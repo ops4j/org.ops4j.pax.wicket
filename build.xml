@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="pax-wicket" default="master-project" >
+
+    <import file="scope.xml" />
+    <target name="build-modules" depends="get-ant-tools">
+        <ant dir="api" inheritall="false" />
+        <ant dir="service" inheritall="false" />
+        <ant dir="samples" inheritall="false" />
+    </target>
+
+    <target name="clean" >
+        <ant dir="api" target="clean" />
+        <ant dir="service" target="clean" />
+        <ant dir="samples" target="clean" />
+    </target>
+
+</project>
