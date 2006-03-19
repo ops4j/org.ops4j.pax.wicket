@@ -18,6 +18,11 @@
 package org.ops4j.pax.wicket.sample.home.internal;
 
 public class IndexPage
+    implements WicketPage
 {
 
+    public String getResourceBasePath()
+    {
+        return "resources";
+    }
 }

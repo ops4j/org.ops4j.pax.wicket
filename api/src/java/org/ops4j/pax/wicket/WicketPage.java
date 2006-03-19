@@ -25,6 +25,20 @@ package org.ops4j.pax.wicket;
 public interface WicketPage
 {
 
-    Class getWicketPageClass();
+    /** Returns the base path for resources referenced in the bundle.
+     *
+     * This base path is to expose resources to the external world in an absolute fashion. Any resource
+     * will be available at http://[domain]/[wicket-base]/[resource-base]/[resource].
+     */
+    String getResourceBasePath();
 
+    void setSession( WicketSession session );
+
+    WicketSession getSession();
+
+    PagePart[] getPageParts();
+
+    void addPagePart( PagePart part );
+
+    void removePagePart( PagePart part );
 }
