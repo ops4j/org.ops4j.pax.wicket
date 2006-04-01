@@ -179,6 +179,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/api/api.iml" filepath="$PROJECT_DIR$/api/api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.ops4j.pax.wicket/org.ops4j.pax.wicket.iml" filepath="$PROJECT_DIR$/org.ops4j.pax.wicket/org.ops4j.pax.wicket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.ops4j.pax.wicket.test/org.ops4j.pax.wicket.test.iml" filepath="$PROJECT_DIR$/org.ops4j.pax.wicket.test/org.ops4j.pax.wicket.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/homepage/sample-homepage.iml" filepath="$PROJECT_DIR$/samples/homepage/sample-homepage.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/menu/sample-menu.iml" filepath="$PROJECT_DIR$/samples/menu/sample-menu.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/page1/sample-page1.iml" filepath="$PROJECT_DIR$/samples/page1/sample-page1.iml" />
@@ -186,7 +188,7 @@
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="false" project-jdk-name="1.4" />
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />
   <component name="RmicSettings">
     <option name="IS_EANABLED" value="false" />
     <option name="DEBUGGING_INFO" value="true" />
@@ -195,53 +197,69 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
   <component name="libraryTable">
-    <library name="wicket-1.2-SNAPSHOT">
+    <library name="wicket-1.2-beta2">
       <CLASSES>
-        <root url="jar://$MAGIC_REPO$/wicket/jars/wicket-1.2-SNAPSHOT.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES>
-        <root url="file:///home/niclas/dev/opensource/sf.net/wicket/src/java" />
-      </SOURCES>
-    </library>
-    <library name="osgi-3.0">
-      <CLASSES>
-        <root url="jar://$MAGIC_REPO$/osgi/official/jars/osgi-3.0.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2-beta2/wicket-1.2-beta2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-logging-api-0.4.3.alpha">
+    <library name="servlet-api-2.3">
       <CLASSES>
-        <root url="jar://$MAGIC_REPO$/pax/logging/jars/pax-logging-api-0.4.3.alpha.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="pax-logging-jcl-0.4.3.alpha">
-      <CLASSES>
-        <root url="jar://$MAGIC_REPO$/pax/logging/jars/pax-logging-jcl-0.4.3.alpha.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="pax-servicemanager-1.0.0.alpha">
-      <CLASSES>
-        <root url="jar://$MAGIC_REPO$/pax/servicemanager/jars/pax-servicemanager-1.0.0.alpha.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="servletapi-2.4">
-      <CLASSES>
-        <root url="jar://$MAGIC_REPO$/servletapi/jars/servletapi-2.4.jar!/" />
+        <root url="jar://$M2_REPO$/javax/servlet/servlet-api/2.3/servlet-api-2.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="activation-1.0.2">
       <CLASSES>
-        <root url="jar://$MAGIC_REPO$/jaf/jars/activation-1.0.2.jar!/" />
+        <root url="jar://$M2_REPO$/javax/activation/activation/1.0.2/activation-1.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="osgi_R4_core-1.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/osgi/osgi_R4_core/1.0/osgi_R4_core-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="osgi_R4_compendium-1.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/osgi/osgi_R4_compendium/1.0/osgi_R4_compendium-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="ops4j-base-0.1.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.1.0/ops4j-base-0.1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="pax-logging-client-0.5.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.5.1/pax-logging-client-0.5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.5.1/pax-logging-client-0.5.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.5.1/pax-logging-client-0.5.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="pax-servicemanager-1.0.2">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/servicemanager/pax-servicemanager/1.0.2/pax-servicemanager-1.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="wicket-extensions-1.1.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.1.1/wicket-extensions-1.1.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -252,7 +270,7 @@
     <option name="COPY_FORMS_RUNTIME_TO_OUTPUT" value="true" />
   </component>
   <UsedPathMacros>
-    <macro name="MAGIC_REPO" />
+    <macro name="M2_REPO" />
   </UsedPathMacros>
 </project>
 
