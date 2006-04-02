@@ -8,16 +8,13 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ops4j.pax.wicket</groupId>
-  <artifactId>pax-wicket-samples</artifactId>
+  <groupId>org.ops4j.pax.wicket.samples</groupId>
+  <artifactId>pax-samples</artifactId>
   <name>OPS4J - Pax Wicket Samples</name>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
-    <module>homepage</module>
-    <module>menu</module>
-    <module>page1</module>
-    <module>page2</module>
+    <module>library</module>
   </modules>
 </project>

@@ -19,26 +19,50 @@ package org.ops4j.pax.wicket.service.internal;
 
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.BundleContext;
+import org.ops4j.pax.wicket.WicketHomePage;
 
 public class HomePageTracker
     implements ServiceTrackerCustomizer
 {
+    private WicketHomePage m_HomePage;
+    private BundleContext m_bundleContext;
+
+    public HomePageTracker( BundleContext bundleContext )
+    {
+        m_bundleContext = bundleContext;
+    }
 
     public Object addingService( ServiceReference serviceReference )
     {
-        //TODO: Auto-generated, need attention.
-        return null;
+        Object service = m_bundleContext.getService( serviceReference );
+        if( service instanceof WicketHomePage )
+        {
+            m_HomePage = (WicketHomePage) service;
+        }
+        return m_HomePage;
     }
 
     public void modifiedService( ServiceReference serviceReference, Object object )
     {
-        //TODO: Auto-generated, need attention.
-
+        Object service = m_bundleContext.getService( serviceReference );
+        if( service instanceof WicketHomePage )
+        {
+            m_HomePage = (WicketHomePage) service;
+        }
     }
 
     public void removedService( ServiceReference serviceReference, Object object )
     {
-        //TODO: Auto-generated, need attention.
+        Object service = m_bundleContext.getService( serviceReference );
+        if( service instanceof WicketHomePage )
+        {
+            m_HomePage = null;
+        }
+    }
 
+    public WicketHomePage getHomePage()
+    {
+        return m_HomePage;
     }
 }

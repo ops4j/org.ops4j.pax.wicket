@@ -19,25 +19,31 @@ package org.ops4j.pax.wicket.service.internal;
 
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.osgi.framework.ServiceReference;
+import org.ops4j.pax.wicket.WicketHomePage;
 
 /** This class is responsible for discovering new WicketPage instances and inject/withdraw them into/from
  * the Wicket runtime instance in this bundle.
- * 
+ *
  */
 public class PageTracker
     implements ServiceTrackerCustomizer
 {
 
+    private HomePageTracker m_homepageTracker;
+
+    public PageTracker( HomePageTracker homepageTracker )
+    {
+        m_homepageTracker = homepageTracker;
+    }
+
     public Object addingService( ServiceReference serviceReference )
     {
-        //TODO: Auto-generated, need attention.
         return null;
     }
 
     public void modifiedService( ServiceReference serviceReference, Object object )
     {
-        //TODO: Auto-generated, need attention.
-
+        WicketHomePage homepage = m_homepageTracker.getHomePage();
     }
 
     public void removedService( ServiceReference serviceReference, Object object )

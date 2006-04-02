@@ -181,10 +181,10 @@
       <module fileurl="file://$PROJECT_DIR$/api/api.iml" filepath="$PROJECT_DIR$/api/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.ops4j.pax.wicket/org.ops4j.pax.wicket.iml" filepath="$PROJECT_DIR$/org.ops4j.pax.wicket/org.ops4j.pax.wicket.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.ops4j.pax.wicket.test/org.ops4j.pax.wicket.test.iml" filepath="$PROJECT_DIR$/org.ops4j.pax.wicket.test/org.ops4j.pax.wicket.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/homepage/sample-homepage.iml" filepath="$PROJECT_DIR$/samples/homepage/sample-homepage.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menu/sample-menu.iml" filepath="$PROJECT_DIR$/samples/menu/sample-menu.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/page1/sample-page1.iml" filepath="$PROJECT_DIR$/samples/page1/sample-page1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/page2/sample-page2.iml" filepath="$PROJECT_DIR$/samples/page2/sample-page2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/library/controller/sample-library-controller.iml" filepath="$PROJECT_DIR$/samples/library/controller/sample-library-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/library/model/sample-library-model.iml" filepath="$PROJECT_DIR$/samples/library/model/sample-library-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/library/skin/sample-library-skin.iml" filepath="$PROJECT_DIR$/samples/library/skin/sample-library-skin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/library/view/sample-library-view.iml" filepath="$PROJECT_DIR$/samples/library/view/sample-library-view.iml" />
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
     </modules>
   </component>
@@ -202,7 +202,9 @@
         <root url="jar://$M2_REPO$/wicket/wicket/1.2-beta2/wicket-1.2-beta2.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file:///home/niclas/dev/opensource/sf.net/wicket-1.2-beta2/wicket/src/java" />
+      </SOURCES>
     </library>
     <library name="servlet-api-2.3">
       <CLASSES>
@@ -257,12 +259,23 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="wicket-extensions-1.1.1">
+    <library name="wicket-extensions-1.2-beta2">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.1.1/wicket-extensions-1.1.1.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-beta2/wicket-extensions-1.2-beta2.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file:///home/niclas/dev/opensource/sf.net/wicket-1.2-beta2/wicket-extensions/src/java" />
+      </SOURCES>
+    </library>
+    <library name="wicket-auth-roles-1.2-beta2">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-beta2/wicket-auth-roles-1.2-beta2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES>
+        <root url="file:///home/niclas/dev/opensource/sf.net/wicket-1.2-beta2/wicket-auth-roles/src/main/java" />
+      </SOURCES>
     </library>
   </component>
   <component name="uidesigner-configuration">
