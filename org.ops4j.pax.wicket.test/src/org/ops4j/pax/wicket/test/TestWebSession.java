@@ -37,7 +37,7 @@ public class TestWebSession extends AuthenticatedWebSession
 	public boolean authenticate( final String username, final String password )
 	{
 		// Check username and password
-		return username.equals("wicket") && password.equals("wicket");
+		return "wicket".equals( username ) && "wicket".equals( password );
 	}
 
 	@Override
