@@ -17,7 +17,29 @@
  */
 package org.ops4j.pax.wicket.sample.page2.internal;
 
-public class WorldTimePage
-{
+import java.util.List;
+import wicket.markup.html.WebPage;
+import wicket.markup.html.basic.Label;
+import wicket.markup.html.list.ListItem;
+import wicket.markup.html.list.PageableListView;
+import wicket.model.PropertyModel;
 
+public class WorldTimePage extends WebPage
+{
+    public WorldTimePage()
+    {
+        WorldClock worldClock = new WorldClock();
+        List localClocks = worldClock.getClocks();
+        PageableListView pageableListView = new PageableListView( "clock-rows", localClocks, 200 )
+        {
+            public void populateItem( final ListItem item )
+            {
+                LocalClock lc = (LocalClock) item.getModelObject();
+                item.add( new Label( "tzid", new PropertyModel( lc, "timeZoneID" ) ) );
+                item.add( new Label( "display", new PropertyModel( lc, "displayName" ) ) );
+                item.add( new Label( "time", new PropertyModel( lc, "currentTime" ) ) );
+            }
+        };
+        add( pageableListView );
+    }
 }

@@ -18,7 +18,6 @@
 package org.ops4j.pax.wicket.sample.page1.internal;
 
 import org.ops4j.pax.servicemanager.ServiceManager;
-import wicket.PageParameters;
 import wicket.markup.html.WebPage;
 
 public class CalculatorPage extends WebPage
@@ -36,11 +35,9 @@ public class CalculatorPage extends WebPage
      * is provided so that tools such as IDEs will include it their list of
      * suggested constructors for derived classes.
      *
-     * @param parameters Wrapped query string parameters.
      */
-    public CalculatorPage( ServiceManager serviceManager, final PageParameters parameters )
+    public CalculatorPage( ServiceManager serviceManager )
     {
-        super( parameters );
         m_serviceManager = serviceManager;
     }
 

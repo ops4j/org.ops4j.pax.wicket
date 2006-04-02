@@ -19,22 +19,28 @@ package org.ops4j.pax.wicket.sample.page2;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.ops4j.pax.wicket.sample.page2.internal.WorldTimePage;
+import org.ops4j.pax.servicemanager.ServiceManager;
+import org.ops4j.pax.servicemanager.ServiceManagerImpl;
 
 public class Activator
     implements BundleActivator
 {
 
+    private WorldTimePage m_Page1;
+
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        //TODO: Auto-generated, need attention.
+        ServiceManager man = new ServiceManagerImpl( bundleContext );
 
+        m_Page1 = new WorldTimePage( man );
+        bundleContext.registerService( "wicket.markup.html.WebPage", m_Page1, null );
     }
 
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        //TODO: Auto-generated, need attention.
 
     }
 }

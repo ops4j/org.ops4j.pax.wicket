@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 Niclas Hedhman.
+ * Copyright 2006 Niclas Hedhman.
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -15,26 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.sample.menu;
+package org.ops4j.pax.wicket.sample.page2.internal;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.List;
 
-public class Activator
-    implements BundleActivator
+public class WorldClock
 {
+    private ArrayList m_Clocks;
 
-    public void start( BundleContext bundleContext )
-        throws Exception
+    public WorldClock()
     {
-        //TODO: Auto-generated, need attention.
-
+        Locale[] locales = Locale.getAvailableLocales();
+        for( int i = 0; i < locales.length; i++ )
+        {
+            Locale loc = locales[i];
+            LocalClock localClock = new LocalClock( loc );
+            m_Clocks.add( localClock );
+        }
     }
 
-    public void stop( BundleContext bundleContext )
-        throws Exception
+    public List getClocks()
     {
-        //TODO: Auto-generated, need attention.
-
+        return m_Clocks;
     }
 }
