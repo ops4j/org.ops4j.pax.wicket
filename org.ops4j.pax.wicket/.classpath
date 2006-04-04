@@ -5,7 +5,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/servlet-api-2.3.jar"/>
 	<classpathentry exported="true" sourcepath="D:/java-tools/wicket-1.2-beta2/src/java" kind="lib" path="lib/wicket-1.2-beta2.jar"/>
-	<classpathentry exported="true" sourcepath="D:/java-tools/wicket-auth-roles-1.2-beta2/src/main/java" kind="lib" path="lib/wicket-auth-roles-1.2-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wicket-auth-roles-1.2-beta2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wicket-extensions-1.2-beta2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>

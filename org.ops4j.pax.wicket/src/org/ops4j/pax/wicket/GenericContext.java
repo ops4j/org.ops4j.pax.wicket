@@ -51,6 +51,8 @@ public class GenericContext implements HttpContext {
 		{
         	return getResource( resourcename.substring( 0, resourcename.length() - 1 ) );
 		}
+        if( resource == null )
+            return null;
         URL url = resource.getURL();
         return url;
     }
@@ -63,7 +65,10 @@ public class GenericContext implements HttpContext {
 		{
         	return getMimeType( resourcename.substring( 0, resourcename.length() - 1 ) );
 		}
-        String mimetype = resource.getMimeType();
-        return mimetype;
+        
+        if( resource == null )
+            return null;
+        
+        return resource.getMimeType();
     }
 }
