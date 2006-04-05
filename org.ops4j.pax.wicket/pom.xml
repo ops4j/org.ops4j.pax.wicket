@@ -14,6 +14,13 @@
     <version>0.1.0-SNAPSHOT</version>
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>lib</directory>
+                <filtering>true</filtering>
+                <targetPath>lib</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
