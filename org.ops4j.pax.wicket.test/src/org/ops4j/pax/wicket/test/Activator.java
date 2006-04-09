@@ -2,6 +2,8 @@ package org.ops4j.pax.wicket.test;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 import javax.servlet.http.HttpServlet;
 
@@ -24,13 +26,10 @@ public class Activator implements BundleActivator
     {
         debug( "Initializing the servlet." );
         HttpServlet servlet = new SimpleWicketServlet( bundleContext, HomePage.class, LoginPage.class, TestWebSession.class );
-        String userDir = System.getProperty( "user.dir" );
-        File contextDir = new File( userDir, "webapps/hello" );
-        contextDir.mkdirs();
-        URL contextRoot = contextDir.toURL();
-        ServletInfo[] servletInfos = new ServletInfo[] { new ServletInfo( "/helloapp", servlet, null ) };
+        Dictionary initParams = new Hashtable();
+		ServletInfo[] servletInfos = new ServletInfo[] { new ServletInfo( "/hellowicket", servlet, initParams  ) };
         ResourceInfo[] resourceInfos = new ResourceInfo[] { new ResourceInfo( "/hello", "/hello" ) };
-        HttpTracker tracker = new HttpTracker( bundleContext, servletInfos, resourceInfos, "/hello", contextRoot );
+        HttpTracker tracker = new HttpTracker( bundleContext, servletInfos, resourceInfos);
  
         m_HttpTracker = new ServiceTracker( bundleContext, HttpService.class.getName(), tracker );
         m_HttpTracker.open();
