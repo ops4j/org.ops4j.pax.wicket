@@ -7,7 +7,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/wicket-1.2-beta2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wicket-auth-roles-1.2-beta2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wicket-extensions-1.2-beta2.jar"/>
-	<classpathentry kind="lib" path="runtime/platform/plugins/org.ops4j.pax.wicket_1.0.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
