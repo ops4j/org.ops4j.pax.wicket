@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OPS4J Wicket Bundle
 Bundle-SymbolicName: org.ops4j.pax.wicket
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Bundle-Vendor: OPS4J
 Bundle-Localization: plugin
 Bundle-ClassPath: .,
  lib/commons-logging-1.0.4.jar,
  lib/log4j-1.2.12.jar,
  lib/servlet-api-2.3.jar,
- lib/wicket-1.2-beta2.jar,
- lib/wicket-auth-roles-1.2-beta2.jar,
- lib/wicket-extensions-1.2-beta2.jar
+ lib/wicket-1.2.jar,
+ lib/wicket-auth-roles-1.2.jar,
+ lib/wicket-extensions-1.2.jar
 Export-Package: javax.servlet,
  javax.servlet.http,
  javax.servlet.jsp,
@@ -38,7 +38,8 @@ Export-Package: javax.servlet,
  wicket.behavior,
  wicket.extensions,
  wicket.extensions.ajax.markup.html,
- wicket.extensions.ajax.markup.html.autocomplete.capxous,
+ wicket.extensions.ajax.markup.html.autocomplete,
+ wicket.extensions.ajax.markup.html.form.upload,
  wicket.extensions.ajax.markup.html.tabs,
  wicket.extensions.markup.html.basic,
  wicket.extensions.markup.html.datepicker,
@@ -56,11 +57,9 @@ Export-Package: javax.servlet,
  wicket.extensions.markup.html.repeater.refreshing,
  wicket.extensions.markup.html.repeater.util,
  wicket.extensions.markup.html.tabs,
- wicket.extensions.markup.html.yui,
- wicket.extensions.markup.html.yui.calendar,
- wicket.extensions.markup.html.yui.slider,
- wicket.extensions.markup.html.yui.slider.img,
+ wicket.extensions.model,
  wicket.extensions.util.encoding,
+ wicket.extensions.util.resource,
  wicket.feedback,
  wicket.markup,
  wicket.markup.html,
@@ -90,6 +89,7 @@ Export-Package: javax.servlet,
  wicket.protocol.http,
  wicket.protocol.http.documentvalidation,
  wicket.protocol.http.request,
+ wicket.protocol.http.request.urlcompressing,
  wicket.protocol.http.servlet,
  wicket.request,
  wicket.request.compound,

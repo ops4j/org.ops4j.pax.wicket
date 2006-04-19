@@ -20,7 +20,7 @@ public abstract class AbstractAuthenticatedWebApplication extends AuthenticatedW
 		m_SignInPage = signInPage;
 		m_WebSession = webSession;
 	}
-	
+    	
 	public void init()
 	{
 		super.init();
