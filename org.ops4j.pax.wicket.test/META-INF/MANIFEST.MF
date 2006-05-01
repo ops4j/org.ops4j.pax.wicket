@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Wicket Plug-in
+Bundle-Name: Ops4J Wicket Test
 Bundle-SymbolicName: org.ops4j.pax.wicket.test
 Bundle-Version: 1.0.0
 Bundle-Activator: org.ops4j.pax.wicket.test.Activator
-Bundle-Vendor: SCANCOIN
+Bundle-Vendor: OPS4J
 Bundle-Localization: plugin
 Import-Package: javax.servlet.http,
  org.ops4j.pax.wicket,
