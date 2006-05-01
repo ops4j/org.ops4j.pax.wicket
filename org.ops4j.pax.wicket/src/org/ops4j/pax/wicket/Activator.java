@@ -5,9 +5,12 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator 
 {
-    public void start( BundleContext bundleContext )
+    public static BundleContext BUNDLE_CONTEXT;
+
+	public void start( BundleContext bundleContext )
         throws Exception
     {
+    	BUNDLE_CONTEXT = bundleContext;
     }
  
     public void stop( BundleContext bundleContext )

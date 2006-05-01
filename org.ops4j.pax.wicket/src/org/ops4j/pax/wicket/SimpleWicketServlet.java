@@ -16,6 +16,12 @@ public class SimpleWicketServlet extends WicketServlet
 {
 	private WicketApplicationFactory m_WebApplicationFactory;
 	
+	//needed for Eclipse extension point registrations
+	public SimpleWicketServlet()
+	{
+		this( Activator.BUNDLE_CONTEXT, null, null, null );
+	}
+	
 	public SimpleWicketServlet( WebApplication webApplication )
 	{
 		m_WebApplicationFactory = new WicketApplicationFactory( webApplication );
