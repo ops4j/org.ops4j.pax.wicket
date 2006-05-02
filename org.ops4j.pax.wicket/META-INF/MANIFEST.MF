@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OPS4J Wicket Bundle
 Bundle-SymbolicName: org.ops4j.pax.wicket
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.2
 Bundle-Vendor: OPS4J
 Bundle-Localization: plugin
 Bundle-ClassPath: .,
