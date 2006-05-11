@@ -41,6 +41,9 @@
     <option name="OUTPUT_DIRECTORY" />
   </component>
   <component name="GUI Designer component loader factory" />
+  <component name="IvyProjectSettings">
+    <dependencies />
+  </component>
   <component name="JavacSettings">
     <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="false" />
@@ -71,6 +74,9 @@
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="IS_EMACS_ERRORS_MODE" value="true" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="LibFinderHistory">
+    <history />
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -189,12 +195,17 @@
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />
+  <component name="ProjectTitlePlugin.ProjectComponent" />
   <component name="RmicSettings">
     <option name="IS_EANABLED" value="false" />
     <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="false" />
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+  </component>
+  <component name="com.yanaware.intellij.ideaspring.PluginConfigurable">
+    <option name="autoscrolling" value="false" />
+    <option name="autoscrollingFromSource" value="false" />
   </component>
   <component name="libraryTable">
     <library name="wicket-1.2-beta2">
