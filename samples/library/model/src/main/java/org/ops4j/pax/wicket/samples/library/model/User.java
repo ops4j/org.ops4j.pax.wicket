@@ -23,5 +23,5 @@ public interface User
 {
     String getName();
 
-    List getBooks();
+    List<Book> getBooks();
 }

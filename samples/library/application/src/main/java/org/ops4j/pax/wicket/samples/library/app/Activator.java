@@ -15,24 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.library.model;
+package org.ops4j.pax.wicket.samples.library.app;
 
-import java.util.List;
-import java.util.Collection;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
-public interface Library
+public class Activator
+    implements BundleActivator
 {
-    Book findBookByTitle( String name );
 
-    Book findBookById( long id );
+    public void start( BundleContext bundleContext )
+        throws Exception
+    {
+    }
 
-    void addBook( Book book );
-
-    void removeBook( Book book );
-
-    long obtainNewId();
-
-    List<WritingStyle> getWritingStyles();
-
-    Collection<Book> findAllBooks();
+    public void stop( BundleContext bundleContext )
+        throws Exception
+    {
+    }
 }

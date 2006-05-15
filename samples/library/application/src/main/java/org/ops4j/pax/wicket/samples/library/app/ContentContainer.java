@@ -15,24 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.library.model;
+package org.ops4j.pax.wicket.samples.library.app;
 
 import java.util.List;
-import java.util.Collection;
+import java.util.Map;
+import wicket.Component;
 
-public interface Library
+public interface ContentContainer
 {
-    Book findBookByTitle( String name );
+    List<String> getProviderHookIds();
 
-    Book findBookById( long id );
+    Map<String, Component> getComponents();
 
-    void addBook( Book book );
+    void addComponent( String id, Component component );
 
-    void removeBook( Book book );
-
-    long obtainNewId();
-
-    List<WritingStyle> getWritingStyles();
-
-    Collection<Book> findAllBooks();
+    void removeComponent( String id );
 }

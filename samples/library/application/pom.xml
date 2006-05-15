@@ -9,8 +9,8 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.library</groupId>
-  <artifactId>model</artifactId>
-  <name>OPS4J - Pax Wicket Library Sample Model</name>
+  <artifactId>application</artifactId>
+  <name>OPS4J - Pax Wicket Library Sample Application</name>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -23,7 +23,7 @@
         <extensions>true</extensions>
         <configuration>
           <osgiManifest>
-            <bundleActivator>org.ops4j.pax.wicket.samples.library.model.Activator</bundleActivator>
+            <bundleActivator>org.ops4j.pax.wicket.samples.library.app.Activator</bundleActivator>
             <bundleSymbolicName>${pom.artifactId}</bundleSymbolicName>
             <bundleName>${pom.name}</bundleName>
             <bundleDescription>Pax Wicket Service.</bundleDescription>
@@ -32,22 +32,27 @@
               org.osgi.framework,
               org.osgi.util.tracker,
               org.ops4j.pax.logging,
+              wicket,
+              wicket.authentication,
+              wicket.authentication.pages,
+              wicket.markup.html,
+              wicket.markup.html.border,
+              wicket.authorization.strategies.role
             </importPackage>
-            <exportPackage>org.ops4j.pax.wicket.samples.library.model</exportPackage>
+            <exportPackage></exportPackage>
           </osgiManifest>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi_R4_core</artifactId>
+      <groupId>wicket</groupId>
+      <artifactId>wicket</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi_R4_compendium</artifactId>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-auth-roles</artifactId>
     </dependency>
   </dependencies>
 </project>

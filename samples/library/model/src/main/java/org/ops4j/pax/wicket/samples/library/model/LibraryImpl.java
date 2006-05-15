@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collection;
 
 public class LibraryImpl
     implements Library
@@ -41,13 +42,13 @@ public class LibraryImpl
 
     public void initialize()
     {
-        Book book1 = new BookImpl( obtainNewId(), "Cat in Hat", "Dr. Seuss", Book.FICTION );
+        Book book1 = new BookImpl( obtainNewId(), "Cat in Hat", "Dr. Seuss", Book.FICTION, WritingStyle.FUNNY );
         addBook( book1 );
-        Book book2 = new BookImpl( obtainNewId(), "That is Highly Illogical", "Dr. Spock", Book.NON_FICTION );
+        Book book2 = new BookImpl( obtainNewId(), "That is Highly Illogical", "Dr. Spock", Book.NON_FICTION, WritingStyle.BORING );
         addBook( book2 );
-        Book book3 = new BookImpl( obtainNewId(), "Where's my Tardis, dude?", "Dr. Who", Book.FICTION );
+        Book book3 = new BookImpl( obtainNewId(), "Where's my Tardis, dude?", "Dr. Who", Book.FICTION, WritingStyle.BAD );
         addBook( book3 );
-        Book book4 = new BookImpl( obtainNewId(), "Frisbee Techniques", "Marty van Hoff", BookImpl.FICTION );
+        Book book4 = new BookImpl( obtainNewId(), "Frisbee Techniques", "Marty van Hoff", BookImpl.FICTION, WritingStyle.SAD );
         addBook( book4 );
         m_writingStyles.add( WritingStyle.BAD );
         m_writingStyles.add( WritingStyle.SAD );
@@ -107,6 +108,13 @@ public class LibraryImpl
     public List getWritingStyles()
     {
         return m_writingStyles;
+    }
+
+    public Collection<Book> findAllBooks()
+    {
+        ArrayList<Book> result = new ArrayList<Book>();
+        result.addAll( m_BooksById.values() );
+        return result;
     }
 
     public Book getRelatedBook( Book reference )

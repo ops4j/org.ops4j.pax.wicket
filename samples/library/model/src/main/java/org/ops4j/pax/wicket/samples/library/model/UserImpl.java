@@ -37,30 +37,30 @@ public final class UserImpl
     private String m_name;
 
     // The user's personal book list
-    private List m_books = new ArrayList();
+    private List<Book> m_books = new ArrayList<Book>();
 
     public UserImpl( ServiceTracker tracker )
     {
         long id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Effective Java", "Joshua Bloch", Book.NON_FICTION ) );
+        m_books.add( new BookImpl( id, "Effective Java", "Joshua Bloch", Book.NON_FICTION, WritingStyle.BAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "The Illiad", "Homer Simpson", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "The Illiad", "Homer Simpson", Book.FICTION, WritingStyle.SAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Why Stock Markets Crash", "Didier Sornette", Book.NON_FICTION ) );
+        m_books.add( new BookImpl( id, "Why Stock Markets Crash", "Didier Sornette", Book.NON_FICTION, WritingStyle.SAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "The Netherlands", "Mike Jones", Book.NON_FICTION ) );
+        m_books.add( new BookImpl( id, "The Netherlands", "Mike Jones", Book.NON_FICTION, WritingStyle.BAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Windows, Windows, Windows!", "Steve Ballmer", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "Windows, Windows, Windows!", "Steve Ballmer", Book.FICTION, WritingStyle.BORING ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "This is a test", "Vincent Rumsfield", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "This is a test", "Vincent Rumsfield", Book.FICTION, WritingStyle.SAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Movies", "Mark Marksfield", Book.NON_FICTION ) );
+        m_books.add( new BookImpl( id, "Movies", "Mark Marksfield", Book.NON_FICTION, WritingStyle.BORING ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "DOS Capitol", "Billy G", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "DOS Capitol", "Billy G", Book.FICTION, WritingStyle.SAD ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Whatever", "Jonny Zoom", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "Whatever", "Jonny Zoom", Book.FICTION, WritingStyle.FUNNY ) );
         id = getNextId( tracker );
-        m_books.add( new BookImpl( id, "Tooty Fruity", "Rudy O", Book.FICTION ) );
+        m_books.add( new BookImpl( id, "Tooty Fruity", "Rudy O", Book.FICTION, WritingStyle.FUNNY ) );
     }
 
     private long getNextId( ServiceTracker tracker )
@@ -92,7 +92,7 @@ public final class UserImpl
     /**
      * @return User's book list
      */
-    public final List getBooks()
+    public final List<Book> getBooks()
     {
         return m_books;
     }

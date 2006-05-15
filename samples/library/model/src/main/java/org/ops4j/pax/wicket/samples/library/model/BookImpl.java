@@ -39,6 +39,7 @@ public final class BookImpl
     private Book m_companionBook;
     private List<Book> m_relatedBooks;
     private boolean m_isFiction;
+    private WritingStyle m_style;
 
     /**
      * Constructor
@@ -48,12 +49,13 @@ public final class BookImpl
      * @param isFiction True (FICTION) if the book is fiction, false (NON_FICTION)
      *                  if it is not.
      */
-    public BookImpl( long id, String title, String author, boolean isFiction )
+    public BookImpl( long id, String title, String author, boolean isFiction, WritingStyle style )
     {
         m_id = id;
         m_title = title;
         m_author = author;
         m_isFiction = isFiction;
+        m_style = style;
         m_relatedBooks = new ArrayList<Book>();
     }
 
@@ -79,6 +81,13 @@ public final class BookImpl
     public final String getTitle()
     {
         return m_title;
+    }
+
+    public List<WritingStyle> getWritingStyles()
+    {
+        ArrayList result = new ArrayList();
+        result.add( m_style );
+        return result;
     }
 
     /**

@@ -15,7 +15,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>app</module>
-    <module>pages</module>
+    <module>application</module>
+    <module>view</module>
+    <module>model</module>
   </modules>
 </project>

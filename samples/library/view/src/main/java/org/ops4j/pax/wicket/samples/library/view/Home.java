@@ -17,11 +17,10 @@
  */
 package org.ops4j.pax.wicket.samples.library.view;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.ops4j.pax.wicket.samples.library.controller.AuthenticatedWebPage;
 import org.ops4j.pax.wicket.samples.library.model.BookImpl;
-import org.ops4j.pax.wicket.samples.library.model.User;
+import org.ops4j.pax.wicket.samples.library.app.LibraryHomePage;
+import org.ops4j.pax.wicket.samples.library.view.internal.EditBook;
+import org.ops4j.pax.wicket.samples.library.view.internal.BookDetails;
 import wicket.PageParameters;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
@@ -35,15 +34,16 @@ import wicket.model.PropertyModel;
  *
  * @author Jonathan Locke
  */
-public final class Home extends AuthenticatedWebPage
+public final class Home extends LibraryHomePage
 {
     /**
      * Constructor
      *
      * @param parameters
      */
-    public Home(final PageParameters parameters)
+    public Home( PageParameters parameters )
     {
+        super( parameters );
         // Add table of books
         final PageableListView listView;
         add(listView = new PageableListView("books", new PropertyModel(this, "books"), 4)
@@ -61,24 +61,5 @@ public final class Home extends AuthenticatedWebPage
             }
         });
         add(new PagingNavigator("navigator", listView));
-    }
-
-    /**
-     *
-     * @return List of books
-     */
-    public List getBooks()
-    {
-        // Note: checkAccess() (and thus login etc.) happen after the Page
-        // has been instantiated. Thus, you can not realy on user != null.
-        // Note2: In any case, all components must be associated with a
-        // wicket tag.
-        User user = getLibrarySession().getUser();
-        if (user == null)
-        {
-            return new ArrayList();
-        }
-
-        return user.getBooks();
     }
 }

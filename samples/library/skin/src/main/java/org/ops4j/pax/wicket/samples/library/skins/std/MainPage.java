@@ -15,38 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.library.model;
+package org.ops4j.pax.wicket.samples.library.skins.std;
 
-import java.util.List;
-import java.io.Serializable;
+import wicket.markup.html.WebPage;
 
-public interface Book extends Serializable
+public class MainPage extends WebPage
 {
-    /**
-     * Value for fiction books.
-     */
-    public static final boolean FICTION = true;
 
     /**
-     * Value for non-fiction books.
+     * Constructor. Having this constructor public means that you page is
+     * 'bookmarkable' and hence can be called/ created from anywhere.
      */
-    public static final boolean NON_FICTION = false;
-
-    long getId();
-
-    String getAuthor();
-
-    String getTitle();
-
-    List<WritingStyle> getWritingStyles();
-
-    Book getCompanionBook();
-
-    boolean getFiction();
-
-    List<Book> getRelatedBooks();
-
-    void addRelatedBook( Book book );
-
-    void removeRelatedBook( Book book );
+    public MainPage()
+    {
+        add( new TitlePanel( "title" ) );
+        add( new SectionsPanel( "sections" ) );
+        add( new MenuPanel( "menu" ) );
+        add( new CreditsPanel( "credits" ) );
+        add( new ContentPanel( "content" ) );
+        add( new ArticlesPanel( "articles" ) );
+        add( new QuickButtonsPanel( "quickbuttons" ) );
+    }
 }

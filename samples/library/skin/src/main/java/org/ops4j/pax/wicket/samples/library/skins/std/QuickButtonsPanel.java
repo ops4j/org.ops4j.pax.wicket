@@ -15,24 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.library.model;
+package org.ops4j.pax.wicket.samples.library.skins.std;
 
-import java.util.List;
-import java.util.Collection;
+import wicket.markup.html.panel.Panel;
 
-public interface Library
+public class QuickButtonsPanel extends Panel
 {
-    Book findBookByTitle( String name );
 
-    Book findBookById( long id );
-
-    void addBook( Book book );
-
-    void removeBook( Book book );
-
-    long obtainNewId();
-
-    List<WritingStyle> getWritingStyles();
-
-    Collection<Book> findAllBooks();
+    public QuickButtonsPanel( String id )
+    {
+        super( id );
+    }
 }
