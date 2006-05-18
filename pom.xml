@@ -7,7 +7,7 @@
   <artifactId>pax-wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0.SNAPSHOT</version>
   <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
@@ -35,19 +35,19 @@
     </plugins>
   </build>
   <modules>
-    <module>api</module>
-    <!-- Disable for now
-    <module>samples</module>
-    -->
     <module>service</module>
-    <module>org.ops4j.pax.wicket</module>
-    <module>org.ops4j.pax.wicket.test</module>
+    <module>samples</module>
   </modules>
   <repositories>
     <repository>
       <id>ops4j-repository</id>
       <name>The OPS4J Repository</name>
       <url>http://repository.ops4j.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>wicket-repository</id>
+      <name>Wicket repository</name>
+      <url>http://wicket.sourceforge.net/maven2/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -85,14 +85,14 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>osgi_R4_core</artifactId>
-        <version>1.0</version>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>1.0.2</version>
       </dependency>
       <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>osgi_R4_compendium</artifactId>
-        <version>1.0</version>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.3</version>
       </dependency>
       <dependency>
         <groupId>jmock</groupId>
@@ -100,36 +100,51 @@
         <version>1.0.1</version>
       </dependency>
       <dependency>
-        <groupId>org.ops4j.pax.servicemanager</groupId>
-        <artifactId>pax-servicemanager</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-      <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-client</artifactId>
-        <version>0.5.1</version>
+        <version>0.6.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>osgi_R4_compendium</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>osgi_R4_core</artifactId>
+        <version>1.0</version>
       </dependency>
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket</artifactId>
-        <version>1.2-beta2</version>
+        <version>1.2-rc4</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket-auth-roles</artifactId>
-        <version>1.2-beta2</version>
+        <version>1.2-rc4</version>
       </dependency>
       <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>2.3</version>
+        <groupId>wicket</groupId>
+        <artifactId>wicket-extensions</artifactId>
+        <version>1.2-rc4</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <distributionManagement>
     <repository>
-      <id>ops4j-repository</id>
-      <url>scp://repository.ops4j.org/var/http/repository.ops4j.org/maven2</url>
+      <id>upload-repository</id>
+      <url>scpexe://repository.ops4j.org/var/http/repository.ops4j.org/maven2</url>
     </repository>
   </distributionManagement>
 </project>

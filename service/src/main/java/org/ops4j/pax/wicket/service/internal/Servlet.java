@@ -23,32 +23,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ops4j.pax.servicemanager.ServiceManager;
-import wicket.IPageFactory;
+import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WicketServlet;
-import wicket.settings.ISessionSettings;
 
 public class Servlet extends WicketServlet
 {
 
-    private ServiceManager m_ServiceManager;
+    private IWebApplicationFactory m_appFactory;
 
-    public Servlet( ServiceManager serviceManager )
+    public Servlet( IWebApplicationFactory appFactory )
     {
-        m_ServiceManager = serviceManager;
+        m_appFactory = appFactory;
     }
 
-    public void init()
+    protected IWebApplicationFactory getApplicationFactory()
     {
-        Log logger = LogFactory.getLog( Servlet.class );
-        logger.debug( "Servlet.init()" );
-        Application app = new Application();
-        webApplication = app;
-        webApplication.setWicketServlet( this );
-        ISessionSettings settings = app.getSessionSettings();
-        IPageFactory defFactory = settings.getPageFactory();
-        IPageFactory pageFactory = new PageFactory( defFactory, m_ServiceManager );
-        settings.setPageFactory( pageFactory );
+        return m_appFactory;
     }
 
     public void service( HttpServletRequest req, HttpServletResponse resp )
@@ -59,4 +49,12 @@ public class Servlet extends WicketServlet
         super.service( req, resp );
     }
 
+    /**
+     * Servlet cleanup.
+     */
+    public void destroy()
+    {
+        super.destroy();
+        System.err.println( "DESTROY!!!!!!!!!" );
+    }
 }

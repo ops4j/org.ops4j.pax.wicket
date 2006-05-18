@@ -17,89 +17,96 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
-import javax.servlet.Servlet;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
-import org.ops4j.pax.servicemanager.ServiceManager;
 
 public class HttpTracker
     implements ServiceTrackerCustomizer
 {
-    private BundleContext m_BundleContext;
-    private HttpService m_Service;
-    private HttpContext m_HttpContext;
-    private Servlet m_Servlet;
-    private ServiceManager m_serviceManager;
-    private String m_rootUrl;
 
-    public HttpTracker( BundleContext bundleContext, Servlet servlet, ServiceManager serviceManager )
+
+    private BundleContext m_bundleContext;
+    private HttpService m_httpService;
+    private Map<String, Servlet> m_servlets;
+
+    public HttpTracker( BundleContext bundleContext )
     {
-        m_serviceManager = serviceManager;
-        Log logger = LogFactory.getLog( HttpTracker.class );
-        logger.debug( "HttpTracker( " + bundleContext + ", " + servlet + " )" );
-        m_BundleContext = bundleContext;
-        m_Servlet = servlet;
+        m_bundleContext = bundleContext;
+        m_servlets = new HashMap<String, Servlet>();
     }
 
     public Object addingService( ServiceReference serviceReference )
     {
-        m_Service = (HttpService) m_BundleContext.getService( serviceReference );
-        try
+        m_httpService = (HttpService) m_bundleContext.getService( serviceReference );
+        for( Map.Entry<String, Servlet> entry : m_servlets.entrySet() )
         {
-            registerAll();
+            Servlet servlet = entry.getValue();
+            String mountpoint = entry.getKey();
+            try
+            {
+                m_httpService.registerServlet( mountpoint, servlet, null, null );
+            } catch( NamespaceException e )
+            {
+                throw new IllegalArgumentException(
+                    "Unable to mount [" + servlet + "] on mount point '" + mountpoint + "'."
+                );
+            } catch( ServletException e )
+            {
+                String message = "Wicket Servlet [" + servlet + "] is unable to initialize. "
+                                 + "This servlet was tried to be mounted on '" + mountpoint + "'.";
+                throw new IllegalArgumentException( message, e );
+            }
         }
-        catch( NamespaceException e )
-        {
-            e.printStackTrace();  //TODO: Auto-generated, need attention.
-        }
-        catch( ServletException e )
-        {
-            e.printStackTrace();  //TODO: Auto-generated, need attention.
-        }
-        return m_Service;
+        return m_httpService;
     }
 
-    public void modifiedService( ServiceReference serviceReference, Object value )
+    public void modifiedService( ServiceReference serviceReference, Object httpService )
     {
-        unregisterAll();
-        try
-        {
-            registerAll();
-        }
-        catch( NamespaceException e )
-        {
-            e.printStackTrace();  //TODO: Auto-generated, need attention.
-        }
-        catch( ServletException e )
-        {
-            e.printStackTrace();  //TODO: Auto-generated, need attention.
-        }
     }
 
-    public void removedService( ServiceReference serviceReference, Object value )
+    public void removedService( ServiceReference serviceReference, Object httpService )
     {
-        unregisterAll();
+        for( String mountpoint : m_servlets.keySet() )
+        {
+            m_httpService.unregister( mountpoint );
+        }
     }
 
-    private void registerAll()
+    void addServlet( String mountPoint, Servlet servlet )
         throws NamespaceException, ServletException
     {
-        m_HttpContext = new GenericContext( m_BundleContext, m_rootUrl, m_serviceManager );
-        m_Service.registerServlet( m_rootUrl + "/app", m_Servlet, null, m_HttpContext );
-        m_Service.registerResources( m_rootUrl , m_rootUrl, m_HttpContext );
-
+        mountPoint = normalizeMountPoint( mountPoint );
+        m_httpService.registerServlet( mountPoint, servlet, null, null );
+        m_servlets.put( mountPoint, servlet );
     }
 
-    private void unregisterAll()
+    void removeServlet( String mountPoint )
     {
-        m_Service.unregister( m_rootUrl + "/app" );
-        m_Service.unregister( m_rootUrl );
+        mountPoint = normalizeMountPoint( mountPoint );
+        if( m_servlets.remove( mountPoint ) != null )
+        {
+            m_httpService.unregister( mountPoint );
+        }
+    }
+
+    private String normalizeMountPoint( String mountPoint )
+    {
+        if( !mountPoint.startsWith( "/" ) )
+        {
+            mountPoint = "/" + mountPoint;
+        }
+        return mountPoint;
+    }
+
+    Servlet getServlet( String mountPoint )
+    {
+        mountPoint = normalizeMountPoint( mountPoint );
+        return m_servlets.get( mountPoint );
     }
 }

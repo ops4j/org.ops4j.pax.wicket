@@ -27,7 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpContext;
-import org.ops4j.pax.servicemanager.ServiceManager;
 
 public class GenericContext
     implements HttpContext
@@ -35,12 +34,10 @@ public class GenericContext
     private BundleContext m_BundleContext;
     private String m_RootUrl;
     private FileTypeMap m_TypeMap;
-    private ServiceManager m_serviceManager;
 
-    public GenericContext( BundleContext bundleContext, String rootUrl, ServiceManager serviceManager )
+    public GenericContext( BundleContext bundleContext, String rootUrl )
     {
         Log logger = LogFactory.getLog( GenericContext.class );
-        m_serviceManager = serviceManager;
         logger.debug( "GenericContext(" + rootUrl + " )" );
         m_BundleContext = bundleContext;
         m_RootUrl = rootUrl;

@@ -21,11 +21,10 @@ package org.ops4j.pax.wicket.samples.library.view.internal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.ops4j.pax.wicket.samples.library.app.LibraryHomePage;
 import org.ops4j.pax.wicket.samples.library.model.Book;
 import org.ops4j.pax.wicket.samples.library.model.Library;
 import org.ops4j.pax.wicket.samples.library.model.WritingStyle;
-import org.ops4j.pax.wicket.samples.library.app.LibraryHomePage;
-import org.ops4j.pax.wicket.samples.library.view.internal.Activator;
 import wicket.Page;
 import wicket.PageParameters;
 import wicket.RequestCycle;
@@ -58,6 +57,7 @@ public final class EditBook extends LibraryHomePage
      */
     public EditBook(final Book book)
     {
+        
         // Create and add feedback panel to page
         final FeedbackPanel feedback = new FeedbackPanel("feedback");
         add(feedback);
