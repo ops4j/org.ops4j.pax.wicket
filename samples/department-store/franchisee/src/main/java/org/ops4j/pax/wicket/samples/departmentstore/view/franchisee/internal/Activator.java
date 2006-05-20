@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,21 +20,17 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
-import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.FranchiseeContent;
 
 /**
  * {@code Activator}
  *
- * @author Edward Yakop
  * @since 1.0.0
  */
 public class Activator
@@ -52,7 +49,6 @@ public class Activator
         ServiceReference depStoreService = bundleContext.getServiceReference( DepartmentStore.class.getName() );
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreService );
 
-        String serviceName = Content.class.getName();
         m_registrations = new ArrayList<ServiceRegistration>();
         List<Floor> floors = departmentStore.getFloors();
         for( Floor floor: floors )
@@ -61,14 +57,12 @@ public class Activator
             for( Franchisee franchisee : franchisees )
             {
                 String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContent content = new FranchiseeContent( franchisee, destinationId  );
-                Properties properties = new Properties();
-                properties.put( Content.CONFIG_DESTINATIONID, destinationId );
-                ServiceRegistration registration = bundleContext.registerService( serviceName, content, properties );
+                FranchiseeContent content = new FranchiseeContent( bundleContext, franchisee  );
+                content.setDestinationId( destinationId );
+                ServiceRegistration registration = content.register();
                 m_registrations.add( registration );
             }
         }
-
     }
 
     public void stop( BundleContext bundleContext )

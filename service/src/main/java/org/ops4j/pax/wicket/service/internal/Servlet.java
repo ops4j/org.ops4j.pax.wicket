@@ -1,5 +1,6 @@
 /*
  * Copyright 2005 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -26,8 +27,9 @@ import org.apache.commons.logging.LogFactory;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WicketServlet;
 
-public class Servlet extends WicketServlet
+public final class Servlet extends WicketServlet
 {
+    private static final Log m_logger = LogFactory.getLog( Servlet.class );
 
     private IWebApplicationFactory m_appFactory;
 
@@ -44,17 +46,10 @@ public class Servlet extends WicketServlet
     public void service( HttpServletRequest req, HttpServletResponse resp )
         throws ServletException, IOException
     {
-        Log logger = LogFactory.getLog( Servlet.class );
-        logger.debug( "Servlet.service( " + req + ", " + resp + " )" );
+        if( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "Servlet.service( " + req + ", " + resp + " )" );
+        }
         super.service( req, resp );
-    }
-
-    /**
-     * Servlet cleanup.
-     */
-    public void destroy()
-    {
-        super.destroy();
-        System.err.println( "DESTROY!!!!!!!!!" );
     }
 }

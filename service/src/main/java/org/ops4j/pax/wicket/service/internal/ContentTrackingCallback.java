@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -23,5 +24,5 @@ public interface ContentTrackingCallback
 {
     void addContent( String id, Content content );
 
-    void removeContent( String id, Content content );
+    boolean removeContent( String id, Content content );
 }

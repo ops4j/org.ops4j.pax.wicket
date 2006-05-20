@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,10 +20,8 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.service.Content;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -50,18 +49,15 @@ public class Activator
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreServiceReference );
         List<Floor> floors = departmentStore.getFloors();
 
-        String[] serviceNames = { Content.class.getName(), ContentContainer.class.getName() };
         String destinationId = "swp.floor";
         for( Floor floor : floors )
         {
             FloorContentContainer container =
                 new FloorContentContainer( floor, floor.getName(), destinationId, bundleContext );
             m_containers.add( container );
-
-            Properties properties = new Properties();
-            properties.put( Content.CONFIG_DESTINATIONID, destinationId );
-            properties.put( ContentContainer.CONFIG_CONTAINMENTID, floor.getName() );
-            ServiceRegistration registration = bundleContext.registerService( serviceNames, container, properties );
+            container.setDestinationId( destinationId );
+            container.setContainmentId( floor.getName() );
+            ServiceRegistration registration = container.register();
             m_registrations.add( registration );
         }
     }

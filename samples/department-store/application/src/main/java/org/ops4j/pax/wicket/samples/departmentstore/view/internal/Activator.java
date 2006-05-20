@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,17 +18,17 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
+import java.util.Properties;
+import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
-import org.ops4j.pax.wicket.service.PaxWicketApplication;
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
+import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import wicket.IPageFactory;
 import wicket.Page;
 import wicket.PageParameters;
-import java.util.Properties;
 
 /**
  * @author Niclas Hedhman
@@ -37,7 +38,6 @@ public class Activator
     implements BundleActivator
 {
     private ContentContainer m_store;
-    private PaxWicketApplication m_application;
     private ServiceRegistration m_serviceRegistration;
 
     public void start( BundleContext bundleContext )
@@ -57,9 +57,10 @@ public class Activator
         };
         m_store = new DefaultPageContainer( "swp", bundleContext, factory );
         Properties props = new Properties();
-        props.put( PaxWicketApplication.MOUNTPOINT, "swp" );
-        m_application = new PaxWicketApplication( factory, OverviewPage.class );
-        m_serviceRegistration = bundleContext.registerService( PaxWicketApplication.class.getName(), m_application, props );
+        props.put( PaxWicketApplicationFactory.MOUNTPOINT, "swp" );
+        PaxWicketApplicationFactory applicationFactory = new PaxWicketApplicationFactory( factory, OverviewPage.class );
+        String serviceName = PaxWicketApplicationFactory.class.getName();
+        m_serviceRegistration = bundleContext.registerService( serviceName, applicationFactory, props );
     }
 
     public void stop( BundleContext bundleContext )

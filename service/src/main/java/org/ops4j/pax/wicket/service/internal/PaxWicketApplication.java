@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -15,21 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package org.ops4j.pax.wicket.service;
+package org.ops4j.pax.wicket.service.internal;
 
+import org.ops4j.lang.NullArgumentException;
+import wicket.IPageFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.settings.ISessionSettings;
-import wicket.IPageFactory;
 
 public final class PaxWicketApplication extends WebApplication
 {
 
-    public static final String MOUNTPOINT = "mountpoint";
     protected IPageFactory m_factory;
     protected Class m_homepageClass;
 
     public PaxWicketApplication( IPageFactory factory, Class homepageClass )
     {
+        NullArgumentException.validateNotNull( factory, "factory" );
+        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
+
         m_homepageClass = homepageClass;
         m_factory = factory;
     }
@@ -54,10 +58,11 @@ public final class PaxWicketApplication extends WebApplication
      * set. <strong>Use this method for any application setup instead of the
      * constructor.</strong>
      */
-    protected void init()
+    public void init()
     {
         super.init();
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
+        configure( DEPLOYMENT );
     }
 }

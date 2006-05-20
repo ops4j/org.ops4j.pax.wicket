@@ -6,9 +6,7 @@
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>pax-wicket</artifactId>
   <packaging>pom</packaging>
-  <name>OPS4J - Pax Wicket</name>
-  <version>0.1.0.SNAPSHOT</version>
-  <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
+  <name>OPS4J - Pax Wicket</name> <version>0.1.0.SNAPSHOT</version> <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
     <url>http://www.ops4j.org/</url>
@@ -103,6 +101,11 @@
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-client</artifactId>
         <version>0.6.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.base</groupId>
+        <artifactId>ops4j-base</artifactId>
+        <version>0.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>

@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,22 +19,36 @@
 package org.ops4j.pax.wicket.service;
 
 import java.util.Dictionary;
+import java.util.Properties;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import wicket.Component;
 
 public abstract class DefaultContent
     implements Content, ManagedService
 {
-    private String m_destinationId;
 
-    protected DefaultContent( String destinationId )
+    private BundleContext m_bundleContext;
+    private String m_contentId;
+    private String m_destinationId;
+    private ServiceRegistration m_registration;
+
+    protected DefaultContent( BundleContext bundleContext, String contentId )
     {
-        m_destinationId = destinationId;
+        m_bundleContext = bundleContext;
+        m_contentId = contentId;
     }
 
-    public final String getDestinationID()
+    public final String getDestinationId()
     {
         return m_destinationId;
+    }
+
+    public final void setDestinationId( String destinationId )
+    {
+        m_destinationId = destinationId;
     }
 
     public final Component createComponent()
@@ -47,6 +62,18 @@ public abstract class DefaultContent
 
     public final void updated( Dictionary config )
     {
+        m_registration.setProperties( config );
         m_destinationId = (String) config.get( CONFIG_DESTINATIONID );
     }
+
+    public final ServiceRegistration register()
+    {
+        String[] serviceNames = { Content.class.getName(), ManagedService.class.getName() };
+        Properties properties = new Properties();
+        properties.put( Constants.SERVICE_PID, m_contentId );
+        properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
+        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        return m_registration;
+    }
+
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -20,32 +21,43 @@ package org.ops4j.pax.wicket.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Dictionary;
+import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracking;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Constants;
 import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ConfigurationException;
 import wicket.Component;
 import wicket.IPageFactory;
 import wicket.Page;
 import wicket.PageParameters;
 
 public class DefaultPageContainer
-    implements ContentContainer, ContentTrackingCallback, PageContent
+    implements ContentContainer, ContentTrackingCallback, PageContent, ManagedService
 {
-
     private String m_containmentId;
+    private BundleContext m_bundleContext;
     private IPageFactory m_pageFactory;
     private ServiceTracker m_serviceTracker;
     private HashMap<String, List<Content>> m_children;
+    private ServiceRegistration m_registration;
+    private DefaultContentTracking m_contentTracking;
 
     public DefaultPageContainer( String containmentId, BundleContext bundleContext, IPageFactory pageFactory )
     {
         m_containmentId = containmentId;
+        m_bundleContext = bundleContext;
         m_pageFactory = pageFactory;
         m_children = new HashMap<String, List<Content>>();
-        DefaultContentTracking contentTracking = new DefaultContentTracking( bundleContext, this );
-        contentTracking.setContainmentId( m_containmentId );
-        m_serviceTracker = new ServiceTracker( bundleContext, Content.class.getName(), contentTracking );
+        m_contentTracking = new DefaultContentTracking( bundleContext, this );
+        m_contentTracking.setContainmentId( m_containmentId );
+        m_serviceTracker = new ServiceTracker( bundleContext, Content.class.getName(), m_contentTracking );
         m_serviceTracker.open();
     }
 
@@ -84,22 +96,72 @@ public class DefaultPageContainer
         contents.add( content );
     }
 
-    public final void removeContent( String id, Content content )
+    public final boolean removeContent( String id, Content content )
     {
         List<Content> contents = m_children.get( id );
         if( contents == null )
         {
-            return;
+            return false;
         }
         contents.remove( content );
         if( contents.isEmpty() )
         {
-            m_children.remove( id );
+            return m_children.remove( id ) != null;
         }
+        return false;
     }
 
     public Page createPage( Class cls, PageParameters params )
     {
         return m_pageFactory.newPage( cls, params );
+    }
+
+    public final ServiceRegistration register()
+    {
+        String[] serviceNames =
+            {
+                Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
+            };
+        Properties properties = new Properties();
+        properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
+        properties.put( Constants.SERVICE_PID, m_containmentId );
+        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        return m_registration;
+    }
+
+    public void updated( Dictionary config )
+        throws ConfigurationException
+    {
+        if( config == null )
+        {
+            return;
+        }
+        m_registration.setProperties( config );
+        String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
+        if( m_containmentId != null && m_containmentId.equals( newContainmentId ) )
+        {
+            return;
+        }
+        m_children.clear();
+        m_containmentId = newContainmentId;
+        if( m_containmentId != null )
+        {
+            try
+            {
+                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), null );
+                if( null == services )
+                {
+                    return;
+                }
+                for( ServiceReference service : services )
+                {
+                    m_contentTracking.addingService( service );
+                }
+            } catch( InvalidSyntaxException e )
+            {
+                // Can not happen. Right!
+                e.printStackTrace();
+            }
+        }
     }
 }

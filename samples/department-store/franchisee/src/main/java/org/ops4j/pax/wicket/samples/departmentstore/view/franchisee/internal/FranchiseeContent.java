@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -15,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee;
+package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.service.DefaultContent;
+import org.osgi.framework.BundleContext;
 import wicket.Component;
 
 /**
@@ -32,9 +34,9 @@ public class FranchiseeContent extends DefaultContent
 
     private Franchisee m_franchisee;
 
-    public FranchiseeContent( Franchisee franchisee, String destinationId )
+    public FranchiseeContent( BundleContext context, Franchisee franchisee )
     {
-        super( destinationId );
+        super( context, franchisee.getName()  );
         m_franchisee = franchisee;
     }
 

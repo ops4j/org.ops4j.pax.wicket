@@ -1,5 +1,6 @@
 /*
  * Copyright 2005 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,11 +20,11 @@ package org.ops4j.pax.wicket.service.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ops4j.pax.wicket.service.PaxWicketApplication;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.util.tracker.ServiceTracker;
+import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 
 public class Activator
     implements BundleActivator
@@ -42,8 +43,9 @@ public class Activator
         m_httpTracking = new ServiceTracker( bundleContext, HttpService.class.getName(), httpTracker );
         m_httpTracking.open();
 
-        WicketApplicationTracker wickTracking = new WicketApplicationTracker( bundleContext, httpTracker );
-        m_wicketTracking = new ServiceTracker( bundleContext, PaxWicketApplication.class.getName(), wickTracking );
+        PaxWicketAppFactoryTracker wickTracking = new PaxWicketAppFactoryTracker( bundleContext, httpTracker );
+        String serviceName = PaxWicketApplicationFactory.class.getName();
+        m_wicketTracking = new ServiceTracker( bundleContext, serviceName, wickTracking );
         m_wicketTracking.open();
     }
 

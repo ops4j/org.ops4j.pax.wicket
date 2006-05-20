@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,6 +18,8 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.Content;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import org.osgi.framework.BundleContext;
@@ -26,6 +29,8 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class DefaultContentTracking
     implements ServiceTrackerCustomizer
 {
+
+    private static final Log m_logger = LogFactory.getLog( DefaultContentTracking.class );
 
     private String m_containmentId;
     private BundleContext m_context;
@@ -44,6 +49,11 @@ public class DefaultContentTracking
 
     public Object addingService( ServiceReference serviceReference )
     {
+        if( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
+        }
+
         String dest = (String) serviceReference.getProperty( "destinationId" );
         Object service = m_context.getService( serviceReference );
         if( dest == null )
@@ -67,31 +77,46 @@ public class DefaultContentTracking
         }
         if( !( service instanceof Content ) )
         {
-            throw new IllegalArgumentException( "OSGi Framework not passing a Content object as specified in R4 spec."
-            );
+            String message = "OSGi Framework not passing a Content object as specified in R4 spec.";
+            throw new IllegalArgumentException( message );
         }
-        String id = dest.substring( contIdLength );
+        String id = dest.substring( contIdLength + 1 );
+        m_logger.info( "Attaching content with wicket:id [" + id + "] to containment [" + m_containmentId + "]" );
         m_callback.addContent( id, (Content) service );
         return service;
     }
 
     public void modifiedService( ServiceReference serviceReference, Object object )
     {
+        if( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "Service Reference [" + serviceReference + "] has been modified." );
+        }
         removedService( serviceReference, object );
         addingService( serviceReference );
     }
 
     public void removedService( ServiceReference serviceReference, Object object )
     {
+        if( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "Service Reference [" + serviceReference + "] has been removed." );
+        }
+
         if( !( object instanceof Content ) )
         {
-            throw new IllegalArgumentException( "OSGi Framework not passing a Content object as specified in R4 spec."
-            );
+            String message = "OSGi Framework not passing a Content object as specified in R4 spec.";
+            throw new IllegalArgumentException( message );
         }
+
         Content content = (Content) object;
-        String destionationId = content.getDestinationID();
+        String destionationId = content.getDestinationId();
         int pos = destionationId.lastIndexOf( '.' );
         String id = destionationId.substring( pos + 1 );
-        m_callback.removeContent( id, content );
+        boolean wasContentRemoved = m_callback.removeContent( id, content );
+        if( m_logger.isInfoEnabled() && wasContentRemoved )
+        {
+            m_logger.info( "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId + "]" );
+        }
     }
 }

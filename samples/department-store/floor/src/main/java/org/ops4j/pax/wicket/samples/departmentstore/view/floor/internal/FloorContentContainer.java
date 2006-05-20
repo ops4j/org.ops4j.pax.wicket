@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,7 +19,6 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.samples.departmentstore.view.floor.FloorPanel;
 import org.ops4j.pax.wicket.service.DefaultContentContainer;
 import org.osgi.framework.BundleContext;
 import wicket.Component;
@@ -43,4 +43,5 @@ public class FloorContentContainer extends DefaultContentContainer
     {
         //TODO: Auto-generated, need attention.
     }
+
 }

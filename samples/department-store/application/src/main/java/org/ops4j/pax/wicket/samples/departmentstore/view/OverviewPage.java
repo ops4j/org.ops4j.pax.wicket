@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,16 +18,16 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view;
 
+import org.ops4j.pax.wicket.service.ContentContainer;
+import wicket.markup.html.WebPage;
+import wicket.markup.html.panel.Panel;
+import wicket.markup.html.basic.Label;
+import wicket.Component;
+import wicket.model.Model;
+import wicket.extensions.markup.html.tabs.AbstractTab;
+import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import java.util.ArrayList;
 import java.util.List;
-import org.ops4j.pax.wicket.service.ContentContainer;
-import wicket.Component;
-import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
-import wicket.extensions.markup.html.tabs.AbstractTab;
-import wicket.markup.html.WebPage;
-import wicket.markup.html.basic.Label;
-import wicket.markup.html.panel.Panel;
-import wicket.model.Model;
 
 public class OverviewPage extends WebPage
 {
@@ -42,12 +43,13 @@ public class OverviewPage extends WebPage
         List tabs = new ArrayList();
         for( final Component floor : floors )
         {
-            tabs.add( new AbstractTab( new Model() )
+            String tabName = (String) floor.getModelObject();
+            tabs.add( new AbstractTab( new Model( tabName ) )
             {
                 public Panel getPanel( String panelId )
                 {
-                    System.out.println( "AbstractTab.getPanel(" + panelId + ");" );
-                    Panel panel = new Panel( panelId );
+                    System.out.println( "Niclas!!!!!!!!!!!!          AbstractTab.getPanel(" + panelId + ");" );
+                    Panel panel = new FloorTabPanel( panelId );
                     panel.add( floor );
                     return panel;
                 }
@@ -62,6 +64,5 @@ public class OverviewPage extends WebPage
         {
             add( new AjaxTabbedPanel( "floors", tabs ) );
         }
-
     }
 }

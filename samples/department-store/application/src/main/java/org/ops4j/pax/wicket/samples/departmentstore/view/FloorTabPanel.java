@@ -16,18 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package org.ops4j.pax.wicket.service;
+package org.ops4j.pax.wicket.samples.departmentstore.view;
 
-import wicket.Component;
+import wicket.markup.html.panel.Panel;
 
-public interface Content
+public class FloorTabPanel extends Panel
 {
 
-    String CONFIG_DESTINATIONID = "destinationId";
-    String DESTINATIONID_UNKNOWN = "";
-
-    String getDestinationId();
-
-    Component createComponent();
-
+    public FloorTabPanel( String id )
+    {
+        super( id );
+    }
 }

@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,12 +22,14 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracking;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.cm.ConfigurationException;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.Component;
@@ -37,11 +40,11 @@ public abstract class DefaultContentContainer
 
     private String m_containmentId;
     private HashMap<String, List<Content>> m_children;
-    private HashMap<Content, Component> m_created;
     private ServiceTracker m_serviceTracker;
     private String m_destinationId;
     private BundleContext m_bundleContext;
     private DefaultContentTracking m_contentTracking;
+    private ServiceRegistration m_registration;
 
     protected DefaultContentContainer( String containmentId, String destinationId, BundleContext bundleContext )
     {
@@ -65,22 +68,35 @@ public abstract class DefaultContentContainer
         return m_containmentId;
     }
 
+    public final void setContainmentId( String containmentId )
+    {
+        m_containmentId = containmentId;
+    }
+
     public final List<Component> createComponents( String id )
     {
         ArrayList<Component> result = new ArrayList<Component>();
         List<Content> contents = m_children.get( id );
-        for( Content content : contents )
+        
+        if( contents != null )
         {
-            result.add( content.createComponent() );
+            for( Content content : contents )
+            {
+                result.add( content.createComponent() );
+            }
         }
         return result;
     }
 
-    public final void updated( Dictionary dictionary )
-        throws ConfigurationException
+    public final void updated( Dictionary config )
     {
-        m_destinationId = (String) dictionary.get( CONFIG_DESTINATIONID );
-        String newContainmentId = (String) dictionary.get( CONFIG_CONTAINMENTID );
+        if( config == null )
+        {
+            return;
+        }
+        m_registration.setProperties( config );
+        m_destinationId = (String) config.get( CONFIG_DESTINATIONID );
+        String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
         if( m_containmentId != null && m_containmentId.equals( newContainmentId ) )
         {
             return;
@@ -119,23 +135,43 @@ public abstract class DefaultContentContainer
         contents.add( content );
     }
 
-    public final void removeContent( String id, Content content )
+    public final boolean removeContent( String id, Content content )
     {
         List<Content> contents = m_children.get( id );
         if( contents == null )
         {
-            return;
+            return false;
         }
         contents.remove( content );
         if( contents.isEmpty() )
         {
-            m_children.remove( id );
+            return m_children.remove( id ) != null;
         }
+        return false;
     }
 
-    public final String getDestinationID()
+    public final String getDestinationId()
     {
         return m_destinationId;
+    }
+
+    public final void setDestinationId( String destinationId )
+    {
+        m_destinationId = destinationId;
+    }
+
+    public final ServiceRegistration register()
+    {
+        String[] serviceNames =
+            {
+                Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
+            };
+        Properties properties = new Properties();
+        properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
+        properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
+        properties.put( Constants.SERVICE_PID, m_containmentId );
+        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        return m_registration;
     }
 
     public final Component createComponent()
@@ -152,5 +188,6 @@ public abstract class DefaultContentContainer
      * should not be added again?
      */
     protected abstract void removeComponent( Component component );
+
 }
 

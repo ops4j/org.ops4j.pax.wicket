@@ -1,5 +1,6 @@
 /*
  * Copyright 2005 Niclas Hedhman.
+ * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -25,28 +26,28 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import wicket.protocol.http.WicketServlet;
 
 public class HttpTracker
     implements ServiceTrackerCustomizer
 {
 
-
     private BundleContext m_bundleContext;
     private HttpService m_httpService;
-    private Map<String, Servlet> m_servlets;
+    private HashMap<String, WicketServlet> m_servlets;
 
     public HttpTracker( BundleContext bundleContext )
     {
         m_bundleContext = bundleContext;
-        m_servlets = new HashMap<String, Servlet>();
+        m_servlets = new HashMap<String, WicketServlet>();
     }
 
     public Object addingService( ServiceReference serviceReference )
     {
         m_httpService = (HttpService) m_bundleContext.getService( serviceReference );
-        for( Map.Entry<String, Servlet> entry : m_servlets.entrySet() )
+        for( Map.Entry<String, WicketServlet> entry : m_servlets.entrySet() )
         {
-            Servlet servlet = entry.getValue();
+            WicketServlet servlet = entry.getValue();
             String mountpoint = entry.getKey();
             try
             {
@@ -78,7 +79,7 @@ public class HttpTracker
         }
     }
 
-    void addServlet( String mountPoint, Servlet servlet )
+    void addServlet( String mountPoint, WicketServlet servlet )
         throws NamespaceException, ServletException
     {
         mountPoint = normalizeMountPoint( mountPoint );
@@ -104,7 +105,7 @@ public class HttpTracker
         return mountPoint;
     }
 
-    Servlet getServlet( String mountPoint )
+    WicketServlet getServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
         return m_servlets.get( mountPoint );

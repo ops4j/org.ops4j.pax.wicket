@@ -1,0 +1,50 @@
+div.floor div.tab-row
+{
+    float: left;
+    width: 100%;
+    background: #DAE0D2 url( "tabs/bg.gif" ) repeat-x bottom;
+    line-height: normal;
+}
+
+div.floor div.tab-row ul
+{
+    margin: 0;
+    padding: 10px 10px 0;
+    list-style: none;
+}
+
+div.floor div.tab-row li
+{
+    float: left;
+    background: url( "tabs/left.gif" ) no-repeat left top;
+    margin: 0;
+    padding: 0 0 0 9px;
+}
+
+div.floor div.tab-row a
+{
+    display: block;
+    background: url( "tabs/right.gif" ) no-repeat right top;
+    padding: 5px 15px 4px 6px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #765;
+    white-space: nowrap;
+}
+
+div.floor div.tab-row a:hover
+{
+    color: #333;
+}
+
+div.floor div.tab-row li.selected
+{
+    background-image: url( "tabs/left_on.gif" );
+}
+
+div.floor div.tab-row li.selected a
+{
+    background-image: url( "tabs/right_on.gif" );
+    color: #333;
+    padding-bottom: 5px;
+}
