@@ -23,7 +23,10 @@ import wicket.Component;
 public interface Content
 {
 
-    String CONFIG_DESTINATIONID = "destinationId";
+    String APPLICATION_NAME = "pax.wicket.applicationname";
+
+    String CONFIG_DESTINATIONID = "pax.wicket.destinationid";
+
     String DESTINATIONID_UNKNOWN = "";
 
     String getDestinationId();

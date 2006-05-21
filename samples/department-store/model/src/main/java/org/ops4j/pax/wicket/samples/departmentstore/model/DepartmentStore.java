@@ -26,5 +26,6 @@ public interface DepartmentStore
     List<Floor> getFloors();
 
     List<Franchisee> getAllFranchisees();
-    
+
+    String getHistory();
 }

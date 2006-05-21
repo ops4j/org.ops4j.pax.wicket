@@ -46,7 +46,8 @@ public class Activator
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        ServiceReference depStoreService = bundleContext.getServiceReference( DepartmentStore.class.getName() );
+        String depStore = DepartmentStore.class.getName();
+        ServiceReference depStoreService = bundleContext.getServiceReference( depStore );
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreService );
 
         m_registrations = new ArrayList<ServiceRegistration>();
@@ -57,7 +58,7 @@ public class Activator
             for( Franchisee franchisee : franchisees )
             {
                 String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContent content = new FranchiseeContent( bundleContext, franchisee  );
+                FranchiseeContent content = new FranchiseeContent( bundleContext, franchisee, "departmentstore"  );
                 content.setDestinationId( destinationId );
                 ServiceRegistration registration = content.register();
                 m_registrations.add( registration );

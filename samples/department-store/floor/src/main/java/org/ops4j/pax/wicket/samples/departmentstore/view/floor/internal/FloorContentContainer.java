@@ -28,9 +28,9 @@ public class FloorContentContainer extends DefaultContentContainer
     private final Floor m_floor;
 
     public FloorContentContainer( Floor floor, String containmentId, String destinationId,
-                                  BundleContext bundleContext )
+                                  BundleContext bundleContext, String applicationname )
     {
-        super( containmentId, destinationId, bundleContext );
+        super( bundleContext, applicationname, containmentId, destinationId );
         m_floor  = floor;
     }
 

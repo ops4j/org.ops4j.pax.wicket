@@ -29,16 +29,17 @@ import wicket.Component;
 public abstract class DefaultContent
     implements Content, ManagedService
 {
-
     private BundleContext m_bundleContext;
     private String m_contentId;
+    private String m_applicationName;
     private String m_destinationId;
     private ServiceRegistration m_registration;
 
-    protected DefaultContent( BundleContext bundleContext, String contentId )
+    protected DefaultContent( BundleContext bundleContext, String contentId, String applicationName )
     {
         m_bundleContext = bundleContext;
         m_contentId = contentId;
+        m_applicationName = applicationName;
     }
 
     public final String getDestinationId()
@@ -71,6 +72,7 @@ public abstract class DefaultContent
         String[] serviceNames = { Content.class.getName(), ManagedService.class.getName() };
         Properties properties = new Properties();
         properties.put( Constants.SERVICE_PID, m_contentId );
+        properties.put( Content.APPLICATION_NAME, m_applicationName );
         properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
         m_registration = m_bundleContext.registerService( serviceNames, this, properties );
         return m_registration;

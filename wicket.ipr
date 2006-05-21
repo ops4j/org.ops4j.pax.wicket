@@ -184,6 +184,7 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/about.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/application.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/floor.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
@@ -205,13 +206,15 @@
     <option name="autoscrollingFromSource" value="false" />
   </component>
   <component name="libraryTable">
-    <library name="wicket-1.2-rc4">
+    <library name="wicket-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2-rc4/wicket-1.2-rc4.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2-SNAPSHOT/wicket-1.2-SNAPSHOT.jar!/" />
       </CLASSES>
-      <JAVADOC />
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2-SNAPSHOT/wicket-1.2-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
       <SOURCES>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2-rc4/wicket-1.2-rc4-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2-SNAPSHOT/wicket-1.2-SNAPSHOT-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="servlet-api-2.3">
@@ -256,31 +259,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-servicemanager-1.0.2">
+    <library name="wicket-extensions-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/servicemanager/pax-servicemanager/1.0.2/pax-servicemanager-1.0.2.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT.jar!/" />
       </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="wicket-extensions-1.2-rc4">
-      <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-beta2/wicket-extensions-1.2-beta2.jar!/" />
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-rc4/wicket-extensions-1.2-rc4.jar!/" />
-      </CLASSES>
-      <JAVADOC />
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
       <SOURCES>
-        <root url="file:///home/niclas/dev/opensource/sf.net/wicket-1.2-beta2/wicket-extensions/src/java" />
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-rc4/wicket-extensions-1.2-rc4-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="wicket-auth-roles-1.2-rc4">
+    <library name="wicket-auth-roles-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-rc4/wicket-auth-roles-1.2-rc4.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-SNAPSHOT/wicket-auth-roles-1.2-SNAPSHOT.jar!/" />
       </CLASSES>
-      <JAVADOC />
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-SNAPSHOT/wicket-auth-roles-1.2-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
       <SOURCES>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-rc4/wicket-auth-roles-1.2-rc4-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-SNAPSHOT/wicket-auth-roles-1.2-SNAPSHOT-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

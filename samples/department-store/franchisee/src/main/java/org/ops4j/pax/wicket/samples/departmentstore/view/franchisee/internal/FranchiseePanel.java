@@ -26,7 +26,6 @@ import wicket.markup.html.panel.Panel;
 /**
  * {@code FranchiseePanel}
  *
- * @author Edward Yakop
  * @since 1.0.0
  */
 public class FranchiseePanel extends Panel

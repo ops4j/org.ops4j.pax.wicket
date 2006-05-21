@@ -19,6 +19,11 @@ package org.ops4j.pax.wicket.samples.departmentstore.model.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.io.BufferedReader;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
@@ -27,6 +32,7 @@ public class DepartmentStoreImpl implements DepartmentStore
 {
     private List<Floor> m_floors;
     private String m_name;
+    private String m_history;
 
     public DepartmentStoreImpl( String name )
     {
@@ -72,6 +78,13 @@ public class DepartmentStoreImpl implements DepartmentStore
         m_floors.add( floor );
         floor = new FloorImpl( "RoofTop" );
         m_floors.add( floor );
+        try
+        {
+            m_history = loadHistory();
+        } catch( IOException e )
+        {
+            m_history = "Error reading history: " + e.getMessage();
+        }
     }
 
     public String getName()
@@ -92,7 +105,46 @@ public class DepartmentStoreImpl implements DepartmentStore
             List<Franchisee> franchisees = floor.getFranchisees();
             all.addAll( franchisees );
         }
-
         return all;
+    }
+
+    public String getHistory()
+    {
+        return m_history;
+    }
+
+    private String loadHistory()
+        throws IOException
+    {
+        InputStream in = getClass().getResourceAsStream( "History.txt" );
+        try
+        {
+            InputStreamReader isr = new InputStreamReader( in, "UTF-8" );
+            StringBuffer result = new StringBuffer(1000);
+            BufferedReader reader = new BufferedReader( isr );
+            String line = reader.readLine();
+            while( line != null )
+            {
+                result.append( line );
+                if( line.length() == 0 )
+                {
+                    // new paragraph
+                    result.append( '\n' );
+                }
+                else
+                {
+                    result.append( " " );
+                }
+                line = reader.readLine();
+            }
+            return result.toString();
+        } catch( UnsupportedEncodingException e )
+        {
+            // can not happen.
+            return "Unsupported Encoding: " + e.getMessage();
+        } finally
+        {
+            in.close();
+        }
     }
 }

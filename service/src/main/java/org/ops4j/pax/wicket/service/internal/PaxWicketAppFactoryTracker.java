@@ -45,6 +45,7 @@ public class PaxWicketAppFactoryTracker
     public Object addingService( ServiceReference serviceReference )
     {
         final PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) m_bundleContext.getService( serviceReference );
+        String mountPoint = factory.getMountPoint();
         if( m_logger.isDebugEnabled() )
         {
             String message = "Service Added [" + serviceReference + "], Factory hash [" + System.identityHashCode(
@@ -52,24 +53,22 @@ public class PaxWicketAppFactoryTracker
             ) + "]";
             m_logger.debug( message );
         }
-
         WicketServlet servlet = new Servlet( factory );
-        String mountPoint = getMountPoint( serviceReference );
         return addServlet( mountPoint, servlet, serviceReference );
     }
 
     public void modifiedService( ServiceReference serviceReference, Object object )
     {
         String oldMountPoint = (String) object;
-        String newMountPoint = (String) serviceReference.getProperty( PaxWicketApplicationFactory.MOUNTPOINT );
+        final PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) m_bundleContext.getService( serviceReference );
+        String newMountPoint = factory.getMountPoint();
         if( oldMountPoint.equals( newMountPoint ) )
         {
             return;
         }
         WicketServlet servlet = m_httpTracker.getServlet( oldMountPoint );
         removedService( serviceReference, object );
-        String mountPoint = getMountPoint( serviceReference );
-        addServlet( mountPoint, servlet, serviceReference );
+        addServlet( newMountPoint, servlet, serviceReference );
     }
 
     public void removedService( ServiceReference serviceReference, Object object )
@@ -101,18 +100,6 @@ public class PaxWicketAppFactoryTracker
                              + "This servlet was tried to be mounted on '" + mountPoint + "'.";
             throw new IllegalArgumentException( message, e );
         }
-    }
-
-    private String getMountPoint( ServiceReference serviceReference )
-    {
-        String mp = PaxWicketApplicationFactory.MOUNTPOINT;
-        String mountPoint = (String) serviceReference.getProperty( mp );
-        if( mountPoint == null || mountPoint.length() == 0 )
-        {
-            String message = "PaxWicketApplicationFactory [" + serviceReference + "] MUST have a '" + mp + "' configuration property.";
-            throw new IllegalArgumentException( message );
-        }
-        return mountPoint;
     }
 
 }

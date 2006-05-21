@@ -18,7 +18,6 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import java.util.Properties;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
@@ -27,40 +26,26 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import wicket.IPageFactory;
-import wicket.Page;
-import wicket.PageParameters;
 
 /**
- * @author Niclas Hedhman
  * @since 1.0.0
  */
 public class Activator
     implements BundleActivator
 {
+
     private ContentContainer m_store;
     private ServiceRegistration m_serviceRegistration;
 
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        IPageFactory factory = new IPageFactory()
-        {
-            public Page newPage( final Class pageClass )
-            {
-                return new OverviewPage( m_store, "Sungei Wang Plaza" );
-            }
-
-            public Page newPage( final Class pageClass, final PageParameters parameters )
-            {
-                return new OverviewPage( m_store, "Sungei Wang Plaza" );
-            }
-        };
-        m_store = new DefaultPageContainer( "swp", bundleContext, factory );
-        Properties props = new Properties();
-        props.put( PaxWicketApplicationFactory.MOUNTPOINT, "swp" );
-        PaxWicketApplicationFactory applicationFactory = new PaxWicketApplicationFactory( factory, OverviewPage.class );
-        String serviceName = PaxWicketApplicationFactory.class.getName();
-        m_serviceRegistration = bundleContext.registerService( serviceName, applicationFactory, props );
+        m_store = new DefaultPageContainer( bundleContext, "swp", "departmentstore" );
+        IPageFactory factory = new OverviewPageFactory( bundleContext, m_store );
+        String mountPoint = "swp";
+        PaxWicketApplicationFactory applicationFactory =
+            new PaxWicketApplicationFactory( bundleContext, factory, OverviewPage.class, mountPoint );
+        m_serviceRegistration = applicationFactory.register();
     }
 
     public void stop( BundleContext bundleContext )
@@ -69,4 +54,5 @@ public class Activator
         m_serviceRegistration.unregister();
         m_store.dispose();
     }
+
 }

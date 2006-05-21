@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>about</module>
     <module>application</module>
     <module>floor</module>
     <module>franchisee</module>

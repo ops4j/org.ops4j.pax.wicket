@@ -45,9 +45,13 @@ public abstract class DefaultContentContainer
     private BundleContext m_bundleContext;
     private DefaultContentTracking m_contentTracking;
     private ServiceRegistration m_registration;
+    private String m_applicationName;
 
-    protected DefaultContentContainer( String containmentId, String destinationId, BundleContext bundleContext )
+    protected DefaultContentContainer( BundleContext bundleContext, String applicationName, String containmentId,
+                                       String destinationId
+    )
     {
+        m_applicationName = applicationName;
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<Content>>();
         m_destinationId = destinationId;
@@ -170,6 +174,7 @@ public abstract class DefaultContentContainer
         properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
         properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
         properties.put( Constants.SERVICE_PID, m_containmentId );
+        properties.put( Content.APPLICATION_NAME, m_applicationName );
         m_registration = m_bundleContext.registerService( serviceNames, this, properties );
         return m_registration;
     }

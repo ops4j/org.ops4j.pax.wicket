@@ -53,7 +53,7 @@ public class Activator
         for( Floor floor : floors )
         {
             FloorContentContainer container =
-                new FloorContentContainer( floor, floor.getName(), destinationId, bundleContext );
+                new FloorContentContainer( floor, floor.getName(), destinationId, bundleContext, "departmentstore" );
             m_containers.add( container );
             container.setDestinationId( destinationId );
             container.setContainmentId( floor.getName() );

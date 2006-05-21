@@ -20,26 +20,52 @@ package org.ops4j.pax.wicket.service;
 
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.BundleContext;
 import wicket.IPageFactory;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WicketServlet;
+import java.util.Dictionary;
+import java.util.Properties;
 
 public class PaxWicketApplicationFactory
-    implements IWebApplicationFactory
+    implements IWebApplicationFactory, ManagedService
 {
+
     public static final String MOUNTPOINT = "mountpoint";
+    public static final String HOMEPAGE_CLASSNAME = "homepageclassname";
 
     private Class m_homepageClass;
     private IPageFactory m_pageFactory;
 
-    public PaxWicketApplicationFactory( IPageFactory pageFactory, Class homepageClass )
+    private String m_mountPoint;
+    private BundleContext m_bundleContext;
+    private ServiceRegistration m_serviceRegistration;
+
+    public PaxWicketApplicationFactory( BundleContext bundleContext, IPageFactory pageFactory, Class homepageClass, String mountPoint )
     {
+        m_bundleContext = bundleContext;
         NullArgumentException.validateNotNull( pageFactory, "pageFactory" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
+        NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
 
+        m_mountPoint = mountPoint;
         m_homepageClass = homepageClass;
         m_pageFactory = pageFactory;
+    }
+
+    public String getMountPoint()
+    {
+        return m_mountPoint;
+    }
+
+    public void setMountPoint( String mountPoint )
+    {
+        NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
+        m_mountPoint = mountPoint;
     }
 
     /**
@@ -51,6 +77,51 @@ public class PaxWicketApplicationFactory
      */
     public WebApplication createApplication( WicketServlet servlet )
     {
-        return new PaxWicketApplication( m_pageFactory, m_homepageClass );
+        PaxWicketApplication paxWicketApplication = new PaxWicketApplication( m_pageFactory, m_homepageClass, m_mountPoint );
+        return paxWicketApplication;
+    }
+
+    public void updated( Dictionary config )
+        throws ConfigurationException
+    {
+        if( config == null )
+        {
+            return;
+        }
+        String classname = (String) config.get( HOMEPAGE_CLASSNAME );
+        if( classname == null )
+        {
+            config.put( HOMEPAGE_CLASSNAME, m_homepageClass );
+        }
+        else
+        {
+            try
+            {
+                m_homepageClass = m_bundleContext.getBundle().loadClass( classname );
+            } catch( ClassNotFoundException e )
+            {
+                throw new ConfigurationException( HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e );
+            }
+        }
+        String mountpoint = (String) config.get( MOUNTPOINT );
+        if( mountpoint == null )
+        {
+            config.put( MOUNTPOINT, m_mountPoint );
+        }
+        else
+        {
+            setMountPoint( mountpoint );
+        }
+        m_serviceRegistration.setProperties( config );
+    }
+
+    public ServiceRegistration register()
+    {
+        String serviceName = PaxWicketApplicationFactory.class.getName();
+        Properties properties = new Properties();
+        properties.put( MOUNTPOINT, m_mountPoint );
+        properties.put( HOMEPAGE_CLASSNAME, m_homepageClass.getName() );
+        m_serviceRegistration = m_bundleContext.registerService( serviceName, this, properties );
+        return m_serviceRegistration;
     }
 }

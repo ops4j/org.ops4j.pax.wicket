@@ -18,27 +18,28 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view;
 
-import org.ops4j.pax.wicket.service.ContentContainer;
-import wicket.markup.html.WebPage;
-import wicket.markup.html.panel.Panel;
-import wicket.markup.html.basic.Label;
-import wicket.Component;
-import wicket.model.Model;
-import wicket.extensions.markup.html.tabs.AbstractTab;
-import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import java.util.ArrayList;
 import java.util.List;
+import org.ops4j.pax.wicket.service.ContentContainer;
+import wicket.Component;
+import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
+import wicket.extensions.markup.html.tabs.AbstractTab;
+import wicket.markup.html.WebPage;
+import wicket.markup.html.link.PageLink;
+import wicket.markup.html.basic.Label;
+import wicket.markup.html.panel.Panel;
+import wicket.model.Model;
 
 public class OverviewPage extends WebPage
 {
+    private static final String WICKET_ID_LABEL = "storeName";
 
-    public static final int FLOOR_PAGE_SIZE = 10;
-    public static final String WICKET_ID_LABEL = "storeName";
-
-    public OverviewPage( ContentContainer container, String storeName )
+    public OverviewPage( ContentContainer container, String storeName, Class aboutPageClass )
     {
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );
+        PageLink link = new PageLink( "aboutlink", aboutPageClass );
+        add( link );
         final List<Component> floors = container.createComponents( "floor" );
         List tabs = new ArrayList();
         for( final Component floor : floors )
@@ -48,7 +49,6 @@ public class OverviewPage extends WebPage
             {
                 public Panel getPanel( String panelId )
                 {
-                    System.out.println( "Niclas!!!!!!!!!!!!          AbstractTab.getPanel(" + panelId + ");" );
                     Panel panel = new FloorTabPanel( panelId );
                     panel.add( floor );
                     return panel;

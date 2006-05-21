@@ -19,41 +19,38 @@
 package org.ops4j.pax.wicket.service;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Dictionary;
 import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracking;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Constants;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.service.cm.ManagedService;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.util.tracker.ServiceTracker;
 import wicket.Component;
-import wicket.IPageFactory;
-import wicket.Page;
-import wicket.PageParameters;
 
 public class DefaultPageContainer
-    implements ContentContainer, ContentTrackingCallback, PageContent, ManagedService
+    implements ContentContainer, ContentTrackingCallback, ManagedService
 {
     private String m_containmentId;
     private BundleContext m_bundleContext;
-    private IPageFactory m_pageFactory;
+    private String m_applicationName;
     private ServiceTracker m_serviceTracker;
     private HashMap<String, List<Content>> m_children;
     private ServiceRegistration m_registration;
     private DefaultContentTracking m_contentTracking;
 
-    public DefaultPageContainer( String containmentId, BundleContext bundleContext, IPageFactory pageFactory )
+    public DefaultPageContainer( BundleContext bundleContext, String containmentId, String applicationName )
     {
         m_containmentId = containmentId;
         m_bundleContext = bundleContext;
-        m_pageFactory = pageFactory;
+        m_applicationName = applicationName;
         m_children = new HashMap<String, List<Content>>();
         m_contentTracking = new DefaultContentTracking( bundleContext, this );
         m_contentTracking.setContainmentId( m_containmentId );
@@ -111,11 +108,6 @@ public class DefaultPageContainer
         return false;
     }
 
-    public Page createPage( Class cls, PageParameters params )
-    {
-        return m_pageFactory.newPage( cls, params );
-    }
-
     public final ServiceRegistration register()
     {
         String[] serviceNames =
@@ -125,6 +117,7 @@ public class DefaultPageContainer
         Properties properties = new Properties();
         properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
         properties.put( Constants.SERVICE_PID, m_containmentId );
+        properties.put( Content.APPLICATION_NAME, m_applicationName );
         m_registration = m_bundleContext.registerService( serviceNames, this, properties );
         return m_registration;
     }

@@ -34,9 +34,9 @@ public class FranchiseeContent extends DefaultContent
 
     private Franchisee m_franchisee;
 
-    public FranchiseeContent( BundleContext context, Franchisee franchisee )
+    public FranchiseeContent( BundleContext context, Franchisee franchisee, String applicationName )
     {
-        super( context, franchisee.getName()  );
+        super( context, franchisee.getName(), applicationName );
         m_franchisee = franchisee;
     }
 
