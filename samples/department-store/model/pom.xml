@@ -28,7 +28,7 @@
             <bundleName>${pom.name}</bundleName>
             <bundleDescription>Pax Department Service.</bundleDescription>
             <bundleVendor>${pom.organization.name}</bundleVendor>
-            <importPackage>org.osgi.framework;version=1.3</importPackage>
+            <importPackage>org.osgi.framework;version=1.3, org.osgi.util.tracker;version=1.2</importPackage>
             <exportPackage>org.ops4j.pax.wicket.samples.departmentstore.model;version=${pom.version}</exportPackage>
           </osgiManifest>
         </configuration>
@@ -39,6 +39,11 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi_R4_core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_compendium</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

@@ -23,13 +23,14 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.osgi.service.http.HttpContext;
+import org.osgi.util.tracker.ServiceTracker;
 import wicket.protocol.http.WicketServlet;
 
-public class HttpTracker
-    implements ServiceTrackerCustomizer
+public class HttpTracker extends ServiceTracker
 {
 
     private BundleContext m_bundleContext;
@@ -38,6 +39,7 @@ public class HttpTracker
 
     public HttpTracker( BundleContext bundleContext )
     {
+        super( bundleContext, HttpService.class.getName(), null );
         m_bundleContext = bundleContext;
         m_servlets = new HashMap<String, WicketServlet>();
     }
@@ -51,6 +53,7 @@ public class HttpTracker
             String mountpoint = entry.getKey();
             try
             {
+                // TODO: need a HttpContext here!!!!!!!!
                 m_httpService.registerServlet( mountpoint, servlet, null, null );
             } catch( NamespaceException e )
             {
@@ -79,11 +82,12 @@ public class HttpTracker
         }
     }
 
-    void addServlet( String mountPoint, WicketServlet servlet )
+    void addServlet( String mountPoint, WicketServlet servlet, Bundle paxWicketBundle )
         throws NamespaceException, ServletException
     {
         mountPoint = normalizeMountPoint( mountPoint );
-        m_httpService.registerServlet( mountPoint, servlet, null, null );
+        HttpContext httpContext = new GenericContext( paxWicketBundle, mountPoint );
+        m_httpService.registerServlet( mountPoint, servlet, null, httpContext );
         m_servlets.put( mountPoint, servlet );
     }
 

@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -16,16 +15,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package org.ops4j.pax.wicket.service;
+package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
+import org.ops4j.pax.wicket.service.PageContent;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import wicket.Page;
 import wicket.PageParameters;
 
-public interface PageContent
+public class AboutPageContent
+    implements PageContent
 {
+    private DepartmentStoreModelTracker m_tracker;
 
-    Class getPageClass();
+    public AboutPageContent( DepartmentStoreModelTracker tracker )
+    {
+        m_tracker = tracker;
+    }
 
-    Page createPage( PageParameters params );
+    public Class getPageClass()
+    {
+        return AboutPage.class;
+    }
 
+    public Page createPage( PageParameters params )
+    {
+        return new AboutPage( m_tracker.getDepartmentStore() );
+    }
 }

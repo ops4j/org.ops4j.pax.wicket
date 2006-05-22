@@ -71,7 +71,7 @@ public abstract class DefaultContent
     {
         String[] serviceNames = { Content.class.getName(), ManagedService.class.getName() };
         Properties properties = new Properties();
-        properties.put( Constants.SERVICE_PID, m_contentId );
+        properties.put( Constants.SERVICE_PID, m_applicationName + "." + m_contentId );
         properties.put( Content.APPLICATION_NAME, m_applicationName );
         properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
         m_registration = m_bundleContext.registerService( serviceNames, this, properties );

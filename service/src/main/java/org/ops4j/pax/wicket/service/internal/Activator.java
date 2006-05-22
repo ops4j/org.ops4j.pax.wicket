@@ -22,15 +22,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.http.HttpService;
 import org.osgi.util.tracker.ServiceTracker;
-import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 
 public class Activator
     implements BundleActivator
 {
-    private ServiceTracker m_httpTracking;
-    private ServiceTracker m_wicketTracking;
+    private HttpTracker m_httpTracker;
+    private ServiceTracker m_appFactoryTracker;
 
     public void start( BundleContext bundleContext )
         throws Exception
@@ -39,22 +37,19 @@ public class Activator
         Log logger = LogFactory.getFactory().getInstance( Activator.class );
         logger.debug( "Initializing the servlet." );
 
-        HttpTracker httpTracker = new HttpTracker( bundleContext );
-        m_httpTracking = new ServiceTracker( bundleContext, HttpService.class.getName(), httpTracker );
-        m_httpTracking.open();
+        m_httpTracker =  new HttpTracker( bundleContext );
+        m_httpTracker.open();
 
-        PaxWicketAppFactoryTracker wickTracking = new PaxWicketAppFactoryTracker( bundleContext, httpTracker );
-        String serviceName = PaxWicketApplicationFactory.class.getName();
-        m_wicketTracking = new ServiceTracker( bundleContext, serviceName, wickTracking );
-        m_wicketTracking.open();
+        m_appFactoryTracker = new PaxWicketAppFactoryTracker( bundleContext, m_httpTracker );
+        m_appFactoryTracker.open();
     }
 
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        m_httpTracking.close();
-        m_httpTracking = null;
-        m_wicketTracking.close();
-        m_wicketTracking = null;
+        m_httpTracker.close();
+        m_httpTracker = null;
+        m_appFactoryTracker.close();
+        m_appFactoryTracker = null;
     }
 }

@@ -22,23 +22,36 @@ import java.util.ArrayList;
 import java.util.List;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
+import wicket.ResourceReference;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.WebPage;
-import wicket.markup.html.link.PageLink;
+import wicket.markup.html.resources.StyleSheetReference;
 import wicket.markup.html.basic.Label;
+import wicket.markup.html.link.PageLink;
 import wicket.markup.html.panel.Panel;
 import wicket.model.Model;
 
 public class OverviewPage extends WebPage
 {
+
     private static final String WICKET_ID_LABEL = "storeName";
 
     public OverviewPage( ContentContainer container, String storeName, Class aboutPageClass )
     {
+        ResourceReference styleResource = new ResourceReference( "/stylesheets/style.css" );
+        add( new StyleSheetReference( "stylelink", styleResource ) );
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );
-        PageLink link = new PageLink( "aboutlink", aboutPageClass );
+        Component link;
+        if( aboutPageClass == null )
+        {
+            link = new Label( "aboutlink", "" );
+        }
+        else
+        {
+            link = new PageLink( "aboutlink", aboutPageClass );
+        }
         add( link );
         final List<Component> floors = container.createComponents( "floor" );
         List tabs = new ArrayList();

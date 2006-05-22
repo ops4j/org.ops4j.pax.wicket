@@ -19,7 +19,6 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
-import org.ops4j.pax.wicket.service.ContentContainer;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
 import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleActivator;
@@ -34,25 +33,32 @@ public class Activator
     implements BundleActivator
 {
 
-    private ContentContainer m_store;
+    private DefaultPageContainer m_store;
     private ServiceRegistration m_serviceRegistration;
+    private ServiceRegistration m_pageRegistration;
+    private ServiceRegistration m_resourceFinder;
+    private PaxWicketApplicationFactory m_applicationFactory;
 
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        m_store = new DefaultPageContainer( bundleContext, "swp", "departmentstore" );
+        String applicationName = "departmentstore";
+        m_store = new DefaultPageContainer( bundleContext, "swp", applicationName );
+        m_pageRegistration = m_store.register();
         IPageFactory factory = new OverviewPageFactory( bundleContext, m_store );
-        String mountPoint = "swp";
-        PaxWicketApplicationFactory applicationFactory =
-            new PaxWicketApplicationFactory( bundleContext, factory, OverviewPage.class, mountPoint );
-        m_serviceRegistration = applicationFactory.register();
+        String mountPoint = "deptStore";
+        m_applicationFactory = new PaxWicketApplicationFactory( bundleContext, factory, OverviewPage.class, mountPoint, applicationName );
+        m_serviceRegistration = m_applicationFactory.register();
     }
 
     public void stop( BundleContext bundleContext )
         throws Exception
     {
+        m_pageRegistration.unregister();
         m_serviceRegistration.unregister();
         m_store.dispose();
+        m_resourceFinder.unregister();
+        m_applicationFactory.dispose();
     }
 
 }

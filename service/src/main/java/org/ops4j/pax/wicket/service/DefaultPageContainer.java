@@ -21,10 +21,10 @@ package org.ops4j.pax.wicket.service;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
-import org.ops4j.pax.wicket.service.internal.DefaultContentTracking;
+import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -38,29 +38,42 @@ import wicket.Component;
 public class DefaultPageContainer
     implements ContentContainer, ContentTrackingCallback, ManagedService
 {
-    private String m_containmentId;
+    private Hashtable<String, String> m_properties;
     private BundleContext m_bundleContext;
-    private String m_applicationName;
-    private ServiceTracker m_serviceTracker;
     private HashMap<String, List<Content>> m_children;
     private ServiceRegistration m_registration;
-    private DefaultContentTracking m_contentTracking;
+    private DefaultContentTracker m_contentTracking;
+    private ServiceTracker m_serviceTracker;
 
     public DefaultPageContainer( BundleContext bundleContext, String containmentId, String applicationName )
     {
-        m_containmentId = containmentId;
         m_bundleContext = bundleContext;
-        m_applicationName = applicationName;
+        m_properties = new Hashtable<String, String>();
+        setContainmentId( containmentId );
+        setApplicationName( applicationName );
+        m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
         m_children = new HashMap<String, List<Content>>();
-        m_contentTracking = new DefaultContentTracking( bundleContext, this );
-        m_contentTracking.setContainmentId( m_containmentId );
-        m_serviceTracker = new ServiceTracker( bundleContext, Content.class.getName(), m_contentTracking );
-        m_serviceTracker.open();
     }
 
-    public final String getContainmentID()
+    public final String getContainmentId()
     {
-        return m_containmentId;
+        return m_properties.get( ContentContainer.CONFIG_CONTAINMENTID );
+    }
+
+    public final void setContainmentId( String containmentId )
+    {
+        m_properties.put( ContentContainer.CONFIG_CONTAINMENTID, containmentId );
+    }
+
+
+    public String getApplicationName()
+    {
+        return m_properties.get( Content.APPLICATION_NAME );
+    }
+
+    public void setApplicationName( String applicationName )
+    {
+        m_properties.put( Content.APPLICATION_NAME, applicationName );
     }
 
     public final List<Component> createComponents( String id )
@@ -110,15 +123,18 @@ public class DefaultPageContainer
 
     public final ServiceRegistration register()
     {
+        m_contentTracking = new DefaultContentTracker( m_bundleContext, this );
+        m_contentTracking.setContainmentId( getContainmentId() );
+//        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
+        String filter = Content.class.getName();
+        m_serviceTracker = new ServiceTracker( m_bundleContext, filter, m_contentTracking );
+        m_serviceTracker.open();
+
         String[] serviceNames =
             {
-                Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
+                ContentContainer.class.getName(), ManagedService.class.getName()
             };
-        Properties properties = new Properties();
-        properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
-        properties.put( Constants.SERVICE_PID, m_containmentId );
-        properties.put( Content.APPLICATION_NAME, m_applicationName );
-        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
         return m_registration;
     }
 
@@ -130,14 +146,15 @@ public class DefaultPageContainer
             return;
         }
         m_registration.setProperties( config );
+        String existingContainmentId = getContainmentId();
         String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
-        if( m_containmentId != null && m_containmentId.equals( newContainmentId ) )
+        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
         }
         m_children.clear();
-        m_containmentId = newContainmentId;
-        if( m_containmentId != null )
+        setContainmentId( newContainmentId );
+        if( newContainmentId != null )
         {
             try
             {

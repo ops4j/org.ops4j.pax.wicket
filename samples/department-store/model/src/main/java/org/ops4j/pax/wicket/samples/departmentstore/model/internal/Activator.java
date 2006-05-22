@@ -17,11 +17,10 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.model.internal;
 
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.samples.departmentstore.model.internal.DepartmentStoreImpl;
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 
 public class Activator
     implements BundleActivator

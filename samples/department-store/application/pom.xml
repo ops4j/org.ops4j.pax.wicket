@@ -37,10 +37,13 @@
               wicket.extensions.markup.html.tabs; version=1.2,
               wicket.markup.html; version=1.2,
               wicket.markup.html.basic; version=1.2,
+              wicket.markup.html.link; version=1.2,
               wicket.markup.html.panel; version=1.2,
+              wicket.markup.html.resources; version=1.2,
               wicket.model; version=1.2,
               wicket.protocol.http; version=1.2,
-              wicket.settings; version=1.2
+              wicket.settings; version=1.2,
+              wicket.util.file; version=1.2
             </importPackage>
             <exportPackage></exportPackage>
           </osgiManifest>

@@ -26,56 +26,56 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
 
 public class GenericContext
     implements HttpContext
 {
-    private BundleContext m_BundleContext;
-    private String m_RootUrl;
-    private FileTypeMap m_TypeMap;
+    private static final Log m_logger = LogFactory.getLog( GenericContext.class );
 
-    public GenericContext( BundleContext bundleContext, String rootUrl )
+    private String m_rootUrl;
+    private FileTypeMap m_typeMap;
+    private Bundle m_applicationBundle;
+
+    public GenericContext( Bundle applicationBundle, String rootUrl )
     {
-        Log logger = LogFactory.getLog( GenericContext.class );
-        logger.debug( "GenericContext(" + rootUrl + " )" );
-        m_BundleContext = bundleContext;
-        m_RootUrl = rootUrl;
-        m_TypeMap = MimetypesFileTypeMap.getDefaultFileTypeMap();
+        m_logger.debug( "GenericContext(" + rootUrl + " )" );
+        m_applicationBundle = applicationBundle;
+        m_rootUrl = rootUrl;
+        m_typeMap = MimetypesFileTypeMap.getDefaultFileTypeMap();
     }
 
     public boolean handleSecurity( HttpServletRequest httpServletRequest,
                                    HttpServletResponse httpServletResponse )
         throws IOException
     {
-        Log logger = LogFactory.getLog( GenericContext.class );
-        logger.debug( "handleSecurity()" );
+        m_logger.debug( "handleSecurity()" );
         return true;
     }
 
     public URL getResource( String resourcename )
     {
-        Log logger = LogFactory.getLog( GenericContext.class );
-        logger.debug( "getResource( " + resourcename + " )" );
-        int prefixLength = m_RootUrl.length();
-        String resource = resourcename.substring( prefixLength + 1 );
-        return m_BundleContext.getBundle().getResource( resource );
+        m_logger.debug( "getResource( " + resourcename + " )" );
+        int prefixLength = m_rootUrl.length();
+        // TODO: When the contextPath and servletPath issue is resolved, figure out what stays here.
+//        String resource = resourcename.substring( prefixLength + 1 );
+//        return m_applicationBundle.getResource( resource );
+        return m_applicationBundle.getResource( resourcename );
     }
 
     public String getMimeType( String resourcename )
     {
-        Log logger = LogFactory.getLog( GenericContext.class );
-        logger.debug( "getMimeType( " + resourcename + " )" );
+        m_logger.debug( "getMimeType( " + resourcename + " )" );
         URL resource = getResource( resourcename );
         if( resource == null )
         {
             return null;
         }
         String url = resource.toString();
-        logger.debug( "         URL: " + url );
-        String contentType = m_TypeMap.getContentType( url );
-        logger.debug( " ContentType: " + contentType );
+        m_logger.debug( "         URL: " + url );
+        String contentType = m_typeMap.getContentType( url );
+        m_logger.debug( " ContentType: " + contentType );
         return contentType;
     }
 }

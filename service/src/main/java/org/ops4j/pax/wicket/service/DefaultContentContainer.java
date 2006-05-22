@@ -21,10 +21,10 @@ package org.ops4j.pax.wicket.service;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
-import org.ops4j.pax.wicket.service.internal.DefaultContentTracking;
+import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -37,44 +37,48 @@ import wicket.Component;
 public abstract class DefaultContentContainer
     implements ContentContainer, Content, ContentTrackingCallback, ManagedService
 {
-
-    private String m_containmentId;
+    private Hashtable<String, String> m_properties;
     private HashMap<String, List<Content>> m_children;
-    private ServiceTracker m_serviceTracker;
-    private String m_destinationId;
     private BundleContext m_bundleContext;
-    private DefaultContentTracking m_contentTracking;
+    private ServiceTracker m_contentTracker;
     private ServiceRegistration m_registration;
-    private String m_applicationName;
 
     protected DefaultContentContainer( BundleContext bundleContext, String applicationName, String containmentId,
                                        String destinationId
     )
     {
-        m_applicationName = applicationName;
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<Content>>();
-        m_destinationId = destinationId;
-        m_containmentId = containmentId;
-        m_contentTracking = new DefaultContentTracking( bundleContext, this );
-        m_contentTracking.setContainmentId( m_containmentId );
-        m_serviceTracker = new ServiceTracker( bundleContext, Content.class.getName(), m_contentTracking );
-        m_serviceTracker.open();
+        m_properties = new Hashtable<String, String>();
+        setContainmentId( containmentId );
+        setDestinationId( destinationId );
+        setApplicationName(applicationName);
+        m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
+    }
+
+    public String getApplicationName()
+    {
+        return m_properties.get( Content.APPLICATION_NAME );
+    }
+
+    public void setApplicationName( String applicationName )
+    {
+        m_properties.put( Content.APPLICATION_NAME, applicationName );
     }
 
     public final void dispose()
     {
-        m_serviceTracker.close();
+        m_contentTracker.close();
     }
 
-    public final String getContainmentID()
+    public final String getContainmentId()
     {
-        return m_containmentId;
+        return m_properties.get( ContentContainer.CONFIG_CONTAINMENTID );
     }
 
     public final void setContainmentId( String containmentId )
     {
-        m_containmentId = containmentId;
+        m_properties.put( ContentContainer.CONFIG_CONTAINMENTID, containmentId );
     }
 
     public final List<Component> createComponents( String id )
@@ -98,16 +102,15 @@ public abstract class DefaultContentContainer
         {
             return;
         }
-        m_registration.setProperties( config );
-        m_destinationId = (String) config.get( CONFIG_DESTINATIONID );
+        String existingContainmentId = getContainmentId();
         String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
-        if( m_containmentId != null && m_containmentId.equals( newContainmentId ) )
+        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
         }
         m_children.clear();
-        m_containmentId = newContainmentId;
-        if( m_containmentId != null )
+        setContainmentId( newContainmentId );
+        if( newContainmentId != null )
         {
             try
             {
@@ -118,7 +121,7 @@ public abstract class DefaultContentContainer
                 }
                 for( ServiceReference service : services )
                 {
-                    m_contentTracking.addingService( service );
+                    m_contentTracker.addingService( service );
                 }
             } catch( InvalidSyntaxException e )
             {
@@ -126,6 +129,7 @@ public abstract class DefaultContentContainer
                 e.printStackTrace();
             }
         }
+        m_registration.setProperties( config );
     }
 
     public final void addContent( String id, Content content )
@@ -156,33 +160,36 @@ public abstract class DefaultContentContainer
 
     public final String getDestinationId()
     {
-        return m_destinationId;
+        return m_properties.get( Content.CONFIG_DESTINATIONID );
     }
 
     public final void setDestinationId( String destinationId )
     {
-        m_destinationId = destinationId;
+        m_properties.put( Content.CONFIG_DESTINATIONID, destinationId );
     }
 
     public final ServiceRegistration register()
     {
+        DefaultContentTracker customizer = new DefaultContentTracker( m_bundleContext, this );
+        customizer.setContainmentId( getContainmentId() );
+//        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
+        String filter = Content.class.getName();
+        m_contentTracker = new ServiceTracker( m_bundleContext, filter, customizer );
+        m_contentTracker.open();
+
         String[] serviceNames =
             {
                 Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
             };
-        Properties properties = new Properties();
-        properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
-        properties.put( ContentContainer.CONFIG_CONTAINMENTID, m_containmentId );
-        properties.put( Constants.SERVICE_PID, m_containmentId );
-        properties.put( Content.APPLICATION_NAME, m_applicationName );
-        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
         return m_registration;
     }
 
     public final Component createComponent()
     {
-        int pos = m_destinationId.lastIndexOf( '.' );
-        String id = m_destinationId.substring( pos + 1 );
+        String destinationId = getDestinationId();
+        int pos = destinationId.lastIndexOf( '.' );
+        String id = destinationId.substring( pos + 1 );
         return createComponent( id );
     }
 

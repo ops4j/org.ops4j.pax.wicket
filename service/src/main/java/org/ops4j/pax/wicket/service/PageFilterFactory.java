@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,17 +17,15 @@
  */
 package org.ops4j.pax.wicket.service;
 
-import wicket.Component;
-import java.util.List;
+import org.ops4j.lang.NullArgumentException;
 
-public interface ContentContainer
+public final class PageFilterFactory
 {
 
-    String CONFIG_CONTAINMENTID = "pax.wicket.containmentid";
-
-    String getContainmentId();
-
-    List<Component> createComponents( String id );
-
-    void dispose();
+    public static String createPageFilter( String pagename, String applicationName )
+    {
+        NullArgumentException.validateNotEmpty( pagename, "pagename" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        return "(&(" +Content.PAGE_NAME + "=" + pagename + ")(" + Content.APPLICATION_NAME+ "=" + applicationName + "))";
+    }
 }

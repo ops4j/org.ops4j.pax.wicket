@@ -28,6 +28,8 @@ public interface Content
     String CONFIG_DESTINATIONID = "pax.wicket.destinationid";
 
     String DESTINATIONID_UNKNOWN = "";
+    
+    String PAGE_NAME = "pax.wicket.pagename";
 
     String getDestinationId();
 

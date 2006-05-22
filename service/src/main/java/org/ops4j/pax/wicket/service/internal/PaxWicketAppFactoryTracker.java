@@ -25,11 +25,10 @@ import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.osgi.util.tracker.ServiceTracker;
 import wicket.protocol.http.WicketServlet;
 
-public class PaxWicketAppFactoryTracker
-    implements ServiceTrackerCustomizer
+public class PaxWicketAppFactoryTracker extends ServiceTracker
 {
 
     private static final Log m_logger = LogFactory.getLog( PaxWicketAppFactoryTracker.class );
@@ -38,6 +37,7 @@ public class PaxWicketAppFactoryTracker
 
     public PaxWicketAppFactoryTracker( BundleContext bundleContext, HttpTracker httpTracker )
     {
+        super( bundleContext, PaxWicketApplicationFactory.class.getName(), null );
         m_bundleContext = bundleContext;
         m_httpTracker = httpTracker;
     }
@@ -89,7 +89,7 @@ public class PaxWicketAppFactoryTracker
     {
         try
         {
-            m_httpTracker.addServlet( mountPoint, servlet );
+            m_httpTracker.addServlet( mountPoint, servlet,  appFactory.getBundle() );
             return mountPoint;
         } catch( NamespaceException e )
         {

@@ -18,18 +18,18 @@
  */
 package org.ops4j.pax.wicket.service;
 
+import java.util.Dictionary;
+import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 import wicket.IPageFactory;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WicketServlet;
-import java.util.Dictionary;
-import java.util.Properties;
 
 public class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
@@ -42,10 +42,12 @@ public class PaxWicketApplicationFactory
     private IPageFactory m_pageFactory;
 
     private String m_mountPoint;
+
     private BundleContext m_bundleContext;
+
     private ServiceRegistration m_serviceRegistration;
 
-    public PaxWicketApplicationFactory( BundleContext bundleContext, IPageFactory pageFactory, Class homepageClass, String mountPoint )
+    public PaxWicketApplicationFactory( BundleContext bundleContext, IPageFactory pageFactory, Class homepageClass, String mountPoint, String applicationName )
     {
         m_bundleContext = bundleContext;
         NullArgumentException.validateNotNull( pageFactory, "pageFactory" );
@@ -55,6 +57,10 @@ public class PaxWicketApplicationFactory
         m_mountPoint = mountPoint;
         m_homepageClass = homepageClass;
         m_pageFactory = pageFactory;
+    }
+
+    public void dispose()
+    {
     }
 
     public String getMountPoint()

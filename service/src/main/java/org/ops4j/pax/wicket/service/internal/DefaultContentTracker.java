@@ -26,17 +26,17 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-public class DefaultContentTracking
+public class DefaultContentTracker
     implements ServiceTrackerCustomizer
 {
 
-    private static final Log m_logger = LogFactory.getLog( DefaultContentTracking.class );
+    private static final Log m_logger = LogFactory.getLog( DefaultContentTracker.class );
 
     private String m_containmentId;
     private BundleContext m_context;
     private ContentTrackingCallback m_callback;
 
-    public DefaultContentTracking( BundleContext context, ContentTrackingCallback callback )
+    public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback )
     {
         m_context = context;
         m_callback = callback;
@@ -54,7 +54,7 @@ public class DefaultContentTracking
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
-        String dest = (String) serviceReference.getProperty( "destinationId" );
+        String dest = (String) serviceReference.getProperty( Content.CONFIG_DESTINATIONID );
         Object service = m_context.getService( serviceReference );
         if( dest == null )
         {
@@ -116,7 +116,10 @@ public class DefaultContentTracking
         boolean wasContentRemoved = m_callback.removeContent( id, content );
         if( m_logger.isInfoEnabled() && wasContentRemoved )
         {
-            m_logger.info( "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId + "]" );
+            m_logger.info(
+                "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId + "]"
+            );
         }
     }
+
 }

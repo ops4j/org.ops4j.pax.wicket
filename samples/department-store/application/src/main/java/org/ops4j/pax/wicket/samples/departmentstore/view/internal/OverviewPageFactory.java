@@ -17,24 +17,20 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
+import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
+import org.ops4j.pax.wicket.service.ContentContainer;
+import org.ops4j.pax.wicket.service.PageContent;
+import org.ops4j.pax.wicket.service.PageFilterFactory;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import wicket.IPageFactory;
 import wicket.Page;
 import wicket.PageParameters;
-import wicket.markup.html.WebPage;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
-import org.ops4j.pax.wicket.service.ContentContainer;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.InvalidSyntaxException;
 
 class OverviewPageFactory
     implements IPageFactory
 {
-
-    private final Log m_logger = LogFactory.getLog( OverviewPage.class );
-
     private BundleContext m_context;
     private ContentContainer m_store;
 
@@ -46,34 +42,30 @@ class OverviewPageFactory
 
     public Page newPage( final Class pageClass, PageParameters params )
     {
-        if( OverviewPage.class.isAssignableFrom( pageClass ))
+        if( OverviewPage.class.isAssignableFrom( pageClass ) )
         {
             ServiceReference[] refs;
             try
             {
-                refs = m_context.getServiceReferences( WebPage.class.getName(), "(pagename=about)");
+                refs = m_context.getServiceReferences( PageContent.class.getName(), PageFilterFactory.createPageFilter( "about", "departmentstore" ) );
             } catch( InvalidSyntaxException e )
             {
-                // Can't happen.
                 e.printStackTrace();
                 return null;
             }
-            if( refs.length == 0 )
+            Class aboutpageClass;
+            if( refs == null || refs.length == 0 )
             {
-                return null;
+                aboutpageClass = null;
             }
-            String classname = (String) refs[0].getProperty( "pageclassname" );
-            Class aboutpageClass = null;
-            try
+            else
             {
-                aboutpageClass = refs[0].getBundle().loadClass( classname );
-                OverviewPage overviewPage = new OverviewPage( m_store, "Sungei Wang Plaza", aboutpageClass );
-                return overviewPage;
-            } catch( ClassNotFoundException e )
-            {
-                m_logger.error( "Class '" + classname + "' could not be found.");
-                return null;
+                ServiceReference ref = refs[ 0 ];
+                PageContent pageContent = (PageContent) m_context.getService( ref );
+                aboutpageClass = pageContent.getPageClass();
             }
+            OverviewPage overviewPage = new OverviewPage( m_store, "Sungei Wang Plaza", aboutpageClass );
+            return overviewPage;
         }
         return null;
     }
