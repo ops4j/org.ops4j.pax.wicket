@@ -20,7 +20,6 @@ package org.ops4j.pax.wicket.service.internal;
 
 import java.io.IOException;
 import java.net.URL;
-import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +34,7 @@ public class GenericContext
     private static final Log m_logger = LogFactory.getLog( GenericContext.class );
 
     private String m_rootUrl;
-    private FileTypeMap m_typeMap;
+    private MimetypesFileTypeMap m_typeMap;
     private Bundle m_applicationBundle;
 
     public GenericContext( Bundle applicationBundle, String rootUrl )
@@ -43,7 +42,8 @@ public class GenericContext
         m_logger.debug( "GenericContext(" + rootUrl + " )" );
         m_applicationBundle = applicationBundle;
         m_rootUrl = rootUrl;
-        m_typeMap = MimetypesFileTypeMap.getDefaultFileTypeMap();
+        m_typeMap = (MimetypesFileTypeMap) MimetypesFileTypeMap.getDefaultFileTypeMap();
+        m_typeMap.addMimeTypes( "text/css  css" );
     }
 
     public boolean handleSecurity( HttpServletRequest httpServletRequest,
