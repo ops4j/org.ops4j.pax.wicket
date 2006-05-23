@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry exported="true" kind="lib" path="wicket-1.2-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="wicket-auth-roles-1.2-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="wicket-extensions-1.2-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/classes/pax-logging-client-0.6.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/classes/activation-1.0.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="target/classes/avalon-framework-api-4.3.jar"/>
