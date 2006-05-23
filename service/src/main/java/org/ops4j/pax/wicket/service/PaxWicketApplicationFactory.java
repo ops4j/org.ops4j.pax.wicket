@@ -77,6 +77,16 @@ public final class PaxWicketApplicationFactory
         m_mountPoint = mountPoint;
     }
 
+    public boolean isDeploymentMode()
+    {
+        return m_deploymentMode;
+    }
+
+    public void setDeploymentMode( boolean deploymentMode )
+    {
+        m_deploymentMode = deploymentMode;
+    }
+
     /**
      * Create application object
      *

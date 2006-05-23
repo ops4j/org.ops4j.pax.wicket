@@ -47,11 +47,15 @@ public class OverviewPageContent extends AbstractPageContent
     public Page createPage( PageParameters params )
     {
         PageContent[] pages = PageFinder.findPages( m_context, "departmentstore", "about" );
+        Class pageClass;
         if( pages.length == 0 )
         {
-            return null;
+            pageClass = null;
         }
-        Class pageClass = pages[ 0 ].getPageClass();
+        else
+        {
+            pageClass = pages[ 0 ].getPageClass();
+        }
         OverviewPage overviewPage = new OverviewPage( m_pageContainer, "Sungei Wang Plaza", pageClass );
         return overviewPage;
     }

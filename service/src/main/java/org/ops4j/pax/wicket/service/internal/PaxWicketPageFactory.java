@@ -145,6 +145,7 @@ public final class PaxWicketPageFactory
             } catch( ClassNotFoundException e )
             {
                 return null;
+//                throw new WicketRuntimeException( "Page is currently not available." );
             }
         }
         return resolved;
