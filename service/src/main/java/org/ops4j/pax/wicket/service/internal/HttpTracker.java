@@ -18,7 +18,9 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import javax.servlet.ServletException;
 import org.osgi.framework.BundleContext;
@@ -87,7 +89,8 @@ public class HttpTracker extends ServiceTracker
     {
         mountPoint = normalizeMountPoint( mountPoint );
         HttpContext httpContext = new GenericContext( paxWicketBundle, mountPoint );
-        m_httpService.registerServlet( mountPoint, servlet, null, httpContext );
+        Dictionary initParams = new Hashtable<String, String>();
+        m_httpService.registerServlet( mountPoint, servlet, initParams, httpContext );
         m_servlets.put( mountPoint, servlet );
     }
 
