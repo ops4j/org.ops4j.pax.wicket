@@ -19,27 +19,24 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import org.ops4j.lang.NullArgumentException;
-import wicket.IPageFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.settings.ISessionSettings;
+import wicket.settings.IApplicationSettings;
 
 public final class PaxWicketApplication extends WebApplication
 {
 
-    protected IPageFactory m_factory;
     protected Class m_homepageClass;
-    private String m_mountPoint;
+    private PaxWicketPageFactory m_factory;
     private boolean m_deploymentMode;
 
-    public PaxWicketApplication( IPageFactory factory, Class homepageClass, String mountPoint, boolean deploymentMode )
+    public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory, boolean deploymentMode )
     {
+        m_factory = factory;
         m_deploymentMode = deploymentMode;
-        NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
 
-        m_mountPoint = mountPoint;
         m_homepageClass = homepageClass;
-        m_factory = factory;
     }
 
     /**
@@ -65,6 +62,9 @@ public final class PaxWicketApplication extends WebApplication
     public void init()
     {
         super.init();
+        IApplicationSettings applicationSettings = getApplicationSettings();
+        applicationSettings.setClassResolver( m_factory );
+        
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
         if( m_deploymentMode )

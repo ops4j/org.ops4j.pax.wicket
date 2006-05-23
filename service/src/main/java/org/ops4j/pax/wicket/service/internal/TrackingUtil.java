@@ -18,11 +18,11 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import org.ops4j.pax.wicket.service.Content;
+import org.ops4j.pax.wicket.service.PageContent;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.Constants;
-import wicket.util.file.IResourceFinder;
 
 public class TrackingUtil
 {
@@ -34,26 +34,29 @@ public class TrackingUtil
         {
             String filterString = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")"
                                   + "(" + Constants.OBJECTCLASS + "=" + Content.class.getName() + "))";
-            filter = bundleContext.createFilter( filterString);
+            filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {
-            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName );
+            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
+            );
         }
         return filter;
     }
 
-    static Filter createResourceFinderFilter( BundleContext bundleContext, String applicationName )
+    public static Filter createAllPageContentFilter( BundleContext bundleContext, String applicationName )
     {
         Filter filter;
         try
         {
             String filterString = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + IResourceFinder.class.getName() + "))";
-            filter = bundleContext.createFilter( filterString);
+                                  + "(" + Constants.OBJECTCLASS + "=" + PageContent.class.getName() + "))";
+            filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {
-            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName );
+            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
+            );
         }
         return filter;
     }
+
 }

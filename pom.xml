@@ -33,9 +33,9 @@
     </plugins>
   </build>
   <modules>
-    <module>external/wicket</module>
+<!--    <module>external/wicket</module>
     <module>external/wicket-auth-roles</module>
-    <module>external/wicket-extensions</module>
+    <module>external/wicket-extensions</module> -->
     <module>service</module>
     <module>samples</module>
   </modules>

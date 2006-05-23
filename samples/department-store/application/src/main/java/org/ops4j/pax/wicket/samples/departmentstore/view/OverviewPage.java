@@ -26,11 +26,11 @@ import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.WebPage;
 import wicket.markup.html.basic.Label;
-import wicket.markup.html.link.PageLink;
+import wicket.markup.html.link.BookmarkablePageLink;
 import wicket.markup.html.panel.Panel;
 import wicket.model.Model;
 
-public class OverviewPage extends WebPage
+public final class OverviewPage extends WebPage
 {
 
     private static final String WICKET_ID_LABEL = "storeName";
@@ -46,7 +46,7 @@ public class OverviewPage extends WebPage
         }
         else
         {
-            link = new PageLink( "aboutlink", aboutPageClass );
+            link = new BookmarkablePageLink( "aboutlink", aboutPageClass );
         }
         add( link );
         final List<Component> floors = container.createComponents( "floor" );

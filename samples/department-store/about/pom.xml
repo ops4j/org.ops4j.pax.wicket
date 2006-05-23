@@ -34,6 +34,7 @@
               org.osgi.framework;version=1.3,
               wicket;version=1.2,
               wicket.model;version=1.2,
+              wicket.markup.html.border;
               wicket.markup.html.basic;version=1.2,
               wicket.markup.html;version=1.2
             </importPackage>

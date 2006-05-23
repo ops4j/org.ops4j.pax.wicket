@@ -22,16 +22,16 @@ import java.util.Dictionary;
 import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
+import org.ops4j.pax.wicket.service.internal.PaxWicketPageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import wicket.IPageFactory;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WicketServlet;
 
-public class PaxWicketApplicationFactory
+public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
 {
 
@@ -39,7 +39,6 @@ public class PaxWicketApplicationFactory
     public static final String HOMEPAGE_CLASSNAME = "homepageclassname";
 
     private Class m_homepageClass;
-    private IPageFactory m_pageFactory;
 
     private String m_mountPoint;
 
@@ -47,22 +46,24 @@ public class PaxWicketApplicationFactory
 
     private ServiceRegistration m_serviceRegistration;
     private boolean m_deploymentMode;
+    private String m_applicationName;
+    private PaxWicketPageFactory m_pageFactory;
 
-    public PaxWicketApplicationFactory( BundleContext bundleContext, IPageFactory pageFactory, Class homepageClass, String mountPoint, String applicationName )
+    public PaxWicketApplicationFactory( BundleContext bundleContext, Class homepageClass, String mountPoint,
+                                        String applicationName )
     {
-        NullArgumentException.validateNotNull( pageFactory, "pageFactory" );
-        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
-
+        m_homepageClass = homepageClass;
         m_bundleContext = bundleContext;
         m_mountPoint = mountPoint;
-        m_homepageClass = homepageClass;
-        m_pageFactory = pageFactory;
         m_deploymentMode = false;
+        setApplicationName( applicationName );
+
     }
 
     public void dispose()
     {
+        m_pageFactory.stop();
     }
 
     public String getMountPoint()
@@ -85,7 +86,8 @@ public class PaxWicketApplicationFactory
      */
     public WebApplication createApplication( WicketServlet servlet )
     {
-        PaxWicketApplication paxWicketApplication = new PaxWicketApplication( m_pageFactory, m_homepageClass, m_mountPoint, m_deploymentMode );
+        PaxWicketApplication paxWicketApplication =
+            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_deploymentMode );
         return paxWicketApplication;
     }
 
@@ -134,4 +136,17 @@ public class PaxWicketApplicationFactory
         m_serviceRegistration = m_bundleContext.registerService( serviceName, this, properties );
         return m_serviceRegistration;
     }
+
+    private void setApplicationName( String applicationName )
+    {
+        if( m_pageFactory != null )
+        {
+            m_pageFactory.stop();
+        }
+
+        m_pageFactory = new PaxWicketPageFactory( m_bundleContext, applicationName );
+        m_pageFactory.start();
+        m_applicationName = applicationName;
+    }
+
 }

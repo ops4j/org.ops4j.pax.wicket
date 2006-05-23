@@ -17,12 +17,13 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
+import java.util.Properties;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import org.ops4j.pax.wicket.service.PageContent;
+import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import java.util.Properties;
 
 public class Activator
     implements BundleActivator
@@ -37,7 +38,8 @@ public class Activator
         m_storeTracker.open();
         AboutPageContent pageContent = new AboutPageContent( m_storeTracker );
         Properties props = new Properties();
-        props.put( "pagename", "about" );
+        props.put( Content.PAGE_NAME, "about" );
+        props.put( Content.APPLICATION_NAME, "departmentstore" );
         m_serviceRegistration = bundleContext.registerService( PageContent.class.getName(), pageContent, props );
     }
 

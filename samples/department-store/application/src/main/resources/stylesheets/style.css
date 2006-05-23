@@ -93,3 +93,17 @@ div.floorpanel div.tab-row li.selected a
     padding-left: 4em;
     background-color: #f5f7f2;
 }
+
+.history-link
+{
+    border-left: 2px #f5f7f2 solid;
+    border-top: 2px #f5f7f2 solid;
+    border-right: 2px #765 solid;
+    border-bottom: 2px #765 solid;
+    background-color: #dbe1d3;
+    padding: 4px;
+    color: #765;
+    font-weight: bold;
+    display: inline;
+    
+}
