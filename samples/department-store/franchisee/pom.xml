@@ -33,8 +33,9 @@
               org.ops4j.pax.wicket.service; version=${pom.version},
               org.osgi.framework; version=1.2,
               wicket; version=1.2,
-              wicket.markup.html.basic; version=1.2,
-              wicket.markup.html.panel; version=1.2
+              wicket.extensions.ajax.markup.html; version=1.2,
+              wicket.markup.html.panel; version=1.2,
+              wicket.model;version=1.2
             </importPackage>
             <exportPackage></exportPackage>
           </osgiManifest>

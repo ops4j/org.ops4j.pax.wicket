@@ -19,11 +19,15 @@ package org.ops4j.pax.wicket.samples.departmentstore.model.internal;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.Serializable;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 
-public class FloorImpl implements Floor
+public class FloorImpl
+    implements Floor, Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private String m_name;
     private List<Franchisee> m_franchisees;

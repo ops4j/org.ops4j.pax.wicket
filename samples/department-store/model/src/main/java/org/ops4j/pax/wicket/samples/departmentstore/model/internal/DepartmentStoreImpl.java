@@ -24,12 +24,17 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.Serializable;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 
-public class DepartmentStoreImpl implements DepartmentStore
+public class DepartmentStoreImpl
+    implements DepartmentStore, Serializable
 {
+
+    private static final long serialVersionUID = 1L;
+
     private List<Floor> m_floors;
     private String m_name;
     private String m_history;

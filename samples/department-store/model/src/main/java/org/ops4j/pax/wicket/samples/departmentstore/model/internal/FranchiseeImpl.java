@@ -18,9 +18,13 @@
 package org.ops4j.pax.wicket.samples.departmentstore.model.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
+import java.io.Serializable;
 
-public class FranchiseeImpl implements Franchisee
+public class FranchiseeImpl
+    implements Franchisee, Serializable
 {
+
+    private static final long serialVersionUID = 1L;
 
     private String m_name;
     private String m_description;
@@ -36,6 +40,11 @@ public class FranchiseeImpl implements Franchisee
         return m_name;
     }
 
+    public void setName( String name )
+    {   
+        m_name = name;
+    }
+
     public String getDescription()
     {
         return m_description;
@@ -43,6 +52,6 @@ public class FranchiseeImpl implements Franchisee
 
     public void setDescription( String description )
     {
-        m_description = description; 
+        m_description = description;
     }
 }

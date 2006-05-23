@@ -87,9 +87,25 @@ div.floorpanel div.tab-row li.selected a
     background-color: #dbe1d3;
 }
 
+.franchisee-item .name input
+{
+    border: 1px solid green;
+    font-weight:bold;
+    display: block;
+    background-color: #dbe1d3;
+}
+
 .franchisee-item .description
 {
     display: block;
+    padding-left: 4em;
+    background-color: #f5f7f2;
+}
+
+.franchisee-item .description input
+{
+    display: block;
+    border: 1px solid green;
     padding-left: 4em;
     background-color: #f5f7f2;
 }
