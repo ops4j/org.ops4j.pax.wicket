@@ -22,11 +22,11 @@ import java.util.List;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
-import wicket.model.Model;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
 import wicket.markup.html.list.ListView;
 import wicket.markup.html.panel.Panel;
+import wicket.model.Model;
 
 /**
  * {@code FloorPanel}
@@ -44,26 +44,19 @@ public class FloorPanel extends Panel
     public FloorPanel( String id, ContentContainer container, Floor floor )
     {
         super( id, new Model( floor.getName() ) );
-        Label nameLabel = new Label( WICKET_ID_NAME_LABEL, floor.getName() );
-        add( nameLabel );
         final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE );
         if( franchisees.isEmpty() )
         {
-            Panel p = new Panel( "franchisees" );
-            p.add( new Label( "franchisee", "No Franchisees on this floor." ) );
-            add( p );
+            franchisees.add( new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." ) );
         }
-        else
+        ListView listView = new ListView( WICKET_ID_FRANCHISEES, franchisees )
         {
-            ListView listView = new ListView( WICKET_ID_FRANCHISEES, franchisees )
+            protected void populateItem( final ListItem item )
             {
-                protected void populateItem( final ListItem item )
-                {
-                    item.add( (Component) item.getModelObject() );
-                }
-            };
-            add( listView );
-        }
+                item.add( (Component) item.getModelObject() );
+            }
+        };
+        add( listView );
     }
 
 }

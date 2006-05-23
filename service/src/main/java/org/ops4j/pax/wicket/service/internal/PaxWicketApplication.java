@@ -29,9 +29,11 @@ public final class PaxWicketApplication extends WebApplication
     protected IPageFactory m_factory;
     protected Class m_homepageClass;
     private String m_mountPoint;
+    private boolean m_deploymentMode;
 
-    public PaxWicketApplication( IPageFactory factory, Class homepageClass, String mountPoint )
+    public PaxWicketApplication( IPageFactory factory, Class homepageClass, String mountPoint, boolean deploymentMode )
     {
+        m_deploymentMode = deploymentMode;
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
 
@@ -65,6 +67,13 @@ public final class PaxWicketApplication extends WebApplication
         super.init();
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
-        configure( DEPLOYMENT );
+        if( m_deploymentMode )
+        {
+            configure( DEPLOYMENT );
+        }
+        else
+        {
+            configure( DEVELOPMENT );
+        }
     }
 }

@@ -22,11 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
-import wicket.ResourceReference;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.WebPage;
-import wicket.markup.html.resources.StyleSheetReference;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.link.PageLink;
 import wicket.markup.html.panel.Panel;
@@ -39,8 +37,6 @@ public class OverviewPage extends WebPage
 
     public OverviewPage( ContentContainer container, String storeName, Class aboutPageClass )
     {
-        ResourceReference styleResource = new ResourceReference( "/stylesheets/style.css" );
-        add( new StyleSheetReference( "stylelink", styleResource ) );
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );
         Component link;

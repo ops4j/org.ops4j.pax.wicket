@@ -25,11 +25,13 @@ import java.util.Hashtable;
 import java.util.List;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
+import org.ops4j.pax.wicket.service.internal.TrackingUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Filter;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.Component;
@@ -172,8 +174,7 @@ public abstract class DefaultContentContainer
     {
         DefaultContentTracker customizer = new DefaultContentTracker( m_bundleContext, this );
         customizer.setContainmentId( getContainmentId() );
-//        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
-        String filter = Content.class.getName();
+        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
         m_contentTracker = new ServiceTracker( m_bundleContext, filter, customizer );
         m_contentTracker.open();
 

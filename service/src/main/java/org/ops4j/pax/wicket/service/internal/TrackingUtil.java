@@ -33,7 +33,7 @@ public class TrackingUtil
         try
         {
             String filterString = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + Content.class.getName() + " ) )";
+                                  + "(" + Constants.OBJECTCLASS + "=" + Content.class.getName() + "))";
             filter = bundleContext.createFilter( filterString);
         } catch( InvalidSyntaxException e )
         {
@@ -48,7 +48,7 @@ public class TrackingUtil
         try
         {
             String filterString = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + IResourceFinder.class.getName() + " ) )";
+                                  + "(" + Constants.OBJECTCLASS + "=" + IResourceFinder.class.getName() + "))";
             filter = bundleContext.createFilter( filterString);
         } catch( InvalidSyntaxException e )
         {

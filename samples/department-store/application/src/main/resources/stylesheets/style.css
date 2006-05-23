@@ -1,11 +1,16 @@
 
 h3
 {
-    background-color: yellow;
-    color: blue;
+    font-weight: bold;
+    color: #765;
 }
 
-div.floor div.tab-row
+.tab-row
+{
+    margin: 0px;
+}
+
+div.floorpanel div.tab-row
 {
     float: left;
     width: 100%;
@@ -13,14 +18,14 @@ div.floor div.tab-row
     line-height: normal;
 }
 
-div.floor div.tab-row ul
+div.floorpanel div.tab-row ul
 {
     margin: 0;
     padding: 10px 10px 0;
     list-style: none;
 }
 
-div.floor div.tab-row li
+div.floorpanel div.tab-row li
 {
     float: left;
     background: url( "tabs/left.gif" ) no-repeat left top;
@@ -28,7 +33,7 @@ div.floor div.tab-row li
     padding: 0 0 0 9px;
 }
 
-div.floor div.tab-row a
+div.floorpanel div.tab-row a
 {
     display: block;
     background: url( "tabs/right.gif" ) no-repeat right top;
@@ -39,19 +44,52 @@ div.floor div.tab-row a
     white-space: nowrap;
 }
 
-div.floor div.tab-row a:hover
+div.floorpanel div.tab-row a:hover
 {
     color: #333;
 }
 
-div.floor div.tab-row li.selected
+div.floorpanel div.tab-row li.selected
 {
     background-image: url( "tabs/left_on.gif" );
 }
 
-div.floor div.tab-row li.selected a
+div.floorpanel div.tab-row li.selected a
 {
     background-image: url( "tabs/right_on.gif" );
     color: #333;
     padding-bottom: 5px;
+}
+
+.floortable
+{
+    border-bottom: 1px black solid;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
+    padding: 3px;
+}
+
+.franchisee-row
+{
+    display: block;
+    border: none;
+}
+
+.franchisee-item
+{
+    display: inline;
+}
+
+.franchisee-item .name
+{
+    font-weight:bold;
+    display: block;
+    background-color: #dbe1d3;
+}
+
+.franchisee-item .description
+{
+    display: block;
+    padding-left: 4em;
+    background-color: #f5f7f2;
 }

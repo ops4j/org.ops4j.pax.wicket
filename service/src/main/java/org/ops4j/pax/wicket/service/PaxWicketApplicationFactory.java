@@ -46,17 +46,19 @@ public class PaxWicketApplicationFactory
     private BundleContext m_bundleContext;
 
     private ServiceRegistration m_serviceRegistration;
+    private boolean m_deploymentMode;
 
     public PaxWicketApplicationFactory( BundleContext bundleContext, IPageFactory pageFactory, Class homepageClass, String mountPoint, String applicationName )
     {
-        m_bundleContext = bundleContext;
         NullArgumentException.validateNotNull( pageFactory, "pageFactory" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
 
+        m_bundleContext = bundleContext;
         m_mountPoint = mountPoint;
         m_homepageClass = homepageClass;
         m_pageFactory = pageFactory;
+        m_deploymentMode = false;
     }
 
     public void dispose()
@@ -83,7 +85,7 @@ public class PaxWicketApplicationFactory
      */
     public WebApplication createApplication( WicketServlet servlet )
     {
-        PaxWicketApplication paxWicketApplication = new PaxWicketApplication( m_pageFactory, m_homepageClass, m_mountPoint );
+        PaxWicketApplication paxWicketApplication = new PaxWicketApplication( m_pageFactory, m_homepageClass, m_mountPoint, m_deploymentMode );
         return paxWicketApplication;
     }
 
@@ -118,6 +120,8 @@ public class PaxWicketApplicationFactory
         {
             setMountPoint( mountpoint );
         }
+        String s = (String) config.get( "deploymentMode" );
+        m_deploymentMode = Boolean.parseBoolean( s );
         m_serviceRegistration.setProperties( config );
     }
 
