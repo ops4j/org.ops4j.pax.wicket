@@ -91,7 +91,6 @@ public final class PaxWicketPageFactory
     public Page newPage( final Class pageClass, final PageParameters parameters )
     {
         PageContent content = m_contents.get( pageClass );
-        m_logger.debug( "EFY: Identity [" + System.identityHashCode( pageClass ) + "] Contents [" + m_contents + "]" );
         if( content == null )
         {
             try
@@ -145,7 +144,6 @@ public final class PaxWicketPageFactory
             } catch( ClassNotFoundException e )
             {
                 return null;
-//                throw new WicketRuntimeException( "Page is currently not available." );
             }
         }
         return resolved;

@@ -34,31 +34,23 @@ import wicket.protocol.http.WicketServlet;
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
 {
-
-    public static final String MOUNTPOINT = "mountpoint";
-    public static final String HOMEPAGE_CLASSNAME = "homepageclassname";
-
     private Class m_homepageClass;
-
-    private String m_mountPoint;
-
     private BundleContext m_bundleContext;
-
-    private ServiceRegistration m_serviceRegistration;
-    private boolean m_deploymentMode;
-    private String m_applicationName;
+    private ServiceRegistration m_registration;
     private PaxWicketPageFactory m_pageFactory;
+    private Properties m_properties;
 
     public PaxWicketApplicationFactory( BundleContext bundleContext, Class homepageClass, String mountPoint,
                                         String applicationName )
     {
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
+        m_properties = new Properties();
         m_homepageClass = homepageClass;
         m_bundleContext = bundleContext;
-        m_mountPoint = mountPoint;
-        m_deploymentMode = false;
+        setMountPoint( mountPoint );
+        setDeploymentMode( false );
         setApplicationName( applicationName );
-
+        m_properties.setProperty( Content.HOMEPAGE_CLASSNAME, homepageClass.getName() );
     }
 
     public void dispose()
@@ -68,23 +60,18 @@ public final class PaxWicketApplicationFactory
 
     public String getMountPoint()
     {
-        return m_mountPoint;
-    }
-
-    public void setMountPoint( String mountPoint )
-    {
-        NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
-        m_mountPoint = mountPoint;
+        return m_properties.getProperty( Content.MOUNTPOINT );
     }
 
     public boolean isDeploymentMode()
     {
-        return m_deploymentMode;
+        return Boolean.parseBoolean( m_properties.getProperty( Content.DEPLOYMENT_MODE ) );
     }
 
     public void setDeploymentMode( boolean deploymentMode )
     {
-        m_deploymentMode = deploymentMode;
+        String depl = String.valueOf( deploymentMode );
+        m_properties.put( Content.DEPLOYMENT_MODE, depl );
     }
 
     /**
@@ -97,7 +84,7 @@ public final class PaxWicketApplicationFactory
     public WebApplication createApplication( WicketServlet servlet )
     {
         PaxWicketApplication paxWicketApplication =
-            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_deploymentMode );
+            new PaxWicketApplication( m_homepageClass, m_pageFactory, isDeploymentMode() );
         return paxWicketApplication;
     }
 
@@ -106,12 +93,13 @@ public final class PaxWicketApplicationFactory
     {
         if( config == null )
         {
+            m_registration.setProperties( m_properties );
             return;
         }
-        String classname = (String) config.get( HOMEPAGE_CLASSNAME );
+        String classname = (String) config.get( Content.HOMEPAGE_CLASSNAME );
         if( classname == null )
         {
-            config.put( HOMEPAGE_CLASSNAME, m_homepageClass );
+            config.put( Content.HOMEPAGE_CLASSNAME, m_homepageClass );
         }
         else
         {
@@ -120,31 +108,17 @@ public final class PaxWicketApplicationFactory
                 m_homepageClass = m_bundleContext.getBundle().loadClass( classname );
             } catch( ClassNotFoundException e )
             {
-                throw new ConfigurationException( HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e );
+                throw new ConfigurationException( Content.HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e );
             }
         }
-        String mountpoint = (String) config.get( MOUNTPOINT );
-        if( mountpoint == null )
-        {
-            config.put( MOUNTPOINT, m_mountPoint );
-        }
-        else
-        {
-            setMountPoint( mountpoint );
-        }
-        String s = (String) config.get( "deploymentMode" );
-        m_deploymentMode = Boolean.parseBoolean( s );
-        m_serviceRegistration.setProperties( config );
+        m_registration.setProperties( config );
     }
 
     public ServiceRegistration register()
     {
-        String serviceName = PaxWicketApplicationFactory.class.getName();
-        Properties properties = new Properties();
-        properties.put( MOUNTPOINT, m_mountPoint );
-        properties.put( HOMEPAGE_CLASSNAME, m_homepageClass.getName() );
-        m_serviceRegistration = m_bundleContext.registerService( serviceName, this, properties );
-        return m_serviceRegistration;
+        String[] serviceNames = { PaxWicketApplicationFactory.class.getName(), ManagedService.class.getName() };
+        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
+        return m_registration;
     }
 
     private void setApplicationName( String applicationName )
@@ -156,7 +130,12 @@ public final class PaxWicketApplicationFactory
 
         m_pageFactory = new PaxWicketPageFactory( m_bundleContext, applicationName );
         m_pageFactory.start();
-        m_applicationName = applicationName;
+        m_properties.setProperty( Content.APPLICATION_NAME, applicationName );
+    }
+
+    private void setMountPoint( String mountPoint )
+    {
+        m_properties.put( Content.MOUNTPOINT, mountPoint );
     }
 
 }

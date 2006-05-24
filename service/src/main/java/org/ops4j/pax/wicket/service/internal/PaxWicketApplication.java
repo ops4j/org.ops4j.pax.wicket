@@ -19,9 +19,14 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import org.ops4j.lang.NullArgumentException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import wicket.protocol.http.WebApplication;
+import wicket.protocol.http.WebRequest;
+import wicket.protocol.http.servlet.ServletWebRequest;
 import wicket.settings.ISessionSettings;
 import wicket.settings.IApplicationSettings;
+import javax.servlet.http.HttpServletRequest;
 
 public final class PaxWicketApplication extends WebApplication
 {
@@ -64,7 +69,7 @@ public final class PaxWicketApplication extends WebApplication
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_factory );
-        
+
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
         if( m_deploymentMode )
@@ -74,6 +79,64 @@ public final class PaxWicketApplication extends WebApplication
         else
         {
             configure( DEVELOPMENT );
+        }
+    }
+
+    /**
+     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and
+     * obfuscated URL which has been encoded by an appropriate WebResponse.
+     *
+     * @param servletRequest
+     *
+     * @return a WebRequest object
+     */
+    protected WebRequest newWebRequest( final HttpServletRequest servletRequest )
+    {
+        return new PaxWicketRequest( servletRequest );
+    }
+
+    private static class PaxWicketRequest extends ServletWebRequest
+    {
+        private static final Log m_logger = LogFactory.getLog( PaxWicketRequest.class.getName() );
+
+        /**
+         * Protected constructor.
+         *
+         * @param httpServletRequest The servlet request information
+         */
+        private PaxWicketRequest( HttpServletRequest httpServletRequest )
+        {
+            super( httpServletRequest );
+        }
+
+        /**
+         * Gets the servlet path.
+         *
+         * @return Servlet path
+         */
+        public String getServletPath()
+        {
+            String contextPath = getHttpServletRequest().getContextPath();
+            if( m_logger.isDebugEnabled() )
+            {
+                m_logger.debug( "getServletPath() : " + contextPath );
+            }
+            return contextPath;
+        }
+
+        /**
+         * Gets the servlet context path.
+         *
+         * @return Servlet context path
+         */
+        public String getContextPath()
+        {
+            String servletPath = getHttpServletRequest().getServletPath();
+            if( m_logger.isDebugEnabled() )
+            {
+                m_logger.debug( "getContextPath() : " + servletPath );
+            }
+            return servletPath;
         }
     }
 }

@@ -30,52 +30,76 @@ public abstract class DefaultContent
     implements Content, ManagedService
 {
     private BundleContext m_bundleContext;
-    private String m_contentId;
-    private String m_applicationName;
-    private String m_destinationId;
+    private Properties m_properties;
     private ServiceRegistration m_registration;
 
     protected DefaultContent( BundleContext bundleContext, String contentId, String applicationName )
     {
+        m_properties = new Properties();
+        m_properties.put( Constants.SERVICE_PID, CONTENTID + "/" + contentId );
         m_bundleContext = bundleContext;
-        m_contentId = contentId;
-        m_applicationName = applicationName;
+        setContentId( contentId );
+        setApplicationName( applicationName );
     }
 
     public final String getDestinationId()
     {
-        return m_destinationId;
+        return m_properties.getProperty( DESTINATIONID );
     }
 
     public final void setDestinationId( String destinationId )
     {
-        m_destinationId = destinationId;
+        m_properties.put( DESTINATIONID, destinationId );
     }
 
     public final Component createComponent()
     {
-        int pos = m_destinationId.lastIndexOf( '.' );
-        String id = m_destinationId.substring( pos + 1 );
+        String destinationId = getDestinationId();
+        int pos = destinationId.lastIndexOf( '.' );
+        String id = destinationId.substring( pos + 1 );
         return createComponent( id );
+    }
+
+    public final String getContentId()
+    {
+        return m_properties.getProperty( CONTENTID );
+    }
+
+    private void setContentId( String contentId )
+    {
+        m_properties.put( CONTENTID, contentId );
+    }
+
+    public final String getApplicationName()
+    {
+        return m_properties.getProperty( APPLICATION_NAME );
+    }
+
+    public final void setApplicationName( String applicationName )
+    {
+        m_properties.put( APPLICATION_NAME, applicationName );
     }
 
     protected abstract Component createComponent( String id );
 
     public final void updated( Dictionary config )
     {
+        if( config == null )
+        {
+            m_registration.setProperties( m_properties );
+            return;
+        }
+        String destinationId = (String) config.get( DESTINATIONID );
+        setDestinationId( destinationId );
+        String appName = (String) config.get( APPLICATION_NAME );
+        setApplicationName( appName );
         m_registration.setProperties( config );
-        m_destinationId = (String) config.get( CONFIG_DESTINATIONID );
     }
 
     public final ServiceRegistration register()
     {
         String[] serviceNames = { Content.class.getName(), ManagedService.class.getName() };
-        Properties properties = new Properties();
-        properties.put( Constants.SERVICE_PID, m_applicationName + "." + m_contentId );
-        properties.put( Content.APPLICATION_NAME, m_applicationName );
-        properties.put( Content.CONFIG_DESTINATIONID, m_destinationId );
-        m_registration = m_bundleContext.registerService( serviceNames, this, properties );
+        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
         return m_registration;
     }
-
 }

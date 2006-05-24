@@ -43,7 +43,7 @@ public class GenericContext
         m_applicationBundle = applicationBundle;
         m_rootUrl = rootUrl;
         m_typeMap = (MimetypesFileTypeMap) MimetypesFileTypeMap.getDefaultFileTypeMap();
-        m_typeMap.addMimeTypes( "text/css  css" );
+        m_typeMap.addMimeTypes( "text/css css" );
     }
 
     public boolean handleSecurity( HttpServletRequest httpServletRequest,
@@ -58,10 +58,8 @@ public class GenericContext
     {
         m_logger.debug( "getResource( " + resourcename + " )" );
         int prefixLength = m_rootUrl.length();
-        // TODO: When the contextPath and servletPath issue is resolved, figure out what stays here.
-//        String resource = resourcename.substring( prefixLength + 1 );
-//        return m_applicationBundle.getResource( resource );
-        return m_applicationBundle.getResource( resourcename );
+        String resource = resourcename.substring( prefixLength + 1 );
+        return m_applicationBundle.getResource( resource );
     }
 
     public String getMimeType( String resourcename )

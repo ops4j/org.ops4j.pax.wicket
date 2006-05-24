@@ -34,7 +34,7 @@ public class OverviewPageContent extends AbstractPageContent
 
     public OverviewPageContent( BundleContext context, DefaultPageContainer  pageContainer, String applicationName, String pageName )
     {
-        super(context, applicationName, pageName );
+        super(context, "overview", applicationName, pageName );
         m_context = context;
         m_pageContainer = pageContainer;
     }

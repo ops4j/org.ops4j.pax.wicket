@@ -25,16 +25,13 @@ import java.util.Hashtable;
 import java.util.List;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
-import org.ops4j.pax.wicket.service.internal.TrackingUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.Filter;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.util.tracker.ServiceTracker;
 import wicket.Component;
 
 public class DefaultPageContainer
@@ -44,8 +41,7 @@ public class DefaultPageContainer
     private BundleContext m_bundleContext;
     private HashMap<String, List<Content>> m_children;
     private ServiceRegistration m_registration;
-    private DefaultContentTracker m_contentTracking;
-    private ServiceTracker m_serviceTracker;
+    private DefaultContentTracker m_contentTracker;
 
     public DefaultPageContainer( BundleContext bundleContext, String containmentId, String applicationName )
     {
@@ -59,12 +55,12 @@ public class DefaultPageContainer
 
     public final String getContainmentId()
     {
-        return m_properties.get( ContentContainer.CONFIG_CONTAINMENTID );
+        return m_properties.get( Content.CONTAINMENTID );
     }
 
     public final void setContainmentId( String containmentId )
     {
-        m_properties.put( ContentContainer.CONFIG_CONTAINMENTID, containmentId );
+        m_properties.put( Content.CONTAINMENTID, containmentId );
     }
 
 
@@ -94,7 +90,7 @@ public class DefaultPageContainer
 
     public final void dispose()
     {
-        m_serviceTracker.close();
+        m_contentTracker.close();
     }
 
     public final void addContent( String id, Content content )
@@ -125,11 +121,9 @@ public class DefaultPageContainer
 
     public final ServiceRegistration register()
     {
-        m_contentTracking = new DefaultContentTracker( m_bundleContext, this );
-        m_contentTracking.setContainmentId( getContainmentId() );
-        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
-        m_serviceTracker = new ServiceTracker( m_bundleContext, filter, m_contentTracking );
-        m_serviceTracker.open();
+        m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
+        m_contentTracker.setContainmentId( getContainmentId() );
+        m_contentTracker.open();
 
         String[] serviceNames =
             {
@@ -144,11 +138,12 @@ public class DefaultPageContainer
     {
         if( config == null )
         {
+            m_registration.setProperties( m_properties );
             return;
         }
         m_registration.setProperties( config );
         String existingContainmentId = getContainmentId();
-        String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
+        String newContainmentId = (String) config.get( Content.CONTAINMENTID );
         if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
@@ -166,7 +161,7 @@ public class DefaultPageContainer
                 }
                 for( ServiceReference service : services )
                 {
-                    m_contentTracking.addingService( service );
+                    m_contentTracker.addingService( service );
                 }
             } catch( InvalidSyntaxException e )
             {

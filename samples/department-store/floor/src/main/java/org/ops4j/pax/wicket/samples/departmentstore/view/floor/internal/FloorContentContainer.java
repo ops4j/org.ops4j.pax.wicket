@@ -27,6 +27,7 @@ public class FloorContentContainer extends DefaultContentContainer
 {
     private final Floor m_floor;
 
+
     public FloorContentContainer( Floor floor, String containmentId, String destinationId,
                                   BundleContext bundleContext, String applicationname )
     {
@@ -38,10 +39,4 @@ public class FloorContentContainer extends DefaultContentContainer
     {
         return new FloorPanel( id, this, m_floor );
     }
-
-    protected void removeComponent( Component component )
-    {
-        //TODO: Auto-generated, need attention.
-    }
-
 }

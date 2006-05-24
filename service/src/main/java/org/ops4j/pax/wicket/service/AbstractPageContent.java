@@ -17,36 +17,74 @@
  */
 package org.ops4j.pax.wicket.service;
 
-import java.util.Properties;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Constants;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 
 public abstract class AbstractPageContent
-    implements PageContent
+    implements PageContent, ManagedService
 {
 
     private BundleContext m_bundleContext;
-    private String m_applicationName;
-    private String m_pageName;
     private ServiceRegistration m_serviceRegistration;
+    private Hashtable<String, String> m_properties;
 
-    protected AbstractPageContent( BundleContext bundleContext, String applicationName, String pageName)
+    protected AbstractPageContent( BundleContext bundleContext, String pageId, String applicationName, String pageName )
     {
+        m_properties = new Hashtable<String, String>();
         m_bundleContext = bundleContext;
-        m_applicationName = applicationName;
-        m_pageName = pageName;
+        setApplicationName( applicationName );
+        setPageName( pageName );
+        m_properties.put( Constants.SERVICE_PID, Content.PAGE_ID + "/" + pageId );
     }
 
     public final void register()
     {
-        Properties props = new Properties();
-        props.put( Content.APPLICATION_NAME, m_applicationName );
-        props.put( Content.PAGE_NAME, m_pageName );
-        m_serviceRegistration = m_bundleContext.registerService( PageContent.class.getName(), this, props );
+        String[] classes = { PageContent.class.getName(), ManagedService.class.getName() };
+        m_serviceRegistration = m_bundleContext.registerService( classes, this, m_properties );
     }
 
     public final void dispose()
     {
         m_serviceRegistration.unregister();
+    }
+
+    public final String getApplicationName()
+    {
+        return m_properties.get( Content.APPLICATION_NAME );
+    }
+
+    public final String getPageName()
+    {
+        return m_properties.get( Content.PAGE_NAME );
+    }
+
+    public void updated( Dictionary config )
+        throws ConfigurationException
+    {
+        if( config == null )
+        {
+            m_serviceRegistration.setProperties( m_properties );
+            return;
+        }
+        String pagename = (String) config.get( Content.PAGE_NAME );
+        String appname = (String) config.get( Content.APPLICATION_NAME );
+        setPageName( pagename );
+        setApplicationName( appname );
+        m_serviceRegistration.setProperties( config );
+    }
+
+    protected final void setApplicationName( String applicationName )
+    {
+        m_properties.put( Content.APPLICATION_NAME, applicationName );
+    }
+
+    protected final void setPageName( String pageName )
+    {
+        m_properties.put(  Content.PAGE_NAME, pageName );
     }
 }

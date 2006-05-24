@@ -21,13 +21,11 @@ package org.ops4j.pax.wicket.service.internal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.Content;
-import org.ops4j.pax.wicket.service.ContentContainer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.osgi.util.tracker.ServiceTracker;
 
-public class DefaultContentTracker
-    implements ServiceTrackerCustomizer
+public class DefaultContentTracker extends ServiceTracker
 {
 
     private static final Log m_logger = LogFactory.getLog( DefaultContentTracker.class );
@@ -36,8 +34,9 @@ public class DefaultContentTracker
     private BundleContext m_context;
     private ContentTrackingCallback m_callback;
 
-    public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback )
+    public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback, String applicationName )
     {
+        super(context, TrackingUtil.createContentFilter( context, applicationName ), null );
         m_context = context;
         m_callback = callback;
     }
@@ -54,7 +53,7 @@ public class DefaultContentTracker
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
-        String dest = (String) serviceReference.getProperty( Content.CONFIG_DESTINATIONID );
+        String dest = (String) serviceReference.getProperty( Content.DESTINATIONID );
         Object service = m_context.getService( serviceReference );
         if( dest == null )
         {
@@ -67,8 +66,8 @@ public class DefaultContentTracker
         int contIdLength = m_containmentId.length();
         if( dest.length() == contIdLength )
         {
-            String message = "The '" + Content.CONFIG_DESTINATIONID + "' property have the form ["
-                             + ContentContainer.CONFIG_CONTAINMENTID + "].[wicketId] but was " + dest;
+            String message = "The '" + Content.DESTINATIONID + "' property have the form ["
+                             + Content.CONTAINMENTID + "].[wicketId] but was " + dest;
             throw new IllegalArgumentException( message );
         }
         if( dest.charAt( contIdLength ) != '.' )

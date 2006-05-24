@@ -21,28 +21,26 @@ package org.ops4j.pax.wicket.service;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Properties;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
-import org.ops4j.pax.wicket.service.internal.TrackingUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.Filter;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.util.tracker.ServiceTracker;
 import wicket.Component;
 
 public abstract class DefaultContentContainer
     implements ContentContainer, Content, ContentTrackingCallback, ManagedService
 {
-    private Hashtable<String, String> m_properties;
+
+    private Properties m_properties;
     private HashMap<String, List<Content>> m_children;
     private BundleContext m_bundleContext;
-    private ServiceTracker m_contentTracker;
+    private DefaultContentTracker m_contentTracker;
     private ServiceRegistration m_registration;
 
     protected DefaultContentContainer( BundleContext bundleContext, String applicationName, String containmentId,
@@ -51,16 +49,16 @@ public abstract class DefaultContentContainer
     {
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<Content>>();
-        m_properties = new Hashtable<String, String>();
+        m_properties = new Properties();
         setContainmentId( containmentId );
         setDestinationId( destinationId );
-        setApplicationName(applicationName);
+        setApplicationName( applicationName );
         m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
     }
 
     public String getApplicationName()
     {
-        return m_properties.get( Content.APPLICATION_NAME );
+        return m_properties.getProperty( Content.APPLICATION_NAME );
     }
 
     public void setApplicationName( String applicationName )
@@ -75,19 +73,19 @@ public abstract class DefaultContentContainer
 
     public final String getContainmentId()
     {
-        return m_properties.get( ContentContainer.CONFIG_CONTAINMENTID );
+        return m_properties.getProperty( CONTAINMENTID );
     }
 
     public final void setContainmentId( String containmentId )
     {
-        m_properties.put( ContentContainer.CONFIG_CONTAINMENTID, containmentId );
+        m_properties.put( CONTAINMENTID, containmentId );
     }
 
     public final List<Component> createComponents( String id )
     {
         ArrayList<Component> result = new ArrayList<Component>();
         List<Content> contents = m_children.get( id );
-        
+
         if( contents != null )
         {
             for( Content content : contents )
@@ -102,10 +100,11 @@ public abstract class DefaultContentContainer
     {
         if( config == null )
         {
+            m_registration.setProperties( m_properties );
             return;
         }
         String existingContainmentId = getContainmentId();
-        String newContainmentId = (String) config.get( CONFIG_CONTAINMENTID );
+        String newContainmentId = (String) config.get( CONTAINMENTID );
         if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
@@ -116,7 +115,10 @@ public abstract class DefaultContentContainer
         {
             try
             {
-                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), null );
+                String filter = "(&(" + Content.APPLICATION_NAME + "=" + getApplicationName() + ")"
+                                + "(" + Content.DESTINATIONID + "=" + getContainmentId() + ".*)"
+                                + ")";
+                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), filter );
                 if( null == services )
                 {
                     return;
@@ -162,20 +164,18 @@ public abstract class DefaultContentContainer
 
     public final String getDestinationId()
     {
-        return m_properties.get( Content.CONFIG_DESTINATIONID );
+        return m_properties.getProperty( Content.DESTINATIONID );
     }
 
     public final void setDestinationId( String destinationId )
     {
-        m_properties.put( Content.CONFIG_DESTINATIONID, destinationId );
+        m_properties.put( Content.DESTINATIONID, destinationId );
     }
 
     public final ServiceRegistration register()
     {
-        DefaultContentTracker customizer = new DefaultContentTracker( m_bundleContext, this );
-        customizer.setContainmentId( getContainmentId() );
-        Filter filter = TrackingUtil.createContentFilter( m_bundleContext, getApplicationName() );
-        m_contentTracker = new ServiceTracker( m_bundleContext, filter, customizer );
+        m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
+        m_contentTracker.setContainmentId( getContainmentId() );
         m_contentTracker.open();
 
         String[] serviceNames =
@@ -195,12 +195,6 @@ public abstract class DefaultContentContainer
     }
 
     protected abstract Component createComponent( String id );
-
-    /**
-     * Note: What is the behavior of removing component? Does this mean, when the component service is added/removed it
-     * should not be added again?
-     */
-    protected abstract void removeComponent( Component component );
 
 }
 

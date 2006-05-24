@@ -24,8 +24,6 @@ import java.util.List;
 public interface ContentContainer
 {
 
-    String CONFIG_CONTAINMENTID = "pax.wicket.containmentid";
-
     String getContainmentId();
 
     List<Component> createComponents( String id );

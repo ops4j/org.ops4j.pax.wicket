@@ -23,13 +23,25 @@ import wicket.Component;
 public interface Content
 {
 
+    String MOUNTPOINT = "pax.wicket.mountpoint";
+
     String APPLICATION_NAME = "pax.wicket.applicationname";
 
-    String CONFIG_DESTINATIONID = "pax.wicket.destinationid";
+    String DESTINATIONID = "pax.wicket.destinationid";
 
     String DESTINATIONID_UNKNOWN = "";
     
     String PAGE_NAME = "pax.wicket.pagename";
+
+    String PAGE_ID = "pax.wicket.pageid";
+
+    String CONTENTID = "pax.wicket.contentid";
+
+    String CONTAINMENTID = "pax.wicket.containmentid";
+
+    String DEPLOYMENT_MODE = "pax.wicket.deploymentmode";
+    
+    String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
 
     String getDestinationId();
 
