@@ -11,16 +11,16 @@
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>departmentstore.view.franchisee</artifactId>
   <name>OPS4J - Pax Wicket Department Store - View - Franchisee</name>
-  <version>0.1.0.SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <packaging>osgi-bundle</packaging>
   <description>Pax Department Store Franchisee View.</description>
-  
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix.plugins</groupId>
         <artifactId>maven-osgi-plugin</artifactId>
-        <version>0.8.0-SNAPSHOT</version>
+        <version>0.8.0</version>
         <extensions>true</extensions>
         <configuration>
           <osgiManifest>
