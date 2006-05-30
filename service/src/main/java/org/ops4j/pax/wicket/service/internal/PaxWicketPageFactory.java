@@ -18,6 +18,7 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import java.util.HashMap;
+import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.PageContent;
@@ -30,9 +31,10 @@ import wicket.WicketRuntimeException;
 import wicket.application.IClassResolver;
 
 public final class PaxWicketPageFactory
-    implements IPageFactory, IClassResolver
+    implements IPageFactory, IClassResolver, Serializable
 {
 
+    private static final long serialVersionUID = 1L;
     private static final Log m_logger = LogFactory.getLog( PaxWicketPageFactory.class );
     private HashMap<Class, PageContent> m_contents;
     private HashMap<String, Class> m_pageClasses;

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
+import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.WebPage;
@@ -30,6 +31,7 @@ import wicket.markup.html.link.BookmarkablePageLink;
 import wicket.markup.html.panel.Panel;
 import wicket.model.Model;
 
+@AuthorizeInstantiation("user")
 public final class OverviewPage extends WebPage
 {
 

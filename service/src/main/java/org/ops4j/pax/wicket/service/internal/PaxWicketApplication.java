@@ -18,22 +18,32 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
-import org.ops4j.lang.NullArgumentException;
+import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import wicket.protocol.http.WebApplication;
+import org.ops4j.lang.NullArgumentException;
+import org.ops4j.pax.wicket.service.PaxWicketAuthenticator;
+import wicket.authentication.AuthenticatedWebApplication;
+import wicket.authentication.AuthenticatedWebSession;
+import wicket.authentication.pages.SignInPage;
+import wicket.authorization.strategies.role.Roles;
+import wicket.markup.html.WebPage;
 import wicket.protocol.http.WebRequest;
 import wicket.protocol.http.servlet.ServletWebRequest;
-import wicket.settings.ISessionSettings;
 import wicket.settings.IApplicationSettings;
-import javax.servlet.http.HttpServletRequest;
+import wicket.settings.ISessionSettings;
 
-public final class PaxWicketApplication extends WebApplication
+public final class PaxWicketApplication extends AuthenticatedWebApplication
 {
+
+    private static final Roles EMPTY_ROLES = new Roles();
 
     protected Class m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private boolean m_deploymentMode;
+    private PaxWicketAuthenticator m_authenticator;
+    private HashMap<AuthenticatedToken, Roles> m_roles;
 
     public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory, boolean deploymentMode )
     {
@@ -83,6 +93,23 @@ public final class PaxWicketApplication extends WebApplication
     }
 
     /**
+     * @return AuthenticatedWebSession subclass to use in this authenticated web
+     *         application.
+     */
+    protected Class<? extends AuthenticatedWebSession> getWebSessionClass()
+    {
+        return PaxWicketSession.class;
+    }
+
+    /**
+     * @return Subclass of sign-in page
+     */
+    protected Class<? extends WebPage> getSignInPageClass()
+    {
+        return SignInPage.class;
+    }
+
+    /**
      * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and
      * obfuscated URL which has been encoded by an appropriate WebResponse.
      *
@@ -95,8 +122,30 @@ public final class PaxWicketApplication extends WebApplication
         return new PaxWicketRequest( servletRequest );
     }
 
+    public AuthenticatedToken authententicate( String username, String password )
+    {
+        Roles roles = m_authenticator.authenticate( username, password );
+        if( roles != null )
+        {
+            AuthenticatedToken authenticatedToken = new AuthenticatedToken();
+            m_roles.put( authenticatedToken, roles );
+            return authenticatedToken;
+        }
+        return null;
+    }
+
+    public Roles getRoles( AuthenticatedToken token )
+    {
+        if( token == null )
+        {
+            return EMPTY_ROLES;
+        }
+        return null;
+    }
+
     private static class PaxWicketRequest extends ServletWebRequest
     {
+
         private static final Log m_logger = LogFactory.getLog( PaxWicketRequest.class.getName() );
 
         /**

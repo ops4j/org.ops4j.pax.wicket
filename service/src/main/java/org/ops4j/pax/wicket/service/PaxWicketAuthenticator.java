@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,14 +17,15 @@
  */
 package org.ops4j.pax.wicket.service;
 
-import wicket.Page;
-import wicket.PageParameters;
+import wicket.authorization.strategies.role.Roles;
 
-public interface PageContent
+public interface PaxWicketAuthenticator
 {
 
-    Class<? extends Page> getPageClass();
+    String USERNAME_IDENTITY = "pax.wicket.authen.id.username";
 
-    Page createPage( PageParameters params );
+    String CREDENTIALS_PASSWORD = "pax.wicket.auten.cred.password";
+
+    Roles authenticate( String username, String password );
 
 }

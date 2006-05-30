@@ -4,34 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>departmentstore</artifactId>
-    <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
+    <groupId>org.ops4j.pax.wicket.samples</groupId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-  <artifactId>departmentstore.view.app</artifactId>
+  <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
+  <artifactId>application</artifactId>
   <name>OPS4J - Pax Wicket Department Store - View - App</name>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>osgi-bundle</packaging>
+  <description>Pax Department Store View Application.</description>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix.plugins</groupId>
-        <artifactId>maven-osgi-plugin</artifactId>
-        <version>0.8.0</version>
-        <extensions>true</extensions>
-        <configuration>
-          <osgiManifest>
-            <bundleSymbolicName>${pom.artifactId}</bundleSymbolicName>
-            <bundleName>${pom.name}</bundleName>
-            <bundleDescription>Pax Department Store View Application.</bundleDescription>
-            <bundleVendor>${pom.organization.name}</bundleVendor>
-          </osgiManifest>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
@@ -49,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
+      <artifactId>service</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
