@@ -4,7 +4,7 @@
   <artifactId>wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
-  <version>0.2.1</version>
+  <version>0.2.1-SNAPSHOT</version>
   <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
