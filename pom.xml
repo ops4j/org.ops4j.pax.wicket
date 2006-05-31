@@ -4,15 +4,15 @@
   <artifactId>wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
   <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
     <url>http://www.ops4j.org/</url>
   </organization>
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.0_2006May31</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.0_2006May31</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
   <build>
     <extensions>

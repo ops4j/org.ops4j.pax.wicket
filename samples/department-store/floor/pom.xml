@@ -2,13 +2,13 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>floor</artifactId>
   <name>OPS4J - Pax Wicket Department Store - View - Floor</name>
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
   <packaging>osgi-bundle</packaging>
   <description>Pax Department Store Floor View.</description>
 
