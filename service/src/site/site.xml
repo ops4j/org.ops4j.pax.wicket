@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven xdoc Plugin">
+
+  <title>Maven xdoc Plugin</title>
+
+  <body>
+    <links>
+      <item name="OPS4J"  href="http://www.ops4j.org/"/>
+    </links>
+    <menu>
+      <item name="Pax Wicket Service" href="/service/index.html">
+        <item name="Reference" href="/service/reference/index.html"/>
+        <item name="Guides" href="/service/guides/index.html">
+          <item name="Creating Components" href="/service/guides/creating-components.html"/>
+          <item name="Using Components" href="/service/guides/using-components.html"/>
+          <item name="Creating Pages" href="/service/guides/creating-pages.html"/>
+          <item name="Assembling Components" href="/service/guides/dynamic-assembly.html"/>
+          <item name="Tabbed Panels" href="/service/guides/tabpanels.html"/>
+          <item name="Authentication" href="/service/guides/authentication.html"/>
+        </item>
+      </item>
+      <item name="Samples" href="/samples/index.html" collapse="true">
+        <item name="Department Store" href="/samples/departmentstore/index.html" collapse="true"/>
+      </item>
+    </menu>
+  </body>
+</project>
