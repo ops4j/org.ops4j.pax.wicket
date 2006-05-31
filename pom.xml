@@ -1,19 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax</groupId>
   <artifactId>wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.2.1</version>
   <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
     <url>http://www.ops4j.org/</url>
   </organization>
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</developerConnection>
   </scm>
   <build>
     <extensions>
@@ -24,6 +23,11 @@
       </extension>
     </extensions>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.0-beta-3</version>
+      </plugin>
       <plugin>
         <groupId>org.ops4j.pax.maven</groupId>
         <artifactId>maven-osgi-bundle</artifactId>
