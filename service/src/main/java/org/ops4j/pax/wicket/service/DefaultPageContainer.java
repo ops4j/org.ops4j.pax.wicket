@@ -23,6 +23,8 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
@@ -63,15 +65,19 @@ public class DefaultPageContainer
         m_properties.put( Content.CONTAINMENTID, containmentId );
     }
 
-
-    public String getApplicationName()
+    public final String getApplicationName()
     {
         return m_properties.get( Content.APPLICATION_NAME );
     }
 
-    public void setApplicationName( String applicationName )
+    public final void setApplicationName( String applicationName )
     {
         m_properties.put( Content.APPLICATION_NAME, applicationName );
+    }
+
+    public final Map<String, List<Content>> getChildren()
+    {
+        return Collections.unmodifiableMap( m_children );
     }
 
     public final List<Component> createComponents( String id )
