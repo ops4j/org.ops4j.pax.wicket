@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Applaction Plug-in
-Bundle-SymbolicName: org.ops4j.pax.wicket.sample.departmentstore.applaction
+Bundle-SymbolicName: org.ops4j.pax.wicket.sample.departmentstore.application
 Bundle-Version: 1.0.0
 Bundle-Vendor: OPS4J
 Bundle-Localization: plugin
@@ -11,6 +11,11 @@ Import-Package: org.ops4j.pax.wicket.service,
  org.osgi.service.cm;version="1.2.0",
  wicket,
  wicket.ajax.markup.html,
+ wicket.authentication,
+ wicket.authentication.pages,
+ wicket.authentication.panel,
+ wicket.authorization,
+ wicket.authorization.strategies.role.annotations,
  wicket.extensions.ajax.markup.html,
  wicket.extensions.ajax.markup.html.tabs,
  wicket.extensions.markup.html.tabs,
