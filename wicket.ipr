@@ -309,7 +309,7 @@
   <component name="libraryTable">
     <library name="wicket-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2-SNAPSHOT/wicket-1.2-SNAPSHOT.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2/wicket-1.2.jar!/" />
       </CLASSES>
       <JAVADOC>
         <root url="jar://$M2_REPO$/wicket/wicket/1.2-SNAPSHOT/wicket-1.2-SNAPSHOT-javadoc.jar!/" />
@@ -372,18 +372,19 @@
     </library>
     <library name="wicket-extensions-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2/wicket-extensions-1.2.jar!/" />
       </CLASSES>
       <JAVADOC>
         <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
         <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2-SNAPSHOT/wicket-extensions-1.2-SNAPSHOT-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2/wicket-extensions-1.2.jar!/" />
       </SOURCES>
     </library>
     <library name="wicket-auth-roles-1.2-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-SNAPSHOT/wicket-auth-roles-1.2-SNAPSHOT.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2/wicket-auth-roles-1.2.jar!/" />
       </CLASSES>
       <JAVADOC>
         <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2-SNAPSHOT/wicket-auth-roles-1.2-SNAPSHOT-javadoc.jar!/" />

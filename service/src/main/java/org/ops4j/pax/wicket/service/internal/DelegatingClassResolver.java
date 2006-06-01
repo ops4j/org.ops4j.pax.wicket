@@ -19,6 +19,8 @@ package org.ops4j.pax.wicket.service.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -26,13 +28,12 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import wicket.application.IClassResolver;
 
 public class DelegatingClassResolver
     implements IClassResolver
 {
+
     private BundleContext m_context;
     private List<IClassResolver> m_resolvers;
     private Log m_logger = LogFactory.getLog( DelegatingClassResolver.class );
@@ -44,7 +45,7 @@ public class DelegatingClassResolver
         m_resolvers = new ArrayList<IClassResolver>();
         m_tracker = new ClassResolverTracker( context, applicationName );
     }
-    
+
     public void intialize()
     {
         m_tracker.open();
@@ -76,7 +77,7 @@ public class DelegatingClassResolver
                 }
             } catch( RuntimeException e )
             {
-                m_logger.warn( "ClassResolver" + resolver+ " threw an unexpected exception.", e );
+                m_logger.warn( "ClassResolver" + resolver + " threw an unexpected exception.", e );
             }
         }
         return null;

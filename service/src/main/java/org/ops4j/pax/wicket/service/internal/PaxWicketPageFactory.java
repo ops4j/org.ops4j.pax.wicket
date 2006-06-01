@@ -18,11 +18,14 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import java.util.HashMap;
+import java.util.Properties;
 import java.io.Serializable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.PageContent;
+import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.IPageFactory;
 import wicket.Page;
@@ -42,6 +45,7 @@ public final class PaxWicketPageFactory
     private BundleContext m_bundleContext;
     private String m_applicationName;
     private ServiceTracker m_pageTracker;
+    private ServiceRegistration m_serviceRegistration;
 
     public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
     {
@@ -53,12 +57,17 @@ public final class PaxWicketPageFactory
 
     public void initialize()
     {
+        Properties config = new Properties();
+        config.setProperty( Content.APPLICATION_NAME, m_applicationName );
+        m_serviceRegistration =
+            m_bundleContext.registerService( IClassResolver.class.getName(), this, config );
         m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
         m_pageTracker.open();
     }
 
     public void dispose()
     {
+        m_serviceRegistration.unregister();
         m_contents.clear();
         m_pageTracker.close();
     }
