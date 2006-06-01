@@ -291,6 +291,7 @@
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/model.iml" group="samples/department-store/model" />
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site.iml" filepath="$PROJECT_DIR$/site.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />

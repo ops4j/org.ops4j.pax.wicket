@@ -205,5 +205,9 @@
       <id>upload-repository</id>
       <url>scpexe://repository.ops4j.org/var/http/repository.ops4j.org/maven2</url>
     </repository>
+    <site>
+      <id>website</id>
+      <url>scp://www.ops4j.org/var/http/www.ops4j.org/projects/pax/wicket</url>
+    </site>
   </distributionManagement>
 </project>

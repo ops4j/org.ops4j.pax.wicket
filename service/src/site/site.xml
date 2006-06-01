@@ -8,27 +8,27 @@
       <item name="OPS4J" href="http://www.ops4j.org/"/>
     </links>
     <menu name="Pax Wicket Service">
-      <item name="Pax Wicket Service" href="/service/index.html">
-        <item name="Reference" href="/service/reference/index.html"/>
-        <item name="My First App" href="/service/myfirstapp/index.html" collapse="true">
-          <item name="Business Logic" href="/service/myfirstapp/businesslogic.html"/>
-          <item name="Content" href="/service/myfirstapp/content.html"/>
-          <item name="Content Container" href="/service/myfirstapp/contentcontainer.html"/>
-          <item name="Home Page" href="/service/myfirstapp/homepage.html"/>
-          <item name="Page Container" href="/service/myfirstapp/pagecontainer.html"/>
-          <item name="Application" href="/service/myfirstapp/application.html"/>
-          <item name="About Page" href="/service/myfirstapp/aboutpage.html"/>
+      <item name="Pax Wicket Service" href="index.html">
+        <item name="Reference" href="/reference/index.html"/>
+        <item name="My First App" href="/myfirstapp/index.html" collapse="true">
+          <item name="Business Logic" href="/myfirstapp/businesslogic.html"/>
+          <item name="Content" href="/myfirstapp/content.html"/>
+          <item name="Content Container" href="/myfirstapp/contentcontainer.html"/>
+          <item name="Home Page" href="/myfirstapp/homepage.html"/>
+          <item name="Page Container" href="/myfirstapp/pagecontainer.html"/>
+          <item name="Application" href="/myfirstapp/application.html"/>
+          <item name="About Page" href="/myfirstapp/aboutpage.html"/>
         </item>
-        <item name="Guides" href="/service/guides/index.html">
-          <item name="Creating Components" href="/service/guides/creating-components.html"/>
-          <item name="Using Components" href="/service/guides/using-components.html"/>
-          <item name="Building" href="/service/guides/creating-pages.html"/>
-          <item name="Dynamic Apps" href="/service/guides/dynamic-assembly.html"/>
-          <item name="Authentication" href="/service/guides/authentication.html"/>
+        <item name="Guides" href="/guides/index.html">
+          <item name="Creating Components" href="/guides/creating-components.html"/>
+          <item name="Using Components" href="/guides/using-components.html"/>
+          <item name="Building" href="/guides/creating-pages.html"/>
+          <item name="Dynamic Apps" href="/guides/dynamic-assembly.html"/>
+          <item name="Authentication" href="/guides/authentication.html"/>
         </item>
-        <item name="Getting Started" href="/service/getting-started/index.html">
-          <item name="Installation" href="/service/getting-started/installation.html"/>
-          <item name="Building" href="/service/getting-started/building.html"/>
+        <item name="Getting Started" href="/getting-started/index.html">
+          <item name="Installation" href="/getting-started/installation.html"/>
+          <item name="Building" href="/getting-started/building.html"/>
         </item>
       </item>
       <item name="Samples" href="/samples/index.html" collapse="true">

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Pax Wicket Samples">
+
+  <title>Pax Wicket - Samples</title>
+
+  <body>
+    <links>
+      <item name="OPS4J" href="http://www.ops4j.org/"/>
+    </links>
+    <menu name="Pax Wicket Samples">
+      <item name="Samples" href="/index.html" collapse="true"/>
+    </menu>
+  </body>
+</project>
