@@ -85,7 +85,7 @@ public class DelegatingClassResolver
 
     private Filter createFilter( String applicationName )
     {
-        String filterStr = "&((" + Constants.OBJECTCLASS + "=" + IClassResolver.class.getName() + ")("
+        String filterStr = "(&(" + Constants.OBJECTCLASS + "=" + IClassResolver.class.getName() + ")("
                            + Content.APPLICATION_NAME + "=" + applicationName + "))";
 
         try
@@ -93,7 +93,8 @@ public class DelegatingClassResolver
             return m_context.createFilter( filterStr );
         } catch( InvalidSyntaxException e )
         {
-            throw new IllegalArgumentException( Content.APPLICATION_NAME + " has an invalid format." );
+            String message = Content.APPLICATION_NAME + "[" + applicationName + "] has an invalid format. ";
+            throw new IllegalArgumentException( message );
         }
     }
 
