@@ -1,0 +1,10 @@
+    --------------
+    Business Logic
+    --------------
+    Niclas Hedhman
+    --------------
+    2006 June 1
+    --------------
+    
+    The Pax Wicket Service should be used to generate a view of the actual application. The view should simply look up OSGi services to obtain the data for the view. By harnessing the modularity of OSGi, we get a very smooth separation of the web tier and the business logic. It is not within the scope of this document to describe how to model business logic on the OSGi platform.
+

@@ -1,0 +1,22 @@
+    -------------------------------
+    My First Pax Wicket Application
+    -------------------------------
+    Niclas Hedhman
+    -------------------------------
+    2006 June 1
+    -------------------------------
+
+    * {{{businesslogic.html}Business Logic}} - Separation of the view from the business logic/model with the help of OSGi services.
+
+    * {{{content.html}Content}} - All Wicket Components are modelled with PageContent implementations.
+
+    * {{{contentcontainer.html}Content Containers}} - Need to aggregate Components into a ContentContainer.
+
+    * {{{homepage.html}Home Page}} - Need a first page in all applications.
+
+    * {{{pagecontainer.html}Page Container}} - A special ContentContainer used for Pages.
+
+    * {{{application.html}Application}} - Description of the PaxWicketApplication structure.
+
+    * {{{aboutpage.html}About Page}} - How to add a About Page and hiding the link if not present.
+

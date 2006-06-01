@@ -1,0 +1,12 @@
+     ------------
+     Requirements
+     ------------
+     Niclas Hedhman
+     --------------
+     2006 June 1
+     --------------
+
+    - An OSGi framework compliant with the R4 Core specification.
+    - A Config Admin Service that is R4 compliant.
+    - Pax Logging Service.
+    - Java5 virtual machine running on a supported operating system.

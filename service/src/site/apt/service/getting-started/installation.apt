@@ -1,0 +1,24 @@
+    --------------------
+    Installation
+    --------------------
+    Niclas Hedhman
+    --------------------
+    2006 June 1
+    --------------------
+
+
+Running with Demo Runner
+
+    There is a project in OPS4J called Pax Demo Runner, which makes it easy for users to test demonstrations of
+    a Pax technology, and make it easy for developers to create them.
+
+    <<not completed>>
+
+Running on Apache Felix
+
+    Apache Felix is an incubating project (soon to graduate) which develops an OSGi framework. <<not completed>>
+
+
+Running on Eclipse Equinox
+
+    <<not completed>>

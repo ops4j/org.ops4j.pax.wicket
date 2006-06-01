@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax</groupId>
   <artifactId>wicket</artifactId>
@@ -12,7 +13,8 @@
   </organization>
   <scm>
     <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</developerConnection>
+    <developerConnection>
+      scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</developerConnection>
   </scm>
   <build>
     <extensions>
@@ -97,15 +99,17 @@
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
       </plugin>
+      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
+        <!--
         <configuration>
           <templateDirectory>${basedir}</templateDirectory>
           <template>maven-site.vm</template>
         </configuration>
+        -->
       </plugin>
-      -->
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>

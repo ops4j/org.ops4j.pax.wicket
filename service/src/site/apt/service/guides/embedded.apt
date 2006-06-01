@@ -1,0 +1,15 @@
+    -----------------------------------------------
+    Embedding Pax Wicket in Web Application Servers
+    -----------------------------------------------
+    Niclas Hedhman
+    -----------------------------------------------
+    2006 June 1
+    -----------------------------------------------
+
+    This is an area that is yet to be explored, but we could learn the basic principles from the RSP-UI project and the Http Service Bridge, alternatively from Simon Kaegi's effort in Equinox. FIXME **Name and URL**
+
+Apache Tomcat
+
+BEA Weblogic
+
+IBM Websphere

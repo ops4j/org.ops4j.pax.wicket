@@ -1,0 +1,178 @@
+    ---------------------------------
+    Writing ContentContainer services
+    ---------------------------------
+    Niclas Hedhman
+    ---------------------------------
+    2006 June 1
+    ---------------------------------
+
+    ContentContainers are aggregation of Content which are typically the re-registered as a larger Content service. For each wicket:id, we need one or more Content, and without it Wicket will fail.
+
+    That said, let's look at our Activator
+
++------------------------------
+public class Activator
+    implements BundleActivator
+{
+
+    private List<FloorContentContainer> m_containers;
+    private List<ServiceRegistration> m_registrations;
+
+    public Activator()
+    {
+        m_containers = new ArrayList<FloorContentContainer>();
+        m_registrations = new ArrayList<ServiceRegistration>();
+    }
+
+    public void start( BundleContext bundleContext )
+        throws Exception
+    {
+        String depStoreServiceName = DepartmentStore.class.getName();
+        ServiceReference depStoreServiceReference = bundleContext.getServiceReference( depStoreServiceName );
+        DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreServiceReference );
+        List<Floor> floors = departmentStore.getFloors();
+
+        String destinationId = "swp.floor";
+        for( Floor floor : floors )
+        {
+            FloorContentContainer container =
+                new FloorContentContainer( floor, floor.getName(), destinationId, bundleContext );
+            m_containers.add( container );
+            container.setDestinationId( destinationId );
+            container.setContainmentId( floor.getName() );
+            ServiceRegistration registration = container.register();
+            m_registrations.add( registration );
+        }
+    }
+
+    public void stop( BundleContext bundleContext )
+        throws Exception
+    {
+        for( ServiceRegistration registration : m_registrations )
+        {
+            registration.unregister();
+        }
+        m_registrations.clear();
+        for( ContentContainer floor : m_containers )
+        {
+            floor.dispose();
+        }
+    }
+}
++------------------------------
+
+    We obtain the Floor instances from our business logic model, and for each floor we create a FloorContentContainer that will look for Content with the DestinationID containing the Floor ContainmentID. The DefaultContentContainer, which we subclass for the FloorContentContainer, also implements the Content interface, so we need to set the DestinationID of the Floor itself. In this case we have hardcoded the DestinationID to "swp.floor", meaning we want each floor to be attached to the Containment "swp" at a wicket:id="floor".
+
++------------------------------
+public class FloorContentContainer extends DefaultContentContainer
+{
+    private final Floor m_floor;
+
+    public FloorContentContainer( Floor floor, String containmentId, String destinationId,
+                                  BundleContext bundleContext )
+    {
+        super( containmentId, destinationId, bundleContext );
+        m_floor  = floor;
+    }
+
+    protected Component createComponent( String id )
+    {
+        return new FloorPanel( id, this, m_floor );
+    }
+
+}
++------------------------------
+
+    The FloorContentContainer need to implement the createComponent( String id )  abstract method, needed by the superclass. The removeComponent( Component comp ) method has not been worked out at writing time.
+
+    The above simply generates the FloorPanel, which looks like this;
+
++------------------------------
+public class FloorPanel extends Panel
+{
+
+    public static final String WICKET_ID_NAME_LABEL = "name";
+    private static final String WICKET_ID_FRANCHISEE = "franchisee";
+    private static final String WICKET_ID_FRANCHISEES = "franchisees";
+
+    public FloorPanel( String id, ContentContainer container, Floor floor )
+    {
+        super( id, new Model( floor.getName() ) );
+        Label nameLabel = new Label( WICKET_ID_NAME_LABEL, floor.getName() );
+        add( nameLabel );
+        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE );
+        if( franchisees.isEmpty() )
+        {
+            Panel p = new Panel( "franchisees" );
+            p.add( new Label( "franchisee", "No Franchisees on this floor." ) );
+            add( p );
+        }
+        else
+        {
+            ListView listView = new ListView( WICKET_ID_FRANCHISEES, franchisees )
+            {
+                protected void populateItem( final ListItem item )
+                {
+                    item.add( (Component) item.getModelObject() );
+                }
+            };
+            add( listView );
+        }
+    }
+
+}
++------------------------------
+
+    First we add a Wicket Label with the name of the Floor. The FloorContentContainer passes itself to the FloorPanel, so that it can request the creation of the Wicket Component(s) of a particular wicket:id. We then make sure that we handle that we have no Franchisees on this Floor. And if we do, then we add them all into a ListView, which is rendered below as a html table.
+
++------------------------------
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+<body>
+    <wicket:panel>
+        <b>Floor: <span wicket:id="name"/></b>
+        <br/>
+        <table>
+            <tr wicket:id="franchisees" ><td><span wicket:id="franchisee"></span></td></tr>
+        </table>
+    </wicket:panel>
+</body>
+</html>
++------------------------------
+
+    In the html, we once again uses Panel, but could in fact be any Wicket Component, including compouded and extended ones.
+
+Bundle Manifest
+
++------------------------------
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: niclas
+Build-Jdk: 1.5.0_06
+Extension-Name: departmentstore.view.floor
+Specification-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Title: departmentstore.view.floor
+Implementation-Version: 0.1.0.SNAPSHOT
+Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.fl
+ oor.internal.Activator
+Bundle-Version: 0.1.0.SNAPSHOT
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model;ver
+ sion=0.1.0.SNAPSHOT,org.ops4j.pax.wicket.service;version=0.1.0.SNAPSH
+ OT,org.osgi.framework;version=1.3,wicket;version=1.2,wicket.model;ver
+ sion=1.2,wicket.markup.html.basic;version=1.2,wicket.markup.html.list
+ ;version=1.2,wicket.markup.html.panel;version=1.2
+Bundle-Name: OPS4J - Pax Wicket Department Store - View - Floor
+Bundle-Description: Pax Department Store Floor View.
+Bundle-SymbolicName: departmentstore.view.floor
++------------------------------
+
+    The manifest is built by Maven and the maven-osgi-plugin. The pom.xml required for this bundle can be found {{{https://scm.ops4j.org/repos/ops4j/projects/pax/wicket/samples/department-store/floor/pom.xml}here}}.
+
+    Again, there are NO exports, and we import the same stuff as in the Content case, i.e. OSGi framework, Pax Logging if needed, Pax Wicket Service and the relevant Wicket packages being used.
+
+Conclusion
+
+    As you have seen, it is not very difficult to write the ContentContainer if you subclass the DefaultContentContainer.
+

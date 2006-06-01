@@ -1,0 +1,180 @@
+    ----------------------------
+    Writing Application services
+    ----------------------------
+    Niclas Hedhman
+    ----------------------------
+    2006 June 1
+    ----------------------------
+
+    The above sample wouldn't do anything unless we tie it into a Page. At the time of writing, we are not completely done with Page support, so the sample only utilizes the HomePage concept in Wicket, but uses AjaxTabbedPanel to show different floors.
+
+    The Activator needs to initialize the Pax Wicket application, and get everything running. Fortunately, that is very simple (as well).
+
++------------------------------
+public class Activator
+    implements BundleActivator
+{
+    private ContentContainer m_store;
+    private ServiceRegistration m_serviceRegistration;
+
+    public void start( BundleContext bundleContext )
+        throws Exception
+    {
+        IPageFactory factory = new IPageFactory()
+        {
+            public Page newPage( final Class pageClass )
+            {
+                return new OverviewPage( m_store, "Sungei Wang Plaza" );
+            }
+
+            public Page newPage( final Class pageClass, final PageParameters parameters )
+            {
+                return new OverviewPage( m_store, "Sungei Wang Plaza" );
+            }
+        };
+        m_store = new DefaultPageContainer( "swp", bundleContext, factory );
+        Properties props = new Properties();
+        props.put( PaxWicketApplicationFactory.MOUNTPOINT, "swp" );
+        PaxWicketApplicationFactory applicationFactory = new PaxWicketApplicationFactory( factory, OverviewPage.class );
+        String serviceName = PaxWicketApplicationFactory.class.getName();
+        m_serviceRegistration = bundleContext.registerService( serviceName, applicationFactory, props );
+    }
+
+    public void stop( BundleContext bundleContext )
+        throws Exception
+    {
+        m_serviceRegistration.unregister();
+        m_store.dispose();
+    }
+}
++------------------------------
+
+    We need to provide a Wicket IPagefactory, since out HomePage does not have a default constructor. We create a DefaultPageContent, which is a ContentContainer that itself is not a Content (at least not yet). The DefaultPageContent is passed to the OverviewPage, via the newPage() methods in the IPageFactory, which IMHO is not the cleanest, since we now have an awkward cyclic dependency. This will be further refined when we solve the whole Page management system in the Pax Wicket Service.
+
+    We then create and register the PaxWicketApplicationFactory under a URL mountpoint of "swp".
+
+    The OverviewPage uses AjaxTabbedPanels and need a little bit of support from a class we call FloorTabPanel.
+
++------------------------------
+public class FloorTabPanel extends Panel
+{
+
+    public FloorTabPanel( String id )
+    {
+        super( id );
+    }
+}
++------------------------------
+
+    Not much about this class, other than it serving as the locator for the html needed.
+
++------------------------------
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+<body>
+    <wicket:panel>
+        <div wicket:id="floor"></div>
+    </wicket:panel>
+</body>
+</html>
++------------------------------
+
+    There is the wicket:id to which the FloorContent will bind themselves. The reason for the FloorTabPanel is a bit obscure, but related to the hierarchy that Wicket creates around the AjaxTabbedPanel. In effect, the Panel one is requested to create must have the name "panel" which sits inside the html for the TabbedPanel component, and we are a content of that wicket:id. We could possibly get away with having DestinationIDs set to "panel" for the Floor (instead of "swp.floor" use "swp.panel", but we thought that would be harder to follow). Well, I have tried to explain it...
+
+    The OverviewPage is then the last piece needed.
+
++------------------------------
+public class OverviewPage extends WebPage
+{
+    private static final String WICKET_ID_LABEL = "storeName";
+
+    public OverviewPage( ContentContainer container, String storeName )
+    {
+        Label label = new Label( WICKET_ID_LABEL, storeName );
+        add( label );
+        final List<Component> floors = container.createComponents( "floor" );
+        List tabs = new ArrayList();
+        for( final Component floor : floors )
+        {
+            String tabName = (String) floor.getModelObject();
+            tabs.add( new AbstractTab( new Model( tabName ) )
+            {
+                public Panel getPanel( String panelId )
+                {
+                    Panel panel = new FloorTabPanel( panelId );
+                    panel.add( floor );
+                    return panel;
+                }
+            }
+            );
+        }
+        if( tabs.isEmpty() )
+        {
+            add( new Label( "floors", "No Floors installed yet." ) );
+        }
+        else
+        {
+            add( new AjaxTabbedPanel( "floors", tabs ) );
+        }
+    }
+}
++------------------------------
+
+    We instantiate a Wicket Label to display the name of the department store. And again, we are passed the ContentContainer in the constructor (in this case a DefaultPageContent instance), which we use to create the Wicket Components needed for the Page (and as explained earlier, the createComponents() method will delegate down the ContentContainer chain to the leaves).
+
+    We have earlier stored the Floor name in the Model of the Floor, to avoid a dependency. That Floor name is used as the title of the Tab, and we just follow the Wicket pattern to create tabs.
+
+    We then check if there were any floors, if not put a simple text message about that, otherwise instantiate a AjaxTabbedPanel named "floors" to be injected into our html (seen below).
+
++------------------------------
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <span wicket:id="storeName">StoreName goes here</span>
+    <p>
+        <div wicket:id="floors" class="floorpanel" ></div>
+    </p>
+</body>
+</html>
++------------------------------
+
+Bundle Manifest
+
+    There is nothing much different in this bundle manifest from the others.
+
++------------------------------
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: niclas
+Build-Jdk: 1.5.0_06
+Extension-Name: departmentstore.view.app
+Specification-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Title: departmentstore.view.app
+Implementation-Version: 0.1.0.SNAPSHOT
+Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.in
+ ternal.Activator
+Bundle-Version: 0.1.0.SNAPSHOT
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model;ver
+ sion=0.1.0.SNAPSHOT,org.ops4j.pax.wicket.service;version=0.1.0.SNAPSH
+ OT,org.osgi.framework;version=1.3,wicket;version=1.2,wicket.extension
+ s.ajax.markup.html.tabs;version=1.2,wicket.extensions.markup.html.tab
+ s;version=1.2,wicket.markup.html;version=1.2,wicket.markup.html.basic
+ ;version=1.2,wicket.markup.html.panel;version=1.2,wicket.model;versio
+ n=1.2,wicket.protocol.http;version=1.2,wicket.settings;version=1.2
+Bundle-Name: OPS4J - Pax Wicket Department Store - View - App
+Bundle-Description: Pax Department Store View Application.
+Bundle-SymbolicName: departmentstore.view.app
++------------------------------
+
+    The manifest is built by Maven and the maven-osgi-plugin. The pom.xml required for this bundle can be found {{{https://scm.ops4j.org/repos/ops4j/projects/pax/wicket/samples/department-store/application/pom.xml}here}}.
+
+    Again, there are NO exports, and we import the same stuff as in the Content case, i.e. OSGi framework, Pax Logging if needed, Pax Wicket Service and the relevant Wicket packages being used.
+
+Conclusion
+
+    FIXME Need to update when we know more about the Page management.
+

@@ -1,0 +1,166 @@
+    ------------------------
+    Writing Content services
+    ------------------------
+    Niclas Hedhman
+    ------------------------
+    2006 June 1
+    ------------------------
+
+    Let's look at the code from the department-store sample in the {{{https://scm.ops4j.org/repos/ops4j/projects/pax/wicket/}OPS4J svn repository}}.
+
+    We need an Activator;
+
++------------------------------
+public class Activator
+    implements BundleActivator
+{
+    private List<ServiceRegistration> m_registrations;
+
+    public Activator()
+    {
+        m_registrations = new ArrayList<ServiceRegistration>();
+    }
+
+    public void start( BundleContext bundleContext )
+        throws Exception
+    {
+        String depStore = DepartmentStore.class.getName();
+        ServiceReference depStoreService = bundleContext.getServiceReference( depStore );
+        DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreService );
+
+        m_registrations = new ArrayList<ServiceRegistration>();
+        List<Floor> floors = departmentStore.getFloors();
+        for( Floor floor: floors )
+        {
+            List<Franchisee> franchisees = floor.getFranchisees();
+            for( Franchisee franchisee : franchisees )
+            {
+                String destinationId = floor.getName() + ".franchisee";
+                FranchiseeContent content = new FranchiseeContent( bundleContext, franchisee  );
+                content.setDestinationId( destinationId );
+                ServiceRegistration registration = content.register();
+                m_registrations.add( registration );
+            }
+        }
+    }
+
+    public void stop( BundleContext bundleContext )
+        throws Exception
+    {
+        for( ServiceRegistration registeration : m_registrations )
+        {
+            registeration.unregister();
+        }
+        m_registrations.clear();
+    }
+}
++------------------------------
+
+    In this sample, the business logic sits in a separate department store model bundle, and the component knows how to extract the available Franchisees, and which floor they are located on. A more generic approach is to set the DestinationID to Content.DESTINATIONID_UNKNOWN and let a separate bundle figure out the wiring. We will probably come up with various strategies around this in the future.
+
+    We need to create a Content class, which we subclass from the DefaultContent to save us a lot of work. For the Franchisee it looks like;
+
++------------------------------
+public class FranchiseeContent extends DefaultContent
+{
+    private Franchisee m_franchisee;
+
+    public FranchiseeContent( BundleContext context, Franchisee franchisee )
+    {
+        super( context, franchisee.getName()  );
+        m_franchisee = franchisee;
+    }
+
+    protected Component createComponent( String id )
+    {
+        return new FranchiseePanel( id, m_franchisee );
+    }
+}
++------------------------------
+
+    Nothing much to do here, just instantiate the Wicket component on demand.
+
+    Next, we need the Wicket part of our Content.
+
++------------------------------
+public class FranchiseePanel extends Panel
+    implements Serializable
+{
+    private static final long serialVersionUID = 1L;
+
+    private static final String WICKET_ID_NAME_LABEL = "name";
+    private static final String WICKET_ID_DESC_LABEL = "description";
+
+    public FranchiseePanel( String id, Franchisee franchisee )
+    {
+        super( id );
+
+        Label nameLabel = new Label( WICKET_ID_NAME_LABEL, franchisee.getName() );
+        add( nameLabel );
+
+        Label descLabel = new Label( WICKET_ID_DESC_LABEL, franchisee.getDescription() );
+        add( descLabel );
+    }
+}
++------------------------------
+
+    This is standard Wicket stuff. It is provided a Franchisee from the business logic model, and adds two Wicket Labels. This must correspond to an HTML snippet;
+
++------------------------------
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+<body>
+    <wicket:panel>
+        Name: <span wicket:id="name"></span>
+
+        <br/>
+        Description: <span wicket:id="description"></span>
+
+        <br/>
+    </wicket:panel>
+</body>
+</html>
++------------------------------
+
+    For those who are not vivid Wicket users (like myself), it is <<important>> that the \<span\> element contains an opening and closing tag, instead of the common <span ... /> format. I am not sure why Wicket makes this distinction.
+
+Bundle Manifest
+
+    We need a bundle manifest for the above code, which needs to look like this;
+
++------------------------------
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: niclas
+Build-Jdk: 1.5.0_06
+Extension-Name: departmentstore.view.franchisee
+Specification-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Vendor: OPS4J - Open Participation Software for Java
+Implementation-Title: departmentstore.view.franchisee
+Implementation-Version: 0.1.0.SNAPSHOT
+Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.fr
+ anchisee.internal.Activator
+Bundle-Version: 0.1.0.SNAPSHOT
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model;ver
+ sion=0.1.0.SNAPSHOT,org.ops4j.pax.wicket.service;version=0.1.0.SNAPSH
+ OT,org.osgi.framework;version=1.2,wicket;version=1.2,wicket.markup.ht
+ ml.basic;version=1.2,wicket.markup.html.panel;version=1.2
+Bundle-Name: OPS4J - Pax Wicket Department Store - View - Franchisee
+Bundle-Description: Pax Department Store Franchisee View.
+Bundle-SymbolicName: departmentstore.view.franchisee
++------------------------------
+
+    The manifest is built by Maven and the maven-osgi-plugin. The pom.xml required for this bundle can be found {{{https://scm.ops4j.org/repos/ops4j/projects/pax/wicket/samples/department-store/franchisee/pom.xml}here}}.
+
+    The important parts to notice are;
+    * No exports !
+    * Import the Pax Wicket Service package.
+    * Import the used Wicket packages.
+    * Import the OSGi framework.
+    * If you need logging, import Pax Logging.
+
+Conclusion
+
+    In essence, this concludes what we need to know about writing Content services. We have seen that it is not very hard, and you will see that most of your issues will be ordinary Wicket stuff, i.e. getting the hierarchies right, which is not related to Pax Wicket Service at all.
+

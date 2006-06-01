@@ -1,0 +1,14 @@
+
+    -------------------
+    Pax Wicket Service
+    -------------------
+    Niclas Hedhman
+    -------------------
+    2006 June 1
+    -------------------
+
+    Pax Wicket service is an solution for running Wicket on OSGi platform, with a high degree of modularity, dynamic capabilities in the true OSGi spirit.
+
+    Pax Wicket allows you to replace panels and other Wicket components without bringing down the entire application, It is even possible to move components between pages in runtime, add new pages and throw away old parts of the application, <<all without stopping the server>>.
+
+    
