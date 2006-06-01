@@ -16,7 +16,7 @@
     <orderEntry type="library" name="osgi_R4_core-1.0" level="project" />
     <orderEntry type="module" module-name="service" />
     <orderEntry type="library" name="osgi_R4_compendium-1.0" level="project" />
-    <orderEntry type="library" name="pax-logging-client-0.6.4" level="project" />
+    <orderEntry type="library" name="pax-logging-client-0.7.1" level="project" />
     <orderEntryProperties />
   </component>
 </module>

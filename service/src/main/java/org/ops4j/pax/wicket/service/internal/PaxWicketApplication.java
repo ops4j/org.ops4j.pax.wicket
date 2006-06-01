@@ -41,16 +41,19 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
 
     protected Class m_homepageClass;
     private PaxWicketPageFactory m_factory;
+    private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
     private PaxWicketAuthenticator m_authenticator;
     private HashMap<AuthenticatedToken, Roles> m_roles;
 
-    public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory, boolean deploymentMode )
+    public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory,
+                                 DelegatingClassResolver delegatingClassResolver,
+                                 boolean deploymentMode )
     {
         m_factory = factory;
+        m_delegatingClassResolver = delegatingClassResolver;
         m_deploymentMode = deploymentMode;
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
-
         m_homepageClass = homepageClass;
     }
 
@@ -78,7 +81,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
     {
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( m_factory );
+        applicationSettings.setClassResolver( m_delegatingClassResolver );
 
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );

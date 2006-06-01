@@ -51,13 +51,13 @@ public final class PaxWicketPageFactory
         m_applicationName = applicationName;
     }
 
-    public void start()
+    public void initialize()
     {
         m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
         m_pageTracker.open();
     }
 
-    public void stop()
+    public void dispose()
     {
         m_contents.clear();
         m_pageTracker.close();

@@ -17,7 +17,7 @@
     <orderEntry type="module" module-name="service" />
     <orderEntry type="module" module-name="model" />
     <orderEntry type="library" name="wicket-extensions-1.2-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="pax-logging-client-0.6.4" level="project" />
+    <orderEntry type="library" name="pax-logging-client-0.7.1" level="project" />
     <orderEntryProperties />
   </component>
 </module>

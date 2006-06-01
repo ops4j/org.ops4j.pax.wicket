@@ -359,12 +359,16 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-logging-client-0.6.4">
+    <library name="pax-logging-client-0.7.1">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.6.4/pax-logging-client-0.6.4.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.7.1/pax-logging-client-0.7.1.jar!/" />
       </CLASSES>
-      <JAVADOC />
-      <SOURCES />
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.7.1/pax-logging-client-0.7.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-client/0.7.1/pax-logging-client-0.7.1-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="wicket-extensions-1.2-SNAPSHOT">
       <CLASSES>

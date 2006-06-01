@@ -23,6 +23,7 @@ import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.service.internal.PaxWicketPageFactory;
+import org.ops4j.pax.wicket.service.internal.DelegatingClassResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
@@ -39,6 +40,7 @@ public final class PaxWicketApplicationFactory
     private ServiceRegistration m_registration;
     private PaxWicketPageFactory m_pageFactory;
     private Properties m_properties;
+    private DelegatingClassResolver m_delegatingClassResolver;
 
     public PaxWicketApplicationFactory( BundleContext bundleContext, Class homepageClass, String mountPoint,
                                         String applicationName )
@@ -55,7 +57,8 @@ public final class PaxWicketApplicationFactory
 
     public void dispose()
     {
-        m_pageFactory.stop();
+        m_pageFactory.dispose();
+        m_delegatingClassResolver.dispose();
     }
 
     public String getMountPoint()
@@ -84,7 +87,7 @@ public final class PaxWicketApplicationFactory
     public WebApplication createApplication( WicketServlet servlet )
     {
         PaxWicketApplication paxWicketApplication =
-            new PaxWicketApplication( m_homepageClass, m_pageFactory, isDeploymentMode() );
+            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_delegatingClassResolver, isDeploymentMode() );
         return paxWicketApplication;
     }
 
@@ -125,11 +128,19 @@ public final class PaxWicketApplicationFactory
     {
         if( m_pageFactory != null )
         {
-            m_pageFactory.stop();
+            m_pageFactory.dispose();
+        }
+        if( m_delegatingClassResolver != null )
+        {
+            m_delegatingClassResolver.dispose();
         }
 
+        m_delegatingClassResolver = new DelegatingClassResolver( m_bundleContext, applicationName );
+        m_delegatingClassResolver.intialize();
+
         m_pageFactory = new PaxWicketPageFactory( m_bundleContext, applicationName );
-        m_pageFactory.start();
+        m_pageFactory.initialize();
+
         m_properties.setProperty( Content.APPLICATION_NAME, applicationName );
     }
 
