@@ -7,3 +7,21 @@
      -------------------
 
 
+Checking out source code
+
+    If you want to build Pax Wicket from source, you will need to checkout the source code from our subversion
+    repository.
+
++----------------------
+    svn co https://scm.ops4j.org/repos/ops4j/projects/pax/wicket
++----------------------
+
+    Then you go to that directory and run;
+
++----------------------
+    mvn install
++----------------------
+
+    And you will soon after have the Pax Wicket service available in the <<<service/target/>>> directory.
+
+
