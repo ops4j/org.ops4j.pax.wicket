@@ -1,0 +1,68 @@
+    -------------------
+    Pax Wicket Concepts
+    -------------------
+    Niclas Hedhman
+    -------------------
+    2006 June 2
+    -------------------
+
+Concepts & API classes.
+
+* Model vs Components
+
+    In Pax Wicket, you create a Model of the view, whereas in Wicket itself you create the Components of the view
+    directly. This is important to understand, as Pax Wicket needs to delay the creation of Components as long as
+    possible, yet have a clear understanding of how things are hanging together.
+
+    The interfaces in Pax Wicket descibes that model, and there are suitable default implementations available to make
+    it easy to create a model of the view, and instantiating the view from these model parts.
+
+* Content and ContentContainer
+
+    <Content> represents a model part that is a leaf in a page. <Content> can be added to a <ContentContainer> as a
+    child. <Content> can be removed from the <ContentContainer> at any time, but the view might not reflect that change
+    immediately depending on when the Wicket page is being discarded and recreated.
+
+* ApplicationName
+
+    All services that are part of a Pax Wicket application, must have the application name property set in its service
+    registration. The application name key is available in <<<Content.APPLICATION_NAME>>>. Failure to set this will
+    preclude the service to become part of the Pax Wicket application.
+    
+* PageContent
+
+    Pages also need to be modelled, and the main challange reside in bookmarkable pages in Wicket, where Wicket will
+    do the instantiation. PageContent is a model part, which allows the developer control over the instantiation of
+    pages, by implementing the <<<getPageClass()>>> and <<<createPage()>>> methods.
+
+* DefaultContent
+
+    This is a implementation of the <Content> interface, suitable for most content that are leaves in the model, i.e.
+    that does not aggregated any other components.
+
+* DefaultContentContainer
+
+    The DefaultContentContainer is an implementation of both the <Content> and the <ContentContainer> interfaces, making
+    it suitable for panels, tables and other types of aggregation where the resulting aggregation is likely to be part
+    of a larger aggregation, for instance on a Page.
+
+
+* DefaultPageContainer
+
+    The DefaultPageContainer is an implementation of the <ContentContainer> suitable for aggregating panels and other
+    components as a model for a Wicket page. Unlike the DefaultContentContainer, this implementation does not implement
+    the <Content> interface, and can therefor not be further aggregated in higher level <ContentContainers>.
+
+* AbstractPageContent
+
+    This is an implementation of the PageContent interface, handling the OSGi registration of the PageContent, but
+    leaving the <<<getPageClass()>>> and  <<<createPage()>>> to be implemented by the subclass.
+
+* Wiring
+
+    Wiring is the process of connecting a Content to a ContentContainer. The ContentContainer publishes a ContainmentID
+    (available from Content.CONTAINMENTID) and the Content publishes a DestinationID (available from
+    Content.DESTIONATIONID). The DestinationID consists of two parts, dot separated, as <containmentid>.<wicketid> where
+    the Content will be added to the ContentContainer with the same ContainmentID as is present in the DestinationID,
+    and the ContentContainer can lookup the <wicketid> from its children during Component creation.
+

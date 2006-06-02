@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Pax Wicket">
+
+  <bannerLeft>
+    <name>OPS4J</name>
+    <src>http://www.ops4j.org/images/logo.png</src>
+    <href>http://www.ops4j.org/</href>
+  </bannerLeft>
+
+  <title>Pax Wicket</title>
+
+  <body>
+
+    <menu name="Pax Wicket">
+      <item name="Introduction" href="index.html"/>
+      <item name="Concepts" href="concepts.html"/>
+      <item name="Reference" href="/reference/index.html"/>
+      <item name="My First App" href="/myfirstapp/index.html" collapse="true">
+        <item name="Business Logic" href="/myfirstapp/businesslogic.html"/>
+        <item name="Content" href="/myfirstapp/content.html"/>
+        <item name="Content Container" href="/myfirstapp/contentcontainer.html"/>
+        <item name="Home Page" href="/myfirstapp/homepage.html"/>
+        <item name="Page Container" href="/myfirstapp/pagecontainer.html"/>
+        <item name="Application" href="/myfirstapp/application.html"/>
+        <item name="About Page" href="/myfirstapp/aboutpage.html"/>
+      </item>
+      <item name="Guides" href="/guides/index.html">
+        <item name="Creating Components" href="/guides/creating-components.html"/>
+        <item name="Using Components" href="/guides/using-components.html"/>
+        <item name="Building" href="/guides/creating-pages.html"/>
+        <item name="Dynamic Apps" href="/guides/dynamic-assembly.html"/>
+        <item name="Authentication" href="/guides/authentication.html"/>
+      </item>
+      <item name="Getting Started" href="/getting-started/index.html">
+        <item name="Installation" href="/getting-started/installation.html"/>
+        <item name="Building" href="/getting-started/building.html"/>
+      </item>
+      <item name="Service" href="service/index.html"/>
+      <item name="Samples" href="samples/index.html"/>
+    </menu>
+
+    ${reports}
+  </body>
+</project>
+

@@ -1,0 +1,15 @@
+
+    The Floor bundle looks up which floors exist in the Department Store and registers Content information to the OSGi
+    framework.
+
+    The Floor is both Content as well as a ContentContainer. The ContentContainer will look for Content to be wired to
+    it, whilst the Content side of the floor practically registers the floor content into a higher ContentContainer, in
+    this being the PageContent of the Application bundle.
+
+    * FloorContentContainer is the combined Content and ContentContainer implementation, by subclassing the
+      DefaultContentContainer in Pax Wicket. We only need to implement the <<<createComponent()>>> method, which is part
+      of the Content interface. Handling of the ContentContainer interface is automatic in the superclass.
+
+    * FloorPanel is the Wicket Panel we are creating. It is simply a List of Franchisees that are <wired> to this floor.
+
+    * The Activator is given the responsibility of creating one FloorContentContainer per floor found in the Model.

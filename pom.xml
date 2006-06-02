@@ -7,15 +7,38 @@
   <name>OPS4J - Pax Wicket</name>
   <version>0.2.1-SNAPSHOT</version>
   <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
+  <inceptionYear>2006</inceptionYear>
   <organization>
     <name>OPS4J - Open Participation Software for Java</name>
     <url>http://www.ops4j.org/</url>
   </organization>
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</connection>
-    <developerConnection>
-      scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket/QA_0.2.1_2006May31</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
+  <developers>
+    <developer>
+      <id>niclas</id>
+      <name>Niclas Hedhman</name>
+      <organization>CodeDragons Ltd</organization>
+      <email>niclas@codedragons.com</email>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+8</timezone>
+    </developer>
+    <developer>
+      <id>efy</id>
+      <name>Edward Yakop</name>
+      <organization>CodeDragons Ltd</organization>
+      <email>efy@codedragons.com</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+8</timezone>
+    </developer>
+  </developers>
   <build>
     <extensions>
       <extension>
@@ -89,17 +112,20 @@
   </dependencies>
   <reporting>
     <plugins>
-      <!--
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <targetJdk>1.5</targetJdk>
+          <sourceEncoding>utf-8</sourceEncoding>
+          <minimumTokens>100</minimumTokens>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
       </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -210,4 +236,38 @@
       <url>scp://www.ops4j.org/var/http/www.ops4j.org/projects/pax/wicket</url>
     </site>
   </distributionManagement>
+  <mailingLists>
+    <mailingList>
+      <archive>http://lists.ops4j.org/pipermail/general</archive>
+      <name>General OPS4J</name>
+      <post>general@lists.ops4j.org</post>
+      <subscribe>general-subscribe@lists.ops4j.org</subscribe>
+      <unsubscribe>general-unsubscribe@lists.ops4j.org</unsubscribe>
+    </mailingList>
+  </mailingLists>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://issues.ops4j.org/jira/browse/PAXWICKET</url>
+  </issueManagement>
+  <ciManagement>
+    <system>continuum</system>
+    <url>http://ci.ops4j.org/</url>
+    <notifiers>
+      <notifier>
+        <type>email</type>
+        <address>notify@ops4j.org</address>
+        <sendOnError>true</sendOnError>
+        <sendOnFailure>true</sendOnFailure>
+        <sendOnWarning>true</sendOnWarning>
+        <sendOnSuccess>false</sendOnSuccess>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <licenses>
+    <license>
+      <name>ALv2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 </project>
