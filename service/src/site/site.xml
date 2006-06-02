@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Pax Wicket Service">
-
-  <title>Pax Wicket - Wicket solution for OSGi</title>
-
   <body>
     <links>
       <item name="OPS4J" href="http://www.ops4j.org/"/>

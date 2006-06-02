@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Pax Wicket Sample Departmentstore">
+  <body>
+    <menu name="Departmentstore" inherit="top">
+      <item name="Introduction" href="index.html"/>
+      <item name="Business Model" href="model/index.html" />
+      <item name="Application" href="application/index.html" />
+      <item name="Floor" href="floot/index.html" />
+      <item name="Franchisee" href="franchisee/index.html" />
+      <item name="About Page" href="aboutpage/index.html" />
+    </menu>
+    ${reports}
+  </body>
+</project>
+

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Pax Wicket Samples">
-
-  <title>Pax Wicket - Samples - Department Store</title>
-
+<project name="Pax Wicket Sample Departmentstore About">
   <body>
     <menu name="Pax Wicket Samples" inherit="top" >
-      <item name="About Page" href="/index.html"/>
+      <item name="About Page" href="index.html"/>
     </menu>
   </body>
 </project>
