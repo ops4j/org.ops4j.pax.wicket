@@ -21,6 +21,8 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
 import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
+import org.ops4j.pax.wicket.service.PaxWicketAuthenticator;
+import org.ops4j.pax.wicket.service.UserAdminAuthenticator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -49,8 +51,9 @@ public class Activator
         m_overviewPageContent = new OverviewPageContent( bundleContext, m_store, applicationName, "overview" );
         m_overviewPageContent.register();
 
+        PaxWicketAuthenticator userAdminAuthenticator = new UserAdminAuthenticator( bundleContext );
         m_applicationFactory =
-            new PaxWicketApplicationFactory( bundleContext, OverviewPage.class, mountPoint, applicationName );
+            new PaxWicketApplicationFactory( bundleContext, OverviewPage.class, mountPoint, applicationName, userAdminAuthenticator );
         m_applicationFactory.setDeploymentMode( true );
         m_serviceRegistration = m_applicationFactory.register();
     }

@@ -41,14 +41,16 @@ public final class PaxWicketApplicationFactory
     private PaxWicketPageFactory m_pageFactory;
     private Properties m_properties;
     private DelegatingClassResolver m_delegatingClassResolver;
+    private PaxWicketAuthenticator m_authenticator;
 
     public PaxWicketApplicationFactory( BundleContext bundleContext, Class homepageClass, String mountPoint,
-                                        String applicationName )
+                                        String applicationName, PaxWicketAuthenticator authenticator )
     {
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
         m_properties = new Properties();
         m_homepageClass = homepageClass;
         m_bundleContext = bundleContext;
+        m_authenticator = authenticator;
         setMountPoint( mountPoint );
         setDeploymentMode( false );
         setApplicationName( applicationName );
@@ -87,7 +89,7 @@ public final class PaxWicketApplicationFactory
     public WebApplication createApplication( WicketServlet servlet )
     {
         PaxWicketApplication paxWicketApplication =
-            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_delegatingClassResolver, isDeploymentMode() );
+            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_delegatingClassResolver, m_authenticator, isDeploymentMode() );
         return paxWicketApplication;
     }
 

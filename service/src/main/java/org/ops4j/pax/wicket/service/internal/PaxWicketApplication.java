@@ -39,6 +39,8 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
 
     private static final Roles EMPTY_ROLES = new Roles();
 
+    private static final AuthenticatedToken TOKEN_NOT_AUTHENTICATED = new AuthenticatedToken();
+
     protected Class m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
@@ -47,14 +49,16 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
     private HashMap<AuthenticatedToken, Roles> m_roles;
 
     public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory,
-                                 DelegatingClassResolver delegatingClassResolver,
+                                 DelegatingClassResolver delegatingClassResolver, PaxWicketAuthenticator authenticator,
                                  boolean deploymentMode )
     {
+        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         m_factory = factory;
+        m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
         m_deploymentMode = deploymentMode;
-        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
-        m_homepageClass = homepageClass;
+        m_authenticator = authenticator;
+        m_roles = new HashMap<AuthenticatedToken, Roles>();
     }
 
     /**
@@ -127,6 +131,10 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
 
     public AuthenticatedToken authententicate( String username, String password )
     {
+        if( m_authenticator == null )
+        {
+            return TOKEN_NOT_AUTHENTICATED;
+        }
         Roles roles = m_authenticator.authenticate( username, password );
         if( roles != null )
         {
@@ -139,11 +147,11 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
 
     public Roles getRoles( AuthenticatedToken token )
     {
-        if( token == null )
+        if( token == null || token == TOKEN_NOT_AUTHENTICATED )
         {
             return EMPTY_ROLES;
         }
-        return null;
+        return m_roles.get( token );
     }
 
     private static class PaxWicketRequest extends ServletWebRequest
