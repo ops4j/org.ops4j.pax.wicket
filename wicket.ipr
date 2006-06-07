@@ -287,6 +287,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/about.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/application.iml" group="samples/department-store/view" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/demo.iml" group="samples/department-store" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/floor.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/model.iml" group="samples/department-store/model" />
