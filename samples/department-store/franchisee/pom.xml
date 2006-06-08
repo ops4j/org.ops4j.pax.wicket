@@ -2,20 +2,20 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.2.1</version>
+    <version>0.2.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>franchisee</artifactId>
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Department Store - View - Franchisee</name>
-  <version>0.2.1</version>
+  <version>0.2.2-SNAPSHOT</version>
   <description>Pax Department Store Franchisee View.</description>
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -31,7 +31,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
