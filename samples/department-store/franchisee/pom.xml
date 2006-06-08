@@ -1,21 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project>
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>franchisee</artifactId>
-  <name>OPS4J - Pax Wicket Department Store - View - Franchisee</name>
-  <version>0.2.1-SNAPSHOT</version>
   <packaging>osgi-bundle</packaging>
+  <name>OPS4J - Pax Wicket Department Store - View - Franchisee</name>
+  <version>0.2.1</version>
   <description>Pax Department Store Franchisee View.</description>
-
   <dependencies>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi_R4_core</artifactId>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>service</artifactId>
+      <version>0.2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -24,15 +24,14 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>service</artifactId>
-      <version>0.2.1-SNAPSHOT</version>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_core</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
-      <version>0.2.1-SNAPSHOT</version>
+      <version>0.2.1</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
