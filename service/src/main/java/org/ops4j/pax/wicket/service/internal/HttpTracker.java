@@ -18,17 +18,15 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import javax.servlet.ServletException;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Bundle;
+import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.service.http.HttpContext;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.protocol.http.WicketServlet;
 
@@ -37,26 +35,27 @@ public class HttpTracker extends ServiceTracker
 
     private BundleContext m_bundleContext;
     private HttpService m_httpService;
-    private HashMap<String, WicketServlet> m_servlets;
+    private HashMap<String, ServletDescriptor> m_servlets;
 
     public HttpTracker( BundleContext bundleContext )
     {
         super( bundleContext, HttpService.class.getName(), null );
         m_bundleContext = bundleContext;
-        m_servlets = new HashMap<String, WicketServlet>();
+        m_servlets = new HashMap<String, ServletDescriptor>();
     }
 
     public Object addingService( ServiceReference serviceReference )
     {
         m_httpService = (HttpService) m_bundleContext.getService( serviceReference );
-        for( Map.Entry<String, WicketServlet> entry : m_servlets.entrySet() )
+        for( Map.Entry<String, ServletDescriptor> entry : m_servlets.entrySet() )
         {
-            WicketServlet servlet = entry.getValue();
+            ServletDescriptor descriptor = entry.getValue();
+            WicketServlet servlet = descriptor.m_servlet;
+            HttpContext context = descriptor.m_httpContext;
             String mountpoint = entry.getKey();
             try
             {
-                // TODO: need a HttpContext here!!!!!!!!
-                m_httpService.registerServlet( mountpoint, servlet, null, null );
+                m_httpService.registerServlet( mountpoint, servlet, null, context );
             } catch( NamespaceException e )
             {
                 throw new IllegalArgumentException(
@@ -89,9 +88,12 @@ public class HttpTracker extends ServiceTracker
     {
         mountPoint = normalizeMountPoint( mountPoint );
         HttpContext httpContext = new GenericContext( paxWicketBundle, mountPoint );
-        Dictionary initParams = new Hashtable<String, String>();
-        m_httpService.registerServlet( mountPoint, servlet, initParams, httpContext );
-        m_servlets.put( mountPoint, servlet );
+        ServletDescriptor descriptor = new ServletDescriptor( servlet, httpContext );
+        m_servlets.put( mountPoint, descriptor );
+        if( m_httpService != null )
+        {
+            m_httpService.registerServlet( mountPoint, servlet, null, httpContext );
+        }
     }
 
     void removeServlet( String mountPoint )
@@ -99,7 +101,10 @@ public class HttpTracker extends ServiceTracker
         mountPoint = normalizeMountPoint( mountPoint );
         if( m_servlets.remove( mountPoint ) != null )
         {
-            m_httpService.unregister( mountPoint );
+            if( m_httpService != null )
+            {
+                m_httpService.unregister( mountPoint );
+            }
         }
     }
 
@@ -115,6 +120,19 @@ public class HttpTracker extends ServiceTracker
     WicketServlet getServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
-        return m_servlets.get( mountPoint );
+        ServletDescriptor descriptor = m_servlets.get( mountPoint );
+        return descriptor.m_servlet;
+    }
+
+    private static class ServletDescriptor
+    {
+        private WicketServlet m_servlet;
+        private HttpContext m_httpContext;
+
+        public ServletDescriptor( WicketServlet servlet, HttpContext httpContext )
+        {
+            m_servlet = servlet;
+            m_httpContext = httpContext;
+        }
     }
 }
