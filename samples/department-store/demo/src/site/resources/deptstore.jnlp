@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp
+        spec="1.5+"
+        codebase="http://www.ops4j.org/projects/pax/wicket/samples/departmentstore/demo"
+        href="deptstore.jnlp">
+  <information>
+    <title>Department Store Demo</title>
+    <vendor>OPS4J - Open Participation Software for Java</vendor>
+    <homepage href="http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket"/>
+    <description>Department Store Demo is a demonstration of Pax Wicket project.</description>
+    <description kind="short">Department Store Demo is a demonstration of Pax Wicket project.</description>
+    <icon href="images/deptstore-icon.png"/>
+    <icon kind="splash" href="images/deptstore-splash.png"/>
+    <offline-allowed/>
+    <shortcut online="false">
+      <desktop/>
+      <menu submenu="Ops4j Pax"/>
+    </shortcut>
+  </information>
+  <security>
+      <all-permissions/>
+  </security>
+  <resources>
+    <j2se version="1.5+" java-vm-args=""/>
+    <jar href="http://repository.ops4j.org/maven2/org/ops4j/pax/pax-runner/pax-runner-LATEST.jar"/>
+  </resources>
+  <application-desc>
+    <argument>org.ops4j.pax.wicket.samples.departmentstore</argument>
+    <argument>demo</argument>
+    <argument>0.2.1</argument>
+  </application-desc>
+
+</jnlp>

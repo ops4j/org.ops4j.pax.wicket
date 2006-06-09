@@ -5,9 +5,9 @@
       <item name="Introduction" href="index.html"/>
       <item name="Business Model" href="model/index.html" />
       <item name="Application" href="application/index.html" />
-      <item name="Floor" href="floot/index.html" />
+      <item name="Floor" href="floor/index.html" />
       <item name="Franchisee" href="franchisee/index.html" />
-      <item name="About Page" href="aboutpage/index.html" />
+      <item name="About Page" href="about/index.html" />
     </menu>
     ${reports}
   </body>

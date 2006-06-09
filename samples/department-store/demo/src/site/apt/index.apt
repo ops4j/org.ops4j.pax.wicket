@@ -1,0 +1,12 @@
+
+    To run the Department Store Demo, you can either do;
+
+    * Click on this {{{deptstore.jnlp}link}}.
+
+    * Download the Pax Runner from
+      {{{http://repository.ops4j.org/maven2/org/ops4j/pax/pax-runner/pax-runner-LATEST.jar}here}},
+      and run the command below;
+
++-------------
+java -jar pax-runner-LATEST.jar org.ops4j.pax.wicket.samples.departmentstore demo 0.2.1
++-------------

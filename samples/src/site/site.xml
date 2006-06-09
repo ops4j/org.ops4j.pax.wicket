@@ -3,7 +3,7 @@
 
   <body>
     <menu name="Pax Wicket Samples" inherit="top">
-      <item name="Samples" href="/index.html" collapse="true"/>
+      <item name="Samples" href="/index.html"/>
     </menu>
     ${reports}
   </body>
