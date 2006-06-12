@@ -5,14 +5,14 @@
   <parent>
     <groupId>org.ops4j</groupId>
     <artifactId>pax</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
   </parent>
   <groupId>org.ops4j.pax</groupId>
   <artifactId>wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
   <version>0.2.2-SNAPSHOT</version>
-  <url>http://wiki.ops4j.org/dokuwiki/doku.php?id=pax:wicket</url>
+  <url>http://www.ops4j.org/projects/pax/wicket</url>
   <issueManagement>
     <system>jira</system>
     <url>http://issues.ops4j.org/jira/browse/PAXWICKET</url>
@@ -22,33 +22,10 @@
     <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
     <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.ops4j.pax.maven</groupId>
-        <artifactId>maven-osgi-bundle</artifactId>
-        <version>0.9.3</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
   <modules>
     <module>service</module>
     <module>samples</module>
   </modules>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi_R4_core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -131,14 +108,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <distributionManagement>
-    <repository>
-      <id>upload-repository</id>
-      <url>scpexe://repository.ops4j.org/var/http/repository.ops4j.org/maven2</url>
-    </repository>
-    <site>
-      <id>website</id>
-      <url>scp://www.ops4j.org/var/http/www.ops4j.org/projects/pax/wicket</url>
-    </site>
-  </distributionManagement>
 </project>
