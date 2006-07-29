@@ -13,10 +13,10 @@
     <orderEntry type="module" module-name="model" />
     <orderEntry type="module" module-name="service" />
     <orderEntry type="library" name="osgi_R4_core-1.0" level="project" />
-    <orderEntry type="library" name="wicket-auth-roles-1.2-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="wicket-1.2-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="wicket-extensions-1.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="osgi_R4_compendium-1.0" level="project" />
+    <orderEntry type="library" name="wicket-1.2.1" level="project" />
+    <orderEntry type="library" name="wicket-auth-roles-1.2.1" level="project" />
+    <orderEntry type="library" name="wicket-extensions-1.2.1" level="project" />
     <orderEntryProperties />
   </component>
 </module>
