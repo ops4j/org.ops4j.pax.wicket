@@ -308,15 +308,15 @@
     <option name="autoscrollingFromSource" value="false" />
   </component>
   <component name="libraryTable">
-    <library name="wicket-1.2.1">
+    <library name="wicket-1.2.2">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2.1/wicket-1.2.1.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2.2/wicket-1.2.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2.1/wicket-1.2.1-javadoc.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2.2/wicket-1.2.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$M2_REPO$/wicket/wicket/1.2.1/wicket-1.2.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket/1.2.2/wicket-1.2.2-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="servlet-api-2.3">
@@ -367,26 +367,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="wicket-extensions-1.2.1">
+    <library name="wicket-extensions-1.2.2">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.1/wicket-extensions-1.2.1.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.2/wicket-extensions-1.2.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.1/wicket-extensions-1.2.1-javadoc.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.2/wicket-extensions-1.2.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.1/wicket-extensions-1.2.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.2/wicket-extensions-1.2.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="wicket-auth-roles-1.2.1">
+    <library name="wicket-auth-roles-1.2.2">
       <CLASSES>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.1/wicket-auth-roles-1.2.1.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.2/wicket-auth-roles-1.2.2.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.1/wicket-auth-roles-1.2.1-javadoc.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.2/wicket-auth-roles-1.2.2-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.1/wicket-auth-roles-1.2.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.2/wicket-auth-roles-1.2.2-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

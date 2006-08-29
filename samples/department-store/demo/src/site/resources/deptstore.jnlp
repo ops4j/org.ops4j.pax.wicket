@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
         spec="1.5+"
-        codebase="http://www.ops4j.org/projects/pax/wicket/samples/departmentstore/demo"
+        codebase="http://www.ops4j.org/projects/pax/wicket/samples/departmentstore/demo/${pom.version}"
         href="deptstore.jnlp">
   <information>
     <title>Department Store Demo</title>
@@ -22,12 +22,12 @@
   </security>
   <resources>
     <j2se version="1.5+" java-vm-args=""/>
-    <jar href="http://repository.ops4j.org/maven2/org/ops4j/pax/pax-runner/pax-runner-LATEST.jar"/>
+    <jar href="http://repository.ops4j.org/maven2/org/ops4j/pax/runner/runner-LATEST.jar"/>
   </resources>
   <application-desc>
     <argument>org.ops4j.pax.wicket.samples.departmentstore</argument>
     <argument>demo</argument>
-    <argument>0.2.1</argument>
+    <argument>${pom.version}</argument>
   </application-desc>
 
 </jnlp>

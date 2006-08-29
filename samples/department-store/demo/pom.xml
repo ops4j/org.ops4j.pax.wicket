@@ -16,22 +16,18 @@
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>api</artifactId>
-      <version>0.9.2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>jcl</artifactId>
-      <version>0.9.2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>service</artifactId>
-      <version>0.9.2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>log4j</artifactId>
-      <version>0.9.2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
