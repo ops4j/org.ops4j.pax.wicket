@@ -23,15 +23,15 @@ import java.net.URL;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
 
 public class GenericContext
     implements HttpContext
 {
-    private static final Log m_logger = LogFactory.getLog( GenericContext.class );
+
+    private static final Logger m_logger = Logger.getLogger( GenericContext.class );
 
     private String m_rootUrl;
     private MimetypesFileTypeMap m_typeMap;

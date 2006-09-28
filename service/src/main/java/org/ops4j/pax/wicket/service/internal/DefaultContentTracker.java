@@ -18,8 +18,7 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -28,7 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class DefaultContentTracker extends ServiceTracker
 {
 
-    private static final Log m_logger = LogFactory.getLog( DefaultContentTracker.class );
+    private static final Logger m_logger = Logger.getLogger( DefaultContentTracker.class );
 
     private String m_containmentId;
     private BundleContext m_context;

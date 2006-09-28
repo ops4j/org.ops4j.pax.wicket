@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.service;
 
 import wicket.Component;
 
-public interface Content
+public interface Content<E extends Component>
 {
 
     String MOUNTPOINT = "pax.wicket.mountpoint";
@@ -30,7 +30,7 @@ public interface Content
     String DESTINATIONID = "pax.wicket.destinationid";
 
     String DESTINATIONID_UNKNOWN = "";
-    
+
     String PAGE_NAME = "pax.wicket.pagename";
 
     String PAGE_ID = "pax.wicket.pageid";
@@ -40,11 +40,10 @@ public interface Content
     String CONTAINMENTID = "pax.wicket.containmentid";
 
     String DEPLOYMENT_MODE = "pax.wicket.deploymentmode";
-    
+
     String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
 
     String getDestinationId();
 
-    Component createComponent();
-
+    E createComponent();
 }

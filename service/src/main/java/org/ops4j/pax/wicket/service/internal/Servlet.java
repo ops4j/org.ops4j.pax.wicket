@@ -22,14 +22,14 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WicketServlet;
 
 public final class Servlet extends WicketServlet
 {
-    private static final Log m_logger = LogFactory.getLog( Servlet.class );
+
+    private static final Logger m_logger = Logger.getLogger( Servlet.class );
 
     private IWebApplicationFactory m_appFactory;
     private ClassLoader m_classloader;
@@ -39,7 +39,7 @@ public final class Servlet extends WicketServlet
     {
         m_appFactory = appFactory;
         m_classloader = getClass().getClassLoader();
-        m_interfaces = new Class[] { HttpServletRequest.class };
+        m_interfaces = new Class[]{ HttpServletRequest.class };
     }
 
     protected IWebApplicationFactory getApplicationFactory()

@@ -22,7 +22,7 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>jcl</artifactId>
+      <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>wicket</groupId>
@@ -57,7 +57,10 @@
     </dependency>
   </dependencies>
   <properties>
-    <osgi-IgnorePackage>junit.framework</osgi-IgnorePackage>
+    <osgi-IgnorePackage>
+    junit.framework,
+    javax.portlet
+    </osgi-IgnorePackage>
     <osgi-ExportPackage>org.ops4j.pax.wicket.service;version=${pom.version},
       wicket; version=1.2,
       wicket.ajax; version=1.2,
@@ -66,9 +69,7 @@
       wicket.ajax.markup.html; version=1.2,
       wicket.ajax.markup.html.form; version=1.2,
       wicket.ajax.markup.html.navigation.paging; version=1.2,
-      wicket.application; version=1.2,
-      wicket.authentication; version=1.2,
-      wicket.authentication.pages; version=1.2,
+      wicket.application; version=1.2, wicket.authentication; version=1.2, wicket.authentication.pages; version=1.2,
       wicket.authentication.panel; version=1.2,
       wicket.authorization; version=1.2,
       wicket.authorization.strategies; version=1.2,

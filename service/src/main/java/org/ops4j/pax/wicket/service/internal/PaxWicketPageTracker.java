@@ -17,18 +17,17 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.Content;
 import org.ops4j.pax.wicket.service.PageContent;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.apache.log4j.Logger;
 
 public class PaxWicketPageTracker extends ServiceTracker
 {
 
-    private static final Log m_logger = LogFactory.getLog( PaxWicketPageTracker.class );
+    private static final Logger m_logger = Logger.getLogger( PaxWicketPageTracker.class );
 
     private BundleContext m_context;
     private String m_applicationName;

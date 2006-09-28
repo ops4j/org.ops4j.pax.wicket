@@ -19,8 +19,7 @@ package org.ops4j.pax.wicket.service.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -34,9 +33,9 @@ public class DelegatingClassResolver
     implements IClassResolver
 {
 
+    private static final Logger m_logger = Logger.getLogger( DelegatingClassResolver.class );
     private BundleContext m_context;
     private List<IClassResolver> m_resolvers;
-    private Log m_logger = LogFactory.getLog( DelegatingClassResolver.class );
     private ClassResolverTracker m_tracker;
 
     public DelegatingClassResolver( BundleContext context, String applicationName )

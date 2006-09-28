@@ -20,10 +20,9 @@ package org.ops4j.pax.wicket.service.internal;
 
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.PaxWicketAuthenticator;
+import org.apache.log4j.Logger;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authentication.AuthenticatedWebSession;
 import wicket.authentication.pages.SignInPage;
@@ -157,7 +156,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
     private static class PaxWicketRequest extends ServletWebRequest
     {
 
-        private static final Log m_logger = LogFactory.getLog( PaxWicketRequest.class.getName() );
+        private static final Logger m_logger = Logger.getLogger( PaxWicketRequest.class.getName() );
 
         /**
          * Protected constructor.

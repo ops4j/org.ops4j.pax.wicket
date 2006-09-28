@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4" relativePaths="true" type="JAVA_MODULE">
   <component name="ModuleRootManager" />
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -17,7 +17,7 @@
     <orderEntry type="module" module-name="service" />
     <orderEntry type="module" module-name="model" />
     <orderEntry type="library" name="wicket-extensions-1.2.2" level="project" />
-    <orderEntry type="library" name="pax-logging-jcl-0.9.2" level="project" />
+    <orderEntry type="library" name="pax-logging-log4j-0.9.5" level="project" />
     <orderEntryProperties />
   </component>
 </module>

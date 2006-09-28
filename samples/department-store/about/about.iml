@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4" relativePaths="true" type="JAVA_MODULE">
   <component name="ModuleRootManager" />
-  <component name="NewModuleRootManager">
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -16,7 +16,7 @@
     <orderEntry type="library" name="osgi_R4_core-1.0" level="project" />
     <orderEntry type="module" module-name="service" />
     <orderEntry type="library" name="osgi_R4_compendium-1.0" level="project" />
-    <orderEntry type="library" name="pax-logging-jcl-0.9.2" level="project" />
+    <orderEntry type="library" name="pax-logging-log4j-0.9.5" level="project" />
     <orderEntry type="library" name="activation-1.0.2" level="project" />
     <orderEntry type="library" name="ops4j-base-0.1.0" level="project" />
     <orderEntry type="library" name="servlet-api-2.3" level="project" />

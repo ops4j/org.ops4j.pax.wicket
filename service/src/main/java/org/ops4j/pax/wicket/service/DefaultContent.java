@@ -26,7 +26,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import wicket.Component;
 
-public abstract class DefaultContent
+public abstract class DefaultContent<E extends Component>
     implements Content, ManagedService
 {
     private BundleContext m_bundleContext;
@@ -80,7 +80,7 @@ public abstract class DefaultContent
         m_properties.put( APPLICATION_NAME, applicationName );
     }
 
-    protected abstract Component createComponent( String id );
+    protected abstract E createComponent( String id );
 
     public final void updated( Dictionary config )
     {

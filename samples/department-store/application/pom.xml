@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>jcl</artifactId>
+      <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>

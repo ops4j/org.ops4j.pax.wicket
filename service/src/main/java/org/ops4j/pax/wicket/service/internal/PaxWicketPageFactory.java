@@ -17,13 +17,12 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Properties;
-import java.io.Serializable;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.ops4j.pax.wicket.service.PageContent;
+import org.apache.log4j.Logger;
 import org.ops4j.pax.wicket.service.Content;
+import org.ops4j.pax.wicket.service.PageContent;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
@@ -38,7 +37,9 @@ public final class PaxWicketPageFactory
 {
 
     private static final long serialVersionUID = 1L;
-    private static final Log m_logger = LogFactory.getLog( PaxWicketPageFactory.class );
+
+    private static final Logger m_logger = Logger.getLogger( PaxWicketPageFactory.class );
+
     private HashMap<Class, PageContent> m_contents;
     private HashMap<String, Class> m_pageClasses;
 

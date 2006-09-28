@@ -19,19 +19,18 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import javax.servlet.ServletException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
+import org.apache.log4j.Logger;
 import wicket.protocol.http.WicketServlet;
 
 public class PaxWicketAppFactoryTracker extends ServiceTracker
 {
 
-    private static final Log m_logger = LogFactory.getLog( PaxWicketAppFactoryTracker.class );
+    private static final Logger m_logger = Logger.getLogger( PaxWicketAppFactoryTracker.class );
     private BundleContext m_bundleContext;
     private HttpTracker m_httpTracker;
 

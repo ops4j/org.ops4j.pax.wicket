@@ -19,9 +19,10 @@ package org.ops4j.pax.wicket.service;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.ops4j.lang.NullArgumentException;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
@@ -34,7 +35,13 @@ public abstract class AbstractPageContent
     private Hashtable<String, String> m_properties;
 
     protected AbstractPageContent( BundleContext bundleContext, String pageId, String applicationName, String pageName )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        NullArgumentException.validateNotEmpty( pageId, "pageId" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        NullArgumentException.validateNotEmpty( pageName, "pageName" );
+
         m_properties = new Hashtable<String, String>();
         m_bundleContext = bundleContext;
         setApplicationName( applicationName );
@@ -85,6 +92,6 @@ public abstract class AbstractPageContent
 
     protected final void setPageName( String pageName )
     {
-        m_properties.put(  Content.PAGE_NAME, pageName );
+        m_properties.put( Content.PAGE_NAME, pageName );
     }
 }
