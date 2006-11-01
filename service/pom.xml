@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>wicket</artifactId>
     <groupId>org.ops4j.pax</groupId>
@@ -16,14 +17,14 @@
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>log4j</artifactId>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
