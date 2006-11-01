@@ -17,6 +17,10 @@
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
     <!--dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>log4j</artifactId>
