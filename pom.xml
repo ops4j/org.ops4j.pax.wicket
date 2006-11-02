@@ -18,6 +18,20 @@
     <url>http://issues.ops4j.org/jira/browse/PAXWICKET</url>
   </issueManagement>
   <inceptionYear>2006</inceptionYear>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.maven</groupId>
+        <artifactId>maven-osgi-bundle</artifactId>
+        <version>0.9.8</version>
+        <extensions>true</extensions>
+        <configuration>
+          <libDirectory>lib</libDirectory>
+          <!--manifestFile>META-INF/MANIFEST.MF</manifestFile-->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <scm>
     <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
     <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
