@@ -26,8 +26,11 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
-public abstract class AbstractPageContent
-    implements PageContent, ManagedService
+import wicket.Page;
+
+
+public abstract class AbstractPageContent<T extends Page> 
+    implements PageContent<T>, ManagedService
 {
 
     private BundleContext m_bundleContext;
@@ -35,7 +38,7 @@ public abstract class AbstractPageContent
     private Hashtable<String, String> m_properties;
 
     protected AbstractPageContent( BundleContext bundleContext, String pageId, String applicationName, String pageName )
-        throws IllegalArgumentException
+            throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( pageId, "pageId" );
@@ -70,16 +73,16 @@ public abstract class AbstractPageContent
         return m_properties.get( Content.PAGE_NAME );
     }
 
-    public void updated( Dictionary config )
-        throws ConfigurationException
+    public void updated( Dictionary config ) throws ConfigurationException
     {
-        if( config == null )
+        if ( config == null )
         {
             m_serviceRegistration.setProperties( m_properties );
             return;
         }
-        String pagename = (String) config.get( Content.PAGE_NAME );
-        String appname = (String) config.get( Content.APPLICATION_NAME );
+        
+        String pagename = ( String ) config.get( Content.PAGE_NAME );
+        String appname = ( String ) config.get( Content.APPLICATION_NAME );
         setPageName( pagename );
         setApplicationName( appname );
         m_serviceRegistration.setProperties( config );

@@ -21,13 +21,14 @@ package org.ops4j.pax.wicket.service;
 import java.util.Dictionary;
 import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
+import org.ops4j.pax.wicket.service.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.service.internal.PaxWicketPageFactory;
-import org.ops4j.pax.wicket.service.internal.DelegatingClassResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import wicket.Page;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WicketServlet;
@@ -35,6 +36,7 @@ import wicket.protocol.http.WicketServlet;
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
 {
+
     private Class m_homepageClass;
     private BundleContext m_bundleContext;
     private ServiceRegistration m_registration;
@@ -43,10 +45,13 @@ public final class PaxWicketApplicationFactory
     private DelegatingClassResolver m_delegatingClassResolver;
     private PaxWicketAuthenticator m_authenticator;
 
-    public PaxWicketApplicationFactory( BundleContext bundleContext, Class homepageClass, String mountPoint,
-                                        String applicationName, PaxWicketAuthenticator authenticator )
+    public PaxWicketApplicationFactory(
+        BundleContext bundleContext, Class<? extends Page> homepageClass, String mountPoint, String applicationName,
+        PaxWicketAuthenticator authenticator )
+        throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
+
         m_properties = new Properties();
         m_homepageClass = homepageClass;
         m_bundleContext = bundleContext;
@@ -88,8 +93,9 @@ public final class PaxWicketApplicationFactory
      */
     public WebApplication createApplication( WicketServlet servlet )
     {
-        PaxWicketApplication paxWicketApplication =
-            new PaxWicketApplication( m_homepageClass, m_pageFactory, m_delegatingClassResolver, m_authenticator, isDeploymentMode() );
+        PaxWicketApplication paxWicketApplication = new PaxWicketApplication(
+            m_homepageClass, m_pageFactory, m_delegatingClassResolver, m_authenticator, isDeploymentMode()
+        );
         return paxWicketApplication;
     }
 
@@ -113,7 +119,9 @@ public final class PaxWicketApplicationFactory
                 m_homepageClass = m_bundleContext.getBundle().loadClass( classname );
             } catch( ClassNotFoundException e )
             {
-                throw new ConfigurationException( Content.HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e );
+                throw new ConfigurationException(
+                    Content.HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e
+                );
             }
         }
         m_registration.setProperties( config );
@@ -150,5 +158,4 @@ public final class PaxWicketApplicationFactory
     {
         m_properties.put( Content.MOUNTPOINT, mountPoint );
     }
-
 }

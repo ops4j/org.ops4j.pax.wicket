@@ -19,6 +19,8 @@
 package org.ops4j.pax.wicket.service;
 
 import wicket.Component;
+
+import java.util.Comparator;
 import java.util.List;
 
 public interface ContentContainer
@@ -26,7 +28,31 @@ public interface ContentContainer
 
     String getContainmentId();
 
-    List<Component> createComponents( String id );
+    /**
+     * Create components that has the specified {@code id} id. Returns an empty list
+     * if there is no component with the specified {@code id}.
+     * 
+     * @param id The component id. This argument must not be {@code null}.
+     * 
+     * @return A list of component id.
+     */
+    <T extends Component> List<T> createComponents( String id );
+    
+    /**
+     * Returns the comparator for component with the specified {@code id}.
+     * Returns {@code null} if the comparator does not exists.
+     * 
+     * @param <T> A component class.
+     * @param id The component with the specified {@code id}.
+     * @return The comparator of the specified {@code id}.
+     * @since 1.0.0
+     */
+    <T extends Component> Comparator<T> getComparator( String id );
 
+    /**
+     * Dispose this {@code ContentContainer} instance.
+     *
+     * @since 1.0.0
+     */
     void dispose();
 }

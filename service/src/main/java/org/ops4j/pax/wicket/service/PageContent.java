@@ -21,11 +21,23 @@ package org.ops4j.pax.wicket.service;
 import wicket.Page;
 import wicket.PageParameters;
 
-public interface PageContent
+public interface PageContent<T extends Page>
 {
 
-    Class<? extends Page> getPageClass();
+    /**
+     * Returns the page class instance represented by this {@code PageContent}.
+     * 
+     * @return The page class represented by this {@code PageContent}.
+     * @since 1.0.0
+     */
+    Class<T> getPageClass();
 
-    Page createPage( PageParameters params );
-
+    /**
+     * Creates a page with the specified {@code params}.
+     * 
+     * @param params The page parameters.
+     * @return An instance of page.
+     * @since 1.0.0
+     */
+    T createPage( PageParameters params );
 }

@@ -17,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import org.ops4j.pax.wicket.service.PageContent;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
-import wicket.Page;
+import org.ops4j.pax.wicket.service.PageContent;
+
 import wicket.PageParameters;
 
 public class AboutPageContent
-    implements PageContent
+    implements PageContent<AboutPage>
 {
     private DepartmentStoreModelTracker m_tracker;
 
@@ -32,12 +32,12 @@ public class AboutPageContent
         m_tracker = tracker;
     }
 
-    public Class getPageClass()
+    public Class<AboutPage> getPageClass()
     {
         return AboutPage.class;
     }
 
-    public Page createPage( PageParameters params )
+    public AboutPage createPage( PageParameters params )
     {
         return new AboutPage( m_tracker.getDepartmentStore() );
     }

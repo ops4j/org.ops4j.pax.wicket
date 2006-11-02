@@ -26,8 +26,8 @@ import org.osgi.framework.BundleContext;
 import wicket.Page;
 import wicket.PageParameters;
 
-public class OverviewPageContent extends AbstractPageContent
-    implements PageContent
+public class OverviewPageContent extends AbstractPageContent<OverviewPage>
+    implements PageContent<OverviewPage>
 {
     private BundleContext m_context;
     private DefaultPageContainer m_pageContainer;
@@ -39,14 +39,14 @@ public class OverviewPageContent extends AbstractPageContent
         m_pageContainer = pageContainer;
     }
 
-    public Class getPageClass()
+    public Class<OverviewPage> getPageClass()
     {
         return OverviewPage.class;
     }
 
-    public Page createPage( PageParameters params )
+    public OverviewPage createPage( PageParameters params )
     {
-        PageContent[] pages = PageFinder.findPages( m_context, "departmentstore", "about" );
+        PageContent<Page>[] pages = PageFinder.findPages( m_context, "departmentstore", "about" );
         Class pageClass;
         if( pages.length == 0 )
         {

@@ -1,8 +1,8 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  *
- * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
+ * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -17,34 +17,62 @@
  */
 package org.ops4j.pax.wicket.service;
 
+import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import wicket.Page;
+
+
 public class PageFinder
 {
+    private static final Logger LOGGER = Logger.getLogger( PageFinder.class );
 
-    public static PageContent[] findPages( BundleContext context, String applicationName, String pageName )
+    /**
+     * Returns the page content from the specified {@code context} for the specified {@code applicationName} and 
+     * {@code pageName}.
+     *  
+     * @param <T> The page subclass.
+     * @param context The bundle context. This argument must not be {@code null}.
+     * @param applicationName The application name. This argument must not be {@code null} or empty.
+     * @param pageName The page name. This argument must not be {@code null} or empty.
+     * 
+     * @return The page of the specified {@code applicationName} and {@code pageName}.
+     * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
+     * @since 1.0.0
+     */
+    public final static <T extends Page> PageContent<T>[] findPages( 
+            BundleContext context, String applicationName, String pageName )
+        throws IllegalArgumentException
     {
-        String filter = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")"
-                              + "(" + Content.PAGE_NAME + "=" + pageName + "))";
+        NullArgumentException.validateNotNull( context, "context" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        NullArgumentException.validateNotEmpty( pageName, "pageName" );
+        
+        String filter = "(&(" + Content.APPLICATION_NAME + "=" + applicationName + ")" + "(" + Content.PAGE_NAME + "="
+                + pageName + "))";
         try
         {
             ServiceReference[] refs = context.getServiceReferences( PageContent.class.getName(), filter );
-            if( refs == null )
+            if ( refs == null )
             {
                 return new PageContent[0];
             }
-            PageContent[] pages = new PageContent[ refs.length ];
+            PageContent[] pages = new PageContent[refs.length];
             int count = 0;
-            for( ServiceReference ref : refs )
+            for ( ServiceReference ref : refs )
             {
-                pages[ count++ ] = (PageContent) context.getService( ref );
+                pages[count++] = ( PageContent ) context.getService( ref );
             }
+
             return pages;
-        } catch( InvalidSyntaxException e )
+        }
+        catch ( InvalidSyntaxException e )
         {
-            e.printStackTrace();
+            LOGGER.warn( "Invalid syntax [" + filter + "]. This should not happen unless if both application name " +
+                    "and page name contains ldap filters.", e );
             // can not happen, RIGHT!
             return new PageContent[0];
         }
