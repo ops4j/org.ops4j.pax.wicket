@@ -20,6 +20,8 @@ package org.ops4j.pax.wicket.samples.departmentstore.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -51,7 +53,9 @@ public final class OverviewPage extends WebPage
             link = new BookmarkablePageLink( "aboutlink", aboutPageClass );
         }
         add( link );
-        final List<Component> floors = container.createComponents( "floor" );
+        
+        Locale locale = getLocale();
+        final List<Component> floors = container.createComponents( "floor", locale );
         List tabs = new ArrayList();
         for( final Component floor : floors )
         {

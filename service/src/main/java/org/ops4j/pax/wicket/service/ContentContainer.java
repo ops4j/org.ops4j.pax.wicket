@@ -22,10 +22,18 @@ import wicket.Component;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public interface ContentContainer
 {
 
+    /**
+     * Returns the containment id of this {@code ContentContainer}.
+     * 
+     * @return The containment id.
+     * 
+     * @since 1.0.0
+     */
     String getContainmentId();
 
     /**
@@ -33,10 +41,16 @@ public interface ContentContainer
      * if there is no component with the specified {@code id}.
      * 
      * @param id The component id. This argument must not be {@code null}.
+     * @param locale The locale. This argument must not be {@code null}.
      * 
      * @return A list of component id.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * 
+     * @since 1.0.0
      */
-    <T extends Component> List<T> createComponents( String id );
+    <T extends Component> List<T> createComponents( String id, Locale locale )
+        throws IllegalArgumentException;
     
     /**
      * Returns the comparator for component with the specified {@code id}.
@@ -45,9 +59,13 @@ public interface ContentContainer
      * @param <T> A component class.
      * @param id The component with the specified {@code id}.
      * @return The comparator of the specified {@code id}.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * 
      * @since 1.0.0
      */
-    <T extends Component> Comparator<T> getComparator( String id );
+    <T extends Component> Comparator<T> getComparator( String id, Locale locale )
+        throws IllegalArgumentException;
 
     /**
      * Dispose this {@code ContentContainer} instance.

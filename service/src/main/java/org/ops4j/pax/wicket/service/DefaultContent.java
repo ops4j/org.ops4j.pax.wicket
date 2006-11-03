@@ -19,6 +19,7 @@
 package org.ops4j.pax.wicket.service;
 
 import java.util.Dictionary;
+import java.util.Locale;
 import java.util.Properties;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.framework.ServiceRegistration;
@@ -52,12 +53,12 @@ public abstract class DefaultContent<E extends Component>
         m_properties.put( DESTINATIONID, destinationId );
     }
 
-    public final Component createComponent()
+    public final Component createComponent( Locale locale )
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
-        return createComponent( id );
+        return createComponent( id, locale );
     }
 
     public final String getContentId()
@@ -80,7 +81,7 @@ public abstract class DefaultContent<E extends Component>
         m_properties.put( APPLICATION_NAME, applicationName );
     }
 
-    protected abstract E createComponent( String id );
+    protected abstract E createComponent( String id, Locale locale );
 
     public final void updated( Dictionary config )
     {

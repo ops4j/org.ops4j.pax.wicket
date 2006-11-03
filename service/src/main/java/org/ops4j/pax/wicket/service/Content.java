@@ -18,6 +18,8 @@
  */
 package org.ops4j.pax.wicket.service;
 
+import java.util.Locale;
+
 import wicket.Component;
 
 public interface Content<E extends Component>
@@ -60,8 +62,10 @@ public interface Content<E extends Component>
      * Create the wicket component represented by this {@code Content} instance. This method must not return 
      * {@code null} object.
      * 
+     * @param locale The locale. This argument must not be {@code null}.
+     * 
      * @return The wicket component represented by this {@code Content} instance.
      * @since 1.0.0 
      */
-    E createComponent();
+    E createComponent( Locale locale );
 }

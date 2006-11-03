@@ -19,6 +19,8 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.List;
+import java.util.Locale;
+
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.service.ContentContainer;
 import wicket.Component;
@@ -41,10 +43,10 @@ public class FloorPanel extends Panel
     private static final String WICKET_ID_FRANCHISEE = "franchisee";
     private static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    public FloorPanel( String id, ContentContainer container, Floor floor )
+    public FloorPanel( String id, ContentContainer container, Floor floor, Locale locale )
     {
         super( id, new Model( floor.getName() ) );
-        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE );
+        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, locale );
         if( franchisees.isEmpty() )
         {
             franchisees.add( new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." ) );

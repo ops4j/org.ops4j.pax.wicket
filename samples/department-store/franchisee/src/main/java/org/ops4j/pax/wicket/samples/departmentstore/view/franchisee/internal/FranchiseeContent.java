@@ -18,6 +18,8 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
+import java.util.Locale;
+
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.service.DefaultContent;
 import org.osgi.framework.BundleContext;
@@ -40,7 +42,7 @@ public class FranchiseeContent extends DefaultContent
         m_franchisee = franchisee;
     }
 
-    protected Component createComponent( String id )
+    protected Component createComponent( String id, Locale locale )
     {
         return new FranchiseePanel( id, m_franchisee );
     }

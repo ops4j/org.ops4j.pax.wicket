@@ -24,6 +24,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Collections;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
@@ -81,7 +82,7 @@ public class DefaultPageContainer
         return Collections.unmodifiableMap( m_children );
     }
 
-    public final <T extends Component> List<T> createComponents( String id )
+    public final <T extends Component> List<T> createComponents( String id, Locale locale )
     {
         ArrayList<T> result = new ArrayList<T>();
         List<Content> contents = m_children.get( id );
@@ -89,12 +90,12 @@ public class DefaultPageContainer
         {
             for( Content content : contents )
             {
-                T component = ( T ) content.createComponent();
+                T component = ( T ) content.createComponent( locale );
                 result.add( component );
             }
         }
         
-        Comparator<T> comparator = getComparator( id );
+        Comparator<T> comparator = getComparator( id, locale );
         if( comparator != null )
         {
             Collections.sort( result, comparator );
@@ -108,11 +109,16 @@ public class DefaultPageContainer
      * Returns {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      * 
      * @param contentId The content id. This argument must not be {@code null}.
+     * @param locale The locale. This argument must not be {@code null}.
      * 
      * @return The comparator for the specified {@code contentId}.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * 
      * @see ContentContainer#createComponents(String)
      */
-    public <T extends Component> Comparator<T> getComparator( String contentId )
+    public <T extends Component> Comparator<T> getComparator( String contentId, Locale locale )
+        throws IllegalArgumentException
     {
         return null;
     }

@@ -311,6 +311,8 @@ public final class PaxWicketApplicationFactory
      * Register this {@code PaxWicketApplicationFactory} instance to OSGi container.
      * 
      * @return The service registration.
+     * 
+     * @since 1.0.0
      */
     public final ServiceRegistration register()
     {

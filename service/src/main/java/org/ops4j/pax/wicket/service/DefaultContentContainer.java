@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -52,7 +53,7 @@ public abstract class DefaultContentContainer
     private ServiceRegistration m_registration;
 
     /**
-     * Construct an instnace of {@code DefaultContentContainer} with the specified arguments.
+     * Construct an instance of {@code DefaultContentContainer} with the specified arguments.
      * 
      * @param bundleContext The bundle context. This argument must not be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
@@ -91,7 +92,10 @@ public abstract class DefaultContentContainer
      */
     public String getApplicationName()
     {
-        return m_properties.getProperty( Content.APPLICATION_NAME );
+        synchronized ( this )
+        {
+            return m_properties.getProperty( Content.APPLICATION_NAME );
+        }
     }
 
     /**
@@ -112,13 +116,19 @@ public abstract class DefaultContentContainer
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        
-        m_properties.put( Content.APPLICATION_NAME, applicationName );
+
+        synchronized ( this )
+        {
+            m_properties.put( Content.APPLICATION_NAME, applicationName );
+        }
     }
 
     public final void dispose()
     {
-        m_contentTracker.close();
+        synchronized ( this )
+        {
+            m_contentTracker.close();
+        }
     }
 
     /**
@@ -129,7 +139,10 @@ public abstract class DefaultContentContainer
      */
     public final String getContainmentId()
     {
-        return m_properties.getProperty( CONTAINMENTID );
+        synchronized ( this )
+        {
+            return m_properties.getProperty( CONTAINMENTID );
+        }
     }
 
     /**
@@ -149,32 +162,32 @@ public abstract class DefaultContentContainer
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
-        
-        m_properties.put( CONTAINMENTID, containmentId );
+
+        synchronized ( this )
+        {
+            m_properties.put( CONTAINMENTID, containmentId );
+        }
     }
 
     /**
-     * Create the wicket component represented by this {@code Content} instance. This method must not return 
-     * {@code null} object.
+     * Create the wicket component represented by this {@code Content} instance.
+     * This method must not return {@code null} object.
      * 
      * @return The wicket component represented by this {@code Content} instance.
      * @since 1.0.0 
      */
-    public final <T extends Component> List<T> createComponents( String id )
+    public final <T extends Component> List<T> createComponents( String id, Locale locale )
     {
         ArrayList<T> result = new ArrayList<T>();
-        List<Content> contents = m_children.get( id );
-
-        if( contents != null )
+        
+        List<Content> contents = getContents( id );
+        for( Content content : contents )
         {
-            for( Content content : contents )
-            {
-                T component = ( T ) content.createComponent();
-                result.add( component );
-            }
+            T component = ( T ) content.createComponent( locale );
+            result.add( component );
         }
         
-        Comparator<T> comparator = getComparator( id );
+        Comparator<T> comparator = getComparator( id, locale );
         if( comparator != null )
         {
             Collections.sort( result, comparator );
@@ -182,17 +195,52 @@ public abstract class DefaultContentContainer
         
         return result;
     }
+
+    /**
+     * Returns list of {@code Content} instnaces of the specified {@code wicketId}.
+     * Returns an empty list if there is no content for the specified {@code wicketId}.
+     * 
+     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * 
+     * @return List of {@code Content} of the specified {@code wicketId}.
+     * 
+     * @throws IllegalArgumentException
+     */
+    protected final <T extends Content> List<T> getContents( String wicketId )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        
+        List<T> contents;
+        synchronized ( this )
+        {
+            contents = (List<T>) m_children.get( wicketId );
+            
+            if( contents != null )
+            {
+                contents = new ArrayList<T>( contents );
+            }
+            else
+            {
+                contents = new ArrayList<T>();
+            }
+        }
+        
+        return contents;
+    }
     
     /**
      * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. 
      * Returns {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      * 
      * @param contentId The content id. This argument must not be {@code null}.
+     * @param locale The current active locale. This argument must not be {@code null}.
      * 
      * @return The comparator for the specified {@code contentId}.
      * @see ContentContainer#createComponents(String)
      */
-    public <T extends Component> Comparator<T> getComparator( String contentId )
+    public <T extends Component> Comparator<T> getComparator( String contentId, Locale locale )
+        throws IllegalArgumentException
     {
         return null;
     }
@@ -258,28 +306,35 @@ public abstract class DefaultContentContainer
 
     public final void addContent( String id, Content content )
     {
-        List<Content> contents = m_children.get( id );
-        if( contents == null )
+        synchronized ( this )
         {
-            contents = new ArrayList<Content>();
-            m_children.put( id, contents );
+            List<Content> contents = m_children.get( id );
+            if( contents == null )
+            {
+                contents = new ArrayList<Content>();
+                m_children.put( id, contents );
+            }
+            contents.add( content );
         }
-        contents.add( content );
     }
 
     public final boolean removeContent( String id, Content content )
     {
-        List<Content> contents = m_children.get( id );
-        if( contents == null )
+        synchronized ( this )
         {
+            List<Content> contents = m_children.get( id );
+            if( contents == null )
+            {
+                return false;
+            }
+            
+            contents.remove( content );
+            if( contents.isEmpty() )
+            {
+                return m_children.remove( id ) != null;
+            }
             return false;
         }
-        contents.remove( content );
-        if( contents.isEmpty() )
-        {
-            return m_children.remove( id ) != null;
-        }
-        return false;
     }
 
     /**
@@ -290,7 +345,10 @@ public abstract class DefaultContentContainer
      */
     public final String getDestinationId()
     {
-        return m_properties.getProperty( Content.DESTINATIONID );
+        synchronized ( this )
+        {
+            return m_properties.getProperty( Content.DESTINATIONID );
+        }
     }
 
     /**
@@ -311,32 +369,38 @@ public abstract class DefaultContentContainer
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
-        
-        m_properties.put( Content.DESTINATIONID, destinationId );
+
+        synchronized ( this )
+        {
+            m_properties.put( Content.DESTINATIONID, destinationId );
+        }
     }
 
     public final ServiceRegistration register()
     {
-        m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
-        m_contentTracker.setContainmentId( getContainmentId() );
-        m_contentTracker.open();
+        synchronized ( this )
+        {
+            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
+            m_contentTracker.setContainmentId( getContainmentId() );
+            m_contentTracker.open();
 
-        String[] serviceNames =
+            String[] serviceNames =
             {
-                Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
+                    Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
             };
-        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-        return m_registration;
+            m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
+            return m_registration;
+        }
     }
 
-    public final Component createComponent()
+    public final Component createComponent( Locale locale )
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
-        return createComponent( id );
+        return createComponent( id, locale );
     }
 
-    protected abstract Component createComponent( String id );
+    protected abstract Component createComponent( String id, Locale locale );
 }
 
