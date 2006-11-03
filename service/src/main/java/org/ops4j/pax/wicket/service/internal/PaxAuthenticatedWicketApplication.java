@@ -77,6 +77,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
      *
      * @return Home page class for this application
      */
+    @Override
     public Class getHomePage()
     {
         return m_homepageClass;

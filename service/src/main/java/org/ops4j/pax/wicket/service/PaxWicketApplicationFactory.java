@@ -24,6 +24,7 @@ import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.service.internal.PaxAuthenticatedWicketApplication;
+import org.ops4j.pax.wicket.service.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.service.internal.PaxWicketPageFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -124,8 +125,11 @@ public final class PaxWicketApplicationFactory
      */
     public final void dispose()
     {
-        m_pageFactory.dispose();
-        m_delegatingClassResolver.dispose();
+        synchronized ( this )
+        {
+            m_pageFactory.dispose();
+            m_delegatingClassResolver.dispose();
+        }
     }
 
     /**
@@ -138,7 +142,10 @@ public final class PaxWicketApplicationFactory
      */
     public final String getMountPoint()
     {
-        return m_properties.getProperty( Content.MOUNTPOINT );
+        synchronized ( this )
+        {
+            return m_properties.getProperty( Content.MOUNTPOINT );
+        }
     }
 
     /**
@@ -152,7 +159,11 @@ public final class PaxWicketApplicationFactory
      */
     public final boolean isDeploymentMode()
     {
-        String deploymentMode = m_properties.getProperty( Content.DEPLOYMENT_MODE );
+        String deploymentMode;
+        synchronized ( this )
+        {
+            deploymentMode = m_properties.getProperty( Content.DEPLOYMENT_MODE );
+        }
         return Boolean.parseBoolean( deploymentMode );
     }
 
@@ -172,8 +183,11 @@ public final class PaxWicketApplicationFactory
      */
     public final void setDeploymentMode( boolean deploymentMode )
     {
-        String depl = String.valueOf( deploymentMode );
-        m_properties.put( Content.DEPLOYMENT_MODE, depl );
+        String strDepMode = String.valueOf( deploymentMode );
+        synchronized ( this )
+        {
+            m_properties.put( Content.DEPLOYMENT_MODE, strDepMode );
+        }
     }
 
     /**
@@ -189,10 +203,23 @@ public final class PaxWicketApplicationFactory
     {
         WebApplication paxWicketApplication;
         
-        // TODO: If authenticator and signinpage are not defined, create standard application.
-        paxWicketApplication = new PaxAuthenticatedWicketApplication(
-            m_homepageClass, m_pageFactory, m_delegatingClassResolver, m_authenticator, m_signinPage, isDeploymentMode()
-        );
+        synchronized ( this )
+        {
+            boolean deploymentMode = isDeploymentMode();
+            if( m_authenticator != null && m_signinPage != null )
+            {
+                paxWicketApplication = new PaxAuthenticatedWicketApplication(
+                    m_homepageClass, m_pageFactory, m_delegatingClassResolver, m_authenticator, m_signinPage, 
+                    deploymentMode
+                );
+            } 
+            else
+            {
+                paxWicketApplication = new PaxWicketApplication( 
+                    m_homepageClass, m_pageFactory, m_delegatingClassResolver, deploymentMode
+                );
+            }
+        }
         
         return paxWicketApplication;
     }
@@ -288,7 +315,12 @@ public final class PaxWicketApplicationFactory
     public final ServiceRegistration register()
     {
         String[] serviceNames = { PaxWicketApplicationFactory.class.getName(), ManagedService.class.getName() };
-        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
+        Properties serviceProperties;
+        synchronized ( this )
+        {
+            serviceProperties = new Properties( m_properties );
+        }
+        m_registration = m_bundleContext.registerService( serviceNames, this, serviceProperties );
         
         return m_registration;
     }
