@@ -19,21 +19,22 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.PaxWicketAuthenticator;
-import org.apache.log4j.Logger;
+
+import wicket.Page;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authentication.AuthenticatedWebSession;
-import wicket.authentication.pages.SignInPage;
 import wicket.authorization.strategies.role.Roles;
 import wicket.markup.html.WebPage;
 import wicket.protocol.http.WebRequest;
-import wicket.protocol.http.servlet.ServletWebRequest;
 import wicket.settings.IApplicationSettings;
 import wicket.settings.ISessionSettings;
 
-public final class PaxWicketApplication extends AuthenticatedWebApplication
+public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
 {
 
     private static final Roles EMPTY_ROLES = new Roles();
@@ -45,18 +46,28 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
     private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
     private PaxWicketAuthenticator m_authenticator;
+    private Class< ? extends WebPage> m_signInPage;
     private HashMap<AuthenticatedToken, Roles> m_roles;
 
-    public PaxWicketApplication( Class homepageClass, PaxWicketPageFactory factory,
-                                 DelegatingClassResolver delegatingClassResolver, PaxWicketAuthenticator authenticator,
-                                 boolean deploymentMode )
+    public PaxAuthenticatedWicketApplication( 
+            Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
+            DelegatingClassResolver delegatingClassResolver, 
+            PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
+            boolean deploymentMode )
+        throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
+        NullArgumentException.validateNotNull( factory, "factory" );
+        NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        NullArgumentException.validateNotNull( authenticator, "authenticator" );
+        NullArgumentException.validateNotNull( signInPage, "signInPage" );
+        
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
         m_deploymentMode = deploymentMode;
         m_authenticator = authenticator;
+        m_signInPage = signInPage;
         m_roles = new HashMap<AuthenticatedToken, Roles>();
     }
 
@@ -83,6 +94,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
     public void init()
     {
         super.init();
+        
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
 
@@ -112,7 +124,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
      */
     protected Class<? extends WebPage> getSignInPageClass()
     {
-        return SignInPage.class;
+        return m_signInPage;
     }
 
     /**
@@ -134,6 +146,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
         {
             return TOKEN_NOT_AUTHENTICATED;
         }
+        
         Roles roles = m_authenticator.authenticate( username, password );
         if( roles != null )
         {
@@ -141,6 +154,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
             m_roles.put( authenticatedToken, roles );
             return authenticatedToken;
         }
+        
         return null;
     }
 
@@ -150,52 +164,7 @@ public final class PaxWicketApplication extends AuthenticatedWebApplication
         {
             return EMPTY_ROLES;
         }
+        
         return m_roles.get( token );
-    }
-
-    private static class PaxWicketRequest extends ServletWebRequest
-    {
-
-        private static final Logger m_logger = Logger.getLogger( PaxWicketRequest.class.getName() );
-
-        /**
-         * Protected constructor.
-         *
-         * @param httpServletRequest The servlet request information
-         */
-        private PaxWicketRequest( HttpServletRequest httpServletRequest )
-        {
-            super( httpServletRequest );
-        }
-
-        /**
-         * Gets the servlet path.
-         *
-         * @return Servlet path
-         */
-        public String getServletPath()
-        {
-            String contextPath = getHttpServletRequest().getContextPath();
-            if( m_logger.isDebugEnabled() )
-            {
-                m_logger.debug( "getServletPath() : " + contextPath );
-            }
-            return contextPath;
-        }
-
-        /**
-         * Gets the servlet context path.
-         *
-         * @return Servlet context path
-         */
-        public String getContextPath()
-        {
-            String servletPath = getHttpServletRequest().getServletPath();
-            if( m_logger.isDebugEnabled() )
-            {
-                m_logger.debug( "getContextPath() : " + servletPath );
-            }
-            return servletPath;
-        }
     }
 }

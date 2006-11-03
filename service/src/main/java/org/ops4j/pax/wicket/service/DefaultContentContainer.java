@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
@@ -33,6 +35,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
@@ -40,6 +43,7 @@ import wicket.Component;
 public abstract class DefaultContentContainer
     implements ContentContainer, Content, ContentTrackingCallback, ManagedService
 {
+    protected final Logger m_logger = Logger.getLogger( getClass() );
 
     private Properties m_properties;
     private HashMap<String, List<Content>> m_children;
@@ -47,26 +51,68 @@ public abstract class DefaultContentContainer
     private DefaultContentTracker m_contentTracker;
     private ServiceRegistration m_registration;
 
+    /**
+     * Construct an instnace of {@code DefaultContentContainer} with the specified arguments.
+     * 
+     * @param bundleContext The bundle context. This argument must not be {@code null}.
+     * @param applicationName The application name. This argument must not be {@code null} or empty.
+     * @param containmentId The containment id. This argument must not be {@code null} or empty.
+     * @param destinationId The destination id. This argument must not be {@code null} or empty.
+     * 
+     * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
+     * @since 1.0.0
+     */
     protected DefaultContentContainer( BundleContext bundleContext, String applicationName, String containmentId,
                                        String destinationId
     )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
+        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
+        
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<Content>>();
         m_properties = new Properties();
+        
         setContainmentId( containmentId );
         setDestinationId( destinationId );
         setApplicationName( applicationName );
+        
         m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
     }
 
+    /**
+     * Returns the application name of this {@code DefaultContentContainer} instance belongs to.
+     *  
+     * @return The application name of this {@code DefaultContentContainer} instance belongs to.
+     * @since 1.0.0
+     */
     public String getApplicationName()
     {
         return m_properties.getProperty( Content.APPLICATION_NAME );
     }
 
-    public void setApplicationName( String applicationName )
+    /**
+     * Sets the application name of this {@code DefaultContentContainer} instant belongs to.
+     * <p>
+     * Note:
+     * Application name property must not be set after this {@code DefaultContentContainer} instance is registered to
+     * OSGi framework.
+     * </p>
+     * 
+     * @param applicationName The application name. This argument must not be {@code null}.
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code applicationName} argument is {@code null} or
+     *                                  empty.
+     * @since 1.0.0
+     */
+    public final void setApplicationName( String applicationName )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        
         m_properties.put( Content.APPLICATION_NAME, applicationName );
     }
 
@@ -75,16 +121,45 @@ public abstract class DefaultContentContainer
         m_contentTracker.close();
     }
 
+    /**
+     * Returns the containment id of this {@code DefaultContentContainer} instance. This method must not return 
+     * {@code null} object.
+     * 
+     * @since 1.0.0
+     */
     public final String getContainmentId()
     {
         return m_properties.getProperty( CONTAINMENTID );
     }
 
+    /**
+     * Set the containment id of this {@code DefaultContentContainer}.
+     * <p>
+     * Note:
+     * Containment id property must not be set after this {@code DefaultContentContainer} instance is registered to
+     * OSGi framework.
+     * </p>
+     * 
+     * @param containmentId The containment id. This argument must not be {@code null}.
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code containmentId} argument is {@code null} or empty.
+     * @since 1.0.0
+     */
     public final void setContainmentId( String containmentId )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
+        
         m_properties.put( CONTAINMENTID, containmentId );
     }
 
+    /**
+     * Create the wicket component represented by this {@code Content} instance. This method must not return 
+     * {@code null} object.
+     * 
+     * @return The wicket component represented by this {@code Content} instance.
+     * @since 1.0.0 
+     */
     public final <T extends Component> List<T> createComponents( String id )
     {
         ArrayList<T> result = new ArrayList<T>();
@@ -122,43 +197,62 @@ public abstract class DefaultContentContainer
         return null;
     }
 
-    public final void updated( Dictionary config )
+    public final void updated( Dictionary config ) 
+        throws ConfigurationException
     {
         if( config == null )
         {
             m_registration.setProperties( m_properties );
+            
             return;
         }
+        
         String existingContainmentId = getContainmentId();
         String newContainmentId = (String) config.get( CONTAINMENTID );
-        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
+        if( newContainmentId == null )
+        {
+            throw new ConfigurationException( CONTAINMENTID, "This property must not be [null]." );
+        }
+        
+        String newApplicationName = (String) config.get( APPLICATION_NAME );
+        if( newApplicationName == null )
+        {
+            throw new ConfigurationException( APPLICATION_NAME, "This property must not be [null]." );
+        }
+        
+        String existingApplicationName = getApplicationName();
+        if( existingContainmentId.equals( newContainmentId ) && existingApplicationName.equals( newApplicationName ) )
         {
             return;
         }
+        
         m_children.clear();
+        setApplicationName( newApplicationName );
         setContainmentId( newContainmentId );
-        if( newContainmentId != null )
+        
+        String filter = "(&(" + Content.APPLICATION_NAME + "=" + getApplicationName() + ")"
+                        + "(" + Content.DESTINATIONID + "=" + getContainmentId() + ".*)"
+                        + ")";
+        
+        try
         {
-            try
+            ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), filter );
+            if( null == services )
             {
-                String filter = "(&(" + Content.APPLICATION_NAME + "=" + getApplicationName() + ")"
-                                + "(" + Content.DESTINATIONID + "=" + getContainmentId() + ".*)"
-                                + ")";
-                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), filter );
-                if( null == services )
-                {
-                    return;
-                }
-                for( ServiceReference service : services )
-                {
-                    m_contentTracker.addingService( service );
-                }
-            } catch( InvalidSyntaxException e )
-            {
-                // Can not happen. Right!
-                e.printStackTrace();
+                return;
             }
+            
+            for( ServiceReference service : services )
+            {
+                m_contentTracker.addingService( service );
+            }
+        } catch( InvalidSyntaxException e )
+        {
+            // Can not happen. Right!
+            m_logger.warn( "Invalid filter [" + filter + "]. This probably caused by either the [application name] " +
+                    "or the containement id] contains osgi filter keywords.", e );
         }
+        
         m_registration.setProperties( config );
     }
 
@@ -188,13 +282,36 @@ public abstract class DefaultContentContainer
         return false;
     }
 
+    /**
+     * Returns the destination id of this {@code DefaultContentContainer} instance. This method must not return 
+     * {@code null} object.
+     * 
+     * @since 1.0.0
+     */
     public final String getDestinationId()
     {
         return m_properties.getProperty( Content.DESTINATIONID );
     }
 
+    /**
+     * Set the destination id of this {@code DefaultContentContainer}.
+     * <p>
+     * Note:
+     * Destination id property must not be set after this {@code DefaultContentContainer} instance is registered to
+     * OSGi framework.
+     * </p>
+     * 
+     * @param destinationId The destination id. This argument must not be {@code null}.
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code destinationId} argument is {@code null} or 
+     *                                  empty.
+     * @since 1.0.0
+     */
     public final void setDestinationId( String destinationId )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
+        
         m_properties.put( Content.DESTINATIONID, destinationId );
     }
 

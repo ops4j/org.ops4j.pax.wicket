@@ -43,7 +43,25 @@ public interface Content<E extends Component>
 
     String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
 
+    /**
+     * Returns the destination id of this {@code Content} instance. This method must not return {@code null} object.
+     * <p>
+     * The destination id is constructed by concatenating the containment id, ".", and the wicket component id. 
+     * For example, If the containment id is "overview.tabs" and the wicket component id is "quickMenu", the returned
+     * destination id is "overview.tabs.quickMenu".
+     * </p>  
+     * 
+     * @return The destination id of this {@code Content} instance.
+     * @since 1.0.0
+     */
     String getDestinationId();
 
+    /**
+     * Create the wicket component represented by this {@code Content} instance. This method must not return 
+     * {@code null} object.
+     * 
+     * @return The wicket component represented by this {@code Content} instance.
+     * @since 1.0.0 
+     */
     E createComponent();
 }

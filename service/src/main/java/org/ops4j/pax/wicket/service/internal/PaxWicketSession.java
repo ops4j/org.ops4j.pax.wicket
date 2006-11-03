@@ -49,7 +49,7 @@ public class PaxWicketSession extends AuthenticatedWebSession
      */
     public boolean authenticate( final String username, final String password )
     {
-        PaxWicketApplication app = (PaxWicketApplication) getApplication();
+        PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
         m_token = app.authententicate( username, password );
         return m_token != null;
     }
@@ -59,7 +59,7 @@ public class PaxWicketSession extends AuthenticatedWebSession
      */
     public Roles getRoles()
     {
-        PaxWicketApplication app = (PaxWicketApplication) getApplication();
+        PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
         Roles roles = app.getRoles( m_token );
         return roles;
     }
