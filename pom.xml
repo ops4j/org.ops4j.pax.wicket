@@ -96,7 +96,7 @@
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
         <exclusions>
           <exclusion>
             <artifactId>junit</artifactId>
@@ -115,12 +115,12 @@
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket-auth-roles</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
       </dependency>
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket-extensions</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
         <exclusions>
           <exclusion>
             <artifactId>junit</artifactId>

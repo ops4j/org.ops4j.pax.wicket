@@ -10,8 +10,8 @@ Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model,
  org.ops4j.pax.wicket.service,
  org.osgi.framework;version="1.3.0",
  org.osgi.service.cm;version="1.2.0",
- wicket,
- wicket.extensions.ajax.markup.html,
- wicket.markup.html.basic,
- wicket.markup.html.panel,
- wicket.model
+ wicket;version="[1.2.0,1.3.0)",
+ wicket.extensions.ajax.markup.html;version="[1.2.0,1.3.0)",
+ wicket.markup.html.basic;version="[1.2.0,1.3.0)",
+ wicket.markup.html.panel;version="[1.2.0,1.3.0)",
+ wicket.model;version="[1.2.0,1.3.0)"

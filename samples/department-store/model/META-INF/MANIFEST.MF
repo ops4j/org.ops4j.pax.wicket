@@ -8,7 +8,7 @@ Bundle-Localization: plugin
 Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.model.internal.Activator
 Import-Package: org.osgi.framework;version="1.3.0",
  org.osgi.util.tracker;version="1.3.1",
- wicket.markup,
- wicket.markup.html,
- wicket.markup.html.basic
+ wicket.markup;version="[1.2.0,1.3.0)",
+ wicket.markup.html;version="[1.2.0,1.3.0)",
+ wicket.markup.html.basic;version="[1.2.0,1.3.0)"
 Export-Package: org.ops4j.pax.wicket.samples.departmentstore.model
