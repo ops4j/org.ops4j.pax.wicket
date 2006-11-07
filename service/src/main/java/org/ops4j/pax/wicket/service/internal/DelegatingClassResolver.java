@@ -18,8 +18,10 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.Content;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -29,52 +31,85 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.application.IClassResolver;
 
-public class DelegatingClassResolver
-    implements IClassResolver
+
+public final class DelegatingClassResolver implements IClassResolver
 {
 
     private static final Logger m_logger = Logger.getLogger( DelegatingClassResolver.class );
-    private BundleContext m_context;
-    private List<IClassResolver> m_resolvers;
+    
+    private final BundleContext m_context;
+    private final String m_applicationName;
+    private final List<IClassResolver> m_resolvers;
+    
     private ClassResolverTracker m_tracker;
 
-    public DelegatingClassResolver( BundleContext context, String applicationName )
+    public DelegatingClassResolver( BundleContext context, String applicationName ) 
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( context, "context" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+
         m_context = context;
+        m_applicationName = applicationName;
         m_resolvers = new ArrayList<IClassResolver>();
-        m_tracker = new ClassResolverTracker( context, applicationName );
     }
 
-    public void intialize()
+    public final void intialize()
+        throws IllegalStateException
     {
-        m_tracker.open();
+        synchronized ( this )
+        {
+            if( m_tracker != null )
+            {
+                throw new IllegalStateException( 
+                    "DelegatingClassResolver [" + this + "] had been initialized."
+                );
+            }
+            
+            m_tracker = new ClassResolverTracker( m_context, m_applicationName );
+            m_tracker.open();
+            
+        }
     }
 
     public void dispose()
+        throws IllegalStateException
     {
-        m_tracker.close();
+        synchronized ( this )
+        {
+            if( m_tracker == null )
+            {
+                throw new IllegalStateException(
+                    "DelegatingClassResolver [" + this + "] had not been initialized." 
+                );
+            }
+            
+            m_tracker.close();
+            m_tracker = null;
+        }
     }
 
     /**
-     * Resolves a class by name (which may or may not involve loading it; thus
-     * the name class *resolver* not *loader*).
-     *
-     * @param classname Fully qualified classname to find
-     *
+     * Resolves a class by name (which may or may not involve loading it; thus the name class *resolver* not *loader*).
+     * 
+     * @param classname
+     *            Fully qualified classname to find
+     * 
      * @return Class
      */
     public Class resolveClass( final String classname )
     {
-        for( IClassResolver resolver : m_resolvers )
+        for ( IClassResolver resolver : m_resolvers )
         {
             try
             {
                 Class candidate = resolver.resolveClass( classname );
-                if( candidate != null )
+                if ( candidate != null )
                 {
                     return candidate;
                 }
-            } catch( RuntimeException e )
+            }
+            catch ( RuntimeException e )
             {
                 m_logger.warn( "ClassResolver" + resolver + " threw an unexpected exception.", e );
             }
@@ -85,54 +120,87 @@ public class DelegatingClassResolver
     private Filter createFilter( String applicationName )
     {
         String filterStr = "(&(" + Constants.OBJECTCLASS + "=" + IClassResolver.class.getName() + ")("
-                           + Content.APPLICATION_NAME + "=" + applicationName + "))";
+                + Content.APPLICATION_NAME + "=" + applicationName + "))";
 
         try
         {
             return m_context.createFilter( filterStr );
-        } catch( InvalidSyntaxException e )
+        }
+        catch ( InvalidSyntaxException e )
         {
             String message = Content.APPLICATION_NAME + "[" + applicationName + "] has an invalid format. ";
             throw new IllegalArgumentException( message );
         }
     }
 
+
     private class ClassResolverTracker extends ServiceTracker
     {
 
-        private BundleContext m_context;
-        private String m_applicationName;
+        private final BundleContext m_context;
+        private final String m_applicationName;
+        private final List<ServiceReference> m_references;
 
         public ClassResolverTracker( BundleContext context, String applicationName )
         {
             super( context, createFilter( applicationName ), null );
+
             m_context = context;
             m_applicationName = applicationName;
+            m_references = new LinkedList<ServiceReference>();
+        }
+        
+        @Override
+        public synchronized void close()
+        {
+            synchronized ( DelegatingClassResolver.this )
+            {
+                for( ServiceReference reference : m_references )
+                {
+                    m_context.ungetService( reference );
+                }
+                
+                m_references.clear();
+            }
+            
+            super.close();
         }
 
         public Object addingService( ServiceReference reference )
         {
-            IClassResolver resolver = (IClassResolver) m_context.getService( reference );
-            m_resolvers.add( resolver );
+            IClassResolver resolver = ( IClassResolver ) m_context.getService( reference );
+
+            synchronized( DelegatingClassResolver.this )
+            {
+                m_resolvers.add( resolver );
+                m_references.add( reference );
+            }
+
             return resolver;
         }
 
         public void modifiedService( ServiceReference reference, Object service )
         {
-            String applName = (String) reference.getProperty( Content.APPLICATION_NAME );
-            if( m_applicationName.equals( applName ) )
+            String applName = ( String ) reference.getProperty( Content.APPLICATION_NAME );
+            if ( m_applicationName.equals( applName ) )
             {
                 return;
             }
-            IClassResolver resolver = (IClassResolver) service;
-            m_resolvers.remove( resolver );
+
+            removedService( reference, service );
         }
 
         public void removedService( ServiceReference reference, Object service )
         {
-            IClassResolver resolver = (IClassResolver) service;
-            m_resolvers.remove( resolver );
-        }
+            IClassResolver resolver = ( IClassResolver ) service;
 
+            synchronized( DelegatingClassResolver.this )
+            {
+                m_resolvers.remove( resolver );
+                m_references.remove( reference );
+
+                m_context.ungetService( reference );
+            }
+        }
     }
 }

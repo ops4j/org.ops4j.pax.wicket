@@ -18,6 +18,7 @@
 package org.ops4j.pax.wicket.service;
 
 import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.useradmin.Authorization;
@@ -36,7 +37,10 @@ public class UserAdminAuthenticator
     private BundleContext m_bundleContext;
 
     public UserAdminAuthenticator( BundleContext bundleContext )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        
         m_bundleContext = bundleContext;
         m_serviceTracker = new UserAdminTracker();
         m_serviceTracker.open();
@@ -54,24 +58,28 @@ public class UserAdminAuthenticator
         {
             throw new SecurityException( "UserAdmin service not available." );
         }
+        
         User user = userAdmin.getUser( PaxWicketAuthenticator.USERNAME_IDENTITY, username );
         if( user == null )
         {
             m_logger.warn( "No user with the username of '" + username + "'" );
             return null;
         }
+        
         if( ! user.hasCredential( CREDENTIALS_PASSWORD, password ) )
         {
             m_logger.warn( "Wrong password issued by " + username );
             return null;
         }
         Authorization authorization = userAdmin.getAuthorization( user );
+        
         String[] uaRoles = authorization.getRoles();
         Roles wicketRoles = new Roles();
         for( String uaRole : uaRoles )
         {
             wicketRoles.add( uaRole );
         }
+        
         return wicketRoles;
     }
 

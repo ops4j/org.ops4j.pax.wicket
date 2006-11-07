@@ -17,6 +17,7 @@
  */
 package org.ops4j.pax.wicket.service.internal;
 
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.Content;
 import org.ops4j.pax.wicket.service.PageContent;
 import org.osgi.framework.BundleContext;
@@ -28,7 +29,11 @@ public class TrackingUtil
 {
 
     public static Filter createContentFilter( BundleContext bundleContext, String applicationName )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        
         Filter filter;
         try
         {
@@ -44,7 +49,11 @@ public class TrackingUtil
     }
 
     public static Filter createAllPageContentFilter( BundleContext bundleContext, String applicationName )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        
         Filter filter;
         try
         {

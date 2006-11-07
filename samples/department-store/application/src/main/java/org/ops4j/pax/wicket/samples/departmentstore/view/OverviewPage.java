@@ -37,6 +37,8 @@ import wicket.model.Model;
 public final class OverviewPage extends WebPage
 {
 
+    private static final long serialVersionUID = 1L;
+    
     private static final String WICKET_ID_LABEL = "storeName";
 
     public OverviewPage( ContentContainer container, String storeName, Class aboutPageClass )
@@ -55,7 +57,7 @@ public final class OverviewPage extends WebPage
         add( link );
         
         Locale locale = getLocale();
-        final List<Component> floors = container.createComponents( "floor", locale );
+        final List<Component> floors = container.createComponents( "floor" );
         List tabs = new ArrayList();
         for( final Component floor : floors )
         {

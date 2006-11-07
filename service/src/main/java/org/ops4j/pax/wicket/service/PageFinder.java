@@ -73,6 +73,7 @@ public class PageFinder
         {
             LOGGER.warn( "Invalid syntax [" + filter + "]. This should not happen unless if both application name " +
                     "and page name contains ldap filters.", e );
+            
             // can not happen, RIGHT!
             return new PageContent[0];
         }

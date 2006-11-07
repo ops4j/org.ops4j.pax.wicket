@@ -28,6 +28,7 @@ public interface PageContent<T extends Page>
      * Returns the page class instance represented by this {@code PageContent}.
      * 
      * @return The page class represented by this {@code PageContent}.
+     * 
      * @since 1.0.0
      */
     Class<T> getPageClass();
@@ -37,6 +38,7 @@ public interface PageContent<T extends Page>
      * 
      * @param params The page parameters.
      * @return An instance of page.
+     * 
      * @since 1.0.0
      */
     T createPage( PageParameters params );

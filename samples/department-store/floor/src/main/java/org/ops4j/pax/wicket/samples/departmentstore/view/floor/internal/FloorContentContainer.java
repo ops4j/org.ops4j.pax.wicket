@@ -18,7 +18,6 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
-import java.util.Locale;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.service.DefaultContentContainer;
@@ -37,8 +36,8 @@ public class FloorContentContainer extends DefaultContentContainer
         m_floor  = floor;
     }
 
-    protected Component createComponent( String id, Locale locale )
+    protected Component createComponent( String id )
     {
-        return new FloorPanel( id, this, m_floor, locale );
+        return new FloorPanel( id, this, m_floor );
     }
 }

@@ -19,14 +19,16 @@
 package org.ops4j.pax.wicket.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Collections;
+
+import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.service.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
@@ -36,11 +38,14 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+
 import wicket.Component;
 
 public class DefaultPageContainer
     implements ContentContainer, ContentTrackingCallback, ManagedService
 {
+    protected final Logger m_logger = Logger.getLogger( DefaultPageContainer.class );
+    
     private Hashtable<String, String> m_properties;
     private BundleContext m_bundleContext;
     private HashMap<String, List<Content>> m_children;
@@ -59,12 +64,18 @@ public class DefaultPageContainer
 
     public final String getContainmentId()
     {
-        return m_properties.get( Content.CONTAINMENTID );
+        synchronized ( this )
+        {
+            return m_properties.get( Content.CONTAINMENTID );
+        }
     }
 
     public final void setContainmentId( String containmentId )
     {
-        m_properties.put( Content.CONTAINMENTID, containmentId );
+        synchronized ( this )
+        {
+            m_properties.put( Content.CONTAINMENTID, containmentId );
+        }
     }
 
     public final String getApplicationName()
@@ -77,28 +88,31 @@ public class DefaultPageContainer
         m_properties.put( Content.APPLICATION_NAME, applicationName );
     }
 
-    public final Map<String, List<Content>> getChildren()
-    {
-        return Collections.unmodifiableMap( m_children );
-    }
-
-    public final <T extends Component> List<T> createComponents( String id, Locale locale )
+    public final <T extends Component> List<T> createComponents( String wicketId )
     {
         ArrayList<T> result = new ArrayList<T>();
-        List<Content> contents = m_children.get( id );
-        if( contents != null )
+        
+        List<Content> contents = getContents( wicketId );
+        if( !contents.isEmpty() )
         {
+            Locale locale = null;
             for( Content content : contents )
             {
-                T component = ( T ) content.createComponent( locale );
+                T component = ( T ) content.createComponent();
+                
+                if( locale != null )
+                {
+                    locale = component.getLocale();
+                }
+                
                 result.add( component );
             }
-        }
-        
-        Comparator<T> comparator = getComparator( id, locale );
-        if( comparator != null )
-        {
-            Collections.sort( result, comparator );
+
+            Comparator<T> comparator = getComparator( wicketId, locale );
+            if( comparator != null )
+            {
+                Collections.sort( result, comparator );
+            }
         }
         
         return result;
@@ -116,6 +130,7 @@ public class DefaultPageContainer
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * 
      * @see ContentContainer#createComponents(String)
+     * @since 1.0.0
      */
     public <T extends Component> Comparator<T> getComparator( String contentId, Locale locale )
         throws IllegalArgumentException
@@ -123,49 +138,154 @@ public class DefaultPageContainer
         return null;
     }
 
+    /**
+     * Dispose this {@code DefaultPageContainer} instance.
+     * <p>
+     * Note: 
+     * Dispose does not unregister this {@code DefaultPageContainer}, and 
+     * ensure that dispose is only called after this {@code DefaultPageContainer} instance is unregistered from OSGi
+     * container. 
+     * </p>
+     * 
+     * @throws IllegalStateException Thrown if this content tracker has not been registered.
+     * 
+     * @see ServiceRegistration#unregister()
+     * 
+     * @since 1.0.0
+     */
     public final void dispose()
+        throws IllegalStateException
     {
-        m_contentTracker.close();
-    }
-
-    public final void addContent( String id, Content content )
-    {
-        List<Content> contents = m_children.get( id );
-        if( contents == null )
+        synchronized ( this )
         {
-            contents = new ArrayList<Content>();
-            m_children.put( id, contents );
+            if( m_contentTracker == null )
+            {
+                throw new IllegalStateException( "DefaultPageContainer [" + this + "] has not been registered." );
+            }
+            
+            m_contentTracker.close();
+            m_contentTracker = null;
         }
-        contents.add( content );
     }
 
-    public final boolean removeContent( String id, Content content )
+    /**
+     * Add the specified {@code content} to this {@code DefaultPageContainer} and mapped it as {@code wicketId}.
+     * 
+     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * @param content The content. This argument must not be {@code null}.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @since 1.0.0
+     */
+    public final void addContent( String wicketId, Content content )
+        throws IllegalArgumentException
     {
-        List<Content> contents = m_children.get( id );
-        if( contents == null )
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        NullArgumentException.validateNotNull( content, "content" );
+        
+        synchronized ( this )
         {
+            List<Content> contents = m_children.get( wicketId );
+            if( contents == null )
+            {
+                contents = new ArrayList<Content>();
+                m_children.put( wicketId, contents );
+            }
+
+            contents.add( content );
+        }
+    }
+
+    /**
+     * Remove the specified {@code content} to this {@code DefaultPageContainer} and unmapped it as {@code wicketId}.
+     * 
+     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * @param content  The content. This argument must not be {@code null}.
+     * 
+     * @return A {@code boolean} indicator whether removal is successfull.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @since 1.0.0
+     */
+    public final boolean removeContent( String wicketId, Content content )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        NullArgumentException.validateNotNull( content, "content" );
+        
+        synchronized ( this )
+        {
+            List<Content> contents = m_children.get( wicketId );
+            if( contents == null )
+            {
+                return false;
+            }
+            contents.remove( content );
+            if( contents.isEmpty() )
+            {
+                return m_children.remove( wicketId ) != null;
+            }
+            
             return false;
         }
-        contents.remove( content );
-        if( contents.isEmpty() )
+    }
+    
+    /**
+     * Returns list of {@code Content} instnaces of the specified {@code wicketId}.
+     * Returns an empty list if there is no content for the specified {@code wicketId}.
+     * 
+     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * 
+     * @return List of {@code Content} of the specified {@code wicketId}.
+     * 
+     * @throws IllegalArgumentException
+     */
+    public final <T extends Content> List<T> getContents( String wicketId )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        
+        List<T> contents;
+        synchronized ( this )
         {
-            return m_children.remove( id ) != null;
+            contents = (List<T>) m_children.get( wicketId );
+            
+            if( contents != null )
+            {
+                contents = new ArrayList<T>( contents );
+            }
+            else
+            {
+                contents = new ArrayList<T>();
+            }
         }
-        return false;
+        
+        return contents;
     }
 
     public final ServiceRegistration register()
+        throws IllegalStateException
     {
-        m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
-        m_contentTracker.setContainmentId( getContainmentId() );
-        m_contentTracker.open();
-
-        String[] serviceNames =
+        synchronized ( this )
+        {
+            if( m_contentTracker != null )
             {
-                ContentContainer.class.getName(), ManagedService.class.getName()
+                throw new IllegalStateException( "DefaultPageContainer [" + this + "] has already been registered." );
+            }
+            
+            String applicationName = getApplicationName();
+            String containmentId = getContainmentId();
+            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, containmentId );
+            m_contentTracker.open();
+
+            String[] serviceNames =
+            {
+                    ContentContainer.class.getName(), ManagedService.class.getName()
             };
-        m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-        return m_registration;
+            m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
+            
+            return m_registration;
+        }
     }
 
     public void updated( Dictionary config )
@@ -173,24 +293,33 @@ public class DefaultPageContainer
     {
         if( config == null )
         {
-            m_registration.setProperties( m_properties );
+            synchronized ( this )
+            {
+                m_registration.setProperties( m_properties );
+            }
+            
             return;
         }
-        m_registration.setProperties( config );
-        String existingContainmentId = getContainmentId();
+        
         String newContainmentId = (String) config.get( Content.CONTAINMENTID );
+        String existingContainmentId = getContainmentId();
         if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
         }
-        m_children.clear();
+        
+        synchronized ( this )
+        {
+            m_children.clear();
+        }
+        
         setContainmentId( newContainmentId );
         if( newContainmentId != null )
         {
             try
             {
-                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), null );
-                if( null == services )
+                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), null);
+                if( services == null )
                 {
                     return;
                 }
@@ -203,6 +332,22 @@ public class DefaultPageContainer
                 // Can not happen. Right!
                 e.printStackTrace();
             }
+        }
+        
+        m_registration.setProperties( config );
+    }
+
+    @Override
+    protected void finalize() throws Throwable
+    {
+        synchronized ( this )
+        {
+            if( m_contentTracker != null )
+            {
+                m_logger.warn( "DefaultPageContainer [" + this + "] is not disposed." );
+            }
+            
+            dispose();
         }
     }
 }

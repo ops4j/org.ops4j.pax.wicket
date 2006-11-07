@@ -40,16 +40,14 @@ public interface ContentContainer
      * Create components that has the specified {@code id} id. Returns an empty list
      * if there is no component with the specified {@code id}.
      * 
-     * @param id The component id. This argument must not be {@code null}.
-     * @param locale The locale. This argument must not be {@code null}.
-     * 
+     * @param wicketId The wicket id. This argument must not be {@code null}.
      * @return A list of component id.
      * 
-     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @throws IllegalArgumentException Thrown if the specified {@code wicketId} argument is {@code null}.
      * 
      * @since 1.0.0
      */
-    <T extends Component> List<T> createComponents( String id, Locale locale )
+    <T extends Component> List<T> createComponents( String wicketId )
         throws IllegalArgumentException;
     
     /**

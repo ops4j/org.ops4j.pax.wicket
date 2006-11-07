@@ -176,21 +176,30 @@ public abstract class DefaultContentContainer
      * @return The wicket component represented by this {@code Content} instance.
      * @since 1.0.0 
      */
-    public final <T extends Component> List<T> createComponents( String id, Locale locale )
+    public final <T extends Component> List<T> createComponents( String id )
     {
         ArrayList<T> result = new ArrayList<T>();
         
         List<Content> contents = getContents( id );
-        for( Content content : contents )
+        if( !contents.isEmpty() )
         {
-            T component = ( T ) content.createComponent( locale );
-            result.add( component );
-        }
-        
-        Comparator<T> comparator = getComparator( id, locale );
-        if( comparator != null )
-        {
-            Collections.sort( result, comparator );
+            Locale locale = null;
+            for( Content content : contents )
+            {
+                T component = ( T ) content.createComponent();
+
+                if( locale == null )
+                {
+                    locale = component.getLocale();
+                }
+                result.add( component );
+            }
+
+            Comparator<T> comparator = getComparator( id, locale );
+            if( comparator != null )
+            {
+                Collections.sort( result, comparator );
+            }
         }
         
         return result;
@@ -206,7 +215,7 @@ public abstract class DefaultContentContainer
      * 
      * @throws IllegalArgumentException
      */
-    protected final <T extends Content> List<T> getContents( String wicketId )
+    public final <T extends Content> List<T> getContents( String wicketId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
@@ -380,8 +389,9 @@ public abstract class DefaultContentContainer
     {
         synchronized ( this )
         {
-            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, getApplicationName() );
-            m_contentTracker.setContainmentId( getContainmentId() );
+            String applicationName = getApplicationName();
+            String containmentId = getContainmentId();
+            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, containmentId );
             m_contentTracker.open();
 
             String[] serviceNames =
@@ -389,18 +399,19 @@ public abstract class DefaultContentContainer
                     Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
             };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
+            
             return m_registration;
         }
     }
 
-    public final Component createComponent( Locale locale )
+    public final Component createComponent( )
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
-        return createComponent( id, locale );
+        return createComponent( id );
     }
 
-    protected abstract Component createComponent( String id, Locale locale );
+    protected abstract Component createComponent( String id );
 }
 

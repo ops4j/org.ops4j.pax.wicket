@@ -38,26 +38,32 @@ import wicket.model.Model;
  */
 public class FloorPanel extends Panel
 {
-
+    
+    private static final long serialVersionUID = 1L;
+    
     public static final String WICKET_ID_NAME_LABEL = "name";
     private static final String WICKET_ID_FRANCHISEE = "franchisee";
     private static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    public FloorPanel( String id, ContentContainer container, Floor floor, Locale locale )
+    public FloorPanel( String id, ContentContainer container, Floor floor )
     {
         super( id, new Model( floor.getName() ) );
-        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, locale );
+        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE );
         if( franchisees.isEmpty() )
         {
             franchisees.add( new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." ) );
         }
         ListView listView = new ListView( WICKET_ID_FRANCHISEES, franchisees )
         {
+            
+            private static final long serialVersionUID = 1L;
+
             protected void populateItem( final ListItem item )
             {
                 item.add( (Component) item.getModelObject() );
             }
         };
+        
         add( listView );
     }
 

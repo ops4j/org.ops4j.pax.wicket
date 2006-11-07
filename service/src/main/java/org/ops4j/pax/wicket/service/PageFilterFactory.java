@@ -26,6 +26,7 @@ public final class PageFilterFactory
     {
         NullArgumentException.validateNotEmpty( pagename, "pagename" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        
         return "(&(" +Content.PAGE_NAME + "=" + pagename + ")(" + Content.APPLICATION_NAME+ "=" + applicationName + "))";
     }
 }
