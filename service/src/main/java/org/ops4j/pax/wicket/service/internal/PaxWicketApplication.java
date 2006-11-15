@@ -30,21 +30,24 @@ import wicket.settings.ISessionSettings;
 
 public final class PaxWicketApplication extends WebApplication
 {
+    private final String m_mountPoint;
     protected Class m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
 
     public PaxWicketApplication( 
-            Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
+            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
             DelegatingClassResolver delegatingClassResolver, 
             boolean deploymentMode )
         throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
         
+        m_mountPoint = mountPoint;
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
@@ -101,6 +104,6 @@ public final class PaxWicketApplication extends WebApplication
      */
     protected final WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
-        return new PaxWicketRequest( servletRequest );
+        return new PaxWicketRequest( m_mountPoint, servletRequest );
     }
 }

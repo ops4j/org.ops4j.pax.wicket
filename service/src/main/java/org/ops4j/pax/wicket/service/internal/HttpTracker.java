@@ -19,7 +19,10 @@
 package org.ops4j.pax.wicket.service.internal;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -68,6 +71,7 @@ public class HttpTracker extends ServiceTracker
                 throw new IllegalArgumentException( message, e );
             }
         }
+        
         return m_httpService;
     }
 
@@ -77,7 +81,13 @@ public class HttpTracker extends ServiceTracker
 
     public void removedService( ServiceReference serviceReference, Object httpService )
     {
-        for( String mountpoint : m_servlets.keySet() )
+        Set<String> mountPoints;
+        synchronized( this )
+        {
+            mountPoints = new HashSet<String>( m_servlets.keySet() );   
+        }
+        
+        for( String mountpoint : mountPoints )
         {
             m_httpService.unregister( mountpoint );
         }

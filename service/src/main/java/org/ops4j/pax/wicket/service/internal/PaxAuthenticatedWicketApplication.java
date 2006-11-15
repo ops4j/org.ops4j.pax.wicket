@@ -41,6 +41,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
     private static final AuthenticatedToken TOKEN_NOT_AUTHENTICATED = new AuthenticatedToken();
 
+    private final String m_mountPoint;
     protected Class m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
@@ -49,19 +50,22 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private Class< ? extends WebPage> m_signInPage;
     private HashMap<AuthenticatedToken, Roles> m_roles;
 
+
     public PaxAuthenticatedWicketApplication( 
-            Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
+            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
             DelegatingClassResolver delegatingClassResolver, 
             PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
             boolean deploymentMode )
         throws IllegalArgumentException
     {
+        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
         NullArgumentException.validateNotNull( authenticator, "authenticator" );
         NullArgumentException.validateNotNull( signInPage, "signInPage" );
         
+        m_mountPoint = mountPoint;
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
@@ -138,7 +142,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
      */
     protected WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
-        return new PaxWicketRequest( servletRequest );
+        return new PaxWicketRequest( m_mountPoint, servletRequest );
     }
 
     public AuthenticatedToken authententicate( String username, String password )

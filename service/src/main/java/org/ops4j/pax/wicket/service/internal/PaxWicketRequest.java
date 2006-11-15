@@ -33,15 +33,19 @@ final class PaxWicketRequest extends ServletWebRequest
 {
 
     private static final Logger m_logger = Logger.getLogger( PaxWicketRequest.class );
+    private final String m_mountPoint;
 
     /**
      * Protected constructor.
      * 
+     * @param point
+     * 
      * @param httpServletRequest The servlet request information
      */
-    PaxWicketRequest( HttpServletRequest httpServletRequest )
+    PaxWicketRequest( String mountPoint, HttpServletRequest httpServletRequest )
     {
         super( httpServletRequest );
+        m_mountPoint = "/" + mountPoint;
     }
 
     /**
@@ -56,7 +60,7 @@ final class PaxWicketRequest extends ServletWebRequest
         {
             m_logger.debug( "getServletPath() : " + contextPath );
         }
-        
+
         return contextPath;
     }
 
@@ -72,7 +76,39 @@ final class PaxWicketRequest extends ServletWebRequest
         {
             m_logger.debug( "getContextPath() : " + servletPath );
         }
-        
+
+        int mountPointLength = m_mountPoint.length();
+        int servletPathLength = servletPath.length();
+        if ( servletPathLength == mountPointLength )
+        {
+            servletPath = servletPath + "/";
+        }
+        else
+        {
+            char aChar = servletPath.charAt( mountPointLength );
+            if ( '/' != aChar )
+            {
+                String suffix = servletPath.substring( mountPointLength );
+                servletPath = m_mountPoint + '/' + suffix;
+            }
+        }
+
         return servletPath;
+    }
+
+    public final String getPath()
+    {
+        String path = super.getPath();
+
+        if ( path == null )
+        {
+            path = "/";
+        }
+        else if ( !path.startsWith( "/" ) )
+        {
+            path = "/" + path;
+        }
+
+        return path;
     }
 }

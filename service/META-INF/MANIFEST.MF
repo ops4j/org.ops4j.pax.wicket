@@ -23,7 +23,7 @@ Bundle-ClassPath: .,
  lib/wicket-1.2.3.jar,
  lib/wicket-auth-roles-1.2.3.jar,
  lib/wicket-extensions-1.2.3.jar
-Export-Package: org.ops4j.pax.wicket.service;version="0.3.0",
+Export-Package: org.ops4j.pax.wicket.service;version="1.0.0",
  wicket;version="1.2.3",
  wicket.ajax;version="1.2.3",
  wicket.ajax.calldecorator;version="1.2.3",
