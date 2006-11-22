@@ -66,6 +66,9 @@
     junit.framework,
     javax.portlet
   </osgi-IgnorePackage>
+  <osgi-BundleActivator>
+    org.ops4j.pax.wicket.service.internal.Activator
+  </osgi-BundleActivator>
   <osgi-ExportPackage>org.ops4j.pax.wicket.service;version=${pom.version},
     wicket;version="1.2.3",
     wicket.ajax;version="1.2.3",
