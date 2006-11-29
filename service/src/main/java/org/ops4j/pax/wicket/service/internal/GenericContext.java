@@ -39,41 +39,69 @@ public class GenericContext
 
     public GenericContext( Bundle applicationBundle, String rootUrl )
     {
-        m_logger.debug( "GenericContext(" + rootUrl + " )" );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "GenericContext(" + rootUrl + " )" );
+        }
         m_applicationBundle = applicationBundle;
         m_rootUrl = rootUrl;
         m_typeMap = (MimetypesFileTypeMap) MimetypesFileTypeMap.getDefaultFileTypeMap();
         m_typeMap.addMimeTypes( "text/css css" );
     }
 
-    public boolean handleSecurity( HttpServletRequest httpServletRequest,
-                                   HttpServletResponse httpServletResponse )
+    public boolean handleSecurity( HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse )
         throws IOException
     {
-        m_logger.debug( "handleSecurity()" );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "handleSecurity()" );
+        }
         return true;
     }
 
     public URL getResource( String resourcename )
     {
-        m_logger.debug( "getResource( " + resourcename + " )" );
-        int prefixLength = m_rootUrl.length();
-        String resource = resourcename.substring( prefixLength + 1 );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "getResource( " + resourcename + " )" );
+        }
+        
+        String resource;
+        if ( resourcename.startsWith( m_rootUrl ) )
+        {
+            int prefixLength = m_rootUrl.length();
+            resource = resourcename.substring( prefixLength + 1 );
+        }
+        else
+        {
+            resource = resourcename;
+        }
+
         return m_applicationBundle.getResource( resource );
     }
 
     public String getMimeType( String resourcename )
     {
-        m_logger.debug( "getMimeType( " + resourcename + " )" );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "getMimeType( " + resourcename + " )" );
+        }
         URL resource = getResource( resourcename );
-        if( resource == null )
+        if ( resource == null )
         {
             return null;
         }
         String url = resource.toString();
-        m_logger.debug( "         URL: " + url );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "         URL: " + url );
+        }
+
         String contentType = m_typeMap.getContentType( url );
-        m_logger.debug( " ContentType: " + contentType );
+        if ( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( " ContentType: " + contentType );
+        }
         return contentType;
     }
 }

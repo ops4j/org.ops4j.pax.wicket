@@ -118,7 +118,7 @@ public final class DefaultContentTracker extends ServiceTracker
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
-
+        
         String dest = (String) serviceReference.getProperty( Content.DESTINATIONID );
         
         Object service;
@@ -206,6 +206,11 @@ public final class DefaultContentTracker extends ServiceTracker
 
         Content content = (Content) object;
         String destionationId = content.getDestinationId();
+        if( destionationId == null )
+        {
+            m_logger.warn( "Content [" + content + "] does not have destionationId defined."  );
+            
+        }
         int pos = destionationId.lastIndexOf( '.' );
         String id = destionationId.substring( pos + 1 );
         boolean wasContentRemoved = m_callback.removeContent( id, content );

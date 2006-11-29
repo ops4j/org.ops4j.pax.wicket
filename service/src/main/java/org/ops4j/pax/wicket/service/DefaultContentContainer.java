@@ -41,8 +41,8 @@ import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
 
-public abstract class DefaultContentContainer
-    implements ContentContainer, Content, ContentTrackingCallback, ManagedService
+public abstract class DefaultContentContainer<E extends Component>
+    implements ContentContainer, Content<E>, ContentTrackingCallback, ManagedService
 {
     protected final Logger m_logger = Logger.getLogger( getClass() );
 
@@ -64,29 +64,28 @@ public abstract class DefaultContentContainer
      * @since 1.0.0
      */
     protected DefaultContentContainer( BundleContext bundleContext, String applicationName, String containmentId,
-                                       String destinationId
-    )
+        String destinationId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
         NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
         NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
-        
+
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<Content>>();
         m_properties = new Properties();
-        
+
         setContainmentId( containmentId );
         setDestinationId( destinationId );
         setApplicationName( applicationName );
-        
+
         m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
     }
 
     /**
      * Returns the application name of this {@code DefaultContentContainer} instance belongs to.
-     *  
+     * 
      * @return The application name of this {@code DefaultContentContainer} instance belongs to.
      * @since 1.0.0
      */
@@ -101,15 +100,14 @@ public abstract class DefaultContentContainer
     /**
      * Sets the application name of this {@code DefaultContentContainer} instant belongs to.
      * <p>
-     * Note:
-     * Application name property must not be set after this {@code DefaultContentContainer} instance is registered to
-     * OSGi framework.
+     * Note: Application name property must not be set after this {@code DefaultContentContainer} instance is registered
+     * to OSGi framework.
      * </p>
      * 
      * @param applicationName The application name. This argument must not be {@code null}.
      * 
      * @throws IllegalArgumentException Thrown if the specified {@code applicationName} argument is {@code null} or
-     *                                  empty.
+     *             empty.
      * @since 1.0.0
      */
     public final void setApplicationName( String applicationName )
@@ -128,11 +126,21 @@ public abstract class DefaultContentContainer
         synchronized ( this )
         {
             m_contentTracker.close();
+            onDispose();
         }
     }
 
     /**
-     * Returns the containment id of this {@code DefaultContentContainer} instance. This method must not return 
+     * Override this method to handle additional dispose.
+     * 
+     * @since 1.0.0
+     */
+    protected void onDispose()
+    {
+    }
+
+    /**
+     * Returns the containment id of this {@code DefaultContentContainer} instance. This method must not return
      * {@code null} object.
      * 
      * @since 1.0.0
@@ -148,9 +156,8 @@ public abstract class DefaultContentContainer
     /**
      * Set the containment id of this {@code DefaultContentContainer}.
      * <p>
-     * Note:
-     * Containment id property must not be set after this {@code DefaultContentContainer} instance is registered to
-     * OSGi framework.
+     * Note: Containment id property must not be set after this {@code DefaultContentContainer} instance is registered
+     * to OSGi framework.
      * </p>
      * 
      * @param containmentId The containment id. This argument must not be {@code null}.
@@ -170,25 +177,25 @@ public abstract class DefaultContentContainer
     }
 
     /**
-     * Create the wicket component represented by this {@code Content} instance.
-     * This method must not return {@code null} object.
+     * Create the wicket component represented by this {@code Content} instance. This method must not return
+     * {@code null} object.
      * 
      * @return The wicket component represented by this {@code Content} instance.
-     * @since 1.0.0 
+     * @since 1.0.0
      */
     public final <T extends Component> List<T> createComponents( String id )
     {
         ArrayList<T> result = new ArrayList<T>();
-        
+
         List<Content> contents = getContents( id );
-        if( !contents.isEmpty() )
+        if ( !contents.isEmpty() )
         {
             Locale locale = null;
-            for( Content content : contents )
+            for ( Content content : contents )
             {
-                T component = ( T ) content.createComponent();
+                T component = (T) content.createComponent();
 
-                if( locale == null )
+                if ( locale == null )
                 {
                     locale = component.getLocale();
                 }
@@ -196,18 +203,18 @@ public abstract class DefaultContentContainer
             }
 
             Comparator<T> comparator = getComparator( id, locale );
-            if( comparator != null )
+            if ( comparator != null )
             {
                 Collections.sort( result, comparator );
             }
         }
-        
+
         return result;
     }
 
     /**
-     * Returns list of {@code Content} instnaces of the specified {@code wicketId}.
-     * Returns an empty list if there is no content for the specified {@code wicketId}.
+     * Returns list of {@code Content} instnaces of the specified {@code wicketId}. Returns an empty list if there is
+     * no content for the specified {@code wicketId}.
      * 
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * 
@@ -219,13 +226,13 @@ public abstract class DefaultContentContainer
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        
+
         List<T> contents;
         synchronized ( this )
         {
             contents = (List<T>) m_children.get( wicketId );
-            
-            if( contents != null )
+
+            if ( contents != null )
             {
                 contents = new ArrayList<T>( contents );
             }
@@ -234,13 +241,13 @@ public abstract class DefaultContentContainer
                 contents = new ArrayList<T>();
             }
         }
-        
+
         return contents;
     }
-    
+
     /**
-     * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. 
-     * Returns {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
+     * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. Returns
+     * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      * 
      * @param contentId The content id. This argument must not be {@code null}.
      * @param locale The current active locale. This argument must not be {@code null}.
@@ -254,62 +261,62 @@ public abstract class DefaultContentContainer
         return null;
     }
 
-    public final void updated( Dictionary config ) 
+    public final void updated( Dictionary config )
         throws ConfigurationException
     {
-        if( config == null )
+        if ( config == null )
         {
             m_registration.setProperties( m_properties );
-            
+
             return;
         }
-        
+
         String existingContainmentId = getContainmentId();
         String newContainmentId = (String) config.get( CONTAINMENTID );
-        if( newContainmentId == null )
+        if ( newContainmentId == null )
         {
             throw new ConfigurationException( CONTAINMENTID, "This property must not be [null]." );
         }
-        
+
         String newApplicationName = (String) config.get( APPLICATION_NAME );
-        if( newApplicationName == null )
+        if ( newApplicationName == null )
         {
             throw new ConfigurationException( APPLICATION_NAME, "This property must not be [null]." );
         }
-        
+
         String existingApplicationName = getApplicationName();
-        if( existingContainmentId.equals( newContainmentId ) && existingApplicationName.equals( newApplicationName ) )
+        if ( existingContainmentId.equals( newContainmentId ) && existingApplicationName.equals( newApplicationName ) )
         {
             return;
         }
-        
+
         m_children.clear();
         setApplicationName( newApplicationName );
         setContainmentId( newContainmentId );
-        
-        String filter = "(&(" + Content.APPLICATION_NAME + "=" + getApplicationName() + ")"
-                        + "(" + Content.DESTINATIONID + "=" + getContainmentId() + ".*)"
-                        + ")";
-        
+
+        String filter = "(&(" + Content.APPLICATION_NAME + "=" + getApplicationName() + ")" + "("
+            + Content.DESTINATIONID + "=" + getContainmentId() + ".*)" + ")";
+
         try
         {
             ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), filter );
-            if( null == services )
+            if ( null == services )
             {
                 return;
             }
-            
-            for( ServiceReference service : services )
+
+            for ( ServiceReference service : services )
             {
                 m_contentTracker.addingService( service );
             }
-        } catch( InvalidSyntaxException e )
+        }
+        catch ( InvalidSyntaxException e )
         {
             // Can not happen. Right!
-            m_logger.warn( "Invalid filter [" + filter + "]. This probably caused by either the [application name] " +
-                    "or the containement id] contains osgi filter keywords.", e );
+            m_logger.warn( "Invalid filter [" + filter + "]. This probably caused by either the [application name] "
+                + "or the containement id] contains osgi filter keywords.", e );
         }
-        
+
         m_registration.setProperties( config );
     }
 
@@ -318,7 +325,7 @@ public abstract class DefaultContentContainer
         synchronized ( this )
         {
             List<Content> contents = m_children.get( id );
-            if( contents == null )
+            if ( contents == null )
             {
                 contents = new ArrayList<Content>();
                 m_children.put( id, contents );
@@ -332,13 +339,13 @@ public abstract class DefaultContentContainer
         synchronized ( this )
         {
             List<Content> contents = m_children.get( id );
-            if( contents == null )
+            if ( contents == null )
             {
                 return false;
             }
-            
+
             contents.remove( content );
-            if( contents.isEmpty() )
+            if ( contents.isEmpty() )
             {
                 return m_children.remove( id ) != null;
             }
@@ -347,7 +354,7 @@ public abstract class DefaultContentContainer
     }
 
     /**
-     * Returns the destination id of this {@code DefaultContentContainer} instance. This method must not return 
+     * Returns the destination id of this {@code DefaultContentContainer} instance. This method must not return
      * {@code null} object.
      * 
      * @since 1.0.0
@@ -363,15 +370,13 @@ public abstract class DefaultContentContainer
     /**
      * Set the destination id of this {@code DefaultContentContainer}.
      * <p>
-     * Note:
-     * Destination id property must not be set after this {@code DefaultContentContainer} instance is registered to
-     * OSGi framework.
+     * Note: Destination id property must not be set after this {@code DefaultContentContainer} instance is registered
+     * to OSGi framework.
      * </p>
      * 
      * @param destinationId The destination id. This argument must not be {@code null}.
      * 
-     * @throws IllegalArgumentException Thrown if the specified {@code destinationId} argument is {@code null} or 
-     *                                  empty.
+     * @throws IllegalArgumentException Thrown if the specified {@code destinationId} argument is {@code null} or empty.
      * @since 1.0.0
      */
     public final void setDestinationId( String destinationId )
@@ -396,22 +401,21 @@ public abstract class DefaultContentContainer
 
             String[] serviceNames =
             {
-                    Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
+                Content.class.getName(), ContentContainer.class.getName(), ManagedService.class.getName()
             };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-            
+
             return m_registration;
         }
     }
 
-    public final Component createComponent( )
+    public final E createComponent()
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
-        return createComponent( id );
+        return (E) createComponent( id );
     }
 
     protected abstract Component createComponent( String id );
 }
-

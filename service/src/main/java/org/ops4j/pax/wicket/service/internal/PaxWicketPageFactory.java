@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Properties;
 import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.Content;
 import org.ops4j.pax.wicket.service.PageContent;
 import org.osgi.framework.BundleContext;
@@ -56,104 +57,138 @@ public final class PaxWicketPageFactory
         m_applicationName = applicationName;
     }
 
-    public void initialize()
+    public final void initialize()
     {
         Properties config = new Properties();
         config.setProperty( Content.APPLICATION_NAME, m_applicationName );
-        m_serviceRegistration =
-            m_bundleContext.registerService( IClassResolver.class.getName(), this, config );
+        m_serviceRegistration = m_bundleContext.registerService( IClassResolver.class.getName(), this, config );
         m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
         m_pageTracker.open();
     }
 
-    public void dispose()
+    public final void dispose()
     {
-        m_serviceRegistration.unregister();
-        m_contents.clear();
-        m_pageTracker.close();
+        synchronized ( this )
+        {
+            m_serviceRegistration.unregister();
+            m_contents.clear();
+            m_pageTracker.close();
+        }
     }
 
     /**
      * Creates a new page using a page class.
-     *
+     * 
      * @param pageClass The page class to instantiate
-     *
+     * 
      * @return The page
-     *
+     * 
      * @throws wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public Page newPage( final Class pageClass )
+    public final Page newPage( Class pageClass )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        
         return newPage( pageClass, null );
     }
 
     /**
-     * Creates a new Page, passing PageParameters to the Page constructor if
-     * such a constructor exists. If no such constructor exists and the
-     * parameters argument is null or empty, then any available default
-     * constructor will be used.
-     *
-     * @param pageClass  The class of Page to create
+     * Creates a new Page, passing PageParameters to the Page constructor if such a constructor exists. If no such
+     * constructor exists and the parameters argument is null or empty, then any available default constructor will be
+     * used.
+     * 
+     * @param pageClass The class of Page to create
      * @param parameters Any parameters to pass to the Page's constructor
-     *
+     * 
      * @return The new page
-     *
+     * 
      * @throws wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public Page newPage( final Class pageClass, final PageParameters parameters )
+    public final Page newPage( Class pageClass, PageParameters parameters )
+        throws IllegalArgumentException
     {
-        PageContent content = m_contents.get( pageClass );
-        if( content == null )
+        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        
+        PageContent content;
+        synchronized ( this )
+        {
+            content = m_contents.get( pageClass );
+        }
+        if ( content == null )
         {
             try
             {
                 return (Page) pageClass.newInstance();
-            } catch( InstantiationException e )
+            }
+            catch ( InstantiationException e )
             {
                 String message = "An abstract class or an interface was requested to be a Page: " + pageClass;
                 m_logger.error( message, e );
                 throw new WicketRuntimeException( message, e );
-            } catch( IllegalAccessException e )
+            }
+            catch ( IllegalAccessException e )
             {
                 String message = "The constructor in " + pageClass + " is not public and without parameters.";
                 m_logger.error( message, e );
                 throw new WicketRuntimeException( message, e );
             }
         }
+        
         return content.createPage( parameters );
     }
 
     public void add( Class pageClass, PageContent page )
+        throws IllegalArgumentException
     {
-        m_contents.put( pageClass, page );
-        m_pageClasses.put( pageClass.getName(), pageClass );
+        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        NullArgumentException.validateNotNull( page, "page" );
+
+        synchronized ( this )
+        {
+            m_contents.put( pageClass, page );
+            String tPageClassName = pageClass.getName();
+            m_pageClasses.put( tPageClassName, pageClass );
+        }
     }
 
-    public void remove( Class pageClass )
+    public final void remove( Class pageClass )
+        throws IllegalArgumentException
     {
-        m_contents.remove( pageClass );
-        m_pageClasses.remove( pageClass.getName() );
+        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        
+        synchronized ( this )
+        {
+            m_contents.remove( pageClass );
+            String tPageClassName = pageClass.getName();
+            m_pageClasses.remove( tPageClassName );
+        }
     }
 
     /**
-     * Resolves a class by name (which may or may not involve loading it; thus
-     * the name class *resolver* not *loader*).
-     *
+     * Resolves a class by name (which may or may not involve loading it; thus the name class *resolver* not *loader*).
+     * 
      * @param classname Fully qualified classname to find
-     *
+     * 
      * @return Class
      */
-    public Class resolveClass( final String classname )
+    public final Class resolveClass( String classname )
     {
-        Class resolved = m_pageClasses.get( classname );
-        if( resolved == null )
+        Class resolved;
+        synchronized ( this )
+        {
+            resolved = m_pageClasses.get( classname );
+        }
+        
+        if ( resolved == null )
         {
             try
             {
                 Class<? extends PaxWicketPageFactory> thisClass = getClass();
                 ClassLoader classLoader = thisClass.getClassLoader();
                 resolved = classLoader.loadClass( classname );
-            } catch( ClassNotFoundException e )
+            }
+            catch ( ClassNotFoundException e )
             {
                 return null;
             }

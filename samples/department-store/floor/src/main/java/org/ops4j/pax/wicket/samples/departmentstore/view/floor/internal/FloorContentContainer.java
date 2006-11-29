@@ -18,25 +18,22 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
-
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.service.DefaultContentContainer;
 import org.osgi.framework.BundleContext;
-import wicket.Component;
 
-public class FloorContentContainer extends DefaultContentContainer
+public class FloorContentContainer extends DefaultContentContainer<FloorPanel>
 {
     private final Floor m_floor;
 
-
-    public FloorContentContainer( Floor floor, String containmentId, String destinationId,
-                                  BundleContext bundleContext, String applicationname )
+    public FloorContentContainer( Floor floor, String containmentId, String destinationId, BundleContext bundleContext,
+        String applicationname )
     {
         super( bundleContext, applicationname, containmentId, destinationId );
-        m_floor  = floor;
+        m_floor = floor;
     }
 
-    protected Component createComponent( String id )
+    protected FloorPanel createComponent( String id )
     {
         return new FloorPanel( id, this, m_floor );
     }

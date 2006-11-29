@@ -6,8 +6,9 @@ Bundle-Version: 1.0.0
 Bundle-Vendor: OPS4J
 Bundle-Localization: plugin
 Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.Activator
-Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model,
- org.ops4j.pax.wicket.service,
+Import-Package: org.apache.log4j;version="[1.2.0,1.3.0)";provider="paxlogging",
+ org.ops4j.pax.wicket.samples.departmentstore.model,
+ org.ops4j.pax.wicket.service;version="[1.0.0,1.1.0)",
  org.osgi.framework;version="1.3.0",
  org.osgi.service.cm;version="1.2.0",
  wicket;version="[1.2.0,1.3.0)",

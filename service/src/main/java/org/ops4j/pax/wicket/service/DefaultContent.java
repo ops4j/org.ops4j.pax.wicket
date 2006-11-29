@@ -29,7 +29,7 @@ import org.osgi.framework.Constants;
 import wicket.Component;
 
 public abstract class DefaultContent<E extends Component>
-    implements Content, ManagedService
+    implements Content<E>, ManagedService
 {
     private BundleContext m_bundleContext;
     private Properties m_properties;
@@ -37,7 +37,7 @@ public abstract class DefaultContent<E extends Component>
 
     /**
      * Construct an instance with {@code DefaultContent}.
-     *  
+     * 
      * @param bundleContext The bundle context. This argument must not be {@code null}.
      * @param contentId The content id. This argument must not be {@code null} or empty.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
@@ -52,7 +52,7 @@ public abstract class DefaultContent<E extends Component>
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( contentId, "contentId" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        
+
         m_properties = new Properties();
         m_properties.put( Constants.SERVICE_PID, CONTENTID + "/" + contentId );
         m_bundleContext = bundleContext;
@@ -87,7 +87,7 @@ public abstract class DefaultContent<E extends Component>
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
-        
+
         synchronized ( this )
         {
             m_properties.put( DESTINATIONID, destinationId );
@@ -99,13 +99,13 @@ public abstract class DefaultContent<E extends Component>
      * 
      * @since 1.0.0
      */
-    public final Component createComponent( )
+    public final E createComponent()
         throws IllegalArgumentException
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String wicketId = destinationId.substring( pos + 1 );
-        
+
         return createComponent( wicketId );
     }
 
@@ -171,7 +171,7 @@ public abstract class DefaultContent<E extends Component>
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        
+
         synchronized ( this )
         {
             m_properties.put( APPLICATION_NAME, applicationName );
@@ -180,7 +180,7 @@ public abstract class DefaultContent<E extends Component>
 
     /**
      * Create component with the specified {@code wicketId}.
-     *
+     * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
      * 
      * @return The wicket component with the specified {@code wicketId}.
@@ -194,7 +194,7 @@ public abstract class DefaultContent<E extends Component>
 
     public final void updated( Dictionary config )
     {
-        if( config == null )
+        if ( config == null )
         {
             synchronized ( this )
             {
@@ -202,13 +202,13 @@ public abstract class DefaultContent<E extends Component>
             }
             return;
         }
-        
+
         String destinationId = (String) config.get( DESTINATIONID );
         setDestinationId( destinationId );
-        
+
         String appName = (String) config.get( APPLICATION_NAME );
         setApplicationName( appName );
-        
+
         synchronized ( this )
         {
             m_registration.setProperties( config );
@@ -224,12 +224,15 @@ public abstract class DefaultContent<E extends Component>
      */
     public final ServiceRegistration register()
     {
-        String[] serviceNames = { Content.class.getName(), ManagedService.class.getName() };
-        
+        String[] serviceNames =
+        {
+            Content.class.getName(), ManagedService.class.getName()
+        };
+
         synchronized ( this )
         {
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-            
+
             return m_registration;
         }
     }
