@@ -18,19 +18,19 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
-
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.service.DefaultContent;
 import org.osgi.framework.BundleContext;
+
 import wicket.Component;
 
 /**
  * {@code FranchiseeContent}
- *
- * @author Edward Yakop
+ * 
+ * @author Niclas Hedhman, Edward Yakop
  * @since 1.0.0
  */
-public class FranchiseeContent extends DefaultContent
+public class FranchiseeContent extends DefaultContent<FranchiseePanel>
 {
 
     private Franchisee m_franchisee;
@@ -41,7 +41,7 @@ public class FranchiseeContent extends DefaultContent
         m_franchisee = franchisee;
     }
 
-    protected Component createComponent( String id )
+    protected FranchiseePanel createComponent( String id, Component parent )
     {
         return new FranchiseePanel( id, m_franchisee );
     }
