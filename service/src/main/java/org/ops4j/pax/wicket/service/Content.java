@@ -18,7 +18,6 @@
  */
 package org.ops4j.pax.wicket.service;
 
-
 import wicket.Component;
 
 public interface Content<E extends Component>
@@ -47,10 +46,10 @@ public interface Content<E extends Component>
     /**
      * Returns the destination id of this {@code Content} instance. This method must not return {@code null} object.
      * <p>
-     * The destination id is constructed by concatenating the containment id, ".", and the wicket component id. 
-     * For example, If the containment id is "overview.tabs" and the wicket component id is "quickMenu", the returned
+     * The destination id is constructed by concatenating the containment id, ".", and the wicket component id. For
+     * example, If the containment id is "overview.tabs" and the wicket component id is "quickMenu", the returned
      * destination id is "overview.tabs.quickMenu".
-     * </p>  
+     * </p>
      * 
      * @return The destination id of this {@code Content} instance.
      * @since 1.0.0
@@ -58,11 +57,25 @@ public interface Content<E extends Component>
     String getDestinationId();
 
     /**
-     * Create the wicket component represented by this {@code Content} instance. This method must not return 
+     * Create the wicket component represented by this {@code Content} instance. This method must not return
      * {@code null} object.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
+     * 
+     * @param parent The parent component of the component to be created by this method. This argument must not be
+     *            {@code null}.
      * 
      * @return The wicket component represented by this {@code Content} instance.
-     * @since 1.0.0 
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
+     * @since 1.0.0
      */
-    E createComponent();
+    <T extends Component> E createComponent( T parent );
 }

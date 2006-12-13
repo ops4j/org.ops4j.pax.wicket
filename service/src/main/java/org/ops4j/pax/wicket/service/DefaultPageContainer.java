@@ -40,12 +40,13 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
+import wicket.MarkupContainer;
 
 public class DefaultPageContainer
     implements ContentContainer, ContentTrackingCallback, ManagedService
 {
     protected final Logger m_logger = Logger.getLogger( DefaultPageContainer.class );
-    
+
     private Hashtable<String, String> m_properties;
     private BundleContext m_bundleContext;
     private HashMap<String, List<Content>> m_children;
@@ -88,39 +89,40 @@ public class DefaultPageContainer
         m_properties.put( Content.APPLICATION_NAME, applicationName );
     }
 
-    public final <T extends Component> List<T> createComponents( String wicketId )
+    @SuppressWarnings("unchecked")
+    public final <V extends Component, T extends Component> List<V> createComponents( String wicketId, T parent )
     {
-        ArrayList<T> result = new ArrayList<T>();
-        
-        List<Content> contents = getContents( wicketId );
-        if( !contents.isEmpty() )
+        ArrayList<V> result = new ArrayList<V>();
+
+        List<Content<V>> contents = getContents( wicketId );
+        if ( !contents.isEmpty() )
         {
             Locale locale = null;
-            for( Content content : contents )
+            for ( Content content : contents )
             {
-                T component = ( T ) content.createComponent();
-                
-                if( locale != null )
+                V component = (V) content.createComponent( null );
+
+                if ( locale != null )
                 {
                     locale = component.getLocale();
                 }
-                
+
                 result.add( component );
             }
 
-            Comparator<T> comparator = getComparator( wicketId, locale );
-            if( comparator != null )
+            Comparator<V> comparator = getComparator( wicketId, locale );
+            if ( comparator != null )
             {
                 Collections.sort( result, comparator );
             }
         }
-        
+
         return result;
     }
-    
+
     /**
-     * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. 
-     * Returns {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
+     * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. Returns
+     * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      * 
      * @param contentId The content id. This argument must not be {@code null}.
      * @param locale The locale. This argument must not be {@code null}.
@@ -129,10 +131,10 @@ public class DefaultPageContainer
      * 
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * 
-     * @see ContentContainer#createComponents(String)
+     * @see ContentContainer#createComponents(String, MarkupContainer)
      * @since 1.0.0
      */
-    public <T extends Component> Comparator<T> getComparator( String contentId, Locale locale )
+    public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
         throws IllegalArgumentException
     {
         return null;
@@ -141,10 +143,8 @@ public class DefaultPageContainer
     /**
      * Dispose this {@code DefaultPageContainer} instance.
      * <p>
-     * Note: 
-     * Dispose does not unregister this {@code DefaultPageContainer}, and 
-     * ensure that dispose is only called after this {@code DefaultPageContainer} instance is unregistered from OSGi
-     * container. 
+     * Note: Dispose does not unregister this {@code DefaultPageContainer}, and ensure that dispose is only called
+     * after this {@code DefaultPageContainer} instance is unregistered from OSGi container.
      * </p>
      * 
      * @throws IllegalStateException Thrown if this content tracker has not been registered.
@@ -158,11 +158,11 @@ public class DefaultPageContainer
     {
         synchronized ( this )
         {
-            if( m_contentTracker == null )
+            if ( m_contentTracker == null )
             {
                 throw new IllegalStateException( "DefaultPageContainer [" + this + "] has not been registered." );
             }
-            
+
             m_contentTracker.close();
             m_contentTracker = null;
         }
@@ -182,11 +182,11 @@ public class DefaultPageContainer
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
         NullArgumentException.validateNotNull( content, "content" );
-        
+
         synchronized ( this )
         {
             List<Content> contents = m_children.get( wicketId );
-            if( contents == null )
+            if ( contents == null )
             {
                 contents = new ArrayList<Content>();
                 m_children.put( wicketId, contents );
@@ -200,7 +200,7 @@ public class DefaultPageContainer
      * Remove the specified {@code content} to this {@code DefaultPageContainer} and unmapped it as {@code wicketId}.
      * 
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
-     * @param content  The content. This argument must not be {@code null}.
+     * @param content The content. This argument must not be {@code null}.
      * 
      * @return A {@code boolean} indicator whether removal is successfull.
      * 
@@ -212,27 +212,27 @@ public class DefaultPageContainer
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
         NullArgumentException.validateNotNull( content, "content" );
-        
+
         synchronized ( this )
         {
             List<Content> contents = m_children.get( wicketId );
-            if( contents == null )
+            if ( contents == null )
             {
                 return false;
             }
             contents.remove( content );
-            if( contents.isEmpty() )
+            if ( contents.isEmpty() )
             {
                 return m_children.remove( wicketId ) != null;
             }
-            
+
             return false;
         }
     }
-    
+
     /**
-     * Returns list of {@code Content} instnaces of the specified {@code wicketId}.
-     * Returns an empty list if there is no content for the specified {@code wicketId}.
+     * Returns list of {@code Content} instnaces of the specified {@code wicketId}. Returns an empty list if there is
+     * no content for the specified {@code wicketId}.
      * 
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * 
@@ -240,26 +240,27 @@ public class DefaultPageContainer
      * 
      * @throws IllegalArgumentException
      */
-    public final <T extends Content> List<T> getContents( String wicketId )
+    @SuppressWarnings("unchecked")
+    public final <V extends Content> List<V> getContents( String wicketId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        
-        List<T> contents;
+
+        List<V> contents;
         synchronized ( this )
         {
-            contents = (List<T>) m_children.get( wicketId );
-            
-            if( contents != null )
-            {
-                contents = new ArrayList<T>( contents );
-            }
-            else
-            {
-                contents = new ArrayList<T>();
-            }
+            contents = (List<V>) m_children.get( wicketId );
         }
-        
+
+        if ( contents != null )
+        {
+            contents = new ArrayList<V>( contents );
+        }
+        else
+        {
+            contents = new ArrayList<V>();
+        }
+
         return contents;
     }
 
@@ -268,11 +269,11 @@ public class DefaultPageContainer
     {
         synchronized ( this )
         {
-            if( m_contentTracker != null )
+            if ( m_contentTracker != null )
             {
                 throw new IllegalStateException( "DefaultPageContainer [" + this + "] has already been registered." );
             }
-            
+
             String applicationName = getApplicationName();
             String containmentId = getContainmentId();
             m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, containmentId );
@@ -280,10 +281,10 @@ public class DefaultPageContainer
 
             String[] serviceNames =
             {
-                    ContentContainer.class.getName(), ManagedService.class.getName()
+                ContentContainer.class.getName(), ManagedService.class.getName()
             };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-            
+
             return m_registration;
         }
     }
@@ -291,62 +292,65 @@ public class DefaultPageContainer
     public void updated( Dictionary config )
         throws ConfigurationException
     {
-        if( config == null )
+        if ( config == null )
         {
             synchronized ( this )
             {
                 m_registration.setProperties( m_properties );
             }
-            
+
             return;
         }
-        
+
         String newContainmentId = (String) config.get( Content.CONTAINMENTID );
         String existingContainmentId = getContainmentId();
-        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
+        if ( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
         }
-        
+
         synchronized ( this )
         {
             m_children.clear();
         }
-        
+
         setContainmentId( newContainmentId );
-        if( newContainmentId != null )
+        if ( newContainmentId != null )
         {
             try
             {
-                ServiceReference[] services = m_bundleContext.getServiceReferences( Content.class.getName(), null);
-                if( services == null )
+                String tServiceClassName = Content.class.getName();
+                ServiceReference[] services = m_bundleContext.getServiceReferences( tServiceClassName, null );
+                if ( services == null )
                 {
                     return;
                 }
-                for( ServiceReference service : services )
+                for ( ServiceReference service : services )
                 {
                     m_contentTracker.addingService( service );
                 }
-            } catch( InvalidSyntaxException e )
+            }
+            catch ( InvalidSyntaxException e )
             {
                 // Can not happen. Right!
                 e.printStackTrace();
             }
         }
-        
+
         m_registration.setProperties( config );
     }
 
     @Override
-    protected void finalize() throws Throwable
+    protected void finalize()
+        throws Throwable
     {
         synchronized ( this )
         {
-            if( m_contentTracker != null )
+            if ( m_contentTracker != null )
             {
                 m_logger.warn( "DefaultPageContainer [" + this + "] is not disposed." );
             }
-            
+
             dispose();
         }
     }

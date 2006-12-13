@@ -22,10 +22,11 @@ import java.util.Dictionary;
 import java.util.Properties;
 
 import org.ops4j.lang.NullArgumentException;
-import org.osgi.service.cm.ManagedService;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ManagedService;
+
 import wicket.Component;
 
 public abstract class DefaultContent<E extends Component>
@@ -95,18 +96,34 @@ public abstract class DefaultContent<E extends Component>
     }
 
     /**
-     * Create the wicket component with the specified {@code locale}.
+     * Create the wicket component represented by this {@code Content} instance. This method must not return
+     * {@code null} object.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
      * 
+     * @param parent The parent component of the component to be created by this method. This argument must not be
+     *            {@code null}.
+     * 
+     * @return The wicket component represented by this {@code Content} instance.
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
      * @since 1.0.0
      */
-    public final E createComponent()
+    public final <T extends Component> E createComponent( T parent )
         throws IllegalArgumentException
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String wicketId = destinationId.substring( pos + 1 );
 
-        return createComponent( wicketId );
+        return createComponent( wicketId, parent );
     }
 
     /**
@@ -180,16 +197,26 @@ public abstract class DefaultContent<E extends Component>
 
     /**
      * Create component with the specified {@code wicketId}.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
      * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
+     * @param parent The parent component of created component of this method. This argument must not be {@code null}.
      * 
      * @return The wicket component with the specified {@code wicketId}.
      * 
-     * @throws IllegalArgumentException Thrown if the specified {@code wicketId} argument is {@code null}.
+     * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      * 
      * @since 1.0.0
      */
-    protected abstract E createComponent( String wicketId )
+    protected abstract <T extends Component> E createComponent( String wicketId, T parent )
         throws IllegalArgumentException;
 
     public final void updated( Dictionary config )

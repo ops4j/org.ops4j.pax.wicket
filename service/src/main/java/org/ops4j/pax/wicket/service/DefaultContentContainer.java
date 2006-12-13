@@ -40,6 +40,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
+import wicket.MarkupContainer;
 
 public abstract class DefaultContentContainer<E extends Component>
     implements ContentContainer, Content<E>, ContentTrackingCallback, ManagedService
@@ -180,12 +181,15 @@ public abstract class DefaultContentContainer<E extends Component>
      * Create the wicket component represented by this {@code Content} instance. This method must not return
      * {@code null} object.
      * 
+     *  @param parent The parent of created components. This argument must not be {@code null}.
+     * 
      * @return The wicket component represented by this {@code Content} instance.
      * @since 1.0.0
      */
-    public final <T extends Component> List<T> createComponents( String id )
+    @SuppressWarnings("unchecked")
+    public final <V extends Component, T extends Component> List<V> createComponents( String id, T parent )
     {
-        ArrayList<T> result = new ArrayList<T>();
+        ArrayList<V> result = new ArrayList<V>();
 
         List<Content> contents = getContents( id );
         if ( !contents.isEmpty() )
@@ -193,7 +197,7 @@ public abstract class DefaultContentContainer<E extends Component>
             Locale locale = null;
             for ( Content content : contents )
             {
-                T component = (T) content.createComponent();
+                V component = (V) content.createComponent( parent );
 
                 if ( locale == null )
                 {
@@ -202,7 +206,7 @@ public abstract class DefaultContentContainer<E extends Component>
                 result.add( component );
             }
 
-            Comparator<T> comparator = getComparator( id, locale );
+            Comparator<V> comparator = getComparator( id, locale );
             if ( comparator != null )
             {
                 Collections.sort( result, comparator );
@@ -222,24 +226,25 @@ public abstract class DefaultContentContainer<E extends Component>
      * 
      * @throws IllegalArgumentException
      */
-    public final <T extends Content> List<T> getContents( String wicketId )
+    @SuppressWarnings("unchecked")
+    public final <V extends Content> List<V> getContents( String wicketId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
 
-        List<T> contents;
+        List<V> contents;
         synchronized ( this )
         {
-            contents = (List<T>) m_children.get( wicketId );
+            contents = (List<V>) m_children.get( wicketId );
+        }
 
-            if ( contents != null )
-            {
-                contents = new ArrayList<T>( contents );
-            }
-            else
-            {
-                contents = new ArrayList<T>();
-            }
+        if ( contents != null )
+        {
+            contents = new ArrayList<V>( contents );
+        }
+        else
+        {
+            contents = new ArrayList<V>();
         }
 
         return contents;
@@ -253,9 +258,9 @@ public abstract class DefaultContentContainer<E extends Component>
      * @param locale The current active locale. This argument must not be {@code null}.
      * 
      * @return The comparator for the specified {@code contentId}.
-     * @see ContentContainer#createComponents(String)
+     * @see ContentContainer#createComponents(String, MarkupContainer)
      */
-    public <T extends Component> Comparator<T> getComparator( String contentId, Locale locale )
+    public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
         throws IllegalArgumentException
     {
         return null;
@@ -409,13 +414,61 @@ public abstract class DefaultContentContainer<E extends Component>
         }
     }
 
-    public final E createComponent()
+    /**
+     * Create the wicket component represented by this {@code Content} instance. This method must not return
+     * {@code null} object.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
+     * 
+     * @param parent The parent component of the component to be created by this method. This argument must not be
+     *            {@code null}.
+     * 
+     * @return The wicket component represented by this {@code Content} instance.
+     * 
+     * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
+     * @since 1.0.0
+     */
+    public final <T extends Component> E createComponent( T parent )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( parent, "parent" );
+
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
-        return (E) createComponent( id );
+        return createComponent( id, parent );
     }
 
-    protected abstract Component createComponent( String id );
+    /**
+     * Create component represented by this {@code DefaultContentContainer} with the specified {@code wicketId} and
+     * {@code parent}.
+     * 
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
+     * 
+     * @param wicketId The wicket id. This argument must not be {@code null}.
+     * @param parent The parent component. This argument must not be {@code null}.
+     * 
+     * @return A new instance of wicket component represented by this {@code DefaultContentContainer}.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * 
+     * @since 1.0.0
+     */
+    protected abstract <T extends Component> E createComponent( String wicketId, T parent )
+        throws IllegalArgumentException;
 }

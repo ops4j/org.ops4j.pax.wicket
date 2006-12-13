@@ -18,11 +18,11 @@
  */
 package org.ops4j.pax.wicket.service;
 
-import wicket.Component;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import wicket.Component;
 
 public interface ContentContainer
 {
@@ -37,24 +37,35 @@ public interface ContentContainer
     String getContainmentId();
 
     /**
-     * Create components that has the specified {@code id} id. Returns an empty list
-     * if there is no component with the specified {@code id}.
+     * Create components that has the specified {@code id} id. Returns an empty list if there is no component with the
+     * specified {@code id}.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
+     * component created by this method.</li>
+     * </ul>
+     * </p>
      * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
-     * @return A list of component id.
+     * @param parent The parent of created components. This argument must not be {@code null}.
      * 
-     * @throws IllegalArgumentException Thrown if the specified {@code wicketId} argument is {@code null}.
+     * @return A list of component with the specified {@code wicketId} and {@code parent}.
+     * 
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * 
      * @since 1.0.0
      */
-    <T extends Component> List<T> createComponents( String wicketId )
+    <E extends Component, T extends Component> List<E> createComponents( String wicketId, T parent )
         throws IllegalArgumentException;
-    
+
     /**
-     * Returns the comparator for component with the specified {@code id}.
-     * Returns {@code null} if the comparator does not exists.
+     * Returns the comparator for component with the specified {@code id}. Returns {@code null} if the comparator does
+     * not exists.
      * 
-     * @param <T> A component class.
+     * @param <E> A component class.
      * @param id The component with the specified {@code id}.
      * @return The comparator of the specified {@code id}.
      * 
@@ -62,12 +73,12 @@ public interface ContentContainer
      * 
      * @since 1.0.0
      */
-    <T extends Component> Comparator<T> getComparator( String id, Locale locale )
+    <E extends Component> Comparator<E> getComparator( String id, Locale locale )
         throws IllegalArgumentException;
 
     /**
      * Dispose this {@code ContentContainer} instance.
-     *
+     * 
      * @since 1.0.0
      */
     void dispose();
