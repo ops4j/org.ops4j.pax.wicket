@@ -18,11 +18,12 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.service.ContentContainer;
+
 import wicket.Component;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
@@ -32,38 +33,43 @@ import wicket.model.Model;
 
 /**
  * {@code FloorPanel}
- *
+ * 
  * @author Edward Yakop
  * @since 1.0.0
  */
-public class FloorPanel extends Panel
+final class FloorPanel extends Panel
 {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public static final String WICKET_ID_NAME_LABEL = "name";
     private static final String WICKET_ID_FRANCHISEE = "franchisee";
     private static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    public FloorPanel( String id, ContentContainer container, Floor floor )
+    FloorPanel( String id, ContentContainer container, Floor floor )
     {
         super( id, new Model( floor.getName() ) );
-        final List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE );
-        if( franchisees.isEmpty() )
+
+        ListView listView = new ListView( WICKET_ID_FRANCHISEES )
         {
-            franchisees.add( new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." ) );
-        }
-        ListView listView = new ListView( WICKET_ID_FRANCHISEES, franchisees )
-        {
-            
             private static final long serialVersionUID = 1L;
 
             protected void populateItem( final ListItem item )
             {
-                item.add( (Component) item.getModelObject() );
+                Component modelObject = (Component) item.getModelObject();
+                item.add( modelObject );
             }
         };
-        
+
+        List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, listView );
+        if ( franchisees.isEmpty() )
+        {
+            Label tLabel = new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." );
+            franchisees.add( tLabel );
+        }
+        Model listViewModel = new Model( (Serializable) franchisees );
+        listView.setModel( listViewModel );
+
         add( listView );
     }
 

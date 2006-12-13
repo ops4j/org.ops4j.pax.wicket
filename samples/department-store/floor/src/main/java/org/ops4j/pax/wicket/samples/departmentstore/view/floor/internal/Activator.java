@@ -19,6 +19,8 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
@@ -32,12 +34,18 @@ public class Activator
     implements BundleActivator
 {
 
-    private List<FloorContentContainer> m_containers;
+    private static Activator INSTANCE;
+
+    private HashMap<String, FloorContentContainer> m_containers;
     private List<ServiceRegistration> m_registrations;
 
     public Activator()
     {
-        m_containers = new ArrayList<FloorContentContainer>();
+        synchronized ( Activator.class )
+        {
+            INSTANCE = this;
+        }
+        m_containers = new HashMap<String, FloorContentContainer>();
         m_registrations = new ArrayList<ServiceRegistration>();
     }
 
@@ -50,11 +58,12 @@ public class Activator
         List<Floor> floors = departmentStore.getFloors();
 
         String destinationId = "swp.floor";
-        for( Floor floor : floors )
+        for ( Floor floor : floors )
         {
-            FloorContentContainer container =
-                new FloorContentContainer( floor, floor.getName(), destinationId, bundleContext, "departmentstore" );
-            m_containers.add( container );
+            String floorName = floor.getName();
+            FloorContentContainer container = new FloorContentContainer( floor, floorName, destinationId,
+                bundleContext, "departmentstore" );
+            m_containers.put( floorName, container );
             container.setDestinationId( destinationId );
             container.setContainmentId( floor.getName() );
             ServiceRegistration registration = container.register();
@@ -65,14 +74,29 @@ public class Activator
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        for( ServiceRegistration registration : m_registrations )
+        for ( ServiceRegistration registration : m_registrations )
         {
             registration.unregister();
         }
         m_registrations.clear();
-        for( ContentContainer floor : m_containers )
+
+        Collection<FloorContentContainer> floorContainers = m_containers.values();
+        for ( ContentContainer floor : floorContainers )
         {
             floor.dispose();
         }
+    }
+
+    static final Activator getInstance()
+    {
+        synchronized ( Activator.class )
+        {
+            return INSTANCE;
+        }
+    }
+
+    final FloorContentContainer getFloorContentContainer( String containerId )
+    {
+        return m_containers.get( containerId );
     }
 }
