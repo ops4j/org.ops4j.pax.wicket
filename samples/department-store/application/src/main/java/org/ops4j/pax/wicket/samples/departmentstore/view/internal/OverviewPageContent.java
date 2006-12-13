@@ -17,7 +17,6 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
 import org.ops4j.pax.wicket.service.PageContent;
 import org.ops4j.pax.wicket.service.PageFinder;
@@ -32,7 +31,7 @@ public class OverviewPageContent extends AbstractPageContent<OverviewPage>
     private BundleContext m_context;
     private DefaultPageContainer m_pageContainer;
 
-    public OverviewPageContent( BundleContext context, DefaultPageContainer  pageContainer, String applicationName, String pageName )
+    public OverviewPageContent( BundleContext context, DefaultPageContainer pageContainer, String applicationName, String pageName )
     {
         super(context, "overview", applicationName, pageName );
         m_context = context;

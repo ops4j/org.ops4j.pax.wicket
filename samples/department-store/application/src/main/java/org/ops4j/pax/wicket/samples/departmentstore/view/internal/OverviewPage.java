@@ -16,13 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package org.ops4j.pax.wicket.samples.departmentstore.view;
+package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.ops4j.pax.wicket.service.ContentContainer;
+import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
+import org.ops4j.pax.wicket.service.Content;
+import org.ops4j.pax.wicket.service.DefaultPageContainer;
+
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
@@ -30,23 +33,22 @@ import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.WebPage;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.link.BookmarkablePageLink;
-import wicket.markup.html.panel.Panel;
-import wicket.model.Model;
 
 @AuthorizeInstantiation("user")
-public final class OverviewPage extends WebPage
+final class OverviewPage extends WebPage
 {
 
     private static final long serialVersionUID = 1L;
-    
+
     private static final String WICKET_ID_LABEL = "storeName";
 
-    public OverviewPage( ContentContainer container, String storeName, Class aboutPageClass )
+    @SuppressWarnings("unchecked")
+    public OverviewPage( DefaultPageContainer container, String storeName, Class aboutPageClass )
     {
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );
         Component link;
-        if( aboutPageClass == null )
+        if ( aboutPageClass == null )
         {
             link = new Label( "aboutlink", "" );
         }
@@ -55,31 +57,30 @@ public final class OverviewPage extends WebPage
             link = new BookmarkablePageLink( "aboutlink", aboutPageClass );
         }
         add( link );
-        
+
         Locale locale = getLocale();
-        final List<Component> floors = container.createComponents( "floor" );
-        List tabs = new ArrayList();
-        for( final Component floor : floors )
+        List<Content<Component>> contents = container.getContents( "floor" );
+        int numberOfContents = contents.size();
+        List<AbstractTab> tabs = new ArrayList<AbstractTab>( numberOfContents );
+        for ( Content content : contents )
         {
-            String tabName = (String) floor.getModelObject();
-            tabs.add( new AbstractTab( new Model( tabName ) )
+            if ( content instanceof OverviewTabContent )
             {
-                public Panel getPanel( String panelId )
-                {
-                    Panel panel = new FloorTabPanel( panelId );
-                    panel.add( floor );
-                    return panel;
-                }
+                OverviewTabContent otc = (OverviewTabContent) content;
+                AbstractTab tab = otc.createTab( locale );
+                tabs.add( tab );
             }
-            );
         }
-        if( tabs.isEmpty() )
+
+        if ( tabs.isEmpty() )
         {
-            add( new Label( "floors", "No Floors installed yet." ) );
+            Label niceMsg = new Label( "floors", "No Floors installed yet." );
+            add( niceMsg );
         }
         else
         {
-            add( new AjaxTabbedPanel( "floors", tabs ) );
+            AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel( "floors", tabs );
+            add( tabbedPanel );
         }
     }
 }

@@ -18,7 +18,6 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewPage;
 import org.ops4j.pax.wicket.service.DefaultPageContainer;
 import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleActivator;
