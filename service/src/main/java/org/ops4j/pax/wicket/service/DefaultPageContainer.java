@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service;
 
@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
-
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
@@ -38,9 +37,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
 import wicket.Component;
-import wicket.MarkupContainer;
 
 public class DefaultPageContainer
     implements ContentContainer, ContentTrackingCallback, ManagedService
@@ -123,15 +120,15 @@ public class DefaultPageContainer
     /**
      * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. Returns
      * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
-     * 
+     *
      * @param contentId The content id. This argument must not be {@code null}.
      * @param locale The locale. This argument must not be {@code null}.
-     * 
+     *
      * @return The comparator for the specified {@code contentId}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     * 
-     * @see ContentContainer#createComponents(String, MarkupContainer)
+     *
+     * @see ContentContainer#createComponents(String, wicket.Component)
      * @since 1.0.0
      */
     public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
@@ -146,11 +143,11 @@ public class DefaultPageContainer
      * Note: Dispose does not unregister this {@code DefaultPageContainer}, and ensure that dispose is only called
      * after this {@code DefaultPageContainer} instance is unregistered from OSGi container.
      * </p>
-     * 
+     *
      * @throws IllegalStateException Thrown if this content tracker has not been registered.
-     * 
+     *
      * @see ServiceRegistration#unregister()
-     * 
+     *
      * @since 1.0.0
      */
     public final void dispose()
@@ -170,10 +167,10 @@ public class DefaultPageContainer
 
     /**
      * Add the specified {@code content} to this {@code DefaultPageContainer} and mapped it as {@code wicketId}.
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
@@ -198,12 +195,12 @@ public class DefaultPageContainer
 
     /**
      * Remove the specified {@code content} to this {@code DefaultPageContainer} and unmapped it as {@code wicketId}.
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
-     * 
+     *
      * @return A {@code boolean} indicator whether removal is successfull.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
@@ -233,16 +230,16 @@ public class DefaultPageContainer
     /**
      * Returns list of {@code Content} instnaces of the specified {@code wicketId}. Returns an empty list if there is
      * no content for the specified {@code wicketId}.
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
-     * 
+     *
      * @return List of {@code Content} of the specified {@code wicketId}.
-     * 
-     * @throws IllegalArgumentException
+     *
+     * @throws NullArgumentException If the wicketId is null.
      */
     @SuppressWarnings("unchecked")
     public final <V extends Content> List<V> getContents( String wicketId )
-        throws IllegalArgumentException
+        throws NullArgumentException
     {
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
 
@@ -350,8 +347,8 @@ public class DefaultPageContainer
             {
                 m_logger.warn( "DefaultPageContainer [" + this + "] is not disposed." );
             }
-
             dispose();
         }
+        super.finalize();
     }
 }

@@ -38,6 +38,7 @@
   </scm>
   <modules>
     <module>service</module>
+    <module>toolkit</module>
     <module>samples</module>
   </modules>
   <dependencyManagement>

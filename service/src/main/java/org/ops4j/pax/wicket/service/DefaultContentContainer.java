@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service;
 
@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.service.internal.ContentTrackingCallback;
@@ -38,9 +37,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
 import wicket.Component;
-import wicket.MarkupContainer;
 
 public abstract class DefaultContentContainer<E extends Component>
     implements ContentContainer, Content<E>, ContentTrackingCallback, ManagedService
@@ -55,12 +52,12 @@ public abstract class DefaultContentContainer<E extends Component>
 
     /**
      * Construct an instance of {@code DefaultContentContainer} with the specified arguments.
-     * 
+     *
      * @param bundleContext The bundle context. This argument must not be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
      * @param containmentId The containment id. This argument must not be {@code null} or empty.
      * @param destinationId The destination id. This argument must not be {@code null} or empty.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
@@ -86,7 +83,7 @@ public abstract class DefaultContentContainer<E extends Component>
 
     /**
      * Returns the application name of this {@code DefaultContentContainer} instance belongs to.
-     * 
+     *
      * @return The application name of this {@code DefaultContentContainer} instance belongs to.
      * @since 1.0.0
      */
@@ -104,9 +101,9 @@ public abstract class DefaultContentContainer<E extends Component>
      * Note: Application name property must not be set after this {@code DefaultContentContainer} instance is registered
      * to OSGi framework.
      * </p>
-     * 
+     *
      * @param applicationName The application name. This argument must not be {@code null}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the specified {@code applicationName} argument is {@code null} or
      *             empty.
      * @since 1.0.0
@@ -133,7 +130,7 @@ public abstract class DefaultContentContainer<E extends Component>
 
     /**
      * Override this method to handle additional dispose.
-     * 
+     *
      * @since 1.0.0
      */
     protected void onDispose()
@@ -143,7 +140,7 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Returns the containment id of this {@code DefaultContentContainer} instance. This method must not return
      * {@code null} object.
-     * 
+     *
      * @since 1.0.0
      */
     public final String getContainmentId()
@@ -160,9 +157,9 @@ public abstract class DefaultContentContainer<E extends Component>
      * Note: Containment id property must not be set after this {@code DefaultContentContainer} instance is registered
      * to OSGi framework.
      * </p>
-     * 
+     *
      * @param containmentId The containment id. This argument must not be {@code null}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the specified {@code containmentId} argument is {@code null} or empty.
      * @since 1.0.0
      */
@@ -180,9 +177,9 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Create the wicket component represented by this {@code Content} instance. This method must not return
      * {@code null} object.
-     * 
+     *
      *  @param parent The parent of created components. This argument must not be {@code null}.
-     * 
+     *
      * @return The wicket component represented by this {@code Content} instance.
      * @since 1.0.0
      */
@@ -219,11 +216,11 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Returns list of {@code Content} instnaces of the specified {@code wicketId}. Returns an empty list if there is
      * no content for the specified {@code wicketId}.
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
-     * 
+     *
      * @return List of {@code Content} of the specified {@code wicketId}.
-     * 
+     *
      * @throws IllegalArgumentException
      */
     @SuppressWarnings("unchecked")
@@ -253,12 +250,12 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Overrides this method to create a sorting mechanism for content with the specified {@code contentId}. Returns
      * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
-     * 
+     *
      * @param contentId The content id. This argument must not be {@code null}.
      * @param locale The current active locale. This argument must not be {@code null}.
-     * 
+     *
      * @return The comparator for the specified {@code contentId}.
-     * @see ContentContainer#createComponents(String, MarkupContainer)
+     * @see ContentContainer#createComponents(String, wicket.Component) 
      */
     public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
         throws IllegalArgumentException
@@ -361,7 +358,7 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Returns the destination id of this {@code DefaultContentContainer} instance. This method must not return
      * {@code null} object.
-     * 
+     *
      * @since 1.0.0
      */
     public final String getDestinationId()
@@ -378,9 +375,9 @@ public abstract class DefaultContentContainer<E extends Component>
      * Note: Destination id property must not be set after this {@code DefaultContentContainer} instance is registered
      * to OSGi framework.
      * </p>
-     * 
+     *
      * @param destinationId The destination id. This argument must not be {@code null}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the specified {@code destinationId} argument is {@code null} or empty.
      * @since 1.0.0
      */
@@ -426,12 +423,12 @@ public abstract class DefaultContentContainer<E extends Component>
      * component created by this method.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param parent The parent component of the component to be created by this method. This argument must not be
      *            {@code null}.
-     * 
+     *
      * @return The wicket component represented by this {@code Content} instance.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
      * @since 1.0.0
      */
@@ -449,7 +446,7 @@ public abstract class DefaultContentContainer<E extends Component>
     /**
      * Create component represented by this {@code DefaultContentContainer} with the specified {@code wicketId} and
      * {@code parent}.
-     * 
+     *
      * <p>
      * General convention:<br/>
      * <ul>
@@ -459,14 +456,14 @@ public abstract class DefaultContentContainer<E extends Component>
      * component created by this method.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null}.
      * @param parent The parent component. This argument must not be {@code null}.
-     * 
+     *
      * @return A new instance of wicket component represented by this {@code DefaultContentContainer}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     * 
+     *
      * @since 1.0.0
      */
     protected abstract <T extends Component> E createComponent( String wicketId, T parent )

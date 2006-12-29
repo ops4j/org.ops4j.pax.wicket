@@ -14,12 +14,17 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service;
 
 import wicket.Component;
 
+/** This is the model interface of Content.
+ * Content is categorized as the model of a Wicket component hierarchy, which can be unloaded, replaced
+ * and moved in runtime, without needing to shut the application down.
+ *
+ */
 public interface Content<E extends Component>
 {
 
@@ -50,7 +55,7 @@ public interface Content<E extends Component>
      * example, If the containment id is "overview.tabs" and the wicket component id is "quickMenu", the returned
      * destination id is "overview.tabs.quickMenu".
      * </p>
-     * 
+     *
      * @return The destination id of this {@code Content} instance.
      * @since 1.0.0
      */
@@ -68,12 +73,12 @@ public interface Content<E extends Component>
      * component created by this method.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param parent The parent component of the component to be created by this method. This argument must not be
      *            {@code null}.
-     * 
+     *
      * @return The wicket component represented by this {@code Content} instance.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
      * @since 1.0.0
      */

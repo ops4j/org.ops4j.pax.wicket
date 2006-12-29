@@ -14,14 +14,12 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service.internal;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.ops4j.lang.NullArgumentException;
-
 import wicket.Page;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WebRequest;
@@ -36,9 +34,9 @@ public final class PaxWicketApplication extends WebApplication
     private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
 
-    public PaxWicketApplication( 
-            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory, 
-            DelegatingClassResolver delegatingClassResolver, 
+    public PaxWicketApplication(
+            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory,
+            DelegatingClassResolver delegatingClassResolver,
             boolean deploymentMode )
         throws IllegalArgumentException
     {
@@ -46,7 +44,7 @@ public final class PaxWicketApplication extends WebApplication
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
-        
+
         m_mountPoint = mountPoint;
         m_factory = factory;
         m_homepageClass = homepageClass;
@@ -75,10 +73,9 @@ public final class PaxWicketApplication extends WebApplication
      * set. <strong>Use this method for any application setup instead of the
      * constructor.</strong>
      */
-    public final void init()
+    protected final void init()
     {
         super.init();
-        
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
 

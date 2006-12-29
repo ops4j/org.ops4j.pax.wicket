@@ -4,8 +4,16 @@
     <links>
       <item name="OPS4J" href="http://www.ops4j.org/"/>
     </links>
-    <menu name="Pax Wicket Service" inherit="top" >
-      <item name="Service" href="index.html" />
+    <menu name="Pax Wicket" inherit="top" >
+      <menu name="Service" inherit="top" >
+        <item name="Concepts" href="concepts.html" />
+        <item name="System Requirements" href="sysrequired.html" />
+        <item name="Building" href="building.html" />
+        <item name="Installation" href="installation.html" />
+      </menu>
+      <menu name="Examples" inherit="top" >
+        <item name="Department Store" href="deptstore.html" />
+      </menu>
     </menu>
   </body>
 </project>

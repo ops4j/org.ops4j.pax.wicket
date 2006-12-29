@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>wicket</artifactId>
+    <groupId>org.ops4j.pax</groupId>
+    <version>0.3.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.ops4j.pax.wicket</groupId>
+  <artifactId>tooklkit</artifactId>
+  <packaging>osgi-bundle</packaging>
+  <name>OPS4J - Pax Wicket Toolkit</name>
+  <version>0.3.0-SNAPSHOT</version>
+  <description>Pax Wicket Toolkit is an extension to Pax Wicket Service to aid developers creating common constructs,
+    such as menus.
+  </description>
+  <dependencies>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>service</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.base</groupId>
+      <artifactId>ops4j-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-extensions</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-auth-roles</artifactId>
+    </dependency>
+  </dependencies>
+  <properties>
+    <osgi-IgnorePackage>
+    </osgi-IgnorePackage>
+    <osgi-BundleActivator>
+    </osgi-BundleActivator>
+  </properties>
+</project>

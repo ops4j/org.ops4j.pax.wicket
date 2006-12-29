@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
@@ -50,7 +50,7 @@ public class Activator
 
         m_applicationFactory =
             new PaxWicketApplicationFactory( bundleContext, OverviewPage.class, mountPoint, applicationName );
-        
+
         m_applicationFactory.setDeploymentMode( true );
         m_serviceRegistration = m_applicationFactory.register();
     }

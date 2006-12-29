@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service.internal;
 
@@ -34,7 +34,7 @@ public class PaxWicketAppFactoryTracker extends ServiceTracker
     private BundleContext m_bundleContext;
     private HttpTracker m_httpTracker;
 
-    public PaxWicketAppFactoryTracker( BundleContext bundleContext, HttpTracker httpTracker )
+    public  PaxWicketAppFactoryTracker( BundleContext bundleContext, HttpTracker httpTracker )
     {
         super( bundleContext, PaxWicketApplicationFactory.class.getName(), null );
         m_bundleContext = bundleContext;

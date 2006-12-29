@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.service;
 
@@ -29,9 +29,9 @@ public interface ContentContainer
 
     /**
      * Returns the containment id of this {@code ContentContainer}.
-     * 
+     *
      * @return The containment id.
-     * 
+     *
      * @since 1.0.0
      */
     String getContainmentId();
@@ -48,14 +48,14 @@ public interface ContentContainer
      * component created by this method.</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param wicketId The wicket id. This argument must not be {@code null}.
      * @param parent The parent of created components. This argument must not be {@code null}.
-     * 
+     *
      * @return A list of component with the specified {@code wicketId} and {@code parent}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     * 
+     *
      * @since 1.0.0
      */
     <E extends Component, T extends Component> List<E> createComponents( String wicketId, T parent )
@@ -64,13 +64,15 @@ public interface ContentContainer
     /**
      * Returns the comparator for component with the specified {@code id}. Returns {@code null} if the comparator does
      * not exists.
-     * 
+     *
      * @param <E> A component class.
      * @param id The component with the specified {@code id}.
+     * @param locale The locale of the Comparator.
+     * 
      * @return The comparator of the specified {@code id}.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     * 
+     *
      * @since 1.0.0
      */
     <E extends Component> Comparator<E> getComparator( String id, Locale locale )
@@ -78,7 +80,7 @@ public interface ContentContainer
 
     /**
      * Dispose this {@code ContentContainer} instance.
-     * 
+     *
      * @since 1.0.0
      */
     void dispose();
