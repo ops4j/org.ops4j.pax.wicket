@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Pax Wicket Service">
+  <publishDate position="navigation-bottom" format="MM-dd-yy"/>
   <body>
     <links>
       <item name="OPS4J" href="http://www.ops4j.org/"/>
     </links>
     <menu name="Pax Wicket" inherit="top" >
-      <menu name="Service" inherit="top" >
         <item name="Concepts" href="concepts.html" />
         <item name="System Requirements" href="sysrequired.html" />
         <item name="Building" href="building.html" />
         <item name="Installation" href="installation.html" />
-      </menu>
-      <menu name="Examples" inherit="top" >
-        <item name="Department Store" href="deptstore.html" />
-      </menu>
+    </menu>
+    <menu name="Examples" inherit="top" >
+      <item name="Department Store" href="deptstore.html" />
     </menu>
   </body>
 </project>
