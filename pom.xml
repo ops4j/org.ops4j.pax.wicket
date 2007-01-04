@@ -10,7 +10,7 @@
   <artifactId>wicket</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket</name>
-  <version>0.3.0</version>
+  <version>0.4.0-SNAPSHOT</version>
   <url>http://www.ops4j.org/projects/pax/wicket</url>
   <issueManagement>
     <system>jira</system>
@@ -32,8 +32,8 @@
     </plugins>
   </build>
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.3.0</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.3.0</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
   <modules>
     <module>service</module>

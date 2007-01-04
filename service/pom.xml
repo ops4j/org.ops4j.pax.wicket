@@ -3,14 +3,14 @@
   <parent>
     <artifactId>wicket</artifactId>
     <groupId>org.ops4j.pax</groupId>
-    <version>0.3.0</version>
+    <version>0.4.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>service</artifactId>
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Service</name>
-  <version>0.3.0</version>
+  <version>0.4.0-SNAPSHOT</version>
   <description>Pax Wicket Service is an OSGi extension of the Wicket framework, allowing for dynamic loading and unloading of Wicket components and pages.</description>
   <dependencies>
     <dependency>
