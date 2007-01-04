@@ -38,8 +38,8 @@
   </scm>
   <modules>
     <module>service</module>
-    <module>toolkit</module>
     <module>samples</module>
+    <!--<module>toolkit</module>-->
   </modules>
   <dependencyManagement>
     <dependencies>
