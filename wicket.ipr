@@ -320,6 +320,11 @@
         <option name="disabledPoms">
           <value>
             <collection type="java.util.TreeSet">
+              <entry type="java.lang.String" value="$PROJECT_DIR$/samples/menus/content1/pom.xml" />
+              <entry type="java.lang.String" value="$PROJECT_DIR$/samples/menus/mainpage/pom.xml" />
+              <entry type="java.lang.String" value="$PROJECT_DIR$/samples/menus/page1/pom.xml" />
+              <entry type="java.lang.String" value="$PROJECT_DIR$/samples/menus/page2/pom.xml" />
+              <entry type="java.lang.String" value="$PROJECT_DIR$/samples/menus/pom.xml" />
               <entry type="java.lang.String" value="$PROJECT_DIR$/toolkit/pom.xml" />
             </collection>
           </value>
@@ -462,7 +467,7 @@
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/demo.iml" group="samples/department-store" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/floor.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menus/mainpage/indexpage.iml" filepath="$PROJECT_DIR$/samples/menus/mainpage/indexpage.iml" group="samples/menus" />
+      <module fileurl="file://$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" filepath="$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" group="samples/menus" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/model.iml" group="samples/department-store/model" />
       <module fileurl="file://$PROJECT_DIR$/samples/menus/page1/page1.iml" filepath="$PROJECT_DIR$/samples/menus/page1/page1.iml" group="samples/menus" />
       <module fileurl="file://$PROJECT_DIR$/samples/menus/page2/page2.iml" filepath="$PROJECT_DIR$/samples/menus/page2/page2.iml" group="samples/menus" />
