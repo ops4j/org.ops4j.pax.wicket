@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.service.ContentContainer;
+import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -36,7 +36,7 @@ public class Activator
 
     private static Activator INSTANCE;
 
-    private HashMap<String, FloorContentContainer> m_containers;
+    private HashMap<String, FloorContentAggregator> m_containers;
     private List<ServiceRegistration> m_registrations;
 
     public Activator()
@@ -45,7 +45,7 @@ public class Activator
         {
             INSTANCE = this;
         }
-        m_containers = new HashMap<String, FloorContentContainer>();
+        m_containers = new HashMap<String, FloorContentAggregator>();
         m_registrations = new ArrayList<ServiceRegistration>();
     }
 
@@ -61,7 +61,7 @@ public class Activator
         for ( Floor floor : floors )
         {
             String floorName = floor.getName();
-            FloorContentContainer container = new FloorContentContainer( floor, floorName, destinationId,
+            FloorContentAggregator container = new FloorContentAggregator( floor, floorName, destinationId,
                 bundleContext, "departmentstore" );
             m_containers.put( floorName, container );
             container.setDestinationId( destinationId );
@@ -80,8 +80,8 @@ public class Activator
         }
         m_registrations.clear();
 
-        Collection<FloorContentContainer> floorContainers = m_containers.values();
-        for ( ContentContainer floor : floorContainers )
+        Collection<FloorContentAggregator> floorContainers = m_containers.values();
+        for ( ContentAggregator floor : floorContainers )
         {
             floor.dispose();
         }
@@ -95,7 +95,7 @@ public class Activator
         }
     }
 
-    final FloorContentContainer getFloorContentContainer( String containerId )
+    final FloorContentAggregator getFloorContentContainer( String containerId )
     {
         return m_containers.get( containerId );
     }

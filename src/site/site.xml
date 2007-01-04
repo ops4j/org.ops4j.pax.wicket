@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Pax Wicket">
 
-  <bannerLeft>
+  <bannerRight>
     <name>OPS4J</name>
     <src>images/logo.png</src>
     <href>http://www.ops4j.org/</href>
-  </bannerLeft>
+  </bannerRight>
 
   <body>
+    <links>
+      <item name="Pax" href="http://www.ops4j.org/pax/" />
+      <item name="Base" href="http://www.ops4j.org/base/" />
+      <item name="Hansa" href="http://www.ops4j.org/hansa/" />
+    </links>
+
     <menu name="Pax Wicket">
       <item name="Introduction" href="index.html"/>
       <item name="Concepts" href="concepts.html"/>

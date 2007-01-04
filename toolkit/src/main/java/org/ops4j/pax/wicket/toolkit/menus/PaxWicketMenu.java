@@ -17,18 +17,18 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.service.DefaultContentContainer;
+import org.ops4j.pax.wicket.util.AbstractContentAggregator;
 import org.ops4j.pax.wicket.toolkit.actions.ActionContainer;
 import org.osgi.framework.BundleContext;
 import wicket.Component;
 import wicket.markup.html.panel.Panel;
 
-public class PaxWicketMenu extends DefaultContentContainer<Panel>
+public class PaxWicketMenu extends AbstractContentAggregator<Panel>
     implements ActionContainer
 {
 
     public static final String MENU_PREFIX = "menu:";
-    
+
     private String m_menuName;
 
     public PaxWicketMenu( BundleContext context, String application, String menuName, String defaultLocation )

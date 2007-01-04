@@ -17,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.service.DefaultContentContainer;
+import org.ops4j.pax.wicket.util.AbstractContentAggregator;
 import org.ops4j.pax.wicket.toolkit.actions.ActionGroup;
 import org.osgi.framework.BundleContext;
 import wicket.Component;
 import wicket.markup.html.panel.Panel;
 
-public class PaxWicketMenuSection extends DefaultContentContainer<Panel>
+public class PaxWicketMenuSection extends AbstractContentAggregator<Panel>
     implements ActionGroup
 {
 

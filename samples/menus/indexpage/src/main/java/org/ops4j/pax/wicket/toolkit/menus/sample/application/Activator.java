@@ -20,18 +20,18 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.application;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.service.DefaultPageContainer;
-import org.ops4j.pax.wicket.service.PaxWicketApplicationFactory;
-import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePageContent;
+import org.ops4j.pax.wicket.util.DefaultAggregator;
+import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePageContentSource;
 import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePage;
 
 public class Activator
     implements BundleActivator
 {
 
-    private DefaultPageContainer m_indexContainer;
+    private DefaultAggregator m_indexContainer;
     private ServiceRegistration m_pageRegistration;
-    private HomePageContent m_pageContent;
+    private HomePageContentSource m_pageContent;
     private PaxWicketApplicationFactory m_applicationFactory;
     private ServiceRegistration m_serviceRegistration;
 
@@ -55,10 +55,10 @@ public class Activator
     public void start( BundleContext context )
         throws Exception
     {
-        m_indexContainer = new DefaultPageContainer( context, "home", Application.NAME );
+        m_indexContainer = new DefaultAggregator( context, "home", Application.NAME );
         m_pageRegistration = m_indexContainer.register();
 
-        m_pageContent = new HomePageContent( context, m_indexContainer, Application.NAME, "home" );
+        m_pageContent = new HomePageContentSource( context, m_indexContainer, Application.NAME, "home" );
         m_pageContent.register();
 
         m_applicationFactory =

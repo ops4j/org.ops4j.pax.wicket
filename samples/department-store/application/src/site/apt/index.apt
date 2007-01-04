@@ -3,11 +3,11 @@
 
     The Application establishes the Wicket execution environment, by providing;
 
-     * The a PageContainer for other pages to be wired to.
+     * The a PageContainer for other pageSources to be wired to.
 
      * OverviewPageContent is the model of the OverviewPage, which locates any About button and where the Floor content will be aggregated.
 
      * The FloorTabPanel is Wicket provided TabbedPanel, which shows one floor in each tab.
 
-     * OverviewPage is the Wicket page and is registered as the wicket home page for the application, via the PaxWicketApplicationFactory creation and registration in the Activator class.
+     * OverviewPage is the Wicket pageSource and is registered as the wicket home pageSource for the application, via the PaxWicketApplicationFactory creation and registration in the Activator class.
 

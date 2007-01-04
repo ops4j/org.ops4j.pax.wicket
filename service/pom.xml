@@ -11,7 +11,7 @@
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Service</name>
   <version>0.4.0-SNAPSHOT</version>
-  <description>Pax Wicket Service is an OSGi extension of the Wicket framework, allowing for dynamic loading and unloading of Wicket components and pages.</description>
+  <description>Pax Wicket Service is an OSGi extension of the Wicket framework, allowing for dynamic loading and unloading of Wicket components and pageSources.</description>
   <dependencies>
     <dependency>
       <groupId>javax.activation</groupId>
@@ -67,7 +67,7 @@
     javax.portlet
   </osgi-IgnorePackage>
   <osgi-BundleActivator>
-    org.ops4j.pax.wicket.service.internal.Activator
+    org.ops4j.pax.wicket.internal.Activator
   </osgi-BundleActivator>
   <osgi-ExportPackage>org.ops4j.pax.wicket.service;version=${pom.version},
     wicket;version="1.2.3",
@@ -79,12 +79,12 @@
     wicket.ajax.markup.html.navigation.paging;version="1.2.3",
     wicket.application;version="1.2.3",
     wicket.authentication;version="1.2.3",
-    wicket.authentication.pages;version="1.2.3",
+    wicket.authentication.pageSources;version="1.2.3",
     wicket.authentication.panel;version="1.2.3",
     wicket.authorization;version="1.2.3",
     wicket.authorization.strategies;version="1.2.3",
     wicket.authorization.strategies.action;version="1.2.3",
-    wicket.authorization.strategies.page;version="1.2.3",
+    wicket.authorization.strategies.pageSource;version="1.2.3",
     wicket.authorization.strategies.role;version="1.2.3",
     wicket.authorization.strategies.role.annotations;version="1.2.3",
     wicket.authorization.strategies.role.metadata;version="1.2.3",
@@ -143,7 +143,7 @@
     wicket.markup.html.link;version="1.2.3",
     wicket.markup.html.list;version="1.2.3",
     wicket.markup.html.navigation.paging;version="1.2.3",
-    wicket.markup.html.pages;version="1.2.3",
+    wicket.markup.html.pageSources;version="1.2.3",
     wicket.markup.html.panel;version="1.2.3",
     wicket.markup.html.resources;version="1.2.3",
     wicket.markup.html.tree;version="1.2.3",
@@ -155,7 +155,7 @@
     wicket.protocol.http;version="1.2.3",
     wicket.protocol.http.documentvalidation;version="1.2.3",
     wicket.protocol.http.portlet;version="1.2.3",
-    wicket.protocol.http.portlet.pages;version="1.2.3",
+    wicket.protocol.http.portlet.pageSources;version="1.2.3",
     wicket.protocol.http.request;version="1.2.3",
     wicket.protocol.http.request.urlcompressing;version="1.2.3",
     wicket.protocol.http.servlet;version="1.2.3",

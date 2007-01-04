@@ -13,14 +13,14 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
 import java.util.Properties;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
-import org.ops4j.pax.wicket.service.PageContent;
-import org.ops4j.pax.wicket.service.Content;
+import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.ContentSource;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -36,11 +36,11 @@ public class Activator
     {
         m_storeTracker = new DepartmentStoreModelTracker( bundleContext );
         m_storeTracker.open();
-        AboutPageContent pageContent = new AboutPageContent( m_storeTracker );
+        AboutPageContentSource pageContent = new AboutPageContentSource( m_storeTracker );
         Properties props = new Properties();
-        props.put( Content.PAGE_NAME, "about" );
-        props.put( Content.APPLICATION_NAME, "departmentstore" );
-        m_serviceRegistration = bundleContext.registerService( PageContent.class.getName(), pageContent, props );
+        props.put( ContentSource.PAGE_NAME, "about" );
+        props.put( ContentSource.APPLICATION_NAME, "departmentstore" );
+        m_serviceRegistration = bundleContext.registerService( PageContentSource.class.getName(), pageContent, props );
     }
 
     public void stop( BundleContext bundleContext )

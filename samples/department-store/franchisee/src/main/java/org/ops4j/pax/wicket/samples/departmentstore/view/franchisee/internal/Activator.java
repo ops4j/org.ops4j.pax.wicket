@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
@@ -58,7 +58,7 @@ public class Activator
             for( Franchisee franchisee : franchisees )
             {
                 String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContent content = new FranchiseeContent( bundleContext, franchisee, "departmentstore"  );
+                FranchiseeContentSource content = new FranchiseeContentSource( bundleContext, franchisee, "departmentstore"  );
                 content.setDestinationId( destinationId );
                 ServiceRegistration registration = content.register();
                 m_registrations.add( registration );

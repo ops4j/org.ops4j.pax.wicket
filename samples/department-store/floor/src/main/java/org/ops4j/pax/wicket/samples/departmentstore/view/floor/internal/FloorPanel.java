@@ -14,7 +14,7 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
@@ -22,7 +22,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.service.ContentContainer;
 
 import wicket.Component;
 import wicket.markup.html.basic.Label;
@@ -33,7 +32,7 @@ import wicket.model.Model;
 
 /**
  * {@code FloorPanel}
- * 
+ *
  * @author Edward Yakop
  * @since 1.0.0
  */

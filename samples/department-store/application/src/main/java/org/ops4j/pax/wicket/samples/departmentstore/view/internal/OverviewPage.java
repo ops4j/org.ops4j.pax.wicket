@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
-import org.ops4j.pax.wicket.service.Content;
-import org.ops4j.pax.wicket.service.DefaultPageContainer;
+import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.util.DefaultAggregator;
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
@@ -41,7 +41,7 @@ final class OverviewPage extends WebPage
     private static final String WICKET_ID_LABEL = "storeName";
 
     @SuppressWarnings( "unchecked" )
-    public OverviewPage( DefaultPageContainer container, String storeName, Class aboutPageClass )
+    public OverviewPage( DefaultAggregator container, String storeName, Class aboutPageClass )
     {
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );
@@ -57,10 +57,10 @@ final class OverviewPage extends WebPage
         add( link );
 
         Locale locale = getLocale();
-        List<Content<Component>> contents = container.getContents( "floor" );
+        List<ContentSource<Component>> contents = container.getContents( "floor" );
         int numberOfContents = contents.size();
         List<AbstractTab> tabs = new ArrayList<AbstractTab>( numberOfContents );
-        for( Content content : contents )
+        for( ContentSource content : contents )
         {
             if( content instanceof OverviewTabContent )
             {

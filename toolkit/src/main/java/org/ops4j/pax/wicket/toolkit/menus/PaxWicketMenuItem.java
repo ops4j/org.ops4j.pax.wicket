@@ -17,7 +17,7 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.service.DefaultContent;
+import org.ops4j.pax.wicket.util.DefaultContentSource;
 import org.ops4j.pax.wicket.toolkit.actions.ActionItem;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketBookmarkableLink;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketAction;
@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import wicket.Component;
 import wicket.ResourceReference;
 
-public class PaxWicketMenuItem extends DefaultContent
+public class PaxWicketMenuItem extends DefaultContentSource
     implements ActionItem
 {
     private String m_caption;

@@ -19,7 +19,7 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.ops4j.pax.wicket.service.DefaultPageContainer;
+import org.ops4j.pax.wicket.util.DefaultAggregator;
 import wicket.Component;
 import wicket.markup.html.WebPage;
 import wicket.markup.html.list.ListItem;
@@ -28,7 +28,7 @@ import wicket.markup.html.list.ListView;
 public class Page extends WebPage
 {
 
-    public Page( DefaultPageContainer container )
+    public Page( DefaultAggregator container )
     {
         List<Component> components = new ArrayList<Component>();
         ListView view = new ListView( "menu", components )
