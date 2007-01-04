@@ -6,15 +6,22 @@
         2006 May 31
         ------------------
 
-    The Pax Wicket Service is an OSGi service for supporting the creation of Wicket applications running on the OSGi platform.
+    The Pax Wicket Service is an OSGi service for supporting the creation of Wicket applications
+    running on the OSGi platform.
 
-    The Pax Wicket Service allows you to load and unload Wicket pages and page content in runtime. It also allows you to register new Wicket Applications in runtime. All this without restarting the
+    The Pax Wicket Service allows you to load and unload Wicket pages and page content in runtime.
+    It also allows you to register new Wicket Applications in runtime. All this without restarting
+    the application as a whole.
 
 Architecture
 
-    The basic architecture of the Pax Wicket eco system, is to make things smaller, runtime replaceable and a strict separation of concerns. We do that by leveraging the service layer in OSGi together with runtime wiring through the Config Admin service.
+    The basic architecture of the Pax Wicket eco system, is to make things smaller, runtime
+    replaceable and a strict separation of concerns. We do that by leveraging the service layer in
+    OSGi together with runtime wiring through the Config Admin service.
 
-    This will, as we shall see, allow us to break up the application in almost arbitrary bundles, and yet get a coherent view served by Wicket. One way to look at the architecture is the bundle break down. It looks like this;
+    This will, as we shall see, allow us to break up the application in almost arbitrary bundles,
+    and yet get a coherent view served by Wicket. One way to look at the architecture is the bundle
+    break down. It looks like this;
 
 +-----------------------------
  +-----------------+  +------------+   +-------------+   +-----------+   +-----------+   +-------------+
@@ -31,21 +38,31 @@ Architecture
  +-----------------------------------------------------------------------------------------------------+
 +-----------------------------
 
-    However, this is not very useful to get an understanding on how things really hang together. Let's start exploring the various aspects of the Pax Wicket Service architecture.
+    However, this is not very useful to get an understanding on how things really hang together.
+    Let's start exploring the various aspects of the Pax Wicket Service architecture.
 
-Content, ContentContainers and Components
+ContentSource, ContentAggregator and Component
 
     First we need to introduce a couple of concepts.
 
-    * Content - Any Wicket component can be packaged as Content. Content is a OSGi service that gets registered into the OSGi framework. Content are written by the developer, but there are extensive support in the Pax Wicket Service to make this task really simple.
+    * ContentSource - Any Wicket component can be packaged into a ContentSource. ContentSource is a
+      OSGi service that gets registered into the OSGi framework. ContentSources are written by the
+      developer, but there are extensive support in the Pax Wicket Service to make this task really
+      simple.
 
-    * Destination - Each Content service must in <<runtime>> define a Destination. The Destination is described in a DestinationID which consists of two parts. The first part is which Containment point should the Content be bound to, and the second part of the DestinationID is the wicket:id within that Containment.
+    * Destination - Each ContentSource service must in <<runtime>> define a Destination. The
+      Destination is described in a DestinationID which consists of two parts. The first part is
+      which Containment point should the Content be bound to, and the second part of the
+      DestinationID is the wicket:id within that Containment.
 
-    * Containment - Containment is an <extension point> to which Content can be attached. Each Containment may have many wicket:ids to be populated. The Containment is identified by a ContainmentID which must be unique within the OSGi runtime platform.
+    * AggregationPoint - AggregationPoint is an <extension point> to which ContentSource can be
+      attached. Each AggregationPoint may have many ContentIDs defined to be populated. The
+      AggregationPoint is identified by a AggregationID which must be unique within the OSGi
+      runtime platform.
 
-    * ContentContainer - The OSGi service that has been registered with a ContainmentID and implements the ContentContainer interface. ContentContainers look for DestinationIDs that has their first part equal to the ContentContainer's ContainmentID.
-
-    []
+    * ContentAggregator - The OSGi service that has been registered with a AggregationID and
+      implements the ContentAggregator interface. ContentAggregators look for DestinationIDs that
+      <<matches>> the AggregationID defined for the ContentAggregator.
 
     So, let's look at the primary interfaces of Content and ContentContainer.
 
@@ -101,29 +118,40 @@ public interface ContentContainer
 }
 +------------------------------
 
-    As you see, there is not much in these interfaces, and that can seem very strange at first. The issue is that quite a lot of the semantics of the Content and ContentContainer are in the behavior and interaction with the OSGi framework, which is not expressed in the interfaces.
+    As you see, there is not much in these interfaces, and that can seem very strange at first. The
+    issue is that quite a lot of the semantics of the Content and ContentContainer are in the
+    behavior and interaction with the OSGi framework, which is not expressed in the interfaces.
 
-    * Content must be registered as OSGi service, and must have a unique org.osgi.framework.Constants.SERVICE_PID set.
+    * ContentSource must be registered as OSGi service, and must have a unique
+      org.osgi.framework.Constants.SERVICE_PID set.
 
-    * ContentContainer must listen for Content service registrations in the OSGi framework.
+    * ContentAggregator must listen for ContentSource service registrations in the OSGi framework.
 
-    * ContentContainer must keep track of which Content service have a DestionationID that matches its own ContainmentID.
+    * ContentAggregator must keep track of which ContentSource service have a DestionationID that
+      matches its own AggregationID.
 
-    * ContentContainer must delegate the createComponents() method to the Content that is wired to each of the wicket:ids.
+    * ContentAggregators must delegate the createComponents() method to the ContentSources that are
+      wired to each of the ContentIDs defined.
 
 
-    Since we expect all this work to be fairly standard, we have provided two implementations of these interfaces, that should be sufficient for most usages.
+    Since we expect all this work to be fairly standard, we have provided some implementations of
+    these interfaces, that should be sufficient for most usages.
 
-    * DefaultContent
+    * AbstractContentSource
 
-    * DefaultContentContainer
+    * DefaultAggregator
 
-    By using these, there is very little overhead that the developer needs to deal with (see <Writing Content services> and <Writing ContentContainer services> below).
+    *
+
+    By using these, there is very little overhead that the developer needs to deal with (see
+    <Writing ContentSource services> and <Writing ContentAggregator services> below).
 
 
 Pages
 
-    Pages are registered into the OSGi framework as services bound to the same Content.APPLICATION_NAME property value as all other parts. Pages must implement the PageContent interface.
+    Pages are registered into the OSGi framework as services bound to the same
+    Content.APPLICATION_NAME property value as all other parts. Pages must implement the
+    PageContent interface.
 
 +---------------------------------
 package org.ops4j.pax.wicket.service;
@@ -143,14 +171,21 @@ public interface PageContent
 
 Pax Wicket Applications
 
-    Pax Wicket Service supports many Pax Wicket applications being deployed simultaneously onto the same instance of Pax Wicket Service. For each Pax Wicket application, a separate Servlet will be created and mounted on to a configurable mount point in the URL space. However, care must be taken to ensure that all ContainmentIDs are registered under unique names.
+    Pax Wicket Service supports many Pax Wicket applications being deployed simultaneously onto the
+    same instance of Pax Wicket Service. For each Pax Wicket application, a separate Servlet will
+    be created and mounted on to a configurable mount point in the URL space. However, care must be
+    taken to ensure that all ContainmentIDs are registered under unique names.
 
-    All Pax Wicket applications are also wired together based on the Content.APPLICATION_NAME property value in its OSGi service registration. All services that are part of the Pax Wicket application must share the same name and properly register it as a service property.
+    All Pax Wicket applications are also wired together based on the Content.APPLICATION_NAME
+    property value in its OSGi service registration. All services that are part of the Pax Wicket
+    application must share the same name and properly register it as a service property.
 
 
 Authentication
 
-    Pax Wicket is supporting the Wicket authentication framework through and users can either be authenticated through the standard OSGi User Admin service, or by a user supplied PaxWicketAuthenticator implementation.
+    Pax Wicket is supporting the Wicket authentication framework through and users can either be
+    authenticated through the standard OSGi User Admin service, or by a user supplied
+    PaxWicketAuthenticator implementation.
 
 +---------------------------------
 
