@@ -3,20 +3,20 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.3.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>floor</artifactId>
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Department Store - View - Floor</name>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.3.0</version>
   <description>Pax Department Store Floor View.</description>
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
+      <version>0.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -32,13 +32,13 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
+      <version>0.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>application</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
+      <version>0.3.0</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
