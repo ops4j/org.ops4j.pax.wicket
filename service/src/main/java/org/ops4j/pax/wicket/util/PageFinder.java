@@ -62,11 +62,11 @@ public class PageFinder
             {
                 return new PageContentSource[0];
             }
-            PageContentSource[] pageSources = new PageContentSource[refs.length];
+            PageContentSource<T>[] pageSources = new PageContentSource[refs.length];
             int count = 0;
             for ( ServiceReference ref : refs )
             {
-                pageSources[count++] = (PageContentSource) context.getService( ref );
+                pageSources[count++] = (PageContentSource<T>) context.getService( ref );
             }
 
             return pageSources;
