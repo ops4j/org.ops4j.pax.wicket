@@ -17,7 +17,8 @@
     <orderEntry type="module" module-name="service" />
     <orderEntry type="module" module-name="model" />
     <orderEntry type="library" name="wicket-extensions-1.2.3" level="project" />
-    <orderEntry type="library" name="pax-logging-log4j-0.9.5" level="project" />
+    <orderEntry type="library" name="pax-logging-log4j-0.9.4" level="project" />
+    <orderEntry type="library" name="ops4j-base-0.3.0" level="project" />
     <orderEntryProperties />
   </component>
   <component name="PluginUploader.UploadConfigurable">

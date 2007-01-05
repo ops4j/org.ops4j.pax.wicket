@@ -4,14 +4,14 @@
   <parent>
     <artifactId>wicket</artifactId>
     <groupId>org.ops4j.pax</groupId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>toolkit</artifactId>
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Toolkit</name>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.4.0-SNAPSHOT</version>
   <description>Pax Wicket Toolkit is an extension to Pax Wicket Service to aid developers creating common constructs,
     such as menus.
   </description>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
-      <version>0.3.0-SNAPSHOT</version>
+      <version>0.4.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

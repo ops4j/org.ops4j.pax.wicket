@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
+import org.ops4j.pax.wicket.api.ContentAggregator;
 
 import wicket.Component;
 import wicket.markup.html.basic.Label;
@@ -45,7 +46,7 @@ final class FloorPanel extends Panel
     private static final String WICKET_ID_FRANCHISEE = "franchisee";
     private static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    FloorPanel( String id, ContentContainer container, Floor floor )
+    FloorPanel( String id, ContentAggregator container, Floor floor )
     {
         super( id, new Model( floor.getName() ) );
 

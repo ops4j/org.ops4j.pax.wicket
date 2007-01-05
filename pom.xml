@@ -38,7 +38,7 @@
   <modules>
     <module>service</module>
     <module>samples</module>
-    <!--<module>toolkit</module>-->
+    <module>toolkit</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -55,7 +55,13 @@
       <dependency>
         <groupId>jmock</groupId>
         <artifactId>jmock</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.2</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -79,7 +85,7 @@
       <dependency>
         <groupId>org.ops4j.base</groupId>
         <artifactId>ops4j-base</artifactId>
-        <version>0.1.0</version>
+        <version>0.3.0</version>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>

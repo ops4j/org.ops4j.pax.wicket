@@ -69,7 +69,9 @@
   <osgi-BundleActivator>
     org.ops4j.pax.wicket.internal.Activator
   </osgi-BundleActivator>
-  <osgi-ExportPackage>org.ops4j.pax.wicket.service;version=${pom.version},
+  <osgi-ExportPackage>
+    org.ops4j.pax.wicket.api;version=${pom.version},
+    org.ops4j.pax.wicket.util;version=${pom.version},
     wicket;version="1.2.3",
     wicket.ajax;version="1.2.3",
     wicket.ajax.calldecorator;version="1.2.3",
@@ -79,12 +81,10 @@
     wicket.ajax.markup.html.navigation.paging;version="1.2.3",
     wicket.application;version="1.2.3",
     wicket.authentication;version="1.2.3",
-    wicket.authentication.pageSources;version="1.2.3",
     wicket.authentication.panel;version="1.2.3",
     wicket.authorization;version="1.2.3",
     wicket.authorization.strategies;version="1.2.3",
     wicket.authorization.strategies.action;version="1.2.3",
-    wicket.authorization.strategies.pageSource;version="1.2.3",
     wicket.authorization.strategies.role;version="1.2.3",
     wicket.authorization.strategies.role.annotations;version="1.2.3",
     wicket.authorization.strategies.role.metadata;version="1.2.3",
@@ -143,7 +143,6 @@
     wicket.markup.html.link;version="1.2.3",
     wicket.markup.html.list;version="1.2.3",
     wicket.markup.html.navigation.paging;version="1.2.3",
-    wicket.markup.html.pageSources;version="1.2.3",
     wicket.markup.html.panel;version="1.2.3",
     wicket.markup.html.resources;version="1.2.3",
     wicket.markup.html.tree;version="1.2.3",
@@ -155,7 +154,6 @@
     wicket.protocol.http;version="1.2.3",
     wicket.protocol.http.documentvalidation;version="1.2.3",
     wicket.protocol.http.portlet;version="1.2.3",
-    wicket.protocol.http.portlet.pageSources;version="1.2.3",
     wicket.protocol.http.request;version="1.2.3",
     wicket.protocol.http.request.urlcompressing;version="1.2.3",
     wicket.protocol.http.servlet;version="1.2.3",

@@ -544,16 +544,16 @@
         <root url="file:///home/niclas/dev/opensource/eclipse/org.eclipse.osgi/core/adaptor" />
       </SOURCES>
     </library>
-    <library name="ops4j-base-0.1.0">
+    <library name="ops4j-base-0.3.0">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.1.0/ops4j-base-0.1.0.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.3.0/ops4j-base-0.3.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-logging-log4j-0.9.5">
+    <library name="pax-logging-log4j-0.9.4">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/log4j/0.9.5-SNAPSHOT/log4j-0.9.5-SNAPSHOT.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/log4j/0.9.4/log4j-0.9.4.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

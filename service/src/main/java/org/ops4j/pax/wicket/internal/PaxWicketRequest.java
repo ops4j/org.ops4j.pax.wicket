@@ -38,7 +38,7 @@ final class PaxWicketRequest extends ServletWebRequest
     /**
      * Protected constructor.
      *
-     * @param point
+     * @param mountPoint
      *
      * @param httpServletRequest The servlet request information
      */
