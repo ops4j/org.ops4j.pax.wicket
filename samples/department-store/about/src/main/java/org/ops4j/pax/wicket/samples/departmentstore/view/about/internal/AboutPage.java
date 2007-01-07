@@ -25,6 +25,7 @@ import wicket.markup.html.border.BoxBorder;
 
 public class AboutPage extends WebPage
 {
+    private static final long serialVersionUID = 1L;
 
     public AboutPage( DepartmentStore store )
     {

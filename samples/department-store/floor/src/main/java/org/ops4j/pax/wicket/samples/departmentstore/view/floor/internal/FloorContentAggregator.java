@@ -36,8 +36,8 @@ public class FloorContentAggregator extends AbstractContentAggregator<FloorPanel
     private final Floor m_floor;
     private final String m_tabId;
 
-    public FloorContentAggregator( Floor floor, String containmentId, String destinationId, BundleContext bundleContext,
-        String applicationname )
+    public FloorContentAggregator( Floor floor, String containmentId, String destinationId,
+        BundleContext bundleContext, String applicationname )
     {
         super( bundleContext, applicationname, containmentId, destinationId );
         m_tabId = containmentId;

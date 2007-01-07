@@ -33,14 +33,14 @@ public final class Servlet extends WicketServlet
     private static final Logger m_logger = Logger.getLogger( Servlet.class );
 
     private IWebApplicationFactory m_appFactory;
-    private ClassLoader m_classloader;
-    private Class<?>[] m_interfaces;
+//    private ClassLoader m_classloader;
+//    private Class<?>[] m_interfaces;
 
     public Servlet( IWebApplicationFactory appFactory )
     {
         m_appFactory = appFactory;
-        m_classloader = getClass().getClassLoader();
-        m_interfaces = new Class[]{ HttpServletRequest.class };
+//        m_classloader = getClass().getClassLoader();
+//        m_interfaces = new Class[]{ HttpServletRequest.class };
     }
 
     protected IWebApplicationFactory getApplicationFactory()

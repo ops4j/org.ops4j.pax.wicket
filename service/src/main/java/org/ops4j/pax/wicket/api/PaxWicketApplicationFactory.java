@@ -215,6 +215,7 @@ public final class PaxWicketApplicationFactory
         return paxWicketApplication;
     }
 
+    @SuppressWarnings("unchecked")
     public final void updated( Dictionary config )
         throws ConfigurationException
     {

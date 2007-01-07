@@ -122,6 +122,20 @@
         <groupId>wicket</groupId>
         <artifactId>wicket-auth-roles</artifactId>
         <version>1.2.3</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>junit</artifactId>
+            <groupId>junit</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>commons-logging</artifactId>
+            <groupId>commons-logging</groupId>
+          </exclusion>
+          <exclusion>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>wicket</groupId>

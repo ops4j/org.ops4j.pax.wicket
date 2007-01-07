@@ -3,10 +3,10 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry exported="true" kind="lib" path="lib/activation-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ops4j-base-0.1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/wicket-1.2.3.jar" sourcepath="/wicket"/>
+	<classpathentry exported="true" kind="lib" path="lib/ops4j-base-0.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wicket-1.2.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wicket-auth-roles-1.2.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/wicket-extensions-1.2.3.jar" sourcepath="/wicket-extensions"/>
+	<classpathentry exported="true" kind="lib" path="lib/wicket-extensions-1.2.3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>

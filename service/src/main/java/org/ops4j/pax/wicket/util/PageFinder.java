@@ -45,6 +45,7 @@ public class PageFinder
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
+    @SuppressWarnings("unchecked")
     public final static <T extends Page> PageContentSource<T>[] findPages(
             BundleContext context, String applicationName, String pageName )
         throws IllegalArgumentException
