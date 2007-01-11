@@ -15,23 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
+package org.ops4j.pax.wicket.toolkit.menus.sample.mainpage;
 
-import org.ops4j.pax.wicket.util.AbstractPageController;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.util.AbstractPageFactory;
+import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
+import org.ops4j.pax.wicket.toolkit.menus.sample.application.Application;
 import org.osgi.framework.BundleContext;
+import wicket.Page;
 import wicket.PageParameters;
 
-public class PageController extends AbstractPageController
+public class HomePageFactory extends AbstractPageFactory
 {
 
-    private RootContentAggregator m_aggregator;
+    private RootContentAggregator m_container;
+    private PaxWicketMenu m_globalMenu;
+    private PaxWicketMenu m_localMenu;
 
-    protected PageController( BundleContext bundleContext, RootContentAggregator aggregator, String applicationName, String pageName )
+    public HomePageFactory( BundleContext context, RootContentAggregator container, String applicationName,
+                            String pageName )
         throws IllegalArgumentException
     {
-        super( bundleContext, "FirstPage", applicationName, pageName );
-        m_aggregator = aggregator;
+        super( context, "home", applicationName, pageName );
+        m_container = container;
+        m_globalMenu = new PaxWicketMenu( context, Application.NAME, "globalmenu", "mainmenu" );
+        m_localMenu = new PaxWicketMenu( context, Application.NAME, "localmenu", "mainmenu" );
     }
 
     /**
@@ -43,7 +51,7 @@ public class PageController extends AbstractPageController
      */
     public Class getPageClass()
     {
-        return Page.class;
+        return HomePage.class;
     }
 
     /**
@@ -55,8 +63,8 @@ public class PageController extends AbstractPageController
      *
      * @since 1.0.0
      */
-    public wicket.Page createPage( PageParameters params )
+    public Page createPage( PageParameters params )
     {
-        return new Page( m_aggregator );
+        return new HomePage( m_container, m_globalMenu, m_localMenu );
     }
 }

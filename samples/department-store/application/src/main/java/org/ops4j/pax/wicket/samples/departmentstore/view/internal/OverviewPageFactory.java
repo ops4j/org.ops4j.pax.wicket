@@ -18,20 +18,20 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import org.ops4j.pax.wicket.util.RootContentAggregator;
-import org.ops4j.pax.wicket.api.PageController;
+import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.util.PageFinder;
-import org.ops4j.pax.wicket.util.AbstractPageController;
+import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
 import wicket.Page;
 import wicket.PageParameters;
 
-public class OverviewPageController extends AbstractPageController<OverviewPage>
-    implements PageController<OverviewPage>
+public class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
+    implements PageFactory<OverviewPage>
 {
     private BundleContext m_context;
     private RootContentAggregator m_aggregator;
 
-    public OverviewPageController( BundleContext context, RootContentAggregator aggregator, String applicationName, String pageName )
+    public OverviewPageFactory( BundleContext context, RootContentAggregator aggregator, String applicationName, String pageName )
     {
         super(context, "overview", applicationName, pageName );
         m_context = context;
@@ -45,7 +45,7 @@ public class OverviewPageController extends AbstractPageController<OverviewPage>
 
     public OverviewPage createPage( PageParameters params )
     {
-        PageController<Page>[] pageSources = PageFinder.findPages( m_context, "departmentstore", "about" );
+        PageFactory<Page>[] pageSources = PageFinder.findPages( m_context, "departmentstore", "about" );
         Class pageClass;
         if( pageSources.length == 0 )
         {

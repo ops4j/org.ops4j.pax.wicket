@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.util;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageController;
+import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -44,7 +44,7 @@ public class PageFinder
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
-    public final static <T extends Page> PageController<T>[] findPages(
+    public static <T extends Page> PageFactory<T>[] findPages(
             BundleContext context, String applicationName, String pageName )
         throws IllegalArgumentException
     {
@@ -56,16 +56,16 @@ public class PageFinder
                 + pageName + "))";
         try
         {
-            ServiceReference[] refs = context.getServiceReferences( PageController.class.getName(), filter );
+            ServiceReference[] refs = context.getServiceReferences( PageFactory.class.getName(), filter );
             if ( refs == null )
             {
-                return new PageController[0];
+                return new PageFactory[0];
             }
-            PageController<T>[] pageSources = new PageController[refs.length];
+            PageFactory<T>[] pageSources = new PageFactory[refs.length];
             int count = 0;
             for ( ServiceReference ref : refs )
             {
-                pageSources[count++] = (PageController<T>) context.getService( ref );
+                pageSources[count++] = (PageFactory<T>) context.getService( ref );
             }
             return pageSources;
         }
@@ -75,7 +75,7 @@ public class PageFinder
                     "and page name contains ldap filters.", e );
 
             // can not happen, RIGHT!
-            return new PageController[0];
+            return new PageFactory[0];
         }
     }
 }

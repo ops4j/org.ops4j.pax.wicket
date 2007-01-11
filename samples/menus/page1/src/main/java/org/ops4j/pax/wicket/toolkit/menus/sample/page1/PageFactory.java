@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -16,16 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.api;
+package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
-import wicket.Page;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.util.AbstractPageFactory;
+import org.osgi.framework.BundleContext;
 import wicket.PageParameters;
 
-/** PageController instances are capable of providing bookmarkable web pages, as defined by Wicket.
- *
- */
-public interface PageController<T extends Page>
+public class PageFactory extends AbstractPageFactory
 {
+
+    private RootContentAggregator m_aggregator;
+
+    protected PageFactory( BundleContext bundleContext, RootContentAggregator aggregator, String applicationName, String pageName )
+        throws IllegalArgumentException
+    {
+        super( bundleContext, "FirstPage", applicationName, pageName );
+        m_aggregator = aggregator;
+    }
 
     /**
      * Returns the page class instance represented by this {@code PageController}.
@@ -34,15 +41,22 @@ public interface PageController<T extends Page>
      *
      * @since 1.0.0
      */
-    Class<T> getPageClass();
+    public Class getPageClass()
+    {
+        return Page.class;
+    }
 
     /**
      * Creates a page with the specified {@code params}.
      *
      * @param params The page parameters.
+     *
      * @return An instance of page.
      *
      * @since 1.0.0
      */
-    T createPage( PageParameters params );
+    public wicket.Page createPage( PageParameters params )
+    {
+        return new Page( m_aggregator );
+    }
 }

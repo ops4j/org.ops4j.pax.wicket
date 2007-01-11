@@ -18,7 +18,7 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageController;
+import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -76,7 +76,7 @@ public class PaxWicketPageTracker extends ServiceTracker
         {
             m_logger.debug( "addingService( " + reference + ");" );
         }
-        PageController pageSource = (PageController) m_context.getService( reference );
+        PageFactory pageSource = (PageFactory) m_context.getService( reference );
         Class pageClass = pageSource.getPageClass();
         m_paxWicketPageFactory.add( pageClass, pageSource );
         return pageSource;
@@ -104,7 +104,7 @@ public class PaxWicketPageTracker extends ServiceTracker
         {
             m_logger.debug( "modifiedService( " + reference + ", " + service + ");" );
         }
-        PageController pageSource = (PageController) m_context.getService( reference );
+        PageFactory pageSource = (PageFactory) m_context.getService( reference );
         String appName = (String) reference.getProperty( ContentSource.APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
@@ -142,7 +142,7 @@ public class PaxWicketPageTracker extends ServiceTracker
         {
             m_logger.debug( "removedService( " + reference + ", " + service + ");" );
         }
-        PageController pageSource = (PageController) service;
+        PageFactory pageSource = (PageFactory) service;
         Class pageclass = pageSource.getPageClass();
         m_paxWicketPageFactory.remove( pageclass );
     }

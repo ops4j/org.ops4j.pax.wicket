@@ -19,7 +19,7 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageController;
+import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -58,7 +58,7 @@ class TrackingUtil
         try
         {
             String filterString = "(&(" + ContentSource.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + PageController.class.getName() + "))";
+                                  + "(" + Constants.OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
             filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {

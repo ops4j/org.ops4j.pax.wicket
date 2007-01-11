@@ -35,7 +35,7 @@ public class Activator
     private ServiceRegistration m_serviceRegistration;
     private ServiceRegistration m_pageRegistration;
     private PaxWicketApplicationFactory m_applicationFactory;
-    private OverviewPageController m_overviewPageContent;
+    private OverviewPageFactory m_overviewPageContent;
 
     public void start( BundleContext bundleContext )
         throws Exception
@@ -45,7 +45,7 @@ public class Activator
         m_store = new RootContentAggregator( bundleContext, "swp", applicationName );
         m_pageRegistration = m_store.register();
 
-        m_overviewPageContent = new OverviewPageController( bundleContext, m_store, applicationName, "overview" );
+        m_overviewPageContent = new OverviewPageFactory( bundleContext, m_store, applicationName, "overview" );
         m_overviewPageContent.register();
 
         m_applicationFactory =
