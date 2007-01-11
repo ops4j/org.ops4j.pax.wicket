@@ -35,9 +35,9 @@ public class PageFactory extends AbstractPageFactory
     }
 
     /**
-     * Returns the page class instance represented by this {@code PageController}.
+     * Returns the page class instance represented by this {@code PageFactory}.
      *
-     * @return The page class represented by this {@code PageController}.
+     * @return The page class represented by this {@code PageFactory}.
      *
      * @since 1.0.0
      */

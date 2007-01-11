@@ -48,7 +48,7 @@ class TrackingUtil
         return filter;
     }
 
-    static Filter createAllPageContentFilter( BundleContext bundleContext, String applicationName )
+    static Filter createAllPageFactoryFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );

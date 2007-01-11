@@ -36,7 +36,7 @@ public class PaxWicketPageTracker extends ServiceTracker
     public PaxWicketPageTracker( BundleContext context, String applicationName,
                                  PaxWicketPageFactory paxWicketPageFactory )
     {
-        super( context, TrackingUtil.createAllPageContentFilter( context, applicationName ), null );
+        super( context, TrackingUtil.createAllPageFactoryFilter( context, applicationName ), null );
 
         m_context = context;
         m_applicationName = applicationName;

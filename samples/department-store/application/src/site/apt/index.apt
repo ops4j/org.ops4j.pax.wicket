@@ -5,7 +5,7 @@
 
      * The a PageContainer for other pageSources to be wired to.
 
-     * OverviewPageContent is the model of the OverviewPage, which locates any About button and where the Floor content will be aggregated.
+     * OverviewPageFactory is the model of the OverviewPage, which locates any About button and where the Floor content will be aggregated.
 
      * The FloorTabPanel is Wicket provided TabbedPanel, which shows one floor in each tab.
 

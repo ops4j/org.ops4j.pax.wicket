@@ -29,7 +29,7 @@ public class Activator
 
     private RootContentAggregator m_aggregator;
     private ServiceRegistration m_pageRegistration;
-    private PageController m_pageContent;
+    private PageFactory m_pageFactory;
 
     /**
      * Called when this bundle is started so the Framework can perform the
@@ -54,8 +54,8 @@ public class Activator
         m_aggregator = new RootContentAggregator(context, "page1", Application.NAME );
         m_pageRegistration = m_aggregator.register();
 
-        m_pageContent = new PageController(context, m_aggregator, Application.NAME, "FirstPage" );
-        m_pageContent.register();
+        m_pageFactory = new PageFactory(context, m_aggregator, Application.NAME, "FirstPage" );
+        m_pageFactory.register();
     }
 
     /**
@@ -80,7 +80,7 @@ public class Activator
     public void stop( BundleContext context )
         throws Exception
     {
-        m_pageContent.dispose();
+        m_pageFactory.dispose();
         m_pageRegistration.unregister();
         m_aggregator.dispose();
     }

@@ -22,8 +22,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
-import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePageController;
 import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePage;
+import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePageFactory;
 
 public class Activator
     implements BundleActivator
@@ -31,7 +31,7 @@ public class Activator
 
     private RootContentAggregator m_indexContainer;
     private ServiceRegistration m_pageRegistration;
-    private HomePageController m_pageContent;
+    private HomePageFactory m_pageFactory;
     private PaxWicketApplicationFactory m_applicationFactory;
     private ServiceRegistration m_serviceRegistration;
 
@@ -58,8 +58,8 @@ public class Activator
         m_indexContainer = new RootContentAggregator( context, "home", Application.NAME );
         m_pageRegistration = m_indexContainer.register();
 
-        m_pageContent = new HomePageController( context, m_indexContainer, Application.NAME, "home" );
-        m_pageContent.register();
+        m_pageFactory = new HomePageFactory( context, m_indexContainer, Application.NAME, "home" );
+        m_pageFactory.register();
 
         m_applicationFactory =
             new PaxWicketApplicationFactory( context, HomePage.class, Application.MOUNTPOINT, Application.NAME );
@@ -92,7 +92,7 @@ public class Activator
     {
         m_pageRegistration.unregister();
         m_serviceRegistration.unregister();
-        m_pageContent.dispose();
+        m_pageFactory.dispose();
         m_indexContainer.dispose();
         m_applicationFactory.dispose();
     }

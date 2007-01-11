@@ -14,10 +14,10 @@ Concepts & API classes.
       interfaces, making it suitable for panels, tables and other types of aggregation where the resulting aggregation
       is likely to be part of a larger aggregation, for instance on a Page.
 
-    * AbstractPageController
+    * AbstractPageFactory
 
-      This is an implementation of the PageController interface, handling the OSGi registration of the PageContent and
-      handling the ManagedServcie interface, but leaving the <<<getPageClass()>>> and  <<<createPage()>>> to be
+      This is an implementation of the PageFactory interface, handling the OSGi registration of the pages and
+      handling the ManagedService interface, but leaving the <<<getPageClass()>>> and  <<<createPage()>>> to be
       implemented by the subclass.
 
     * AggregationMatchExpression
@@ -81,10 +81,10 @@ Concepts & API classes.
       The interfaces in Pax Wicket descibes that model, and there are suitable default implementations available to make
       it easy to create a model of the view, and instantiating the view from these model parts.
 
-    * PageController
+    * PageFactory
 
       Pages also need to be modelled, and the main challange reside in bookmarkable pages in Wicket, where Wicket will
-      do the instantiation. PageController is a model part, which allows the developer control over the instantiation
+      do the instantiation. PageFactory is a model part, which allows the developer control over the instantiation
       of pages, by implementing the <<<getPageClass()>>> and <<<createPage()>>> methods.
 
     * RootContentAggregator

@@ -36,11 +36,11 @@ public class Activator
     {
         m_storeTracker = new DepartmentStoreModelTracker( bundleContext );
         m_storeTracker.open();
-        AboutPageFactory pageContent = new AboutPageFactory( m_storeTracker );
+        AboutPageFactory pageFactory = new AboutPageFactory( m_storeTracker );
         Properties props = new Properties();
         props.put( ContentSource.PAGE_NAME, "about" );
         props.put( ContentSource.APPLICATION_NAME, "departmentstore" );
-        m_serviceRegistration = bundleContext.registerService( PageFactory.class.getName(), pageContent, props );
+        m_serviceRegistration = bundleContext.registerService( PageFactory.class.getName(), pageFactory, props );
     }
 
     public void stop( BundleContext bundleContext )
