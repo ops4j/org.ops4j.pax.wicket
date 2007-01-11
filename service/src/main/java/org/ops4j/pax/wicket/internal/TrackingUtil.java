@@ -19,16 +19,16 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.PageController;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
-public class TrackingUtil
+class TrackingUtil
 {
 
-    public static Filter createContentFilter( BundleContext bundleContext, String applicationName )
+    static Filter createContentFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -48,7 +48,7 @@ public class TrackingUtil
         return filter;
     }
 
-    public static Filter createAllPageContentFilter( BundleContext bundleContext, String applicationName )
+    static Filter createAllPageContentFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -58,7 +58,7 @@ public class TrackingUtil
         try
         {
             String filterString = "(&(" + ContentSource.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + PageContentSource.class.getName() + "))";
+                                  + "(" + Constants.OBJECTCLASS + "=" + PageController.class.getName() + "))";
             filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {

@@ -17,17 +17,17 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
-import org.ops4j.pax.wicket.util.AbstractPageContentSource;
-import org.ops4j.pax.wicket.util.DefaultAggregator;
+import org.ops4j.pax.wicket.util.AbstractPageController;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
 import wicket.PageParameters;
 
-public class PageContentSource extends AbstractPageContentSource
+public class PageController extends AbstractPageController
 {
 
-    private DefaultAggregator m_aggregator;
+    private RootContentAggregator m_aggregator;
 
-    protected PageContentSource( BundleContext bundleContext, DefaultAggregator aggregator, String applicationName, String pageName )
+    protected PageController( BundleContext bundleContext, RootContentAggregator aggregator, String applicationName, String pageName )
         throws IllegalArgumentException
     {
         super( bundleContext, "FirstPage", applicationName, pageName );
@@ -35,9 +35,9 @@ public class PageContentSource extends AbstractPageContentSource
     }
 
     /**
-     * Returns the page class instance represented by this {@code PageContentSource}.
+     * Returns the page class instance represented by this {@code PageController}.
      *
-     * @return The page class represented by this {@code PageContentSource}.
+     * @return The page class represented by this {@code PageController}.
      *
      * @since 1.0.0
      */

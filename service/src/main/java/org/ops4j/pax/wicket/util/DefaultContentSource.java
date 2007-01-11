@@ -56,7 +56,7 @@ public abstract class DefaultContentSource<E extends Component>
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
         m_properties = new Properties();
-        m_properties.put( Constants.SERVICE_PID, CONTENTID + "/" + contentId );
+        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + contentId );
         m_bundleContext = bundleContext;
         setContentId( contentId );
         setApplicationName( applicationName );
@@ -72,7 +72,7 @@ public abstract class DefaultContentSource<E extends Component>
     {
         synchronized ( this )
         {
-            return m_properties.getProperty( DESTINATIONID );
+            return m_properties.getProperty( DESTINATION );
         }
     }
 
@@ -92,7 +92,7 @@ public abstract class DefaultContentSource<E extends Component>
 
         synchronized ( this )
         {
-            m_properties.put( DESTINATIONID, destinationId );
+            m_properties.put( DESTINATION, destinationId );
         }
     }
 
@@ -138,7 +138,7 @@ public abstract class DefaultContentSource<E extends Component>
     {
         synchronized ( this )
         {
-            return m_properties.getProperty( CONTENTID );
+            return m_properties.getProperty( SOURCE_ID );
         }
     }
 
@@ -157,7 +157,7 @@ public abstract class DefaultContentSource<E extends Component>
         NullArgumentException.validateNotEmpty( contentId, "contentId" );
         synchronized ( this )
         {
-            m_properties.put( CONTENTID, contentId );
+            m_properties.put( SOURCE_ID, contentId );
         }
     }
 
@@ -231,7 +231,7 @@ public abstract class DefaultContentSource<E extends Component>
             return;
         }
 
-        String destinationId = (String) config.get( DESTINATIONID );
+        String destinationId = (String) config.get( DESTINATION );
         setDestinationId( destinationId );
 
         String appName = (String) config.get( APPLICATION_NAME );

@@ -19,7 +19,7 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.mainpage;
 
 import java.util.List;
 import java.util.ArrayList;
-import org.ops4j.pax.wicket.util.DefaultAggregator;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -32,7 +32,7 @@ import wicket.markup.html.basic.Label;
 public class HomePage extends WebPage
 {
 
-    private DefaultAggregator m_aggregator;
+    private RootContentAggregator m_aggregator;
 
 
     /**
@@ -41,7 +41,7 @@ public class HomePage extends WebPage
      * @param globalMenu
      * @param localMenu
      */
-    public HomePage( DefaultAggregator container, PaxWicketMenu globalMenu, PaxWicketMenu localMenu )
+    public HomePage( RootContentAggregator container, PaxWicketMenu globalMenu, PaxWicketMenu localMenu )
     {
         super();
         m_aggregator = container;

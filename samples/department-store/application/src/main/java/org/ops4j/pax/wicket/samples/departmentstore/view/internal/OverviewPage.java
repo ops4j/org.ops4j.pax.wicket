@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.util.DefaultAggregator;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
@@ -41,7 +41,7 @@ final class OverviewPage extends WebPage
     private static final String WICKET_ID_LABEL = "storeName";
 
     @SuppressWarnings( "unchecked" )
-    public OverviewPage( DefaultAggregator container, String storeName, Class aboutPageClass )
+    public OverviewPage( RootContentAggregator container, String storeName, Class aboutPageClass )
     {
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );

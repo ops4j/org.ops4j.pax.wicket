@@ -20,13 +20,11 @@ package org.ops4j.pax.wicket.util;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.PageController;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
 import wicket.Page;
-
 
 public class PageFinder
 {
@@ -46,7 +44,7 @@ public class PageFinder
      * @since 1.0.0
      */
     @SuppressWarnings("unchecked")
-    public final static <T extends Page> PageContentSource<T>[] findPages(
+    public final static <T extends Page> PageController<T>[] findPages(
             BundleContext context, String applicationName, String pageName )
         throws IllegalArgumentException
     {
@@ -58,18 +56,17 @@ public class PageFinder
                 + pageName + "))";
         try
         {
-            ServiceReference[] refs = context.getServiceReferences( PageContentSource.class.getName(), filter );
+            ServiceReference[] refs = context.getServiceReferences( PageController.class.getName(), filter );
             if ( refs == null )
             {
-                return new PageContentSource[0];
+                return new PageController[0];
             }
-            PageContentSource<T>[] pageSources = new PageContentSource[refs.length];
+            PageController<T>[] pageSources = new PageController[refs.length];
             int count = 0;
             for ( ServiceReference ref : refs )
             {
-                pageSources[count++] = (PageContentSource<T>) context.getService( ref );
+                pageSources[count++] = (PageController<T>) context.getService( ref );
             }
-
             return pageSources;
         }
         catch ( InvalidSyntaxException e )
@@ -78,7 +75,7 @@ public class PageFinder
                     "and page name contains ldap filters.", e );
 
             // can not happen, RIGHT!
-            return new PageContentSource[0];
+            return new PageController[0];
         }
     }
 }

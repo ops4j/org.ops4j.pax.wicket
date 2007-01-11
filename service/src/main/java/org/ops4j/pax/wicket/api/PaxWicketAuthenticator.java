@@ -28,10 +28,6 @@ import wicket.authorization.strategies.role.Roles;
 public interface PaxWicketAuthenticator
 {
 
-    String USERNAME_IDENTITY = "pax.wicket.authen.id.username";
-
-    String CREDENTIALS_PASSWORD = "pax.wicket.auten.cred.password";
-
     /**
      * Authenticate the specified {@code userName} with the specified {@code password}. Returns {@code null} if the
      * specified {@code userName} is not authenticate.

@@ -24,44 +24,45 @@ import java.util.Locale;
 
 import wicket.Component;
 
-/** The ContentAggregator defines the AggregationPoint.
+/** The <i>ContentAggregator</i> defines the <i>AggregationPoint</i>.
  * <p>
- * ContentSources can attach themselves to a AggregationPoint, which identified by its AggregationID.
- * During the request, i.e. a call to <code>createComponents( String contentID, Component parent )</code>,
- * the ContentAggregator must delegate the creation of components to the <i>wired</i> ContentSources.
- * 
+ * <i>ContentSource</i>s can attach themselves to an <i>AggregationPoint</i>, which is defined by a
+ * <i>ContentAggregator</i>. During the request, i.e. a call to <code>createComponents( String contentID, Component
+ * parent )</code>, the ContentAggregator must delegate the creation of components to the <i>wired</i> ContentSources.
+ *
  * </p>
  * <ol>
  * <li>
- * The <i>ApplicationID</i> of both the ContentAggregator and the ContentSource must be
+ * The <i>ApplicationName</i> of both the <i>ContentAggregator</i> and the <i>ContentSource</i> must be
  * idential, done with a case-sensitive string comparison.
  * </li>
  * <li>
- * The DestinationID consists of two parts, separated by a dot ("."). The first part is the AggregationMatchExpression
- * and the part after the dot is called the ContentMatchExpression.
+ * The <i>Destination</i> consists of two parts, separated by a dot ("."). The first part is the
+ * <i>AggregationMatchExpression</i> and the part after the dot is called the <i>ContentMatchExpression</i>.
  * </li>
  * <li>
- * The ContentAggregator must track ContentSource services which has a AggregationMatchExpression that evaluates to
- * true for the ContentAggregator's AggregationID.
+ * The <i>ContentAggregator</i> must track <i>ContentSource</i> services which has a <i>AggregationMatchExpression</i>
+ * that evaluates to true for the <i>AggregationPoint</i> of the <i>ContentAggregator</i>.
  * </li>
  * <li>
- * If the AggregationMatchExpression starts with "regexp(", then the AggregationMatchExpression is a regular expression
- * up to the closing paranthesis. If that regular expression evaluates to <strong>true</strong> for the AggregationID
- * of this ContentAggregator, then the <i>wiring</i> is established.
+ * If the <i>AggregationMatchExpression</i> starts with <b>"regexp("</b> (no quotes), then the
+ * <i>AggregationMatchExpression</i> is a regular expression up to the closing paranthesis. If that regular expression
+ * evaluates to <strong>true</strong> for the <i>AggregationPoint</i> of this <i>ContentAggregator</i>, then the
+ * <i>wiring</i> is established.
  * </li>
  * <li>
- * If the AggregationMatchExpression does not start with "regexp(", then the expression must be case-sensitive equal
- * of the AggregationID of this ContentAggregator.
+ * If the <i>AggregationMatchExpression</i> does not start with <b>"regexp("</b> (no quotes), then the expression must
+ * be case-sensitive equal of the <i>AggregationPoint</i> of this <i>ContentAggregator</i>.
  * </li>
  * <li>
- * On <code>createComponents( String contentID, Component parent )</code>, the ContentAggregator must find the ContentSources that
- * are <i>wired</i> to the ContentAggregator and where the ContentMatchExpression <i>matches</i> the
- * <code>contentID</code> in the method call. This match is performed identically to the one done for the AggregationID
- * and AggregationMatchExpression.
+ * On <code>createComponents( String contentID, Component parent )</code>, the <i>ContentAggregator</i> must find the
+ * <i>ContentSource</i>s that are <i>wired</i> to the <i>ContentAggregator</i> and where the
+ * <i>ContentMatchExpression</i> <b>matches</b> the <code>contentID</code> in the method call. This match is performed
+ * identically to the one done for the <i>AggregationPoint</i> and <i>AggregationMatchExpression</i>.
  * </li>
  * <li>
- * For each found ContentSource, which is wired and has a matching ContentMatchExpression, the ContentAggregator must
- * call the <code>ContentSource.createComponent( Component parent )</code> method.
+ * For each found <i>ContentSource</i>, which is wired and has a matching <i>ContentMatchExpression</i>, the
+ * <i>ContentAggregator</i> must call the <code>ContentSource.createComponent( Component parent )</code> method.
  * </li>
  * </ol>
  */

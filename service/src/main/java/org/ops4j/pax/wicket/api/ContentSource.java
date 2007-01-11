@@ -20,32 +20,64 @@ package org.ops4j.pax.wicket.api;
 
 import wicket.Component;
 
-/** This is the model interface of ContentSource.
+/**
+ * This is the model interface of ContentSource.
  * ContentSource is categorized as the model of a Wicket component hierarchy, which can be unloaded, replaced
  * and moved in runtime, without needing to shut the application down.
- *
  */
 public interface ContentSource<E extends Component>
 {
 
+    /**
+     * Service property name for the configuration of the <i>MountPoint</i>.
+     */
     String MOUNTPOINT = "pax.wicket.mountpoint";
 
+    /**
+     * Service property name for the configuration of the <i>ApplicationName</i>.
+     */
     String APPLICATION_NAME = "pax.wicket.applicationname";
 
-    String DESTINATIONID = "pax.wicket.destinationid";
+    /**
+     * Service property name for the configuration of the <i>Destination</i> of a <i>ContentSource</i>.
+     */
+    String DESTINATION = "pax.wicket.destination";
 
-    String DESTINATIONID_UNKNOWN = "";
+    /**
+     * Service property value for the configuration of a <i>Destination</i> that is not known, and therefor will not
+     * be <i>wired</i>.
+     */
+    String DESTINATION_UNKNOWN = "";
 
+    /**
+     * Service property name for the configuration of the <i>PageName</i>.
+     */
     String PAGE_NAME = "pax.wicket.pagename";
 
+    /**
+     * Service property name for the configuration of the <i>PageId</i>.
+     */
     String PAGE_ID = "pax.wicket.pageid";
 
-    String CONTENTID = "pax.wicket.contentid";
+    /**
+     * Prefix used in the Constants.SERVICE_PID to uniquely identify Pax Wicket ContentSource instances for the
+     * Configuration Admin service.
+     */
+    String SOURCE_ID = "pax.wicket.source";
 
-    String CONTAINMENTID = "pax.wicket.containmentid";
+    /**
+     * Service property name for the configuration of the <i>AggregationPoint</i>.
+     */
+    String AGGREGATION_POINT = "pax.wicket.aggregation.point";
 
+    /**
+     * Service property name for the configuration of <i>DeploymentMode</i>.
+     */
     String DEPLOYMENT_MODE = "pax.wicket.deploymentmode";
 
+    /**
+     * Service property name for the configuration of the classname of the <i>HomePage</i>.
+     */
     String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
 
     /**
@@ -57,6 +89,7 @@ public interface ContentSource<E extends Component>
      * </p>
      *
      * @return The destination id of this {@code ContentSource} instance.
+     *
      * @since 1.0.0
      */
     String getDestinationId();
@@ -75,7 +108,7 @@ public interface ContentSource<E extends Component>
      * </p>
      *
      * @param parent The parent component of the component to be created by this method. This argument must not be
-     *            {@code null}.
+     *               {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance.
      *

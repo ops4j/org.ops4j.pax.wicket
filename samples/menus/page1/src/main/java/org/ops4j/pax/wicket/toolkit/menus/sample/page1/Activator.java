@@ -20,16 +20,16 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.util.DefaultAggregator;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.toolkit.menus.sample.application.Application;
 
 public class Activator
     implements BundleActivator
 {
 
-    private DefaultAggregator m_aggregator;
+    private RootContentAggregator m_aggregator;
     private ServiceRegistration m_pageRegistration;
-    private PageContentSource m_pageContent;
+    private PageController m_pageContent;
 
     /**
      * Called when this bundle is started so the Framework can perform the
@@ -51,10 +51,10 @@ public class Activator
     public void start( BundleContext context )
         throws Exception
     {
-        m_aggregator = new DefaultAggregator(context, "page1", Application.NAME );
+        m_aggregator = new RootContentAggregator(context, "page1", Application.NAME );
         m_pageRegistration = m_aggregator.register();
 
-        m_pageContent = new PageContentSource(context, m_aggregator, Application.NAME, "FirstPage" );
+        m_pageContent = new PageController(context, m_aggregator, Application.NAME, "FirstPage" );
         m_pageContent.register();
     }
 

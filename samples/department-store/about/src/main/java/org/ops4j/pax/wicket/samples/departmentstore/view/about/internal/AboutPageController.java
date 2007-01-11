@@ -18,16 +18,16 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.PageController;
 
 import wicket.PageParameters;
 
-public class AboutPageContentSource
-    implements PageContentSource<AboutPage>
+public class AboutPageController
+    implements PageController<AboutPage>
 {
     private DepartmentStoreModelTracker m_tracker;
 
-    public AboutPageContentSource( DepartmentStoreModelTracker tracker )
+    public AboutPageController( DepartmentStoreModelTracker tracker )
     {
         m_tracker = tracker;
     }

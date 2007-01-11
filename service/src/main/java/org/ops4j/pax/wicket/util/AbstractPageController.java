@@ -21,7 +21,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.PageController;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -31,15 +31,15 @@ import org.osgi.service.cm.ManagedService;
 import wicket.Page;
 
 
-public abstract class AbstractPageContentSource<T extends Page>
-    implements PageContentSource<T>, ManagedService
+public abstract class AbstractPageController<T extends Page>
+    implements PageController<T>, ManagedService
 {
 
     private BundleContext m_bundleContext;
     private ServiceRegistration m_serviceRegistration;
     private Hashtable<String, String> m_properties;
 
-    protected AbstractPageContentSource( BundleContext bundleContext,
+    protected AbstractPageController( BundleContext bundleContext,
             String pageId, String applicationName, String pageName )
         throws IllegalArgumentException
     {
@@ -59,13 +59,13 @@ public abstract class AbstractPageContentSource<T extends Page>
     public final void register()
         throws IllegalStateException
     {
-        String[] classes = { PageContentSource.class.getName(), ManagedService.class.getName() };
+        String[] classes = { PageController.class.getName(), ManagedService.class.getName() };
 
         synchronized ( this )
         {
             if( m_serviceRegistration != null )
             {
-                Class< ? extends AbstractPageContentSource> clazz = getClass();
+                Class< ? extends AbstractPageController> clazz = getClass();
                 String className = clazz.getSimpleName();
                 throw new IllegalArgumentException( className + "[" + this + "] has been registered." );
             }
@@ -81,7 +81,7 @@ public abstract class AbstractPageContentSource<T extends Page>
         {
             if( m_serviceRegistration == null )
             {
-                Class< ? extends AbstractPageContentSource> clazz = getClass();
+                Class< ? extends AbstractPageController> clazz = getClass();
                 String className = clazz.getSimpleName();
                 throw new IllegalStateException( className + "[" + this + "] has not been registered." );
             }

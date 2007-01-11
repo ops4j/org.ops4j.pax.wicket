@@ -76,7 +76,7 @@ public abstract class AbstractContentAggregator<E extends Component>
         m_children = new HashMap<String, List<ContentSource>>();
         m_properties = new Properties();
 
-        setContainmentId( containmentId );
+        setAggregationId( containmentId );
         setDestinationId( destinationId );
         setApplicationName( applicationName );
 
@@ -149,7 +149,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     {
         synchronized ( this )
         {
-            return m_properties.getProperty( CONTAINMENTID );
+            return m_properties.getProperty( AGGREGATION_POINT );
         }
     }
 
@@ -165,14 +165,14 @@ public abstract class AbstractContentAggregator<E extends Component>
      * @throws IllegalArgumentException Thrown if the specified {@code containmentId} argument is {@code null} or empty.
      * @since 1.0.0
      */
-    public final void setContainmentId( String containmentId )
+    public final void setAggregationId( String containmentId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
 
         synchronized ( this )
         {
-            m_properties.put( CONTAINMENTID, containmentId );
+            m_properties.put( AGGREGATION_POINT, containmentId );
         }
     }
 
@@ -276,10 +276,10 @@ public abstract class AbstractContentAggregator<E extends Component>
         }
 
         String existingContainmentId = getContainmentId();
-        String newContainmentId = (String) config.get( CONTAINMENTID );
+        String newContainmentId = (String) config.get( AGGREGATION_POINT );
         if ( newContainmentId == null )
         {
-            throw new ConfigurationException( CONTAINMENTID, "This property must not be [null]." );
+            throw new ConfigurationException( AGGREGATION_POINT, "This property must not be [null]." );
         }
 
         String newApplicationName = (String) config.get( APPLICATION_NAME );
@@ -296,10 +296,10 @@ public abstract class AbstractContentAggregator<E extends Component>
 
         m_children.clear();
         setApplicationName( newApplicationName );
-        setContainmentId( newContainmentId );
+        setAggregationId( newContainmentId );
 
         String filter = "(&(" + ContentSource.APPLICATION_NAME + "=" + getApplicationName() + ")" + "("
-            + ContentSource.DESTINATIONID + "=" + getContainmentId() + ".*)" + ")";
+            + ContentSource.DESTINATION + "=" + getContainmentId() + ".*)" + ")";
 
         try
         {
@@ -367,7 +367,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     {
         synchronized ( this )
         {
-            return m_properties.getProperty( ContentSource.DESTINATIONID );
+            return m_properties.getProperty( ContentSource.DESTINATION );
         }
     }
 
@@ -390,7 +390,7 @@ public abstract class AbstractContentAggregator<E extends Component>
 
         synchronized ( this )
         {
-            m_properties.put( ContentSource.DESTINATIONID, destinationId );
+            m_properties.put( ContentSource.DESTINATION, destinationId );
         }
     }
 

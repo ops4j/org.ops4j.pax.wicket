@@ -17,21 +17,21 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.ops4j.pax.wicket.util.DefaultAggregator;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.api.PageController;
 import org.ops4j.pax.wicket.util.PageFinder;
-import org.ops4j.pax.wicket.util.AbstractPageContentSource;
+import org.ops4j.pax.wicket.util.AbstractPageController;
 import org.osgi.framework.BundleContext;
 import wicket.Page;
 import wicket.PageParameters;
 
-public class OverviewPageContentSource extends AbstractPageContentSource<OverviewPage>
-    implements PageContentSource<OverviewPage>
+public class OverviewPageController extends AbstractPageController<OverviewPage>
+    implements PageController<OverviewPage>
 {
     private BundleContext m_context;
-    private DefaultAggregator m_aggregator;
+    private RootContentAggregator m_aggregator;
 
-    public OverviewPageContentSource( BundleContext context, DefaultAggregator aggregator, String applicationName, String pageName )
+    public OverviewPageController( BundleContext context, RootContentAggregator aggregator, String applicationName, String pageName )
     {
         super(context, "overview", applicationName, pageName );
         m_context = context;
@@ -45,7 +45,7 @@ public class OverviewPageContentSource extends AbstractPageContentSource<Overvie
 
     public OverviewPage createPage( PageParameters params )
     {
-        PageContentSource<Page>[] pageSources = PageFinder.findPages( m_context, "departmentstore", "about" );
+        PageController<Page>[] pageSources = PageFinder.findPages( m_context, "departmentstore", "about" );
         Class pageClass;
         if( pageSources.length == 0 )
         {

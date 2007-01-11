@@ -87,7 +87,7 @@ public final class DefaultContentTracker extends ServiceTracker
 
             for( ServiceReference reference : m_references )
             {
-                String destinationId = (String) reference.getProperty( ContentSource.DESTINATIONID );
+                String destinationId = (String) reference.getProperty( ContentSource.DESTINATION );
                 String wicketId = destinationId.substring( startIndexOfWicketId );
                 ContentSource content = (ContentSource) m_context.getService( reference );
 
@@ -116,7 +116,7 @@ public final class DefaultContentTracker extends ServiceTracker
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
-        String dest = (String) serviceReference.getProperty( ContentSource.DESTINATIONID );
+        String dest = (String) serviceReference.getProperty( ContentSource.DESTINATION );
 
         Object service;
         synchronized( this )
@@ -166,8 +166,8 @@ public final class DefaultContentTracker extends ServiceTracker
         int contIdLength = m_containmentId.length();
         if( dest.length() == contIdLength )
         {
-            String message = "The '" + ContentSource.DESTINATIONID + "' property have the form ["
-                             + ContentSource.CONTAINMENTID + "].[wicketId] but was " + dest;
+            String message = "The '" + ContentSource.DESTINATION + "' property have the form ["
+                             + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
 
             throw new IllegalArgumentException( message );
         }

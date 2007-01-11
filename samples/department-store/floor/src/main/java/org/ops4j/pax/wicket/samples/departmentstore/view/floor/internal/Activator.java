@@ -65,7 +65,7 @@ public class Activator
                 bundleContext, "departmentstore" );
             m_containers.put( floorName, container );
             container.setDestinationId( destinationId );
-            container.setContainmentId( floor.getName() );
+            container.setAggregationId( floor.getName() );
             ServiceRegistration registration = container.register();
             m_registrations.add( registration );
         }

@@ -41,10 +41,10 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
 
-public class DefaultAggregator
+public class RootContentAggregator
     implements ContentAggregator, ContentTrackingCallback, ManagedService
 {
-    protected final Logger m_logger = Logger.getLogger( DefaultAggregator.class );
+    protected final Logger m_logger = Logger.getLogger( RootContentAggregator.class );
 
     private Hashtable<String, String> m_properties;
     private BundleContext m_bundleContext;
@@ -52,7 +52,7 @@ public class DefaultAggregator
     private ServiceRegistration m_registration;
     private DefaultContentTracker m_contentTracker;
 
-    public DefaultAggregator( BundleContext bundleContext, String containmentId, String applicationName )
+    public RootContentAggregator( BundleContext bundleContext, String containmentId, String applicationName )
     {
         m_bundleContext = bundleContext;
         m_properties = new Hashtable<String, String>();
@@ -66,7 +66,7 @@ public class DefaultAggregator
     {
         synchronized ( this )
         {
-            return m_properties.get( ContentSource.CONTAINMENTID );
+            return m_properties.get( ContentSource.AGGREGATION_POINT );
         }
     }
 
@@ -74,7 +74,7 @@ public class DefaultAggregator
     {
         synchronized ( this )
         {
-            m_properties.put( ContentSource.CONTAINMENTID, containmentId );
+            m_properties.put( ContentSource.AGGREGATION_POINT, containmentId );
         }
     }
 
@@ -140,10 +140,10 @@ public class DefaultAggregator
     }
 
     /**
-     * Dispose this {@code DefaultAggregator} instance.
+     * Dispose this {@code RootContentAggregator} instance.
      * <p>
-     * Note: Dispose does not unregister this {@code DefaultAggregator}, and ensure that dispose is only called
-     * after this {@code DefaultAggregator} instance is unregistered from OSGi container.
+     * Note: Dispose does not unregister this {@code RootContentAggregator}, and ensure that dispose is only called
+     * after this {@code RootContentAggregator} instance is unregistered from OSGi container.
      * </p>
      *
      * @throws IllegalStateException Thrown if this content tracker has not been registered.
@@ -159,7 +159,7 @@ public class DefaultAggregator
         {
             if ( m_contentTracker == null )
             {
-                throw new IllegalStateException( "DefaultAggregator [" + this + "] has not been registered." );
+                throw new IllegalStateException( "RootContentAggregator [" + this + "] has not been registered." );
             }
 
             m_contentTracker.close();
@@ -168,7 +168,7 @@ public class DefaultAggregator
     }
 
     /**
-     * Add the specified {@code content} to this {@code DefaultAggregator} and mapped it as {@code wicketId}.
+     * Add the specified {@code content} to this {@code RootContentAggregator} and mapped it as {@code wicketId}.
      *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
@@ -196,7 +196,7 @@ public class DefaultAggregator
     }
 
     /**
-     * Remove the specified {@code content} to this {@code DefaultAggregator} and unmapped it as {@code wicketId}.
+     * Remove the specified {@code content} to this {@code RootContentAggregator} and unmapped it as {@code wicketId}.
      *
      * @param wicketId The wicket id. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
@@ -270,7 +270,7 @@ public class DefaultAggregator
         {
             if ( m_contentTracker != null )
             {
-                throw new IllegalStateException( "DefaultAggregator [" + this + "] has already been registered." );
+                throw new IllegalStateException( "RootContentAggregator [" + this + "] has already been registered." );
             }
 
             String applicationName = getApplicationName();
@@ -301,7 +301,7 @@ public class DefaultAggregator
             return;
         }
 
-        String newContainmentId = (String) config.get( ContentSource.CONTAINMENTID );
+        String newContainmentId = (String) config.get( ContentSource.AGGREGATION_POINT );
         String existingContainmentId = getContainmentId();
         if ( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
@@ -347,7 +347,7 @@ public class DefaultAggregator
         {
             if ( m_contentTracker != null )
             {
-                m_logger.warn( "DefaultAggregator [" + this + "] is not disposed." );
+                m_logger.warn( "RootContentAggregator [" + this + "] is not disposed." );
             }
             dispose();
         }

@@ -23,7 +23,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageContentSource;
+import org.ops4j.pax.wicket.api.PageController;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
@@ -41,7 +41,7 @@ public final class PaxWicketPageFactory
 
     private static final Logger m_logger = Logger.getLogger( PaxWicketPageFactory.class );
 
-    private HashMap<Class, PageContentSource> m_contents;
+    private HashMap<Class, PageController> m_contents;
     private HashMap<String, Class> m_pageClasses;
 
     private BundleContext m_bundleContext;
@@ -51,7 +51,7 @@ public final class PaxWicketPageFactory
 
     public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
     {
-        m_contents = new HashMap<Class, PageContentSource>();
+        m_contents = new HashMap<Class, PageController>();
         m_pageClasses = new HashMap<String, Class>();
         m_bundleContext = appBundleContext;
         m_applicationName = applicationName;
@@ -110,7 +110,7 @@ public final class PaxWicketPageFactory
     {
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
 
-        PageContentSource content;
+        PageController content;
         synchronized ( this )
         {
             content = m_contents.get( pageClass );
@@ -138,7 +138,7 @@ public final class PaxWicketPageFactory
         return content.createPage( parameters );
     }
 
-    public void add( Class pageClass, PageContentSource pageSource )
+    public void add( Class pageClass, PageController pageSource )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
