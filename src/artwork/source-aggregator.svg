@@ -13,22 +13,19 @@
    height="600"
    id="svg3330"
    sodipodi:version="0.32"
-   inkscape:version="0.44+devel"
+   inkscape:version="0.44.1"
    sodipodi:docname="diagram2.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:docbase="C:\dev\artwork\sequence_diagrams"
+   sodipodi:docbase="/home/niclas/dev/ops4j/projects/pax/wicket/src/artwork"
    version="1.0"
-   inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
+   inkscape:export-filename="/home/niclas/dev/ops4j/projects/pax/wicket/src/artwork/source-aggregator.png"
    inkscape:export-xdpi="72"
-   inkscape:export-ydpi="72"
-   sodipodi:modified="true">
+   inkscape:export-ydpi="72">
   <defs
      id="defs3332">
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient3368">
       <stop
-         style="stop-color:#ffd42a;stop-opacity:1;"
+         style="stop-color:#fff2a8;stop-opacity:1;"
          offset="0"
          id="stop3370" />
       <stop
@@ -39,11 +36,11 @@
     <linearGradient
        id="linearGradient3343">
       <stop
-         style="stop-color:#59f;stop-opacity:1;"
+         style="stop-color:#76adff;stop-opacity:1;"
          offset="0"
          id="stop3345" />
       <stop
-         style="stop-color:#59f;stop-opacity:0;"
+         style="stop-color:white;stop-opacity:0;"
          offset="1"
          id="stop3347" />
     </linearGradient>
@@ -188,10 +185,10 @@
      inkscape:cy="328.04901"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1440"
+     inkscape:window-width="1272"
      inkscape:window-height="874"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      width="744.09px"
      height="600px" />
   <metadata
@@ -244,7 +241,7 @@
          id="tspan3340"
          x="117.599"
          y="161.61574"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:courier">createComponents()</tspan></text>
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:courier">createComponent()</tspan></text>
     <g
        id="g2919"
        transform="translate(178,-34)"
@@ -462,12 +459,12 @@
          y="312.61572"
          x="104.599"
          id="tspan2987"
-         sodipodi:role="line">createComponents(<tspan
+         sodipodi:role="line">createComponent(<tspan
    style="font-size:12px;font-weight:bold;fill:#4d4d4d"
    id="tspan3547">wicketID</tspan>)</tspan></text>
     <path
-       style="color:black;fill:white;fill-opacity:1;fill-rule:nonzero;stroke:#646464;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 327.74897,240.02773 L 342.08349,254.36226 L 313.41443,254.36226 L 327.74897,240.02773 z "
+       style="color:black;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#646464;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 327.74897,208.02773 L 342.08349,222.36226 L 313.41443,222.36226 L 327.74897,208.02773 z "
        id="path2997"
        sodipodi:nodetypes="cccc"
        inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
@@ -489,25 +486,10 @@
          y="165.36218"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#646464;fill-opacity:1;font-family:Arial">For each wired* Content</tspan></text>
     <text
-       sodipodi:linespacing="100%"
-       id="text3399"
-       y="231.37587"
-       x="222.70392"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#999;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        xml:space="preserve"
-       inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#999;fill-opacity:1;font-family:Arial"
-         y="231.37587"
-         x="222.70392"
-         id="tspan3401"
-         sodipodi:role="line">Default Content Aggregator</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:white;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
-       x="222.70392"
-       y="230.37634"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
+       x="208.70392"
+       y="123.37634"
        id="text2981"
        sodipodi:linespacing="100%"
        inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
@@ -515,9 +497,9 @@
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan2983"
-         x="222.70392"
-         y="230.37634"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:white;fill-opacity:1;font-family:Arial">Default Content Aggregator</tspan></text>
+         x="208.70392"
+         y="123.37634"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#4d4d4d;fill-opacity:1;font-family:Courier">AbstractContentAggregator</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#646464;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
@@ -532,7 +514,7 @@
          id="tspan2988"
          x="574.47693"
          y="240.37292"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#646464;fill-opacity:1;font-family:Arial">Content Source</tspan></text>
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#646464;fill-opacity:1;font-family:Arial">Content Sources</tspan></text>
     <text
        sodipodi:linespacing="100%"
        id="text3409"
@@ -574,41 +556,26 @@
     <path
        sodipodi:nodetypes="cc"
        id="path3461"
-       d="M 327.74897,255.44626 C 327.74897,274.88162 327.74897,359.1086 327.74897,359.1086"
-       style="fill:none;fill-rule:evenodd;stroke:#646464;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 327.74897,224.0448 C 327.74897,251.50516 327.74897,370.51006 327.74897,370.51006"
+       style="fill:none;fill-rule:evenodd;stroke:#646464;stroke-width:3.56597304;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <text
-       xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#999;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
-       x="238.70392"
-       y="471.37585"
-       id="text3510"
-       sodipodi:linespacing="100%"
-       inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         sodipodi:role="line"
-         id="tspan3512"
-         x="238.70392"
-         y="471.37585"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#999;fill-opacity:1;font-family:Arial">My Content Aggregator</tspan></text>
-    <text
        sodipodi:linespacing="100%"
        id="text3514"
-       y="470.37634"
-       x="238.70392"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:white;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
+       y="466.37634"
+       x="241.70392"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        xml:space="preserve"
        inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:white;fill-opacity:1;font-family:Arial"
-         y="470.37634"
-         x="238.70392"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#4d4d4d;fill-opacity:1;font-family:Courier"
+         y="466.37634"
+         x="241.70392"
          id="tspan3516"
-         sodipodi:role="line">My Content Aggregator</tspan></text>
+         sodipodi:role="line">MyContentAggregator</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:18.70221519px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#2a7fff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
@@ -790,5 +757,20 @@
        inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
+       x="332.01587"
+       y="256.354"
+       id="text4155"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams 2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         sodipodi:role="line"
+         id="tspan4157"
+         x="332.01587"
+         y="256.354"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:courier">extends</tspan></text>
   </g>
 </svg>

@@ -13,15 +13,13 @@
    height="600"
    id="svg3330"
    sodipodi:version="0.32"
-   inkscape:version="0.44+devel"
+   inkscape:version="0.44.1"
    sodipodi:docname="diagram.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:docbase="C:\dev\artwork\sequence_diagrams"
+   sodipodi:docbase="/home/niclas/dev/ops4j/projects/pax/wicket/src/artwork"
    version="1.0"
-   inkscape:export-filename="C:\Documents and Settings\Thien\My Documents\My Projects\Container Research\Diagrams.png"
-   inkscape:export-xdpi="72"
-   inkscape:export-ydpi="72"
-   sodipodi:modified="true">
+   inkscape:export-filename="/home/niclas/dev/ops4j/projects/pax/wicket/src/artwork/aggregator.png"
+   inkscape:export-xdpi="72.070198"
+   inkscape:export-ydpi="72.070198">
   <defs
      id="defs3332">
     <linearGradient
@@ -109,15 +107,15 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="376.29001"
-     inkscape:cy="296.39859"
+     inkscape:zoom="1.1483333"
+     inkscape:cx="372.045"
+     inkscape:cy="299.99999"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1440"
+     inkscape:window-width="1272"
      inkscape:window-height="874"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      height="600px"
      width="744.09px" />
   <metadata
@@ -165,7 +163,7 @@
          id="tspan3340"
          x="29.598999"
          y="112.61574"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:courier">createComponents()</tspan></text>
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:Courier New">createComponents()</tspan></text>
     <g
        id="g2919"
        transform="translate(12,80)">
@@ -367,7 +365,7 @@
        x="250.599"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        xml:space="preserve"><tspan
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:courier"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#f60;fill-opacity:1;font-family:Courier New"
          y="276.61572"
          x="250.599"
          id="tspan2987"
@@ -375,23 +373,25 @@
     <path
        sodipodi:nodetypes="czcc"
        id="path2991"
-       d="M 408,283.695 C 408,283.695 256.10094,283.695 247,283.695 C 237.54551,283.695 235.83359,281.63434 235.83359,272.52859 C 235.83359,261.43565 235.83359,179.36218 235.83359,179.36218"
-       style="fill:none;fill-rule:evenodd;stroke:#828282;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       d="M 407.94134,283.63634 C 407.94134,283.63634 256.14579,283.63634 247.05105,283.63634 C 237.60301,283.63634 235.89225,281.06201 235.89225,269.68643 C 235.89225,255.8283 235.89225,153.29603 235.89225,153.29603"
+       style="fill:none;fill-rule:evenodd;stroke:#828282;stroke-width:1.11732852px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#828282;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        x="243"
-       y="226.36218"
+       y="192.36218"
        id="text2999"
        sodipodi:linespacing="100%"><tspan
          sodipodi:role="line"
          id="tspan3001"
          x="243"
-         y="226.36218"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Arial">For each content wired*</tspan></text>
+         y="192.36218"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Arial">For each <tspan
+   style="font-family:Courier;font-weight:bold"
+   id="tspan4352">ContentSource</tspan> wired*</tspan></text>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#828282;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 458.83193,362.69414 C 458.83193,373.78708 458.83193,421.86055 458.83193,421.86055"
+       style="fill:none;fill-rule:evenodd;stroke:#828282;stroke-width:1.14822483px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 458.83193,343.69515 C 458.83193,358.32031 458.83193,421.70134 458.83193,421.70134"
        id="path2969"
        sodipodi:nodetypes="cc" />
     <text
@@ -422,26 +422,26 @@
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#828282;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        x="177.70361"
-       y="172.37634"
+       y="62.376343"
        id="text2981"
        sodipodi:linespacing="100%"><tspan
          sodipodi:role="line"
          id="tspan2983"
          x="177.70361"
-         y="172.37634"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Arial">Content Aggregator</tspan></text>
+         y="62.376343"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Courier">ContentAggregator</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#828282;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial"
        x="408.47693"
-       y="356.37292"
+       y="238.37292"
        id="text2986"
        sodipodi:linespacing="100%"><tspan
          sodipodi:role="line"
          id="tspan2988"
          x="408.47693"
-         y="356.37292"
-         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Arial">Content Source</tspan></text>
+         y="238.37292"
+         style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Courier">ContentSource</tspan></text>
     <path
        id="path2358"
        d="M 209,73 L 209,102 L 219,102 L 219,83 L 238,83 L 238,73 L 209,73 z "
