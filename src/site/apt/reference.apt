@@ -23,20 +23,7 @@ Architecture
     and yet get a coherent view served by Wicket. One way to look at the architecture is the bundle
     break down. It looks like this;
 
-+-----------------------------
- +-----------------+  +------------+   +-------------+   +-----------+   +-----------+   +-------------+
- | HTTP Service    |  | Pax Wicket |   |  Bus Logic  |   | Component |   |   Page    |   | Application |
- | (Standard OSGi) |  |   Service  |   |  bundle(s)  |   | bundle(s) |   | bundle(s) |   |  bundle(s)  |
- +-----      ------+  +---      ---+   +---      ----+   +--      ---+   +---      --+   +---      ----+
-       \    /             \    /           \    /           \    /           \    /          \    /
- +----- \  / ------------- \  / ----------- \  / ----------- \  / ----------- \  / ---------- \  / ----+
- |     \ \/ /             \ \/ /           \ \/ /           \ \/ /           \ \/ /          \ \/ /    |
- |      \  /               \  /             \  /             \  /             \  /            \  /     |
- |       \/                 \/               \/               \/               \/              \/      |
- |                                                                                                     |
- |                                           OSGi Runtime Platform                                     |
- +-----------------------------------------------------------------------------------------------------+
-+-----------------------------
+[images/Architecture.png] Pax Wicket Architecture
 
     However, this is not very useful to get an understanding on how things really hang together.
     Let's start exploring the various aspects of the Pax Wicket Service architecture.
@@ -90,6 +77,12 @@ ContentSource, ContentAggregator and Component
     <<<org.ops4j.pax.wicket.util>>> package;
 
     * AbstractContentAggregator
+
+      The AbstractContentAggregator is your typical superclass of a <ContentAggregator>. By extending
+      this class, you need to provide the implementation for <<<protected abstract <T extends Component> E createComponent( String contentId, T parent )>>>.
+      The
+      The parent is passed as a preparation for Wicket 2.0, and Pax Wicket will support Wicket 2.0 as soon as
+      it is released.
 
     * DefaultContentSource
 

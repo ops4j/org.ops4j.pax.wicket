@@ -18,6 +18,8 @@
       <item name="Introduction" href="index.html"/>
       <item name="Concepts" href="concepts.html"/>
       <item name="Reference" href="reference.html"/>
+      <item name="Javadoc" href="apidocs/index.html"/>
+
       <item name="My First App" href="/myfirstapp/index.html" collapse="true">
         <item name="Business Logic" href="/myfirstapp/businesslogic.html"/>
         <item name="Content" href="/myfirstapp/content.html"/>

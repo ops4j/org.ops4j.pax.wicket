@@ -311,12 +311,14 @@
         <option name="updateClasspathsEnabled" value="true" />
         <option name="sortDependenciesEnabled" value="false" />
         <option name="removeDuplicateDependenciesEnabled" value="false" />
+        <option name="respondToPomChangesEnabled" value="true" />
         <option name="manageSourceRootsEnabled" value="true" />
         <option name="manageModuleInterdependenciesEnabled" value="true" />
         <option name="downloadSourcesEnabled" value="false" />
         <option name="downloadJavadocEnabled" value="false" />
         <option name="generateSourcesEnabled" value="false" />
         <option name="settingsPath" value="/home/niclas/.m2/settings.xml" />
+        <option name="searchFilter" value="" />
         <option name="disabledPoms">
           <value>
             <collection type="java.util.TreeSet">

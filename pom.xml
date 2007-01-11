@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ops4j</groupId>
@@ -30,11 +31,44 @@
         </configuration>
       </plugin>
     </plugins>
+
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <aggregate>true</aggregate>
+          <stylesheetfile>${basedir}/src/site/resources/css/javadoc.css</stylesheetfile>
+          <excludePackageNames>*.internal:org.ops4j.pax.wicket.samples.*</excludePackageNames>
+          <groups>
+            <group>
+              <title>API</title>
+              <packages>org.ops4j.pax.wicket.api</packages>
+            </group>
+            <group>
+              <title>Utilities</title>
+              <packages>org.ops4j.pax.wicket.util</packages>
+            </group>
+          </groups>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+  <dependencies>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>log4j</artifactId>
+      <version>0.9.4</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <scm>
     <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
     <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
+
   <modules>
     <module>service</module>
     <module>samples</module>

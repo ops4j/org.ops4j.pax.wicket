@@ -28,10 +28,10 @@ import java.util.Locale;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
+import org.ops4j.pax.wicket.api.ContentAggregator;
+import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.internal.DefaultContentTracker;
-import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -41,9 +41,100 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
 
+/**
+ * This is a convenient superclass for creation of a ContentAggregator.
+ * <p>
+ * Normal use only requires the overriding of a single abstract method;
+ * <code><pre>
+ *     protected abstract <T extends Component> E createComponent( String contentId, T parent )
+ *         throws IllegalArgumentException;
+ * </pre></code>
+ * </p>
+ * <p>
+ * The subclass looks something like this;
+ * <code><pre>
+ * public class PrinterContentAggregator<E extends Compontnet> extends AbstractContentAggregator
+ * {
+ *     public PrinterContentAggregator( BundleContext context, String applicationName,
+ *                                      String aggregationPoint, String destination )
+ *         throws IllegalArgumentException
+ *     {
+ *         super( context, applicationName, aggregationPoint, destination );
+ *     }
+ *
+ *     protected abstract <T extends Component> E createComponent( String contentId, T parent )
+ *         throws IllegalArgumentException
+ *     {
+ *         return new PrintersPanel( contentId, this );
+ *     }
+ * }
+ * </pre></code>
+ *
+ * And the MyPanel handles the generation of the Wicket Panel instance. Example;
+ *
+ * <code><pre>
+ * public class PrintersPanel extends Panel
+ * {
+ *
+ *     private static final long serialVersionUID = 1L;
+ *
+ *     public static final String WICKET_ID_NAME_LABEL = "name";
+ *     private static final String WICKET_ID_PRINTER = "printer";
+ *     private static final String WICKET_ID_PRINTERS = "printers";
+ *
+ *     FloorPanel( String id, ContentAggregator container, Floor floor )
+ *     {
+ *          super( id, new Model( "printers" ) );
+ *
+ *          ListView listView = new ListView( WICKET_ID_PRINTERS )
+ *          {
+ *              private static final long serialVersionUID = 1L;
+ *
+ *              protected void populateItem( final ListItem item )
+ *              {
+ *                  Component modelObject = (Component) item.getModelObject();
+ *                  item.add( modelObject );
+ *              }
+ *         };
+ *
+ *         List&lt;Component&gt; printers = container.createComponents( WICKET_ID_PRINTER, listView );
+ *         if ( printers.isEmpty() )
+ *         {
+ *             Label tLabel = new Label( WICKET_ID_PRINTER, "No Printers are available at the moment." );
+ *             printers.add( tLabel );
+ *         }
+ *         Model listViewModel = new Model( (Serializable) printers );
+ *         listView.setModel( listViewModel );
+ *         add( listView );
+ *     }
+ * }
+ * </pre></code>
+ * In the above example, we are wiring printer <i>ContentSource</i>s to a printers panel. The rendering
+ * of each Printer view is up to the wired printer, and the aggregator just need a little bit of html
+ * to define its own panel. Something like this;
+ * <code><pre>
+ *   &lt;html xmlns="http://www.w3.org/1999/xhtml"
+ *            xmlns:wicket="http://wicket.sourceforge.net/"
+ *            xml:lang="en"
+ *            lang="en"
+ *   &gt;
+ *       &lt;body&gt;
+ *           &lt;wicket:panel&gt;
+ *               &lt;div class="printerspanel"&gt;
+ *                   &lt;div class="printer-row" wicket:id="printers"&gt;
+ *                       &lt;span class="printer-item" wicket:id="printer"&gt;&lt;/span&gt;
+ *                   &lt;/div&gt;
+ *               &lt;/div&gt;
+ *           &lt;/wicket:panel&gt;
+ *       &lt;/body&gt;
+ *   &lt;/html&gt;
+ * </pre></code>
+ * </p>
+ */
 public abstract class AbstractContentAggregator<E extends Component>
     implements ContentAggregator, ContentSource<E>, ContentTrackingCallback, ManagedService
 {
+
     protected final Logger m_logger = Logger.getLogger( getClass() );
 
     private Properties m_properties;
@@ -55,43 +146,44 @@ public abstract class AbstractContentAggregator<E extends Component>
     /**
      * Construct an instance of {@code AbstractContentAggregator} with the specified arguments.
      *
-     * @param bundleContext The bundle context. This argument must not be {@code null}.
-     * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * @param containmentId The containment id. This argument must not be {@code null} or empty.
-     * @param destinationId The destination id. This argument must not be {@code null} or empty.
+     * @param bundleContext    The bundle context. This argument must not be {@code null}.
+     * @param applicationName  The application name. This argument must not be {@code null} or empty.
+     * @param aggregationPoint The containment id. This argument must not be {@code null} or empty.
+     * @param destination      The destination id. This argument must not be {@code null} or empty.
      *
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
-    protected AbstractContentAggregator( BundleContext bundleContext, String applicationName, String containmentId,
-        String destinationId )
+    protected AbstractContentAggregator( BundleContext bundleContext, String applicationName, String aggregationPoint,
+                                         String destination )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
-        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
+        NullArgumentException.validateNotEmpty( aggregationPoint, "aggregationPoint" );
+        NullArgumentException.validateNotEmpty( destination, "destination" );
 
         m_bundleContext = bundleContext;
         m_children = new HashMap<String, List<ContentSource>>();
         m_properties = new Properties();
 
-        setAggregationId( containmentId );
-        setDestinationId( destinationId );
+        setAggregationId( aggregationPoint );
+        setDestinationId( destination );
         setApplicationName( applicationName );
 
-        m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
+        m_properties.put( Constants.SERVICE_PID, applicationName + "." + aggregationPoint );
     }
 
     /**
      * Returns the application name of this {@code AbstractContentAggregator} instance belongs to.
      *
      * @return The application name of this {@code AbstractContentAggregator} instance belongs to.
+     *
      * @since 1.0.0
      */
     public String getApplicationName()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.getProperty( ContentSource.APPLICATION_NAME );
         }
@@ -107,7 +199,7 @@ public abstract class AbstractContentAggregator<E extends Component>
      * @param applicationName The application name. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code applicationName} argument is {@code null} or
-     *             empty.
+     *                                  empty.
      * @since 1.0.0
      */
     public final void setApplicationName( String applicationName )
@@ -115,7 +207,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     {
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( ContentSource.APPLICATION_NAME, applicationName );
         }
@@ -123,7 +215,7 @@ public abstract class AbstractContentAggregator<E extends Component>
 
     public final void dispose()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             m_contentTracker.close();
             onDispose();
@@ -147,7 +239,7 @@ public abstract class AbstractContentAggregator<E extends Component>
      */
     public final String getContainmentId()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.getProperty( AGGREGATION_POINT );
         }
@@ -170,7 +262,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     {
         NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( AGGREGATION_POINT, containmentId );
         }
@@ -180,33 +272,34 @@ public abstract class AbstractContentAggregator<E extends Component>
      * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
      * {@code null} object.
      *
-     *  @param parent The parent of created components. This argument must not be {@code null}.
+     * @param parent The parent of created components. This argument must not be {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance.
+     *
      * @since 1.0.0
      */
-    @SuppressWarnings("unchecked")
-    public final <V extends Component, T extends Component> List<V> createComponents( String id, T parent )
+    @SuppressWarnings( "unchecked" )
+    public final <V extends Component, T extends Component> List<V> createComponents( String contentId, T parent )
     {
         ArrayList<V> result = new ArrayList<V>();
 
-        List<ContentSource> contents = getContents( id );
-        if ( !contents.isEmpty() )
+        List<ContentSource> contents = getContents( contentId );
+        if( !contents.isEmpty() )
         {
             Locale locale = null;
-            for ( ContentSource content : contents )
+            for( ContentSource content : contents )
             {
                 V component = (V) content.createComponent( parent );
 
-                if ( locale == null )
+                if( locale == null )
                 {
                     locale = component.getLocale();
                 }
                 result.add( component );
             }
 
-            Comparator<V> comparator = getComparator( id, locale );
-            if ( comparator != null )
+            Comparator<V> comparator = getComparator( contentId, locale );
+            if( comparator != null )
             {
                 Collections.sort( result, comparator );
             }
@@ -219,25 +312,25 @@ public abstract class AbstractContentAggregator<E extends Component>
      * Returns list of {@code ContentSource} instnaces of the specified {@code wicketId}. Returns an empty list if there is
      * no content for the specified {@code wicketId}.
      *
-     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * @param contentId The wicket id. This argument must not be {@code null} or empty.
      *
      * @return List of {@code ContentSource} of the specified {@code wicketId}.
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the contentId is null or empty.
      */
-    @SuppressWarnings("unchecked")
-    public final <V extends ContentSource> List<V> getContents( String wicketId )
+    @SuppressWarnings( "unchecked" )
+    public final <V extends ContentSource> List<V> getContents( String contentId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        NullArgumentException.validateNotEmpty( contentId, "contentId" );
 
         List<V> contents;
-        synchronized ( this )
+        synchronized( this )
         {
-            contents = (List<V>) m_children.get( wicketId );
+            contents = (List<V>) m_children.get( contentId );
         }
 
-        if ( contents != null )
+        if( contents != null )
         {
             contents = new ArrayList<V>( contents );
         }
@@ -254,10 +347,11 @@ public abstract class AbstractContentAggregator<E extends Component>
      * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      *
      * @param contentId The content id. This argument must not be {@code null}.
-     * @param locale The current active locale. This argument must not be {@code null}.
+     * @param locale    The current active locale. This argument must not be {@code null}.
      *
      * @return The comparator for the specified {@code contentId}.
-     * @see ContentAggregator#createComponents(String, wicket.Component)
+     *
+     * @see ContentAggregator#createComponents(String,wicket.Component)
      */
     public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
         throws IllegalArgumentException
@@ -268,7 +362,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     public final void updated( Dictionary config )
         throws ConfigurationException
     {
-        if ( config == null )
+        if( config == null )
         {
             m_registration.setProperties( m_properties );
 
@@ -277,19 +371,19 @@ public abstract class AbstractContentAggregator<E extends Component>
 
         String existingContainmentId = getContainmentId();
         String newContainmentId = (String) config.get( AGGREGATION_POINT );
-        if ( newContainmentId == null )
+        if( newContainmentId == null )
         {
             throw new ConfigurationException( AGGREGATION_POINT, "This property must not be [null]." );
         }
 
         String newApplicationName = (String) config.get( APPLICATION_NAME );
-        if ( newApplicationName == null )
+        if( newApplicationName == null )
         {
             throw new ConfigurationException( APPLICATION_NAME, "This property must not be [null]." );
         }
 
         String existingApplicationName = getApplicationName();
-        if ( existingContainmentId.equals( newContainmentId ) && existingApplicationName.equals( newApplicationName ) )
+        if( existingContainmentId.equals( newContainmentId ) && existingApplicationName.equals( newApplicationName ) )
         {
             return;
         }
@@ -299,26 +393,27 @@ public abstract class AbstractContentAggregator<E extends Component>
         setAggregationId( newContainmentId );
 
         String filter = "(&(" + ContentSource.APPLICATION_NAME + "=" + getApplicationName() + ")" + "("
-            + ContentSource.DESTINATION + "=" + getContainmentId() + ".*)" + ")";
+                        + ContentSource.DESTINATION + "=" + getContainmentId() + ".*)" + ")";
 
         try
         {
             ServiceReference[] services = m_bundleContext.getServiceReferences( ContentSource.class.getName(), filter );
-            if ( null == services )
+            if( null == services )
             {
                 return;
             }
 
-            for ( ServiceReference service : services )
+            for( ServiceReference service : services )
             {
                 m_contentTracker.addingService( service );
             }
         }
-        catch ( InvalidSyntaxException e )
+        catch( InvalidSyntaxException e )
         {
             // Can not happen. Right!
             m_logger.warn( "Invalid filter [" + filter + "]. This probably caused by either the [application name] "
-                + "or the containement id] contains osgi filter keywords.", e );
+                           + "or the containement id] contains osgi filter keywords.", e
+            );
         }
 
         m_registration.setProperties( config );
@@ -326,10 +421,10 @@ public abstract class AbstractContentAggregator<E extends Component>
 
     public final void addContent( String id, ContentSource content )
     {
-        synchronized ( this )
+        synchronized( this )
         {
             List<ContentSource> contents = m_children.get( id );
-            if ( contents == null )
+            if( contents == null )
             {
                 contents = new ArrayList<ContentSource>();
                 m_children.put( id, contents );
@@ -340,16 +435,16 @@ public abstract class AbstractContentAggregator<E extends Component>
 
     public final boolean removeContent( String id, ContentSource content )
     {
-        synchronized ( this )
+        synchronized( this )
         {
             List<ContentSource> contents = m_children.get( id );
-            if ( contents == null )
+            if( contents == null )
             {
                 return false;
             }
 
             contents.remove( content );
-            if ( contents.isEmpty() )
+            if( contents.isEmpty() )
             {
                 return m_children.remove( id ) != null;
             }
@@ -365,7 +460,7 @@ public abstract class AbstractContentAggregator<E extends Component>
      */
     public final String getDestinationId()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.getProperty( ContentSource.DESTINATION );
         }
@@ -388,7 +483,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     {
         NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( ContentSource.DESTINATION, destinationId );
         }
@@ -396,7 +491,7 @@ public abstract class AbstractContentAggregator<E extends Component>
 
     public final ServiceRegistration register()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             String applicationName = getApplicationName();
             String containmentId = getContainmentId();
@@ -404,9 +499,9 @@ public abstract class AbstractContentAggregator<E extends Component>
             m_contentTracker.open();
 
             String[] serviceNames =
-            {
-                ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName()
-            };
+                {
+                    ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName()
+                };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
 
             return m_registration;
@@ -427,7 +522,7 @@ public abstract class AbstractContentAggregator<E extends Component>
      * </p>
      *
      * @param parent The parent component of the component to be created by this method. This argument must not be
-     *            {@code null}.
+     *               {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance.
      *
@@ -459,15 +554,15 @@ public abstract class AbstractContentAggregator<E extends Component>
      * </ul>
      * </p>
      *
-     * @param wicketId The wicket id. This argument must not be {@code null}.
-     * @param parent The parent component. This argument must not be {@code null}.
+     * @param contentId The contentId. This argument must not be {@code null} nor empty. It maps to the wicket:id of the
+     *                  rendering process in Wicket.
+     * @param parent    The parent component. This argument must not be {@code null}.
      *
      * @return A new instance of wicket component represented by this {@code AbstractContentAggregator}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     *
      * @since 1.0.0
      */
-    protected abstract <T extends Component> E createComponent( String wicketId, T parent )
+    protected abstract <T extends Component> E createComponent( String contentId, T parent )
         throws IllegalArgumentException;
 }
