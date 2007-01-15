@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code DefaultContentTracker} tracks {@link ContentSource} services.
- *
+ * 
  * @author Edward Yakop
  * @since 1.0.0
  */
@@ -47,17 +47,17 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Construct an instance of {@code DefaultContentTracker} with the specified arguments.
-     *
-     * @param context         The bundle context. This argument must not be {@code null}.
-     * @param callback        The callback. This argument must not be {@code null}.
+     * 
+     * @param context The bundle context. This argument must not be {@code null}.
+     * @param callback The callback. This argument must not be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * @param containmentId   The containment id. This argument must not be {@code null} or empty.
-     *
+     * @param containmentId The containment id. This argument must not be {@code null} or empty.
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      * @since 1.0.0
      */
-    public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback,
-                                  String applicationName, String containmentId )
+    public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback, String applicationName,
+        String containmentId )
         throws IllegalArgumentException
     {
         super( context, TrackingUtil.createContentFilter( context, applicationName ), null );
@@ -75,17 +75,17 @@ public final class DefaultContentTracker extends ServiceTracker
     /**
      * Close the tracker. This method assumes that all {@code ContentSource} that are stored by invoking
      * {@link ContentTrackingCallback#addContent(String,ContentSource)} has been freed.
-     *
+     * 
      * @since 1.0.0
      */
     @Override
     public final synchronized void close()
     {
-        synchronized( this )
+        synchronized ( this )
         {
             int startIndexOfWicketId = m_containmentId.length() + 1;
 
-            for( ServiceReference reference : m_references )
+            for ( ServiceReference reference : m_references )
             {
                 String destinationId = (String) reference.getProperty( ContentSource.DESTINATION );
                 String wicketId = destinationId.substring( startIndexOfWicketId );
@@ -105,13 +105,13 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Adding service.
-     *
+     * 
      * @see ServiceTracker#addingService(ServiceReference)
      * @since 1.0.0
      */
     public final Object addingService( ServiceReference serviceReference )
     {
-        if( m_logger.isDebugEnabled() )
+        if ( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
@@ -119,20 +119,20 @@ public final class DefaultContentTracker extends ServiceTracker
         String dest = (String) serviceReference.getProperty( ContentSource.DESTINATION );
 
         Object service;
-        synchronized( this )
+        synchronized ( this )
         {
             service = m_context.getService( serviceReference );
         }
 
-        if( dest == null )
+        if ( dest == null )
         {
             return service;
         }
-        if( dest.startsWith( "regexp(" ) )
+        if ( dest.startsWith( "regexp(" ) )
         {
             return matchRegularExpression( dest, service, serviceReference );
         }
-        else if( !dest.startsWith( m_containmentId ) )
+        else if ( !dest.startsWith( m_containmentId ) )
         {
             return service;
         }
@@ -143,15 +143,15 @@ public final class DefaultContentTracker extends ServiceTracker
     private Object matchRegularExpression( String dest, Object service, ServiceReference serviceReference )
     {
         int lastParan = dest.lastIndexOf( ")." );
-        if( lastParan < 0 )
+        if ( lastParan < 0 )
         {
             String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[wicketId]";
             throw new IllegalArgumentException( message );
         }
         String expression = dest.substring( 7, lastParan );
-        if(  Pattern.matches( expression, m_containmentId ) )
+        if ( Pattern.matches( expression, m_containmentId ) )
         {
-            synchronized( this )
+            synchronized ( this )
             {
                 String id = dest.substring( lastParan + 2 );
                 m_callback.addContent( id, (ContentSource) service );
@@ -164,27 +164,27 @@ public final class DefaultContentTracker extends ServiceTracker
     private Object matchDirect( String dest, Object service, ServiceReference serviceReference )
     {
         int contIdLength = m_containmentId.length();
-        if( dest.length() == contIdLength )
+        if ( dest.length() == contIdLength )
         {
             String message = "The '" + ContentSource.DESTINATION + "' property have the form ["
-                             + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
+                + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
 
             throw new IllegalArgumentException( message );
         }
 
-        if( dest.charAt( contIdLength ) != '.' )
+        if ( dest.charAt( contIdLength ) != '.' )
         {
             return service;
         }
 
         String id = dest.substring( contIdLength + 1 );
 
-        if( m_logger.isInfoEnabled() )
+        if ( m_logger.isInfoEnabled() )
         {
             m_logger.info( "Attaching content with wicket:id [" + id + "] to containment [" + m_containmentId + "]" );
         }
 
-        synchronized( this )
+        synchronized ( this )
         {
             m_callback.addContent( id, (ContentSource) service );
             m_references.add( serviceReference );
@@ -195,13 +195,13 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Handle modified service.
-     *
+     * 
      * @see ServiceTracker#modifiedService(ServiceReference,Object)
      * @since 1.0.0
      */
     public final void modifiedService( ServiceReference serviceReference, Object object )
     {
-        if( m_logger.isDebugEnabled() )
+        if ( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been modified." );
         }
@@ -212,18 +212,18 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Handle removed service.
-     *
+     * 
      * @see ServiceTracker#removedService(ServiceReference,Object)
      * @since 1.0.0
      */
     public void removedService( ServiceReference serviceReference, Object object )
     {
-        if( m_logger.isDebugEnabled() )
+        if ( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been removed." );
         }
 
-        if( !( object instanceof ContentSource ) )
+        if ( !(object instanceof ContentSource) )
         {
             String message = "OSGi Framework not passing a ContentSource object as specified in R4 spec.";
             throw new IllegalArgumentException( message );
@@ -231,23 +231,24 @@ public final class DefaultContentTracker extends ServiceTracker
 
         ContentSource content = (ContentSource) object;
         String destionationId = content.getDestinationId();
-        if( destionationId == null )
+        if ( destionationId == null )
         {
             m_logger.warn( "ContentSource [" + content + "] does not have destionationId defined." );
-
         }
-        int pos = destionationId.lastIndexOf( '.' );
-        String id = destionationId.substring( pos + 1 );
-        boolean wasContentRemoved = m_callback.removeContent( id, content );
-
-        if( m_logger.isInfoEnabled() && wasContentRemoved )
+        else
         {
-            m_logger.info(
-                "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId + "]"
-            );
+            int pos = destionationId.lastIndexOf( '.' );
+            String id = destionationId.substring( pos + 1 );
+            boolean wasContentRemoved = m_callback.removeContent( id, content );
+
+            if ( m_logger.isInfoEnabled() && wasContentRemoved )
+            {
+                m_logger.info( "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId
+                    + "]" );
+            }
         }
 
-        synchronized( this )
+        synchronized ( this )
         {
             m_context.ungetService( serviceReference );
             m_references.remove( serviceReference );
