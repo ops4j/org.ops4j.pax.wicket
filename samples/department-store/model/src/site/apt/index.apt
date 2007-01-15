@@ -1,5 +1,0 @@
-
-    The Model of this application is really simple.
-
-    Imagine a multi-floor department store or a mall, with one or more franchisees (tenants) on each floor. The Franchisee therefor belongs to a floor, has a name and a description.
-    

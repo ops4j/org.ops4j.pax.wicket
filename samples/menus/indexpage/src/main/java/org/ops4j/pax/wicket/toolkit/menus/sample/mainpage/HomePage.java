@@ -49,10 +49,10 @@ public class HomePage extends WebPage
         populateMenus( localMenu, "localmenu" );
     }
 
-    private void populateMenus( PaxWicketMenu menu, String wicketId )
+    private void populateMenus( PaxWicketMenu menu, String contentId )
     {
         List<Component> globalMenuComponents  = new ArrayList<Component>();
-        ListView globalmenuview = new ListView( wicketId, globalMenuComponents )
+        ListView globalmenuview = new ListView( contentId, globalMenuComponents )
         {
             protected void populateItem( final ListItem item )
             {
@@ -63,7 +63,7 @@ public class HomePage extends WebPage
         if( globalMenuComponents.size() == 0 )
         {
             // No menu installed.
-            Label dummy = new Label( wicketId, "" );
+            Label dummy = new Label( contentId, "" );
             dummy.setVisible( false );
             add( dummy );
         }

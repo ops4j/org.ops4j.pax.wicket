@@ -83,15 +83,15 @@ public final class DefaultContentTracker extends ServiceTracker
     {
         synchronized ( this )
         {
-            int startIndexOfWicketId = m_containmentId.length() + 1;
+            int startIndexOfContentId = m_containmentId.length() + 1;
 
             for ( ServiceReference reference : m_references )
             {
                 String destinationId = (String) reference.getProperty( ContentSource.DESTINATION );
-                String wicketId = destinationId.substring( startIndexOfWicketId );
+                String contentId = destinationId.substring( startIndexOfContentId );
                 ContentSource content = (ContentSource) m_context.getService( reference );
 
-                m_callback.removeContent( wicketId, content );
+                m_callback.removeContent( contentId, content );
 
                 m_context.ungetService( reference ); // Removal for the first get during add
                 m_context.ungetService( reference ); // Removal for the second get in this loop block
@@ -145,7 +145,7 @@ public final class DefaultContentTracker extends ServiceTracker
         int lastParan = dest.lastIndexOf( ")." );
         if ( lastParan < 0 )
         {
-            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[wicketId]";
+            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[contentId]";
             throw new IllegalArgumentException( message );
         }
         String expression = dest.substring( 7, lastParan );
@@ -167,8 +167,7 @@ public final class DefaultContentTracker extends ServiceTracker
         if ( dest.length() == contIdLength )
         {
             String message = "The '" + ContentSource.DESTINATION + "' property have the form ["
-                + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
-
+                             + ContentSource.AGGREGATION_POINT + "].[contentId] but was " + dest;
             throw new IllegalArgumentException( message );
         }
 
@@ -233,7 +232,8 @@ public final class DefaultContentTracker extends ServiceTracker
         String destionationId = content.getDestinationId();
         if ( destionationId == null )
         {
-            m_logger.warn( "ContentSource [" + content + "] does not have destionationId defined." );
+            m_logger.warn( "ContentSource [" + content + "] does not have Destination defined. Setting to <unknown>" );
+            destionationId = ContentSource.DESTINATION_UNKNOWN;
         }
         else
         {

@@ -44,6 +44,7 @@ import wicket.Component;
 public class RootContentAggregator
     implements ContentAggregator, ContentTrackingCallback, ManagedService
 {
+
     protected final Logger m_logger = Logger.getLogger( RootContentAggregator.class );
 
     private Hashtable<String, String> m_properties;
@@ -64,7 +65,7 @@ public class RootContentAggregator
 
     public final String getContainmentId()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.get( ContentSource.AGGREGATION_POINT );
         }
@@ -72,7 +73,7 @@ public class RootContentAggregator
 
     public final void setContainmentId( String containmentId )
     {
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( ContentSource.AGGREGATION_POINT, containmentId );
         }
@@ -88,20 +89,20 @@ public class RootContentAggregator
         m_properties.put( ContentSource.APPLICATION_NAME, applicationName );
     }
 
-    @SuppressWarnings("unchecked")
-    public final <V extends Component, T extends Component> List<V> createComponents( String wicketId, T parent )
+    @SuppressWarnings( "unchecked" )
+    public final <V extends Component, T extends Component> List<V> createComponents( String contentId, T parent )
     {
         ArrayList<V> result = new ArrayList<V>();
 
-        List<ContentSource<V>> contents = getContents( wicketId );
-        if ( !contents.isEmpty() )
+        List<ContentSource<V>> contents = getContents( contentId );
+        if( !contents.isEmpty() )
         {
             Locale locale = null;
-            for ( ContentSource content : contents )
+            for( ContentSource source : contents )
             {
-                V component = (V) content.createComponent( null );
+                V component = (V) source.createComponent( null );
 
-                if ( locale != null )
+                if( locale == null )
                 {
                     locale = component.getLocale();
                 }
@@ -109,8 +110,8 @@ public class RootContentAggregator
                 result.add( component );
             }
 
-            Comparator<V> comparator = getComparator( wicketId, locale );
-            if ( comparator != null )
+            Comparator<V> comparator = getComparator( contentId, locale );
+            if( comparator != null )
             {
                 Collections.sort( result, comparator );
             }
@@ -124,13 +125,12 @@ public class RootContentAggregator
      * {@code null} if the comparator is not defined. By default, this comparator returns {@code null}.
      *
      * @param contentId The content id. This argument must not be {@code null}.
-     * @param locale The locale. This argument must not be {@code null}.
+     * @param locale    The locale. This argument must not be {@code null}.
      *
      * @return The comparator for the specified {@code contentId}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     *
-     * @see ContentAggregator#createComponents(String, wicket.Component)
+     * @see ContentAggregator#createComponents(String,wicket.Component)
      * @since 1.0.0
      */
     public <V extends Component> Comparator<V> getComparator( String contentId, Locale locale )
@@ -147,17 +147,15 @@ public class RootContentAggregator
      * </p>
      *
      * @throws IllegalStateException Thrown if this content tracker has not been registered.
-     *
      * @see ServiceRegistration#unregister()
-     *
      * @since 1.0.0
      */
     public final void dispose()
         throws IllegalStateException
     {
-        synchronized ( this )
+        synchronized( this )
         {
-            if ( m_contentTracker == null )
+            if( m_contentTracker == null )
             {
                 throw new IllegalStateException( "RootContentAggregator [" + this + "] has not been registered." );
             }
@@ -168,61 +166,61 @@ public class RootContentAggregator
     }
 
     /**
-     * Add the specified {@code content} to this {@code RootContentAggregator} and mapped it as {@code wicketId}.
+     * Add the specified {@code source} to this {@code RootContentAggregator} and mapped it as {@code contentId}.
      *
-     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
-     * @param content The content. This argument must not be {@code null}.
+     * @param contentId The wicket id. This argument must not be {@code null} or empty.
+     * @param source  The source. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    public final void addContent( String wicketId, ContentSource content )
+    public final void addContent( String contentId, ContentSource source )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        NullArgumentException.validateNotNull( content, "content" );
+        NullArgumentException.validateNotEmpty( contentId, "contentId" );
+        NullArgumentException.validateNotNull( source, "source" );
 
-        synchronized ( this )
+        synchronized( this )
         {
-            List<ContentSource> contents = m_children.get( wicketId );
-            if ( contents == null )
+            List<ContentSource> contents = m_children.get( contentId );
+            if( contents == null )
             {
                 contents = new ArrayList<ContentSource>();
-                m_children.put( wicketId, contents );
+                m_children.put( contentId, contents );
             }
 
-            contents.add( content );
+            contents.add( source );
         }
     }
 
     /**
-     * Remove the specified {@code content} to this {@code RootContentAggregator} and unmapped it as {@code wicketId}.
+     * Remove the specified {@code content} to this {@code RootContentAggregator} and unmapped it as {@code contentId}.
      *
-     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
-     * @param content The content. This argument must not be {@code null}.
+     * @param contentId The wicket id. This argument must not be {@code null} or empty.
+     * @param content  The content. This argument must not be {@code null}.
      *
      * @return A {@code boolean} indicator whether removal is successfull.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    public final boolean removeContent( String wicketId, ContentSource content )
+    public final boolean removeContent( String contentId, ContentSource content )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        NullArgumentException.validateNotEmpty( contentId, "contentId" );
         NullArgumentException.validateNotNull( content, "content" );
 
-        synchronized ( this )
+        synchronized( this )
         {
-            List<ContentSource> contents = m_children.get( wicketId );
-            if ( contents == null )
+            List<ContentSource> contents = m_children.get( contentId );
+            if( contents == null )
             {
                 return false;
             }
             contents.remove( content );
-            if ( contents.isEmpty() )
+            if( contents.isEmpty() )
             {
-                return m_children.remove( wicketId ) != null;
+                return m_children.remove( contentId ) != null;
             }
 
             return false;
@@ -230,28 +228,28 @@ public class RootContentAggregator
     }
 
     /**
-     * Returns list of {@code ContentSource} instnaces of the specified {@code wicketId}. Returns an empty list if there is
-     * no content for the specified {@code wicketId}.
+     * Returns list of {@code ContentSource} instances of the specified {@code contentId}. Returns an empty list if there is
+     * no content for the specified {@code contentId}.
      *
-     * @param wicketId The wicket id. This argument must not be {@code null} or empty.
+     * @param contentId The wicket id. This argument must not be {@code null} or empty.
      *
-     * @return List of {@code ContentSource} of the specified {@code wicketId}.
+     * @return List of {@code ContentSource} of the specified {@code contentId}.
      *
-     * @throws NullArgumentException If the wicketId is null.
+     * @throws NullArgumentException If the contentId is null.
      */
-    @SuppressWarnings("unchecked")
-    public final <V extends ContentSource> List<V> getContents( String wicketId )
+    @SuppressWarnings( "unchecked" )
+    public final <V extends ContentSource> List<V> getContents( String contentId )
         throws NullArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        NullArgumentException.validateNotEmpty( contentId, "contentId" );
 
         List<V> contents;
-        synchronized ( this )
+        synchronized( this )
         {
-            contents = (List<V>) m_children.get( wicketId );
+            contents = (List<V>) m_children.get( contentId );
         }
 
-        if ( contents != null )
+        if( contents != null )
         {
             contents = new ArrayList<V>( contents );
         }
@@ -266,9 +264,9 @@ public class RootContentAggregator
     public final ServiceRegistration register()
         throws IllegalStateException
     {
-        synchronized ( this )
+        synchronized( this )
         {
-            if ( m_contentTracker != null )
+            if( m_contentTracker != null )
             {
                 throw new IllegalStateException( "RootContentAggregator [" + this + "] has already been registered." );
             }
@@ -279,9 +277,9 @@ public class RootContentAggregator
             m_contentTracker.open();
 
             String[] serviceNames =
-            {
-                ContentAggregator.class.getName(), ManagedService.class.getName()
-            };
+                {
+                    ContentAggregator.class.getName(), ManagedService.class.getName()
+                };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
 
             return m_registration;
@@ -291,9 +289,9 @@ public class RootContentAggregator
     public void updated( Dictionary config )
         throws ConfigurationException
     {
-        if ( config == null )
+        if( config == null )
         {
-            synchronized ( this )
+            synchronized( this )
             {
                 m_registration.setProperties( m_properties );
             }
@@ -303,33 +301,33 @@ public class RootContentAggregator
 
         String newContainmentId = (String) config.get( ContentSource.AGGREGATION_POINT );
         String existingContainmentId = getContainmentId();
-        if ( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
+        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;
         }
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_children.clear();
         }
 
         setContainmentId( newContainmentId );
-        if ( newContainmentId != null )
+        if( newContainmentId != null )
         {
             try
             {
                 String tServiceClassName = ContentSource.class.getName();
                 ServiceReference[] services = m_bundleContext.getServiceReferences( tServiceClassName, null );
-                if ( services == null )
+                if( services == null )
                 {
                     return;
                 }
-                for ( ServiceReference service : services )
+                for( ServiceReference service : services )
                 {
                     m_contentTracker.addingService( service );
                 }
             }
-            catch ( InvalidSyntaxException e )
+            catch( InvalidSyntaxException e )
             {
                 // Can not happen. Right!
                 e.printStackTrace();
@@ -343,9 +341,9 @@ public class RootContentAggregator
     protected void finalize()
         throws Throwable
     {
-        synchronized ( this )
+        synchronized( this )
         {
-            if ( m_contentTracker != null )
+            if( m_contentTracker != null )
             {
                 m_logger.warn( "RootContentAggregator [" + this + "] is not disposed." );
             }

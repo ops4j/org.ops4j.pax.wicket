@@ -55,7 +55,6 @@ public class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
         {
             pageClass = pageSources[ 0 ].getPageClass();
         }
-        OverviewPage overviewPage = new OverviewPage( m_aggregator, "Sungei Wang Plaza", pageClass );
-        return overviewPage;
+        return new OverviewPage( m_aggregator, "Sungei Wang Plaza", pageClass );
     }
 }

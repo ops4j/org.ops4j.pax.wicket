@@ -91,16 +91,16 @@ public interface ContentAggregator
      * </ul>
      * </p>
      *
-     * @param wicketId The wicket id. This argument must not be {@code null}.
+     * @param contentId The wicket id. This argument must not be {@code null}.
      * @param parent The parent of created components. This argument must not be {@code null}.
      *
-     * @return A list of component with the specified {@code wicketId} and {@code parent}.
+     * @return A list of component with the specified {@code contentId} and {@code parent}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      *
      * @since 1.0.0
      */
-    <E extends Component, T extends Component> List<E> createComponents( String wicketId, T parent )
+    <E extends Component, T extends Component> List<E> createComponents( String contentId, T parent )
         throws IllegalArgumentException;
 
     /**

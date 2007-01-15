@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Pax Wicket Sample Departmentstore Franchisee">
-
-  <body>
-    <menu name="Pax Wicket Samples" inherit="top" >
-      <item name="Franchisee" href="index.html"/>
-    </menu>
-  </body>
-</project>

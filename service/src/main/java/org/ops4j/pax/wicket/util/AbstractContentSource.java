@@ -30,7 +30,7 @@ import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
 
-public abstract class DefaultContentSource<E extends Component>
+public abstract class AbstractContentSource<E extends Component>
     implements ContentSource<E>, ManagedService
 {
     private BundleContext m_bundleContext;
@@ -38,7 +38,7 @@ public abstract class DefaultContentSource<E extends Component>
     private ServiceRegistration m_registration;
 
     /**
-     * Construct an instance with {@code DefaultContentSource}.
+     * Construct an instance with {@code AbstractContentSource}.
      *
      * @param bundleContext The bundle context. This argument must not be {@code null}.
      * @param contentId The content id. This argument must not be {@code null} or empty.
@@ -48,7 +48,7 @@ public abstract class DefaultContentSource<E extends Component>
      *
      * @since 1.0.0
      */
-    protected DefaultContentSource( BundleContext bundleContext, String contentId, String applicationName )
+    protected AbstractContentSource( BundleContext bundleContext, String contentId, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -122,9 +122,9 @@ public abstract class DefaultContentSource<E extends Component>
     {
         String destinationId = getDestinationId();
         int pos = destinationId.lastIndexOf( '.' );
-        String wicketId = destinationId.substring( pos + 1 );
+        String contentId = destinationId.substring( pos + 1 );
 
-        return createComponent( wicketId, parent );
+        return createComponent( contentId, parent );
     }
 
     /**
@@ -197,7 +197,7 @@ public abstract class DefaultContentSource<E extends Component>
     }
 
     /**
-     * Create component with the specified {@code wicketId}.
+     * Create component with the specified {@code contentId}.
      * <p>
      * General convention:<br/>
      * <ul>
@@ -208,16 +208,16 @@ public abstract class DefaultContentSource<E extends Component>
      * </ul>
      * </p>
      *
-     * @param wicketId The wicket id. This argument must not be {@code null}.
+     * @param contentId The wicket id. This argument must not be {@code null}.
      * @param parent The parent component of created component of this method. This argument must not be {@code null}.
      *
-     * @return The wicket component with the specified {@code wicketId}.
+     * @return The wicket component with the specified {@code contentId}.
      *
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      *
      * @since 1.0.0
      */
-    protected abstract <T extends Component> E createComponent( String wicketId, T parent )
+    protected abstract <T extends Component> E createComponent( String contentId, T parent )
         throws IllegalArgumentException;
 
     public final void updated( Dictionary config )
@@ -244,9 +244,9 @@ public abstract class DefaultContentSource<E extends Component>
     }
 
     /**
-     * Register the specified {@code DefaultContentSource} instance.
+     * Register the specified {@code AbstractContentSource} instance.
      *
-     * @return The specified {@code DefaultContentSource}.
+     * @return The specified {@code AbstractContentSource}.
      *
      * @since 1.0.0
      */

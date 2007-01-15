@@ -467,6 +467,7 @@
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/application.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/menus/content1/content1.iml" filepath="$PROJECT_DIR$/samples/menus/content1/content1.iml" group="samples/menus" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/demo.iml" group="samples/department-store" />
+      <module fileurl="file://$PROJECT_DIR$/src/documentation.iml" filepath="$PROJECT_DIR$/src/documentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/floor.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
       <module fileurl="file://$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" filepath="$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" group="samples/menus" />

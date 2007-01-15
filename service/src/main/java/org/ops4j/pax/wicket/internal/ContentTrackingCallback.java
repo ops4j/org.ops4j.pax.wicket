@@ -29,22 +29,22 @@ import org.ops4j.pax.wicket.api.ContentSource;
 public interface ContentTrackingCallback
 {
     /**
-     * The specified {@code content} is added with the specified {@code wicketId} id.
+     * The specified {@code content} is added with the specified {@code contentId} id.
      *
-     * @param wicketId The wicket identifier. This argument must not be {@code null} or empty.
+     * @param contentId The wicket identifier. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      *
      * @since 1.0.0
      */
-    void addContent( String wicketId, ContentSource content )
+    void addContent( String contentId, ContentSource content )
         throws IllegalArgumentException;
 
     /**
-     * The specified {@code content} is not available with the specified {@code wicketId} id.
+     * The specified {@code content} is not available with the specified {@code contentId} id.
      *
-     * @param wicketId The wicket identifier. This argument must not be {@code null} or empty.
+     * @param contentId The wicket identifier. This argument must not be {@code null} or empty.
      * @param content The content. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
@@ -53,5 +53,5 @@ public interface ContentTrackingCallback
      *
      * @since 1.0.0
      */
-    boolean removeContent( String wicketId, ContentSource content );
+    boolean removeContent( String contentId, ContentSource content );
 }

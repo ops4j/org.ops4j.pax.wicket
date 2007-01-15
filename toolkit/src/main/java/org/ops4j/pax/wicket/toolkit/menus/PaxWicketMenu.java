@@ -17,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.util.AbstractContentAggregator;
 import org.ops4j.pax.wicket.toolkit.actions.ActionContainer;
+import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
 import wicket.Component;
 import wicket.markup.html.panel.Panel;
 
-public class PaxWicketMenu extends AbstractContentAggregator<Panel>
+public class PaxWicketMenu extends AbstractAggregatedSource<Panel>
     implements ActionContainer
 {
 
@@ -37,10 +37,10 @@ public class PaxWicketMenu extends AbstractContentAggregator<Panel>
         m_menuName = menuName;
     }
 
-    protected <T extends Component> Panel createComponent( String wicketId, T parent )
+    protected <T extends Component> Panel createComponent( String contentId, T parent )
         throws IllegalArgumentException
     {
-        return new PaxWicketMenuPanel( this, wicketId );
+        return new PaxWicketMenuPanel( this, contentId );
     }
 
     public String getMenuName()

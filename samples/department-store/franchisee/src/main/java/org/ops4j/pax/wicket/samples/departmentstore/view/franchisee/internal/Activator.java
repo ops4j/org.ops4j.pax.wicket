@@ -38,14 +38,10 @@ public class Activator
 {
     private List<ServiceRegistration> m_registrations;
 
-    public Activator()
-    {
-        m_registrations = new ArrayList<ServiceRegistration>();
-    }
-
     public void start( BundleContext bundleContext )
         throws Exception
     {
+        m_registrations = new ArrayList<ServiceRegistration>();
         String depStore = DepartmentStore.class.getName();
         ServiceReference depStoreService = bundleContext.getServiceReference( depStore );
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreService );
@@ -58,9 +54,9 @@ public class Activator
             for( Franchisee franchisee : franchisees )
             {
                 String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContentSource content = new FranchiseeContentSource( bundleContext, franchisee, "departmentstore"  );
-                content.setDestinationId( destinationId );
-                ServiceRegistration registration = content.register();
+                FranchiseeContentSource source = new FranchiseeContentSource( bundleContext, franchisee, "departmentstore"  );
+                source.setDestinationId( destinationId );
+                ServiceRegistration registration = source.register();
                 m_registrations.add( registration );
             }
         }

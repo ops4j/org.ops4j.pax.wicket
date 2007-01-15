@@ -33,9 +33,9 @@ public class PaxWicketMenuItemPanel extends Panel
 
     private PaxWicketMenuItem m_menuItem;
 
-    public PaxWicketMenuItemPanel( PaxWicketMenuItem menuItem, String wicketId )
+    public PaxWicketMenuItemPanel( PaxWicketMenuItem menuItem, String contentId )
     {
-        super( wicketId );
+        super( contentId );
         m_menuItem = menuItem;
         PaxWicketBookmarkableLink pageLink = menuItem.getLink();
         if( pageLink != null )

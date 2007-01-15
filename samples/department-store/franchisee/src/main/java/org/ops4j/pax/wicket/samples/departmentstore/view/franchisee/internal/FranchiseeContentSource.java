@@ -19,7 +19,7 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
-import org.ops4j.pax.wicket.util.DefaultContentSource;
+import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
 
 import wicket.Component;
@@ -30,7 +30,7 @@ import wicket.Component;
  * @author Niclas Hedhman, Edward Yakop
  * @since 1.0.0
  */
-public class FranchiseeContentSource extends DefaultContentSource<FranchiseePanel>
+public class FranchiseeContentSource extends AbstractContentSource<FranchiseePanel>
 {
 
     private Franchisee m_franchisee;

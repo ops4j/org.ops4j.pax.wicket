@@ -46,9 +46,9 @@ final class FloorPanel extends Panel
     private static final String WICKET_ID_FRANCHISEE = "franchisee";
     private static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    FloorPanel( String id, ContentAggregator container, Floor floor )
+    FloorPanel( String id, ContentAggregator container, Model floor )
     {
-        super( id, new Model( floor.getName() ) );
+        super( id, floor );
 
         ListView listView = new ListView( WICKET_ID_FRANCHISEES )
         {

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Pax Wicket Sample Departmentstore Floor">
-  <body>
-    <menu name="Pax Wicket Samples" inherit="top" >
-      <item name="Floor" href="index.html"/>
-    </menu>
-  </body>
-</project>

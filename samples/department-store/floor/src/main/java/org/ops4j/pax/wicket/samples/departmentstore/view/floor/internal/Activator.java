@@ -34,69 +34,45 @@ public class Activator
     implements BundleActivator
 {
 
-    private static Activator INSTANCE;
-
-    private HashMap<String, FloorContentAggregator> m_containers;
     private List<ServiceRegistration> m_registrations;
-
-    public Activator()
-    {
-        synchronized ( Activator.class )
-        {
-            INSTANCE = this;
-        }
-        m_containers = new HashMap<String, FloorContentAggregator>();
-        m_registrations = new ArrayList<ServiceRegistration>();
-    }
+    private ArrayList<ContentAggregator> m_floors;
 
     public void start( BundleContext bundleContext )
         throws Exception
     {
+        m_registrations = new ArrayList<ServiceRegistration>();
         String depStoreServiceName = DepartmentStore.class.getName();
         ServiceReference depStoreServiceReference = bundleContext.getServiceReference( depStoreServiceName );
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreServiceReference );
         List<Floor> floors = departmentStore.getFloors();
-
+        m_floors = new ArrayList<ContentAggregator>();
         String destinationId = "swp.floor";
-        for ( Floor floor : floors )
+        for( Floor floor : floors )
         {
             String floorName = floor.getName();
-            FloorContentAggregator container = new FloorContentAggregator( floor, floorName, destinationId,
-                bundleContext, "departmentstore" );
-            m_containers.put( floorName, container );
-            container.setDestinationId( destinationId );
-            container.setAggregationId( floor.getName() );
-            ServiceRegistration registration = container.register();
+            FloorAggregatedSource aggregatedSource = new FloorAggregatedSource( floor, floorName, destinationId,
+                                                                                bundleContext, "departmentstore"
+            );
+            aggregatedSource.setDestinationId( destinationId );
+            aggregatedSource.setAggregationId( floor.getName() );
+            ServiceRegistration registration = aggregatedSource.register();
             m_registrations.add( registration );
+            m_floors.add( aggregatedSource );
         }
     }
 
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        for ( ServiceRegistration registration : m_registrations )
+        for( ServiceRegistration registration : m_registrations )
         {
             registration.unregister();
         }
         m_registrations.clear();
 
-        Collection<FloorContentAggregator> floorContainers = m_containers.values();
-        for ( ContentAggregator floor : floorContainers )
+        for( ContentAggregator floor : m_floors )
         {
             floor.dispose();
         }
-    }
-
-    static final Activator getInstance()
-    {
-        synchronized ( Activator.class )
-        {
-            return INSTANCE;
-        }
-    }
-
-    final FloorContentAggregator getFloorContentContainer( String containerId )
-    {
-        return m_containers.get( containerId );
     }
 }

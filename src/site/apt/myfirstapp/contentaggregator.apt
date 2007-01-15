@@ -1,0 +1,278 @@
+    ---------------------------------
+    Writing Content Aggregators
+    ---------------------------------
+    Niclas Hedhman
+    ---------------------------------
+    2007 January 15
+    ---------------------------------
+
+Writing Content Aggregators
+
+    <ContentAggregator> is an aggregation of <ContentSource>(s) which are typically the re-registered as a larger
+    <ContentSource>. The <ContentAggregator> defines a <AggregationPoint> which in turn defines zero, one or many
+    <ContentId>s. Each <ContentId> is associated with a wicket:id in the html markup and creation of Wicket components.
+    It is important that the <ContentAggregator> fulfills the creation of the component of the wicket:id, even if no
+    matching <ContentSource> exist. Typically, a dummy empty label is created if the
+    <<<ContentSource.createComponent()>>> method returns an empty list.
+
+    That is the theory. In this case, the Floor bundle looks up which floors exist in the Department Store and
+    registers each <ContentAggregator> as a service into the OSGi framework.
+
+    The Floor is both <ContentSource> as well as a ContentAggregator. The <ContentAggregator> will look for
+    <ContentSource>s to be <wired> to it, whilst the <ContentSource> side of the floor practically registers the
+    floor content into a higher <ContentAggregator>, in this case being the <RootContentAggregator> of the Application
+    bundle.
+
+        * <<<FloorContentAggregator>>> is the combined <ContentSource> and <ContentAggregator> implementation, by
+          subclassing the  <<<AbstractContentAggregator>>> in Pax Wicket. We only need to implement the
+          <<<createComponent()>>> method, which is part of the <ContentSource> interface. Handling of the
+          <ContentAggregator> interface is automatic in the superclass.
+
+        * <<<FloorPanel>>> is the Wicket Panel we are creating. It is simply a <<<List>>> of Franchisees that are
+          <wired> to this floor.
+
+        * The <<<Activator>>> is given the responsibility of creating one <<<FloorAggregatedSource>>> per floor found in
+          the Model.
+
+    Now let's look at the code from the department-store sample in the
+    {{{https://scm.ops4j.org/repos/ops4j/projects/pax/wicket/samples/deptartment-store}OPS4J svn repository}}.
+
+
++------------------------------
+public class Activator
+    implements BundleActivator
+{
+
+    private List<ServiceRegistration> m_registrations;
+    private ArrayList<ContentAggregator> m_floors;
+
+    public void start( BundleContext bundleContext )
+        throws Exception
+    {
+        m_registrations = new ArrayList<ServiceRegistration>();
+        String depStoreServiceName = DepartmentStore.class.getName();
+        ServiceReference depStoreServiceReference = bundleContext.getServiceReference( depStoreServiceName );
+        DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreServiceReference );
+        List<Floor> floors = departmentStore.getFloors();
+        m_floors = new ArrayList<ContentAggregator>();
+        String destinationId = "swp.floor";
+        for( Floor floor : floors )
+        {
+            String floorName = floor.getName();
+            FloorAggregatedSource aggregatedSource = new FloorAggregatedSource( floor, floorName, destinationId,
+                                                                                bundleContext, "departmentstore"
+            );
+            aggregatedSource.setDestinationId( destinationId );
+            aggregatedSource.setAggregationId( floor.getName() );
+            ServiceRegistration registration = aggregatedSource.register();
+            m_registrations.add( registration );
+            m_floors.add( aggregatedSource );
+        }
+    }
+
+    public void stop( BundleContext bundleContext )
+        throws Exception
+    {
+        for( ServiceRegistration registration : m_registrations )
+        {
+            registration.unregister();
+        }
+        m_registrations.clear();
+
+        for( ContentAggregator floor : m_floors )
+        {
+            floor.dispose();
+        }
+    }
+}
++------------------------------
+
+    We obtain the Floor instances from our business logic model, and for each floor we create a
+    <<<FloorAggregatedSource>>> that will look for <ContentSource> with the <Destination> containing the
+    Floor <AggregationPoint>. The <<<AbstractAggregatedSource>>>, which we subclass for the FloorAggregatedSource,
+    also implements the <ContentSource> interface, so we need to set the <Destination> of the Floor itself.
+    In this case we have hardcoded the <Destination> to "swp.floor", meaning we want each floor to be
+    attached to the <AggregationPoint> named "swp" at a <ContentId> named "floor".
+
++------------------------------
+public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
+    implements OverviewTabContent
+{
+    private static HashMap<String, FloorAggregatedSource> m_instances;
+
+    private final Model m_floor;
+    private final String m_tabId;
+
+    static
+    {
+        m_instances = new HashMap<String, FloorAggregatedSource>();
+    }
+
+    public FloorAggregatedSource( Floor floor, String aggregationPoint, String destination,
+                                  BundleContext bundleContext, String applicationname )
+    {
+        super( bundleContext, applicationname, aggregationPoint, destination );
+        m_tabId = aggregationPoint;
+        m_floor = new Model( floor.getName() );
+        m_instances.put( floor.getName(), this );
+    }
+
+    protected FloorPanel createComponent( String contentId, Component parent )
+    {
+        return new FloorPanel( contentId, this, m_floor );
+    }
+
+    public AbstractTab createTab( Locale locale )
+    {
+        return new FloorTab( m_floor );
+    }
+
+    public String getTabId()
+    {
+        return m_tabId;
+    }
+
+    private static class FloorTab extends AbstractTab
+    {
+
+        private static final long serialVersionUID = 1L;
+
+        public FloorTab( Model title )
+        {
+            super( title );
+        }
+
+        @Override
+        public Panel getPanel( String panelId )
+        {
+            String floorName = (String) getTitle().getObject( null );
+            FloorAggregatedSource source = m_instances.get( floorName );
+            return source.createComponent( panelId, null );
+        }
+    }
+}
++------------------------------
+
+    The FloorAggregatedSource need to implement the createComponent( String id )  abstract method, needed by the
+    superclass <<<AbstractAggregatedSource>>>.
+
+    This code looks more complex than needed, as we store the created FloorAggregatedSource instances in the
+    static <<<Map>>> instance, so that we can look it up from the <<<getPanel()>>> method in the FloorTab. This
+    is to ensure that we don't pass the <<<FloorAggregatedSource>>> instance into the <<<AbstractTab>>> is this is
+    serialized by Wicket and must be a fairly lightweight object. The above approache ensures the small size. Note
+    that the <<<FloorAggregatedSource>>> looks light-weight, but the <<<AbstractAggregatedSource>>> carries 
+    <<<BundleContext>>> and other non-serializable classes.
+
++------------------------------
+final class FloorPanel extends Panel
+{
+
+    private static final long serialVersionUID = 1L;
+
+    public static final String WICKET_ID_NAME_LABEL = "name";
+    private static final String WICKET_ID_FRANCHISEE = "franchisee";
+    private static final String WICKET_ID_FRANCHISEES = "franchisees";
+
+    FloorPanel( String id, ContentAggregator container, Model floor )
+    {
+        super( id, floor );
+
+        ListView listView = new ListView( WICKET_ID_FRANCHISEES )
+        {
+            private static final long serialVersionUID = 1L;
+
+            protected void populateItem( final ListItem item )
+            {
+                Component modelObject = (Component) item.getModelObject();
+                item.add( modelObject );
+            }
+        };
+
+        List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, listView );
+        if ( franchisees.isEmpty() )
+        {
+            Label tLabel = new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." );
+            franchisees.add( tLabel );
+        }
+        Model listViewModel = new Model( (Serializable) franchisees );
+        listView.setModel( listViewModel );
+
+        add( listView );
+    }
+
+}
++------------------------------
+
+    The <<<Model>>> <floor> passed in the constructor argument, contains the name of the floor. We create a
+    <<<ListView>>> which we will populate with the components that are found in the <<<createComponents()>>>
+    method call later. The listView must be passed as the parent in the <<<createComponents()>>> to be compatible
+    with Wicket 2.0 (when it comes out). If there are no components to be created, then we generate a label saying so.
+    Otherwise, we set the <<<Model>>> of the <<<ListView>>> to the list of components. (Note: Wicket will call the
+    <<<populateItem()>>> method of the anonymous class at that point.)
+
+    The HTML associated with the FloorPanel looks like this;
++------------------------------
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.sourceforge.net/" xml:lang="en" lang="en">
+<body>
+    <wicket:panel>
+        <div class="floortable">
+            <div class="franchisee-row" wicket:id="franchisees">
+                <span class="franchisee-item" wicket:id="franchisee"></span>
+            </div>
+        </div>
+    </wicket:panel>
+</body>
++------------------------------
+
+    In the html, we once again uses Panel, but could in fact be any Wicket Component, including compounded and
+    extended ones.
+
+Bundle Manifest
+
++------------------------------
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Floor Plug-in
+Bundle-SymbolicName: org.ops4j.pax.wicket.sample.departmentstore.floor
+Bundle-Version: 1.0.0
+Bundle-Vendor: OPS4J
+Bundle-Localization: plugin
+Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.Activator
+Import-Package: org.apache.log4j;provider=paxlogging;version="[1.2.0,1.3.0)",
+ org.ops4j.pax.wicket.api;version="[1.0.0,1.1.0)",
+ org.ops4j.pax.wicket.samples.departmentstore.model;version="[1.0.0,1.1.0)",
+ org.ops4j.pax.wicket.samples.departmentstore.view;version="[1.0.0,1.1.0)",
+ org.ops4j.pax.wicket.util;version="[1.0.0,1.1.0)",
+ org.osgi.framework;version="[1.3.0,2.0.0)",
+ org.osgi.service.cm;version="[1.2.0,2.0.0)",
+ wicket;version="[1.2.0,1.3.0)",
+ wicket.extensions.markup.html.tabs;version="[1.2.0,1.3.0)",
+ wicket.markup.html.basic;version="[1.2.0,1.3.0)",
+ wicket.markup.html.body;version="[1.2.0,1.3.0)",
+ wicket.markup.html.border;version="[1.2.0,1.3.0)",
+ wicket.markup.html.debug;version="[1.2.0,1.3.0)",
+ wicket.markup.html.form;version="[1.2.0,1.3.0)",
+ wicket.markup.html.form.persistence;version="[1.2.0,1.3.0)",
+ wicket.markup.html.form.upload;version="[1.2.0,1.3.0)",
+ wicket.markup.html.form.validation;version="[1.2.0,1.3.0)",
+ wicket.markup.html.image;version="[1.2.0,1.3.0)",
+ wicket.markup.html.image.resource;version="[1.2.0,1.3.0)",
+ wicket.markup.html.include;version="[1.2.0,1.3.0)",
+ wicket.markup.html.internal;version="[1.2.0,1.3.0)",
+ wicket.markup.html.link;version="[1.2.0,1.3.0)",
+ wicket.markup.html.list;version="[1.2.0,1.3.0)",
+ wicket.markup.html.navigation.paging;version="[1.2.0,1.3.0)",
+ wicket.markup.html.panel;version="[1.2.0,1.3.0)",
+ wicket.markup.html.resources;version="[1.2.0,1.3.0)",
+ wicket.markup.html.tree;version="[1.2.0,1.3.0)",
+ wicket.model;version="[1.2.0,1.3.0)"
++------------------------------
+
+    The manifest contains a bunch of Wicket imports, and some of the dependencies within this sample.
+    We don't export anything, as this bundle has no further dependencies.
+
+Conclusion
+
+    As you have seen, it is not very difficult to write the <ContentAggregator> which is a <ContentSource> at the 
+    same time, if you subclass the <<<AbstractAggregatedSource>>>.
+

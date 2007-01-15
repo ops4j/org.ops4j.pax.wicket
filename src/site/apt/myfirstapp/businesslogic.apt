@@ -5,6 +5,26 @@
     --------------
     2006 June 1
     --------------
-    
-    The Pax Wicket Service should be used to generate a view of the actual application. The view should simply look up OSGi services to obtain the data for the view. By harnessing the modularity of OSGi, we get a very smooth separation of the web tier and the business logic. It is not within the scope of this document to describe how to model business logic on the OSGi platform.
+
+Business Logic Integration
+
+    The Pax Wicket Service should be used to generate a view of the actual application. The view should simply look
+    up OSGi services to obtain the data for the view. By harnessing the modularity of OSGi, we get a very smooth
+    separation of the web tier and the business logic. It is not within the scope of this document to describe how
+    to model business logic on the OSGi platform.
+
+    In this example, the Model bundle exposes a simple service, where we can obtain the information about the floors.
+    This is enough to construct the view of these floor, and populate with the franchisee information.
+
+Dynamic Model
+
+    Quite often, one wants the business model to be dynamic. That means that we want to put subsystems of functionality
+    into separate modules and have the view of the entire system reflect what is actually enabled. We can achieve that
+    easily in Pax Wicket, by being clever about the <AggregationPoint>s that are meant for this extension of the
+    view.
+
+    We can also put the view parts of the business model into the same bundle as the business model components, so that
+    once we load the subsystem, the view contains the parts needed. However, if you envision different kinds of views
+    or that the view is likely to evolve independently of the business model, then it is probably a better idea to
+    keep the view in separate bundles.
 

@@ -131,7 +131,7 @@ import wicket.Component;
  * </pre></code>
  * </p>
  */
-public abstract class AbstractContentAggregator<E extends Component>
+public abstract class AbstractAggregatedSource<E extends Component>
     implements ContentAggregator, ContentSource<E>, ContentTrackingCallback, ManagedService
 {
 
@@ -154,7 +154,7 @@ public abstract class AbstractContentAggregator<E extends Component>
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
-    protected AbstractContentAggregator( BundleContext bundleContext, String applicationName, String aggregationPoint,
+    protected AbstractAggregatedSource( BundleContext bundleContext, String applicationName, String aggregationPoint,
                                          String destination )
         throws IllegalArgumentException
     {
@@ -287,9 +287,9 @@ public abstract class AbstractContentAggregator<E extends Component>
         if( !contents.isEmpty() )
         {
             Locale locale = null;
-            for( ContentSource content : contents )
+            for( ContentSource source : contents )
             {
-                V component = (V) content.createComponent( parent );
+                V component = (V) source.createComponent( parent );
 
                 if( locale == null )
                 {
@@ -309,12 +309,12 @@ public abstract class AbstractContentAggregator<E extends Component>
     }
 
     /**
-     * Returns list of {@code ContentSource} instnaces of the specified {@code wicketId}. Returns an empty list if there is
-     * no content for the specified {@code wicketId}.
+     * Returns list of {@code ContentSource} instnaces of the specified {@code contentId}. Returns an empty list if there is
+     * no content for the specified {@code contentId}.
      *
      * @param contentId The wicket id. This argument must not be {@code null} or empty.
      *
-     * @return List of {@code ContentSource} of the specified {@code wicketId}.
+     * @return List of {@code ContentSource} of the specified {@code contentId}.
      *
      * @throws IllegalArgumentException if the contentId is null or empty.
      */
@@ -541,7 +541,7 @@ public abstract class AbstractContentAggregator<E extends Component>
     }
 
     /**
-     * Create component represented by this {@code AbstractContentAggregator} with the specified {@code wicketId} and
+     * Create component represented by this {@code AbstractContentAggregator} with the specified {@code contentId} and
      * {@code parent}.
      *
      * <p>

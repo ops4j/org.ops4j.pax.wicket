@@ -6,17 +6,26 @@
     2006 June 1
     -------------------------------
 
-    * {{{businesslogic.html}Business Logic}} - Separation of the view from the business logic/model with the help of OSGi services.
+My First Pax Wicket Application
 
-    * {{{content.html}Content}} - All Wicket Components are modelled with PageContent implementations.
+    This is a tutorial to cover all the basics of Pax Wicket and showing how you can decouple many parts of the
+    application into separate, evolvable and in runtime exchangable parts.
 
-    * {{{contentcontainer.html}Content Containers}} - Need to aggregate Components into a ContentContainer.
+        * {{{businesslogic.html}Business Logic}} - Separation of the view from the business logic/model with the help
+          of OSGi services.
 
-    * {{{homepage.html}Home Page}} - Need a first page in all applications.
+        * {{{contentsource.html}Content Source}} - All Wicket Components are modelled with <ContentSource>
+          implementations.
 
-    * {{{pagecontainer.html}Page Container}} - A special ContentContainer used for Pages.
+        * {{{contentaggregator.html}Content Aggregators}} - Need to aggregate Components into a <ContentAggregator>.
 
-    * {{{application.html}Application}} - Description of the PaxWicketApplication structure.
+        * {{{application.html}Application}} - We define an Application bundle, which contains the common resources, the
+          <<<PaxWicketApplicationFactory>>> and the <PageFactory> for the home page.
 
-    * {{{aboutpage.html}About Page}} - How to add a About Page and hiding the link if not present.
+        * {{{aboutpage.html}About Page}} - How to add a About Page and hiding the link if not present.
 
+
+    The Model of this application is really simple.
+
+    Imagine a multi-floor department store or a mall, with one or more franchisees (tenants) on each floor. The
+    Franchisee therefor belongs to a floor, has a name and a description.

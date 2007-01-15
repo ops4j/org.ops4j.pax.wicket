@@ -3,7 +3,7 @@
     --------------------
     Niclas Hedhman
     --------------------
-    2006 June 1
+    2007 January 15
     --------------------
 
 
@@ -20,5 +20,10 @@ Running on Apache Felix
 
 
 Running on Eclipse Equinox
+
+    <<not completed>>
+
+
+Running on Knopflerfish
 
     <<not completed>>

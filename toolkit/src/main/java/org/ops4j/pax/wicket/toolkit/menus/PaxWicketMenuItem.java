@@ -17,7 +17,7 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.util.DefaultContentSource;
+import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.ops4j.pax.wicket.toolkit.actions.ActionItem;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketBookmarkableLink;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketAction;
@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import wicket.Component;
 import wicket.ResourceReference;
 
-public class PaxWicketMenuItem extends DefaultContentSource
+public class PaxWicketMenuItem extends AbstractContentSource
     implements ActionItem
 {
     private String m_caption;
@@ -125,9 +125,9 @@ public class PaxWicketMenuItem extends DefaultContentSource
         m_visible = visible;
     }
 
-    protected Component createComponent( String wicketId, Component parent )
+    protected Component createComponent( String contentId, Component parent )
         throws IllegalArgumentException
     {
-        return new PaxWicketMenuItemPanel( this, wicketId );
+        return new PaxWicketMenuItemPanel( this, contentId );
     }
 }

@@ -17,27 +17,31 @@
     <menu name="Pax Wicket">
       <item name="Introduction" href="index.html"/>
       <item name="Concepts" href="concepts.html"/>
-      <item name="Reference" href="reference.html"/>
+      <item name="Reference" href="reference/index.html">
+        <item name="Request Sequence" href="reference/request.html"/>
+        <item name="OSGi Registrations" href="reference/registrations.html"/>
+      </item>
+      
       <item name="Javadoc" href="apidocs/index.html"/>
 
-      <item name="My First App" href="/myfirstapp/index.html" collapse="true">
-        <item name="Business Logic" href="/myfirstapp/businesslogic.html"/>
-        <item name="Content" href="/myfirstapp/content.html"/>
-        <item name="Content Container" href="/myfirstapp/contentcontainer.html"/>
-        <item name="Home Page" href="/myfirstapp/homepage.html"/>
-        <item name="Page Container" href="/myfirstapp/pagecontainer.html"/>
-        <item name="Application" href="/myfirstapp/application.html"/>
-        <item name="About Page" href="/myfirstapp/aboutpage.html"/>
+      <item name="My First App" href="myfirstapp/index.html" collapse="true">
+        <item name="Business Logic" href="myfirstapp/businesslogic.html"/>
+        <item name="Application" href="myfirstapp/application.html"/>
+        <item name="Content Source" href="myfirstapp/contentsource.html"/>
+        <item name="Content Aggregator" href="myfirstapp/contentaggregator.html"/>
+        <item name="About Page" href="myfirstapp/aboutpage.html"/>
       </item>
-      <item name="Guides" href="/guides/index.html">
-        <item name="Dynamic Apps" href="/guides/dynamic-assembly.html"/>
-        <item name="Authentication" href="/guides/authentication.html"/>
-        <item name="Embedding" href="/guides/embedded.html"/>
+      <item name="Guides" href="guides/index.html">
+        <item name="Advanced Aggregators" href="guides/contentaggregator.html"/>
+        <item name="Advanced Content Sources" href="guides/contentsource.html"/>
+        <item name="Dynamic Applications" href="guides/dynamic-assembly.html"/>
+        <item name="Authentication &amp; Authorization" href="guides/authentication.html"/>
+        <item name="Embedding" href="guides/embedded.html"/>
       </item>
-      <item name="Getting Started" href="/getting-started/index.html">
-        <item name="Requirements" href="/getting-started/requirements.html" />
-        <item name="Installation" href="/getting-started/installation.html"/>
-        <item name="Building" href="/getting-started/building.html"/>
+      <item name="Getting Started" href="getting-started/index.html">
+        <item name="Requirements" href="getting-started/requirements.html" />
+        <item name="Installation" href="getting-started/installation.html"/>
+        <item name="Building" href="getting-started/building.html"/>
       </item>
       <item name="Service" href="service/index.html"/>
       <item name="Samples" href="samples/index.html"/>
