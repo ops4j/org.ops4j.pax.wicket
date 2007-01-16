@@ -26,6 +26,7 @@ import wicket.markup.html.panel.Panel;
 
 public class PaxWicketMenuPanel extends Panel
 {
+    private static final long serialVersionUID = 1L;
 
     public PaxWicketMenuPanel( PaxWicketMenu menu, String id )
     {
@@ -34,6 +35,8 @@ public class PaxWicketMenuPanel extends Panel
 
         ListView view = new ListView( "sections", components )
         {
+            private static final long serialVersionUID = 1L;
+
             protected void populateItem( final ListItem listitem )
             {
                 Component menuitem = (Component) listitem.getModelObject();

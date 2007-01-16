@@ -31,6 +31,8 @@ import wicket.model.Model;
 public class PaxWicketMenuItemPanel extends Panel
 {
 
+    private static final long serialVersionUID = 1L;
+    
     private PaxWicketMenuItem m_menuItem;
 
     public PaxWicketMenuItemPanel( PaxWicketMenuItem menuItem, String contentId )
@@ -38,7 +40,7 @@ public class PaxWicketMenuItemPanel extends Panel
         super( contentId );
         m_menuItem = menuItem;
         PaxWicketBookmarkableLink pageLink = menuItem.getLink();
-        if( pageLink != null )
+        if ( pageLink != null )
         {
             Class pageClass = pageLink.getPageClass();
             PageParameters params = pageLink.getParameters();
@@ -47,8 +49,12 @@ public class PaxWicketMenuItemPanel extends Panel
         }
         else
         {
-            Link actionLink = new Link("link", new Model( menuItem.getAction() ) )
+            PaxWicketAction tMenuItemAction = menuItem.getAction();
+            Model tMenuItemActionModel = new Model( tMenuItemAction );
+            Link actionLink = new Link( "link", tMenuItemActionModel )
             {
+                private static final long serialVersionUID = 1L;
+
                 public void onClick()
                 {
                     PaxWicketAction action = (PaxWicketAction) getModelObject();
@@ -59,7 +65,7 @@ public class PaxWicketMenuItemPanel extends Panel
         }
         ResourceReference ref = menuItem.getImage();
         Label dummy;
-        if( menuItem.getAlignment() == Alignment.before )
+        if ( menuItem.getAlignment() == Alignment.before )
         {
             add( new Image( "image-left", ref ) );
             dummy = new Label( "image-right" );
