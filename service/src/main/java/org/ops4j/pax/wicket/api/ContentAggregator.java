@@ -76,7 +76,7 @@ public interface ContentAggregator
      *
      * @since 1.0.0
      */
-    String getContainmentId();
+    String getAggregationId();
 
     /**
      * Create components that has the specified {@code id} id. Returns an empty list if there is no component with the

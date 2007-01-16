@@ -63,7 +63,7 @@ public class RootContentAggregator
         m_children = new HashMap<String, List<ContentSource>>();
     }
 
-    public final String getContainmentId()
+    public final String getAggregationId()
     {
         synchronized( this )
         {
@@ -272,7 +272,7 @@ public class RootContentAggregator
             }
 
             String applicationName = getApplicationName();
-            String containmentId = getContainmentId();
+            String containmentId = getAggregationId();
             m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, containmentId );
             m_contentTracker.open();
 
@@ -300,7 +300,7 @@ public class RootContentAggregator
         }
 
         String newContainmentId = (String) config.get( ContentSource.AGGREGATION_POINT );
-        String existingContainmentId = getContainmentId();
+        String existingContainmentId = getAggregationId();
         if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
         {
             return;

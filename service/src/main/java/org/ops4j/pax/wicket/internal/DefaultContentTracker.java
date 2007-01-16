@@ -41,7 +41,7 @@ public final class DefaultContentTracker extends ServiceTracker
 
     private final BundleContext m_context;
     private final ContentTrackingCallback m_callback;
-    private final String m_containmentId;
+    private final String m_aggregationId;
 
     private final List<ServiceReference> m_references;
 
@@ -51,23 +51,23 @@ public final class DefaultContentTracker extends ServiceTracker
      * @param context The bundle context. This argument must not be {@code null}.
      * @param callback The callback. This argument must not be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * @param containmentId The containment id. This argument must not be {@code null} or empty.
+     * @param aggregationId The aggregation id. This argument must not be {@code null} or empty.
      * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      * @since 1.0.0
      */
     public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback, String applicationName,
-        String containmentId )
+        String aggregationId )
         throws IllegalArgumentException
     {
         super( context, TrackingUtil.createContentFilter( context, applicationName ), null );
 
-        NullArgumentException.validateNotEmpty( containmentId, "containmentId" );
+        NullArgumentException.validateNotEmpty( aggregationId, "aggregationId" );
         NullArgumentException.validateNotNull( callback, "callback" );
 
         m_context = context;
         m_callback = callback;
-        m_containmentId = containmentId;
+        m_aggregationId = aggregationId;
 
         m_references = new ArrayList<ServiceReference>();
     }
@@ -83,7 +83,7 @@ public final class DefaultContentTracker extends ServiceTracker
     {
         synchronized ( this )
         {
-            int startIndexOfContentId = m_containmentId.length() + 1;
+            int startIndexOfContentId = m_aggregationId.length() + 1;
 
             for ( ServiceReference reference : m_references )
             {
@@ -132,7 +132,7 @@ public final class DefaultContentTracker extends ServiceTracker
         {
             return matchRegularExpression( dest, service, serviceReference );
         }
-        else if ( !dest.startsWith( m_containmentId ) )
+        else if ( !dest.startsWith( m_aggregationId ) )
         {
             return service;
         }
@@ -149,7 +149,7 @@ public final class DefaultContentTracker extends ServiceTracker
             throw new IllegalArgumentException( message );
         }
         String expression = dest.substring( 7, lastParan );
-        if ( Pattern.matches( expression, m_containmentId ) )
+        if ( Pattern.matches( expression, m_aggregationId ) )
         {
             synchronized ( this )
             {
@@ -163,24 +163,24 @@ public final class DefaultContentTracker extends ServiceTracker
 
     private Object matchDirect( String dest, Object service, ServiceReference serviceReference )
     {
-        int contIdLength = m_containmentId.length();
-        if ( dest.length() == contIdLength )
+        int aggregationIdLength = m_aggregationId.length();
+        if ( dest.length() == aggregationIdLength )
         {
             String message = "The '" + ContentSource.DESTINATION + "' property have the form ["
                              + ContentSource.AGGREGATION_POINT + "].[contentId] but was " + dest;
             throw new IllegalArgumentException( message );
         }
 
-        if ( dest.charAt( contIdLength ) != '.' )
+        if ( dest.charAt( aggregationIdLength ) != '.' )
         {
             return service;
         }
 
-        String id = dest.substring( contIdLength + 1 );
+        String id = dest.substring( aggregationIdLength + 1 );
 
         if ( m_logger.isInfoEnabled() )
         {
-            m_logger.info( "Attaching content with wicket:id [" + id + "] to containment [" + m_containmentId + "]" );
+            m_logger.info( "Attaching content with wicket:id [" + id + "] to aggregation [" + m_aggregationId + "]" );
         }
 
         synchronized ( this )
@@ -243,7 +243,7 @@ public final class DefaultContentTracker extends ServiceTracker
 
             if ( m_logger.isInfoEnabled() && wasContentRemoved )
             {
-                m_logger.info( "Detaching content with wicket:id [" + id + "] from containment [" + m_containmentId
+                m_logger.info( "Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
                     + "]" );
             }
         }
