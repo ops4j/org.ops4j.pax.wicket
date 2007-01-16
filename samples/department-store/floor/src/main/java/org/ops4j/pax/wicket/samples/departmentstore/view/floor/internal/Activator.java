@@ -19,12 +19,11 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+
+import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -47,12 +46,11 @@ public class Activator
         List<Floor> floors = departmentStore.getFloors();
         m_floors = new ArrayList<ContentAggregator>();
         String destinationId = "swp.floor";
-        for( Floor floor : floors )
+        for ( Floor floor : floors )
         {
             String floorName = floor.getName();
             FloorAggregatedSource aggregatedSource = new FloorAggregatedSource( floor, floorName, destinationId,
-                                                                                bundleContext, "departmentstore"
-            );
+                bundleContext, "departmentstore" );
             aggregatedSource.setDestinationId( destinationId );
             aggregatedSource.setAggregationId( floor.getName() );
             ServiceRegistration registration = aggregatedSource.register();
@@ -64,13 +62,13 @@ public class Activator
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        for( ServiceRegistration registration : m_registrations )
+        for ( ServiceRegistration registration : m_registrations )
         {
             registration.unregister();
         }
         m_registrations.clear();
 
-        for( ContentAggregator floor : m_floors )
+        for ( ContentAggregator floor : m_floors )
         {
             floor.dispose();
         }

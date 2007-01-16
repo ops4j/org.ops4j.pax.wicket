@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 import java.io.Serializable;
 import java.util.List;
 
-import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 
 import wicket.Component;
