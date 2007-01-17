@@ -68,7 +68,7 @@ public abstract class AbstractContentSource<E extends Component>
      * @return The destination id.
      * @since 1.0.0
      */
-    public final String getDestinationId()
+    public final String getDestination()
     {
         synchronized ( this )
         {
@@ -120,7 +120,7 @@ public abstract class AbstractContentSource<E extends Component>
     public final <T extends Component> E createComponent( T parent )
         throws IllegalArgumentException
     {
-        String destinationId = getDestinationId();
+        String destinationId = getDestination();
         int pos = destinationId.lastIndexOf( '.' );
         String contentId = destinationId.substring( pos + 1 );
 

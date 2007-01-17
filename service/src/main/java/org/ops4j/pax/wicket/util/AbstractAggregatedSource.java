@@ -233,7 +233,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
      * 
      * @since 1.0.0
      */
-    public final String getAggregationId()
+    public final String getAggregationPoint()
     {
         synchronized ( this )
         {
@@ -365,7 +365,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
             return;
         }
 
-        String existingAggregationId = getAggregationId();
+        String existingAggregationId = getAggregationPoint();
         String newAggregationId = (String) config.get( AGGREGATION_POINT );
         if ( newAggregationId == null )
         {
@@ -389,7 +389,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
         setAggregationId( newAggregationId );
 
         String filter = "(&(" + ContentSource.APPLICATION_NAME + "=" + getApplicationName() + ")" + "("
-            + ContentSource.DESTINATION + "=" + getAggregationId() + ".*)" + ")";
+            + ContentSource.DESTINATION + "=" + getAggregationPoint() + ".*)" + ")";
 
         try
         {
@@ -453,7 +453,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
      * 
      * @since 1.0.0
      */
-    public final String getDestinationId()
+    public final String getDestination()
     {
         synchronized ( this )
         {
@@ -489,7 +489,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
         synchronized ( this )
         {
             String applicationName = getApplicationName();
-            String aggregationId = getAggregationId();
+            String aggregationId = getAggregationPoint();
             m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, aggregationId );
             m_contentTracker.open();
 
@@ -529,7 +529,7 @@ public abstract class AbstractAggregatedSource<E extends Component>
     {
         NullArgumentException.validateNotNull( parent, "parent" );
 
-        String destinationId = getDestinationId();
+        String destinationId = getDestination();
         int pos = destinationId.lastIndexOf( '.' );
         String id = destinationId.substring( pos + 1 );
         return createComponent( id, parent );

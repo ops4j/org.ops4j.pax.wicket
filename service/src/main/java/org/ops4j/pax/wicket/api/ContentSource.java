@@ -83,16 +83,17 @@ public interface ContentSource<E extends Component>
     /**
      * Returns the destination id of this {@code ContentSource} instance. This method must not return {@code null} object.
      * <p>
-     * The destination id is constructed by concatenating the containment id, ".", and the wicket component id. For
-     * example, If the containment id is "overview.tabs" and the wicket component id is "quickMenu", the returned
-     * destination id is "overview.tabs.quickMenu".
+     * The <i>Destination</i> is constructed by concatenating the <i>AggregationPointMatchExpression</i>, ".", and the
+     * <i>ContentMatchExpression</i>.
+     * For example, If the <i>AggregationPointMatchExpression</i> is "overviewtabs" and the
+     * <i>ContentMatchExpression</i> is "quickMenu", the returned <i>Destination</i> is "overviewtabs.quickMenu".
      * </p>
      *
      * @return The destination id of this {@code ContentSource} instance.
      *
      * @since 1.0.0
      */
-    String getDestinationId();
+    String getDestination();
 
     /**
      * Create the wicket component represented by this {@code ContentSource} instance. This method must not return

@@ -70,13 +70,13 @@ public interface ContentAggregator
 {
 
     /**
-     * Returns the containment id of this {@code ContentAggregator}.
+     * Returns the <i>AggregationPoint</i> of this {@code ContentAggregator}.
      *
-     * @return The containment id.
+     * @return The name of the <i>AggregationPoint</i>.
      *
      * @since 1.0.0
      */
-    String getAggregationId();
+    String getAggregationPoint();
 
     /**
      * Create components that has the specified {@code id} id. Returns an empty list if there is no component with the

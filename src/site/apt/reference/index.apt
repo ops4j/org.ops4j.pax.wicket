@@ -52,9 +52,9 @@ ContentSource, ContentAggregator and Component
           <<matches>> the AggregationID defined for the ContentAggregator.
 
     So, let's look at the primary interfaces of
-    {{{http://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/ContentSource.java}ContentSource}}
+    {{{https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/ContentSource.java}ContentSource}}
     and
-    {{{http://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/ContentAggregator.java}ContentAggregator}}
+    {{{https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/ContentAggregator.java}ContentAggregator}}
     .
 
 
@@ -105,7 +105,7 @@ Pages
     Pages are registered into the OSGi framework as services bound to the same
     <<<ContentSource.APPLICATION_NAME>>> property value as all other parts. Pages are created via a <PageFactory> instance,
     which allows for the page to be bookmarkable. The
-    {{{http://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/PageFactory.java}PageFactory}} interface
+    {{{https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.4.0/service/src/main/java/org/ops4j/pax/wicket/api/PageFactory.java}PageFactory}} interface
     is fairly simple, and the packaging of the page related resources should go into the same bundle or bundle fragment,
     and Pax Wicket will resolve the classloading for those.
 

@@ -53,17 +53,17 @@ public class RootContentAggregator
     private ServiceRegistration m_registration;
     private DefaultContentTracker m_contentTracker;
 
-    public RootContentAggregator( BundleContext bundleContext, String containmentId, String applicationName )
+    public RootContentAggregator( BundleContext bundleContext, String aggregationPoint, String applicationName )
     {
         m_bundleContext = bundleContext;
         m_properties = new Hashtable<String, String>();
-        setContainmentId( containmentId );
+        setAggregationPoint( aggregationPoint );
         setApplicationName( applicationName );
-        m_properties.put( Constants.SERVICE_PID, applicationName + "." + containmentId );
+        m_properties.put( Constants.SERVICE_PID, applicationName + "." + aggregationPoint );
         m_children = new HashMap<String, List<ContentSource>>();
     }
 
-    public final String getAggregationId()
+    public final String getAggregationPoint()
     {
         synchronized( this )
         {
@@ -71,11 +71,11 @@ public class RootContentAggregator
         }
     }
 
-    public final void setContainmentId( String containmentId )
+    public final void setAggregationPoint( String aggregationPoint )
     {
         synchronized( this )
         {
-            m_properties.put( ContentSource.AGGREGATION_POINT, containmentId );
+            m_properties.put( ContentSource.AGGREGATION_POINT, aggregationPoint );
         }
     }
 
@@ -272,8 +272,8 @@ public class RootContentAggregator
             }
 
             String applicationName = getApplicationName();
-            String containmentId = getAggregationId();
-            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, containmentId );
+            String aggregationPoint = getAggregationPoint();
+            m_contentTracker = new DefaultContentTracker( m_bundleContext, this, applicationName, aggregationPoint );
             m_contentTracker.open();
 
             String[] serviceNames =
@@ -299,9 +299,9 @@ public class RootContentAggregator
             return;
         }
 
-        String newContainmentId = (String) config.get( ContentSource.AGGREGATION_POINT );
-        String existingContainmentId = getAggregationId();
-        if( existingContainmentId != null && existingContainmentId.equals( newContainmentId ) )
+        String newAggregationPoint = (String) config.get( ContentSource.AGGREGATION_POINT );
+        String existingAggregationPoint = getAggregationPoint();
+        if( existingAggregationPoint != null && existingAggregationPoint.equals( newAggregationPoint ) )
         {
             return;
         }
@@ -311,8 +311,8 @@ public class RootContentAggregator
             m_children.clear();
         }
 
-        setContainmentId( newContainmentId );
-        if( newContainmentId != null )
+        setAggregationPoint( newAggregationPoint );
+        if( newAggregationPoint != null )
         {
             try
             {

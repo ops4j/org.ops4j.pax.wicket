@@ -229,7 +229,7 @@ public final class DefaultContentTracker extends ServiceTracker
         }
 
         ContentSource content = (ContentSource) object;
-        String destionationId = content.getDestinationId();
+        String destionationId = content.getDestination();
         if ( destionationId == null )
         {
             m_logger.warn( "ContentSource [" + content + "] does not have Destination defined. Setting to <unknown>" );
