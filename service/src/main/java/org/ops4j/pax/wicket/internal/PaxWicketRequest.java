@@ -46,10 +46,6 @@ final class PaxWicketRequest extends ServletWebRequest
     {
         super( httpServletRequest );
         m_mountPoint = "/" + mountPoint;
-
-        System.err.println( "Path: [" + httpServletRequest.getRequestURL() + "]" );
-        System.err.println( "ServletPath: [" + httpServletRequest.getServletPath() + "]" );
-        System.err.println( "ContextPath: [" + httpServletRequest.getContextPath() + "]" );
     }
 
     /**
