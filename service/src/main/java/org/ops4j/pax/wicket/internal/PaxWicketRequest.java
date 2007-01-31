@@ -26,7 +26,7 @@ import wicket.protocol.http.servlet.ServletWebRequest;
 
 /**
  * @author Niclas Hedhman, Edward Yakop
- *
+ * 
  * @since 1.0.0
  */
 final class PaxWicketRequest extends ServletWebRequest
@@ -37,28 +37,33 @@ final class PaxWicketRequest extends ServletWebRequest
 
     /**
      * Protected constructor.
-     *
+     * 
      * @param mountPoint
-     *
+     * 
      * @param httpServletRequest The servlet request information
      */
     PaxWicketRequest( String mountPoint, HttpServletRequest httpServletRequest )
     {
         super( httpServletRequest );
         m_mountPoint = "/" + mountPoint;
+
+        System.err.println( "Path: [" + httpServletRequest.getRequestURL() + "]" );
+        System.err.println( "ServletPath: [" + httpServletRequest.getServletPath() + "]" );
+        System.err.println( "ContextPath: [" + httpServletRequest.getContextPath() + "]" );
     }
 
     /**
      * Gets the servlet path.
-     *
+     * 
      * @return Servlet path
      */
     public final String getServletPath()
     {
         String contextPath = getHttpServletRequest().getContextPath();
-        if ( m_logger.isDebugEnabled() )
+
+        if( !contextPath.endsWith( "/" ) )
         {
-            m_logger.debug( "getServletPath() : " + contextPath );
+            contextPath += "/";
         }
 
         return contextPath;
@@ -66,27 +71,27 @@ final class PaxWicketRequest extends ServletWebRequest
 
     /**
      * Gets the servlet context path.
-     *
+     * 
      * @return Servlet context path
      */
     public final String getContextPath()
     {
         String servletPath = getHttpServletRequest().getServletPath();
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "getContextPath() : " + servletPath );
         }
 
         int mountPointLength = m_mountPoint.length();
         int servletPathLength = servletPath.length();
-        if ( servletPathLength == mountPointLength )
+        if( servletPathLength == mountPointLength )
         {
             servletPath = servletPath + "/";
         }
         else
         {
             char aChar = servletPath.charAt( mountPointLength );
-            if ( '/' != aChar )
+            if( '/' != aChar )
             {
                 String suffix = servletPath.substring( mountPointLength );
                 servletPath = m_mountPoint + '/' + suffix;
@@ -96,19 +101,32 @@ final class PaxWicketRequest extends ServletWebRequest
         return servletPath;
     }
 
-    public final String getPath()
+    @Override
+    public String getRelativeURL()
     {
-        String path = super.getPath();
+        String url = getServletPath();
 
-        if ( path == null )
+        HttpServletRequest servletRequest = getHttpServletRequest();
+        final String pathInfo = servletRequest.getPathInfo();
+
+        if( pathInfo != null )
         {
-            path = "/";
-        }
-        else if ( !path.startsWith( "/" ) )
-        {
-            path = "/" + path;
+            url += pathInfo;
         }
 
-        return path;
+        final String queryString = servletRequest.getQueryString();
+        if( queryString != null )
+        {
+            url += ("?" + queryString);
+        }
+
+        // If url is non-empty it has to start with '/', which we should lose
+        if( !url.equals( "" ) )
+        {
+            // Remove leading '/'
+            url = url.substring( 1 );
+        }
+
+        return url;
     }
 }
