@@ -21,13 +21,15 @@ import wicket.authentication.AuthenticatedWebSession;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authorization.strategies.role.Roles;
 import java.io.Serializable;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 
 public class PaxWicketSession extends AuthenticatedWebSession
-    implements Serializable
+    implements Serializable, PaxWicketAuthentication
 {
     private static final long serialVersionUID = 1L;
 
     private AuthenticatedToken m_token;
+    private String m_loggedInUser;
 
     /**
      * Construct.
@@ -37,6 +39,7 @@ public class PaxWicketSession extends AuthenticatedWebSession
     public PaxWicketSession( AuthenticatedWebApplication application )
     {
         super( application );
+        m_loggedInUser = null;
     }
 
     /**
@@ -51,7 +54,25 @@ public class PaxWicketSession extends AuthenticatedWebSession
     {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
         m_token = app.authententicate( username, password );
-        return m_token != null;
+        if( m_token != null )
+        {
+            m_loggedInUser = username;
+            return true;
+        }
+        m_loggedInUser = null;
+        return false;
+    }
+
+    public String getLoggedInUser()
+    {
+        return m_loggedInUser;
+    }
+
+    public void invalidateNow()
+    {
+        m_token = null;
+        m_loggedInUser = null;
+        super.invalidateNow();
     }
 
     /**
@@ -63,5 +84,4 @@ public class PaxWicketSession extends AuthenticatedWebSession
         Roles roles = app.getRoles( m_token );
         return roles;
     }
-
 }
