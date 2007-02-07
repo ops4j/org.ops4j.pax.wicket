@@ -20,6 +20,7 @@ package org.ops4j.pax.wicket.internal;
 import wicket.authentication.AuthenticatedWebSession;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authorization.strategies.role.Roles;
+import wicket.authorization.IAuthorizationStrategy;
 import java.io.Serializable;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 
@@ -29,6 +30,7 @@ public class PaxWicketSession extends AuthenticatedWebSession
     private static final long serialVersionUID = 1L;
 
     private AuthenticatedToken m_token;
+
     private String m_loggedInUser;
 
     /**

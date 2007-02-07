@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
@@ -40,6 +41,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
+import wicket.authentication.AuthenticatedWebSession;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.
@@ -183,6 +185,18 @@ public abstract class AbstractAggregatedSource<E extends Component>
         {
             return m_properties.getProperty( ContentSource.APPLICATION_NAME );
         }
+    }
+
+    /** Returns the Authentication of the current request.
+     *
+     * It is possible to obtain the Username of the logged in user as well as which roles that this
+     * user has assigned to it.
+     *
+     * @return the Authentication of the current request.
+     */
+    protected PaxWicketAuthentication getAuthentication()
+    {
+        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
     }
 
     /**

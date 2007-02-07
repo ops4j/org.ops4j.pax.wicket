@@ -23,12 +23,14 @@ import java.util.Properties;
 
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
 
 import wicket.Component;
+import wicket.authentication.AuthenticatedWebSession;
 
 public abstract class AbstractContentSource<E extends Component>
     implements ContentSource<E>, ManagedService
@@ -174,6 +176,18 @@ public abstract class AbstractContentSource<E extends Component>
         {
             return m_properties.getProperty( APPLICATION_NAME );
         }
+    }
+
+    /** Returns the Authentication of the current request.
+     *
+     * It is possible to obtain the Username of the logged in user as well as which roles that this
+     * user has assigned to it.
+     *
+     * @return the Authentication of the current request.
+     */
+    protected PaxWicketAuthentication getAuthentication()
+    {
+        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
     }
 
     /**

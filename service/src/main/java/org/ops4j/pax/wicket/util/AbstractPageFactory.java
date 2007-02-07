@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -29,7 +30,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 import wicket.Page;
-
+import wicket.authentication.AuthenticatedWebSession;
 
 public abstract class AbstractPageFactory<T extends Page>
     implements PageFactory<T>, ManagedService
@@ -104,6 +105,18 @@ public abstract class AbstractPageFactory<T extends Page>
         {
             return m_properties.get( ContentSource.APPLICATION_NAME );
         }
+    }
+
+    /** Returns the Authentication of the current request.
+     *
+     * It is possible to obtain the Username of the logged in user as well as which roles that this
+     * user has assigned to it.
+     *
+     * @return the Authentication of the current request.
+     */
+    protected PaxWicketAuthentication getAuthentication()
+    {
+        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
     }
 
     /**

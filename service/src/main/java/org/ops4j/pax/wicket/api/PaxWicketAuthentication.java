@@ -17,27 +17,32 @@
 package org.ops4j.pax.wicket.api;
 
 import wicket.authorization.strategies.role.Roles;
-
+import wicket.authentication.AuthenticatedWebSession;
 
 /** PaxWicketAuthentication represents a subset of the current Session.
  *
  * Typical usage would be;
  * <code><pre>
- * import wicket.authentication.AuthenticatedWebSession;
  * import wicket.authorization.AuthorizationException;
  * import wicket.authorization.strategies.role.Roles;
  *
  * :
  *
- * PaxWicketAuthentication auth = (PaxWicketAuthentication) AuthenticatedWebSession.get();
- * Roles roles = auth.getRoles();
- * if( ! roles.hasRole( MyRoles.MEMBER ) )
+ * public class SomeContentSource extends AbstractContentSource
  * {
- *     throw new AuthorizationException( "Only members are allowed in this area." );
+ *
+ *     protected Panel createComponent( String contentId, Panel parent )
+ *     {
+ *         PaxWicketAuthentication auth = getAuthentication();
+ *         Roles roles = auth.getRoles();
+ *         if( ! roles.hasRole( MyRoles.MEMBER ) )
+ *         {
+ *             throw new AuthorizationException( "Only members are allowed in this area." );
+ *         }
+ *         String username = auth.getLoggedInUser();
+ *         return new MyPanel( username, .... );
+ *     }
  * }
- * String username = auth.getLoggedInUser();
- * Label userLabel = new Label( "username", username );
- * add( userLabel ); 
  * </pre></code>
  */
 public interface PaxWicketAuthentication
