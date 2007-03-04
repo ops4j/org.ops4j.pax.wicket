@@ -112,6 +112,12 @@
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
+        <artifactId>jcl</artifactId>
+        <version>0.9.4</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>service</artifactId>
         <version>0.9.4</version>
         <scope>provided</scope>
