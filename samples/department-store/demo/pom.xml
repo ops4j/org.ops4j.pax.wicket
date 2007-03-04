@@ -36,11 +36,6 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>floor</artifactId>
-      <version>0.4.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>application</artifactId>
       <version>0.4.0-SNAPSHOT</version>
     </dependency>
@@ -57,6 +52,11 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
+      <version>0.4.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
+      <artifactId>floor</artifactId>
       <version>0.4.0-SNAPSHOT</version>
     </dependency>
     <dependency>
