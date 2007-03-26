@@ -18,6 +18,7 @@
       <artifactId>service</artifactId>
       <version>0.4.0-SNAPSHOT</version>
       <scope>provided</scope>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -33,6 +34,17 @@
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <scope>provided</scope>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket-extensions</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

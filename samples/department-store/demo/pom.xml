@@ -33,11 +33,13 @@
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>application</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.eclipse.equinox.servlet</groupId>
@@ -53,21 +55,25 @@
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>floor</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>about</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>franchisee</artifactId>
       <version>0.4.0-SNAPSHOT</version>
+      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
   </dependencies>
   <properties>
