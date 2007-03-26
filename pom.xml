@@ -125,7 +125,7 @@
       <dependency>
         <groupId>org.ops4j.base</groupId>
         <artifactId>ops4j-base</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>

@@ -43,24 +43,24 @@ public abstract class AbstractContentSource<E extends Component>
      * Construct an instance with {@code AbstractContentSource}.
      *
      * @param bundleContext The bundle context. This argument must not be {@code null}.
-     * @param contentId The content id. This argument must not be {@code null} or empty.
+     * @param persistenceId The content id. This argument must not be {@code null} or empty.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
      *
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      *
      * @since 1.0.0
      */
-    protected AbstractContentSource( BundleContext bundleContext, String contentId, String applicationName )
+    protected AbstractContentSource( BundleContext bundleContext, String persistenceId, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( contentId, "contentId" );
+        NullArgumentException.validateNotEmpty( persistenceId, "persistenceId" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
         m_properties = new Properties();
-        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + contentId );
+        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + persistenceId );
         m_bundleContext = bundleContext;
-        setContentId( contentId );
+        setPersistenceId( persistenceId );
         setApplicationName( applicationName );
     }
 
@@ -81,20 +81,24 @@ public abstract class AbstractContentSource<E extends Component>
     /**
      * Sets the destination id.
      *
-     * @param destinationId The destination id. This argument must not be {@code null}.
-     *
+     * @param destinations
      * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
      *
      * @since 1.0.0
      */
-    public final void setDestinationId( String destinationId )
+    public final void setDestinations( String... destinations )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
+        int count = 0;
+        for( String dest : destinations )
+        {
+            NullArgumentException.validateNotEmpty( dest, "destination[" + count + "]" );
+            count = count + 1;
+        }
 
         synchronized ( this )
         {
-            m_properties.put( DESTINATION, destinationId );
+            m_properties.put( DESTINATION, destinations );
         }
     }
 
@@ -153,7 +157,7 @@ public abstract class AbstractContentSource<E extends Component>
      *
      * @since 1.0.0
      */
-    private void setContentId( String contentId )
+    private void setPersistenceId( String contentId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( contentId, "contentId" );
@@ -246,7 +250,7 @@ public abstract class AbstractContentSource<E extends Component>
         }
 
         String destinationId = (String) config.get( DESTINATION );
-        setDestinationId( destinationId );
+        setDestinations( destinationId );
 
         String appName = (String) config.get( APPLICATION_NAME );
         setApplicationName( appName );

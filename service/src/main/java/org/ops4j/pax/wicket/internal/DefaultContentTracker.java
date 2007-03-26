@@ -145,7 +145,7 @@ public final class DefaultContentTracker extends ServiceTracker
         int lastParan = dest.lastIndexOf( ")." );
         if ( lastParan < 0 )
         {
-            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[contentId]";
+            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[content-expression]";
             throw new IllegalArgumentException( message );
         }
         String expression = dest.substring( 7, lastParan );

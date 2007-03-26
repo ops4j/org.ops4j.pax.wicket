@@ -21,6 +21,7 @@ package org.ops4j.pax.wicket.internal;
 import javax.servlet.http.HttpServletRequest;
 import org.ops4j.lang.NullArgumentException;
 import wicket.Page;
+import wicket.Session;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WebRequest;
 import wicket.settings.IApplicationSettings;
@@ -78,7 +79,6 @@ public final class PaxWicketApplication extends WebApplication
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
-
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
         if( m_deploymentMode )

@@ -19,6 +19,7 @@
 package org.ops4j.pax.wicket.api;
 
 import wicket.Component;
+import wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
 
 /**
  * This is the model interface of ContentSource.

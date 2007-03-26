@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.util.PageFinder;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
@@ -109,7 +110,7 @@ public final class PaxWicketPageFactory
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
-
+        PageFinder.setCurrentPageParameters( parameters );
         PageFactory content;
         synchronized ( this )
         {

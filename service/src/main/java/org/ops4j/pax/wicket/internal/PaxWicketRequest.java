@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import wicket.protocol.http.servlet.ServletWebRequest;
+import wicket.Application;
 
 /**
  * @author Niclas Hedhman, Edward Yakop
@@ -46,6 +47,7 @@ final class PaxWicketRequest extends ServletWebRequest
     {
         super( httpServletRequest );
         m_mountPoint = "/" + mountPoint;
+        
     }
 
     /**
@@ -61,7 +63,6 @@ final class PaxWicketRequest extends ServletWebRequest
         {
             contextPath += "/";
         }
-
         return contextPath;
     }
 

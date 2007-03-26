@@ -20,9 +20,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.io.Serializable;
 import java.util.List;
-
 import org.ops4j.pax.wicket.api.ContentAggregator;
-
 import wicket.Component;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
@@ -48,7 +46,6 @@ final class FloorPanel extends Panel
     FloorPanel( String id, ContentAggregator container, Model floor )
     {
         super( id, floor );
-
         ListView listView = new ListView( WICKET_ID_FRANCHISEES )
         {
             private static final long serialVersionUID = 1L;
@@ -59,9 +56,8 @@ final class FloorPanel extends Panel
                 item.add( modelObject );
             }
         };
-
         List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, listView );
-        if ( franchisees.isEmpty() )
+        if( franchisees.isEmpty() )
         {
             Label tLabel = new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." );
             franchisees.add( tLabel );

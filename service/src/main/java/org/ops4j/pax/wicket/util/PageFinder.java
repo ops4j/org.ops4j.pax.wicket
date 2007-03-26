@@ -25,10 +25,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import wicket.Page;
+import wicket.PageParameters;
 
 public class PageFinder
 {
     private static final Logger LOGGER = Logger.getLogger( PageFinder.class );
+    private static ThreadLocal<PageParameters> m_pageParameters = new ThreadLocal<PageParameters>();
 
     /**
      * Returns the page content from the specified {@code context} for the specified {@code applicationName} and
@@ -77,5 +79,24 @@ public class PageFinder
             // can not happen, RIGHT!
             return new PageFactory[0];
         }
+    }
+
+    /**
+     * THIS METHOD MUST NOT BE USED BY CLIENT CODE!!!
+     *
+     * @param parameters The PageParameters of the current request.
+     */
+    public static void setCurrentPageParameters( PageParameters parameters )
+    {
+        m_pageParameters.set( parameters );
+    }
+
+    /**
+     *
+     * @return the PageParameters of the current request in progress.
+     */
+    public static PageParameters getCurentPageParameters()
+    {
+        return m_pageParameters.get();
     }
 }
