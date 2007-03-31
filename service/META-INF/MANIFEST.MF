@@ -20,7 +20,7 @@ Import-Package: javax.servlet;version="2.3.0",
 Bundle-ClassPath: .,
  lib/activation-1.1.jar,
  lib/commons-collections-2.1.jar,
- lib/ops4j-base-0.3.0.jar,
+ lib/ops4j-base-0.4.0.jar,
  lib/wicket-1.2.5.jar,
  lib/wicket-auth-roles-1.2.5.jar,
  lib/wicket-extensions-1.2.5.jar
