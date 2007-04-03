@@ -19,8 +19,7 @@
 package org.ops4j.pax.wicket.util;
 
 import java.util.Dictionary;
-import java.util.Properties;
-
+import java.util.Hashtable;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
@@ -28,78 +27,85 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
-
 import wicket.Component;
-import wicket.authentication.AuthenticatedWebSession;
+import wicket.MarkupContainer;
+import wicket.Session;
+import wicket.authorization.strategies.role.Roles;
 
 public abstract class AbstractContentSource<E extends Component>
     implements ContentSource<E>, ManagedService
 {
+
+    private static final String[] ROLES_TYPE = new String[0];
+    private static final PaxWicketAuthentication DUMMY_AUTHENTICATION = new PaxWicketAuthentication()
+    {
+        public String getLoggedInUser()
+        {
+            return null;
+        }
+
+        public Roles getRoles()
+        {
+            return new Roles();
+        }
+    };
+
     private BundleContext m_bundleContext;
-    private Properties m_properties;
+    private Dictionary<String, Object> m_properties;
     private ServiceRegistration m_registration;
+    private Roles m_requiredRoles;
+    private Roles m_basicRoles;
 
     /**
      * Construct an instance with {@code AbstractContentSource}.
      *
-     * @param bundleContext The bundle context. This argument must not be {@code null}.
-     * @param persistenceId The content id. This argument must not be {@code null} or empty.
+     * @param bundleContext   The bundle context. This argument must not be {@code null}.
+     * @param wicketId        The WicketId. This argument must not be {@code null} or empty.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
      *
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
-     *
      * @since 1.0.0
      */
-    protected AbstractContentSource( BundleContext bundleContext, String persistenceId, String applicationName )
+    protected AbstractContentSource( BundleContext bundleContext, String wicketId, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( persistenceId, "persistenceId" );
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
-        m_properties = new Properties();
-        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + persistenceId );
+        m_properties = new Hashtable<String, Object>();
+        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId );
         m_bundleContext = bundleContext;
-        setPersistenceId( persistenceId );
+
+        setWicketId( wicketId );
         setApplicationName( applicationName );
     }
 
     /**
-     * Returns the destination id.
+     * Returns the destinations.
      *
-     * @return The destination id.
+     * @return The destinations.
+     *
      * @since 1.0.0
      */
-    public final String getDestination()
+    public final String[] getDestinations()
     {
-        synchronized ( this )
-        {
-            return m_properties.getProperty( DESTINATION );
-        }
+        return getStringArrayProperty( DESTINATIONS );
     }
 
     /**
      * Sets the destination id.
      *
-     * @param destinations
-     * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
+     * @param destinationId The destination id. This argument must not be {@code null}.
      *
+     * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
      * @since 1.0.0
      */
-    public final void setDestinations( String... destinations )
+    public final void setDestination( String destinationId )
         throws IllegalArgumentException
     {
-        int count = 0;
-        for( String dest : destinations )
-        {
-            NullArgumentException.validateNotEmpty( dest, "destination[" + count + "]" );
-            count = count + 1;
-        }
-
-        synchronized ( this )
-        {
-            m_properties.put( DESTINATION, destinations );
-        }
+        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
+        m_properties.put( DESTINATIONS, destinationId );
     }
 
     /**
@@ -116,55 +122,116 @@ public abstract class AbstractContentSource<E extends Component>
      * </p>
      *
      * @param parent The parent component of the component to be created by this method. This argument must not be
-     *            {@code null}.
+     *               {@code null}.
      *
-     * @return The wicket component represented by this {@code ContentSource} instance.
+     * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
+     *         this ContentSource.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
      * @since 1.0.0
      */
-    public final <T extends Component> E createComponent( T parent )
+    public final <T extends MarkupContainer> E createSourceComponent( T parent, String wicketId )
         throws IllegalArgumentException
     {
-        String destinationId = getDestination();
-        int pos = destinationId.lastIndexOf( '.' );
-        String contentId = destinationId.substring( pos + 1 );
-
-        return createComponent( contentId, parent );
-    }
-
-    /**
-     * Returns the content id.
-     *
-     * @return The content id.
-     *
-     * @since 1.0.0
-     */
-    public final String getContentId()
-    {
-        synchronized ( this )
+        boolean isRolesApproved = isRolesAuthorized();
+        if( isRolesApproved )
         {
-            return m_properties.getProperty( SOURCE_ID );
+            return createWicketComponent( parent, wicketId );
+        }
+        else
+        {
+            return onAuthorizationFailed( parent, wicketId );
         }
     }
 
     /**
-     * Set the content id.
+     * This method is called when the Authorization of the ContentSource has failed.
      *
-     * @param contentId The content id. This argument must not be {@code null}.
+     * @param parent   The parent of the ContentSource
+     * @param wicketId The WicketId of the content to be created.
      *
-     * @throws IllegalArgumentException Thrown if the {@code contentId} argument is {@code null}.
+     * @return null by default. Override to return a customized <i>protected</i> component, such as a label
+     *         without the link.
+     */
+    protected <T extends MarkupContainer> E onAuthorizationFailed( T parent, String wicketId )
+    {
+        return null;
+    }
+
+    /**
+     * Returns {@code true} if the user roles is authorized to create this content source component, {@code false}
+     * otherwise.
+     *
+     * @return A {@code boolean} indicator whether the user roles can create this content source component.
      *
      * @since 1.0.0
      */
-    private void setPersistenceId( String contentId )
+    private boolean isRolesAuthorized()
+    {
+        PaxWicketAuthentication authentication = getAuthentication();
+        Roles userRoles = authentication.getRoles();
+
+        boolean isRequiredRolesAuthorized = true;
+        if( m_requiredRoles != null )
+        {
+            isRequiredRolesAuthorized = m_requiredRoles.hasAllRoles( userRoles );
+        }
+
+        boolean isBasicRolesAuthorized = true;
+        if( m_basicRoles != null && !m_basicRoles.isEmpty() )
+        {
+            isBasicRolesAuthorized = userRoles.hasAnyRole( m_basicRoles );
+        }
+
+        return isRequiredRolesAuthorized && isBasicRolesAuthorized;
+    }
+
+    private String[] getStringArrayProperty( String key )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( contentId, "contentId" );
-        synchronized ( this )
+        NullArgumentException.validateNotEmpty( key, "key" );
+
+        return (String[]) m_properties.get( key );
+    }
+
+    private String getStringProperty( String key, String defaultValue )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( key, "key" );
+
+        String value = (String) m_properties.get( key );
+        if( value == null )
         {
-            m_properties.put( SOURCE_ID, contentId );
+            return defaultValue;
         }
+        return value;
+    }
+
+    /**
+     * Returns the content source id.
+     *
+     * @return The content source id.
+     *
+     * @since 1.0.0
+     */
+    public final String getSourceId()
+    {
+        return getStringProperty( SOURCE_ID, null );
+    }
+
+    /**
+     * Set the WicketId.
+     *
+     * @param wicketId The WicketId. This argument must not be {@code null}.
+     *
+     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
+     * @since 1.0.0
+     */
+    private void setWicketId( String wicketId )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        m_properties.put( SOURCE_ID, wicketId );
     }
 
     /**
@@ -176,22 +243,26 @@ public abstract class AbstractContentSource<E extends Component>
      */
     public final String getApplicationName()
     {
-        synchronized ( this )
-        {
-            return m_properties.getProperty( APPLICATION_NAME );
-        }
+        return getStringProperty( APPLICATION_NAME, null );
     }
 
-    /** Returns the Authentication of the current request.
+    /**
+     * Returns the Authentication of the current request.
      *
-     * It is possible to obtain the Username of the logged in user as well as which roles that this
-     * user has assigned to it.
+     * It is possible to obtain the Username of the logged in user as well as which roles that this user has assigned to
+     * it.
      *
      * @return the Authentication of the current request.
      */
     protected PaxWicketAuthentication getAuthentication()
     {
-        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
+        Session session = Session.get();
+        if( session instanceof PaxWicketAuthentication )
+        {
+            return (PaxWicketAuthentication) session;
+        }
+
+        return DUMMY_AUTHENTICATION;
     }
 
     /**
@@ -200,7 +271,6 @@ public abstract class AbstractContentSource<E extends Component>
      * @param applicationName The application name. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if the {@code applicationName} argument is {@code null}.
-     *
      * @since 1.0.0
      */
     public final void setApplicationName( String applicationName )
@@ -208,14 +278,11 @@ public abstract class AbstractContentSource<E extends Component>
     {
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
-        synchronized ( this )
-        {
-            m_properties.put( APPLICATION_NAME, applicationName );
-        }
+        m_properties.put( APPLICATION_NAME, applicationName );
     }
 
     /**
-     * Create component with the specified {@code contentId}.
+     * Create component with the specified {@code wicketId}.
      * <p>
      * General convention:<br/>
      * <ul>
@@ -226,38 +293,45 @@ public abstract class AbstractContentSource<E extends Component>
      * </ul>
      * </p>
      *
-     * @param contentId The wicket id. This argument must not be {@code null}.
-     * @param parent The parent component of created component of this method. This argument must not be {@code null}.
+     * @param wicketId The WicketId. This argument must not be {@code null}.
+     * @param parent   The parent component of created component of this method. This argument must not be {@code null}.
      *
-     * @return The wicket component with the specified {@code contentId}.
+     * @return The wicket component with the specified {@code wicketId}.
      *
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
-     *
      * @since 1.0.0
      */
-    protected abstract <T extends Component> E createComponent( String contentId, T parent )
+    protected abstract <T extends MarkupContainer> E createWicketComponent( T parent, String wicketId )
         throws IllegalArgumentException;
 
+    @SuppressWarnings( "unchecked" )
     public final void updated( Dictionary config )
     {
-        if ( config == null )
+        synchronized( this )
         {
-            synchronized ( this )
+            if( config != null )
             {
+                m_properties = config;
+                String[] required = (String[]) m_properties.get( REQUIRED_ROLES );
+                if( required != null )
+                {
+                    m_requiredRoles = new Roles( required );
+                }
+                else
+                {
+                    m_requiredRoles = new Roles();
+                }
+                String[] basic = (String[]) m_properties.get( BASIC_ROLES );
+                if( basic != null )
+                {
+                    m_basicRoles = new Roles( basic );
+                }
+                else
+                {
+                    m_basicRoles = new Roles();
+                }
                 m_registration.setProperties( m_properties );
             }
-            return;
-        }
-
-        String destinationId = (String) config.get( DESTINATION );
-        setDestinations( destinationId );
-
-        String appName = (String) config.get( APPLICATION_NAME );
-        setApplicationName( appName );
-
-        synchronized ( this )
-        {
-            m_registration.setProperties( config );
         }
     }
 
@@ -270,16 +344,47 @@ public abstract class AbstractContentSource<E extends Component>
      */
     public final ServiceRegistration register()
     {
-        String[] serviceNames =
+        synchronized( this )
         {
-            ContentSource.class.getName(), ManagedService.class.getName()
-        };
-
-        synchronized ( this )
-        {
+            String[] serviceNames =
+                {
+                    ContentSource.class.getName(), ManagedService.class.getName()
+                };
             m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-
             return m_registration;
+        }
+    }
+
+    public Roles getRequiredRoles()
+    {
+        return m_requiredRoles;
+    }
+
+    public Roles getBasicRoles()
+    {
+        return m_basicRoles;
+    }
+
+    public final void setRoles( Roles requiredRoles, Roles basicRoles )
+    {
+        boolean changed = false;
+        if( requiredRoles != null )
+        {
+            changed = true;
+            m_requiredRoles = requiredRoles;
+            m_properties.put( REQUIRED_ROLES, requiredRoles.toArray( ROLES_TYPE ) );
+        }
+
+        if( basicRoles != null )
+        {
+            m_basicRoles = basicRoles;
+            m_properties.put( REQUIRED_ROLES, basicRoles.toArray( ROLES_TYPE ) );
+            changed = true;
+        }
+
+        if( changed && m_registration != null )
+        {
+            m_registration.setProperties( m_properties );
         }
     }
 }

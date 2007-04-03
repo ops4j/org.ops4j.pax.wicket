@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.internal;
 import javax.servlet.http.HttpServletRequest;
 import org.ops4j.lang.NullArgumentException;
 import wicket.Page;
-import wicket.Session;
 import wicket.protocol.http.WebApplication;
 import wicket.protocol.http.WebRequest;
 import wicket.settings.IApplicationSettings;
@@ -29,16 +28,15 @@ import wicket.settings.ISessionSettings;
 
 public final class PaxWicketApplication extends WebApplication
 {
+
     private final String m_mountPoint;
-    protected Class m_homepageClass;
+    protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
 
-    public PaxWicketApplication(
-            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory,
-            DelegatingClassResolver delegatingClassResolver,
-            boolean deploymentMode )
+    public PaxWicketApplication( String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory,
+                                 DelegatingClassResolver delegatingClassResolver, boolean deploymentMode )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
@@ -54,31 +52,28 @@ public final class PaxWicketApplication extends WebApplication
     }
 
     /**
-     * Application subclasses must specify a home page class by implementing
-     * this abstract method.
+     * Application subclasses must specify a home page class by implementing this abstract method.
      *
      * @return Home page class for this application
      */
     @Override
-    public final Class getHomePage()
+    public final Class<? extends Page> getHomePage()
     {
         return m_homepageClass;
     }
 
     /**
-     * Initialize; if you need the wicket servlet for initialization, e.g.
-     * because you want to read an initParameter from web.xml or you want to
-     * read a resource from the servlet's context path, you can override this
-     * method and provide custom initialization. This method is called right
-     * after this application class is constructed, and the wicket servlet is
-     * set. <strong>Use this method for any application setup instead of the
-     * constructor.</strong>
+     * Initialize; if you need the wicket servlet for initialization, e.g. because you want to read an initParameter
+     * from web.xml or you want to read a resource from the servlet's context path, you can override this method and
+     * provide custom initialization. This method is called right after this application class is constructed, and the
+     * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
      */
     protected final void init()
     {
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
+
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
         if( m_deploymentMode )
@@ -92,13 +87,14 @@ public final class PaxWicketApplication extends WebApplication
     }
 
     /**
-     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and
-     * obfuscated URL which has been encoded by an appropriate WebResponse.
+     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and obfuscated URL which has been encoded by
+     * an appropriate WebResponse.
      *
-     * @param servletRequest
+     * @param servletRequest The servlet request
      *
-     * @return a WebRequest object
+     * @return a WebRequest object.
      */
+    @Override
     protected final WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
         return new PaxWicketRequest( m_mountPoint, servletRequest );

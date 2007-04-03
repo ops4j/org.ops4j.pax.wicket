@@ -17,10 +17,11 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
+import java.util.HashMap;
 import org.ops4j.pax.wicket.toolkit.actions.ActionGroup;
+import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.Component;
+import wicket.MarkupContainer;
 import wicket.markup.html.panel.Panel;
 
 public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
@@ -29,6 +30,9 @@ public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
 
     public static final String MENUSECTION_PREFIX = "menusection:";
 
+    public static final String MENUITEM = "menu-item";
+
+    private static HashMap<String, PaxWicketMenuSection> m_instances = new HashMap<String, PaxWicketMenuSection>();
     private String m_sectionName;
 
     public PaxWicketMenuSection( BundleContext context, String application, String sectionName,
@@ -37,12 +41,13 @@ public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
     {
         super( context, application, sectionName, defaultLocation );
         m_sectionName = sectionName;
+        m_instances.put( sectionName, this );
     }
 
-    protected <T extends Component> Panel createComponent( String contentId, T parent )
+    protected <T extends MarkupContainer> Panel createComponent( T parent, String wicketId )
         throws IllegalArgumentException
     {
-        return new PaxWicketSectionPanel( this, contentId );
+        return new PaxWicketSectionPanel( this, wicketId );
     }
 
     public String getSectionName()
@@ -53,5 +58,13 @@ public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
     public String getIdentifier()
     {
         return MENUSECTION_PREFIX + m_sectionName;
+    }
+
+    public static PaxWicketMenuSection getPaxWicketMenuSection( String sectionName )
+    {
+        synchronized( PaxWicketMenuSection.class )
+        {
+            return m_instances.get( sectionName );
+        }
     }
 }

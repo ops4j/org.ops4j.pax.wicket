@@ -18,15 +18,12 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
-import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
-import org.ops4j.pax.wicket.api.ContentAggregator;
-import wicket.Component;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
 import wicket.markup.html.list.ListView;
 import wicket.markup.html.panel.Panel;
-import wicket.model.Model;
 
 /**
  * {@code FloorPanel}
@@ -40,32 +37,64 @@ final class FloorPanel extends Panel
     private static final long serialVersionUID = 1L;
 
     public static final String WICKET_ID_NAME_LABEL = "name";
-    private static final String WICKET_ID_FRANCHISEE = "franchisee";
-    private static final String WICKET_ID_FRANCHISEES = "franchisees";
+    public static final String WICKET_ID_FRANCHISEE = "franchisee";
+    public static final String WICKET_ID_FRANCHISEES = "franchisees";
 
-    FloorPanel( String id, ContentAggregator container, Model floor )
+    FloorPanel( String wicketId, List<String> sources, String floorName )
     {
-        super( id, floor );
-        ListView listView = new ListView( WICKET_ID_FRANCHISEES )
-        {
-            private static final long serialVersionUID = 1L;
+        super( wicketId );
 
-            protected void populateItem( final ListItem item )
-            {
-                Component modelObject = (Component) item.getModelObject();
-                item.add( modelObject );
-            }
-        };
-        List<Component> franchisees = container.createComponents( WICKET_ID_FRANCHISEE, listView );
-        if( franchisees.isEmpty() )
+        ListView view;
+        if( sources.isEmpty() )
         {
-            Label tLabel = new Label( WICKET_ID_FRANCHISEE, "No Franchisees are renting on this floor." );
-            franchisees.add( tLabel );
+            String message = "No Franchisees are renting on this floor.";
+            view = new LabelListView( WICKET_ID_FRANCHISEES, Collections.singletonList( message ) );
         }
-        Model listViewModel = new Model( (Serializable) franchisees );
-        listView.setModel( listViewModel );
+        else
+        {
+            view = new FloorListView( WICKET_ID_FRANCHISEES, sources, floorName );
+        }
 
-        add( listView );
+        add( view );
     }
 
+    private static final class LabelListView extends ListView
+    {
+
+        private static final long serialVersionUID = 1L;
+
+        private LabelListView( String wicketId, List<String> list )
+        {
+            super( wicketId, list );
+        }
+
+        @Override
+        protected final void populateItem( ListItem item )
+        {
+            String message = (String) item.getModelObject();
+            Label label = new Label( WICKET_ID_FRANCHISEE, message );
+            item.add( label );
+        }
+    }
+
+    private static class FloorListView extends ListView
+    {
+
+        private static final long serialVersionUID = 1L;
+        private final String m_floorName;
+
+        private FloorListView( String wicketId, List<String> sources, String floorName )
+        {
+            super( wicketId, sources );
+            m_floorName = floorName;
+        }
+
+        @Override
+        protected void populateItem( ListItem item )
+        {
+            String sourceId = (String) item.getModelObject();
+            FloorAggregatedSource instance = FloorAggregatedSource.getInstance( m_floorName );
+            instance.createWiredComponent( sourceId, item, WICKET_ID_FRANCHISEE );
+        }
+    }
 }

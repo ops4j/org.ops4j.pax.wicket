@@ -88,8 +88,8 @@ public class UserAdminAuthenticator
         m_serviceTracker.open();
     }
 
-    /** Releases all the resources used by this class.
-     *
+    /**
+     * Releases all the resources used by this class.
      */
     public void dispose()
     {
@@ -142,7 +142,8 @@ public class UserAdminAuthenticator
         return wicketRoles;
     }
 
-    /** A Tracker for the UserAdmin service in the OSGi framework.
+    /**
+     * A Tracker for the UserAdmin service in the OSGi framework.
      *
      * <p>
      * This tracker will only hold the reference to the <code>UserAdmin</code>

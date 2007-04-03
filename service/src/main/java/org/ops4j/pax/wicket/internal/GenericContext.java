@@ -39,7 +39,7 @@ public class GenericContext
 
     public GenericContext( Bundle applicationBundle, String rootUrl )
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "GenericContext(" + rootUrl + " )" );
         }
@@ -52,7 +52,7 @@ public class GenericContext
     public boolean handleSecurity( HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse )
         throws IOException
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "handleSecurity()" );
         }
@@ -61,13 +61,13 @@ public class GenericContext
 
     public URL getResource( String resourcename )
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "getResource( " + resourcename + " )" );
         }
 
         String resource;
-        if ( resourcename.startsWith( m_rootUrl ) )
+        if( resourcename.startsWith( m_rootUrl ) )
         {
             int prefixLength = m_rootUrl.length();
             resource = resourcename.substring( prefixLength + 1 );
@@ -82,23 +82,23 @@ public class GenericContext
 
     public String getMimeType( String resourcename )
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "getMimeType( " + resourcename + " )" );
         }
         URL resource = getResource( resourcename );
-        if ( resource == null )
+        if( resource == null )
         {
             return null;
         }
         String url = resource.toString();
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "         URL: " + url );
         }
 
         String contentType = m_typeMap.getContentType( url );
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( " ContentType: " + contentType );
         }

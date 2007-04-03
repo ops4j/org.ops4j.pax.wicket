@@ -28,7 +28,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
 import wicket.Page;
 import wicket.authentication.AuthenticatedWebSession;
 
@@ -41,7 +40,7 @@ public abstract class AbstractPageFactory<T extends Page>
     private Hashtable<String, String> m_properties;
 
     protected AbstractPageFactory( BundleContext bundleContext,
-            String pageId, String applicationName, String pageName )
+                                   String pageId, String applicationName, String pageName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -62,11 +61,11 @@ public abstract class AbstractPageFactory<T extends Page>
     {
         String[] classes = { PageFactory.class.getName(), ManagedService.class.getName() };
 
-        synchronized ( this )
+        synchronized( this )
         {
             if( m_serviceRegistration != null )
             {
-                Class< ? extends AbstractPageFactory> clazz = getClass();
+                Class<? extends AbstractPageFactory> clazz = getClass();
                 String className = clazz.getSimpleName();
                 throw new IllegalArgumentException( className + "[" + this + "] has been registered." );
             }
@@ -78,11 +77,11 @@ public abstract class AbstractPageFactory<T extends Page>
     public final void dispose()
         throws IllegalStateException
     {
-        synchronized ( this )
+        synchronized( this )
         {
             if( m_serviceRegistration == null )
             {
-                Class< ? extends AbstractPageFactory> clazz = getClass();
+                Class<? extends AbstractPageFactory> clazz = getClass();
                 String className = clazz.getSimpleName();
                 throw new IllegalStateException( className + "[" + this + "] has not been registered." );
             }
@@ -101,13 +100,14 @@ public abstract class AbstractPageFactory<T extends Page>
      */
     public final String getApplicationName()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.get( ContentSource.APPLICATION_NAME );
         }
     }
 
-    /** Returns the Authentication of the current request.
+    /**
+     * Returns the Authentication of the current request.
      *
      * It is possible to obtain the Username of the logged in user as well as which roles that this
      * user has assigned to it.
@@ -128,17 +128,18 @@ public abstract class AbstractPageFactory<T extends Page>
      */
     public final String getPageName()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             return m_properties.get( ContentSource.PAGE_NAME );
         }
     }
 
-    public void updated( Dictionary config ) throws ConfigurationException
+    public void updated( Dictionary config )
+        throws ConfigurationException
     {
-        if ( config == null )
+        if( config == null )
         {
-            synchronized ( this )
+            synchronized( this )
             {
                 m_serviceRegistration.setProperties( m_properties );
             }
@@ -146,11 +147,11 @@ public abstract class AbstractPageFactory<T extends Page>
             return;
         }
 
-        String pagename = ( String ) config.get( ContentSource.PAGE_NAME );
-        String appname = ( String ) config.get( ContentSource.APPLICATION_NAME );
+        String pagename = (String) config.get( ContentSource.PAGE_NAME );
+        String appname = (String) config.get( ContentSource.APPLICATION_NAME );
         setPageName( pagename );
         setApplicationName( appname );
-        synchronized ( this )
+        synchronized( this )
         {
             m_serviceRegistration.setProperties( config );
         }
@@ -162,7 +163,6 @@ public abstract class AbstractPageFactory<T extends Page>
      * @param applicationName The application name. This argument must not be {@code null} or empty.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code applicationName} is {@code null}.
-     *
      * @since 1.0.0
      */
     protected final void setApplicationName( String applicationName )
@@ -170,7 +170,7 @@ public abstract class AbstractPageFactory<T extends Page>
     {
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( ContentSource.APPLICATION_NAME, applicationName );
         }
@@ -182,7 +182,6 @@ public abstract class AbstractPageFactory<T extends Page>
      * @param pageName The page name. This argument must not be {@code null} or empty.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code pageName} arguments are {@code null}.
-     *
      * @since 1.0.0
      */
     protected final void setPageName( String pageName )
@@ -190,7 +189,7 @@ public abstract class AbstractPageFactory<T extends Page>
     {
         NullArgumentException.validateNotEmpty( pageName, "pageName" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_properties.put( ContentSource.PAGE_NAME, pageName );
         }

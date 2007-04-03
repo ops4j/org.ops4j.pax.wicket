@@ -17,16 +17,15 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus.sample.mainpage;
 
-import java.util.List;
 import java.util.ArrayList;
-import org.ops4j.pax.wicket.util.RootContentAggregator;
+import java.util.List;
 import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import wicket.Component;
 import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import wicket.markup.html.WebPage;
-import wicket.markup.html.list.ListView;
 import wicket.markup.html.list.ListItem;
-import wicket.markup.html.basic.Label;
+import wicket.markup.html.list.ListView;
 
 @AuthorizeInstantiation( "user" )
 public class HomePage extends WebPage
@@ -34,12 +33,12 @@ public class HomePage extends WebPage
 
     private RootContentAggregator m_aggregator;
 
-
     /**
-     * @see wicket.Page#Page(wicket.model.IModel) @param container The Page Container to use to create the components.
      * @param container
      * @param globalMenu
      * @param localMenu
+     *
+     * @see wicket.Page#Page(wicket.model.IModel) @param container The Page Container to use to create the components.
      */
     public HomePage( RootContentAggregator container, PaxWicketMenu globalMenu, PaxWicketMenu localMenu )
     {
@@ -51,7 +50,7 @@ public class HomePage extends WebPage
 
     private void populateMenus( PaxWicketMenu menu, String contentId )
     {
-        List<Component> globalMenuComponents  = new ArrayList<Component>();
+        List<Component> globalMenuComponents = new ArrayList<Component>();
         ListView globalmenuview = new ListView( contentId, globalMenuComponents )
         {
             protected void populateItem( final ListItem item )
@@ -59,17 +58,17 @@ public class HomePage extends WebPage
 
             }
         };
-        globalMenuComponents.addAll( menu.createComponents( "menu", globalmenuview ) );
-        if( globalMenuComponents.size() == 0 )
-        {
-            // No menu installed.
-            Label dummy = new Label( contentId, "" );
-            dummy.setVisible( false );
-            add( dummy );
-        }
-        else
-        {
-
-        }
+//        globalMenuComponents.addAll( menu.createComponent( "menu", globalmenuview ) );
+//        if( globalMenuComponents.size() == 0 )
+//        {
+        // No menu installed.
+//            Label dummy = new Label( contentId, "" );
+//            dummy.setVisible( false );
+//            add( dummy );
+//        }
+//        else
+//        {
+//
+//        }
     }
 }

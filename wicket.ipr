@@ -507,7 +507,9 @@
         <root url="jar://$M2_REPO$/wicket/wicket/1.2.5/wicket-1.2.5.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file:///home/efy/dev/wicket/wicket-1.2.x/wicket/src/main/java" />
+      </SOURCES>
     </library>
     <library name="servlet-api-2.3">
       <CLASSES>
@@ -562,14 +564,18 @@
         <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.5/wicket-extensions-1.2.5.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file:///home/efy/dev/wicket/wicket-1.2.x/wicket-extensions/src/main/java" />
+      </SOURCES>
     </library>
     <library name="wicket-auth-roles-1.2.5">
       <CLASSES>
         <root url="jar://$M2_REPO$/wicket/wicket-auth-roles/1.2.5/wicket-auth-roles-1.2.5.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="file:///home/efy/dev/wicket/wicket-1.2.x/wicket-auth-roles/src/main/java" />
+      </SOURCES>
     </library>
   </component>
   <component name="uidesigner-configuration">

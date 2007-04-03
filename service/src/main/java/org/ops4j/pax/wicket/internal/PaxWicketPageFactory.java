@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.util.PageFinder;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
@@ -69,7 +68,7 @@ public final class PaxWicketPageFactory
 
     public final void dispose()
     {
-        synchronized ( this )
+        synchronized( this )
         {
             m_serviceRegistration.unregister();
             m_contents.clear();
@@ -99,7 +98,7 @@ public final class PaxWicketPageFactory
      * constructor exists and the parameters argument is null or empty, then any available default constructor will be
      * used.
      *
-     * @param pageClass The class of Page to create
+     * @param pageClass  The class of Page to create
      * @param parameters Any parameters to pass to the Page's constructor
      *
      * @return The new page
@@ -110,25 +109,25 @@ public final class PaxWicketPageFactory
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
-        PageFinder.setCurrentPageParameters( parameters );
+
         PageFactory content;
-        synchronized ( this )
+        synchronized( this )
         {
             content = m_contents.get( pageClass );
         }
-        if ( content == null )
+        if( content == null )
         {
             try
             {
                 return (Page) pageClass.newInstance();
             }
-            catch ( InstantiationException e )
+            catch( InstantiationException e )
             {
                 String message = "An abstract class or an interface was requested to be a Page: " + pageClass;
                 m_logger.error( message, e );
                 throw new WicketRuntimeException( message, e );
             }
-            catch ( IllegalAccessException e )
+            catch( IllegalAccessException e )
             {
                 String message = "The constructor in " + pageClass + " is not public and without parameters.";
                 m_logger.error( message, e );
@@ -145,7 +144,7 @@ public final class PaxWicketPageFactory
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
         NullArgumentException.validateNotNull( pageSource, "pageSource" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_contents.put( pageClass, pageSource );
             String tPageClassName = pageClass.getName();
@@ -158,7 +157,7 @@ public final class PaxWicketPageFactory
     {
         NullArgumentException.validateNotNull( pageClass, "pageClass" );
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_contents.remove( pageClass );
             String tPageClassName = pageClass.getName();
@@ -176,12 +175,12 @@ public final class PaxWicketPageFactory
     public final Class resolveClass( String classname )
     {
         Class resolved;
-        synchronized ( this )
+        synchronized( this )
         {
             resolved = m_pageClasses.get( classname );
         }
 
-        if ( resolved == null )
+        if( resolved == null )
         {
             try
             {
@@ -189,7 +188,7 @@ public final class PaxWicketPageFactory
                 ClassLoader classLoader = thisClass.getClassLoader();
                 resolved = classLoader.loadClass( classname );
             }
-            catch ( ClassNotFoundException e )
+            catch( ClassNotFoundException e )
             {
                 return null;
             }

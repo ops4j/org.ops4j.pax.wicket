@@ -19,6 +19,7 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import wicket.Component;
 import wicket.markup.html.WebPage;
@@ -39,7 +40,13 @@ public class Page extends WebPage
                 listItem.add( comp );
             }
         };
-        components.addAll( container.createComponents( "menuitem", view ) );
+
+        List<String> sourceIds = container.getWiredSourceIds( "menuitem", null );
+        for( String sourceId : sourceIds )
+        {
+            Component component = container.createWiredComponent( sourceId, null, "menuitem" );
+            components.add( component );
+        }   
         add( view );
     }
 }

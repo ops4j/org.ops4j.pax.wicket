@@ -18,23 +18,25 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
-import java.util.Locale;
 import java.util.HashMap;
-
+import java.util.List;
+import java.util.Locale;
+import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-
-import wicket.Component;
+import wicket.MarkupContainer;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.panel.Panel;
+import wicket.model.IModel;
 import wicket.model.Model;
 
 public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     implements OverviewTabContent
 {
-    private static HashMap<String, FloorAggregatedSource> m_instances;
+
+    private static final HashMap<String, FloorAggregatedSource> m_instances;
 
     private final Model m_floor;
     private final String m_tabId;
@@ -49,13 +51,16 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     {
         super( bundleContext, applicationname, aggregationPoint, destination );
         m_tabId = aggregationPoint;
-        m_floor = new Model( floor.getName() );
-        m_instances.put( floor.getName(), this );
+        String floorName = floor.getName();
+        m_floor = new Model( floorName );
+        m_instances.put( floorName, this );
     }
 
-    protected FloorPanel createComponent( String contentId, Component parent )
+    protected <T extends MarkupContainer> FloorPanel createComponent( T parent, String wicketId )
     {
-        return new FloorPanel( contentId, this, m_floor );
+        List<String> sources = getWiredSourceIds( FloorPanel.WICKET_ID_FRANCHISEE, null );
+        String floorName = (String) m_floor.getObject( null );
+        return new FloorPanel( wicketId, sources, floorName );
     }
 
     public AbstractTab createTab( Locale locale )
@@ -63,9 +68,34 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         return new FloorTab( m_floor );
     }
 
-    public String getTabId()
+    public final String getFloorId()
+    {
+        return (String) m_floor.getObject( null );
+    }
+
+    public final String getTabId()
     {
         return m_tabId;
+    }
+
+    /**
+     * Returns the floor aggregated source given the specified {@code floorId} argument.
+     *
+     * @param floorId The floor id. This argument must not be {@code null}.
+     *
+     * @return The floor aggregated source given the specified {@code floorId} argument.
+     *
+     * @throws IllegalArgumentException Thrown if the specified {@code floorId} argument is {@code null}.
+     * @since 1.0.0
+     */
+    static FloorAggregatedSource getInstance( String floorId )
+        throws IllegalArgumentException
+    {
+        NullArgumentException.validateNotEmpty( floorId, "floorId" );
+        synchronized( m_instances )
+        {
+            return m_instances.get( floorId );
+        }
     }
 
     private static class FloorTab extends AbstractTab
@@ -81,9 +111,11 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         @Override
         public Panel getPanel( String panelId )
         {
-            String floorName = (String) getTitle().getObject( null );
+            IModel titleModel = getTitle();
+            String floorName = (String) titleModel.getObject( null );
             FloorAggregatedSource source = m_instances.get( floorName );
-            return source.createComponent( panelId, null );
+            return source.createSourceComponent( null, panelId );
         }
     }
+
 }

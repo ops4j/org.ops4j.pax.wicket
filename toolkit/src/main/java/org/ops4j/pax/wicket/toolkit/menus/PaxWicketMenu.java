@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.toolkit.menus;
 import org.ops4j.pax.wicket.toolkit.actions.ActionContainer;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.Component;
+import wicket.MarkupContainer;
 import wicket.markup.html.panel.Panel;
 
 public class PaxWicketMenu extends AbstractAggregatedSource<Panel>
@@ -37,10 +37,10 @@ public class PaxWicketMenu extends AbstractAggregatedSource<Panel>
         m_menuName = menuName;
     }
 
-    protected <T extends Component> Panel createComponent( String contentId, T parent )
+    protected <T extends MarkupContainer> Panel createComponent( T parent, String wicketId )
         throws IllegalArgumentException
     {
-        return new PaxWicketMenuPanel( this, contentId );
+        return new PaxWicketMenuPanel( this, wicketId );
     }
 
     public String getMenuName()

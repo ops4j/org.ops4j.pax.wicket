@@ -30,7 +30,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code DefaultContentTracker} tracks {@link ContentSource} services.
- * 
+ *
  * @author Edward Yakop
  * @since 1.0.0
  */
@@ -47,27 +47,27 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Construct an instance of {@code DefaultContentTracker} with the specified arguments.
-     * 
-     * @param context The bundle context. This argument must not be {@code null}.
-     * @param callback The callback. This argument must not be {@code null}.
-     * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * @param aggregationId The aggregation id. This argument must not be {@code null} or empty.
-     * 
+     *
+     * @param context              The bundle context. This argument must not be {@code null}.
+     * @param callback             The callback. This argument must not be {@code null}.
+     * @param applicationName      The application name. This argument must not be {@code null} or empty.
+     * @param aggregationPointName The aggregation id. This argument must not be {@code null} or empty.
+     *
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      * @since 1.0.0
      */
     public DefaultContentTracker( BundleContext context, ContentTrackingCallback callback, String applicationName,
-        String aggregationId )
+                                  String aggregationPointName )
         throws IllegalArgumentException
     {
         super( context, TrackingUtil.createContentFilter( context, applicationName ), null );
 
-        NullArgumentException.validateNotEmpty( aggregationId, "aggregationId" );
+        NullArgumentException.validateNotEmpty( aggregationPointName, "aggregationPointName" );
         NullArgumentException.validateNotNull( callback, "callback" );
 
         m_context = context;
         m_callback = callback;
-        m_aggregationId = aggregationId;
+        m_aggregationId = aggregationPointName;
 
         m_references = new ArrayList<ServiceReference>();
     }
@@ -75,23 +75,23 @@ public final class DefaultContentTracker extends ServiceTracker
     /**
      * Close the tracker. This method assumes that all {@code ContentSource} that are stored by invoking
      * {@link ContentTrackingCallback#addContent(String,ContentSource)} has been freed.
-     * 
+     *
      * @since 1.0.0
      */
     @Override
     public final synchronized void close()
     {
-        synchronized ( this )
+        synchronized( this )
         {
-            int startIndexOfContentId = m_aggregationId.length() + 1;
+            int startIndexOfWicketId = m_aggregationId.length() + 1;
 
-            for ( ServiceReference reference : m_references )
+            for( ServiceReference reference : m_references )
             {
-                String destinationId = (String) reference.getProperty( ContentSource.DESTINATION );
-                String contentId = destinationId.substring( startIndexOfContentId );
+                String destinationId = (String) reference.getProperty( ContentSource.DESTINATIONS );
+                String wicketId = destinationId.substring( startIndexOfWicketId );
                 ContentSource content = (ContentSource) m_context.getService( reference );
 
-                m_callback.removeContent( contentId, content );
+                m_callback.removeContent( wicketId, content );
 
                 m_context.ungetService( reference ); // Removal for the first get during add
                 m_context.ungetService( reference ); // Removal for the second get in this loop block
@@ -105,34 +105,34 @@ public final class DefaultContentTracker extends ServiceTracker
 
     /**
      * Adding service.
-     * 
+     *
      * @see ServiceTracker#addingService(ServiceReference)
      * @since 1.0.0
      */
     public final Object addingService( ServiceReference serviceReference )
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
-        String dest = (String) serviceReference.getProperty( ContentSource.DESTINATION );
+        String dest = (String) serviceReference.getProperty( ContentSource.DESTINATIONS );
 
         Object service;
-        synchronized ( this )
+        synchronized( this )
         {
             service = m_context.getService( serviceReference );
         }
 
-        if ( dest == null )
+        if( dest == null )
         {
             return service;
         }
-        if ( dest.startsWith( "regexp(" ) )
+        if( dest.startsWith( "regexp(" ) )
         {
             return matchRegularExpression( dest, service, serviceReference );
         }
-        else if ( !dest.startsWith( m_aggregationId ) )
+        else if( !dest.startsWith( m_aggregationId ) )
         {
             return service;
         }
@@ -143,15 +143,15 @@ public final class DefaultContentTracker extends ServiceTracker
     private Object matchRegularExpression( String dest, Object service, ServiceReference serviceReference )
     {
         int lastParan = dest.lastIndexOf( ")." );
-        if ( lastParan < 0 )
+        if( lastParan < 0 )
         {
-            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[content-expression]";
+            String message = "Regular Expressions must have the format: \"regexp(\"[expression]\").\"[wicketId]";
             throw new IllegalArgumentException( message );
         }
         String expression = dest.substring( 7, lastParan );
-        if ( Pattern.matches( expression, m_aggregationId ) )
+        if( Pattern.matches( expression, m_aggregationId ) )
         {
-            synchronized ( this )
+            synchronized( this )
             {
                 String id = dest.substring( lastParan + 2 );
                 m_callback.addContent( id, (ContentSource) service );
@@ -164,26 +164,26 @@ public final class DefaultContentTracker extends ServiceTracker
     private Object matchDirect( String dest, Object service, ServiceReference serviceReference )
     {
         int aggregationIdLength = m_aggregationId.length();
-        if ( dest.length() == aggregationIdLength )
+        if( dest.length() == aggregationIdLength )
         {
-            String message = "The '" + ContentSource.DESTINATION + "' property have the form ["
-                             + ContentSource.AGGREGATION_POINT + "].[contentId] but was " + dest;
+            String message = "The '" + ContentSource.DESTINATIONS + "' property have the form ["
+                             + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
             throw new IllegalArgumentException( message );
         }
 
-        if ( dest.charAt( aggregationIdLength ) != '.' )
+        if( dest.charAt( aggregationIdLength ) != '.' )
         {
             return service;
         }
 
         String id = dest.substring( aggregationIdLength + 1 );
 
-        if ( m_logger.isInfoEnabled() )
+        if( m_logger.isInfoEnabled() )
         {
             m_logger.info( "Attaching content with wicket:id [" + id + "] to aggregation [" + m_aggregationId + "]" );
         }
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_callback.addContent( id, (ContentSource) service );
             m_references.add( serviceReference );
@@ -193,62 +193,41 @@ public final class DefaultContentTracker extends ServiceTracker
     }
 
     /**
-     * Handle modified service.
-     * 
-     * @see ServiceTracker#modifiedService(ServiceReference,Object)
-     * @since 1.0.0
-     */
-    public final void modifiedService( ServiceReference serviceReference, Object object )
-    {
-        if ( m_logger.isDebugEnabled() )
-        {
-            m_logger.debug( "Service Reference [" + serviceReference + "] has been modified." );
-        }
-
-        removedService( serviceReference, object );
-        addingService( serviceReference );
-    }
-
-    /**
      * Handle removed service.
-     * 
+     *
      * @see ServiceTracker#removedService(ServiceReference,Object)
      * @since 1.0.0
      */
     public void removedService( ServiceReference serviceReference, Object object )
     {
-        if ( m_logger.isDebugEnabled() )
+        if( m_logger.isDebugEnabled() )
         {
             m_logger.debug( "Service Reference [" + serviceReference + "] has been removed." );
         }
 
-        if ( !(object instanceof ContentSource) )
+        if( !( object instanceof ContentSource ) )
         {
             String message = "OSGi Framework not passing a ContentSource object as specified in R4 spec.";
             throw new IllegalArgumentException( message );
         }
 
         ContentSource content = (ContentSource) object;
-        String destionationId = content.getDestination();
-        if ( destionationId == null )
+        String[] destionationIds = content.getDestinations();
+        for( String destinationId : destionationIds )
         {
-            m_logger.warn( "ContentSource [" + content + "] does not have Destination defined. Setting to <unknown>" );
-            destionationId = ContentSource.DESTINATION_UNKNOWN;
-        }
-        else
-        {
-            int pos = destionationId.lastIndexOf( '.' );
-            String id = destionationId.substring( pos + 1 );
+            int pos = destinationId.lastIndexOf( '.' );
+            String id = destinationId.substring( pos + 1 );
             boolean wasContentRemoved = m_callback.removeContent( id, content );
 
-            if ( m_logger.isInfoEnabled() && wasContentRemoved )
+            if( m_logger.isInfoEnabled() && wasContentRemoved )
             {
                 m_logger.info( "Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
-                    + "]" );
+                               + "]"
+                );
             }
         }
 
-        synchronized ( this )
+        synchronized( this )
         {
             m_context.ungetService( serviceReference );
             m_references.remove( serviceReference );

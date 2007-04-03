@@ -20,7 +20,6 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
@@ -33,26 +32,32 @@ public class Activator
     implements BundleActivator
 {
 
-    private List<ServiceRegistration> m_registrations;
-    private ArrayList<ContentAggregator> m_floors;
+    private final List<ServiceRegistration> m_registrations;
+    private final List<ContentAggregator> m_floors;
+
+    public Activator()
+    {
+        m_registrations = new ArrayList<ServiceRegistration>();
+        m_floors = new ArrayList<ContentAggregator>();
+    }
 
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        m_registrations = new ArrayList<ServiceRegistration>();
         String depStoreServiceName = DepartmentStore.class.getName();
         ServiceReference depStoreServiceReference = bundleContext.getServiceReference( depStoreServiceName );
         DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreServiceReference );
+
         List<Floor> floors = departmentStore.getFloors();
-        m_floors = new ArrayList<ContentAggregator>();
         String destinationId = "swp.floor";
-        for ( Floor floor : floors )
+        for( Floor floor : floors )
         {
             String floorName = floor.getName();
             FloorAggregatedSource aggregatedSource = new FloorAggregatedSource( floor, floorName, destinationId,
-                bundleContext, "departmentstore" );
-            aggregatedSource.setDestinationId( destinationId );
-            aggregatedSource.setAggregationId( floor.getName() );
+                                                                                bundleContext, "departmentstore"
+            );
+            aggregatedSource.setDestination( destinationId );
+            aggregatedSource.setAggregationPointName( floor.getName() );
             ServiceRegistration registration = aggregatedSource.register();
             m_registrations.add( registration );
             m_floors.add( aggregatedSource );
@@ -62,15 +67,17 @@ public class Activator
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        for ( ServiceRegistration registration : m_registrations )
+        for( ServiceRegistration registration : m_registrations )
         {
             registration.unregister();
         }
+
         m_registrations.clear();
 
-        for ( ContentAggregator floor : m_floors )
+        for( ContentAggregator floor : m_floors )
         {
             floor.dispose();
         }
+        m_floors.clear();
     }
 }

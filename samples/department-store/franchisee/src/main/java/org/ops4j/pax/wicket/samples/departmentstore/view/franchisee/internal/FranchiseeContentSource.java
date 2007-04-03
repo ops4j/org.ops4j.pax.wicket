@@ -22,7 +22,7 @@ import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
 
-import wicket.Component;
+import wicket.MarkupContainer;
 
 /**
  * {@code FranchiseeContentSource}
@@ -41,8 +41,10 @@ public class FranchiseeContentSource extends AbstractContentSource<FranchiseePan
         m_franchisee = franchisee;
     }
 
-    protected FranchiseePanel createComponent( String id, Component parent )
+    @Override
+    protected <T extends MarkupContainer> FranchiseePanel createWicketComponent( T parent , String wicketId)
+        throws IllegalArgumentException
     {
-        return new FranchiseePanel( id, m_franchisee );
+        return new FranchiseePanel( wicketId, m_franchisee );
     }
 }

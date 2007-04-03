@@ -18,7 +18,8 @@ package org.ops4j.pax.wicket.api;
 
 import wicket.authorization.strategies.role.Roles;
 
-/** PaxWicketAuthentication represents a subset of the current Session.
+/**
+ * PaxWicketAuthentication represents a subset of the current Session.
  *
  * Typical usage would be;
  * <code><pre>
@@ -43,19 +44,23 @@ import wicket.authorization.strategies.role.Roles;
  *     }
  * }
  * </pre></code>
+ *
+ * @since 1.0.0
  */
 public interface PaxWicketAuthentication
 {
 
     /**
-     *
      * @return The user that is logged in, in the request that this PaxWicketAuthentication is part of.
+     *
+     * @since 1.0.0
      */
     String getLoggedInUser();
 
     /**
-     *
      * @return The Roles of the user that is logged in.
+     *
+     * @since 1.0.0
      */
     Roles getRoles();
 }

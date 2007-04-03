@@ -51,6 +51,15 @@
     </dependency>
     <dependency>
       <groupId>wicket</groupId>
+      <artifactId>wicket-auth-roles</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.base</groupId>
+      <artifactId>ops4j-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
       <scope>provided</scope>
     </dependency>

@@ -19,12 +19,9 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
-
 import wicket.Page;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authentication.AuthenticatedWebSession;
@@ -42,20 +39,19 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private static final AuthenticatedToken TOKEN_NOT_AUTHENTICATED = new AuthenticatedToken();
 
     private final String m_mountPoint;
-    protected Class m_homepageClass;
+    protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
     private boolean m_deploymentMode;
     private PaxWicketAuthenticator m_authenticator;
-    private Class< ? extends WebPage> m_signInPage;
+    private Class<? extends WebPage> m_signInPage;
     private HashMap<AuthenticatedToken, Roles> m_roles;
 
-
-    public PaxAuthenticatedWicketApplication(
-            String mountPoint, Class<? extends Page> homepageClass, PaxWicketPageFactory factory,
-            DelegatingClassResolver delegatingClassResolver,
-            PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
-            boolean deploymentMode )
+    public PaxAuthenticatedWicketApplication( String mountPoint, Class<? extends Page> homepageClass,
+                                              PaxWicketPageFactory factory,
+                                              DelegatingClassResolver delegatingClassResolver,
+                                              PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
+                                              boolean deploymentMode )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
@@ -76,25 +72,21 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     }
 
     /**
-     * Application subclasses must specify a home page class by implementing
-     * this abstract method.
+     * Application subclasses must specify a home page class by implementing this abstract method.
      *
      * @return Home page class for this application
      */
     @Override
-    public Class getHomePage()
+    public Class<? extends Page> getHomePage()
     {
         return m_homepageClass;
     }
 
     /**
-     * Initialize; if you need the wicket servlet for initialization, e.g.
-     * because you want to read an initParameter from web.xml or you want to
-     * read a resource from the servlet's context path, you can override this
-     * method and provide custom initialization. This method is called right
-     * after this application class is constructed, and the wicket servlet is
-     * set. <strong>Use this method for any application setup instead of the
-     * constructor.</strong>
+     * Initialize; if you need the wicket servlet for initialization, e.g. because you want to read an initParameter
+     * from web.xml or you want to read a resource from the servlet's context path, you can override this method and
+     * provide custom initialization. This method is called right after this application class is constructed, and the
+     * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
      */
     public void init()
     {
@@ -116,8 +108,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     }
 
     /**
-     * @return AuthenticatedWebSession subclass to use in this authenticated web
-     *         application.
+     * @return AuthenticatedWebSession subclass to use in this authenticated web application.
      */
     protected Class<? extends AuthenticatedWebSession> getWebSessionClass()
     {
@@ -133,19 +124,20 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     }
 
     /**
-     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and
-     * obfuscated URL which has been encoded by an appropriate WebResponse.
+     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and obfuscated URL which has been encoded by
+     * an appropriate WebResponse.
      *
-     * @param servletRequest
+     * @param servletRequest The servlet request.
      *
      * @return a WebRequest object
      */
+    @Override
     protected WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
         return new PaxWicketRequest( m_mountPoint, servletRequest );
     }
 
-    public AuthenticatedToken authententicate( String username, String password )
+    final AuthenticatedToken authententicate( String username, String password )
     {
         if( m_authenticator == null )
         {
@@ -163,7 +155,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         return null;
     }
 
-    public Roles getRoles( AuthenticatedToken token )
+    final Roles getRoles( AuthenticatedToken token )
     {
         if( token == null || token == TOKEN_NOT_AUTHENTICATED )
         {

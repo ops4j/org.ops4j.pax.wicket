@@ -25,7 +25,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
-class TrackingUtil
+final class TrackingUtil
 {
 
     static Filter createContentFilter( BundleContext bundleContext, String applicationName )

@@ -32,23 +32,22 @@ import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.protocol.http.WicketServlet;
 
-public class HttpTracker extends ServiceTracker
+final class HttpTracker extends ServiceTracker
 {
 
-    private BundleContext m_bundleContext;
     private HttpService m_httpService;
     private HashMap<String, ServletDescriptor> m_servlets;
 
-    public HttpTracker( BundleContext bundleContext )
+    HttpTracker( BundleContext bundleContext )
     {
         super( bundleContext, HttpService.class.getName(), null );
-        m_bundleContext = bundleContext;
         m_servlets = new HashMap<String, ServletDescriptor>();
     }
 
-    public Object addingService( ServiceReference serviceReference )
+    @Override
+    public final Object addingService( ServiceReference serviceReference )
     {
-        m_httpService = (HttpService) m_bundleContext.getService( serviceReference );
+        m_httpService = (HttpService) super.addingService( serviceReference );
         for( Map.Entry<String, ServletDescriptor> entry : m_servlets.entrySet() )
         {
             ServletDescriptor descriptor = entry.getValue();
@@ -74,11 +73,8 @@ public class HttpTracker extends ServiceTracker
         return m_httpService;
     }
 
-    public void modifiedService( ServiceReference serviceReference, Object httpService )
-    {
-    }
-
-    public void removedService( ServiceReference serviceReference, Object httpService )
+    @Override
+    public final void removedService( ServiceReference serviceReference, Object httpService )
     {
         Set<String> mountPoints;
         synchronized( this )
@@ -90,9 +86,11 @@ public class HttpTracker extends ServiceTracker
         {
             m_httpService.unregister( mountpoint );
         }
+
+        super.removedService( serviceReference, httpService );
     }
 
-    void addServlet( String mountPoint, WicketServlet servlet, Bundle paxWicketBundle )
+    final void addServlet( String mountPoint, WicketServlet servlet, Bundle paxWicketBundle )
         throws NamespaceException, ServletException
     {
         mountPoint = normalizeMountPoint( mountPoint );
@@ -105,7 +103,7 @@ public class HttpTracker extends ServiceTracker
         }
     }
 
-    void removeServlet( String mountPoint )
+    final void removeServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
         if( m_servlets.remove( mountPoint ) != null )
@@ -126,15 +124,16 @@ public class HttpTracker extends ServiceTracker
         return mountPoint;
     }
 
-    WicketServlet getServlet( String mountPoint )
+    final WicketServlet getServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
         ServletDescriptor descriptor = m_servlets.get( mountPoint );
         return descriptor.m_servlet;
     }
 
-    private static class ServletDescriptor
+    private static final class ServletDescriptor
     {
+
         private WicketServlet m_servlet;
         private HttpContext m_httpContext;
 

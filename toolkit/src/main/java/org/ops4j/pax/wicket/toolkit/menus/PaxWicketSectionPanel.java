@@ -17,9 +17,7 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import java.util.ArrayList;
 import java.util.List;
-import wicket.Component;
 import wicket.markup.html.list.ListItem;
 import wicket.markup.html.list.ListView;
 import wicket.markup.html.panel.Panel;
@@ -29,21 +27,22 @@ public class PaxWicketSectionPanel extends Panel
 
     private static final long serialVersionUID = 1L;
 
-    public PaxWicketSectionPanel( PaxWicketMenuSection section, String id )
+    public PaxWicketSectionPanel( PaxWicketMenuSection section, final String id )
     {
         super( id );
-        List<Component> components = new ArrayList<Component>();
-
-        ListView view = new ListView( "items", components )
+        final String sectionName = section.getSectionName();
+        List<String> sources = section.getWiredSourceIds( id, null );
+        ListView listView = new ListView( "items", sources )
         {
             private static final long serialVersionUID = 1L;
 
             protected void populateItem( final ListItem listitem )
             {
-                Component menuitem = (Component) listitem.getModelObject();
-                listitem.add( menuitem );
+                PaxWicketMenuSection menuSection = PaxWicketMenuSection.getPaxWicketMenuSection( sectionName );
+                menuSection.createWiredComponent( id, listitem, PaxWicketMenuSection.MENUITEM );
             }
         };
-        components.addAll( section.createComponents( "item", view ) );
+
+        add( listView );
     }
 }

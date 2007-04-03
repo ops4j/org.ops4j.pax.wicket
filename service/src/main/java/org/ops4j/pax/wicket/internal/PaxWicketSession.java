@@ -17,31 +17,29 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import wicket.authentication.AuthenticatedWebSession;
-import wicket.authentication.AuthenticatedWebApplication;
-import wicket.authorization.strategies.role.Roles;
-import wicket.authorization.IAuthorizationStrategy;
 import java.io.Serializable;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
+import wicket.authentication.AuthenticatedWebApplication;
+import wicket.authentication.AuthenticatedWebSession;
+import wicket.authorization.strategies.role.Roles;
 
-public class PaxWicketSession extends AuthenticatedWebSession
+public final class PaxWicketSession extends AuthenticatedWebSession
     implements Serializable, PaxWicketAuthentication
 {
+
     private static final long serialVersionUID = 1L;
 
     private AuthenticatedToken m_token;
-
     private String m_loggedInUser;
 
     /**
-     * Construct.
+     * Construct the instance of pax wicket session.
      *
-     * @param application The web application
+     * @param application The web application.
      */
     public PaxWicketSession( AuthenticatedWebApplication application )
     {
         super( application );
-        m_loggedInUser = null;
     }
 
     /**
@@ -83,7 +81,7 @@ public class PaxWicketSession extends AuthenticatedWebSession
     public Roles getRoles()
     {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
-        Roles roles = app.getRoles( m_token );
-        return roles;
+        return app.getRoles( m_token );
     }
+
 }

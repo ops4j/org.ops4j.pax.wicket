@@ -28,6 +28,7 @@ import wicket.protocol.http.WicketServlet;
 
 public final class Servlet extends WicketServlet
 {
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger m_logger = Logger.getLogger( Servlet.class );
@@ -53,6 +54,4 @@ public final class Servlet extends WicketServlet
         }
         super.service( req, resp );
     }
-
-
 }

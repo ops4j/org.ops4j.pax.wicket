@@ -17,10 +17,10 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.util.Random;
 import java.io.Serializable;
+import java.util.Random;
 
-public class AuthenticatedToken
+final class AuthenticatedToken
     implements Serializable
 {
 
@@ -30,14 +30,15 @@ public class AuthenticatedToken
 
     private String m_Id;
 
-    public AuthenticatedToken()
+    AuthenticatedToken()
     {
         Random random = new Random();
         m_IdSequence = m_IdSequence + ( random.nextInt() % 100000 );
         m_Id = String.valueOf( m_IdSequence );
     }
 
-    public boolean equals( Object o )
+    @Override
+    public final boolean equals( Object o )
     {
         if( this == o )
         {
@@ -50,15 +51,11 @@ public class AuthenticatedToken
 
         final AuthenticatedToken that = (AuthenticatedToken) o;
 
-        if( !m_Id.equals( that.m_Id ) )
-        {
-            return false;
-        }
-
-        return true;
+        return m_Id.equals( that.m_Id );
     }
 
-    public int hashCode()
+    @Override
+    public final int hashCode()
     {
         return m_Id.hashCode();
     }

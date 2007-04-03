@@ -18,16 +18,11 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
-import wicket.Component;
-
-/** The <i>ContentAggregator</i> defines the <i>AggregationPoint</i>.
+/**
+ * The <i>ContentAggregator</i> defines the <i>AggregationPoint</i>.
  * <p>
  * <i>ContentSource</i>s can attach themselves to an <i>AggregationPoint</i>, which is defined by a
- * <i>ContentAggregator</i>. During the request, i.e. a call to <code>createComponents( String contentID, Component
+ * <i>ContentAggregator</i>. During the request, i.e. a call to <code>createComponents( String wicketId, Component
  * parent )</code>, the ContentAggregator must delegate the creation of components to the <i>wired</i> ContentSources.
  *
  * </p>
@@ -55,14 +50,14 @@ import wicket.Component;
  * be case-sensitive equal of the <i>AggregationPoint</i> of this <i>ContentAggregator</i>.
  * </li>
  * <li>
- * On <code>createComponents( String contentID, Component parent )</code>, the <i>ContentAggregator</i> must find the
+ * On <code>createComponents( MarkupContainer parent, String wicketId )</code>, the <i>ContentAggregator</i> must find the
  * <i>ContentSource</i>s that are <i>wired</i> to the <i>ContentAggregator</i> and where the
- * <i>ContentMatchExpression</i> <b>matches</b> the <code>contentID</code> in the method call. This match is performed
+ * <i>ContentMatchExpression</i> <b>matches</b> the <code>wicketId</code> in the method call. This match is performed
  * identically to the one done for the <i>AggregationPoint</i> and <i>AggregationMatchExpression</i>.
  * </li>
  * <li>
  * For each found <i>ContentSource</i>, which is wired and has a matching <i>ContentMatchExpression</i>, the
- * <i>ContentAggregator</i> must call the <code>ContentSource.createComponent( Component parent )</code> method.
+ * <i>ContentAggregator</i> must call the <code>ContentSource.createSourceComponent( Component parent )</code> method.
  * </li>
  * </ol>
  */
@@ -76,49 +71,16 @@ public interface ContentAggregator
      *
      * @since 1.0.0
      */
-    String getAggregationPoint();
+    String getAggregationPointName();
 
     /**
-     * Create components that has the specified {@code id} id. Returns an empty list if there is no component with the
-     * specified {@code id}.
-     * <p>
-     * General convention:<br/>
-     * <ul>
-     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
-     * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
-     * </ul>
-     * </p>
+     * Returns the application name of this {@code ContentAggregator} instance.
      *
-     * @param contentId The wicket id. This argument must not be {@code null}.
-     * @param parent The parent of created components. This argument must not be {@code null}.
-     *
-     * @return A list of component with the specified {@code contentId} and {@code parent}.
-     *
-     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @return The application name of this {@code ContentAggregator} instance.
      *
      * @since 1.0.0
      */
-    <E extends Component, T extends Component> List<E> createComponents( String contentId, T parent )
-        throws IllegalArgumentException;
-
-    /**
-     * Returns the comparator for component with the specified {@code id}. Returns {@code null} if the comparator does
-     * not exists.
-     *
-     * @param <E> A component class.
-     * @param id The component with the specified {@code id}.
-     * @param locale The locale of the Comparator.
-     *
-     * @return The comparator of the specified {@code id}.
-     *
-     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
-     *
-     * @since 1.0.0
-     */
-    <E extends Component> Comparator<E> getComparator( String id, Locale locale )
-        throws IllegalArgumentException;
+    String getApplicationName();
 
     /**
      * Dispose this {@code ContentAggregator} instance.

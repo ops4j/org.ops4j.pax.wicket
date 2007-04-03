@@ -55,7 +55,7 @@ public class Activator
             {
                 String destinationId = floor.getName() + ".franchisee";
                 FranchiseeContentSource source = new FranchiseeContentSource( bundleContext, franchisee, "departmentstore"  );
-                source.setDestinations( destinationId );
+                source.setDestination( destinationId );
                 ServiceRegistration registration = source.register();
                 m_registrations.add( registration );
             }

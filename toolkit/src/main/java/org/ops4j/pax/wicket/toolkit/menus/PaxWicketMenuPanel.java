@@ -31,8 +31,8 @@ public class PaxWicketMenuPanel extends Panel
     public PaxWicketMenuPanel( PaxWicketMenu menu, String id )
     {
         super( id );
-        List<Component> components = new ArrayList<Component>();
 
+        List<Component> components = new ArrayList<Component>();
         ListView view = new ListView( "sections", components )
         {
             private static final long serialVersionUID = 1L;
@@ -40,9 +40,8 @@ public class PaxWicketMenuPanel extends Panel
             protected void populateItem( final ListItem listitem )
             {
                 Component menuitem = (Component) listitem.getModelObject();
-                listitem.add( menuitem );
             }
         };
-        components.addAll( menu.createComponents( "section", view ) );
+        add( view );
     }
 }

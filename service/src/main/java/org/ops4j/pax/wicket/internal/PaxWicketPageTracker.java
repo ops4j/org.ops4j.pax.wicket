@@ -17,28 +17,25 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import org.apache.log4j.Logger;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
-import org.apache.log4j.Logger;
 
-public class PaxWicketPageTracker extends ServiceTracker
+final class PaxWicketPageTracker extends ServiceTracker
 {
 
     private static final Logger m_logger = Logger.getLogger( PaxWicketPageTracker.class );
 
-    private BundleContext m_context;
-    private String m_applicationName;
-    private PaxWicketPageFactory m_paxWicketPageFactory;
+    private final String m_applicationName;
+    private final PaxWicketPageFactory m_paxWicketPageFactory;
 
-    public PaxWicketPageTracker( BundleContext context, String applicationName,
-                                 PaxWicketPageFactory paxWicketPageFactory )
+    PaxWicketPageTracker( BundleContext context, String applicationName, PaxWicketPageFactory paxWicketPageFactory )
     {
         super( context, TrackingUtil.createAllPageFactoryFilter( context, applicationName ), null );
 
-        m_context = context;
         m_applicationName = applicationName;
         m_paxWicketPageFactory = paxWicketPageFactory;
     }
@@ -70,13 +67,10 @@ public class PaxWicketPageTracker extends ServiceTracker
      *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
-    public Object addingService( ServiceReference reference )
+    @Override
+    public final Object addingService( ServiceReference reference )
     {
-        if( m_logger.isDebugEnabled() )
-        {
-            m_logger.debug( "addingService( " + reference + ");" );
-        }
-        PageFactory pageSource = (PageFactory) m_context.getService( reference );
+        PageFactory pageSource = (PageFactory) super.addingService( reference );
         Class pageClass = pageSource.getPageClass();
         m_paxWicketPageFactory.add( pageClass, pageSource );
         return pageSource;
@@ -98,13 +92,10 @@ public class PaxWicketPageTracker extends ServiceTracker
      *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
-    public void modifiedService( ServiceReference reference, Object service )
+    @Override
+    public final void modifiedService( ServiceReference reference, Object service )
     {
-        if( m_logger.isDebugEnabled() )
-        {
-            m_logger.debug( "modifiedService( " + reference + ", " + service + ");" );
-        }
-        PageFactory pageSource = (PageFactory) m_context.getService( reference );
+        PageFactory pageSource = (PageFactory) service;
         String appName = (String) reference.getProperty( ContentSource.APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
@@ -136,7 +127,8 @@ public class PaxWicketPageTracker extends ServiceTracker
      *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
-    public void removedService( ServiceReference reference, Object service )
+    @Override
+    public final void removedService( ServiceReference reference, Object service )
     {
         if( m_logger.isDebugEnabled() )
         {
@@ -145,5 +137,7 @@ public class PaxWicketPageTracker extends ServiceTracker
         PageFactory pageSource = (PageFactory) service;
         Class pageclass = pageSource.getPageClass();
         m_paxWicketPageFactory.remove( pageclass );
+
+        super.removedService( reference, service );
     }
 }

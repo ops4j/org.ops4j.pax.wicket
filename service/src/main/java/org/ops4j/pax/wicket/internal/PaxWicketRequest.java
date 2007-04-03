@@ -19,15 +19,11 @@
 package org.ops4j.pax.wicket.internal;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-
 import wicket.protocol.http.servlet.ServletWebRequest;
-import wicket.Application;
 
 /**
  * @author Niclas Hedhman, Edward Yakop
- * 
  * @since 1.0.0
  */
 final class PaxWicketRequest extends ServletWebRequest
@@ -38,37 +34,39 @@ final class PaxWicketRequest extends ServletWebRequest
 
     /**
      * Protected constructor.
-     * 
-     * @param mountPoint
-     * 
+     *
+     * @param mountPoint The mount point of the application.
      * @param httpServletRequest The servlet request information
      */
     PaxWicketRequest( String mountPoint, HttpServletRequest httpServletRequest )
     {
         super( httpServletRequest );
         m_mountPoint = "/" + mountPoint;
-        
     }
 
     /**
      * Gets the servlet path.
-     * 
+     *
      * @return Servlet path
      */
     public final String getServletPath()
     {
         String contextPath = getHttpServletRequest().getContextPath();
-
+        if( m_logger.isDebugEnabled() )
+        {
+            m_logger.debug( "getServletPath() : " + contextPath );
+        }
         if( !contextPath.endsWith( "/" ) )
         {
             contextPath += "/";
         }
+
         return contextPath;
     }
 
     /**
      * Gets the servlet context path.
-     * 
+     *
      * @return Servlet context path
      */
     public final String getContextPath()
@@ -102,23 +100,23 @@ final class PaxWicketRequest extends ServletWebRequest
     public String getRelativeURL()
     {
         String url = getServletPath();
-
         HttpServletRequest servletRequest = getHttpServletRequest();
-        final String pathInfo = servletRequest.getPathInfo();
+        String pathInfo = servletRequest.getPathInfo();
 
         if( pathInfo != null )
         {
             url += pathInfo;
         }
 
-        final String queryString = servletRequest.getQueryString();
+        String queryString = servletRequest.getQueryString();
+
         if( queryString != null )
         {
-            url += ("?" + queryString);
+            url += ( "?" + queryString );
         }
 
         // If url is non-empty it has to start with '/', which we should lose
-        if( !url.equals( "" ) )
+        if( url.length() > 0  )
         {
             // Remove leading '/'
             url = url.substring( 1 );
