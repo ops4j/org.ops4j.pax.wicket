@@ -3,14 +3,14 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.4.0-SNAPSHOT</version>
+    <version>0.4.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>model</artifactId>
   <packaging>osgi-bundle</packaging>
   <name>OPS4J - Pax Wicket Department Store Model</name>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0</version>
   <description>Pax Wicket Samples Departmentstore - The model of the department store, representing the business logic separated from the view.</description>
   <dependencies>
     <dependency>
