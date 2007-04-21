@@ -3,13 +3,13 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.4.0</version>
+    <version>0.5.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>demo</artifactId>
   <name>OPS4J - Pax Wicket Department Store - Demo</name>
-  <version>0.4.0</version>
+  <version>0.5.0-SNAPSHOT</version>
   <description>Pax Department Store Demo package.</description>
   <dependencies>
     <dependency>
