@@ -1,0 +1,2 @@
+
+Export-Package: org.ops4j.pax.wicket.samples.departmentstore.model;version=${pom.version}

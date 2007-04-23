@@ -1,0 +1,4 @@
+
+Import-Package: !javax.portlet, *
+
+Export-Package: !wicket.util.tester, wicket.*;version=1.2.5

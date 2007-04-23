@@ -10,7 +10,7 @@ Pax Wicket Guides
 
     {{{authentication.html}Authentication & Authorization }}.
 
-    {{{embedded.html}Embedding Pax Wicket in Application Servers}.
+    {{{embedded.html}Embedding Pax Wicket in Application Servers}}.
 
     {{{dynamic-assembly.html}Hints on Dynamic Assembly}}.
 

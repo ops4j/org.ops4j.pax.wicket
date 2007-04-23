@@ -1,13 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry exported="true" kind="lib" path="lib/wicket-1.2.5.jar" sourcepath="/home/efy/dev/wicket/wicket-1.2.x/wicket/src/main/java"/>
-	<classpathentry exported="true" kind="lib" path="lib/wicket-auth-roles-1.2.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/wicket-extensions-1.2.5.jar" sourcepath="/home/efy/dev/wicket/wicket-1.2.x/wicket-extensions"/>
-	<classpathentry exported="true" kind="lib" path="lib/activation-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-collections-2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ops4j-base-0.4.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="output" path="bin"/>
+  <classpathentry kind="src" path="src/main/java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar"/>
 </classpath>

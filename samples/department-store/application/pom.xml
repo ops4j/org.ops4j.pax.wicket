@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>application</artifactId>
-  <packaging>osgi-bundle</packaging>
+  <packaging>bundle</packaging>
   <name>OPS4J - Pax Wicket Department Store - View - App</name>
   <version>0.5.0-SNAPSHOT</version>
   <description>Pax Department Store View Application.</description>
@@ -22,7 +22,6 @@
       <artifactId>service</artifactId>
       <version>0.4.0</version>
       <scope>provided</scope>
-      <type>osgi-bundle</type>  <!-- Required due to bug in Maven, when building from pax/ directory. -->
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
