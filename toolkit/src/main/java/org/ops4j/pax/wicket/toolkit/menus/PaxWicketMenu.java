@@ -31,13 +31,13 @@ public class PaxWicketMenu extends AbstractAggregatedSource<Panel>
 
     private String m_menuName;
 
-    public PaxWicketMenu( BundleContext context, String application, String menuName, String defaultLocation )
+    public PaxWicketMenu( BundleContext context, String application, String menuName, String defaultDestination )
     {
-        super( context, application, menuName, defaultLocation );
+        super( context, application, menuName, defaultDestination );
         m_menuName = menuName;
     }
 
-    protected <T extends MarkupContainer> Panel createComponent( T parent, String wicketId )
+    protected <T extends MarkupContainer> Panel createComponent( String wicketId )
         throws IllegalArgumentException
     {
         return new PaxWicketMenuPanel( this, wicketId );

@@ -39,7 +39,7 @@ public class PaxWicketSectionPanel extends Panel
             protected void populateItem( final ListItem listitem )
             {
                 PaxWicketMenuSection menuSection = PaxWicketMenuSection.getPaxWicketMenuSection( sectionName );
-                menuSection.createWiredComponent( id, listitem, PaxWicketMenuSection.MENUITEM );
+                menuSection.createWiredComponent( id, PaxWicketMenuSection.MENUITEM );
             }
         };
 

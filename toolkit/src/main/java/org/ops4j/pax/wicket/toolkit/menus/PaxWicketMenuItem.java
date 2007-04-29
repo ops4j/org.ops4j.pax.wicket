@@ -126,7 +126,7 @@ public class PaxWicketMenuItem extends AbstractContentSource
         m_visible = visible;
     }
 
-    protected Component createWicketComponent( MarkupContainer parent, String contentId )
+    protected Component createWicketComponent( String contentId )
         throws IllegalArgumentException
     {
         return new PaxWicketMenuItemPanel( this, contentId );
