@@ -1,0 +1,11 @@
+<classpath>
+  <classpathentry kind="src" path="src/main/java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/org/ops4j/pax/logging/service/0.9.4/service-0.9.4.jar" sourcepath="M2_REPO/org/ops4j/pax/logging/service/0.9.4/service-0.9.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/ops4j/pax/logging/api/0.9.4/api-0.9.4.jar" sourcepath="M2_REPO/org/ops4j/pax/logging/api/0.9.4/api-0.9.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar" sourcepath="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/ops4j/pax/logging/jcl/0.9.4/jcl-0.9.4.jar" sourcepath="M2_REPO/org/ops4j/pax/logging/jcl/0.9.4/jcl-0.9.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/ops4j/pax/logging/log4j/0.9.4/log4j-0.9.4.jar" sourcepath="M2_REPO/org/ops4j/pax/logging/log4j/0.9.4/log4j-0.9.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar"/>
+</classpath>
