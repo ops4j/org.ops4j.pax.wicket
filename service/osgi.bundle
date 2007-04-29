@@ -1,4 +1,6 @@
 
+Private-Package: org.ops4j.pax.wicket.internal
+
 Import-Package: !javax.portlet, *
 
-Export-Package: !wicket.util.tester, wicket.*;version=1.2.5
+Export-Package: org.ops4j.pax.wicket.api, org.ops4j.pax.wicket.util, !wicket.util.tester, wicket.*;version=1.2.5

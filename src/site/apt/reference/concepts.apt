@@ -17,7 +17,7 @@ Concepts & API classes.
     * <<<AbstractContentSource>>>
 
       This is a implementation of the <ContentSource> interface, suitable for most content that are leaves in the model.
-      A single method, <<<protected abstract <T extends Component> E createComponent( String contentId, T parent )>>>,
+      A single method, <<<protected abstract <T extends Component> E createComponent( String contentId )>>>,
       needs to be implemented.
 
 

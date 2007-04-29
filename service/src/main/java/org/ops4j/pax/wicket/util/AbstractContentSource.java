@@ -116,44 +116,37 @@ public abstract class AbstractContentSource<E extends Component>
      * <ul>
      * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
      * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
      * </ul>
      * </p>
-     *
-     * @param parent The parent component of the component to be created by this method. This argument must not be
-     *               {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
      *
-     * @throws IllegalArgumentException Thrown if the specified {@code parent} arguement is {@code null}.
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> E createSourceComponent( T parent, String wicketId )
+    public final <T extends MarkupContainer> E createSourceComponent( String wicketId )
         throws IllegalArgumentException
     {
         boolean isRolesApproved = isRolesAuthorized();
         if( isRolesApproved )
         {
-            return createWicketComponent( parent, wicketId );
+            return createWicketComponent( wicketId );
         }
         else
         {
-            return onAuthorizationFailed( parent, wicketId );
+            return onAuthorizationFailed( wicketId );
         }
     }
 
     /**
      * This method is called when the Authorization of the ContentSource has failed.
      *
-     * @param parent   The parent of the ContentSource
      * @param wicketId The WicketId of the content to be created.
      *
      * @return null by default. Override to return a customized <i>protected</i> component, such as a label
      *         without the link.
      */
-    protected <T extends MarkupContainer> E onAuthorizationFailed( T parent, String wicketId )
+    protected <T extends MarkupContainer> E onAuthorizationFailed( String wicketId )
     {
         return null;
     }
@@ -288,20 +281,17 @@ public abstract class AbstractContentSource<E extends Component>
      * <ul>
      * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
      * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
      * </ul>
      * </p>
      *
      * @param wicketId The WicketId. This argument must not be {@code null}.
-     * @param parent   The parent component of created component of this method. This argument must not be {@code null}.
      *
      * @return The wicket component with the specified {@code wicketId}.
      *
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      * @since 1.0.0
      */
-    protected abstract <T extends MarkupContainer> E createWicketComponent( T parent, String wicketId )
+    protected abstract <T extends MarkupContainer> E createWicketComponent( String wicketId )
         throws IllegalArgumentException;
 
     @SuppressWarnings( "unchecked" )

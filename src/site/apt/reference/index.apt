@@ -86,10 +86,7 @@ ContentSource, ContentAggregator and Component
         * <<<AbstractAggregatedSource>>>
           The <<<AbstractAggregatedSource>>> is your typical superclass of a <ContentAggregator>. By extending
           this class, you need to provide the implementation for
-          <<<protected abstract <T extends Component> E createComponent( String contentId, T parent )>>>.
-
-          The parent is passed as a preparation for Wicket 2.0, and Pax Wicket will support Wicket 2.0 as soon as
-          it is released.
+          <<<protected abstract <T extends Component> E createComponent( String contentId )>>>.
 
         * <<<AbstractContentSource>>>
 

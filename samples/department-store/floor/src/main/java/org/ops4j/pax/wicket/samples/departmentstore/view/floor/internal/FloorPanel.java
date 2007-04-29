@@ -94,7 +94,7 @@ final class FloorPanel extends Panel
         {
             String sourceId = (String) item.getModelObject();
             FloorAggregatedSource instance = FloorAggregatedSource.getInstance( m_floorName );
-            instance.createWiredComponent( sourceId, item, WICKET_ID_FRANCHISEE );
+            instance.createWiredComponent( sourceId, WICKET_ID_FRANCHISEE );
         }
     }
 }

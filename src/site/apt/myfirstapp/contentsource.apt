@@ -95,7 +95,7 @@ public class FranchiseeContentSource extends AbstractContentSource<FranchiseePan
         m_franchisee = franchisee;
     }
 
-    protected FranchiseePanel createComponent( String id, Component parent )
+    protected FranchiseePanel createComponent( String id )
     {
         return new FranchiseePanel( id, m_franchisee );
     }

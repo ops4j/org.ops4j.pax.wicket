@@ -22,8 +22,8 @@ package org.ops4j.pax.wicket.api;
  * The <i>ContentAggregator</i> defines the <i>AggregationPoint</i>.
  * <p>
  * <i>ContentSource</i>s can attach themselves to an <i>AggregationPoint</i>, which is defined by a
- * <i>ContentAggregator</i>. During the request, i.e. a call to <code>createComponents( String wicketId, Component
- * parent )</code>, the ContentAggregator must delegate the creation of components to the <i>wired</i> ContentSources.
+ * <i>ContentAggregator</i>. During the request, i.e. a call to <code>createComponents( String wicketId )</code>, the
+ * ContentAggregator must delegate the creation of components to the <i>wired</i> ContentSources.
  *
  * </p>
  * <ol>
@@ -50,14 +50,14 @@ package org.ops4j.pax.wicket.api;
  * be case-sensitive equal of the <i>AggregationPoint</i> of this <i>ContentAggregator</i>.
  * </li>
  * <li>
- * On <code>createComponents( MarkupContainer parent, String wicketId )</code>, the <i>ContentAggregator</i> must find the
+ * On <code>createComponents( String wicketId )</code>, the <i>ContentAggregator</i> must find the
  * <i>ContentSource</i>s that are <i>wired</i> to the <i>ContentAggregator</i> and where the
  * <i>ContentMatchExpression</i> <b>matches</b> the <code>wicketId</code> in the method call. This match is performed
  * identically to the one done for the <i>AggregationPoint</i> and <i>AggregationMatchExpression</i>.
  * </li>
  * <li>
  * For each found <i>ContentSource</i>, which is wired and has a matching <i>ContentMatchExpression</i>, the
- * <i>ContentAggregator</i> must call the <code>ContentSource.createSourceComponent( Component parent )</code> method.
+ * <i>ContentAggregator</i> must call the <code>ContentSource.createSourceComponent()</code> method.
  * </li>
  * </ol>
  */

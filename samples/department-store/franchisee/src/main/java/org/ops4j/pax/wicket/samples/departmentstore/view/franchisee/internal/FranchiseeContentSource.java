@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
-
 import wicket.MarkupContainer;
 
 /**
@@ -42,7 +41,7 @@ public class FranchiseeContentSource extends AbstractContentSource<FranchiseePan
     }
 
     @Override
-    protected <T extends MarkupContainer> FranchiseePanel createWicketComponent( T parent , String wicketId)
+    protected <T extends MarkupContainer> FranchiseePanel createWicketComponent( String wicketId )
         throws IllegalArgumentException
     {
         return new FranchiseePanel( wicketId, m_franchisee );

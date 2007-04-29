@@ -136,22 +136,16 @@ public interface ContentSource<E extends Component>
      * <ul>
      * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
      * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
      * </ul>
      * </p>
      *
-     * @param parent   The parent component of the component to be created by this method. This argument must not be
-     *                 {@code null}.
      * @param wicketId The wicket id. This argument must not be {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
      *
-     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null} (or/and)
-     *                                  the {@code parent} argument is {@code null} and if the wicket library is of
-     *                                  version {@code 2}.
+     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    <T extends MarkupContainer> E createSourceComponent( T parent, String wicketId );
+    <T extends MarkupContainer> E createSourceComponent( String wicketId );
 }

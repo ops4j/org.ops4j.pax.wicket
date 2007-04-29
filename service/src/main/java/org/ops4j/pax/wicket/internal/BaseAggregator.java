@@ -339,7 +339,7 @@ public abstract class BaseAggregator
      * @return A List of SourceIDs, identifying the ContentSource that has been wired to this ContentAggregator.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code wicketId} argument is {@code null}.
-     * @see #createWiredComponent(String,wicket.MarkupContainer,String)
+     * @see #createWiredComponent(String,String)
      * @since 1.0.0
      */
     public final List<String> getWiredSourceIds( String wicketId, Comparator<ContentSource> comparator )
@@ -364,7 +364,6 @@ public abstract class BaseAggregator
 
     /**
      * @param sourceId The SourceID of the ContentSource that we want to create a component.
-     * @param parent   The parent component that the created component will belong to.
      * @param wicketId The WicketID of the component to be created by the ContentSource. This responds to the
      *                 wicket:id in the markup.
      *
@@ -374,12 +373,11 @@ public abstract class BaseAggregator
      * @see #getWiredSourceIds(String,java.util.Comparator)
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> Component createWiredComponent( String sourceId, T parent, String wicketId
+    public final <T extends MarkupContainer> Component createWiredComponent( String sourceId, String wicketId
     )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( sourceId, "sourceId" );
-//        NullArgumentException.validateNotNull( parent, "parent" );
         NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
         ContentSource<?> source;
         synchronized( this )
@@ -393,7 +391,7 @@ public abstract class BaseAggregator
             m_logger.warn( message );
             throw new IllegalArgumentException( message );
         }
-        return source.createSourceComponent( parent, wicketId );
+        return source.createSourceComponent( wicketId );
     }
 
     /**

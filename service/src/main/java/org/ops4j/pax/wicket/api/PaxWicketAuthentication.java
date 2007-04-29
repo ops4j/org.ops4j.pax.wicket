@@ -31,7 +31,7 @@ import wicket.authorization.strategies.role.Roles;
  * public class SomeContentSource extends AbstractContentSource
  * {
  *
- *     protected Panel createComponent( String contentId, Panel parent )
+ *     protected Panel createComponent( String contentId )
  *     {
  *         PaxWicketAuthentication auth = getAuthentication();
  *         Roles roles = auth.getRoles();

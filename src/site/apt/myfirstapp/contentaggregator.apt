@@ -117,7 +117,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         m_instances.put( floor.getName(), this );
     }
 
-    protected FloorPanel createComponent( String contentId, Component parent )
+    protected FloorPanel createComponent( String contentId )
     {
         return new FloorPanel( contentId, this, m_floor );
     }
@@ -205,8 +205,7 @@ final class FloorPanel extends Panel
 
     The <<<Model>>> <floor> passed in the constructor argument, contains the name of the floor. We create a
     <<<ListView>>> which we will populate with the components that are found in the <<<createComponents()>>>
-    method call later. The listView must be passed as the parent in the <<<createComponents()>>> to be compatible
-    with Wicket 2.0 (when it comes out). If there are no components to be created, then we generate a label saying so.
+    method call later. If there are no components to be created, then we generate a label saying so.
     Otherwise, we set the <<<Model>>> of the <<<ListView>>> to the list of components. (Note: Wicket will call the
     <<<populateItem()>>> method of the anonymous class at that point.)
 

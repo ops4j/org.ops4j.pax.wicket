@@ -29,12 +29,14 @@ import org.osgi.service.cm.ManagedService;
 import wicket.Component;
 import wicket.MarkupContainer;
 import wicket.authorization.strategies.role.Roles;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.
  * <p>
  * Normal use only requires the overriding of a single abstract method; <code><pre>
- * protected abstract &lt;T extends Component&gt; E createSourceComponent( T parent, String wicketId )
+ * protected abstract &lt;T extends Component&gt; E createSourceComponent( String wicketId )
  *     throws IllegalArgumentException;
  * </pre></code>
  * </p>
@@ -48,7 +50,7 @@ import wicket.authorization.strategies.role.Roles;
  *             {
  *                 super( context, applicationName, aggregationPoint, destination );
  *             }
- *             protected abstract &lt;T extends Component&gt; E createSourceComponent( T parent, String wicketId )
+ *             protected abstract &lt;T extends Component&gt; E createSourceComponent( String wicketId )
  *                 throws IllegalArgumentException
  *             {
  *                 return new PrintersPanel( wicketId, this );
@@ -200,33 +202,24 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * <ul>
      * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
      * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
      * </ul>
      * </p>
      *
-     * @param parent   The parent component of the component to be created by this method. This argument must not be
-     *                 {@code null}.
      * @param wicketId The wicket id. This argument must not be {@code null}.
      *
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
      *
-     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null} (or/and)
-     *                                  the {@code parent} argument is {@code null} and if the wicket library is of
-     *                                  version {@code 2}.
+     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> E createSourceComponent( T parent, String wicketId )
+    public final <T extends MarkupContainer> E createSourceComponent( String wicketId )
         throws IllegalArgumentException
     {
-        // Uncomment the next line for pax-wicket-2.0
-//        NullArgumentException.validateNotNull( parent, "parent" );
-        
         boolean isRolesApproved = isRolesAuthorized();
         if( isRolesApproved )
         {
-            return createComponent( parent, wicketId );
+            return createComponent( wicketId );
         }
         else
         {
@@ -258,29 +251,25 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     }
 
     /**
-     * Create component represented by this {@code AbstractContentAggregator} with the specified {@code wicketId} and
-     * {@code parent}.
+     * Create component represented by this {@code AbstractContentAggregator} with the specified {@code wicketId}.
      *
      * <p>
      * General convention:<br/>
      * <ul>
      * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
      * this method;</li>
-     * <li>In the use case of Wicket 2 environment. The parent is passed through constructor during creational of the
-     * component created by this method.</li>
      * </ul>
      * </p>
      *
      * @param wicketId The wicketId. This argument must not be {@code null} nor empty. It maps to the wicket:id of the
      *                 rendering process in Wicket.
-     * @param parent   The parent component. This argument must not be {@code null}.
      *
      * @return A new instance of wicket component represented by this {@code AbstractContentAggregator}.
      *
-     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @throws IllegalArgumentException Thrown if argument is {@code null}.
      * @since 1.0.0
      */
-    protected abstract <T extends MarkupContainer> E createComponent( T parent, String wicketId )
+    protected abstract <T extends MarkupContainer> E createComponent( String wicketId )
         throws IllegalArgumentException;
 
     public final Roles getRequiredRoles()
@@ -313,4 +302,21 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
             updateRegistration();
         }
     }
+
+    protected final List<Component> createComponents( String wicketId )
+    {
+        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        List<ContentSource> contents = getContents( wicketId );
+        List<Component> items = new ArrayList<Component>();
+        for( ContentSource content : contents )
+        {
+            Component comp = content.createSourceComponent( "portal-item" );
+            if( comp != null )
+            {
+                items.add( comp );
+            }
+        }
+        return items;
+    }
+
 }

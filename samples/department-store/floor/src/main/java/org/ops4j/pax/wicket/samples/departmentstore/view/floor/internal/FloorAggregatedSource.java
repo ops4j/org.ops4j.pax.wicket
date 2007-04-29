@@ -56,7 +56,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         m_instances.put( floorName, this );
     }
 
-    protected <T extends MarkupContainer> FloorPanel createComponent( T parent, String wicketId )
+    protected <T extends MarkupContainer> FloorPanel createComponent( String wicketId )
     {
         List<String> sources = getWiredSourceIds( FloorPanel.WICKET_ID_FRANCHISEE, null );
         String floorName = (String) m_floor.getObject( null );
@@ -114,7 +114,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
             IModel titleModel = getTitle();
             String floorName = (String) titleModel.getObject( null );
             FloorAggregatedSource source = m_instances.get( floorName );
-            return source.createSourceComponent( null, panelId );
+            return source.createSourceComponent( panelId );
         }
     }
 

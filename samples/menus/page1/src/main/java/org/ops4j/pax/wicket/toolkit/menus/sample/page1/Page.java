@@ -44,7 +44,7 @@ public class Page extends WebPage
         List<String> sourceIds = container.getWiredSourceIds( "menuitem", null );
         for( String sourceId : sourceIds )
         {
-            Component component = container.createWiredComponent( sourceId, null, "menuitem" );
+            Component component = container.createWiredComponent( sourceId, "menuitem" );
             components.add( component );
         }   
         add( view );
