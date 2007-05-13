@@ -17,23 +17,25 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.util.PageFinder;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
+import org.ops4j.pax.wicket.util.PageFinder;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
 import wicket.Page;
 import wicket.PageParameters;
 
-public class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
+final class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
     implements PageFactory<OverviewPage>
 {
+
     private BundleContext m_context;
     private RootContentAggregator m_aggregator;
 
-    public OverviewPageFactory( BundleContext context, RootContentAggregator aggregator, String applicationName, String pageName )
+    public OverviewPageFactory( BundleContext context, RootContentAggregator aggregator, String applicationName,
+                                String pageName )
     {
-        super(context, "overview", applicationName, pageName );
+        super( context, "overview", applicationName, pageName );
         m_context = context;
         m_aggregator = aggregator;
     }

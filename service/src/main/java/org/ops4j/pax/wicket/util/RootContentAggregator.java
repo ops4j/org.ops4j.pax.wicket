@@ -37,6 +37,7 @@ public class RootContentAggregator extends BaseAggregator
         super( bundleContext, applicationName, aggregationPointName );
     }
 
+    @Override
     protected String[] getServiceNames()
     {
         return new String[]

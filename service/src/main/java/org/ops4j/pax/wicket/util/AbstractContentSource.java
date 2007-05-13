@@ -28,7 +28,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
-import wicket.MarkupContainer;
 import wicket.Session;
 import wicket.authorization.strategies.role.Roles;
 
@@ -96,16 +95,17 @@ public abstract class AbstractContentSource<E extends Component>
     /**
      * Sets the destination id.
      *
-     * @param destinationId The destination id. This argument must not be {@code null}.
+     * @param destinationIds The destination ids. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
      * @since 1.0.0
      */
-    public final void setDestination( String destinationId )
+    public final void setDestination( String... destinationIds )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( destinationId, "destinationId" );
-        m_properties.put( DESTINATIONS, destinationId );
+        NullArgumentException.validateNotNull( destinationIds, "destinationIds" );
+
+        m_properties.put( DESTINATIONS, destinationIds );
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class AbstractContentSource<E extends Component>
      *
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> E createSourceComponent( String wicketId )
+    public final E createSourceComponent( String wicketId )
         throws IllegalArgumentException
     {
         boolean isRolesApproved = isRolesAuthorized();
@@ -146,7 +146,7 @@ public abstract class AbstractContentSource<E extends Component>
      * @return null by default. Override to return a customized <i>protected</i> component, such as a label
      *         without the link.
      */
-    protected <T extends MarkupContainer> E onAuthorizationFailed( String wicketId )
+    protected E onAuthorizationFailed( String wicketId )
     {
         return null;
     }
@@ -291,7 +291,7 @@ public abstract class AbstractContentSource<E extends Component>
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      * @since 1.0.0
      */
-    protected abstract <T extends MarkupContainer> E createWicketComponent( String wicketId )
+    protected abstract E createWicketComponent( String wicketId )
         throws IllegalArgumentException;
 
     @SuppressWarnings( "unchecked" )

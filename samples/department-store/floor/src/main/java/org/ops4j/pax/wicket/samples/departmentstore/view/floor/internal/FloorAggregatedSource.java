@@ -26,7 +26,6 @@ import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.MarkupContainer;
 import wicket.extensions.markup.html.tabs.AbstractTab;
 import wicket.markup.html.panel.Panel;
 import wicket.model.IModel;
@@ -56,7 +55,8 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         m_instances.put( floorName, this );
     }
 
-    protected <T extends MarkupContainer> FloorPanel createComponent( String wicketId )
+    @Override
+    protected FloorPanel createComponent( String wicketId )
     {
         List<String> sources = getWiredSourceIds( FloorPanel.WICKET_ID_FRANCHISEE, null );
         String floorName = (String) m_floor.getObject( null );
@@ -112,8 +112,11 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         public Panel getPanel( String panelId )
         {
             IModel titleModel = getTitle();
+
             String floorName = (String) titleModel.getObject( null );
+
             FloorAggregatedSource source = m_instances.get( floorName );
+
             return source.createSourceComponent( panelId );
         }
     }

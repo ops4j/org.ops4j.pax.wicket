@@ -17,11 +17,11 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
+import static org.ops4j.pax.wicket.toolkit.menus.sample.application.Application.NAME;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.util.RootContentAggregator;
-import org.ops4j.pax.wicket.toolkit.menus.sample.application.Application;
 
 public class Activator
     implements BundleActivator
@@ -51,10 +51,10 @@ public class Activator
     public void start( BundleContext context )
         throws Exception
     {
-        m_aggregator = new RootContentAggregator(context, "page1", Application.NAME );
+        m_aggregator = new RootContentAggregator( context, NAME, "page1" );
         m_pageRegistration = m_aggregator.register();
 
-        m_pageFactory = new PageFactory(context, m_aggregator, Application.NAME, "FirstPage" );
+        m_pageFactory = new PageFactory( context, m_aggregator, NAME, "FirstPage" );
         m_pageFactory.register();
     }
 

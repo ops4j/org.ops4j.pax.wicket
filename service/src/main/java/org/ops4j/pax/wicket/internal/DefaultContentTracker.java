@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
+import static org.ops4j.pax.wicket.api.ContentSource.DESTINATIONS;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -87,11 +89,15 @@ public final class DefaultContentTracker extends ServiceTracker
 
             for( ServiceReference reference : m_references )
             {
-                String destinationId = (String) reference.getProperty( ContentSource.DESTINATIONS );
-                String wicketId = destinationId.substring( startIndexOfWicketId );
-                ContentSource content = (ContentSource) m_context.getService( reference );
+                String[] destinationIds = (String[]) reference.getProperty( DESTINATIONS );
 
-                m_callback.removeContent( wicketId, content );
+                for( String destinationId : destinationIds )
+                {
+                    String wicketId = destinationId.substring( startIndexOfWicketId );
+                    ContentSource content = (ContentSource) m_context.getService( reference );
+
+                    m_callback.removeContent( wicketId, content );
+                }
 
                 m_context.ungetService( reference ); // Removal for the first get during add
                 m_context.ungetService( reference ); // Removal for the second get in this loop block
@@ -109,6 +115,7 @@ public final class DefaultContentTracker extends ServiceTracker
      * @see ServiceTracker#addingService(ServiceReference)
      * @since 1.0.0
      */
+    @Override
     public final Object addingService( ServiceReference serviceReference )
     {
         if( m_logger.isDebugEnabled() )
@@ -116,31 +123,27 @@ public final class DefaultContentTracker extends ServiceTracker
             m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
-        String dest = (String) serviceReference.getProperty( ContentSource.DESTINATIONS );
-
-        Object service;
-        synchronized( this )
+        String[] destinations = (String[]) serviceReference.getProperty( DESTINATIONS );
+        Object service = m_context.getService( serviceReference );
+        if( destinations != null )
         {
-            service = m_context.getService( serviceReference );
+            for( String destination : destinations )
+            {
+                if( destination.startsWith( "regexp(" ) )
+                {
+                    matchRegularExpression( destination, service, serviceReference );
+                }
+                else if( destination.startsWith( m_aggregationId ) )
+                {
+                    matchDirect( destination, service, serviceReference );
+                }
+            }
         }
 
-        if( dest == null )
-        {
-            return service;
-        }
-        if( dest.startsWith( "regexp(" ) )
-        {
-            return matchRegularExpression( dest, service, serviceReference );
-        }
-        else if( !dest.startsWith( m_aggregationId ) )
-        {
-            return service;
-        }
-
-        return matchDirect( dest, service, serviceReference );
+        return service;
     }
 
-    private Object matchRegularExpression( String dest, Object service, ServiceReference serviceReference )
+    private void matchRegularExpression( String dest, Object service, ServiceReference serviceReference )
     {
         int lastParan = dest.lastIndexOf( ")." );
         if( lastParan < 0 )
@@ -158,22 +161,21 @@ public final class DefaultContentTracker extends ServiceTracker
                 m_references.add( serviceReference );
             }
         }
-        return service;
     }
 
-    private Object matchDirect( String dest, Object service, ServiceReference serviceReference )
+    private void matchDirect( String dest, Object service, ServiceReference serviceReference )
     {
         int aggregationIdLength = m_aggregationId.length();
         if( dest.length() == aggregationIdLength )
         {
-            String message = "The '" + ContentSource.DESTINATIONS + "' property have the form ["
-                             + ContentSource.AGGREGATION_POINT + "].[wicketId] but was " + dest;
+            String message = "The '" + DESTINATIONS + "' property have the form [" + AGGREGATION_POINT
+                             + "].[wicketId] but was " + dest;
             throw new IllegalArgumentException( message );
         }
 
         if( dest.charAt( aggregationIdLength ) != '.' )
         {
-            return service;
+            return;
         }
 
         String id = dest.substring( aggregationIdLength + 1 );
@@ -188,8 +190,6 @@ public final class DefaultContentTracker extends ServiceTracker
             m_callback.addContent( id, (ContentSource) service );
             m_references.add( serviceReference );
         }
-
-        return service;
     }
 
     /**
@@ -198,6 +198,7 @@ public final class DefaultContentTracker extends ServiceTracker
      * @see ServiceTracker#removedService(ServiceReference,Object)
      * @since 1.0.0
      */
+    @Override
     public void removedService( ServiceReference serviceReference, Object object )
     {
         if( m_logger.isDebugEnabled() )

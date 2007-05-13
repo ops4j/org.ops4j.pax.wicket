@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
+    <artifactId>departmentstore</artifactId>
     <version>0.5.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>application</artifactId>
-  <packaging>bundle</packaging>
-  <name>OPS4J - Pax Wicket Department Store - View - App</name>
   <version>0.5.0-SNAPSHOT</version>
+
+  <packaging>bundle</packaging>
+
+  <name>OPS4J - Pax Wicket Department Store - View - App</name>
   <description>Pax Department Store View Application.</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.maven</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.ops4j.pax.construct</groupId>
+        <artifactId>maven-pax-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
@@ -20,18 +37,14 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
-      <version>0.4.0</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi_R4_compendium</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi_R4_core</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>wicket</groupId>
@@ -51,7 +64,6 @@
     <dependency>
       <groupId>org.ops4j.base</groupId>
       <artifactId>ops4j-base</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

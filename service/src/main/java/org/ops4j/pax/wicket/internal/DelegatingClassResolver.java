@@ -21,16 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
+import static org.osgi.framework.Constants.OBJECTCLASS;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.application.IClassResolver;
 
-public final class DelegatingClassResolver implements IClassResolver
+public final class DelegatingClassResolver
+    implements IClassResolver
 {
 
     private static final Logger m_logger = Logger.getLogger( DelegatingClassResolver.class );
@@ -142,7 +143,7 @@ public final class DelegatingClassResolver implements IClassResolver
         @Override
         public final void modifiedService( ServiceReference reference, Object service )
         {
-            String applName = (String) reference.getProperty( ContentSource.APPLICATION_NAME );
+            String applName = (String) reference.getProperty( APPLICATION_NAME );
             if( m_applicationName.equals( applName ) )
             {
                 return;
@@ -167,8 +168,8 @@ public final class DelegatingClassResolver implements IClassResolver
 
     private static Filter createFilter( BundleContext context, String applicationName )
     {
-        String filterStr = "(&(" + Constants.OBJECTCLASS + "=" + IClassResolver.class.getName() + ")("
-                           + ContentSource.APPLICATION_NAME + "=" + applicationName + "))";
+        String filterStr = "(&(" + OBJECTCLASS + "=" + IClassResolver.class.getName() + ")(" + APPLICATION_NAME + "="
+                           + applicationName + "))";
 
         try
         {
@@ -176,7 +177,7 @@ public final class DelegatingClassResolver implements IClassResolver
         }
         catch( InvalidSyntaxException e )
         {
-            String message = ContentSource.APPLICATION_NAME + "[" + applicationName + "] has an invalid format. ";
+            String message = APPLICATION_NAME + "[" + applicationName + "] has an invalid format. ";
             throw new IllegalArgumentException( message );
         }
     }

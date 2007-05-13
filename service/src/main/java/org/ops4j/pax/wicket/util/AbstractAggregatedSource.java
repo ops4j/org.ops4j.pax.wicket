@@ -18,25 +18,25 @@
  */
 package org.ops4j.pax.wicket.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.BaseAggregator;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
-import wicket.MarkupContainer;
 import wicket.authorization.strategies.role.Roles;
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.
  * <p>
  * Normal use only requires the overriding of a single abstract method; <code><pre>
- * protected abstract &lt;T extends Component&gt; E createSourceComponent( String wicketId )
+ * protected abstract E createSourceComponent( String wicketId )
  *     throws IllegalArgumentException;
  * </pre></code>
  * </p>
@@ -50,7 +50,7 @@ import java.util.ArrayList;
  *             {
  *                 super( context, applicationName, aggregationPoint, destination );
  *             }
- *             protected abstract &lt;T extends Component&gt; E createSourceComponent( String wicketId )
+ *             protected abstract E createSourceComponent( String wicketId )
  *                 throws IllegalArgumentException
  *             {
  *                 return new PrintersPanel( wicketId, this );
@@ -173,19 +173,22 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * framework.
      * </p>
      *
-     * @param destination The destination. This argument must not be {@code null}.
+     * @param destinations The destinations. This argument must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code destination} argument is {@code null} or empty.
      * @since 1.0.0
      */
-    public final void setDestination( String destination )
+    public final void setDestination( String... destinations )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( destination, "destination" );
-        setProperty( ContentSource.DESTINATIONS, destination );
+        NullArgumentException.validateNotNull( destinations, "destinations" );
+
+        setProperty( ContentSource.DESTINATIONS, destinations );
+
         updateRegistration();
     }
 
+    @Override
     protected String[] getServiceNames()
     {
         return new String[]
@@ -213,7 +216,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> E createSourceComponent( String wicketId )
+    public final E createSourceComponent( String wicketId )
         throws IllegalArgumentException
     {
         boolean isRolesApproved = isRolesAuthorized();
@@ -237,17 +240,43 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      */
     private boolean isRolesAuthorized()
     {
-        Roles userRoles = getAuthentication().getRoles();
+        PaxWicketAuthentication paxWicketAuthentication = getAuthentication();
+        Roles userRoles;
+        if( paxWicketAuthentication != null )
+        {
+            userRoles = paxWicketAuthentication.getRoles();
+        }
+        else
+        {
+            userRoles = newRoles( null );
+        }
 
-        Roles requiredRoles = new Roles( getStringProperty( REQUIRED_ROLES, "" ) );
-        Roles basicRoles = new Roles( getStringProperty( BASIC_ROLES, "" ) );
-        boolean isRequiredRolesAuthorized = userRoles.hasAllRoles( requiredRoles );
+        Roles requiredRoles = newRoles( getStringProperty( REQUIRED_ROLES, null ) );
+        Roles basicRoles = newRoles( getStringProperty( BASIC_ROLES, null ) );
+
+        boolean isRequiredRolesAuthorized = true;
+        if( !requiredRoles.isEmpty() )
+        {
+            isRequiredRolesAuthorized = userRoles.hasAllRoles( requiredRoles );
+        }
+
         boolean isBasicRolesAuthorized = true;
         if( !basicRoles.isEmpty() )
         {
-            userRoles.hasAnyRole( basicRoles );
+            isBasicRolesAuthorized = userRoles.hasAnyRole( basicRoles );
         }
+
         return isRequiredRolesAuthorized && isBasicRolesAuthorized;
+    }
+
+    private Roles newRoles( String rolesAsString )
+    {
+        if( rolesAsString == null || rolesAsString.trim().length() == 0 )
+        {
+            return new Roles();
+        }
+
+        return new Roles( rolesAsString );
     }
 
     /**
@@ -269,7 +298,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @throws IllegalArgumentException Thrown if argument is {@code null}.
      * @since 1.0.0
      */
-    protected abstract <T extends MarkupContainer> E createComponent( String wicketId )
+    protected abstract E createComponent( String wicketId )
         throws IllegalArgumentException;
 
     public final Roles getRequiredRoles()

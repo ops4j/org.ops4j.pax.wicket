@@ -41,7 +41,7 @@ final class OverviewPage extends WebPage
     private static final String WICKET_ID_LABEL = "storeName";
 
     @SuppressWarnings( "unchecked" )
-    public OverviewPage( RootContentAggregator container, String storeName, Class aboutPageClass )
+    OverviewPage( RootContentAggregator container, String storeName, Class aboutPageClass )
     {
         Label label = new Label( WICKET_ID_LABEL, storeName );
         add( label );

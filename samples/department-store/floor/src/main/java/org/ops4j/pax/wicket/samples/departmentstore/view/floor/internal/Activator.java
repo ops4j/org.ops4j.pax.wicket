@@ -53,12 +53,13 @@ public class Activator
         for( Floor floor : floors )
         {
             String floorName = floor.getName();
-            FloorAggregatedSource aggregatedSource = new FloorAggregatedSource( floor, floorName, destinationId,
-                                                                                bundleContext, "departmentstore"
+            FloorAggregatedSource aggregatedSource = new FloorAggregatedSource(
+                floor, floorName, destinationId, bundleContext, "departmentstore"
             );
             aggregatedSource.setDestination( destinationId );
             aggregatedSource.setAggregationPointName( floor.getName() );
             ServiceRegistration registration = aggregatedSource.register();
+
             m_registrations.add( registration );
             m_floors.add( aggregatedSource );
         }

@@ -18,8 +18,8 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -42,7 +42,7 @@ public class Activator
     {
         String mountPoint = "deptStore";
         String applicationName = "departmentstore";
-        m_store = new RootContentAggregator( bundleContext, "swp", applicationName );
+        m_store = new RootContentAggregator( bundleContext, applicationName, "swp" );
         m_pageRegistration = m_store.register();
 
         m_overviewPageFactory = new OverviewPageFactory( bundleContext, m_store, applicationName, "overview" );

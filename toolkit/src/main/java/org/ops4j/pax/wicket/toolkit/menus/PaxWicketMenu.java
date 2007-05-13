@@ -37,7 +37,8 @@ public class PaxWicketMenu extends AbstractAggregatedSource<Panel>
         m_menuName = menuName;
     }
 
-    protected <T extends MarkupContainer> Panel createComponent( String wicketId )
+    @Override
+    protected Panel createComponent( String wicketId )
         throws IllegalArgumentException
     {
         return new PaxWicketMenuPanel( this, wicketId );

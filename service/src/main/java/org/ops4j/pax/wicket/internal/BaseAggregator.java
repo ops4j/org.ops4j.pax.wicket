@@ -35,7 +35,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
 import wicket.MarkupContainer;
-import wicket.authentication.AuthenticatedWebSession;
+import wicket.Session;
 
 public abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback
@@ -191,9 +191,8 @@ public abstract class BaseAggregator
         m_registration.setProperties( config );
         m_contentTracker.close();
         m_children.clear();
-        m_contentTracker = new DefaultContentTracker( m_bundleContext, this, newApplicationName,
-                                                      newAggregationPointName
-        );
+        m_contentTracker =
+            new DefaultContentTracker( m_bundleContext, this, newApplicationName, newAggregationPointName );
         m_contentTracker.open();
         onUpdated( config );
     }
@@ -301,7 +300,16 @@ public abstract class BaseAggregator
 
     protected String getStringProperty( String key, String defaultValue )
     {
-        return (String) m_properties.get( key );
+        String value = (String) m_properties.get( key );
+
+        if( value == null )
+        {
+            return defaultValue;
+        }
+        else
+        {
+            return value;
+        }
     }
 
     protected void setProperty( String key, Object value )
@@ -373,8 +381,7 @@ public abstract class BaseAggregator
      * @see #getWiredSourceIds(String,java.util.Comparator)
      * @since 1.0.0
      */
-    public final <T extends MarkupContainer> Component createWiredComponent( String sourceId, String wicketId
-    )
+    public final Component createWiredComponent( String sourceId, String wicketId )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotEmpty( sourceId, "sourceId" );
@@ -438,7 +445,13 @@ public abstract class BaseAggregator
      */
     protected PaxWicketAuthentication getAuthentication()
     {
-        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
+        Session session = Session.get();
+        if( session instanceof PaxWicketAuthentication )
+        {
+            return (PaxWicketAuthentication) session;
+        }
+
+        return null;
     }
 
     public final ContentSource<? extends Component> getContentById( String wicketId, String sourceId )

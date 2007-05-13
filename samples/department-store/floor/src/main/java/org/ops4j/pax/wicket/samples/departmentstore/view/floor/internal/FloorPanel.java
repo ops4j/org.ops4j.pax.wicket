@@ -20,6 +20,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.Collections;
 import java.util.List;
+import wicket.Component;
 import wicket.markup.html.basic.Label;
 import wicket.markup.html.list.ListItem;
 import wicket.markup.html.list.ListView;
@@ -94,7 +95,9 @@ final class FloorPanel extends Panel
         {
             String sourceId = (String) item.getModelObject();
             FloorAggregatedSource instance = FloorAggregatedSource.getInstance( m_floorName );
-            instance.createWiredComponent( sourceId, WICKET_ID_FRANCHISEE );
+            Component component = instance.createWiredComponent( sourceId, WICKET_ID_FRANCHISEE );
+
+            item.add( component );
         }
     }
 }

@@ -1,25 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ops4j.pax</groupId>
     <artifactId>project</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
   </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>build</artifactId>
-  <packaging>pom</packaging>
-  <name>OPS4J - Pax Wicket</name>
   <version>0.5.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>OPS4J - Pax Wicket</name>
   <url>http://www.ops4j.org/projects/pax/wicket</url>
+
   <issueManagement>
     <system>jira</system>
     <url>http://issues.ops4j.org/jira/browse/PAXWICKET</url>
   </issueManagement>
+
   <scm>
     <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/logging</connection>
     <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/logging</developerConnection>
   </scm>
+
+  <properties>
+    <wicket.dependency.version>1.2.6</wicket.dependency.version>
+  </properties>
+
+  <!--
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.maven</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.ops4j.pax.construct</groupId>
+        <artifactId>maven-pax-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  -->
+
   <reporting>
     <plugins>
       <plugin>
@@ -66,14 +91,19 @@
         <version>1.1</version>
       </dependency>
       <dependency>
+        <groupId>javax.portlet</groupId>
+        <artifactId>portlet-api</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>2.3</version>
       </dependency>
       <dependency>
-        <groupId>jmock</groupId>
-        <artifactId>jmock</artifactId>
-        <version>1.1.0</version>
+        <groupId>org.jmock</groupId>
+        <artifactId>jmock-junit3</artifactId>
+        <version>2.0.0</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -126,7 +156,7 @@
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket</artifactId>
-        <version>1.2.6</version>
+        <version>${wicket.dependency.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>junit</artifactId>
@@ -145,7 +175,7 @@
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket-auth-roles</artifactId>
-        <version>1.2.6</version>
+        <version>${wicket.dependency.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>junit</artifactId>
@@ -164,7 +194,7 @@
       <dependency>
         <groupId>wicket</groupId>
         <artifactId>wicket-extensions</artifactId>
-        <version>1.2.6</version>
+        <version>${wicket.dependency.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>junit</artifactId>

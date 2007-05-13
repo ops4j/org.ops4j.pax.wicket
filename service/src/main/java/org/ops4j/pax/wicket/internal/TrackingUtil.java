@@ -19,9 +19,10 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
+import static org.osgi.framework.Constants.OBJECTCLASS;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
@@ -37,8 +38,8 @@ final class TrackingUtil
         Filter filter;
         try
         {
-            String filterString = "(&(" + ContentSource.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + ContentSource.class.getName() + "))";
+            String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")(" +
+                                  OBJECTCLASS + "=" + ContentSource.class.getName() + "))";
             filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {
@@ -57,8 +58,8 @@ final class TrackingUtil
         Filter filter;
         try
         {
-            String filterString = "(&(" + ContentSource.APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + Constants.OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
+            String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")"
+                                  + "(" + OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
             filter = bundleContext.createFilter( filterString );
         } catch( InvalidSyntaxException e )
         {
