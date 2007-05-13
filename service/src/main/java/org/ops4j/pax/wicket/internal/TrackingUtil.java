@@ -29,6 +29,10 @@ import org.osgi.framework.InvalidSyntaxException;
 final class TrackingUtil
 {
 
+    private TrackingUtil()
+    {
+    }
+
     static Filter createContentFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
