@@ -26,6 +26,7 @@ import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
 import static org.ops4j.pax.wicket.api.ContentSource.DESTINATIONS;
+import static org.ops4j.pax.wicket.internal.TrackingUtil.createContentFilter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -62,7 +63,7 @@ public final class DefaultContentTracker extends ServiceTracker
                                   String aggregationPointName )
         throws IllegalArgumentException
     {
-        super( context, TrackingUtil.createContentFilter( context, applicationName ), null );
+        super( context, createContentFilter( context, applicationName ), null );
 
         NullArgumentException.validateNotEmpty( aggregationPointName, "aggregationPointName" );
         NullArgumentException.validateNotNull( callback, "callback" );

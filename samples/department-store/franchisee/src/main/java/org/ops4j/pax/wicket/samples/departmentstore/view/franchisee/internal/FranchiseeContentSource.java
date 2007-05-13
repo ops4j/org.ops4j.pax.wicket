@@ -41,7 +41,7 @@ public class FranchiseeContentSource extends AbstractContentSource<FranchiseePan
     }
 
     @Override
-    protected <T extends MarkupContainer> FranchiseePanel createWicketComponent( String wicketId )
+    protected FranchiseePanel createWicketComponent( String wicketId )
         throws IllegalArgumentException
     {
         return new FranchiseePanel( wicketId, m_franchisee );

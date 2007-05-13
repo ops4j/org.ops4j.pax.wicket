@@ -29,12 +29,11 @@ import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
+import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
-import wicket.MarkupContainer;
 import wicket.Session;
 
 public abstract class BaseAggregator
@@ -51,6 +50,7 @@ public abstract class BaseAggregator
     private HashMap<String, ContentSource> m_wiredSources;
 
     public BaseAggregator( BundleContext bundleContext, String applicationName, String aggregationPoint )
+        throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
@@ -59,7 +59,7 @@ public abstract class BaseAggregator
         m_children = new HashMap<String, List<ContentSource>>();
         m_wiredSources = new HashMap<String, ContentSource>();
         m_properties = new Hashtable<String, Object>();
-        m_properties.put( Constants.SERVICE_PID, applicationName + "." + aggregationPoint );
+        m_properties.put( SERVICE_PID, applicationName + "." + aggregationPoint );
         m_bundleContext = bundleContext;
         setAggregationPointName( aggregationPoint );
         setApplicationName( applicationName );
@@ -147,6 +147,7 @@ public abstract class BaseAggregator
             {
                 throw new IllegalStateException( "RootContentAggregator [" + this + "] has not been registered." );
             }
+            
             m_contentTracker.close();
             onDispose();
             m_contentTracker = null;

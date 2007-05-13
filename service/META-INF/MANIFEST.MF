@@ -158,8 +158,8 @@ Export-Package: wicket.util.thread;uses:="wicket.util.time,org.apache.
  lator;uses:=wicket.util.lang;version=1.2.6,org.ops4j.pax.wicket.util;
  uses:="wicket.authentication,wicket,wicket.authorization.strategies.r
  ole,org.osgi.framework,org.ops4j.lang,org.ops4j.pax.wicket.api,org.os
- gi.service.cm,org.apache.log4j,org.osgi.util.tracker,org.osgi.service
- .useradmin,org.ops4j.pax.wicket.internal";version=0.5.0.SNAPSHOT,wick
+ gi.service.cm,org.apache.log4j,org.osgi.util.tracker,org.ops4j.pax.wi
+ cket.internal,org.osgi.service.useradmin";version=0.5.0.SNAPSHOT,wick
  et.extensions.ajax.markup.html.form.upload;uses:="wicket.markup.html,
  javax.servlet.http,wicket.protocol.http.servlet,wicket,wicket.util.ti
  me,wicket.util.lang,wicket.util.upload,wicket.markup.html.resources,w

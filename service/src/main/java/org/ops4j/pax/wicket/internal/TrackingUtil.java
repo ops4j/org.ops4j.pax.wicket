@@ -46,6 +46,7 @@ final class TrackingUtil
             throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
             );
         }
+
         return filter;
     }
 

@@ -569,13 +569,6 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-logging-log4j-0.9.4">
-      <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/log4j/0.9.4/log4j-0.9.4.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
     <library name="wicket-extensions-1.2.6">
       <CLASSES>
         <root url="jar://$M2_REPO$/wicket/wicket-extensions/1.2.6/wicket-extensions-1.2.6.jar!/" />
@@ -602,6 +595,25 @@
       <SOURCES>
         <root url="jar://$M2_REPO$/junit/junit/3.8.1/junit-3.8.1-sources.jar!/" />
       </SOURCES>
+    </library>
+    <library name="jmock-junit3-2.0.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/jmock/jmock-junit3/2.0.0/jmock-junit3-2.0.0.jar!/" />
+        <root url="jar://$M2_REPO$/org/jmock/jmock/2.0.0/jmock-2.0.0.jar!/" />
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-library/1.0/hamcrest-library-1.0.jar!/" />
+        <root url="jar://$M2_REPO$/org/hamcrest/hamcrest-api/1.0/hamcrest-api-1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="pax-logging-0.9.4">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/api/0.9.4/api-0.9.4.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/log4j/0.9.4/log4j-0.9.4.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/jcl/0.9.4/jcl-0.9.4.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
   </component>
   <component name="uidesigner-configuration" />
