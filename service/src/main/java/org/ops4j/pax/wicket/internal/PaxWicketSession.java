@@ -50,35 +50,42 @@ public final class PaxWicketSession extends AuthenticatedWebSession
      *
      * @return True if the user was authenticated successfully
      */
-    public boolean authenticate( final String username, final String password )
+    @Override
+    public final boolean authenticate( String username, String password )
     {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
+
         m_token = app.authententicate( username, password );
         if( m_token != null )
         {
             m_loggedInUser = username;
             return true;
         }
+
         m_loggedInUser = null;
+
         return false;
     }
 
-    public String getLoggedInUser()
+    public final String getLoggedInUser()
     {
         return m_loggedInUser;
     }
 
-    public void invalidateNow()
+    @Override
+    public final void invalidateNow()
     {
         m_token = null;
         m_loggedInUser = null;
+
         super.invalidateNow();
     }
 
     /**
      * @return Get the roles that this session can play
      */
-    public Roles getRoles()
+    @Override
+    public final Roles getRoles()
     {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
         return app.getRoles( m_token );

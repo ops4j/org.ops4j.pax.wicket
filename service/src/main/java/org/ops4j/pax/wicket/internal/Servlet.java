@@ -18,40 +18,27 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import org.ops4j.lang.NullArgumentException;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WicketServlet;
 
-public final class Servlet extends WicketServlet
+final class Servlet extends WicketServlet
 {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger m_logger = Logger.getLogger( Servlet.class );
-
     private IWebApplicationFactory m_appFactory;
 
-    public Servlet( IWebApplicationFactory appFactory )
+    Servlet( IWebApplicationFactory appFactory )
+        throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( appFactory, "appFactory" );
         m_appFactory = appFactory;
     }
 
+    @Override
     protected IWebApplicationFactory getApplicationFactory()
     {
         return m_appFactory;
-    }
-
-    public void service( HttpServletRequest req, HttpServletResponse resp )
-        throws ServletException, IOException
-    {
-        if( m_logger.isDebugEnabled() )
-        {
-            m_logger.debug( "Servlet.service( " + req + ", " + resp + " )" );
-        }
-        super.service( req, resp );
     }
 }

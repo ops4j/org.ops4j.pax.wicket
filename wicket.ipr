@@ -552,7 +552,9 @@
       <CLASSES>
         <root url="jar://$M2_REPO$/org/osgi/osgi_R4_core/1.0/osgi_R4_core-1.0.jar!/" />
       </CLASSES>
-      <JAVADOC />
+      <JAVADOC>
+        <root url="http://www2.osgi.org/javadoc/r4/" />
+      </JAVADOC>
       <SOURCES />
     </library>
     <library name="osgi_R4_compendium-1.0">

@@ -207,8 +207,39 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
         String wicketId = "wicketId";
         aggregator.addContent( wicketId, cs );
 
-        List<ContentSource> contents = aggregator.getContents( wicketId );
-        assertEquals( cs, contents.get( 0 ) );
+        String getContentsMsg = "getContents with [null] argument must throw [IllegalArgumentException].";
+        try
+        {
+            aggregator.getContents( null );
+            fail( getContentsMsg );
+        } catch( IllegalArgumentException e )
+        {
+            // expected
+        } catch( Throwable e )
+        {
+            e.printStackTrace();
+            fail( getContentsMsg );
+        }
+
+        List<ContentSource> cnt1 = aggregator.getContents( "wicketId2" );
+        assertEquals( cnt1.size(), 0 );
+
+        List<ContentSource> cnt2 = aggregator.getContents( wicketId );
+        assertEquals( cs, cnt2.get( 0 ) );
+
+        String getContentByIdMsg = "getContentById with [null] argument must throw [IllegalArgumentException].";
+        try
+        {
+            aggregator.getContentById( null, "srcId" );
+            fail( getContentByIdMsg );
+        } catch( IllegalArgumentException e )
+        {
+            // Expected
+        } catch( Throwable e )
+        {
+            e.printStackTrace();
+            fail( getContentByIdMsg );
+        }
 
         ContentSource retContentSource = aggregator.getContentById( wicketId, sourceId );
         assertEquals( cs, retContentSource );

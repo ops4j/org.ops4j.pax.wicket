@@ -23,6 +23,7 @@
     <orderEntry type="library" name="wicket-auth-roles-1.2.6" level="project" />
     <orderEntry type="library" name="wicket-extensions-1.2.6" level="project" />
     <orderEntry type="library" name="pax-logging-0.9.4" level="project" />
+    <orderEntry type="library" name="wicket-auth-roles-1.2.6" level="project" />
     <orderEntryProperties />
   </component>
   <component name="PluginUploader.UploadConfigurable">

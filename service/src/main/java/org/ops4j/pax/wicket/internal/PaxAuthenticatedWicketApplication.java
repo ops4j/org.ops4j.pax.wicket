@@ -88,6 +88,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
      * provide custom initialization. This method is called right after this application class is constructed, and the
      * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
      */
+    @Override
     public void init()
     {
         super.init();
@@ -110,6 +111,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     /**
      * @return AuthenticatedWebSession subclass to use in this authenticated web application.
      */
+    @Override
     protected Class<? extends AuthenticatedWebSession> getWebSessionClass()
     {
         return PaxWicketSession.class;
@@ -118,6 +120,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     /**
      * @return Subclass of sign-in page
      */
+    @Override
     protected Class<? extends WebPage> getSignInPageClass()
     {
         return m_signInPage;
