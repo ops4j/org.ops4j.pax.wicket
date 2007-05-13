@@ -5,9 +5,9 @@
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar" sourcepath="M2_REPO/junit/junit/3.8.2/junit-3.8.2-sources.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.0.0/jmock-2.0.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-api/1.0/hamcrest-api-1.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock-junit3/2.0.0/jmock-junit3-2.0.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-library/1.0/hamcrest-library-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar" sourcepath="M2_REPO/junit/junit/3.8.2/junit-3.8.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock-junit3/2.0.0/jmock-junit3-2.0.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.0.0/jmock-2.0.0.jar"/>
 </classpath>
