@@ -23,7 +23,8 @@ import java.net.URL;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
 
@@ -31,7 +32,7 @@ public class GenericContext
     implements HttpContext
 {
 
-    private static final Logger m_logger = Logger.getLogger( GenericContext.class );
+    private static final Log LOGGER = LogFactory.getLog( GenericContext.class );
 
     private String m_rootUrl;
     private MimetypesFileTypeMap m_typeMap;
@@ -39,9 +40,9 @@ public class GenericContext
 
     public GenericContext( Bundle applicationBundle, String rootUrl )
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "GenericContext(" + rootUrl + " )" );
+            LOGGER.debug( "GenericContext(" + rootUrl + " )" );
         }
         m_applicationBundle = applicationBundle;
         m_rootUrl = rootUrl;
@@ -52,18 +53,18 @@ public class GenericContext
     public boolean handleSecurity( HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse )
         throws IOException
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "handleSecurity()" );
+            LOGGER.debug( "handleSecurity()" );
         }
         return true;
     }
 
     public URL getResource( String resourcename )
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "getResource( " + resourcename + " )" );
+            LOGGER.debug( "getResource( " + resourcename + " )" );
         }
 
         String resource;
@@ -82,9 +83,9 @@ public class GenericContext
 
     public String getMimeType( String resourcename )
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "getMimeType( " + resourcename + " )" );
+            LOGGER.debug( "getMimeType( " + resourcename + " )" );
         }
         URL resource = getResource( resourcename );
         if( resource == null )
@@ -92,15 +93,15 @@ public class GenericContext
             return null;
         }
         String url = resource.toString();
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "         URL: " + url );
+            LOGGER.debug( "         URL: " + url );
         }
 
         String contentType = m_typeMap.getContentType( url );
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( " ContentType: " + contentType );
+            LOGGER.debug( " ContentType: " + contentType );
         }
         return contentType;
     }

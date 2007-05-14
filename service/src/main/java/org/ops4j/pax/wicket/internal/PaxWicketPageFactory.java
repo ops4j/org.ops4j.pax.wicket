@@ -17,10 +17,10 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -34,18 +34,16 @@ import wicket.WicketRuntimeException;
 import wicket.application.IClassResolver;
 
 public final class PaxWicketPageFactory
-    implements IPageFactory, IClassResolver, Serializable
+    implements IPageFactory, IClassResolver
 {
 
-    private static final long serialVersionUID = 1L;
+    private static final Log LOGGER = LogFactory.getLog( PaxWicketPageFactory.class );
 
-    private static final Logger m_logger = Logger.getLogger( PaxWicketPageFactory.class );
+    private final BundleContext m_bundleContext;
+    private final String m_applicationName;
+    private final HashMap<String, Class> m_pageClasses;
+    private final HashMap<Class, PageFactory> m_contents;
 
-    private HashMap<Class, PageFactory> m_contents;
-    private HashMap<String, Class> m_pageClasses;
-
-    private BundleContext m_bundleContext;
-    private String m_applicationName;
     private ServiceTracker m_pageTracker;
     private ServiceRegistration m_serviceRegistration;
 
@@ -124,13 +122,13 @@ public final class PaxWicketPageFactory
             catch( InstantiationException e )
             {
                 String message = "An abstract class or an interface was requested to be a Page: " + pageClass;
-                m_logger.error( message, e );
+                LOGGER.error( message, e );
                 throw new WicketRuntimeException( message, e );
             }
             catch( IllegalAccessException e )
             {
                 String message = "The constructor in " + pageClass + " is not public and without parameters.";
-                m_logger.error( message, e );
+                LOGGER.error( message, e );
                 throw new WicketRuntimeException( message, e );
             }
         }

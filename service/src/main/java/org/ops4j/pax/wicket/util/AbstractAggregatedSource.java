@@ -20,7 +20,6 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -119,7 +118,6 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
 
     private static final String[] ROLES_TYPE = new String[0];
 
-    protected final Logger m_logger = Logger.getLogger( getClass() );
     private Roles m_requiredRoles;
     private Roles m_basicRoles;
 

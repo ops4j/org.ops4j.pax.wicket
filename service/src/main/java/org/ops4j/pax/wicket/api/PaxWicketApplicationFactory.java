@@ -40,9 +40,9 @@ public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
 {
 
-    private BundleContext m_bundleContext;
+    private final BundleContext m_bundleContext;
     private Class<? extends Page> m_homepageClass;
-    private Properties m_properties;
+    private final Properties m_properties;
 
     private PaxWicketPageFactory m_pageFactory;
     private DelegatingClassResolver m_delegatingClassResolver;
@@ -64,7 +64,8 @@ public final class PaxWicketApplicationFactory
      * @since 1.0.0
      */
     public PaxWicketApplicationFactory( BundleContext bundleContext, Class<? extends Page> homepageClass,
-                                        String mountPoint, String applicationName )
+                                        String mountPoint,
+                                        String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );

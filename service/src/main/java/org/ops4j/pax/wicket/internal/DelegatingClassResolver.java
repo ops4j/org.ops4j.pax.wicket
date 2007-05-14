@@ -19,7 +19,8 @@ package org.ops4j.pax.wicket.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.BundleContext;
@@ -34,7 +35,7 @@ public final class DelegatingClassResolver
     implements IClassResolver
 {
 
-    private static final Logger m_logger = Logger.getLogger( DelegatingClassResolver.class );
+    private static final Log LOGGER = LogFactory.getLog( DelegatingClassResolver.class );
 
     private final BundleContext m_context;
     private final String m_applicationName;
@@ -109,7 +110,7 @@ public final class DelegatingClassResolver
             }
             catch( RuntimeException e )
             {
-                m_logger.warn( "ClassResolver" + resolver + " threw an unexpected exception.", e );
+                LOGGER.warn( "ClassResolver" + resolver + " threw an unexpected exception.", e );
             }
         }
         return null;

@@ -21,7 +21,8 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
@@ -40,7 +41,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public final class DefaultContentTracker extends ServiceTracker
 {
 
-    private static final Logger m_logger = Logger.getLogger( DefaultContentTracker.class );
+    private static final Log LOGGER = LogFactory.getLog( DefaultContentTracker.class );
 
     private final BundleContext m_context;
     private final ContentTrackingCallback m_callback;
@@ -119,9 +120,9 @@ public final class DefaultContentTracker extends ServiceTracker
     @Override
     public final Object addingService( ServiceReference serviceReference )
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "Service Reference [" + serviceReference + "] has been added." );
+            LOGGER.debug( "Service Reference [" + serviceReference + "] has been added." );
         }
 
         String[] destinations = (String[]) serviceReference.getProperty( DESTINATIONS );
@@ -181,9 +182,9 @@ public final class DefaultContentTracker extends ServiceTracker
 
         String id = dest.substring( aggregationIdLength + 1 );
 
-        if( m_logger.isInfoEnabled() )
+        if( LOGGER.isInfoEnabled() )
         {
-            m_logger.info( "Attaching content with wicket:id [" + id + "] to aggregation [" + m_aggregationId + "]" );
+            LOGGER.info( "Attaching content with wicket:id [" + id + "] to aggregation [" + m_aggregationId + "]" );
         }
 
         synchronized( this )
@@ -202,9 +203,9 @@ public final class DefaultContentTracker extends ServiceTracker
     @Override
     public void removedService( ServiceReference serviceReference, Object object )
     {
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "Service Reference [" + serviceReference + "] has been removed." );
+            LOGGER.debug( "Service Reference [" + serviceReference + "] has been removed." );
         }
 
         if( !( object instanceof ContentSource ) )
@@ -221,9 +222,9 @@ public final class DefaultContentTracker extends ServiceTracker
             String id = destinationId.substring( pos + 1 );
             boolean wasContentRemoved = m_callback.removeContent( id, content );
 
-            if( m_logger.isInfoEnabled() && wasContentRemoved )
+            if( LOGGER.isInfoEnabled() && wasContentRemoved )
             {
-                m_logger.info( "Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
+                LOGGER.info( "Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
                                + "]"
                 );
             }

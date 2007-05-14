@@ -19,7 +19,9 @@
 package org.ops4j.pax.wicket.internal;
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ops4j.lang.NullArgumentException;
 import wicket.protocol.http.servlet.ServletWebRequest;
 
 /**
@@ -29,19 +31,33 @@ import wicket.protocol.http.servlet.ServletWebRequest;
 final class PaxWicketRequest extends ServletWebRequest
 {
 
-    private static final Logger m_logger = Logger.getLogger( PaxWicketRequest.class );
+    private static final Log LOGGER = LogFactory.getLog( PaxWicketRequest.class );
+    
     private final String m_mountPoint;
 
     /**
      * Protected constructor.
      *
-     * @param mountPoint The mount point of the application.
+     * @param mountPoint         The mount point of the application.
      * @param httpServletRequest The servlet request information
+     *
+     * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
+     * @since 1.0.0
      */
     PaxWicketRequest( String mountPoint, HttpServletRequest httpServletRequest )
+        throws IllegalArgumentException
     {
         super( httpServletRequest );
-        m_mountPoint = "/" + mountPoint;
+
+        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
+        NullArgumentException.validateNotNull( httpServletRequest, "httpServletRequest" );
+
+        if( mountPoint.charAt( 0 ) != '/' )
+        {
+            mountPoint = "/" + mountPoint;
+        }
+
+        m_mountPoint = mountPoint;
     }
 
     /**
@@ -49,12 +65,13 @@ final class PaxWicketRequest extends ServletWebRequest
      *
      * @return Servlet path
      */
+    @Override
     public final String getServletPath()
     {
         String contextPath = getHttpServletRequest().getContextPath();
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "getServletPath() : " + contextPath );
+            LOGGER.debug( "getServletPath() : " + contextPath );
         }
         if( !contextPath.endsWith( "/" ) )
         {
@@ -69,12 +86,15 @@ final class PaxWicketRequest extends ServletWebRequest
      *
      * @return Servlet context path
      */
+    @Override
     public final String getContextPath()
     {
-        String servletPath = getHttpServletRequest().getServletPath();
-        if( m_logger.isDebugEnabled() )
+        HttpServletRequest request = getHttpServletRequest();
+        String servletPath = request.getServletPath();
+
+        if( LOGGER.isDebugEnabled() )
         {
-            m_logger.debug( "getContextPath() : " + servletPath );
+            LOGGER.debug( "getContextPath() : " + servletPath );
         }
 
         int mountPointLength = m_mountPoint.length();
@@ -116,7 +136,7 @@ final class PaxWicketRequest extends ServletWebRequest
         }
 
         // If url is non-empty it has to start with '/', which we should lose
-        if( url.length() > 0  )
+        if( url.length() > 0 )
         {
             // Remove leading '/'
             url = url.substring( 1 );

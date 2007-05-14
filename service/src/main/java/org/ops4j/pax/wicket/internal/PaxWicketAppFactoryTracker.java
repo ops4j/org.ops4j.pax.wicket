@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.internal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
-import org.apache.log4j.Logger;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
@@ -29,12 +28,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import wicket.protocol.http.WicketServlet;
 
 final class PaxWicketAppFactoryTracker extends ServiceTracker
 {
 
-    private static final Logger m_logger = Logger.getLogger( PaxWicketAppFactoryTracker.class );
+    private static final Log LOGGER = LogFactory.getLog( PaxWicketAppFactoryTracker.class );
     private static final String SERVICE_NAME = PaxWicketApplicationFactory.class.getName();
 
     private final HttpTracker m_httpTracker;
@@ -55,11 +56,11 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         final PaxWicketApplicationFactory factory =
             (PaxWicketApplicationFactory) super.addingService( serviceReference );
 
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
             int factoryHash = System.identityHashCode( factory );
             String message = "Service Added [" + serviceReference + "], Factory hash [" + factoryHash + "]";
-            m_logger.debug( message );
+            LOGGER.debug( message );
         }
 
         WicketServlet servlet = new Servlet( factory );
@@ -99,11 +100,11 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
     public final void removedService( ServiceReference serviceReference, Object service )
     {
         PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) service;
-        if( m_logger.isDebugEnabled() )
+        if( LOGGER.isDebugEnabled() )
         {
             int factoryHash = System.identityHashCode( factory );
             String message = "Service removed [" + serviceReference + "], Application hash [" + factoryHash + "]";
-            m_logger.debug( message );
+            LOGGER.debug( message );
         }
 
         String mountPoint;

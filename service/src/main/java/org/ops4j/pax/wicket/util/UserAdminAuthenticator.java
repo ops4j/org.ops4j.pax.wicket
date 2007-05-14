@@ -17,7 +17,8 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
@@ -59,7 +60,7 @@ public class UserAdminAuthenticator
     implements PaxWicketAuthenticator
 {
 
-    private static final Logger m_logger = Logger.getLogger( UserAdminAuthenticator.class.getName() );
+    private static final Log LOGGER = LogFactory.getLog( UserAdminAuthenticator.class );
 
     private UserAdminTracker m_serviceTracker;
     private BundleContext m_bundleContext;
@@ -118,13 +119,13 @@ public class UserAdminAuthenticator
         User user = userAdmin.getUser( m_applicationName + ".userid", username );
         if( user == null )
         {
-            m_logger.warn( "No user with the username of '" + username + "'" );
+            LOGGER.warn( "No user with the username of '" + username + "'" );
             return null;
         }
 
         if( !user.hasCredential( m_applicationName + ".password", password ) )
         {
-            m_logger.warn( "Wrong password issued by " + username );
+            LOGGER.warn( "Wrong password issued by " + username );
             return null;
         }
         Authorization authorization = userAdmin.getAuthorization( user );
@@ -193,6 +194,7 @@ public class UserAdminAuthenticator
          *
          * @see org.osgi.util.tracker.ServiceTrackerCustomizer
          */
+        @Override
         public Object addingService( ServiceReference reference )
         {
             m_userAdmin = (UserAdmin) m_bundleContext.getService( reference );
@@ -222,6 +224,7 @@ public class UserAdminAuthenticator
          *
          * @see org.osgi.util.tracker.ServiceTrackerCustomizer
          */
+        @Override
         public void removedService( ServiceReference reference, Object service )
         {
             m_userAdmin = null;

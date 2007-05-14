@@ -17,7 +17,8 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -29,7 +30,7 @@ import wicket.Page;
 public class PageFinder
 {
 
-    private static final Logger LOGGER = Logger.getLogger( PageFinder.class );
+    private static final Log LOGGER = LogFactory.getLog( PageFinder.class );
 
     /**
      * Returns the page content from the specified {@code context} for the specified {@code applicationName} and

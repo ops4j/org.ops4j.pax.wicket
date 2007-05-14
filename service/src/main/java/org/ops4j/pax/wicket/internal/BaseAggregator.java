@@ -23,7 +23,8 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -40,7 +41,7 @@ public abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback
 {
 
-    protected final Logger m_logger = Logger.getLogger( getClass() );
+    protected final Log LOGGER = LogFactory.getLog( getClass() );
 
     private Dictionary<String, Object> m_properties;
     private BundleContext m_bundleContext;
@@ -396,7 +397,7 @@ public abstract class BaseAggregator
         if( source == null )
         {
             String message = "Source [" + sourceId + "] is not wired to [" + this + "]";
-            m_logger.warn( message );
+            LOGGER.warn( message );
             throw new IllegalArgumentException( message );
         }
         return source.createSourceComponent( wicketId );
@@ -489,7 +490,7 @@ public abstract class BaseAggregator
         {
             if( m_contentTracker != null )
             {
-                m_logger.warn( "RootContentAggregator [" + this + "] is not disposed." );
+                LOGGER.warn( "RootContentAggregator [" + this + "] is not disposed." );
             }
             dispose();
         }

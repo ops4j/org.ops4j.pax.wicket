@@ -73,8 +73,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>jcl</artifactId>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging-api</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -89,18 +89,13 @@
       <artifactId>portlet-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>log4j</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jmock</groupId>
@@ -114,6 +109,10 @@
     <dependency>
       <groupId>org.ops4j.base</groupId>
       <artifactId>ops4j-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>log4j</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
