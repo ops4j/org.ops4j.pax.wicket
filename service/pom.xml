@@ -3,14 +3,14 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>build</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>service</artifactId>
-  <version>0.5.0</version>
+  <version>0.5.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>OPS4J - Pax Wicket Service</name>

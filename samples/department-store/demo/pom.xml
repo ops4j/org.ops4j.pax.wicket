@@ -3,13 +3,13 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.5.0</version>
+    <version>0.5.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>demo</artifactId>
   <name>OPS4J - Pax Wicket Department Store - Demo</name>
-  <version>0.5.0</version>
+  <version>0.5.0-SNAPSHOT</version>
   <description>Pax Department Store Demo package.</description>
   <build>
     <plugins>
@@ -38,12 +38,12 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>application</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.equinox.servlet</groupId>
@@ -58,22 +58,22 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>model</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>floor</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>about</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>franchisee</artifactId>
-      <version>0.5.0</version>
+      <version>0.5.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <properties>
