@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket</groupId>
-  <artifactId>build</artifactId>
+  <artifactId>wicket</artifactId>
   <version>0.5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -22,8 +22,8 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/logging</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/logging</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
 
   <properties>
@@ -62,12 +62,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging-api</artifactId>
-        <version>1.1</version>
-        <scope>provided</scope>
-      </dependency>
       <dependency>
         <groupId>javax.activation</groupId>
         <artifactId>activation</artifactId>
