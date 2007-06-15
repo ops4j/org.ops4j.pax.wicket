@@ -11,7 +11,8 @@
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket Samples</name>
   <modules>
-    <module>department-store</module>
+    <!-- This doesn't build -->
+    <!--module>department-store</module-->
     <!--<module>menus</module>-->
   </modules>
   <dependencyManagement>
