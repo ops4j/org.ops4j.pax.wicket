@@ -17,7 +17,7 @@
     <menu name="Pax Wicket">
       <item name="Introduction" href="index.html"/>
       <item name="Reference" href="reference/index.html">
-        <item name="Concepts" href="concepts.html"/>
+        <item name="Concepts" href="reference/concepts.html"/>
         <item name="Request Sequence" href="reference/request.html"/>
         <item name="OSGi Registrations" href="reference/registrations.html"/>
       </item>

@@ -8,38 +8,45 @@
     -------------------
 
 
-Welcome to Pax Wicket
+Welcome to Pax Wicket!
 
-    Pax Wicket is an OSGi-based extension to the Wicket framework, currently (Dec 2007) incubating
-    at Apache Software Foundation, http://incubator.apache.org/wicket.
+    Pax Wicket is an OSGi-based extension to the {{{http://incubator.apache.org/wicket}Wicket}} framework, 
+    currently (Dec 2007) incubating at Apache Software Foundation.
 
-    The extension allows you to model the Wicket application, and move those model parts around
+    Whereas a typical Wicket application requires that all component wiring be done at compile time, 
+    this extension allows you to model the Wicket application, and move those model parts around
     and not be resolved until request time. You can add and remove parts of the Wicket application
     without restarting the application, simply by loading and unloading OSGi bundles. New sections
     can be added, and if properly prepared, menu items for those sections can be added to all
     existing pages.
 
-    This flexibility comes at a price; <<Know what you are doing.>>
+    Yes, we think this is pretty cool, too. But this flexibility comes at a price; 
+    <<Know what you are doing.>>
 
-    Hopefully this documentation will clarify how Pax Wicket harness both OSGi and Wicket to
-    accomplish some great feats. The principles behind Pax Wicket are not that complicated, just
-    hard to explain and somewhat hard to apply, since the thinking is radically different.
+    Hopefully this documentation will clarify how Pax Wicket harnesses both OSGi and Wicket to
+    accomplish some great feats. The principles behind Pax Wicket are not all that complicated, 
+    just a little hard to explain and, we admit, perhaps not all that easy to apply the first time. 
+    The thinking is radically different, so be prepared to wipe your mind clean before moving on!
+    (There is no spoon...)
 
 
 Content of this Site
 
-    You will definately need to go through and understand the {{{concepts.html}Concepts}} page.
-    If you are interested in building Pax Wicket from sources, you need to check out the
-    {{{building.html}Building Pax Wicket}} page. The {{{sysrequired.html}System Requirements}}
-    are available for reference, but as important as the {{{installation.html}Installation}} page.
+    To use Pax Wicket, you will definitely need to go through and understand the 
+    {{{reference/concepts.html}Concepts}} page.
+    If you are interested in building Pax Wicket from the sources, you will need to check out 
+    (pun intended) the {{{getting-started/building.html}Building Pax Wicket}} page. 
+    The {{{getting-started/requirements.html}System Requirements}}
+    and the
+    {{{getting-started/installation.html}Installation}} pages may also be useful.
 
     The {{{reference/index.html}Reference Manual}} covers everything at a more detailed level.
 
 More Information and Help
 
-    If you need additional information not (yet) available on this site, or you have questions,
-    feedback or need help to get going, please use the mailing list general@lists.ops4j.org.
-    You find subscription details on {{{http://lists.ops4j.org/mailman/listinfo/general}this
-    page}}.
+    If you need any additional information not (yet) available on this site, or if you have 
+    questions, feedback or maybe just need a little help to get going, please use the mailing 
+    list general@lists.ops4j.org.
+    You can {{{http://lists.ops4j.org/mailman/listinfo/general}subscribe via a web-form}}.
 
 
