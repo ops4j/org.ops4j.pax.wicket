@@ -27,43 +27,19 @@
         <artifactId>maven-pax-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>dependency-maven-plugin</artifactId>
+        <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <id>unpack</id>
+            <id>embed-jar</id>
             <phase>generate-resources</phase>
             <goals>
-              <goal>unpack</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>javax.activation</groupId>
-                  <artifactId>activation</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>javax.portlet</groupId>
-                  <artifactId>portlet-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ops4j.base</groupId>
-                  <artifactId>ops4j-base</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>wicket</groupId>
-                  <artifactId>wicket</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>wicket</groupId>
-                  <artifactId>wicket-auth-roles</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>wicket</groupId>
-                  <artifactId>wicket-extensions</artifactId>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <excludeTransitive>true</excludeTransitive>
+              <excludeScope>provided</excludeScope>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>
@@ -81,6 +57,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
@@ -98,10 +75,12 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jmock</groupId>
       <artifactId>jmock-junit3</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -115,6 +94,7 @@
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>log4j</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>

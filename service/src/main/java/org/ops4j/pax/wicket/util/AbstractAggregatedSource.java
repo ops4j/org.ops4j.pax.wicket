@@ -24,7 +24,6 @@ import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
-import org.ops4j.pax.wicket.internal.BaseAggregator;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;

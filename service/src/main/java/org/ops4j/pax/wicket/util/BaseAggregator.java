@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +29,8 @@ import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
+import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
+import org.ops4j.pax.wicket.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
@@ -37,7 +39,7 @@ import org.osgi.service.cm.ManagedService;
 import wicket.Component;
 import wicket.Session;
 
-public abstract class BaseAggregator
+abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback
 {
 

@@ -20,3 +20,22 @@ Export-Package: javax.portlet;version="1.0.0", \
                 org.ops4j.pax.wicket.api;version="${pom.version}", \
                 org.ops4j.pax.wicket.util;version="${pom.version}", \
                 wicket.*;version=${wicket.dependency.version}
+
+Include-Resource:\
+ wicket.properties=src/main/resources/wicket.properties,\
+ target/activation.jar=_placeholder_.jar,\
+ target/ops4j-base.jar=_placeholder_.jar,\
+ target/portlet-api.jar=_placeholder_.jar,\
+ target/wicket-auth-roles.jar=_placeholder_.jar,\
+ target/wicket-extensions.jar=_placeholder_.jar,\
+ target/wicket.jar=_placeholder_.jar
+
+Bundle-ClassPath:\
+ .,\
+ target/activation.jar,\
+ target/ops4j-base.jar,\
+ target/portlet-api.jar,\
+ target/wicket-auth-roles.jar,\
+ target/wicket-extensions.jar,\
+ target/wicket.jar
+

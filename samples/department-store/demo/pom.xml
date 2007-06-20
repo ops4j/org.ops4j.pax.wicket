@@ -11,14 +11,7 @@
   <name>OPS4J - Pax Wicket Department Store - Demo</name>
   <version>0.5.1-SNAPSHOT</version>
   <description>Pax Department Store Demo package.</description>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.ops4j.pax.construct</groupId>
-        <artifactId>maven-pax-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
+  <packaging>pom</packaging>
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
