@@ -64,8 +64,7 @@ public final class PaxWicketApplicationFactory
      * @since 1.0.0
      */
     public PaxWicketApplicationFactory( BundleContext bundleContext, Class<? extends Page> homepageClass,
-                                        String mountPoint,
-                                        String applicationName )
+                                        String mountPoint, String applicationName )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
