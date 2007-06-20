@@ -131,8 +131,9 @@ public class UserAdminAuthenticator
         Authorization authorization = userAdmin.getAuthorization( user );
         if( authorization == null )
         {
-            // anonymous user.
-            return null;
+            Roles wicketRoles = new Roles();
+            // anonymous user == no roles.
+            return wicketRoles;
         }
         String[] uaRoles = authorization.getRoles();
         Roles wicketRoles = new Roles();
