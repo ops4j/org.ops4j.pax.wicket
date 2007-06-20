@@ -31,10 +31,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>log4j</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>service</artifactId>
     </dependency>

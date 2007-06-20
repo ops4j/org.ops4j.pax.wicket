@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.ops4j.pax</groupId>
     <artifactId>project</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -84,12 +84,6 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.14</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.jmock</groupId>
         <artifactId>jmock-junit3</artifactId>
         <version>2.0.0</version>
@@ -98,12 +92,6 @@
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>api</artifactId>
-        <version>0.9.4</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.ops4j.pax.logging</groupId>
-        <artifactId>log4j</artifactId>
         <version>0.9.4</version>
         <scope>provided</scope>
       </dependency>
@@ -149,10 +137,6 @@
             <artifactId>commons-logging</artifactId>
             <groupId>commons-logging</groupId>
           </exclusion>
-          <exclusion>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -167,10 +151,6 @@
           <exclusion>
             <artifactId>commons-logging</artifactId>
             <groupId>commons-logging</groupId>
-          </exclusion>
-          <exclusion>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -187,14 +167,35 @@
             <artifactId>commons-logging</artifactId>
             <groupId>commons-logging</groupId>
           </exclusion>
-          <exclusion>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-          </exclusion>
         </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>embed-jar</id>
+              <phase>generate-resources</phase>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.directory}</outputDirectory>
+                <excludeTransitive>true</excludeTransitive>
+                <excludeScope>provided</excludeScope>
+                <stripVersion>true</stripVersion>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
   <repositories>
     <repository>
