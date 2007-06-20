@@ -28,6 +28,7 @@ import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import wicket.authorization.strategies.role.Roles;
+import java.util.Arrays;
 
 /**
  * This is a PaxWicketAuthenticator that uses the User Admin Service as specified in the OSGi R4 specification.
@@ -131,16 +132,12 @@ public class UserAdminAuthenticator
         Authorization authorization = userAdmin.getAuthorization( user );
         if( authorization == null )
         {
-            Roles wicketRoles = new Roles();
             // anonymous user == no roles.
-            return wicketRoles;
+            return new Roles();
         }
         String[] uaRoles = authorization.getRoles();
         Roles wicketRoles = new Roles();
-        for( String uaRole : uaRoles )
-        {
-            wicketRoles.add( uaRole );
-        }
+        wicketRoles.addAll( Arrays.asList( uaRoles ) );
         return wicketRoles;
     }
 
