@@ -2,14 +2,14 @@
   <parent>
     <artifactId>samples</artifactId>
     <groupId>org.ops4j.pax.wicket</groupId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples</groupId>
   <artifactId>menus</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket Menus Sample</name>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.2-SNAPSHOT</version>
   <modules>
     <module>content1</module>
     <module>indexpage</module>
