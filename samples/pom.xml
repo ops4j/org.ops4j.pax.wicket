@@ -12,8 +12,7 @@
   <name>OPS4J - Pax Wicket Samples</name>
   <modules>
     <module>department-store</module>
-    <!-- This doesn't build -->
-    <!--<module>menus</module>-->
+    <module>menus</module>
   </modules>
   <dependencyManagement>
     <dependencies>
