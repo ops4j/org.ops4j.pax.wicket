@@ -29,21 +29,26 @@ Concepts & API classes.
 
     * <Aggregation>
 
-      Pax Wicket tries to solve the problem that certain aggregation containers doesn't know what kind of content
-      they will be holding until much later in the development cycle. Extendable systems need to accommodate for
-      future changes and Pax Wicket is all about that. <Aggregation> is the key concept to accomplish this.
-      <Aggregation> is the runtime process where the <ContentSource> instances found are wired into the available
+      With Wicket, each component is tied to it's parent at compile time. Extendable systems,though, need 
+      to accommodate for future changes, which is where Pax Wicket comes into play.
+      Pax Wicket allows the decoupling of
+      components from parents for dynamic use in an OSGi environment.
+      With Pax Wicket, that certain aggregation containers don't know what kind of content
+      they will be holding until much later in the development cycle no longer becomes an issue. 
+      <Aggregation> is the key concept to accomplish this.
+      <Aggregation> is the runtime process where the <ContentSource> instances "found" in the OSGi framework
+      are wired into the available
       <AggregationPoint>s. It is resolved in the request cycle, and through the classloading capabilities in
-      OSGi it is possible to change the <ContentSource> instance wired to an <AggregationPoint> in runtime. This
+      OSGi it is possible to change the <ContentSource> instance wired to an <AggregationPoint> at runtime. This
       includes the moving of a <ContentSource> to another <AggregationPoint> as well as replacing it with a newer
-      version of itself.
+      version of itself. Pretty cool, huh?
 
     * <AggregationMatchExpression>
 
       <AggregationMatchExpression> is the first part of the <Destination>, i.e. what is to the left of the dot in the
       more formal \<<AggregationMatchExpression>\><<.>>\<<ContentMatchExpression>\>. The <AggregationMatchExpression> of
-      the <Destination> of <ContentSource>s is matched against <AggregationPoint>s to determine if a <wire> should be established between
-      the <AggregationPoint> and the <ContentSource>.
+      the <Destination> of <ContentSource>s is matched against <AggregationPoint>s to determine if a <wire> 
+      should be established between the <AggregationPoint> and the <ContentSource>.
 
     * <AggregationPoint>
 
@@ -53,11 +58,13 @@ Concepts & API classes.
       runtime platform.
 
     * <Application>
-      A Pax Wicket <Application> is the unit that collaborate within a single Wicket instance. For each
-      <<<PaxWicketApplicationFactory>>> created, one full Wicket instance will be created. <Application>s
-      should be kept to a minimum, and typically only a single on exists for OSGi framework, although by
-      proper use of the <ApplicationName> Pax Wicket is capable of supporting many <Application>s at the
-      same time. Each <Application> must have identical <ApplicationName> and a single PaxWicketApplicationFactory
+
+      A Pax Wicket <Application> is the unit that collaborates within a single Wicket instance. For each
+      <<<PaxWicketApplicationFactory>>> created, one full Wicket instance will also be created. The use of
+      <Application>s should be kept to a minimum, and typically only a single one should exist for an 
+      OSGi framework. However, when required, through proper use of the <ApplicationName>, Pax Wicket 
+      is capable of supporting many <Application>s simultaneously.
+      Each <Application> must have unique <ApplicationName> and a single PaxWicketApplicationFactory
       created.
 
     * <ApplicationName>
@@ -125,8 +132,8 @@ Concepts & API classes.
       does not change anything in this notion, other than introduction of a <<<PageFactory>>> interface for the
       creation process. In Pax Wicket, each <Page> has a name and belongs to an <Application>. The starting
       page of an <Application>, which is passed to the <<<PaxWicketApplicationFactory>>> must be a so called
-      Bookmarkable page, which in this case means have a non-argument constructor, and only the <<<Class>>> is
-      passed to the <<<PaxWicketApplicationFactory>>>.
+      "Bookmarkable" page, which means that it must have a non-argument constructor as well as a constructor
+      that accepts <<PageParameter>>s. Only the <<<Class>>> is passed to the <<<PaxWicketApplicationFactory>>>.
 
     * <PageFactory>
 
