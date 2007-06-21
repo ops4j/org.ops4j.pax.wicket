@@ -14,6 +14,8 @@
     <module>content1</module>
     <module>indexpage</module>
     <module>page1</module>
+<!--
     <module>page2</module>
+-->
   </modules>
 </project>
