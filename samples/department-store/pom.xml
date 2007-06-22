@@ -20,5 +20,6 @@
     <module>franchisee</module>
     <module>model</module>
     <module>demo</module>
+    <module>equinox-target-platform</module>
   </modules>
 </project>
