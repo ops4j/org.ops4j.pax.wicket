@@ -17,8 +17,8 @@
 
 <dependencies>						
 <dependency><groupId>org.eclipse</groupId><artifactId>osgi</artifactId><version>3.2.1.R32x_v20060717</version></dependency>
-<dependency><groupId>org.eclipse.equinox</groupId><artifactId>org.eclipse.osgi.services</artifactId><version>3.1.100.v20060918</version></dependency>
-<dependency><groupId>org.eclipse.equinox</groupId><artifactId>org.eclipse.osgi.util</artifactId><version>3.1.100.v20060918</version></dependency>
+<dependency><groupId>org.eclipse.osgi</groupId><artifactId>services</artifactId><version>3.1.100.v20060601</version></dependency>
+<dependency><groupId>org.eclipse.osgi</groupId><artifactId>util</artifactId><version>3.1.100.v20060601</version></dependency>
 <dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>api</artifactId><version>0.9.4</version></dependency>
 <dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>service</artifactId><version>0.9.4</version></dependency>
 <dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>jcl</artifactId><version>0.9.4</version></dependency>
