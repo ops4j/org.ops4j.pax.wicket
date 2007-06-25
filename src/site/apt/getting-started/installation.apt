@@ -52,7 +52,7 @@ Running on Eclipse Equinox with Eclipse
     
  *  If necessary Project, Clean..., Clean all projects
     
-    Now, it should not be any errors more.
+    Now, it should be no more errors.
     
  *  Create new launch configuration
 
@@ -61,6 +61,8 @@ Running on Eclipse Equinox with Eclipse
     Under Workspace Plug-ins shall be visible:
 
 +----------------------
+    org.ops4j.pax.wicket.samples.departmentstore.service-alternative
+    org.ops4j.pax.wicket.samples.departmentstore.service-basic
     org.ops4j.pax.wicket.samples.departmentstore.model
     org.ops4j.pax.wicket.samples.departmentstore.view.about
     org.ops4j.pax.wicket.samples.departmentstore.view.application
@@ -68,34 +70,63 @@ Running on Eclipse Equinox with Eclipse
     org.ops4j.pax.wicket.samples.departmentstore.view.franchisee
 +----------------------
     
-    Mark all checkboxes at Workspace Plug-ins and Target Platform, and finally Run!
+  ** Mark all checkboxes at Workspace Plug-ins and Target Platform
+  
+  ** Set Start to false at service-alternative (or unset checkbox at service-alternative)
+  
+  ** and finally Run!
     
     You will see many log messages in Console view.
 
     Now you can check your bundles - in Console type <<<ss>>> [Enter] - you will see:
     
 +----------------------
-    Framework is launched.
-    
-    id	State       Bundle
-    0	ACTIVE      system.bundle_3.2.1.R32x_v20060717
-    1	ACTIVE      org.eclipse.equinox.servlet.api_1.0.0.v20060601
-    2	ACTIVE      org.eclipse.osgi.services_3.1.100.v20060918
-    3	ACTIVE      org.eclipse.osgi.util_3.1.100.v20060918
-    4	ACTIVE      org.ops4j.pax.logging.api_0.9.4
-    5	ACTIVE      org.ops4j.pax.logging.jcl_0.9.4
-    6	ACTIVE      org.ops4j.pax.logging.service_0.9.4
-    7	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.model_0.5.2.SNAPSHOT
-    8	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.about_0.5.2.SNAPSHOT
-    9	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.application_0.5.2.SNAPSHOT
-    10	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.floor_0.5.2.SNAPSHOT
-    11	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.franchisee_0.5.2.SNAPSHOT
-    12	ACTIVE      org.ops4j.pax.wicket.service_0.5.2.SNAPSHOT
-    13	ACTIVE      org.ops4j.pax.wicket.toolkit_0.5.2.SNAPSHOT
-    14	ACTIVE      org.ungoverned.osgi.bundle.http_1.1.2
+Framework is launched.
+
+id	State       Bundle
+0	ACTIVE      system.bundle_3.2.1.R32x_v20060717
+1	ACTIVE      org.eclipse.equinox.servlet.api_1.0.0.v20060601
+2	ACTIVE      org.eclipse.osgi.services_3.1.100.v20060601
+3	ACTIVE      org.eclipse.osgi.util_3.1.100.v20060601
+4	ACTIVE      org.ops4j.pax.logging.api_0.9.4
+5	ACTIVE      org.ops4j.pax.logging.jcl_0.9.4
+6	ACTIVE      org.ops4j.pax.logging.service_0.9.4
+7	RESOLVED    org.ops4j.pax.wicket.samples.departmentstore.departmentstore.service-alternative_0.5.2.SNAPSHOT
+8	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.departmentstore.service-basic_0.5.2.SNAPSHOT
+9	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.model_0.5.2.SNAPSHOT
+10	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.about_0.5.2.SNAPSHOT
+11	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.application_0.5.2.SNAPSHOT
+12	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.floor_0.5.2.SNAPSHOT
+13	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.franchisee_0.5.2.SNAPSHOT
+14	ACTIVE      org.ops4j.pax.wicket.service_0.5.2.SNAPSHOT
+15	ACTIVE      org.ops4j.pax.wicket.toolkit_0.5.2.SNAPSHOT
+16	ACTIVE      org.ungoverned.osgi.bundle.http_1.1.2
 +----------------------
     
- *   Open in your web browser {{http://localhost:8080/deptStore}} and enjoy!
+ *   Open in your web browser {{http://localhost:8080/deptStore}}
+ 
+  You will see floors from C to RoofTop and can read full history of Sungei Wang Plaza.
+ 
+ *  Now you can switch to alternative DepartmentStore service implementation
+ 
+ 1. Stop service-basice bundle - in Eclipse, Console view type:
+ 
++----------------------
+stop 8 
++----------------------
+
+ You will see many log messages while services are unregistered.
+  
+ 2. Start service-alternative bundle:
+  
++----------------------
+start 7
++----------------------
+
+ You will see few log messages.
+
+ 3. After refreshing in the web browser, you will see only one floor (Basement) and history text is "No history available".
+
 
 Running on Knopflerfish
 
