@@ -18,15 +18,8 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
-import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * {@code Activator}
@@ -36,39 +29,19 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator
     implements BundleActivator
 {
-    private List<ServiceRegistration> m_registrations;
+	private FranchiseeDepartmentStoreModelTracker m_storeTracker;
 
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        m_registrations = new ArrayList<ServiceRegistration>();
-        String depStore = DepartmentStore.class.getName();
-        ServiceReference depStoreService = bundleContext.getServiceReference( depStore );
-        DepartmentStore departmentStore = (DepartmentStore) bundleContext.getService( depStoreService );
+		m_storeTracker = new FranchiseeDepartmentStoreModelTracker(bundleContext);
+		m_storeTracker.open();
 
-        m_registrations = new ArrayList<ServiceRegistration>();
-        List<Floor> floors = departmentStore.getFloors();
-        for( Floor floor: floors )
-        {
-            List<Franchisee> franchisees = floor.getFranchisees();
-            for( Franchisee franchisee : franchisees )
-            {
-                String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContentSource source = new FranchiseeContentSource( bundleContext, franchisee, "departmentstore"  );
-                source.setDestination( destinationId );
-                ServiceRegistration registration = source.register();
-                m_registrations.add( registration );
-            }
-        }
     }
 
     public void stop( BundleContext bundleContext )
         throws Exception
     {
-        for( ServiceRegistration registeration : m_registrations )
-        {
-            registeration.unregister();
-        }
-        m_registrations.clear();
+		m_storeTracker.close();
     }
 }

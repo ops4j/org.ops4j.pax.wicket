@@ -54,6 +54,11 @@
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
+      <artifactId>service-basic</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>floor</artifactId>
       <version>0.5.2-SNAPSHOT</version>

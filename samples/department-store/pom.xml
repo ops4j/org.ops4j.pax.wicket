@@ -19,6 +19,8 @@
     <module>floor</module>
     <module>franchisee</module>
     <module>model</module>
+    <module>service-basic</module>
+    <module>service-alternative</module>
     <module>demo</module>
     <module>equinox-target-platform</module>
   </modules>
