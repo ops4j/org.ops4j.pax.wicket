@@ -1,0 +1,42 @@
+Manifest-Version: 1
+Created-By: Bnd-0.0.145
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-Activator: org.ops4j.pax.wicket.samples.wicketauth.example.inte
+ rnal.Activator
+Import-Package: org.ops4j.pax.wicket.api;version="[0.5.0, 1.0.0]",org.
+ ops4j.pax.wicket.samples.wicketauth.example,org.ops4j.pax.wicket.util
+ ;version="[0.5.0, 1.0.0]",org.osgi.framework;version="[1.0.0, 2.0.0)"
+ ,org.osgi.service.cm;version=1.2.0,org.osgi.service.useradmin;version
+ =1.1.0,org.osgi.util.tracker;version="[1.0.0, 2.0.0)",wicket;version=
+ 1.2.6,wicket.ajax;version=1.2.6,wicket.ajax.markup.html;version=1.2.6
+ ,wicket.authentication.pages;version=1.2.6,wicket.authorization;versi
+ on=1.2.6,wicket.authorization.strategies.role;version=1.2.6,wicket.au
+ thorization.strategies.role.annotations;version=1.2.6,wicket.authoriz
+ ation.strategies.role.metadata;version=1.2.6,wicket.extensions.ajax.m
+ arkup.html.autocomplete;version=1.2.6,wicket.extensions.markup.html.r
+ epeater.data;version=1.2.6,wicket.extensions.markup.html.repeater.ref
+ reshing;version=1.2.6,wicket.markup;version=1.2.6,wicket.markup.html;
+ version=1.2.6,wicket.markup.html.basic;version=1.2.6,wicket.markup.ht
+ ml.form;version=1.2.6,wicket.markup.html.link;version=1.2.6,wicket.ma
+ rkup.html.list;version=1.2.6,wicket.markup.html.panel;version=1.2.6,w
+ icket.model;version=1.2.6,wicket.protocol.http;version=1.2.6,wicket.u
+ til.value;version=1.2.6
+Include-Resource: src/main/resources
+Export-Package: org.ops4j.pax.wicket.samples.wicketauth.example;uses:=
+ "wicket.markup.html,wicket.markup.html.basic,wicket,wicket.authorizat
+ ion.strategies.role,wicket.ajax,wicket.markup.html.list,wicket.markup
+ .html.link,wicket.authorization.strategies.role.annotations,wicket.au
+ thorization.strategies.role.metadata,wicket.authorization,wicket.ajax
+ .markup.html,wicket.markup.html.panel,wicket.protocol.http,wicket.mod
+ el"
+Bundle-Version: 0.5.1.SNAPSHOT
+Bundle-Name: OPS4J - Pax Wicket Authorization Example
+Bundle-Description: Pax Wicket Authorization Example
+Private-Package: org.ops4j.pax.wicket.samples.wicketauth.example.inter
+ nal
+Bundle-DocURL: http://www.ops4j.org/
+Bundle-ManifestVersion: 2
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Bundle-SymbolicName: org.ops4j.pax.wicket.samples.wicketauth.example.e
+ xample
+

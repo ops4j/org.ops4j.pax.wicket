@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.ops4j.pax.wicket.samples</groupId>
+    <artifactId>wicketauth</artifactId>
+    <version>0.5.1-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.ops4j.pax.wicket.samples.wicketauth.example</groupId>
+  <artifactId>example</artifactId>
+  <version>0.5.1-SNAPSHOT</version>
+
+  <packaging>bundle</packaging>
+  <name>OPS4J - Pax Wicket Authorization Example</name>
+  <description>Pax Wicket Authorization Example</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.maven</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.ops4j.pax.construct</groupId>
+        <artifactId>maven-pax-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_compendium</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi_R4_core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
+      <artifactId>model</artifactId>
+      <version>0.5.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>wicket</groupId>
+      <artifactId>wicket</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
