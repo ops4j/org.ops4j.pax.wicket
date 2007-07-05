@@ -45,7 +45,7 @@ public class PaxWicketSessionTestCase extends MockObjectTestCase
         PaxWicketPageFactory pageFac = new PaxWicketPageFactory( context, appName );
         PaxWicketAuthenticator authenticator = mock( PaxWicketAuthenticator.class );
         PaxAuthenticatedWicketApplication application = new PaxAuthenticatedWicketApplication(
-            "mountPoint", Page.class, pageFac, classResolver, authenticator, WebPage.class, true
+            context, appName, "mountPoint", Page.class, pageFac, classResolver, authenticator, WebPage.class, true
         );
         set( application );
 

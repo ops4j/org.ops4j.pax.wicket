@@ -52,6 +52,8 @@ public final class PaxWicketApplicationFactory
     private PaxWicketAuthenticator m_authenticator;
     private Class<? extends WebPage> m_signinPage;
 
+    private final String m_applicationName;
+    
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
      *
@@ -75,6 +77,7 @@ public final class PaxWicketApplicationFactory
         m_properties = new Properties();
         m_homepageClass = homepageClass;
         m_bundleContext = bundleContext;
+        m_applicationName = applicationName;
 
         setMountPoint( mountPoint );
         setDeploymentMode( false );
@@ -333,7 +336,9 @@ public final class PaxWicketApplicationFactory
             String mountPoint = getMountPoint();
             if( m_authenticator != null && m_signinPage != null )
             {
-                paxWicketApplication = new PaxAuthenticatedWicketApplication( mountPoint, m_homepageClass,
+                paxWicketApplication = new PaxAuthenticatedWicketApplication( m_bundleContext,
+                                                                              m_applicationName,
+                                                                              mountPoint, m_homepageClass,
                                                                               m_pageFactory, m_delegatingClassResolver,
                                                                               m_authenticator, m_signinPage,
                                                                               deploymentMode
@@ -341,7 +346,8 @@ public final class PaxWicketApplicationFactory
             }
             else
             {
-                paxWicketApplication = new PaxWicketApplication( mountPoint, m_homepageClass, m_pageFactory,
+                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, mountPoint, 
+                                                                 m_homepageClass, m_pageFactory,
                                                                  m_delegatingClassResolver, deploymentMode
                 );
             }

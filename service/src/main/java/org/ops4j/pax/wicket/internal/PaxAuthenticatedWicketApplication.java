@@ -18,17 +18,33 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
+
 import javax.servlet.http.HttpServletRequest;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 import wicket.Page;
 import wicket.authentication.AuthenticatedWebApplication;
 import wicket.authentication.AuthenticatedWebSession;
 import wicket.authorization.strategies.role.Roles;
 import wicket.markup.html.WebPage;
 import wicket.protocol.http.WebRequest;
+import wicket.settings.IAjaxSettings;
 import wicket.settings.IApplicationSettings;
+import wicket.settings.IDebugSettings;
+import wicket.settings.IExceptionSettings;
+import wicket.settings.IFrameworkSettings;
+import wicket.settings.IMarkupSettings;
+import wicket.settings.IPageSettings;
+import wicket.settings.IRequestCycleSettings;
+import wicket.settings.IResourceSettings;
+import wicket.settings.ISecuritySettings;
 import wicket.settings.ISessionSettings;
 
 public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
@@ -38,6 +54,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
     private static final AuthenticatedToken TOKEN_NOT_AUTHENTICATED = new AuthenticatedToken();
 
+    private final BundleContext m_bundleContext;
+    private final String m_applicationName;
     private final String m_mountPoint;
     protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
@@ -46,14 +64,20 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private PaxWicketAuthenticator m_authenticator;
     private Class<? extends WebPage> m_signInPage;
     private HashMap<AuthenticatedToken, Roles> m_roles;
+    private final List<ServiceRegistration> m_wicketSettings;
 
-    public PaxAuthenticatedWicketApplication( String mountPoint, Class<? extends Page> homepageClass,
-                                              PaxWicketPageFactory factory,
-                                              DelegatingClassResolver delegatingClassResolver,
-                                              PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
-                                              boolean deploymentMode )
+    public PaxAuthenticatedWicketApplication( 
+            BundleContext bundleContext,
+            String applicationName,
+            String mountPoint, Class<? extends Page> homepageClass,
+            PaxWicketPageFactory factory,
+            DelegatingClassResolver delegatingClassResolver,
+            PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
+            boolean deploymentMode )
         throws IllegalArgumentException
     {
+        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
+        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
         NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
@@ -61,6 +85,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         NullArgumentException.validateNotNull( authenticator, "authenticator" );
         NullArgumentException.validateNotNull( signInPage, "signInPage" );
 
+        m_bundleContext = bundleContext;
+        m_applicationName = applicationName;
         m_mountPoint = mountPoint;
         m_factory = factory;
         m_homepageClass = homepageClass;
@@ -69,6 +95,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         m_authenticator = authenticator;
         m_signInPage = signInPage;
         m_roles = new HashMap<AuthenticatedToken, Roles>();
+
+        m_wicketSettings = new ArrayList<ServiceRegistration>();
     }
 
     /**
@@ -89,15 +117,28 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
      * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
      */
     @Override
-    public void init()
+    protected final void init()
     {
         super.init();
 
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
+        addWicketService( IApplicationSettings.class, applicationSettings );
 
         ISessionSettings sessionSettings = getSessionSettings();
         sessionSettings.setPageFactory( m_factory );
+        addWicketService( ISessionSettings.class, sessionSettings );
+
+        addWicketService( IAjaxSettings.class, getAjaxSettings() );
+        addWicketService( IDebugSettings.class, getDebugSettings() );
+        addWicketService( IExceptionSettings.class, getExceptionSettings() );
+        addWicketService( IFrameworkSettings.class, getFrameworkSettings() );
+        addWicketService( IMarkupSettings.class, getMarkupSettings() );
+        addWicketService( IPageSettings.class, getPageSettings() );
+        addWicketService( IRequestCycleSettings.class, getRequestCycleSettings() );
+        addWicketService( IResourceSettings.class, getResourceSettings() );
+        addWicketService( ISecuritySettings.class, getSecuritySettings() );
+
         if( m_deploymentMode )
         {
             configure( DEPLOYMENT );
@@ -166,5 +207,17 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         }
 
         return m_roles.get( token );
+    }
+
+    private <T>void addWicketService( final Class<T> service, final T implementation )
+    {
+        Properties props = new Properties();
+        props.setProperty( "applicationId", m_applicationName );
+
+        m_wicketSettings.add(
+                m_bundleContext.registerService( 
+                        service.getName(), 
+                        implementation, 
+                        props ) );
     }
 }

@@ -45,4 +45,11 @@ public interface PageFactory<T extends Page>
      * @since 1.0.0
      */
     T createPage( PageParameters params );
+
+    /**
+     * Returns the {@code BookmarkableInfo} for this page.
+     * 
+     * @return the {@code BookmarkableInfo} for the page being created.
+     */
+    BookmarkableInfo<T> getBookmarkableInfo();
 }
