@@ -18,8 +18,6 @@ package org.ops4j.pax.wicket.util;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
-import org.ops4j.pax.wicket.api.BookmarkableInfo;
-import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import wicket.Page;
 import wicket.PageParameters;
@@ -27,7 +25,6 @@ import wicket.PageParameters;
 public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T>
 {
     private Class<T> m_pageClass;
-    private final String m_niceUrlPath;
 
     public DefaultPageFactory( 
             BundleContext bundleContext, 
@@ -51,7 +48,6 @@ public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T>
     {
         super( bundleContext, pageId, applicationName, pageName );
         m_pageClass = pageClass;
-        m_niceUrlPath = niceUrlPath;
     }
 
     public Class<T> getPageClass()
@@ -71,13 +67,5 @@ public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T>
         {
             throw new UndeclaredThrowableException( e );
         }
-    }
-
-    public BookmarkableInfo<T> getBookmarkableInfo()
-    {
-        if( null != m_niceUrlPath )
-            return new DefaultBookmarkableInfo<T>( m_niceUrlPath, m_pageClass );
-
-        return null;
     }
 }
