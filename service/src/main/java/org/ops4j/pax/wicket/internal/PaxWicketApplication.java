@@ -25,6 +25,8 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 
 import org.ops4j.lang.NullArgumentException;
+import org.ops4j.pax.wicket.api.MountPointInfo;
+import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -49,6 +51,7 @@ public final class PaxWicketApplication extends WebApplication
     private final BundleContext m_bundleContext;
     private final String m_applicationName;
     private final String m_mountPoint;
+    private final PageMounter m_pageMounter;
     protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
@@ -59,6 +62,7 @@ public final class PaxWicketApplication extends WebApplication
             BundleContext bundleContext, 
             String applicationName,
             String mountPoint, 
+            PageMounter pageMounter,
             Class<? extends Page> homepageClass, 
             PaxWicketPageFactory factory, 
             DelegatingClassResolver delegatingClassResolver, 
@@ -67,7 +71,8 @@ public final class PaxWicketApplication extends WebApplication
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotNull( mountPoint, "mountPoint" );
+        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
+        NullArgumentException.validateNotNull( pageMounter, "pageMounter" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
@@ -75,6 +80,7 @@ public final class PaxWicketApplication extends WebApplication
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
         m_mountPoint = mountPoint;
+        m_pageMounter = pageMounter;
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
@@ -128,6 +134,14 @@ public final class PaxWicketApplication extends WebApplication
         else
         {
             configure( DEVELOPMENT );
+        }
+
+        if( null != m_pageMounter )
+        {
+            for( MountPointInfo<? extends Page> bookmark : m_pageMounter.getMountPoints() )
+            {
+                this.mountBookmarkablePage( bookmark.getPath(), bookmark.getPageClass() );
+            }
         }
     }
 

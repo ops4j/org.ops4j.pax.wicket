@@ -52,6 +52,8 @@ public final class PaxWicketApplicationFactory
     private PaxWicketAuthenticator m_authenticator;
     private Class<? extends WebPage> m_signinPage;
 
+    private PageMounter m_pageMounter;
+
     private final String m_applicationName;
     
     /**
@@ -326,6 +328,13 @@ public final class PaxWicketApplicationFactory
         }
     }
 
+    public void setPageMounter( PageMounter pageMounter )
+    {
+        NullArgumentException.validateNotNull( pageMounter, "pageMounter" );
+
+        m_pageMounter = pageMounter;
+    }
+
     public final WebApplication createApplication( WicketServlet servlet )
     {
         WebApplication paxWicketApplication;
@@ -338,7 +347,9 @@ public final class PaxWicketApplicationFactory
             {
                 paxWicketApplication = new PaxAuthenticatedWicketApplication( m_bundleContext,
                                                                               m_applicationName,
-                                                                              mountPoint, m_homepageClass,
+                                                                              mountPoint,
+                                                                              m_pageMounter,
+                                                                              m_homepageClass,
                                                                               m_pageFactory, m_delegatingClassResolver,
                                                                               m_authenticator, m_signinPage,
                                                                               deploymentMode
@@ -346,7 +357,9 @@ public final class PaxWicketApplicationFactory
             }
             else
             {
-                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, mountPoint, 
+                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, 
+                                                                 mountPoint,
+                                                                 m_pageMounter,
                                                                  m_homepageClass, m_pageFactory,
                                                                  m_delegatingClassResolver, deploymentMode
                 );
