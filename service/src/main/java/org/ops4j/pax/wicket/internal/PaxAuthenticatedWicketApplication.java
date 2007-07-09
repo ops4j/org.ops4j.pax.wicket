@@ -84,7 +84,6 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
         NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
         NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
-        NullArgumentException.validateNotNull( pageMounter, "pageMounter" );
         NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
         NullArgumentException.validateNotNull( factory, "factory" );
         NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
@@ -157,9 +156,9 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
         if( null != m_pageMounter )
         {
-            for( MountPointInfo<? extends Page> bookmark : m_pageMounter.getMountPoints() )
+            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
             {
-                this.mountBookmarkablePage( bookmark.getPath(), bookmark.getPageClass() );
+                mount( bookmark.getPath(), bookmark.getCodingStrategy() );
             }
         }
     }

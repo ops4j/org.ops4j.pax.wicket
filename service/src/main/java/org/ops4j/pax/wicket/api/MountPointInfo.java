@@ -1,9 +1,9 @@
 package org.ops4j.pax.wicket.api;
 
-import wicket.Page;
+import wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
-public interface MountPointInfo<T extends Page>
+public interface MountPointInfo
 {
     String getPath();
-    Class<T> getPageClass();
+    public IRequestTargetUrlCodingStrategy getCodingStrategy();
 }

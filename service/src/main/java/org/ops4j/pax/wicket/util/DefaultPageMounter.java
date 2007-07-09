@@ -8,44 +8,66 @@ import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 
 import wicket.Page;
+import wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
+import wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
 public class DefaultPageMounter
         implements PageMounter
 {
-    private final List<MountPointInfo<? extends Page>> m_mountPoints;
+    private final List<MountPointInfo> m_mountPoints;
 
     public DefaultPageMounter()
     {
         // Using Vector because it is synchronized
         // But not sure if synchronization is really necessary or not...
-        m_mountPoints = new Vector<MountPointInfo<? extends Page>>();
+        m_mountPoints = new Vector<MountPointInfo>();
     }
 
+    /**
+     * A convenience method that uses a default coding strategy.
+     * 
+     * @param path      the path on which the page is to be mounted
+     * @param pageClass the class to mount on this mount point using the
+     *                  default strategy
+     */
     public <T extends Page> void addMountPoint( String path, Class<T> pageClass )
     {
-        MountPointInfo<T> info = new DefaultMountPointInfo<T>( path, pageClass );
+        addMountPoint( 
+                path, 
+                new BookmarkablePageRequestTargetUrlCodingStrategy( 
+                        path, 
+                        pageClass, 
+                        null) );
+    }
+
+    public void addMountPoint( 
+            String path,
+            IRequestTargetUrlCodingStrategy codingStrategy )
+    {
+        MountPointInfo info = new DefaultMountPointInfo( path, codingStrategy );
         m_mountPoints.add( info );
     }
 
-    public List<MountPointInfo<? extends Page>> getMountPoints()
+    public List<MountPointInfo> getMountPoints()
     {
         return m_mountPoints;
     }
 
-
-    private class DefaultMountPointInfo<T extends Page>
-        implements MountPointInfo<T>
+    private class DefaultMountPointInfo
+        implements MountPointInfo
     {
         private final String m_path;
-        private final Class<T> m_pageClass;
+        private final IRequestTargetUrlCodingStrategy m_codingStrategy;
 
-        public DefaultMountPointInfo( String path, Class<T> pageClass )
+        public DefaultMountPointInfo( 
+                String path, 
+                IRequestTargetUrlCodingStrategy codingStrategy )
         {
             NullArgumentException.validateNotEmpty( path, "path" );
-            NullArgumentException.validateNotNull( pageClass, "pageClass" );
+            NullArgumentException.validateNotNull( codingStrategy, "codingStrategy" );
 
             m_path = path;
-            m_pageClass = pageClass;
+            m_codingStrategy = codingStrategy;
         }
 
         public String getPath()
@@ -53,9 +75,9 @@ public class DefaultPageMounter
             return m_path;
         }
 
-        public Class<T> getPageClass()
+        public IRequestTargetUrlCodingStrategy getCodingStrategy()
         {
-            return m_pageClass;
+            return m_codingStrategy;
         }
     }
 }
