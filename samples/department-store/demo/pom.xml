@@ -44,9 +44,9 @@
       <version>1.0.0.v20060601</version>
     </dependency>
     <dependency>
-      <groupId>org.ungoverned.osgi.bundle</groupId>
-      <artifactId>http</artifactId>
-      <version>1.1.2</version>
+      <groupId>org.knopflerfish.bundle.http</groupId>
+      <artifactId>http_all</artifactId>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
