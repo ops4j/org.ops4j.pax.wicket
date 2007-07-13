@@ -28,6 +28,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
+import wicket.MarkupContainer;
 import wicket.Session;
 import wicket.authorization.strategies.role.Roles;
 
@@ -131,6 +132,20 @@ public abstract class AbstractContentSource<E extends Component>
         if( isRolesApproved )
         {
             return createWicketComponent( wicketId );
+        }
+        else
+        {
+            return onAuthorizationFailed( wicketId );
+        }
+    }
+
+    public final E createSourceComponent( String wicketId, MarkupContainer parent )
+        throws IllegalArgumentException
+    {
+        boolean isRolesApproved = isRolesAuthorized();
+        if( isRolesApproved )
+        {
+            return createWicketComponent( wicketId, parent );
         }
         else
         {
@@ -293,6 +308,24 @@ public abstract class AbstractContentSource<E extends Component>
      */
     protected abstract E createWicketComponent( String wicketId )
         throws IllegalArgumentException;
+
+    /**
+     * Default implementation that ignores the parent component.
+     * Override this if you want to inject the parent component into your
+     * created Wicket {@code Component}
+     * 
+     * @param wicketId The WicketId. This argument must not be {@code null}.
+     * @param parent the parent {@code MarkupContainer} 
+     * 
+     * @return The wicket component with the specified {@code wicketId}.
+     *
+     * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
+     */
+    protected <C extends MarkupContainer>E createWicketComponent( String wicketId, C parent )
+        throws IllegalArgumentException
+    {
+        return createWicketComponent( wicketId );
+    }
 
     @SuppressWarnings( "unchecked" )
     public final void updated( Dictionary config )
