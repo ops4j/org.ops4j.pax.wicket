@@ -18,7 +18,9 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 import java.util.Properties;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
@@ -31,6 +33,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import wicket.Page;
+import wicket.application.IComponentInstantiationListener;
 import wicket.markup.html.WebPage;
 import wicket.protocol.http.IWebApplicationFactory;
 import wicket.protocol.http.WebApplication;
@@ -55,6 +58,7 @@ public final class PaxWicketApplicationFactory
     private PageMounter m_pageMounter;
 
     private final String m_applicationName;
+    private List<IComponentInstantiationListener> componentInstantiationListeners;
     
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
@@ -87,6 +91,8 @@ public final class PaxWicketApplicationFactory
 
         String homepageClassName = homepageClass.getName();
         m_properties.setProperty( ContentSource.HOMEPAGE_CLASSNAME, homepageClassName );
+        
+        componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
     }
 
     /**
@@ -334,6 +340,10 @@ public final class PaxWicketApplicationFactory
 
         m_pageMounter = pageMounter;
     }
+    
+    public void addComponentInstantiationListener(IComponentInstantiationListener listener) {
+        componentInstantiationListeners.add(listener);
+    }
 
     public final WebApplication createApplication( WicketServlet servlet )
     {
@@ -365,7 +375,9 @@ public final class PaxWicketApplicationFactory
                 );
             }
         }
-
+        for(IComponentInstantiationListener listener:componentInstantiationListeners){
+            paxWicketApplication.addComponentInstantiationListener(listener);
+        }
         return paxWicketApplication;
     }
 }
