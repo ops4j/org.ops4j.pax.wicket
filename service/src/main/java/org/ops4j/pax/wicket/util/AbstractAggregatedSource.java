@@ -28,6 +28,7 @@ import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
 import wicket.Component;
+import wicket.MarkupContainer;
 import wicket.authorization.strategies.role.Roles;
 
 /**
@@ -228,6 +229,39 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     }
 
     /**
+     * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
+     * {@code null} object.
+     * <p>
+     * General convention:<br/>
+     * <ul>
+     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
+     * this method;</li>
+     * </ul>
+     * </p>
+     *
+     * @param wicketId The wicket id. This argument must not be {@code null}.
+     *
+     * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
+     *         this ContentSource.
+     *
+     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
+     * @since 1.0.0
+     */
+    public <T extends MarkupContainer> E createSourceComponent( String wicketId, T parent )
+        throws IllegalArgumentException
+    {
+        boolean isRolesApproved = isRolesAuthorized();
+        if( isRolesApproved )
+        {
+            return createComponent( wicketId, parent );
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
      * Returns {@code true} if the user roles is approved to create this content source component, {@code false}
      * otherwise.
      *
@@ -297,6 +331,23 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      */
     protected abstract E createComponent( String wicketId )
         throws IllegalArgumentException;
+
+    /**
+     * Default implementation that ignores the parent component.
+     * Override this if you want to inject the parent component into your created Wicket {@code Component}
+     *
+     * @param wicketId The WicketId. This argument must not be {@code null}.
+     * @param parent   the parent {@code MarkupContainer}
+     *
+     * @return The wicket component with the specified {@code wicketId}.
+     *
+     * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
+     * @since 0.5.2
+     */
+    protected <T extends MarkupContainer> E createComponent( String wicketId, T parent )
+    {
+        return createComponent( wicketId );
+    }
 
     public final Roles getRequiredRoles()
     {
