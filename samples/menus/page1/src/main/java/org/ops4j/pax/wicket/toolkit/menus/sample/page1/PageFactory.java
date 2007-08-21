@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,10 +18,10 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 
-import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.apache.wicket.PageParameters;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
-import wicket.PageParameters;
 
 public class PageFactory extends AbstractPageFactory
 {
@@ -55,7 +56,7 @@ public class PageFactory extends AbstractPageFactory
      *
      * @since 1.0.0
      */
-    public wicket.Page createPage( PageParameters params )
+    public org.apache.wicket.Page createPage( PageParameters params )
     {
         return new Page( m_aggregator );
     }

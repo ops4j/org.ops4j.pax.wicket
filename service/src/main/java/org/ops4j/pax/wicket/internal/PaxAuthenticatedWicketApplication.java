@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -24,30 +25,29 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.Page;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.settings.IDebugSettings;
+import org.apache.wicket.settings.IExceptionSettings;
+import org.apache.wicket.settings.IFrameworkSettings;
+import org.apache.wicket.settings.IMarkupSettings;
+import org.apache.wicket.settings.IPageSettings;
+import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.IResourceSettings;
+import org.apache.wicket.settings.ISecuritySettings;
+import org.apache.wicket.settings.ISessionSettings;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import wicket.Page;
-import wicket.authentication.AuthenticatedWebApplication;
-import wicket.authentication.AuthenticatedWebSession;
-import wicket.authorization.strategies.role.Roles;
-import wicket.markup.html.WebPage;
-import wicket.protocol.http.WebRequest;
-import wicket.settings.IAjaxSettings;
-import wicket.settings.IApplicationSettings;
-import wicket.settings.IDebugSettings;
-import wicket.settings.IExceptionSettings;
-import wicket.settings.IFrameworkSettings;
-import wicket.settings.IMarkupSettings;
-import wicket.settings.IPageSettings;
-import wicket.settings.IRequestCycleSettings;
-import wicket.settings.IResourceSettings;
-import wicket.settings.ISecuritySettings;
-import wicket.settings.ISessionSettings;
 
 public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
 {
@@ -135,7 +135,6 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         sessionSettings.setPageFactory( m_factory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
-        addWicketService( IAjaxSettings.class, getAjaxSettings() );
         addWicketService( IDebugSettings.class, getDebugSettings() );
         addWicketService( IExceptionSettings.class, getExceptionSettings() );
         addWicketService( IFrameworkSettings.class, getFrameworkSettings() );
@@ -145,21 +144,25 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        if( m_deploymentMode )
-        {
-            configure( DEPLOYMENT );
-        }
-        else
-        {
-            configure( DEVELOPMENT );
-        }
-
         if( null != m_pageMounter )
         {
             for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
             {
-                mount( bookmark.getPath(), bookmark.getCodingStrategy() );
+                mount( bookmark.getCodingStrategy() );
             }
+        }
+    }
+
+    @Override
+    public String getConfigurationType()
+    {
+        if( m_deploymentMode )
+        {
+            return DEPLOYMENT;
+        }
+        else
+        {
+            return DEVELOPMENT;
         }
     }
 

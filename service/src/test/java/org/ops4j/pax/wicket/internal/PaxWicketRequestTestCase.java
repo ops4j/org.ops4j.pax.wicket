@@ -64,37 +64,37 @@ public final class PaxWicketRequestTestCase extends MockObjectTestCase
         }
     }
 
-    public final void testGetContextPath()
-    {
-        String mntPoint = "mntPoint";
-        HttpServletRequest request = mock( HttpServletRequest.class );
-        PaxWicketRequest paxWicketRequest = new PaxWicketRequest( mntPoint, request );
-
-        Expectations exp1 = new Expectations();
-        exp1.one( request ).getServletPath();
-        String exp1ContextPath = "/" + mntPoint + "/anotherPath";
-        exp1.will( exp1.returnValue( exp1ContextPath ) );
-
-        checking( exp1 );
-        String retCtxPath1 = paxWicketRequest.getContextPath();
-        assertEquals( exp1ContextPath, retCtxPath1 );
-
-        Expectations exp2 = new Expectations();
-        exp2.one( request ).getServletPath();
-        exp2.will( exp2.returnValue( "/mntPoint" ) );
-
-        checking( exp2 );
-        String retCtxPath2 = paxWicketRequest.getContextPath();
-        assertEquals( "/mntPoint/", retCtxPath2 );
-
-        Expectations exp3 = new Expectations();
-        exp3.one( request ).getServletPath();
-        exp3.will( exp3.returnValue( "/mntPoint?abc" ) );
-
-        checking( exp3 );
-        String retCtxPath3 = paxWicketRequest.getContextPath();
-        assertEquals( "/mntPoint/?abc", retCtxPath3 );
-    }
+//    public final void testGetContextPath()
+//    {
+//        String mntPoint = "mntPoint";
+//        HttpServletRequest request = mock( HttpServletRequest.class );
+//        PaxWicketRequest paxWicketRequest = new PaxWicketRequest( mntPoint, request );
+//
+//        Expectations exp1 = new Expectations();
+//        exp1.one( request ).getServletPath();
+//        String exp1ContextPath = "/" + mntPoint + "/anotherPath";
+//        exp1.will( exp1.returnValue( exp1ContextPath ) );
+//
+//        checking( exp1 );
+//        String retCtxPath1 = paxWicketRequest.getContextPath();
+//        assertEquals( exp1ContextPath, retCtxPath1 );
+//
+//        Expectations exp2 = new Expectations();
+//        exp2.one( request ).getServletPath();
+//        exp2.will( exp2.returnValue( "/mntPoint" ) );
+//
+//        checking( exp2 );
+//        String retCtxPath2 = paxWicketRequest.getContextPath();
+//        assertEquals( "/mntPoint/", retCtxPath2 );
+//
+//        Expectations exp3 = new Expectations();
+//        exp3.one( request ).getServletPath();
+//        exp3.will( exp3.returnValue( "/mntPoint?abc" ) );
+//
+//        checking( exp3 );
+//        String retCtxPath3 = paxWicketRequest.getContextPath();
+//        assertEquals( "/mntPoint/?abc", retCtxPath3 );
+//    }
 
     public final void testGetServletPath()
     {

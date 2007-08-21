@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,13 +20,14 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.mainpage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
-import wicket.Component;
-import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import wicket.markup.html.WebPage;
-import wicket.markup.html.list.ListItem;
-import wicket.markup.html.list.ListView;
 
 @AuthorizeInstantiation( "user" )
 public class HomePage extends WebPage

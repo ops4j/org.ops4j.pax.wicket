@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2005 Edward Yakop.
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -20,7 +21,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.view;
 
 import java.util.Locale;
 
-import wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 
 /**
  * {@code OverviewTabContent} represents an interface that can create tab item representing a floor of Sungei Wang

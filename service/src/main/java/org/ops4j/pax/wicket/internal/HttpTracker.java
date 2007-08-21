@@ -1,6 +1,7 @@
 /*
  * Copyright 2005 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -22,7 +23,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletException;
+
+import org.apache.wicket.protocol.http.WicketServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -30,7 +34,6 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.protocol.http.WicketServlet;
 
 final class HttpTracker extends ServiceTracker
 {

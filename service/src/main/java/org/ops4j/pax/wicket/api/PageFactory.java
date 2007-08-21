@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,8 +19,8 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import wicket.Page;
-import wicket.PageParameters;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 
 /** PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
  *

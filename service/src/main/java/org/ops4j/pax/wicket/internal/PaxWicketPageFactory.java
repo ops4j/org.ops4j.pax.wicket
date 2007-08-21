@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,19 +20,20 @@ package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
 import java.util.Properties;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.IPageFactory;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.application.IClassResolver;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.IPageFactory;
-import wicket.Page;
-import wicket.PageParameters;
-import wicket.WicketRuntimeException;
-import wicket.application.IClassResolver;
 
 public final class PaxWicketPageFactory
     implements IPageFactory, IClassResolver

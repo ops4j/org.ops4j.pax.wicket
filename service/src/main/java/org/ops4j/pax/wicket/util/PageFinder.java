@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * you may not use  this file  except in  compliance with the License.
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -19,13 +20,13 @@ package org.ops4j.pax.wicket.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import wicket.Page;
 
 public class PageFinder
 {

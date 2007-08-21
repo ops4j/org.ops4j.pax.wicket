@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,15 +22,16 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.extensions.markup.html.tabs.AbstractTab;
-import wicket.markup.html.panel.Panel;
-import wicket.model.IModel;
-import wicket.model.Model;
 
 public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     implements OverviewTabContent
@@ -112,7 +114,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         {
             IModel titleModel = getTitle();
 
-            String floorName = (String) titleModel.getObject( null );
+            String floorName = (String) titleModel.getObject();
 
             FloorAggregatedSource source = m_instances.get( floorName );
 

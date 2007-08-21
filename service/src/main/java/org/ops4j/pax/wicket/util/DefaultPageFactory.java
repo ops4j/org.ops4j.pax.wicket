@@ -1,4 +1,6 @@
-/*  Copyright 2007 Niclas Hedhman.
+/*
+ * Copyright 2007 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +20,9 @@ package org.ops4j.pax.wicket.util;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.osgi.framework.BundleContext;
-import wicket.Page;
-import wicket.PageParameters;
 
 public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T>
 {

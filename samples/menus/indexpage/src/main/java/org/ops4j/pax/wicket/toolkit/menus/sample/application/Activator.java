@@ -17,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus.sample.application;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePage;
 import org.ops4j.pax.wicket.toolkit.menus.sample.mainpage.HomePageFactory;
+import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 public class Activator
     implements BundleActivator

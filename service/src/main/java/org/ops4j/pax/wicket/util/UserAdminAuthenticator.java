@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,8 +18,11 @@
  */
 package org.ops4j.pax.wicket.util;
 
+import java.util.Arrays;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
@@ -27,8 +31,6 @@ import org.osgi.service.useradmin.Authorization;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.authorization.strategies.role.Roles;
-import java.util.Arrays;
 
 /**
  * This is a PaxWicketAuthenticator that uses the User Admin Service as specified in the OSGi R4 specification.

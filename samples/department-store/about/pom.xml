@@ -49,7 +49,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket</artifactId>
       <scope>provided</scope>
     </dependency>

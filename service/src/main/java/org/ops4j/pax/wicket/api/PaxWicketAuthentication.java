@@ -1,4 +1,6 @@
-/*  Copyright 2007 Niclas Hedhman.
+/*
+ * Copyright 2007 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +18,7 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * PaxWicketAuthentication represents a subset of the current Session.

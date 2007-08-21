@@ -1,4 +1,6 @@
-/*  Copyright 2007 Niclas Hedhman.
+/*
+ * Copyright 2007 Niclas Hedhman.
+ * Copyright 2007 David Leangen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +18,8 @@
  */
 package org.ops4j.pax.wicket.util;
 
+import static org.osgi.framework.Constants.SERVICE_PID;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,8 +27,11 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -32,12 +39,9 @@ import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
-import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import wicket.Component;
-import wicket.Session;
 
 abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback

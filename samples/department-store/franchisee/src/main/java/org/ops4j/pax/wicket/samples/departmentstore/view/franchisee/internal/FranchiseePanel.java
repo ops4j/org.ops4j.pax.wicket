@@ -19,10 +19,11 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import java.io.Serializable;
+
+import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.PropertyModel;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
-import wicket.extensions.ajax.markup.html.AjaxEditableLabel;
-import wicket.markup.html.panel.Panel;
-import wicket.model.PropertyModel;
 
 /**
  * {@code FranchiseePanel}

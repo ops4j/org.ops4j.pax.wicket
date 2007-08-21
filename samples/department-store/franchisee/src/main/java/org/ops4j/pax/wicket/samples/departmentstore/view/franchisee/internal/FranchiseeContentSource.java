@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,7 +22,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
-import wicket.MarkupContainer;
+import org.apache.wicket.MarkupContainer;
 
 /**
  * {@code FranchiseeContentSource}
