@@ -1,6 +1,5 @@
 /*
  * Copyright 2007 Edward Yakop.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,9 +18,11 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.jmock.integration.junit3.MockObjectTestCase;
+import wicket.protocol.http.IWebApplicationFactory;
 
 public final class ServletTestCase extends MockObjectTestCase
 {
+
     public void testConstructor()
     {
         String msg = "Construct with [null] argument must throw [IllegalArgumentException].";
@@ -37,4 +38,14 @@ public final class ServletTestCase extends MockObjectTestCase
             fail( msg );
         }
     }
+
+    public final void testGetApplicationFactory()
+    {
+        IWebApplicationFactory expected = mock( IWebApplicationFactory.class );
+        Servlet servlet = new Servlet( expected );
+
+        IWebApplicationFactory appFac = servlet.getApplicationFactory();
+        assertEquals( expected, appFac );
+    }
+
 }

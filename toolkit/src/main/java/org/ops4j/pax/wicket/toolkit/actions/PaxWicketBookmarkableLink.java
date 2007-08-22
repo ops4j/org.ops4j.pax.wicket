@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,7 +17,7 @@
  */
 package org.ops4j.pax.wicket.toolkit.actions;
 
-import org.apache.wicket.PageParameters;
+import wicket.PageParameters;
 
 public class PaxWicketBookmarkableLink
 {

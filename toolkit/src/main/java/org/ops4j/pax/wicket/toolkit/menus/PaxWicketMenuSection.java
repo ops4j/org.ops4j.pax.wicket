@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,11 +18,11 @@
 package org.ops4j.pax.wicket.toolkit.menus;
 
 import java.util.HashMap;
-
-import org.apache.wicket.markup.html.panel.Panel;
 import org.ops4j.pax.wicket.toolkit.actions.ActionGroup;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
+import wicket.MarkupContainer;
+import wicket.markup.html.panel.Panel;
 
 public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
     implements ActionGroup

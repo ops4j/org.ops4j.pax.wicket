@@ -1,7 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -23,14 +22,6 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.wicket.Page;
-import org.apache.wicket.application.IComponentInstantiationListener;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
@@ -41,6 +32,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import wicket.Page;
+import wicket.application.IComponentInstantiationListener;
+import wicket.markup.html.WebPage;
+import wicket.protocol.http.IWebApplicationFactory;
+import wicket.protocol.http.WebApplication;
+import wicket.protocol.http.WicketServlet;
 
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
@@ -348,7 +345,7 @@ public final class PaxWicketApplicationFactory
         componentInstantiationListeners.add(listener);
     }
 
-    public final WebApplication createApplication( WicketFilter filter )
+    public final WebApplication createApplication( WicketServlet servlet )
     {
         WebApplication paxWicketApplication;
 

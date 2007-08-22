@@ -1,7 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,12 +20,7 @@ package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
@@ -34,6 +28,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import wicket.protocol.http.WicketServlet;
 
 final class PaxWicketAppFactoryTracker extends ServiceTracker
 {

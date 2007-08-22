@@ -1,7 +1,6 @@
 /*
  * Copyright 2005 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,17 +18,16 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
+import wicket.protocol.http.IWebApplicationFactory;
+import wicket.protocol.http.WicketServlet;
 
 final class Servlet extends WicketServlet
 {
 
     private static final long serialVersionUID = 1L;
 
-    private final IWebApplicationFactory m_appFactory;
+    private IWebApplicationFactory m_appFactory;
 
     Servlet( IWebApplicationFactory appFactory )
         throws IllegalArgumentException
@@ -39,8 +37,8 @@ final class Servlet extends WicketServlet
     }
 
     @Override
-    protected WicketFilter newWicketFilter()
+    protected IWebApplicationFactory getApplicationFactory()
     {
-        return new PaxWicketFilter( m_appFactory );
+        return m_appFactory;
     }
 }

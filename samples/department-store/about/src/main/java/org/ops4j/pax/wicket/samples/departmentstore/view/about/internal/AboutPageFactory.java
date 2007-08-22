@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,9 +17,10 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import org.apache.wicket.PageParameters;
-import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
+import org.ops4j.pax.wicket.api.PageFactory;
+
+import wicket.PageParameters;
 
 public class AboutPageFactory
     implements PageFactory<AboutPage>

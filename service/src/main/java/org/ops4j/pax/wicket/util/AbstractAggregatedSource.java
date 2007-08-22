@@ -1,7 +1,6 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,10 +20,6 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -32,6 +27,9 @@ import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
+import wicket.Component;
+import wicket.MarkupContainer;
+import wicket.authorization.strategies.role.Roles;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.

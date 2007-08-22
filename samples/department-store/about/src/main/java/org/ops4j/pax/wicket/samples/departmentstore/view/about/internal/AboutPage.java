@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,11 +17,11 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
-import org.apache.wicket.markup.html.border.BoxBorder;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
+import wicket.markup.html.WebPage;
+import wicket.markup.html.basic.Label;
+import wicket.markup.html.basic.MultiLineLabel;
+import wicket.markup.html.border.BoxBorder;
 
 public class AboutPage extends WebPage
 {

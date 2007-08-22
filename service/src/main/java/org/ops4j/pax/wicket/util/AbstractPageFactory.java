@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -20,9 +19,6 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-
-import org.apache.wicket.Page;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -32,6 +28,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import wicket.Page;
+import wicket.authentication.AuthenticatedWebSession;
 
 public abstract class AbstractPageFactory<T extends Page>
     implements PageFactory<T>, ManagedService

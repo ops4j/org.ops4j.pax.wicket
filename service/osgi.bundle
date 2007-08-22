@@ -4,29 +4,26 @@ Private-Package:\
  javax.portlet, \
  org.ops4j.lang, \
  org.ops4j.pax.wicket.internal, \
- org.slf4j, \
- org.apache.wicket.*
+ wicket.*
 
 Bundle-Activator: org.ops4j.pax.wicket.internal.Activator
 
 Import-Package:\
  junit.framework; resolution:=optional, \
- javax.servlet;version="2.3", \
  org.apache.commons.logging;version="[1.0.0, 2.0.0)";provider=paxlogging, \
- org.slf4j;version="[1.0.0, 2.0.0)";provider=paxlogging, \
  org.osgi.framework;version="[1.0.0, 2.0.0)", \
  org.osgi.service.cm;version="[1.0.0, 2.0.0)", \
  org.osgi.service.http;version="[1.0.0, 2.0.0)", \
  org.osgi.service.useradmin;version="[1.0.0, 2.0.0)", \
  org.osgi.util.tracker;version="[1.0.0, 2.0.0)", \
- org.apache.wicket.*;version="[${wicket.dependency.osgi.version}, 2.0.0)", \
+ wicket.*;version="[${wicket.dependency.version}, 2.0.0)", \
  *
 
 Export-Package: \
  javax.portlet;version="1.0.0", \
  org.ops4j.pax.wicket.api;version="${pom.version}", \
  org.ops4j.pax.wicket.util;version="${pom.version}", \
- org.apache.wicket.*;version=${wicket.dependency.osgi.version}
+ wicket.*;version=${wicket.dependency.version}
 
 Include-Resource:\
  wicket.properties=src/main/resources/wicket.properties,\

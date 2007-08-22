@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,10 +18,9 @@
 package org.ops4j.pax.wicket.toolkit.menus;
 
 import java.util.List;
-
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
+import wicket.markup.html.list.ListItem;
+import wicket.markup.html.list.ListView;
+import wicket.markup.html.panel.Panel;
 
 public class PaxWicketSectionPanel extends Panel
 {

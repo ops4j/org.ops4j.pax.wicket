@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,16 +17,16 @@
  */
 package org.ops4j.pax.wicket.toolkit.menus;
 
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketAction;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketBookmarkableLink;
+import wicket.PageParameters;
+import wicket.ResourceReference;
+import wicket.markup.html.basic.Label;
+import wicket.markup.html.image.Image;
+import wicket.markup.html.link.BookmarkablePageLink;
+import wicket.markup.html.link.Link;
+import wicket.markup.html.panel.Panel;
+import wicket.model.Model;
 
 public class PaxWicketMenuItemPanel extends Panel
 {

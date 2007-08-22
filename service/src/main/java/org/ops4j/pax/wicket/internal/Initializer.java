@@ -1,6 +1,5 @@
 /*
  * Copyright 2007 Edward Yakop.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,8 +17,8 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.IInitializer;
+import wicket.Application;
+import wicket.IInitializer;
 
 /**
  * {@code Initializer} is invoked by {@link Application} to initialize wicket application.
@@ -38,8 +37,8 @@ public final class Initializer implements IInitializer
 
     public Initializer()
     {
-        m_wicketInitializer = new org.apache.wicket.Initializer();
-        m_wicketExtInitializer = new org.apache.wicket.extensions.Initializer();
+        m_wicketInitializer = new wicket.Initializer();
+        m_wicketExtInitializer = new wicket.extensions.Initializer();
     }
 
     /**

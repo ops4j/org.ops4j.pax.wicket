@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -19,12 +18,10 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.Serializable;
-
-import org.apache.wicket.Request;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
+import wicket.authentication.AuthenticatedWebApplication;
+import wicket.authentication.AuthenticatedWebSession;
+import wicket.authorization.strategies.role.Roles;
 
 public final class PaxWicketSession extends AuthenticatedWebSession
     implements Serializable, PaxWicketAuthentication
@@ -40,9 +37,9 @@ public final class PaxWicketSession extends AuthenticatedWebSession
      *
      * @param application The web application.
      */
-    public PaxWicketSession( AuthenticatedWebApplication application, Request request )
+    public PaxWicketSession( AuthenticatedWebApplication application )
     {
-        super( application, request );
+        super( application );
     }
 
     /**

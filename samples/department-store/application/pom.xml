@@ -43,17 +43,17 @@
       <artifactId>osgi_R4_core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.wicket</groupId>
+      <groupId>wicket</groupId>
       <artifactId>wicket</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.wicket</groupId>
+      <groupId>wicket</groupId>
       <artifactId>wicket-auth-roles</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.wicket</groupId>
+      <groupId>wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
       <scope>provided</scope>
     </dependency>

@@ -1,6 +1,5 @@
 /*
  * Copyright 2006 Niclas Hedhman.
- * Copyright 2007 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.ops4j.pax.wicket.util.PageFinder;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
+import wicket.Page;
+import wicket.PageParameters;
 
 final class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
     implements PageFactory<OverviewPage>
