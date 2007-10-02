@@ -99,11 +99,7 @@ final class PaxWicketRequest extends ServletWebRequest
 
         int mountPointLength = m_mountPoint.length();
         int servletPathLength = servletPath.length();
-        if( servletPathLength == mountPointLength )
-        {
-            servletPath = servletPath + "/";
-        }
-        else
+        if( servletPathLength != mountPointLength )
         {
             char aChar = servletPath.charAt( mountPointLength );
             if( '/' != aChar )
