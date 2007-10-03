@@ -131,8 +131,11 @@ final class PaxWicketRequest extends ServletWebRequest
             url += ( "?" + queryString );
         }
 
-        // If url is non-empty it has to start with '/', which we should lose
-        if( url.length() > 0 )
+        // Wicket will itself add a leading '/', so remove them all here.
+        // Note: I don't know if this is the "right" way of processing the URL, because
+        //       the algorithm here is not obvious to me. Anyway, this "hack" seems to
+        //       work.
+        while( url.length() > 0 && url.charAt( 0 ) == '/' )
         {
             // Remove leading '/'
             url = url.substring( 1 );
