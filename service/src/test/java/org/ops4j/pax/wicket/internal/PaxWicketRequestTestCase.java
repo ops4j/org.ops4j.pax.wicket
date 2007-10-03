@@ -85,7 +85,7 @@ public final class PaxWicketRequestTestCase extends MockObjectTestCase
 
         checking( exp2 );
         String retCtxPath2 = paxWicketRequest.getContextPath();
-        assertEquals( "/mntPoint/", retCtxPath2 );
+        assertEquals( "/mntPoint", retCtxPath2 );
 
         Expectations exp3 = new Expectations();
         exp3.one( request ).getServletPath();
