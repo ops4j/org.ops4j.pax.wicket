@@ -16,15 +16,15 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * PaxWicketAuthentication represents a subset of the current Session.
  *
  * Typical usage would be;
  * <code><pre>
- * import wicket.authorization.AuthorizationException;
- * import wicket.authorization.strategies.role.Roles;
+ * import org.apache.wicket.authorization.AuthorizationException;
+ * import org.apache.wicket.authorization.strategies.role.Roles;
  *
  * :
  *

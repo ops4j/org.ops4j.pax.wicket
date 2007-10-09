@@ -18,9 +18,12 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
-import wicket.protocol.http.IWebApplicationFactory;
-import wicket.protocol.http.WicketServlet;
+import java.io.File;
+import javax.servlet.ServletContext;
 
 final class Servlet extends WicketServlet
 {
@@ -28,17 +31,38 @@ final class Servlet extends WicketServlet
     private static final long serialVersionUID = 1L;
 
     private IWebApplicationFactory m_appFactory;
+    private static final String WICKET_REQUIRED_ATTRIBUTE = "javax.servlet.context.tempdir";
+    private final File m_tmpDir;
 
-    Servlet( IWebApplicationFactory appFactory )
+    Servlet( IWebApplicationFactory appFactory, File tmpDir )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( appFactory, "appFactory" );
+        m_tmpDir = tmpDir;
+        m_tmpDir.mkdirs();
         m_appFactory = appFactory;
     }
 
+//    @Override
+//    protected IWebApplicationFactory getApplicationFactory()
+//    {
+//        return m_appFactory;
+
+    //    }
     @Override
-    protected IWebApplicationFactory getApplicationFactory()
+    protected WicketFilter newWicketFilter()
     {
-        return m_appFactory;
+        ServletContext servletContext = getServletContext();
+        if( servletContext.getAttribute( WICKET_REQUIRED_ATTRIBUTE ) == null )
+        {
+            servletContext.setAttribute( WICKET_REQUIRED_ATTRIBUTE, m_tmpDir );
+        }
+        return new PaxWicketFilter( m_appFactory );
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Pax Wicket Servlet";
     }
 }

@@ -22,9 +22,9 @@ import org.ops4j.pax.wicket.toolkit.actions.PaxWicketAction;
 import org.ops4j.pax.wicket.toolkit.actions.PaxWicketBookmarkableLink;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
-import wicket.Component;
-import wicket.MarkupContainer;
-import wicket.ResourceReference;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ResourceReference;
 
 public class PaxWicketMenuItem extends AbstractContentSource
     implements ActionItem

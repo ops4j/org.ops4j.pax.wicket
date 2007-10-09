@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-  <artifactId>franchisee</artifactId>
+  <artifactId>departmentstore-view-franchisee</artifactId>
   <packaging>bundle</packaging>
   <version>0.5.2-SNAPSHOT</version>
 
@@ -31,7 +31,8 @@
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>service</artifactId>
+      <artifactId>pax-wicket-service</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -43,22 +44,22 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-      <artifactId>model</artifactId>
-      <version>${pom.version}</version>
+      <artifactId>departmentstore-model</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-auth-roles</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
       <scope>provided</scope>
     </dependency>

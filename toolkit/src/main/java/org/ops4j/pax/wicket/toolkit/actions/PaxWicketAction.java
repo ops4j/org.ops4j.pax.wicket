@@ -18,7 +18,7 @@
 package org.ops4j.pax.wicket.toolkit.actions;
 
 import java.io.Serializable;
-import wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public abstract class PaxWicketAction
     implements Serializable

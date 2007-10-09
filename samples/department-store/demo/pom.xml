@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-  <artifactId>demo</artifactId>
+  <artifactId>departmentstore-demo</artifactId>
   <name>OPS4J - Pax Wicket Department Store - Demo</name>
   <version>0.5.2-SNAPSHOT</version>
   <description>Pax Department Store Demo package.</description>
@@ -15,27 +15,22 @@
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>api</artifactId>
-      <version>0.9.4</version>
+      <artifactId>pax-logging-api</artifactId>
+      <version>0.9.6</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>service</artifactId>
-      <version>0.9.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>jcl</artifactId>
-      <version>0.9.4</version>
+      <artifactId>pax-logging-service</artifactId>
+      <version>0.9.6</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>service</artifactId>
+      <artifactId>pax-wicket-service</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>application</artifactId>
+      <artifactId>departmentstore-view-application</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -44,13 +39,13 @@
       <version>1.0.0.v20060601</version>
     </dependency>
     <dependency>
-      <groupId>org.ungoverned.osgi.bundle</groupId>
-      <artifactId>http</artifactId>
-      <version>1.1.2</version>
+      <groupId>org.ops4j.pax.web.bundles</groupId>
+      <artifactId>service</artifactId>
+      <version>0.2.0</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-      <artifactId>model</artifactId>
+      <artifactId>departmentstore-model</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -60,17 +55,17 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>floor</artifactId>
+      <artifactId>departmentstore-view-floor</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>about</artifactId>
+      <artifactId>departmentstore-view-about</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>franchisee</artifactId>
+      <artifactId>departmentstore-view-franchisee</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
   </dependencies>

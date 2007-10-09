@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.application.IClassResolver;
 import org.ops4j.lang.NullArgumentException;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.BundleContext;
@@ -29,7 +30,6 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.application.IClassResolver;
 
 public final class DelegatingClassResolver
     implements IClassResolver
@@ -97,6 +97,7 @@ public final class DelegatingClassResolver
      * @return Class
      */
     public Class resolveClass( final String classname )
+        throws ClassNotFoundException
     {
         for( IClassResolver resolver : m_resolvers )
         {

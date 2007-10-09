@@ -36,8 +36,8 @@ import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import wicket.Component;
-import wicket.Session;
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 
 abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback

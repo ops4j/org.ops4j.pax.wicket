@@ -1,6 +1,6 @@
 package org.ops4j.pax.wicket.api;
 
-import wicket.Application;
+import org.apache.wicket.Application;
 
 public interface ApplicationInitCallback
 {

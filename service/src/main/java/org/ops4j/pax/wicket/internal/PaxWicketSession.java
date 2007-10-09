@@ -18,10 +18,10 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.Serializable;
+import org.apache.wicket.Request;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
-import wicket.authentication.AuthenticatedWebApplication;
-import wicket.authentication.AuthenticatedWebSession;
-import wicket.authorization.strategies.role.Roles;
 
 public final class PaxWicketSession extends AuthenticatedWebSession
     implements Serializable, PaxWicketAuthentication
@@ -35,11 +35,13 @@ public final class PaxWicketSession extends AuthenticatedWebSession
     /**
      * Construct the instance of pax wicket session.
      *
-     * @param application The web application.
+     * @param request     The incoming request.
      */
-    public PaxWicketSession( AuthenticatedWebApplication application )
+    public PaxWicketSession( Request request )
     {
-        super( application );
+        // Note that currently the Application constructor argument in the Session classes are
+        // not used at all. This could change in the future. 
+        super( null, request );
     }
 
     /**

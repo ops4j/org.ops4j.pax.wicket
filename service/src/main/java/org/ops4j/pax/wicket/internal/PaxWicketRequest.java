@@ -21,8 +21,8 @@ package org.ops4j.pax.wicket.internal;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.ops4j.lang.NullArgumentException;
-import wicket.protocol.http.servlet.ServletWebRequest;
 
 /**
  * @author Niclas Hedhman, Edward Yakop
@@ -32,7 +32,7 @@ final class PaxWicketRequest extends ServletWebRequest
 {
 
     private static final Log LOGGER = LogFactory.getLog( PaxWicketRequest.class );
-    
+
     private final String m_mountPoint;
 
     /**
@@ -81,36 +81,40 @@ final class PaxWicketRequest extends ServletWebRequest
         return contextPath;
     }
 
-    /**
-     * Gets the servlet context path.
-     *
-     * @return Servlet context path
-     */
-    @Override
-    public final String getContextPath()
-    {
-        HttpServletRequest request = getHttpServletRequest();
-        String servletPath = request.getServletPath();
-
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "getContextPath() : " + servletPath );
-        }
-
-        int mountPointLength = m_mountPoint.length();
-        int servletPathLength = servletPath.length();
-        if( servletPathLength != mountPointLength )
-        {
-            char aChar = servletPath.charAt( mountPointLength );
-            if( '/' != aChar )
-            {
-                String suffix = servletPath.substring( mountPointLength );
-                servletPath = m_mountPoint + '/' + suffix;
-            }
-        }
-
-        return servletPath;
-    }
+//    /**
+//     * Gets the servlet context path.
+//     *
+//     * @return Servlet context path
+//     */
+//    @Override
+//    public final String getContextPath()
+//    {
+//        HttpServletRequest request = getHttpServletRequest();
+//        String servletPath = request.getServletPath();
+//
+//        if( LOGGER.isDebugEnabled() )
+//        {
+//            LOGGER.debug( "getContextPath() : " + servletPath );
+//        }
+//
+//        int mountPointLength = m_mountPoint.length();
+//        int servletPathLength = servletPath.length();
+//        if( servletPathLength == mountPointLength )
+//        {
+//            servletPath = servletPath + "/";
+//        }
+//        else
+//        {
+//            char aChar = servletPath.charAt( mountPointLength );
+//            if( '/' != aChar )
+//            {
+//                String suffix = servletPath.substring( mountPointLength );
+//                servletPath = m_mountPoint + '/' + suffix;
+//            }
+//        }
+//
+//        return servletPath;
+//    }
 
     @Override
     public String getRelativeURL()

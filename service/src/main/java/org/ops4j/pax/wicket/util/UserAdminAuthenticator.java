@@ -27,7 +27,7 @@ import org.osgi.service.useradmin.Authorization;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.authorization.strategies.role.Roles;
 import java.util.Arrays;
 
 /**

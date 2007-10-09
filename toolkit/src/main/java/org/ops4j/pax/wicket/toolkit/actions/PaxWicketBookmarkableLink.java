@@ -17,7 +17,7 @@
  */
 package org.ops4j.pax.wicket.toolkit.actions;
 
-import wicket.PageParameters;
+import org.apache.wicket.PageParameters;
 
 public class PaxWicketBookmarkableLink
 {

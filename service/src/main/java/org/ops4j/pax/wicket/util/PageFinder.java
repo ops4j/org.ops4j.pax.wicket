@@ -25,7 +25,7 @@ import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import wicket.Page;
+import org.apache.wicket.Page;
 
 public class PageFinder
 {

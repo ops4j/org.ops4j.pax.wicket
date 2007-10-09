@@ -21,8 +21,8 @@ import java.util.HashMap;
 import org.ops4j.pax.wicket.toolkit.actions.ActionGroup;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.MarkupContainer;
-import wicket.markup.html.panel.Panel;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.panel.Panel;
 
 public class PaxWicketMenuSection extends AbstractAggregatedSource<Panel>
     implements ActionGroup

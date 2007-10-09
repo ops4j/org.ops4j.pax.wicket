@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>departmentstore</artifactId>
@@ -8,24 +9,57 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-  <artifactId>equinix-target-platform</artifactId>
+  <artifactId>equinox-target-platform</artifactId>
   <version>0.5.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>OPS4J - Pax Wicket Department Store - Equinox Target Platform for Eclipse PDE</name>
   <description>Creates directory for Equinox with bundles required to run Department Store sample.</description>
 
-<dependencies>						
-<dependency><groupId>org.eclipse</groupId><artifactId>osgi</artifactId><version>3.2.1.R32x_v20060717</version></dependency>
-<dependency><groupId>org.eclipse.osgi</groupId><artifactId>services</artifactId><version>3.1.100.v20060601</version></dependency>
-<dependency><groupId>org.eclipse.osgi</groupId><artifactId>util</artifactId><version>3.1.100.v20060601</version></dependency>
-<dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>api</artifactId><version>0.9.4</version></dependency>
-<dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>service</artifactId><version>0.9.4</version></dependency>
-<dependency><groupId>org.ops4j.pax.logging</groupId><artifactId>jcl</artifactId><version>0.9.4</version></dependency>
-<dependency><groupId>org.eclipse.equinox.servlet</groupId><artifactId>api</artifactId><version>1.0.0.v20060601</version></dependency>
-<dependency><groupId>org.ungoverned.osgi.bundle</groupId><artifactId>http</artifactId><version>1.1.2</version></dependency>
-<dependency><groupId>org.ops4j.pax.wicket</groupId><artifactId>service</artifactId><version>${pom.version}</version></dependency>
-<dependency><groupId>org.ops4j.pax.wicket</groupId><artifactId>toolkit</artifactId><version>${pom.version}</version></dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>osgi</artifactId>
+      <version>3.2.1.R32x_v20060717</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.osgi</groupId>
+      <artifactId>services</artifactId>
+      <version>3.1.100.v20060601</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.osgi</groupId>
+      <artifactId>util</artifactId>
+      <version>3.1.100.v20060601</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.logging</groupId>
+      <artifactId>pax-logging-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.equinox.servlet</groupId>
+      <artifactId>api</artifactId>
+      <version>1.0.0.v20060601</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.web.bundles</groupId>
+      <artifactId>service</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>pax-wicket-service</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>pax-wicket-toolkit</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -46,25 +80,25 @@
           </execution>
         </executions>
       </plugin>
-<!--
-     <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>package</phase>
-            <goals>
-              <goal>resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}</outputDirectory>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>      
--->
+      <!--
+           <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-resources-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>copy-resources</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>resources</goal>
+                  </goals>
+                  <configuration>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <excludeTransitive>true</excludeTransitive>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+      -->
     </plugins>
   </build>
 </project>

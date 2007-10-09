@@ -7,20 +7,20 @@
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="service" />
-    <orderEntry type="module" module-name="toolkit" />
-    <orderEntry type="library" name="osgi_R4_compendium-1.0" level="project" />
-    <orderEntry type="library" name="osgi_R4_core-1.0" level="project" />
-    <orderEntry type="library" name="wicket-1.3.0-beta3" level="project" />
-    <orderEntry type="library" name="wicket-auth-roles-1.3.0-beta3" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/osgi/osgi_R4_core/1.0/osgi_R4_core-1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="model" />
     <orderEntryProperties />
-  </component>
-  <component name="PluginUploader.UploadConfigurable">
-    <option name="_archivePath" />
   </component>
 </module>
 

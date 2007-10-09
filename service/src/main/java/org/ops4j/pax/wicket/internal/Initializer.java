@@ -17,8 +17,8 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import wicket.Application;
-import wicket.IInitializer;
+import org.apache.wicket.Application;
+import org.apache.wicket.IInitializer;
 
 /**
  * {@code Initializer} is invoked by {@link Application} to initialize wicket application.
@@ -37,8 +37,8 @@ public final class Initializer implements IInitializer
 
     public Initializer()
     {
-        m_wicketInitializer = new wicket.Initializer();
-        m_wicketExtInitializer = new wicket.extensions.Initializer();
+        m_wicketInitializer = new org.apache.wicket.Initializer();
+        m_wicketExtInitializer = new org.apache.wicket.extensions.Initializer();
     }
 
     /**

@@ -21,17 +21,17 @@ import java.util.HashMap;
 import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.IPageFactory;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.application.IClassResolver;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.IPageFactory;
-import wicket.Page;
-import wicket.PageParameters;
-import wicket.WicketRuntimeException;
-import wicket.application.IClassResolver;
 
 public final class PaxWicketPageFactory
     implements IPageFactory, IClassResolver
@@ -81,7 +81,7 @@ public final class PaxWicketPageFactory
      *
      * @return The page
      *
-     * @throws wicket.WicketRuntimeException Thrown if the page cannot be constructed
+     * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final Page newPage( Class pageClass )
         throws IllegalArgumentException
@@ -101,7 +101,7 @@ public final class PaxWicketPageFactory
      *
      * @return The new page
      *
-     * @throws wicket.WicketRuntimeException Thrown if the page cannot be constructed
+     * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final Page newPage( Class pageClass, PageParameters parameters )
         throws IllegalArgumentException

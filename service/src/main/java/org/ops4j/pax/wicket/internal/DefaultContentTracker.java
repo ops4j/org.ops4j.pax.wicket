@@ -225,7 +225,7 @@ public final class DefaultContentTracker extends ServiceTracker
             if( LOGGER.isInfoEnabled() && wasContentRemoved )
             {
                 LOGGER.info( "Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
-                               + "]"
+                             + "]"
                 );
             }
         }

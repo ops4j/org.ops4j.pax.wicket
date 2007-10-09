@@ -20,11 +20,11 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.Collections;
 import java.util.List;
-import wicket.Component;
-import wicket.markup.html.basic.Label;
-import wicket.markup.html.list.ListItem;
-import wicket.markup.html.list.ListView;
-import wicket.markup.html.panel.Panel;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * {@code FloorPanel}

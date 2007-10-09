@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import org.ops4j.pax.wicket.api.PageFactory;
 
-import wicket.PageParameters;
+import org.apache.wicket.PageParameters;
 
 public class AboutPageFactory
     implements PageFactory<AboutPage>

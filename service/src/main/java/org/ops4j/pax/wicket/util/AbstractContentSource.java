@@ -27,10 +27,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
-import wicket.Component;
-import wicket.MarkupContainer;
-import wicket.Session;
-import wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.role.Roles;
 
 public abstract class AbstractContentSource<E extends Component>
     implements ContentSource<E>, ManagedService

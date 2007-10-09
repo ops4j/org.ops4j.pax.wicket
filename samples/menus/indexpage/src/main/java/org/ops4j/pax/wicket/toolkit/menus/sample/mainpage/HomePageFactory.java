@@ -22,8 +22,8 @@ import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
 import org.ops4j.pax.wicket.toolkit.menus.sample.application.Application;
 import org.osgi.framework.BundleContext;
-import wicket.Page;
-import wicket.PageParameters;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 
 public class HomePageFactory extends AbstractPageFactory
 {

@@ -19,6 +19,7 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
@@ -66,7 +67,12 @@ public class GenericContext
         {
             LOGGER.debug( "getResource( " + resourcename + " )" );
         }
-
+        // The below hack is to compensate for a strange hack in Wicket.AbstractRequestCycleProcessor#resolveExternalResource
+        // See comment in that method's source code.
+        while( resourcename.startsWith( "//" ) )
+        {
+            resourcename = resourcename.substring( 1 );
+        }
         String resource;
         if( resourcename.startsWith( m_rootUrl ) )
         {
@@ -78,7 +84,8 @@ public class GenericContext
             resource = resourcename;
         }
 
-        return m_applicationBundle.getResource( resource );
+        URL result = m_applicationBundle.getResource( resource );
+        return result;
     }
 
     public String getMimeType( String resourcename )

@@ -22,32 +22,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
 import javax.servlet.http.HttpServletRequest;
+import org.apache.wicket.Page;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.settings.IDebugSettings;
+import org.apache.wicket.settings.IExceptionSettings;
+import org.apache.wicket.settings.IFrameworkSettings;
+import org.apache.wicket.settings.IMarkupSettings;
+import org.apache.wicket.settings.IPageSettings;
+import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.IResourceSettings;
+import org.apache.wicket.settings.ISecuritySettings;
+import org.apache.wicket.settings.ISessionSettings;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-
-import wicket.Page;
-import wicket.authentication.AuthenticatedWebApplication;
-import wicket.authentication.AuthenticatedWebSession;
-import wicket.authorization.strategies.role.Roles;
-import wicket.markup.html.WebPage;
-import wicket.protocol.http.WebRequest;
-import wicket.settings.IAjaxSettings;
-import wicket.settings.IApplicationSettings;
-import wicket.settings.IDebugSettings;
-import wicket.settings.IExceptionSettings;
-import wicket.settings.IFrameworkSettings;
-import wicket.settings.IMarkupSettings;
-import wicket.settings.IPageSettings;
-import wicket.settings.IRequestCycleSettings;
-import wicket.settings.IResourceSettings;
-import wicket.settings.ISecuritySettings;
-import wicket.settings.ISessionSettings;
 
 public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
 {
@@ -69,16 +66,16 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private HashMap<AuthenticatedToken, Roles> m_roles;
     private final List<ServiceRegistration> m_wicketSettings;
 
-    public PaxAuthenticatedWicketApplication( 
-            BundleContext bundleContext,
-            String applicationName,
-            String mountPoint, 
-            PageMounter pageMounter,
-            Class<? extends Page> homepageClass,
-            PaxWicketPageFactory factory,
-            DelegatingClassResolver delegatingClassResolver,
-            PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
-            boolean deploymentMode )
+    public PaxAuthenticatedWicketApplication(
+        BundleContext bundleContext,
+        String applicationName,
+        String mountPoint,
+        PageMounter pageMounter,
+        Class<? extends Page> homepageClass,
+        PaxWicketPageFactory factory,
+        DelegatingClassResolver delegatingClassResolver,
+        PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
+        boolean deploymentMode )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -135,7 +132,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         sessionSettings.setPageFactory( m_factory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
-        addWicketService( IAjaxSettings.class, getAjaxSettings() );
+//        addWicketService( IAjaxSettings.class, getAjaxSettings() );
         addWicketService( IDebugSettings.class, getDebugSettings() );
         addWicketService( IExceptionSettings.class, getExceptionSettings() );
         addWicketService( IFrameworkSettings.class, getFrameworkSettings() );
@@ -145,20 +142,20 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        if( m_deploymentMode )
-        {
-            configure( DEPLOYMENT );
-        }
-        else
-        {
-            configure( DEVELOPMENT );
-        }
+//        if( m_deploymentMode )
+//        {
+//            configure( DEPLOYMENT );
+//        }
+//        else
+//        {
+//            configure( DEVELOPMENT );
+//        }
 
         if( null != m_pageMounter )
         {
             for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
             {
-                mount( bookmark.getPath(), bookmark.getCodingStrategy() );
+                mount( bookmark.getCodingStrategy() );
             }
         }
     }
@@ -223,15 +220,17 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         return m_roles.get( token );
     }
 
-    private <T>void addWicketService( final Class<T> service, final T implementation )
+    private <T> void addWicketService( final Class<T> service, final T implementation )
     {
         Properties props = new Properties();
         props.setProperty( "applicationId", m_applicationName );
 
         m_wicketSettings.add(
-                m_bundleContext.registerService( 
-                        service.getName(), 
-                        implementation, 
-                        props ) );
+            m_bundleContext.registerService(
+                service.getName(),
+                implementation,
+                props
+            )
+        );
     }
 }

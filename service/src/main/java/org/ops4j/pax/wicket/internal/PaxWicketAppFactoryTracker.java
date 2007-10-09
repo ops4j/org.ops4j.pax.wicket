@@ -21,6 +21,9 @@ package org.ops4j.pax.wicket.internal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
@@ -28,9 +31,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import wicket.protocol.http.WicketServlet;
 
 final class PaxWicketAppFactoryTracker extends ServiceTracker
 {
@@ -63,7 +63,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
             LOGGER.debug( message );
         }
 
-        WicketServlet servlet = new Servlet( factory );
+        WicketServlet servlet = new Servlet( factory, context.getDataFile( "tmp-dir" ) );
         String mountPoint = factory.getMountPoint();
         addServlet( mountPoint, servlet, serviceReference );
 
@@ -121,7 +121,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
         NullArgumentException.validateNotNull( servlet, "servlet" );
         NullArgumentException.validateNotNull( appFactoryReference, "appFactoryReference" );
-        
+
         Bundle bundle = appFactoryReference.getBundle();
         try
         {

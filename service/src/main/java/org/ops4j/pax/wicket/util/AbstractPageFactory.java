@@ -28,8 +28,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import wicket.Page;
-import wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.Page;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
 
 public abstract class AbstractPageFactory<T extends Page>
     implements PageFactory<T>, ManagedService

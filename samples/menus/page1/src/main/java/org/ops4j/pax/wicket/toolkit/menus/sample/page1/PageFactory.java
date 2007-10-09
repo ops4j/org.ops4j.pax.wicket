@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.toolkit.menus.sample.page1;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
-import wicket.PageParameters;
+import org.apache.wicket.PageParameters;
 
 public class PageFactory extends AbstractPageFactory
 {
@@ -55,7 +55,7 @@ public class PageFactory extends AbstractPageFactory
      *
      * @since 1.0.0
      */
-    public wicket.Page createPage( PageParameters params )
+    public Page createPage( PageParameters params )
     {
         return new Page( m_aggregator );
     }

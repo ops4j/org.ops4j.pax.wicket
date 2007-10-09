@@ -18,8 +18,8 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import wicket.Component;
-import wicket.MarkupContainer;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 
 /**
  * This is the model interface of ContentSource. ContentSource is categorized as the model of a Wicket component

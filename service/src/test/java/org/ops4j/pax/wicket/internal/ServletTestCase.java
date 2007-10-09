@@ -18,7 +18,6 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.jmock.integration.junit3.MockObjectTestCase;
-import wicket.protocol.http.IWebApplicationFactory;
 
 public final class ServletTestCase extends MockObjectTestCase
 {
@@ -28,7 +27,7 @@ public final class ServletTestCase extends MockObjectTestCase
         String msg = "Construct with [null] argument must throw [IllegalArgumentException].";
         try
         {
-            new Servlet( null );
+            new Servlet( null, null );
             fail( msg );
         } catch( IllegalArgumentException e )
         {
@@ -39,13 +38,13 @@ public final class ServletTestCase extends MockObjectTestCase
         }
     }
 
-    public final void testGetApplicationFactory()
-    {
-        IWebApplicationFactory expected = mock( IWebApplicationFactory.class );
-        Servlet servlet = new Servlet( expected );
-
-        IWebApplicationFactory appFac = servlet.getApplicationFactory();
-        assertEquals( expected, appFac );
-    }
+//    public final void testGetApplicationFactory()
+//    {
+//        IWebApplicationFactory expected = mock( IWebApplicationFactory.class );
+//        Servlet servlet = new Servlet( expected );
+//
+//        IWebApplicationFactory appFac = servlet.getApplicationFactory();
+//        assertEquals( expected, appFac );
+//    }
 
 }

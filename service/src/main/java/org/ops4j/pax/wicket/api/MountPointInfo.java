@@ -1,6 +1,6 @@
 package org.ops4j.pax.wicket.api;
 
-import wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
 public interface MountPointInfo
 {

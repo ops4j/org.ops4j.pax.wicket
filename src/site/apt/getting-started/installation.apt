@@ -88,9 +88,8 @@ id	State       Bundle
 1	ACTIVE      org.eclipse.equinox.servlet.api_1.0.0.v20060601
 2	ACTIVE      org.eclipse.osgi.services_3.1.100.v20060601
 3	ACTIVE      org.eclipse.osgi.util_3.1.100.v20060601
-4	ACTIVE      org.ops4j.pax.logging.api_0.9.4
-5	ACTIVE      org.ops4j.pax.logging.jcl_0.9.4
-6	ACTIVE      org.ops4j.pax.logging.service_0.9.4
+4	ACTIVE      org.ops4j.pax.logging.pax-logging-api_0.9.6
+6	ACTIVE      org.ops4j.pax.logging.pax-logging-service_0.9.6
 7	RESOLVED    org.ops4j.pax.wicket.samples.departmentstore.departmentstore.service-alternative_0.5.2.SNAPSHOT
 8	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.departmentstore.service-basic_0.5.2.SNAPSHOT
 9	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.model_0.5.2.SNAPSHOT
@@ -98,9 +97,8 @@ id	State       Bundle
 11	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.application_0.5.2.SNAPSHOT
 12	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.floor_0.5.2.SNAPSHOT
 13	ACTIVE      org.ops4j.pax.wicket.samples.departmentstore.view.franchisee_0.5.2.SNAPSHOT
-14	ACTIVE      org.ops4j.pax.wicket.service_0.5.2.SNAPSHOT
-15	ACTIVE      org.ops4j.pax.wicket.toolkit_0.5.2.SNAPSHOT
-16	ACTIVE      org.ungoverned.osgi.bundle.http_1.1.2
+14	ACTIVE      org.ops4j.pax.wicket.pax-wicket-service_0.5.2.SNAPSHOT
+15	ACTIVE      org.ops4j.pax.web.pax-web-service_0.2.0
 +----------------------
     
  *   Open in your web browser {{http://localhost:8080/deptStore}}

@@ -27,9 +27,9 @@ import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
-import wicket.Component;
-import wicket.MarkupContainer;
-import wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.

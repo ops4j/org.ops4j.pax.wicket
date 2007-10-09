@@ -32,12 +32,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import wicket.Page;
-import wicket.application.IComponentInstantiationListener;
-import wicket.markup.html.WebPage;
-import wicket.protocol.http.IWebApplicationFactory;
-import wicket.protocol.http.WebApplication;
-import wicket.protocol.http.WicketServlet;
+import org.apache.wicket.Page;
+import org.apache.wicket.application.IComponentInstantiationListener;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WicketServlet;
+import org.apache.wicket.protocol.http.WicketFilter;
 
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
@@ -346,6 +347,42 @@ public final class PaxWicketApplicationFactory
     }
 
     public final WebApplication createApplication( WicketServlet servlet )
+    {
+        WebApplication paxWicketApplication;
+
+        synchronized( this )
+        {
+            boolean deploymentMode = isDeploymentMode();
+            String mountPoint = getMountPoint();
+            if( m_authenticator != null && m_signinPage != null )
+            {
+                paxWicketApplication = new PaxAuthenticatedWicketApplication( m_bundleContext,
+                                                                              m_applicationName,
+                                                                              mountPoint,
+                                                                              m_pageMounter,
+                                                                              m_homepageClass,
+                                                                              m_pageFactory, m_delegatingClassResolver,
+                                                                              m_authenticator, m_signinPage,
+                                                                              deploymentMode
+                );
+            }
+            else
+            {
+                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, 
+                                                                 mountPoint,
+                                                                 m_pageMounter,
+                                                                 m_homepageClass, m_pageFactory,
+                                                                 m_delegatingClassResolver, deploymentMode
+                );
+            }
+        }
+        for(IComponentInstantiationListener listener:componentInstantiationListeners){
+            paxWicketApplication.addComponentInstantiationListener(listener);
+        }
+        return paxWicketApplication;
+    }
+
+    public final WebApplication createApplication( WicketFilter filter )
     {
         WebApplication paxWicketApplication;
 

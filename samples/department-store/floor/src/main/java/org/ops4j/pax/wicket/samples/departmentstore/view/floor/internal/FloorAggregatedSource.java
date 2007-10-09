@@ -26,10 +26,10 @@ import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
 import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
 import org.osgi.framework.BundleContext;
-import wicket.extensions.markup.html.tabs.AbstractTab;
-import wicket.markup.html.panel.Panel;
-import wicket.model.IModel;
-import wicket.model.Model;
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     implements OverviewTabContent
@@ -58,7 +58,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     protected FloorPanel createComponent( String wicketId )
     {
         List<String> sources = getWiredSourceIds( FloorPanel.WICKET_ID_FRANCHISEE, null );
-        String floorName = (String) m_floor.getObject( null );
+        String floorName = (String) m_floor.getObject();
         return new FloorPanel( wicketId, sources, floorName );
     }
 
@@ -69,7 +69,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
 
     public final String getFloorId()
     {
-        return (String) m_floor.getObject( null );
+        return (String) m_floor.getObject();
     }
 
     public final String getTabId()
@@ -112,7 +112,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         {
             IModel titleModel = getTitle();
 
-            String floorName = (String) titleModel.getObject( null );
+            String floorName = (String) titleModel.getObject();
 
             FloorAggregatedSource source = m_instances.get( floorName );
 

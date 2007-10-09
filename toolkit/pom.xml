@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket</groupId>
-  <artifactId>toolkit</artifactId>
+  <artifactId>pax-wicket-toolkit</artifactId>
   <version>0.5.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
@@ -33,7 +33,7 @@
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>service</artifactId>
+      <artifactId>pax-wicket-service</artifactId>
       <version>0.5.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
@@ -50,15 +50,15 @@
       <artifactId>osgi_R4_compendium</artifactId>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket</artifactId>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-auth-roles</artifactId>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
     </dependency>
   </dependencies>

@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-  <artifactId>floor</artifactId>
+  <artifactId>departmentstore-view-floor</artifactId>
   <version>0.5.2-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
@@ -36,7 +36,8 @@
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>service</artifactId>
+      <artifactId>pax-wicket-service</artifactId>
+      <version>0.5.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -51,23 +52,23 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-      <artifactId>model</artifactId>
+      <artifactId>departmentstore-model</artifactId>
       <version>0.5.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
-      <artifactId>application</artifactId>
+      <artifactId>departmentstore-view-application</artifactId>
       <version>0.5.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-auth-roles</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -76,7 +77,7 @@
       <artifactId>ops4j-base</artifactId>
     </dependency>
     <dependency>
-      <groupId>wicket</groupId>
+      <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-extensions</artifactId>
       <scope>provided</scope>
     </dependency>

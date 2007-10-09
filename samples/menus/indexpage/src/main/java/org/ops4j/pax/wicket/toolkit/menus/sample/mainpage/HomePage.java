@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.ops4j.pax.wicket.toolkit.menus.PaxWicketMenu;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
-import wicket.Component;
-import wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import wicket.markup.html.WebPage;
-import wicket.markup.html.list.ListItem;
-import wicket.markup.html.list.ListView;
+import org.apache.wicket.Component;
+import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 
 @AuthorizeInstantiation( "user" )
 public class HomePage extends WebPage
@@ -37,8 +37,9 @@ public class HomePage extends WebPage
      * @param container
      * @param globalMenu
      * @param localMenu
+     * @param container The Page Container to use to create the components.
      *
-     * @see wicket.Page#Page(wicket.model.IModel) @param container The Page Container to use to create the components.
+     * @see org.apache.wicket.Page#Page(org.apache.wicket.model.IModel) 
      */
     public HomePage( RootContentAggregator container, PaxWicketMenu globalMenu, PaxWicketMenu localMenu )
     {

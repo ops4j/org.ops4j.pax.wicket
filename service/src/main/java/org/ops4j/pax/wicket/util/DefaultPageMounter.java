@@ -7,9 +7,9 @@ import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 
-import wicket.Page;
-import wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
-import wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.Page;
+import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
 public class DefaultPageMounter
         implements PageMounter

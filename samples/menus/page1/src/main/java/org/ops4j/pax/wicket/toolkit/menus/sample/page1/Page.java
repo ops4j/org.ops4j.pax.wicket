@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
-import wicket.Component;
-import wicket.markup.html.WebPage;
-import wicket.markup.html.list.ListItem;
-import wicket.markup.html.list.ListView;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 
 public class Page extends WebPage
 {

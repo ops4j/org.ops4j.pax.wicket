@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.ServletException;
+import org.apache.wicket.protocol.http.WicketServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -30,7 +31,6 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
-import wicket.protocol.http.WicketServlet;
 
 final class HttpTracker extends ServiceTracker
 {
