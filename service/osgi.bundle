@@ -10,12 +10,12 @@ Import-Package:\
  junit.framework; resolution:=optional, \
  org.apache.portals.*;resolution:=optional, \
  javax.portlet.*;resolution:=optional, \
- org.slf4j.*; version="[1.0.0, 2.0.0)";provider=paxlogging, \
+ org.slf4j.*; version="[1.0.0,2.0.0)";provider=paxlogging, \
  javax.servlet, \
  javax.servlet.http, \
  javax.*, \
- org.apache.wicket.*;version="[1.3.0, 2.0.0)", \
- org.osgi.*;version="[1.0.0, 2.0.0)", \
+ org.apache.wicket.*;version="[1.3.0,2.0.0)", \
+ org.osgi.*;version="[1.0.0,2.0.0)", \
  org.xml.sax, \
  org.w3c.dom, \
  !sun.*
