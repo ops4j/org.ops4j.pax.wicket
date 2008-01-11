@@ -21,8 +21,6 @@ package org.ops4j.pax.wicket.internal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
@@ -31,11 +29,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class PaxWicketAppFactoryTracker extends ServiceTracker
 {
 
-    private static final Log LOGGER = LogFactory.getLog( PaxWicketAppFactoryTracker.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketAppFactoryTracker.class );
     private static final String SERVICE_NAME = PaxWicketApplicationFactory.class.getName();
 
     private final HttpTracker m_httpTracker;

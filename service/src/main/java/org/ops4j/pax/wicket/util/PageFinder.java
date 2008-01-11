@@ -17,20 +17,20 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Page;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.apache.wicket.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PageFinder
 {
 
-    private static final Log LOGGER = LogFactory.getLog( PageFinder.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( PageFinder.class );
 
     /**
      * Returns the page content from the specified {@code context} for the specified {@code applicationName} and

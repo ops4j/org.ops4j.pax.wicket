@@ -19,10 +19,10 @@
 package org.ops4j.pax.wicket.internal;
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.ops4j.lang.NullArgumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Niclas Hedhman, Edward Yakop
@@ -31,7 +31,7 @@ import org.ops4j.lang.NullArgumentException;
 final class PaxWicketRequest extends ServletWebRequest
 {
 
-    private static final Log LOGGER = LogFactory.getLog( PaxWicketRequest.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketRequest.class );
 
     private final String m_mountPoint;
 

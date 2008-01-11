@@ -21,8 +21,6 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentSource;
 import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
@@ -31,6 +29,8 @@ import static org.ops4j.pax.wicket.internal.TrackingUtil.createContentFilter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * {@code DefaultContentTracker} tracks {@link ContentSource} services.
@@ -41,7 +41,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public final class DefaultContentTracker extends ServiceTracker
 {
 
-    private static final Log LOGGER = LogFactory.getLog( DefaultContentTracker.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( DefaultContentTracker.class );
 
     private final BundleContext m_context;
     private final ContentTrackingCallback m_callback;

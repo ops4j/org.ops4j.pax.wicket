@@ -17,8 +17,8 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Arrays;
+import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
@@ -27,8 +27,8 @@ import org.osgi.service.useradmin.Authorization;
 import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 import org.osgi.util.tracker.ServiceTracker;
-import org.apache.wicket.authorization.strategies.role.Roles;
-import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a PaxWicketAuthenticator that uses the User Admin Service as specified in the OSGi R4 specification.
@@ -61,7 +61,7 @@ public class UserAdminAuthenticator
     implements PaxWicketAuthenticator
 {
 
-    private static final Log LOGGER = LogFactory.getLog( UserAdminAuthenticator.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( UserAdminAuthenticator.class );
 
     private UserAdminTracker m_serviceTracker;
     private BundleContext m_bundleContext;

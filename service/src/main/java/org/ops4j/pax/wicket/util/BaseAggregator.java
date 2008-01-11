@@ -23,8 +23,8 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -36,14 +36,14 @@ import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class BaseAggregator
     implements ContentAggregator, ManagedService, ContentTrackingCallback
 {
 
-    protected final Log LOGGER = LogFactory.getLog( getClass() );
+    protected final Logger LOGGER = LoggerFactory.getLogger( getClass() );
 
     private Dictionary<String, Object> m_properties;
     private BundleContext m_bundleContext;
@@ -150,7 +150,7 @@ abstract class BaseAggregator
             {
                 throw new IllegalStateException( "RootContentAggregator [" + this + "] has not been registered." );
             }
-            
+
             m_contentTracker.close();
             onDispose();
             m_contentTracker = null;

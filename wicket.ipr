@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4" relativePaths="false">
+<project relativePaths="false" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
   </component>
@@ -44,7 +44,6 @@
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
-  <component name="ClearCase" />
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
@@ -150,6 +149,15 @@
         <option name="VARIABLE_ANNOTATION_WRAP" value="5" />
         <option name="SPACE_WITHIN_ANNOTATION_PARENTHESES" value="true" />
         <option name="ENUM_CONSTANTS_WRAP" value="5" />
+        <ADDITIONAL_INDENT_OPTIONS fileType="js">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
       </value>
     </option>
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
@@ -173,11 +181,12 @@
       <entry name="?*.tld" />
     </wildcardResourcePatterns>
   </component>
-  <component name="DataSourceManagerImpl" />
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
-  <component name="DependencyValidationManager" />
+  <component name="DependencyValidationManager">
+    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
+  </component>
   <component name="EclipseCompilerSettings">
     <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="true" />
@@ -193,14 +202,13 @@
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component name="EntryPointsManager">
-    <entry_points />
+    <entry_points version="2.0" />
   </component>
   <component name="ExportToHTMLSettings">
     <option name="PRINT_LINE_NUMBERS" value="false" />
     <option name="OPEN_IN_BROWSER" value="false" />
     <option name="OUTPUT_DIRECTORY" />
   </component>
-  <component name="GUI Designer component loader factory" />
   <component name="IdProvider" IDEtalkID="CD7B31CC5886B9DEFEBC64AEEE74E1DF" />
   <component name="InspectionProjectProfileManager">
     <option name="PROJECT_PROFILE" value="Project Default" />
@@ -210,24 +218,6 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
-        <used_levels>
-          <error>
-            <option name="myName" value="ERROR" />
-            <option name="myVal" value="400" />
-          </error>
-          <warning>
-            <option name="myName" value="WARNING" />
-            <option name="myVal" value="300" />
-          </warning>
-          <information>
-            <option name="myName" value="INFO" />
-            <option name="myVal" value="200" />
-          </information>
-          <server>
-            <option name="myName" value="SERVER PROBLEM" />
-            <option name="myVal" value="100" />
-          </server>
-        </used_levels>
         <inspection_tool class="StringBufferReplaceableByStringBuilder" level="WARNING" enabled="true" />
         <inspection_tool class="JavaDoc" level="WARNING" enabled="true">
           <option name="TOP_LEVEL_CLASS_OPTIONS">
@@ -260,6 +250,7 @@
         </inspection_tool>
       </profile>
     </profiles>
+    <list size="0" />
   </component>
   <component name="IvyProjectSettings">
     <dependencies />
@@ -462,6 +453,7 @@
       </item>
     </group>
   </component>
+  <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/about.iml" group="samples/department-store/view" />
@@ -483,8 +475,6 @@
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />
-  <component name="ProjectRunConfigurationManager" />
-  <component name="ProjectTitlePlugin.ProjectComponent" />
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
       <value>
@@ -499,12 +489,10 @@
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
-  <component name="StarteamVcsAdapter" />
-  <component name="SvnBranchConfigurationManager" />
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
-  <component name="VssVcs" />
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="com.intellij.jsf.UserDefinedFacesConfigs">
     <option name="USER_DEFINED_CONFIGS">
       <value>
@@ -519,11 +507,11 @@
   <component name="libraryTable">
     <library name="wicket-1.3.0-beta3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.0-beta3/wicket-1.3.0-beta3.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.0/wicket-1.3.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.0-beta3/wicket-1.3.0-beta3-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.0/wicket-1.3.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="servlet-api-2.3">
@@ -538,9 +526,7 @@
         <root url="jar://$M2_REPO$/javax/activation/activation/1.1/activation-1.1.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES>
-        <root url="jar://$M2_REPO$/javax/activation/activation/1.1/activation-1.1-sources.jar!/" />
-      </SOURCES>
+      <SOURCES />
     </library>
     <library name="osgi_R4_core-1.0">
       <CLASSES>
@@ -567,20 +553,20 @@
     </library>
     <library name="wicket-extensions-1.3.0-beta3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.0-beta3/wicket-extensions-1.3.0-beta3.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.0/wicket-extensions-1.3.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.0-beta3/wicket-extensions-1.3.0-beta3-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.0/wicket-extensions-1.3.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="wicket-auth-roles-1.3.0-beta3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.0-beta3/wicket-auth-roles-1.3.0-beta3.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.0/wicket-auth-roles-1.3.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.0-beta3/wicket-auth-roles-1.3.0-beta3-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.0/wicket-auth-roles-1.3.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="junit-3.8.1">
@@ -600,18 +586,15 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="pax-logging-api-0.9.6">
+    <library name="pax-logging-api-1.0-RC2">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/0.9.6/pax-logging-api-0.9.6.jar!/" />
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0-RC2/pax-logging-api-1.0-RC2.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0-RC2/pax-logging-api-1.0-RC2-sources.jar!/" />
+      </SOURCES>
     </library>
-  </component>
-  <component name="uidesigner-configuration">
-    <option name="INSTRUMENT_CLASSES" value="true" />
-    <option name="COPY_FORMS_RUNTIME_TO_OUTPUT" value="true" />
-    <option name="DEFAULT_LAYOUT_MANAGER" value="GridLayoutManager" />
   </component>
   <UsedPathMacros>
     <macro name="M2_REPO" />

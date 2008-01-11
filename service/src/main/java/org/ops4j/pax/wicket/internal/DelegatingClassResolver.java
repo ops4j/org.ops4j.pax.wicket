@@ -19,8 +19,6 @@ package org.ops4j.pax.wicket.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.lang.NullArgumentException;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
@@ -30,12 +28,14 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class DelegatingClassResolver
     implements IClassResolver
 {
 
-    private static final Log LOGGER = LogFactory.getLog( DelegatingClassResolver.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( DelegatingClassResolver.class );
 
     private final BundleContext m_context;
     private final String m_applicationName;

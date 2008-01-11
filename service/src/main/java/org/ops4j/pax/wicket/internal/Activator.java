@@ -18,22 +18,22 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class Activator
+public final class Activator
     implements BundleActivator
 {
 
-    private static final Log LOGGER = LogFactory.getLog( Activator.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( Activator.class );
 
     private HttpTracker m_httpTracker;
     private ServiceTracker m_appFactoryTracker;
 
-    public void start( BundleContext bundleContext )
+    public final void start( BundleContext bundleContext )
         throws Exception
     {
         LOGGER.debug( "Initializing the servlet." );
@@ -45,7 +45,7 @@ public class Activator
         m_appFactoryTracker.open();
     }
 
-    public void stop( BundleContext bundleContext )
+    public final void stop( BundleContext bundleContext )
         throws Exception
     {
         m_httpTracker.close();

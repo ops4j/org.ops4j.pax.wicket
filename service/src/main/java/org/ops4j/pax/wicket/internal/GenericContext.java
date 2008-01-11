@@ -19,21 +19,20 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GenericContext
     implements HttpContext
 {
 
-    private static final Log LOGGER = LogFactory.getLog( GenericContext.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( GenericContext.class );
 
     private String m_rootUrl;
     private MimetypesFileTypeMap m_typeMap;
