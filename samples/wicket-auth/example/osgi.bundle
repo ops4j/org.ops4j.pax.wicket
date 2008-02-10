@@ -2,33 +2,8 @@ Bundle-Activator: org.ops4j.pax.wicket.samples.wicketauth.example.internal.Activ
 
 Private-Package:  org.ops4j.pax.wicket.samples.wicketauth.example.internal
 
-Import-Package:   org.ops4j.pax.wicket.samples.wicketauth.example, \
-                  org.ops4j.pax.wicket.api;version="[0.5.0, 1.0.0]", \
-                  org.ops4j.pax.wicket.util;version="[0.5.0, 1.0.0]", \
-                  org.osgi.framework;version="[1.0.0, 2.0.0)", \
-                  org.osgi.service.cm;version="1.2.0", \
-                  org.osgi.service.useradmin;version="1.1.0", \
-                  org.osgi.util.tracker;version="[1.0.0, 2.0.0)", \
-                  wicket;version="1.2.6", \
-                  wicket.ajax;version="1.2.6", \
-                  wicket.ajax.markup.html;version="1.2.6", \
-                  wicket.authentication.pages;version="1.2.6", \
-                  wicket.authorization;version="1.2.6", \
-                  wicket.authorization.strategies.role;version="1.2.6", \
-                  wicket.authorization.strategies.role.annotations;version="1.2.6", \
-                  wicket.authorization.strategies.role.metadata;version="1.2.6", \
-                  wicket.extensions.ajax.markup.html.autocomplete;version="1.2.6", \
-                  wicket.extensions.markup.html.repeater.data;version="1.2.6", \
-                  wicket.extensions.markup.html.repeater.refreshing;version="1.2.6", \
-                  wicket.markup;version="1.2.6", \
-                  wicket.markup.html;version="1.2.6", \
-                  wicket.markup.html.basic;version="1.2.6", \
-                  wicket.markup.html.form;version="1.2.6", \
-                  wicket.markup.html.link;version="1.2.6", \
-                  wicket.markup.html.list;version="1.2.6", \
-                  wicket.markup.html.panel;version="1.2.6", \
-                  wicket.model;version="1.2.6", \
-                  wicket.protocol.http;version="1.2.6", \
-                  wicket.util.value;version="1.2.6"
+Import-Package:   org.ops4j.pax.wicket.*;version="[0.5.0,1.1.0)", \
+                  org.osgi.*;version="[1.0.0,2.0.0)", \
+                  org.apache.wicket.*;version="[1.3.0,1.4.0)"
 
-Export-Package:   org.ops4j.pax.wicket.samples.wicketauth.example 
+Export-Package:   org.ops4j.pax.wicket.samples.wicketauth.example;version=${pom.version}

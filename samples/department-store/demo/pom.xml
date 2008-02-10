@@ -16,12 +16,12 @@
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-api</artifactId>
-      <version>0.9.6</version>
+      <version>1.0-RC2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-service</artifactId>
-      <version>0.9.6</version>
+      <version>1.0-RC2</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>org.ops4j.pax.web.bundles</groupId>
       <artifactId>service</artifactId>
-      <version>0.2.0</version>
+      <version>0.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>

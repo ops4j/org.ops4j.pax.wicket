@@ -29,7 +29,8 @@ import org.apache.wicket.IInitializer;
  * @author Edward Yakop
  * @since 0.5.0
  */
-public final class Initializer implements IInitializer
+public final class Initializer
+    implements IInitializer
 {
 
     private final IInitializer m_wicketInitializer;
@@ -42,9 +43,13 @@ public final class Initializer implements IInitializer
     }
 
     /**
+     * Initialize the application.
+     *
      * @param application The application loading the component
+     *
+     * @since 0.5.0
      */
-    public void init( Application application )
+    public final void init( Application application )
     {
         m_wicketInitializer.init( application );
         m_wicketExtInitializer.init( application );

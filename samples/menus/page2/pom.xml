@@ -12,18 +12,20 @@
   <packaging>bundle</packaging>
   <name>OPS4J - Pax Wicket Samples - Menu Page 2</name>
   <version>0.5.2-SNAPSHOT</version>
+
   <build>
     <plugins>
       <plugin>
-        <groupId>org.ops4j.pax.maven</groupId>
+        <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.ops4j.pax.construct</groupId>
+        <groupId>org.ops4j</groupId>
         <artifactId>maven-pax-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
