@@ -19,6 +19,7 @@ package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.HashSet;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
@@ -41,7 +42,7 @@ public final class PaxWicketPageFactory
 
     private final BundleContext m_bundleContext;
     private final String m_applicationName;
-    private final HashMap<String, Class> m_pageClasses;
+    private final HashSet<Class> m_pageClasses;
     private final HashMap<Class, PageFactory> m_contents;
 
     private ServiceTracker m_pageTracker;
@@ -50,13 +51,13 @@ public final class PaxWicketPageFactory
     public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
     {
         m_contents = new HashMap<Class, PageFactory>();
-        m_pageClasses = new HashMap<String, Class>();
+        m_pageClasses = new HashSet<Class>();
         m_bundleContext = appBundleContext;
         m_applicationName = applicationName;
     }
 
     public final void initialize()
-    {
+    {                                                   
         Properties config = new Properties();
         config.setProperty( ContentSource.APPLICATION_NAME, m_applicationName );
         m_serviceRegistration = m_bundleContext.registerService( IClassResolver.class.getName(), this, config );
@@ -147,8 +148,7 @@ public final class PaxWicketPageFactory
         synchronized( this )
         {
             m_contents.put( pageClass, pageSource );
-            String tPageClassName = pageClass.getName();
-            m_pageClasses.put( tPageClassName, pageClass );
+            m_pageClasses.add( pageClass );
         }
     }
 
@@ -160,8 +160,7 @@ public final class PaxWicketPageFactory
         synchronized( this )
         {
             m_contents.remove( pageClass );
-            String tPageClassName = pageClass.getName();
-            m_pageClasses.remove( tPageClassName );
+            m_pageClasses.remove( pageClass );
         }
     }
 
@@ -174,25 +173,30 @@ public final class PaxWicketPageFactory
      */
     public final Class resolveClass( String classname )
     {
-        Class resolved;
         synchronized( this )
         {
-            resolved = m_pageClasses.get( classname );
-        }
-
-        if( resolved == null )
-        {
+            for( Class pageClass : m_pageClasses )
+            {
+                ClassLoader cl = pageClass.getClassLoader();
+                try
+                {
+                    return cl.loadClass( classname );
+                } catch( ClassNotFoundException e )
+                {
+                    // ignore
+                }
+            }
             try
             {
                 Class<? extends PaxWicketPageFactory> thisClass = getClass();
                 ClassLoader classLoader = thisClass.getClassLoader();
-                resolved = classLoader.loadClass( classname );
+                return classLoader.loadClass( classname );
             }
             catch( ClassNotFoundException e )
             {
-                return null;
+                // ignore
             }
         }
-        return resolved;
+        return null;
     }
 }

@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.ops4j.pax</groupId>
-    <artifactId>project</artifactId>
-    <version>1.10-SNAPSHOT</version>
+    <artifactId>master</artifactId>
+    <version>1.10</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -29,6 +29,22 @@
   <properties>
     <wicket.dependency.version>1.3.1</wicket.dependency.version>
   </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j.pax.maven</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+            <instructions>
+              <Bundle-DocURL>${pom.url}</Bundle-DocURL>
+              <_include>-osgi.bundle</_include>
+            </instructions>
+          </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <reporting>
     <plugins>
@@ -189,33 +205,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <build>
-      <!--
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>embed-jar</id>
-              <phase>generate-resources</phase>
-              <goals>
-                <goal>copy-dependencies</goal>
-              </goals>
-              <configuration>
-                <outputDirectory>${project.build.directory}</outputDirectory>
-                <excludeTransitive>true</excludeTransitive>
-                <excludeScope>provided</excludeScope>
-                <stripVersion>true</stripVersion>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    -->
-  </build>
 
   <repositories>
     <repository>

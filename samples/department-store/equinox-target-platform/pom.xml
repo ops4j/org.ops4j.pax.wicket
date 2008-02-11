@@ -46,9 +46,9 @@
       <version>1.0.0.v20060601</version>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.web.bundles</groupId>
-      <artifactId>service</artifactId>
-      <version>0.2.0</version>
+      <groupId>org.ops4j.pax.web</groupId>
+      <artifactId>pax-web-service</artifactId>
+      <version>0.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
@@ -80,25 +80,6 @@
           </execution>
         </executions>
       </plugin>
-      <!--
-           <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-resources-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>copy-resources</id>
-                  <phase>package</phase>
-                  <goals>
-                    <goal>resources</goal>
-                  </goals>
-                  <configuration>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <excludeTransitive>true</excludeTransitive>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-      -->
     </plugins>
   </build>
 </project>

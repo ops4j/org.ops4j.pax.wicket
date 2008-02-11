@@ -39,8 +39,8 @@
       <version>1.0.0.v20060601</version>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.web.bundles</groupId>
-      <artifactId>service</artifactId>
+      <groupId>org.ops4j.pax.web</groupId>
+      <artifactId>pax-web-service</artifactId>
       <version>0.3.1</version>
     </dependency>
     <dependency>
@@ -50,7 +50,7 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
-      <artifactId>departmentstore.service-basic</artifactId>
+      <artifactId>departmentstore-service-basic</artifactId>
       <version>0.5.2-SNAPSHOT</version>
     </dependency>
     <dependency>
