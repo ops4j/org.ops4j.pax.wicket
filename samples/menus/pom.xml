@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><project>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>samples</artifactId>
     <groupId>org.ops4j.pax.wicket</groupId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples</groupId>
   <artifactId>menus</artifactId>
   <packaging>pom</packaging>
   <name>OPS4J - Pax Wicket Menus Sample</name>
-  <version>0.5.2-SNAPSHOT</version>
+  <version>0.5.2</version>
   <modules>
     <module>content1</module>
     <module>indexpage</module>

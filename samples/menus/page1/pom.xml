@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>menus</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.menus</groupId>
   <artifactId>pax-wicket-samples-menus-page1</artifactId>
   <packaging>bundle</packaging>
   <name>OPS4J - Pax Wicket Samples - Menu Page 1</name>
-  <version>0.5.2-SNAPSHOT</version>
+  <version>0.5.2</version>
 
   <build>
     <plugins>
@@ -30,19 +29,19 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.2-SNAPSHOT</version>
+      <version>0.5.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-toolkit</artifactId>
-      <version>0.5.2-SNAPSHOT</version>
+      <version>0.5.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.menus</groupId>
       <artifactId>pax-wicket-samples-menus-indexpage</artifactId>
-      <version>0.5.2-SNAPSHOT</version>
+      <version>0.5.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
