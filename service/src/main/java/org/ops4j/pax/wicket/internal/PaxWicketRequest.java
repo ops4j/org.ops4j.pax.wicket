@@ -19,6 +19,7 @@
 package org.ops4j.pax.wicket.internal;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.ops4j.lang.NullArgumentException;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ final class PaxWicketRequest extends ServletWebRequest
      *
      * @return Servlet path
      */
-    @Override
+    /*@Override
     public final String getServletPath()
     {
         String contextPath = getHttpServletRequest().getContextPath();
@@ -79,7 +80,7 @@ final class PaxWicketRequest extends ServletWebRequest
         }
 
         return contextPath;
-    }
+    }*/
 
 //    /**
 //     * Gets the servlet context path.
@@ -116,7 +117,7 @@ final class PaxWicketRequest extends ServletWebRequest
 //        return servletPath;
 //    }
 
-    @Override
+    /*@Override
     public String getRelativeURL()
     {
         String url = getServletPath();
@@ -145,6 +146,7 @@ final class PaxWicketRequest extends ServletWebRequest
             url = url.substring( 1 );
         }
 
+        if(LOGGER.isDebugEnabled()) LOGGER.debug("URL=" + url);
         return url;
-    }
+    }*/
 }

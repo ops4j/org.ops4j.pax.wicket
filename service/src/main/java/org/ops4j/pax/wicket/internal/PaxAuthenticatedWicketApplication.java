@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -164,12 +167,17 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
      * @return AuthenticatedWebSession subclass to use in this authenticated web application.
      */
     @Override
-    protected Class<? extends AuthenticatedWebSession> getWebSessionClass()
+    protected final Class<? extends AuthenticatedWebSession> getWebSessionClass()
     {
         return PaxWicketSession.class;
     }
+    
+    @Override
+	public final Session newSession(Request request, Response response) {
+		return new PaxWicketSession(this, request);
+	}
 
-    /**
+	/**
      * @return Subclass of sign-in page
      */
     @Override

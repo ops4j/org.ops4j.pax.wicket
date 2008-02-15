@@ -17,24 +17,23 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.lang.reflect.Method;
+import static org.apache.wicket.Application.set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.apache.wicket.protocol.http.MockHttpServletRequest;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Expectations;
 import org.jmock.integration.junit3.MockObjectTestCase;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
-import static org.apache.wicket.Application.set;
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.util.tester.WicketTester;
-import org.apache.wicket.authorization.strategies.role.Roles;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.MockServletContext;
-import org.apache.wicket.protocol.http.MockHttpServletRequest;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 public class PaxWicketSessionTestCase extends MockObjectTestCase
 {
@@ -71,7 +70,8 @@ public class PaxWicketSessionTestCase extends MockObjectTestCase
 
         HttpServletRequest httpRequest = new MockHttpServletRequest( application, null, null );
         Request request = new PaxWicketRequest( "/mock-point", httpRequest );
-        PaxWicketSession session = new PaxWicketSession( request );
+        PaxWicketSession session = new PaxWicketSession( application, request );
+        //PaxWicketSession session = new PaxWicketSession( request );
 
         // Test unsuccesfull authentication
         Expectations exp1 = new Expectations();

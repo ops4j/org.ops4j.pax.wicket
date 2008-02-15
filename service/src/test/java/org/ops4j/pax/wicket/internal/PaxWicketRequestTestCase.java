@@ -106,7 +106,7 @@ public final class PaxWicketRequestTestCase extends MockObjectTestCase
     }
 */
 
-    public final void testGetServletPath()
+    /*public final void testGetServletPath()
     {
         String mntPoint = "/mntPoint";
         HttpServletRequest request = mock( HttpServletRequest.class );
@@ -128,5 +128,5 @@ public final class PaxWicketRequestTestCase extends MockObjectTestCase
         checking( exp2 );
         String retServletPath2 = paxWicketRequest.getServletPath();
         assertEquals( expMountPoint, retServletPath2 );
-    }
+    }*/
 }

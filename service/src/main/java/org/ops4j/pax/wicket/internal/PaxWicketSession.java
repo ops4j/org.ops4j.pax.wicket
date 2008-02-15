@@ -18,7 +18,9 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.Serializable;
+
 import org.apache.wicket.Request;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
@@ -37,11 +39,9 @@ public final class PaxWicketSession extends AuthenticatedWebSession
      *
      * @param request     The incoming request.
      */
-    public PaxWicketSession( Request request )
+    public PaxWicketSession( AuthenticatedWebApplication application, Request request )
     {
-        // Note that currently the Application constructor argument in the Session classes are
-        // not used at all. This could change in the future. 
-        super( null, request );
+        super( application, request );
     }
 
     /**
