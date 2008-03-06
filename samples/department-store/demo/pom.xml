@@ -3,13 +3,13 @@
   <parent>
     <artifactId>departmentstore</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.5.3-SNAPSHOT</version>
+    <version>0.5.3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>departmentstore-demo</artifactId>
   <name>OPS4J - Pax Wicket Department Store - Demo</name>
-  <version>0.5.3-SNAPSHOT</version>
+  <version>0.5.3</version>
   <description>Pax Department Store Demo package.</description>
   <packaging>pom</packaging>
   <dependencies>
@@ -26,12 +26,12 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>departmentstore-view-application</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.equinox.servlet</groupId>
@@ -46,27 +46,27 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>departmentstore-model</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>departmentstore-service-basic</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>departmentstore-view-floor</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>departmentstore-view-about</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
       <artifactId>departmentstore-view-franchisee</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.3</version>
     </dependency>
   </dependencies>
   <properties>

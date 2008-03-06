@@ -3,13 +3,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>departmentstore</artifactId>
-    <version>0.5.3-SNAPSHOT</version>
+    <version>0.5.3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>departmentstore-model</artifactId>
-  <version>0.5.3-SNAPSHOT</version>
+  <version>0.5.3</version>
 
   <packaging>bundle</packaging>
 
