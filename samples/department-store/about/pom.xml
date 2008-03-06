@@ -3,14 +3,14 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>departmentstore</artifactId>
-    <version>0.5.3</version>
+    <version>0.5.4-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.departmentstore.view</groupId>
   <artifactId>departmentstore-view-about</artifactId>
-  <version>0.5.3</version>
+  <version>0.5.4-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
   <name>OPS4J - Pax Wicket Department Store - View - About</name>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -46,7 +46,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
       <artifactId>departmentstore-model</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

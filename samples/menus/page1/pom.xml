@@ -3,14 +3,14 @@
   <parent>
     <artifactId>menus</artifactId>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
-    <version>0.5.3</version>
+    <version>0.5.4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.menus</groupId>
   <artifactId>pax-wicket-samples-menus-page1</artifactId>
   <packaging>bundle</packaging>
   <name>OPS4J - Pax Wicket Samples - Menu Page 1</name>
-  <version>0.5.3</version>
+  <version>0.5.4-SNAPSHOT</version>
 
   <build>
     <plugins>
@@ -29,19 +29,19 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-toolkit</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.menus</groupId>
       <artifactId>pax-wicket-samples-menus-indexpage</artifactId>
-      <version>0.5.3</version>
+      <version>0.5.4-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
