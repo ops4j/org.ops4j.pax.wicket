@@ -10,7 +10,7 @@
 
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>wicket</artifactId>
-  <version>0.5.4-SNAPSHOT</version>
+  <version>0.5.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>OPS4J - Pax Wicket</name>
