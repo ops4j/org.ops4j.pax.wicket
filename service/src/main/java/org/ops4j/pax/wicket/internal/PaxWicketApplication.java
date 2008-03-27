@@ -51,7 +51,6 @@ public final class PaxWicketApplication extends WebApplication
     protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
-    private boolean m_deploymentMode;
     private final List<ServiceRegistration> m_wicketSettings;
 
     public PaxWicketApplication(
@@ -79,7 +78,6 @@ public final class PaxWicketApplication extends WebApplication
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
-        m_deploymentMode = deploymentMode;
 
         m_wicketSettings = new ArrayList<ServiceRegistration>();
     }
@@ -121,15 +119,6 @@ public final class PaxWicketApplication extends WebApplication
         addWicketService( IRequestCycleSettings.class, getRequestCycleSettings() );
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
-
-//        if( m_deploymentMode )
-//        {
-//            configure( DEPLOYMENT );
-//        }
-//        else
-//        {
-//            configure( DEVELOPMENT );
-//        }
 
         if( null != m_pageMounter )
         {
