@@ -362,8 +362,7 @@ public final class PaxWicketApplicationFactory
                                                                               m_pageMounter,
                                                                               m_homepageClass,
                                                                               m_pageFactory, m_delegatingClassResolver,
-                                                                              m_authenticator, m_signinPage,
-                                                                              deploymentMode
+                                                                              m_authenticator, m_signinPage
                 );
             }
             else
@@ -372,7 +371,7 @@ public final class PaxWicketApplicationFactory
                                                                  mountPoint,
                                                                  m_pageMounter,
                                                                  m_homepageClass, m_pageFactory,
-                                                                 m_delegatingClassResolver, deploymentMode
+                                                                 m_delegatingClassResolver
                 );
             }
         }
@@ -398,8 +397,7 @@ public final class PaxWicketApplicationFactory
                                                                               m_pageMounter,
                                                                               m_homepageClass,
                                                                               m_pageFactory, m_delegatingClassResolver,
-                                                                              m_authenticator, m_signinPage,
-                                                                              deploymentMode
+                                                                              m_authenticator, m_signinPage
                 );
             }
             else
@@ -408,7 +406,7 @@ public final class PaxWicketApplicationFactory
                                                                  mountPoint,
                                                                  m_pageMounter,
                                                                  m_homepageClass, m_pageFactory,
-                                                                 m_delegatingClassResolver, deploymentMode
+                                                                 m_delegatingClassResolver
                 );
             }
         }

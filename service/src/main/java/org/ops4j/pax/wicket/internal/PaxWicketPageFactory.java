@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class PaxWicketPageFactory
-    implements IPageFactory, IClassResolver
+    implements IPageFactory
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketPageFactory.class );
@@ -46,7 +46,6 @@ public final class PaxWicketPageFactory
     private final HashMap<Class, PageFactory> m_contents;
 
     private ServiceTracker m_pageTracker;
-    private ServiceRegistration m_serviceRegistration;
 
     public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
     {
@@ -58,9 +57,6 @@ public final class PaxWicketPageFactory
 
     public final void initialize()
     {                                                   
-        Properties config = new Properties();
-        config.setProperty( ContentSource.APPLICATION_NAME, m_applicationName );
-        m_serviceRegistration = m_bundleContext.registerService( IClassResolver.class.getName(), this, config );
         m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
         m_pageTracker.open();
     }
@@ -69,7 +65,6 @@ public final class PaxWicketPageFactory
     {
         synchronized( this )
         {
-            m_serviceRegistration.unregister();
             m_contents.clear();
             m_pageTracker.close();
         }
@@ -162,41 +157,5 @@ public final class PaxWicketPageFactory
             m_contents.remove( pageClass );
             m_pageClasses.remove( pageClass );
         }
-    }
-
-    /**
-     * Resolves a class by name (which may or may not involve loading it; thus the name class *resolver* not *loader*).
-     *
-     * @param classname Fully qualified classname to find
-     *
-     * @return Class
-     */
-    public final Class resolveClass( String classname )
-    {
-        synchronized( this )
-        {
-            for( Class pageClass : m_pageClasses )
-            {
-                ClassLoader cl = pageClass.getClassLoader();
-                try
-                {
-                    return cl.loadClass( classname );
-                } catch( ClassNotFoundException e )
-                {
-                    // ignore
-                }
-            }
-            try
-            {
-                Class<? extends PaxWicketPageFactory> thisClass = getClass();
-                ClassLoader classLoader = thisClass.getClassLoader();
-                return classLoader.loadClass( classname );
-            }
-            catch( ClassNotFoundException e )
-            {
-                // ignore
-            }
-        }
-        return null;
     }
 }

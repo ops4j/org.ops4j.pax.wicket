@@ -17,83 +17,87 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.util.Iterator;
 import java.util.HashSet;
 import org.apache.wicket.application.IClassResolver;
+import org.ops4j.pax.wicket.api.ContentAggregator;
+import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
-import org.osgi.service.packageadmin.ExportedPackage;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.util.tracker.ServiceTracker;
 
-public class BundleDelegatingClassResolver
-    implements IClassResolver, BundleListener
+public class BundleDelegatingClassResolver extends ServiceTracker
+    implements IClassResolver
 {
-    private HashSet<ExportedPackage> m_packages;
-    private PackageAdminTracker m_packageAdmin;
 
-    public BundleDelegatingClassResolver( BundleContext context )
+    private static final String FILTER = "(|(objectClass=" + ContentSource.class.getName() + ")" +
+                                         "(objectClass=" + ContentAggregator.class.getName() + ")" +
+                                         "(objectClass=" + PageFactory.class.getName() + "))";
+
+    private HashSet<Bundle> m_bundles;
+    private String m_applicationName;
+
+    public BundleDelegatingClassResolver( BundleContext context, String applicationName )
     {
-        m_packages = new HashSet<ExportedPackage>();
-        m_packageAdmin = new PackageAdminTracker( context );
+        super( context,
+               FILTER,
+               null
+        );
+        m_applicationName = applicationName;
+        m_bundles = new HashSet<Bundle>();
+        open( true );
     }
 
     public Class resolveClass( String classname )
         throws ClassNotFoundException
     {
-        String packageName = extractPackageName( classname );
-        if( packageName == null )
+        for( Bundle bundle : m_bundles )
         {
-            return null;
-        }
-        for( ExportedPackage pakkage : m_packages )
-        {
-            if( packageName.equals( pakkage.getName() ) )
+            try
             {
-                return pakkage.getExportingBundle().loadClass( classname );
+                return bundle.loadClass( classname );
+            } catch( ClassNotFoundException e )
+            {
+                // ignore, expected in many cases.
             }
         }
         return null;
     }
 
-    private String extractPackageName( String classname )
+    public Object addingService( ServiceReference serviceReference )
     {
-        int lastDot = classname.lastIndexOf( '.' );
-        if( lastDot < 0 )
+        String appName = (String) serviceReference.getProperty( ContentSource.APPLICATION_NAME );
+        if( !m_applicationName.equals( appName ) )
         {
             return null;
         }
-        return classname.substring( 0, lastDot );
+        Bundle bundle = serviceReference.getBundle();
+        m_bundles.add( bundle );
+        return super.addingService( serviceReference );
     }
 
-    public void bundleChanged( BundleEvent bundleEvent )
+    public void removedService( ServiceReference serviceReference, Object o )
     {
-        int type = bundleEvent.getType();
-        if( type == Bundle.UNINSTALLED )
+        String appName = (String) serviceReference.getProperty( ContentSource.APPLICATION_NAME );
+        if( !m_applicationName.equals( appName ) )
         {
-            Bundle bundle = bundleEvent.getBundle();
-            Iterator<ExportedPackage> iter = m_packages.iterator();
-            while( iter.hasNext() )
-            {
-                ExportedPackage pakkage = iter.next();
-                if( pakkage.getExportingBundle().equals( bundle ))
-                {
-                    iter.remove();
-                }
-            }
+            return;
         }
-        
-        if( type == Bundle.RESOLVED )
+        HashSet<Bundle> revisedSet = new HashSet<Bundle>();
+        try
         {
-            Bundle bundle = bundleEvent.getBundle();
-            ExportedPackage[] pakkages = m_packageAdmin.getExportedPackages( bundle );
-            for( ExportedPackage pakkage : pakkages )
+            ServiceReference[] serviceReferences = context.getAllServiceReferences( null, FILTER );
+            for( ServiceReference ref : serviceReferences )
             {
-                if( ! pakkage.isRemovalPending() )
-                {
-                    m_packages.add( pakkage );
-                }
+                revisedSet.add( ref.getBundle() );
             }
+            m_bundles = revisedSet;
+        } catch( InvalidSyntaxException e )
+        {
+            // Can not happen.
         }
+        super.removedService( serviceReference, o );
     }
 }

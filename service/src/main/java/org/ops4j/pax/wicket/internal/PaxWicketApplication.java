@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Page;
+import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -38,6 +39,7 @@ import org.apache.wicket.settings.ISessionSettings;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
+import org.ops4j.pax.wicket.api.ContentSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -51,7 +53,7 @@ public final class PaxWicketApplication extends WebApplication
     protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
-    private final List<ServiceRegistration> m_wicketSettings;
+    private final List<ServiceRegistration> m_serviceRegistrations;
 
     public PaxWicketApplication(
         BundleContext bundleContext,
@@ -60,8 +62,7 @@ public final class PaxWicketApplication extends WebApplication
         PageMounter pageMounter,
         Class<? extends Page> homepageClass,
         PaxWicketPageFactory factory,
-        DelegatingClassResolver delegatingClassResolver,
-        boolean deploymentMode )
+        DelegatingClassResolver delegatingClassResolver )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
@@ -78,8 +79,7 @@ public final class PaxWicketApplication extends WebApplication
         m_factory = factory;
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
-
-        m_wicketSettings = new ArrayList<ServiceRegistration>();
+        m_serviceRegistrations = new ArrayList<ServiceRegistration>();
     }
 
     /**
@@ -120,6 +120,11 @@ public final class PaxWicketApplication extends WebApplication
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
+        Properties config = new Properties();
+        config.setProperty( ContentSource.APPLICATION_NAME, m_applicationName );
+        BundleDelegatingClassResolver bdcr = new BundleDelegatingClassResolver( m_bundleContext, m_applicationName );
+        m_serviceRegistrations.add(  m_bundleContext.registerService( IClassResolver.class.getName(), bdcr, config ) );
+
         if( null != m_pageMounter )
         {
             for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
@@ -150,6 +155,17 @@ public final class PaxWicketApplication extends WebApplication
 
         String serviceName = service.getName();
         ServiceRegistration registration = m_bundleContext.registerService( serviceName, implementation, props );
-        m_wicketSettings.add( registration );
+        m_serviceRegistrations.add( registration );
+    }
+
+    /** Called by Wicket when the Application is being destroyed and taken down.
+     *
+     */
+    @Override protected void onDestroy()
+    {
+        for( ServiceRegistration reg : m_serviceRegistrations )
+        {
+            reg.unregister();
+        }
     }
 }

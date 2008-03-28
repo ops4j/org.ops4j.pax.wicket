@@ -76,8 +76,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         Class<? extends Page> homepageClass,
         PaxWicketPageFactory factory,
         DelegatingClassResolver delegatingClassResolver,
-        PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage,
-        boolean deploymentMode )
+        PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage )
         throws IllegalArgumentException
     {
         NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
