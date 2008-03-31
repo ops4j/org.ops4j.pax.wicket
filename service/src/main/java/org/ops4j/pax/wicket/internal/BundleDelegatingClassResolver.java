@@ -24,8 +24,8 @@ import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class BundleDelegatingClassResolver extends ServiceTracker
@@ -39,14 +39,12 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     private HashSet<Bundle> m_bundles;
     private String m_applicationName;
 
-    public BundleDelegatingClassResolver( BundleContext context, String applicationName )
+    public BundleDelegatingClassResolver( BundleContext context, String applicationName, Bundle paxWicketbundle )
     {
-        super( context,
-               FILTER,
-               null
-        );
+        super( context, FILTER, null );
         m_applicationName = applicationName;
         m_bundles = new HashSet<Bundle>();
+        m_bundles.add( paxWicketbundle );
         open( true );
     }
 
@@ -61,6 +59,9 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             } catch( ClassNotFoundException e )
             {
                 // ignore, expected in many cases.
+            } catch( IllegalStateException e)
+            {
+                // if the bundle has been uninstalled.
             }
         }
         return null;
@@ -73,8 +74,13 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         {
             return null;
         }
-        Bundle bundle = serviceReference.getBundle();
-        m_bundles.add( bundle );
+        synchronized( this )
+        {
+            Bundle bundle = serviceReference.getBundle();
+            HashSet<Bundle> clone = (HashSet<Bundle>) m_bundles.clone();
+            clone.add( bundle );
+            m_bundles = clone;
+        }
         return super.addingService( serviceReference );
     }
 

@@ -120,11 +120,6 @@ public final class PaxWicketApplication extends WebApplication
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        Properties config = new Properties();
-        config.setProperty( ContentSource.APPLICATION_NAME, m_applicationName );
-        BundleDelegatingClassResolver bdcr = new BundleDelegatingClassResolver( m_bundleContext, m_applicationName );
-        m_serviceRegistrations.add(  m_bundleContext.registerService( IClassResolver.class.getName(), bdcr, config ) );
-
         if( null != m_pageMounter )
         {
             for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )

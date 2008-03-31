@@ -71,11 +71,6 @@ public interface ContentSource<E extends Component>
     String AGGREGATION_POINT = "pax.wicket.aggregation.point";
 
     /**
-     * Service property name for the configuration of <i>DeploymentMode</i>.
-     */
-    String DEPLOYMENT_MODE = "pax.wicket.deploymentmode";
-
-    /**
      * Service property name for the configuration of the classname of the <i>HomePage</i>.
      */
     String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";

@@ -22,23 +22,25 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Properties;
+import org.apache.wicket.Page;
+import org.apache.wicket.application.IComponentInstantiationListener;
+import org.apache.wicket.application.IClassResolver;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.lang.NullArgumentException;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketPageFactory;
+import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.apache.wicket.Page;
-import org.apache.wicket.application.IComponentInstantiationListener;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketServlet;
-import org.apache.wicket.protocol.http.WicketFilter;
 
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
@@ -60,7 +62,8 @@ public final class PaxWicketApplicationFactory
 
     private final String m_applicationName;
     private List<IComponentInstantiationListener> componentInstantiationListeners;
-    
+    private ServiceRegistration m_bundleDelegatingClassResolver;
+
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
      *
@@ -87,13 +90,13 @@ public final class PaxWicketApplicationFactory
         m_applicationName = applicationName;
 
         setMountPoint( mountPoint );
-        setDeploymentMode( false );
         setApplicationName( applicationName );
 
         String homepageClassName = homepageClass.getName();
         m_properties.setProperty( ContentSource.HOMEPAGE_CLASSNAME, homepageClassName );
-        
+
         componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
+
     }
 
     /**
@@ -135,6 +138,7 @@ public final class PaxWicketApplicationFactory
         {
             m_pageFactory.dispose();
             m_delegatingClassResolver.dispose();
+            m_bundleDelegatingClassResolver.unregister();
         }
     }
 
@@ -151,47 +155,6 @@ public final class PaxWicketApplicationFactory
         synchronized( this )
         {
             return m_properties.getProperty( ContentSource.MOUNTPOINT );
-        }
-    }
-
-    /**
-     * Returns {@code true} if application created by this {@code PaxWicketApplicationFactory} is in deployment mode,
-     * {@code false} if application is in debug mode.
-     *
-     * @return A {@code boolean} indicator whether application created by this {@code PaxWicketApplicationFactory}
-     *         instance is in deployment mode.
-     *
-     * @since 1.0.0
-     */
-    public final boolean isDeploymentMode()
-    {
-        String deploymentMode;
-        synchronized( this )
-        {
-            deploymentMode = m_properties.getProperty( ContentSource.DEPLOYMENT_MODE );
-        }
-        return Boolean.parseBoolean( deploymentMode );
-    }
-
-    /**
-     * Sets the deployment mode of application created by this {@code PaxWicketApplicationFactory} instance. Sets to
-     * {@code true} if the application should be in {@code deployment mode}, {@code false} if it should be in debug
-     * mode.
-     * <p>
-     * Note: Value changed will only affect wicket application created after this method invocation.
-     * </p>
-     *
-     * @param deploymentMode The deployment mode.
-     *
-     * @see #register()
-     * @since 1.0.0
-     */
-    public final void setDeploymentMode( boolean deploymentMode )
-    {
-        String strDepMode = String.valueOf( deploymentMode );
-        synchronized( this )
-        {
-            m_properties.put( ContentSource.DEPLOYMENT_MODE, strDepMode );
         }
     }
 
@@ -234,17 +197,6 @@ public final class PaxWicketApplicationFactory
                     );
                 }
             }
-        }
-
-        String deploymentMode = (String) config.get( ContentSource.DEPLOYMENT_MODE );
-        if( deploymentMode == null )
-        {
-            String currentDeploymentMode;
-            synchronized( this )
-            {
-                currentDeploymentMode = (String) m_properties.get( ContentSource.DEPLOYMENT_MODE );
-            }
-            config.put( ContentSource.DEPLOYMENT_MODE, currentDeploymentMode );
         }
 
         String applicationName = (String) config.get( ContentSource.APPLICATION_NAME );
@@ -341,9 +293,22 @@ public final class PaxWicketApplicationFactory
 
         m_pageMounter = pageMounter;
     }
-    
-    public void addComponentInstantiationListener(IComponentInstantiationListener listener) {
-        componentInstantiationListeners.add(listener);
+
+    public void setPaxWicketBundle( Bundle bundle )
+    {
+        if( m_bundleDelegatingClassResolver != null )
+        {
+            m_bundleDelegatingClassResolver.unregister();
+        }
+        Properties config = new Properties();
+        config.setProperty( ContentSource.APPLICATION_NAME, m_applicationName );
+        BundleDelegatingClassResolver bdcr = new BundleDelegatingClassResolver( m_bundleContext, m_applicationName, bundle );
+        m_bundleDelegatingClassResolver = m_bundleContext.registerService( IClassResolver.class.getName(), bdcr, config );
+    }
+
+    public void addComponentInstantiationListener( IComponentInstantiationListener listener )
+    {
+        componentInstantiationListeners.add( listener );
     }
 
     public final WebApplication createApplication( WicketServlet servlet )
@@ -352,7 +317,6 @@ public final class PaxWicketApplicationFactory
 
         synchronized( this )
         {
-            boolean deploymentMode = isDeploymentMode();
             String mountPoint = getMountPoint();
             if( m_authenticator != null && m_signinPage != null )
             {
@@ -367,7 +331,7 @@ public final class PaxWicketApplicationFactory
             }
             else
             {
-                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, 
+                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName,
                                                                  mountPoint,
                                                                  m_pageMounter,
                                                                  m_homepageClass, m_pageFactory,
@@ -375,44 +339,15 @@ public final class PaxWicketApplicationFactory
                 );
             }
         }
-        for(IComponentInstantiationListener listener:componentInstantiationListeners){
-            paxWicketApplication.addComponentInstantiationListener(listener);
+        for( IComponentInstantiationListener listener : componentInstantiationListeners )
+        {
+            paxWicketApplication.addComponentInstantiationListener( listener );
         }
         return paxWicketApplication;
     }
 
     public final WebApplication createApplication( WicketFilter filter )
     {
-        WebApplication paxWicketApplication;
-
-        synchronized( this )
-        {
-            boolean deploymentMode = isDeploymentMode();
-            String mountPoint = getMountPoint();
-            if( m_authenticator != null && m_signinPage != null )
-            {
-                paxWicketApplication = new PaxAuthenticatedWicketApplication( m_bundleContext,
-                                                                              m_applicationName,
-                                                                              mountPoint,
-                                                                              m_pageMounter,
-                                                                              m_homepageClass,
-                                                                              m_pageFactory, m_delegatingClassResolver,
-                                                                              m_authenticator, m_signinPage
-                );
-            }
-            else
-            {
-                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName, 
-                                                                 mountPoint,
-                                                                 m_pageMounter,
-                                                                 m_homepageClass, m_pageFactory,
-                                                                 m_delegatingClassResolver
-                );
-            }
-        }
-        for(IComponentInstantiationListener listener:componentInstantiationListeners){
-            paxWicketApplication.addComponentInstantiationListener(listener);
-        }
-        return paxWicketApplication;
+        return createApplication( (WicketServlet) null );
     }
 }

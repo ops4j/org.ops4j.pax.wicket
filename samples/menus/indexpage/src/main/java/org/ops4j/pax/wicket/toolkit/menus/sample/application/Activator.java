@@ -64,7 +64,6 @@ public class Activator
         m_applicationFactory =
             new PaxWicketApplicationFactory( context, HomePage.class, Application.MOUNTPOINT, Application.NAME );
 
-        m_applicationFactory.setDeploymentMode( true );
         m_serviceRegistration = m_applicationFactory.register();
     }
 
