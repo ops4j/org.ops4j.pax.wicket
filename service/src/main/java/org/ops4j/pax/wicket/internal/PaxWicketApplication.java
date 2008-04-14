@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Page;
-import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -36,10 +35,10 @@ import org.apache.wicket.settings.IRequestCycleSettings;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
-import org.ops4j.pax.wicket.api.ContentSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -65,12 +64,12 @@ public final class PaxWicketApplication extends WebApplication
         DelegatingClassResolver delegatingClassResolver )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
-        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
-        NullArgumentException.validateNotNull( factory, "factory" );
-        NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( mountPoint, "mountPoint" );
+        validateNotNull( homepageClass, "homepageClass" );
+        validateNotNull( factory, "factory" );
+        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
 
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
@@ -153,10 +152,11 @@ public final class PaxWicketApplication extends WebApplication
         m_serviceRegistrations.add( registration );
     }
 
-    /** Called by Wicket when the Application is being destroyed and taken down.
-     *
+    /**
+     * Called by Wicket when the Application is being destroyed and taken down.
      */
-    @Override protected void onDestroy()
+    @Override
+    protected void onDestroy()
     {
         for( ServiceRegistration reg : m_serviceRegistrations )
         {

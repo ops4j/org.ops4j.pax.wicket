@@ -18,12 +18,12 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.io.File;
+import javax.servlet.ServletContext;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.WicketServlet;
-import org.ops4j.lang.NullArgumentException;
-import java.io.File;
-import javax.servlet.ServletContext;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 final class Servlet extends WicketServlet
 {
@@ -37,18 +37,12 @@ final class Servlet extends WicketServlet
     Servlet( IWebApplicationFactory appFactory, File tmpDir )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( appFactory, "appFactory" );
+        validateNotNull( appFactory, "appFactory" );
         m_tmpDir = tmpDir;
         m_tmpDir.mkdirs();
         m_appFactory = appFactory;
     }
 
-//    @Override
-//    protected IWebApplicationFactory getApplicationFactory()
-//    {
-//        return m_appFactory;
-
-    //    }
     @Override
     protected WicketFilter newWicketFilter()
     {

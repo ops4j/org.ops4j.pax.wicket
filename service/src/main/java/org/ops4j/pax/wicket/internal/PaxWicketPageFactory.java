@@ -18,18 +18,14 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.HashSet;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.application.IClassResolver;
-import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +52,7 @@ public final class PaxWicketPageFactory
     }
 
     public final void initialize()
-    {                                                   
+    {
         m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
         m_pageTracker.open();
     }
@@ -83,7 +79,7 @@ public final class PaxWicketPageFactory
     public final Page newPage( Class pageClass )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        validateNotNull( pageClass, "pageClass" );
 
         return newPage( pageClass, null );
     }
@@ -104,7 +100,7 @@ public final class PaxWicketPageFactory
     public final Page newPage( Class pageClass, PageParameters parameters )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        validateNotNull( pageClass, "pageClass" );
 
         PageFactory content;
         synchronized( this )
@@ -137,8 +133,8 @@ public final class PaxWicketPageFactory
     public void add( Class pageClass, PageFactory pageSource )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( pageClass, "pageClass" );
-        NullArgumentException.validateNotNull( pageSource, "pageSource" );
+        validateNotNull( pageClass, "pageClass" );
+        validateNotNull( pageSource, "pageSource" );
 
         synchronized( this )
         {
@@ -150,7 +146,7 @@ public final class PaxWicketPageFactory
     public final void remove( Class pageClass )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( pageClass, "pageClass" );
+        validateNotNull( pageClass, "pageClass" );
 
         synchronized( this )
         {

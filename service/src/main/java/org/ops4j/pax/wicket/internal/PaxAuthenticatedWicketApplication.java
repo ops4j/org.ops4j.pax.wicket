@@ -42,7 +42,8 @@ import org.apache.wicket.settings.IRequestCycleSettings;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
@@ -79,14 +80,14 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
-        NullArgumentException.validateNotNull( homepageClass, "homepageClass" );
-        NullArgumentException.validateNotNull( factory, "factory" );
-        NullArgumentException.validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
-        NullArgumentException.validateNotNull( authenticator, "authenticator" );
-        NullArgumentException.validateNotNull( signInPage, "signInPage" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( mountPoint, "mountPoint" );
+        validateNotNull( homepageClass, "homepageClass" );
+        validateNotNull( factory, "factory" );
+        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        validateNotNull( authenticator, "authenticator" );
+        validateNotNull( signInPage, "signInPage" );
 
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
@@ -159,13 +160,14 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     {
         return PaxWicketSession.class;
     }
-    
-    @Override
-	public final Session newSession(Request request, Response response) {
-		return new PaxWicketSession(this, request);
-	}
 
-	/**
+    @Override
+    public final Session newSession( Request request, Response response )
+    {
+        return new PaxWicketSession( this, request );
+    }
+
+    /**
      * @return Subclass of sign-in page
      */
     @Override

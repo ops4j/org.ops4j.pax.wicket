@@ -21,15 +21,15 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
-import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
-import org.osgi.framework.BundleContext;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
+import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
+import org.ops4j.pax.wicket.util.AbstractAggregatedSource;
+import org.osgi.framework.BundleContext;
 
 public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     implements OverviewTabContent
@@ -90,7 +90,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
     static FloorAggregatedSource getInstance( String floorId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( floorId, "floorId" );
+        validateNotEmpty( floorId, "floorId" );
         synchronized( m_instances )
         {
             return m_instances.get( floorId );

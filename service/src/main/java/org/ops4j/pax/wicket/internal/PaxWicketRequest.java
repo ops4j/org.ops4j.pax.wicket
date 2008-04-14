@@ -19,9 +19,9 @@
 package org.ops4j.pax.wicket.internal;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +50,8 @@ final class PaxWicketRequest extends ServletWebRequest
     {
         super( httpServletRequest );
 
-        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
-        NullArgumentException.validateNotNull( httpServletRequest, "httpServletRequest" );
+        validateNotEmpty( mountPoint, "mountPoint" );
+        validateNotNull( httpServletRequest, "httpServletRequest" );
 
         if( mountPoint.charAt( 0 ) != '/' )
         {

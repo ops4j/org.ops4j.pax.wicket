@@ -21,6 +21,7 @@ import java.util.HashSet;
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -59,7 +60,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             } catch( ClassNotFoundException e )
             {
                 // ignore, expected in many cases.
-            } catch( IllegalStateException e)
+            } catch( IllegalStateException e )
             {
                 // if the bundle has been uninstalled.
             }
@@ -69,7 +70,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
 
     public Object addingService( ServiceReference serviceReference )
     {
-        String appName = (String) serviceReference.getProperty( ContentSource.APPLICATION_NAME );
+        String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
             return null;
@@ -86,7 +87,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
 
     public void removedService( ServiceReference serviceReference, Object o )
     {
-        String appName = (String) serviceReference.getProperty( ContentSource.APPLICATION_NAME );
+        String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
             return;

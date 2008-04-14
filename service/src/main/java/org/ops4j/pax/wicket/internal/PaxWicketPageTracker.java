@@ -17,7 +17,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -96,7 +96,7 @@ final class PaxWicketPageTracker extends ServiceTracker
     public final void modifiedService( ServiceReference reference, Object service )
     {
         PageFactory pageSource = (PageFactory) service;
-        String appName = (String) reference.getProperty( ContentSource.APPLICATION_NAME );
+        String appName = (String) reference.getProperty( APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
             Class pageClass = pageSource.getPageClass();

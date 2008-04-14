@@ -18,8 +18,10 @@
 package org.ops4j.pax.wicket.util;
 
 import org.apache.wicket.Page;
-import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -51,13 +53,12 @@ public class PageFinder
         BundleContext context, String applicationName, String pageName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( context, "context" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( pageName, "pageName" );
+        validateNotNull( context, "context" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( pageName, "pageName" );
 
         String filter =
-            "(&(" + ContentSource.APPLICATION_NAME + "=" + applicationName + ")" + "(" + ContentSource.PAGE_NAME + "="
-            + pageName + "))";
+            "(&(" + APPLICATION_NAME + "=" + applicationName + ")" + "(" + PAGE_NAME + "=" + pageName + "))";
         try
         {
             ServiceReference[] refs = context.getServiceReferences( PageFactory.class.getName(), filter );

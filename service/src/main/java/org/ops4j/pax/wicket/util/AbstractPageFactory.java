@@ -19,8 +19,11 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.api.ContentSource;
+import org.apache.wicket.Page;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.*;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
@@ -28,8 +31,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.apache.wicket.Page;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
 
 public abstract class AbstractPageFactory<T extends Page>
     implements PageFactory<T>, ManagedService
@@ -43,17 +44,17 @@ public abstract class AbstractPageFactory<T extends Page>
                                    String pageId, String applicationName, String pageName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( pageId, "pageId" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( pageName, "pageName" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( pageId, "pageId" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( pageName, "pageName" );
 
         m_properties = new Hashtable<String, String>();
         m_bundleContext = bundleContext;
         setApplicationName( applicationName );
         setPageName( pageName );
 
-        m_properties.put( Constants.SERVICE_PID, ContentSource.PAGE_ID + "/" + pageId );
+        m_properties.put( Constants.SERVICE_PID, PAGE_ID + "/" + pageId );
     }
 
     public final void register()
@@ -102,7 +103,7 @@ public abstract class AbstractPageFactory<T extends Page>
     {
         synchronized( this )
         {
-            return m_properties.get( ContentSource.APPLICATION_NAME );
+            return m_properties.get( APPLICATION_NAME );
         }
     }
 
@@ -130,7 +131,7 @@ public abstract class AbstractPageFactory<T extends Page>
     {
         synchronized( this )
         {
-            return m_properties.get( ContentSource.PAGE_NAME );
+            return m_properties.get( PAGE_NAME );
         }
     }
 
@@ -147,8 +148,8 @@ public abstract class AbstractPageFactory<T extends Page>
             return;
         }
 
-        String pagename = (String) config.get( ContentSource.PAGE_NAME );
-        String appname = (String) config.get( ContentSource.APPLICATION_NAME );
+        String pagename = (String) config.get( PAGE_NAME );
+        String appname = (String) config.get( APPLICATION_NAME );
         setPageName( pagename );
         setApplicationName( appname );
         synchronized( this )
@@ -168,11 +169,11 @@ public abstract class AbstractPageFactory<T extends Page>
     protected final void setApplicationName( String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         synchronized( this )
         {
-            m_properties.put( ContentSource.APPLICATION_NAME, applicationName );
+            m_properties.put( APPLICATION_NAME, applicationName );
         }
     }
 
@@ -187,11 +188,11 @@ public abstract class AbstractPageFactory<T extends Page>
     protected final void setPageName( String pageName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( pageName, "pageName" );
+        validateNotEmpty( pageName, "pageName" );
 
         synchronized( this )
         {
-            m_properties.put( ContentSource.PAGE_NAME, pageName );
+            m_properties.put( PAGE_NAME, pageName );
         }
     }
 }

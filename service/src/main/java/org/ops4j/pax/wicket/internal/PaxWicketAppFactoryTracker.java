@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
 import org.apache.wicket.protocol.http.WicketServlet;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -45,7 +46,8 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         throws IllegalArgumentException
     {
         super( bundleContext, SERVICE_NAME, null );
-        NullArgumentException.validateNotNull( httpTracker, "httpTracker" );
+
+        validateNotNull( httpTracker, "httpTracker" );
         m_httpTracker = httpTracker;
         m_factories = new HashMap<PaxWicketApplicationFactory, String>();
     }
@@ -118,20 +120,22 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
 
     private void addServlet( String mountPoint, WicketServlet servlet, ServiceReference appFactoryReference )
     {
-        NullArgumentException.validateNotEmpty( mountPoint, "mountPoint" );
-        NullArgumentException.validateNotNull( servlet, "servlet" );
-        NullArgumentException.validateNotNull( appFactoryReference, "appFactoryReference" );
+        validateNotEmpty( mountPoint, "mountPoint" );
+        validateNotNull( servlet, "servlet" );
+        validateNotNull( appFactoryReference, "appFactoryReference" );
 
         Bundle bundle = appFactoryReference.getBundle();
         try
         {
             m_httpTracker.addServlet( mountPoint, servlet, bundle );
-        } catch( NamespaceException e )
+        }
+        catch( NamespaceException e )
         {
             throw new IllegalArgumentException(
                 "Unable to mount [" + appFactoryReference + "] on mount point '" + mountPoint + "'."
             );
-        } catch( ServletException e )
+        }
+        catch( ServletException e )
         {
             String message = "Wicket Servlet for [" + appFactoryReference + "] is unable to initialize. "
                              + "This servlet was tried to be mounted on '" + mountPoint + "'.";

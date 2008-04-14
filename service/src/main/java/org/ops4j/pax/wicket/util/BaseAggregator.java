@@ -25,9 +25,12 @@ import java.util.Hashtable;
 import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.internal.DefaultContentTracker;
@@ -55,9 +58,9 @@ abstract class BaseAggregator
     public BaseAggregator( BundleContext bundleContext, String applicationName, String aggregationPoint )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
-        NullArgumentException.validateNotEmpty( aggregationPoint, "aggregationPoint" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( aggregationPoint, "aggregationPoint" );
 
         m_children = new HashMap<String, List<ContentSource>>();
         m_wiredSources = new HashMap<String, ContentSource>();
@@ -78,7 +81,7 @@ abstract class BaseAggregator
      */
     public final String getAggregationPointName()
     {
-        return getStringProperty( ContentSource.AGGREGATION_POINT, null );
+        return getStringProperty( AGGREGATION_POINT, null );
     }
 
     /**
@@ -95,7 +98,7 @@ abstract class BaseAggregator
      */
     public final void setAggregationPointName( String aggregationPoint )
     {
-        setProperty( ContentSource.AGGREGATION_POINT, aggregationPoint );
+        setProperty( AGGREGATION_POINT, aggregationPoint );
         updateRegistration();
     }
 
@@ -108,7 +111,7 @@ abstract class BaseAggregator
      */
     public final String getApplicationName()
     {
-        return getStringProperty( ContentSource.APPLICATION_NAME, null );
+        return getStringProperty( APPLICATION_NAME, null );
     }
 
     /**
@@ -126,7 +129,7 @@ abstract class BaseAggregator
      */
     public final void setApplicationName( String applicationName )
     {
-        setProperty( ContentSource.APPLICATION_NAME, applicationName );
+        setProperty( APPLICATION_NAME, applicationName );
         updateRegistration();
     }
 
@@ -175,15 +178,15 @@ abstract class BaseAggregator
         {
             return;
         }
-        String newAggregationPointName = (String) config.get( ContentSource.AGGREGATION_POINT );
+        String newAggregationPointName = (String) config.get( AGGREGATION_POINT );
         if( newAggregationPointName == null )
         {
-            throw new ConfigurationException( ContentSource.AGGREGATION_POINT, "This property must not be [null]." );
+            throw new ConfigurationException( AGGREGATION_POINT, "This property must not be [null]." );
         }
-        String newApplicationName = (String) config.get( ContentSource.APPLICATION_NAME );
+        String newApplicationName = (String) config.get( APPLICATION_NAME );
         if( newApplicationName == null )
         {
-            throw new ConfigurationException( ContentSource.APPLICATION_NAME, "This property must not be [null]." );
+            throw new ConfigurationException( APPLICATION_NAME, "This property must not be [null]." );
         }
 
         String existingAggregationPointName = getAggregationPointName();
@@ -217,8 +220,8 @@ abstract class BaseAggregator
     public final void addContent( String wicketId, ContentSource source )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        NullArgumentException.validateNotNull( source, "source" );
+        validateNotEmpty( wicketId, "wicketId" );
+        validateNotNull( source, "source" );
 
         synchronized( this )
         {
@@ -250,8 +253,8 @@ abstract class BaseAggregator
     public final boolean removeContent( String wicketId, ContentSource content )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        NullArgumentException.validateNotNull( content, "content" );
+        validateNotEmpty( wicketId, "wicketId" );
+        validateNotNull( content, "content" );
 
         synchronized( this )
         {
@@ -357,7 +360,7 @@ abstract class BaseAggregator
     public final List<String> getWiredSourceIds( String wicketId, Comparator<ContentSource> comparator )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( wicketId, "wicketId" );
 
         ArrayList<String> result = new ArrayList<String>();
         List<ContentSource> contents = getContents( wicketId );
@@ -388,8 +391,8 @@ abstract class BaseAggregator
     public final Component createWiredComponent( String sourceId, String wicketId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( sourceId, "sourceId" );
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( sourceId, "sourceId" );
+        validateNotEmpty( wicketId, "wicketId" );
         ContentSource<?> source;
         synchronized( this )
         {
@@ -419,7 +422,7 @@ abstract class BaseAggregator
     public final <V extends ContentSource> List<V> getContents( String wicketId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( wicketId, "wicketId" );
 
         List<V> contents;
         synchronized( this )
@@ -461,8 +464,8 @@ abstract class BaseAggregator
     public final ContentSource<? extends Component> getContentById( String wicketId, String sourceId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        NullArgumentException.validateNotEmpty( sourceId, "sourceId" );
+        validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( sourceId, "sourceId" );
 
         synchronized( this )
         {

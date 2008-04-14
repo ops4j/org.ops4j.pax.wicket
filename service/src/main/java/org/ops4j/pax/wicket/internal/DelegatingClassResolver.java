@@ -20,7 +20,8 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.wicket.application.IClassResolver;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.OBJECTCLASS;
@@ -46,8 +47,8 @@ public final class DelegatingClassResolver
     public DelegatingClassResolver( BundleContext context, String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( context, "context" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( context, "context" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         m_context = context;
         m_applicationName = applicationName;

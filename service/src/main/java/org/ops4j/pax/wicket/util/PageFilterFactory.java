@@ -17,17 +17,18 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.ops4j.lang.NullArgumentException;
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
 
 public final class PageFilterFactory
 {
 
     public static String createPageFilter( String pagename, String applicationName )
     {
-        NullArgumentException.validateNotEmpty( pagename, "pagename" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( pagename, "pagename" );
+        validateNotEmpty( applicationName, "applicationName" );
 
-        return "(&(" + ContentSource.PAGE_NAME + "=" + pagename + ")(" + ContentSource.APPLICATION_NAME+ "=" + applicationName + "))";
+        return "(&(" + PAGE_NAME + "=" + pagename + ")(" + APPLICATION_NAME + "=" + applicationName + "))";
     }
 }

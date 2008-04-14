@@ -21,7 +21,8 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentSource;
 import static org.ops4j.pax.wicket.api.ContentSource.AGGREGATION_POINT;
 import static org.ops4j.pax.wicket.api.ContentSource.DESTINATIONS;
@@ -66,8 +67,8 @@ public final class DefaultContentTracker extends ServiceTracker
     {
         super( context, createContentFilter( context, applicationName ), null );
 
-        NullArgumentException.validateNotEmpty( aggregationPointName, "aggregationPointName" );
-        NullArgumentException.validateNotNull( callback, "callback" );
+        validateNotEmpty( aggregationPointName, "aggregationPointName" );
+        validateNotNull( callback, "callback" );
 
         m_context = context;
         m_callback = callback;

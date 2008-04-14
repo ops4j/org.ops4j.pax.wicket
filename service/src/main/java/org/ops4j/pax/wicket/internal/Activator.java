@@ -18,8 +18,12 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.util.Properties;
+import org.apache.wicket.application.IClassResolver;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -18,9 +18,10 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
 import java.util.Properties;
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
-import org.ops4j.pax.wicket.api.ContentSource;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -28,6 +29,7 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator
     implements BundleActivator
 {
+
     private DepartmentStoreModelTracker m_storeTracker;
     private ServiceRegistration m_serviceRegistration;
 
@@ -38,8 +40,8 @@ public class Activator
         m_storeTracker.open();
         AboutPageFactory pageFactory = new AboutPageFactory( m_storeTracker );
         Properties props = new Properties();
-        props.put( ContentSource.PAGE_NAME, "about" );
-        props.put( ContentSource.APPLICATION_NAME, "departmentstore" );
+        props.put( PAGE_NAME, "about" );
+        props.put( APPLICATION_NAME, "departmentstore" );
         m_serviceRegistration = bundleContext.registerService( PageFactory.class.getName(), pageFactory, props );
     }
 

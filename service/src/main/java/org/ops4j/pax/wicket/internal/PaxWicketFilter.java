@@ -21,7 +21,6 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 
@@ -41,19 +40,6 @@ public class PaxWicketFilter extends WicketFilter
         return m_appFactory;
     }
 
-    @Override
-    protected String getFilterPath( HttpServletRequest request )
-    {
-        return super.getFilterPath( request );
-    }
-
-    @Override
-    public String getRelativePath( HttpServletRequest request )
-    {
-        String path = super.getRelativePath( request );
-        return path;
-    }
-
     /**
      * @return The filter config of this WicketFilter
      */
@@ -63,14 +49,19 @@ public class PaxWicketFilter extends WicketFilter
         FilterConfig config = super.getFilterConfig();
         if( config == null )
         {
-            return new PaxFilterConfig();
+            return new PaxFilterConfig(m_appFactory);
         }
         return config;
     }
 
-    private class PaxFilterConfig
+    private static class PaxFilterConfig
         implements FilterConfig
     {
+
+        public PaxFilterConfig( IWebApplicationFactory appFactory )
+        {
+            //To change body of created methods use File | Settings | File Templates.
+        }
 
         public String getFilterName()
         {

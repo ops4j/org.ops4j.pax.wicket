@@ -20,16 +20,17 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.ops4j.lang.NullArgumentException;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * This is a convenient superclass for creation of a ContentAggregator.
@@ -137,7 +138,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
         throws IllegalArgumentException
     {
         super( bundleContext, applicationName, aggregationPoint );
-        NullArgumentException.validateNotEmpty( destination, "destination" );
+        validateNotEmpty( destination, "destination" );
 
         setDestination( destination );
     }
@@ -179,7 +180,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     public final void setDestination( String... destinations )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( destinations, "destinations" );
+        validateNotNull( destinations, "destinations" );
 
         setProperty( ContentSource.DESTINATIONS, destinations );
 
@@ -382,7 +383,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
 
     protected final List<Component> createComponents( String wicketId )
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( wicketId, "wicketId" );
         List<ContentSource> contents = getContents( wicketId );
         List<Component> items = new ArrayList<Component>();
         for( ContentSource content : contents )

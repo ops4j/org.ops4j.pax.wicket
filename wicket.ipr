@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project relativePaths="false" version="4">
+<project relativePaths="true" version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
   </component>
@@ -456,22 +456,17 @@
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/about.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/application.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menus/content1/content1.iml" filepath="$PROJECT_DIR$/samples/menus/content1/content1.iml" group="samples/menus" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/demo.iml" group="samples/department-store" />
-      <module fileurl="file://$PROJECT_DIR$/src/documentation.iml" filepath="$PROJECT_DIR$/src/documentation.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" filepath="$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" group="samples/department-store" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/floor.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/franchisee.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" filepath="$PROJECT_DIR$/samples/menus/indexpage/indexpage.iml" group="samples/menus" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/model.iml" group="samples/department-store/model" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menus/page1/page1.iml" filepath="$PROJECT_DIR$/samples/menus/page1/page1.iml" group="samples/menus" />
-      <module fileurl="file://$PROJECT_DIR$/samples/menus/page2/page2.iml" filepath="$PROJECT_DIR$/samples/menus/page2/page2.iml" group="samples/menus" />
-      <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-alternative/service-alternative.iml" filepath="$PROJECT_DIR$/samples/department-store/service-alternative/service-alternative.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-basic/service-basic.iml" filepath="$PROJECT_DIR$/samples/department-store/service-basic/service-basic.iml" group="samples/department-store/view" />
-      <module fileurl="file://$PROJECT_DIR$/toolkit/toolkit.iml" filepath="$PROJECT_DIR$/toolkit/toolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/ds-demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/ds-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/equinox-target-platform/ds-equinox-target-platform.iml" filepath="$PROJECT_DIR$/samples/department-store/equinox-target-platform/ds-equinox-target-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/ds-model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/ds-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/ds-view-about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/ds-view-about.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/ds-view-application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/ds-view-application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/ds-view-floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/ds-view-floor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/ds-view-franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/ds-view-franchisee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-alternative/ds-view-service-alternative.iml" filepath="$PROJECT_DIR$/samples/department-store/service-alternative/ds-view-service-alternative.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-basic/ds-view-service-basic.iml" filepath="$PROJECT_DIR$/samples/department-store/service-basic/ds-view-service-basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/lifecycleTest/it-lifecycleTest.iml" filepath="$PROJECT_DIR$/integrationTest/lifecycleTest/it-lifecycleTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service/pax-wicket-service.iml" filepath="$PROJECT_DIR$/service/pax-wicket-service.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" />
@@ -505,13 +500,13 @@
     <option name="autoscrollingFromSource" value="false" />
   </component>
   <component name="libraryTable">
-    <library name="wicket-1.3.1">
+    <library name="wicket-1.3.3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.1/wicket-1.3.1.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.3/wicket-1.3.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.1/wicket-1.3.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket/1.3.3/wicket-1.3.3-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="servlet-api-2.3">
@@ -551,22 +546,22 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="wicket-extensions-1.3.1">
+    <library name="wicket-extensions-1.3.3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.1/wicket-extensions-1.3.1.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.3/wicket-extensions-1.3.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.1/wicket-extensions-1.3.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-extensions/1.3.3/wicket-extensions-1.3.3-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="wicket-auth-roles-1.3.1">
+    <library name="wicket-auth-roles-1.3.3">
       <CLASSES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.1/wicket-auth-roles-1.3.1.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.3/wicket-auth-roles-1.3.3.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.1/wicket-auth-roles-1.3.1-sources.jar!/" />
+        <root url="jar://$M2_REPO$/org/apache/wicket/wicket-auth-roles/1.3.3/wicket-auth-roles-1.3.3-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="junit-3.8.1">

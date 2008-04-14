@@ -17,7 +17,8 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentSource;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -36,8 +37,8 @@ final class TrackingUtil
     static Filter createContentFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         Filter filter;
         try
@@ -57,8 +58,8 @@ final class TrackingUtil
     static Filter createAllPageFactoryFilter( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         Filter filter;
         try

@@ -19,7 +19,7 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.Arrays;
 import org.apache.wicket.authorization.strategies.role.Roles;
-import org.ops4j.lang.NullArgumentException;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -81,8 +81,8 @@ public class UserAdminAuthenticator
     public UserAdminAuthenticator( BundleContext bundleContext, String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotNull( applicationName, "applicationName" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotNull( applicationName, "applicationName" );
         m_applicationName = applicationName;
 
         m_bundleContext = bundleContext;

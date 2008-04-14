@@ -20,17 +20,18 @@ package org.ops4j.pax.wicket.util;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import org.ops4j.lang.NullArgumentException;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.role.Roles;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Session;
-import org.apache.wicket.authorization.strategies.role.Roles;
 
 public abstract class AbstractContentSource<E extends Component>
     implements ContentSource<E>, ManagedService
@@ -69,9 +70,9 @@ public abstract class AbstractContentSource<E extends Component>
     protected AbstractContentSource( BundleContext bundleContext, String wicketId, String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( bundleContext, "bundleContext" );
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         m_properties = new Hashtable<String, Object>();
         m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId );
@@ -104,7 +105,7 @@ public abstract class AbstractContentSource<E extends Component>
     public final void setDestination( String... destinationIds )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotNull( destinationIds, "destinationIds" );
+        validateNotNull( destinationIds, "destinationIds" );
 
         m_properties.put( DESTINATIONS, destinationIds );
     }
@@ -197,7 +198,7 @@ public abstract class AbstractContentSource<E extends Component>
     private String[] getStringArrayProperty( String key )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( key, "key" );
+        validateNotEmpty( key, "key" );
 
         return (String[]) m_properties.get( key );
     }
@@ -205,7 +206,7 @@ public abstract class AbstractContentSource<E extends Component>
     private String getStringProperty( String key, String defaultValue )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( key, "key" );
+        validateNotEmpty( key, "key" );
 
         String value = (String) m_properties.get( key );
         if( value == null )
@@ -238,7 +239,7 @@ public abstract class AbstractContentSource<E extends Component>
     private void setWicketId( String wicketId )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( wicketId, "wicketId" );
+        validateNotEmpty( wicketId, "wicketId" );
         m_properties.put( SOURCE_ID, wicketId );
     }
 
@@ -284,7 +285,7 @@ public abstract class AbstractContentSource<E extends Component>
     public final void setApplicationName( String applicationName )
         throws IllegalArgumentException
     {
-        NullArgumentException.validateNotEmpty( applicationName, "applicationName" );
+        validateNotEmpty( applicationName, "applicationName" );
 
         m_properties.put( APPLICATION_NAME, applicationName );
     }
@@ -313,15 +314,15 @@ public abstract class AbstractContentSource<E extends Component>
      * Default implementation that ignores the parent component.
      * Override this if you want to inject the parent component into your
      * created Wicket {@code Component}
-     * 
+     *
      * @param wicketId The WicketId. This argument must not be {@code null}.
-     * @param parent the parent {@code MarkupContainer} 
-     * 
+     * @param parent   the parent {@code MarkupContainer}
+     *
      * @return The wicket component with the specified {@code wicketId}.
      *
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      */
-    protected <C extends MarkupContainer>E createWicketComponent( String wicketId, C parent )
+    protected <C extends MarkupContainer> E createWicketComponent( String wicketId, C parent )
         throws IllegalArgumentException
     {
         return createWicketComponent( wicketId );
