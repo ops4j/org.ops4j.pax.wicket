@@ -98,7 +98,6 @@ public final class PaxWicketApplicationFactory
         m_properties.setProperty( HOMEPAGE_CLASSNAME, homepageClassName );
 
         componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
-
     }
 
     /**
@@ -140,7 +139,11 @@ public final class PaxWicketApplicationFactory
         {
             m_pageFactory.dispose();
             m_delegatingClassResolver.dispose();
-            m_bundleDelegatingClassResolver.unregister();
+
+            if( m_bundleDelegatingClassResolver != null )
+            {
+                m_bundleDelegatingClassResolver.unregister();
+            }
         }
     }
 
@@ -301,13 +304,18 @@ public final class PaxWicketApplicationFactory
         if( m_bundleDelegatingClassResolver != null )
         {
             m_bundleDelegatingClassResolver.unregister();
+            m_bundleDelegatingClassResolver = null;
         }
-        Properties config = new Properties();
-        config.setProperty( APPLICATION_NAME, m_applicationName );
-        BundleDelegatingClassResolver bdcr =
-            new BundleDelegatingClassResolver( m_bundleContext, m_applicationName, bundle );
-        m_bundleDelegatingClassResolver =
-            m_bundleContext.registerService( IClassResolver.class.getName(), bdcr, config );
+
+        if( bundle != null )
+        {
+            Properties config = new Properties();
+            config.setProperty( APPLICATION_NAME, m_applicationName );
+            BundleDelegatingClassResolver bdcr =
+                new BundleDelegatingClassResolver( m_bundleContext, m_applicationName, bundle );
+            m_bundleDelegatingClassResolver =
+                m_bundleContext.registerService( IClassResolver.class.getName(), bdcr, config );
+        }
     }
 
     public void addComponentInstantiationListener( IComponentInstantiationListener listener )

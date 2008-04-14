@@ -25,6 +25,7 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -42,7 +43,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
 
     public BundleDelegatingClassResolver( BundleContext context, String applicationName, Bundle paxWicketbundle )
     {
-        super( context, FILTER, null );
+        super( context, createFilter( context ), null );
         m_applicationName = applicationName;
         m_bundles = new HashSet<Bundle>();
         m_bundles.add( paxWicketbundle );
@@ -106,5 +107,20 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             // Can not happen.
         }
         super.removedService( serviceReference, o );
+    }
+
+    private static Filter createFilter( BundleContext context )
+    {
+        try
+        {
+            return context.createFilter( FILTER );
+        }
+        catch( InvalidSyntaxException e )
+        {
+            // Should not happened
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

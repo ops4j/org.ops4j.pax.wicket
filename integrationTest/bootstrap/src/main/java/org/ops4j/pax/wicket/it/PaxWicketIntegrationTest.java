@@ -59,11 +59,37 @@ public abstract class PaxWicketIntegrationTest extends AbstractConfigurableBundl
         validBundleList.add( "org.apache.felix,org.apache.felix.configadmin,1.0.1" );
         validBundleList.add( "org.ops4j.pax.wicket,pax-wicket-service,0.5.4-SNAPSHOT" );
         validBundleList.add( "org.knopflerfish.bundle.useradmin,useradmin_api,1.1.0" );
-        validBundleList.add( "org.ops4j.pax.web,pax-web-bundle,0.4.1" );
         validBundleList.add( "org.ops4j.pax.web,pax-web-service,0.4.1" );
         validBundleList.add( "org.apache.felix,org.osgi.compendium,1.0.0" );
 
+        // bootstrap bundle
+        validBundleList.add( "org.ops4j.pax.wicket.integrationTest,bootstrap,0.5.4-SNAPSHOT" );
+
         return validBundleList.toArray( new String[validBundleList.size()] );
+    }
+
+    /**
+     * Return bundle given the symbolic name. Returns {@code null} if not found.
+     *
+     * @param aSymbolicName The bundle symbolic name.
+     *
+     * @return The bundle given the symbolic name.
+     *
+     * @since 0.5.4
+     */
+    protected final Bundle getBundleBySymbolicName( String aSymbolicName )
+    {
+        Bundle[] bundles = bundleContext.getBundles();
+        for( Bundle bundle : bundles )
+        {
+            String bundleSymbolicName = bundle.getSymbolicName();
+            if( bundleSymbolicName.equals( aSymbolicName ) )
+            {
+                return bundle;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -75,17 +101,7 @@ public abstract class PaxWicketIntegrationTest extends AbstractConfigurableBundl
      */
     protected final Bundle getPaxWicketServiceBundle()
     {
-        Bundle paxWicketBundle = null;
-        Bundle[] bundles = bundleContext.getBundles();
-        for( Bundle bundle : bundles )
-        {
-            String bundleSymbolicName = bundle.getSymbolicName();
-            if( SYMBOLIC_NAME_PAX_WICKET_SERVICE.equals( bundleSymbolicName ) )
-            {
-                paxWicketBundle = bundle;
-                break;
-            }
-        }
+        Bundle paxWicketBundle = getBundleBySymbolicName( SYMBOLIC_NAME_PAX_WICKET_SERVICE );
         assertNotNull( paxWicketBundle );
         return paxWicketBundle;
     }

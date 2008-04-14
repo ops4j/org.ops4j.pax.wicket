@@ -18,6 +18,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static java.lang.System.identityHashCode;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -60,11 +61,12 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
 
         if( LOGGER.isDebugEnabled() )
         {
-            int factoryHash = System.identityHashCode( factory );
+            int factoryHash = identityHashCode( factory );
             String message = "Service Added [" + serviceReference + "], Factory hash [" + factoryHash + "]";
             LOGGER.debug( message );
         }
 
+        factory.setPaxWicketBundle( context.getBundle() );
         WicketServlet servlet = new Servlet( factory, context.getDataFile( "tmp-dir" ) );
         String mountPoint = factory.getMountPoint();
         addServlet( mountPoint, servlet, serviceReference );
@@ -104,7 +106,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) service;
         if( LOGGER.isDebugEnabled() )
         {
-            int factoryHash = System.identityHashCode( factory );
+            int factoryHash = identityHashCode( factory );
             String message = "Service removed [" + serviceReference + "], Application hash [" + factoryHash + "]";
             LOGGER.debug( message );
         }
@@ -116,6 +118,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         }
 
         m_httpTracker.removeServlet( mountPoint );
+        factory.setPaxWicketBundle( null );
     }
 
     private void addServlet( String mountPoint, WicketServlet servlet, ServiceReference appFactoryReference )

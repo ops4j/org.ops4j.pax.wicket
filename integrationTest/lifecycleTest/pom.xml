@@ -16,7 +16,13 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.integrationTest</groupId>
       <artifactId>bootstrap</artifactId>
-      <version>${project.version}</version>
+      <version>${pom.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.integrationTest.bundles</groupId>
+      <artifactId>simpleApp</artifactId>
+      <version>${pom.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

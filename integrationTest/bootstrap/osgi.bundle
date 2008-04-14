@@ -1,0 +1,6 @@
+Import-Package:\
+ org.springframework.osgi.*;version="[1.0.0,2.0.0)", \
+ org.osgi.*;version="[1.0.0,2.0.0)"
+
+Export-Package: \
+ org.ops4j.pax.wicket.it.*;version="${pom.version}"

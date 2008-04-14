@@ -1,0 +1,13 @@
+Private-Package:\
+ org.ops4j.pax.wicket.it.bundles.simpleApp.internal.*
+
+Import-Package:\
+ org.ops4j.pax.wicket.*;version="[0.5.4,1.1.0)", \
+ org.apache.wicket.*;version="1.3.0", \
+ org.osgi.*;version="[1.0.0,2.0.0)"
+
+Export-Package:\
+ org.ops4j.pax.wicket.it.bundles.simpleApp;version="${pom.version}"
+
+Bundle-SymbolicName: org.ops4j.pax.wicket.it.bundles.simpleApp
+Bundle-Activator: org.ops4j.pax.wicket.it.bundles.simpleApp.internal.Activator
