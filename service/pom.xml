@@ -33,7 +33,6 @@
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-api</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.activation</groupId>
@@ -47,12 +46,10 @@
     <dependency>
       <groupId>org.jmock</groupId>
       <artifactId>jmock-junit3</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi_R4_compendium</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.base</groupId>
@@ -61,7 +58,6 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi_R4_core</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
@@ -78,7 +74,6 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

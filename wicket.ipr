@@ -465,6 +465,7 @@
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/ds-view-franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/ds-view-franchisee.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-alternative/ds-view-service-alternative.iml" filepath="$PROJECT_DIR$/samples/department-store/service-alternative/ds-view-service-alternative.iml" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-basic/ds-view-service-basic.iml" filepath="$PROJECT_DIR$/samples/department-store/service-basic/ds-view-service-basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bootstrap/it-bootstrap.iml" filepath="$PROJECT_DIR$/integrationTest/bootstrap/it-bootstrap.iml" />
       <module fileurl="file://$PROJECT_DIR$/integrationTest/lifecycleTest/it-lifecycleTest.iml" filepath="$PROJECT_DIR$/integrationTest/lifecycleTest/it-lifecycleTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/service/pax-wicket-service.iml" filepath="$PROJECT_DIR$/service/pax-wicket-service.iml" />
     </modules>
