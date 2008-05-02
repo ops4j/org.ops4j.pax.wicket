@@ -30,7 +30,7 @@
     <dependency>
       <groupId>org.springframework.osgi</groupId>
       <artifactId>spring-osgi-test</artifactId>
-      <version>1.1.0-m1</version>
+      <version>1.1.0-m2</version>
       <scope>provided</scope>
     </dependency>
 
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>org.springframework.osgi</groupId>
       <artifactId>spring-osgi-annotation</artifactId>
-      <version>1.1.0-m1</version>
+      <version>1.1.0-m2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

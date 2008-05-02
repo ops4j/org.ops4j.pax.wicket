@@ -276,6 +276,19 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="it-bootstrap" exported="" />
+    <orderEntry type="module-library">
+      <library name="org.springframework.osgi:aopalliance.osgi:1.0-20080321.182649-23">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module" module-name="it-bundles-simpleApp" exported="" />
     <orderEntryProperties />
   </component>

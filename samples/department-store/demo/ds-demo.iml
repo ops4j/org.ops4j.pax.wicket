@@ -9,7 +9,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/target/dependency-maven-plugin-markers" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -185,132 +184,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.web:pax-web-service:0.3.1">
+      <library name="org.ops4j.pax.web:pax-web-service:0.4.1">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.3.1/pax-web-service-0.3.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.3.1/pax-web-service-0.3.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.3.1/pax-web-service-0.3.1-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.mortbay.jetty:jetty:6.1.6">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty/6.1.6/jetty-6.1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty/6.1.6/jetty-6.1.6-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty/6.1.6/jetty-6.1.6-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.mortbay.jetty:jetty-util:6.1.6">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty-util/6.1.6/jetty-util-6.1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty-util/6.1.6/jetty-util-6.1.6-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/jetty-util/6.1.6/jetty-util-6.1.6-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.mortbay.jetty:servlet-api-2.5:6.1.6">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/servlet-api-2.5/6.1.6/servlet-api-2.5-6.1.6.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/servlet-api-2.5/6.1.6/servlet-api-2.5-6.1.6-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/mortbay/jetty/servlet-api-2.5/6.1.6/servlet-api-2.5-6.1.6-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.base:ops4j-base-lang:0.5.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.base:ops4j-base-util-property:0.5.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-util-property/0.5.0/ops4j-base-util-property-0.5.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-util-property/0.5.0/ops4j-base-util-property-0.5.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-util-property/0.5.0/ops4j-base-util-property-0.5.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.swissbox:pax-swissbox-core:0.1.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-core/0.1.0/pax-swissbox-core-0.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-core/0.1.0/pax-swissbox-core-0.1.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-core/0.1.0/pax-swissbox-core-0.1.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.swissbox:pax-swissbox-lifecycle:0.1.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-lifecycle/0.1.0/pax-swissbox-lifecycle-0.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-lifecycle/0.1.0/pax-swissbox-lifecycle-0.1.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-lifecycle/0.1.0/pax-swissbox-lifecycle-0.1.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.swissbox:pax-swissbox-optional-jcl:0.1.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.1.0/pax-swissbox-optional-jcl-0.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.1.0/pax-swissbox-optional-jcl-0.1.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.1.0/pax-swissbox-optional-jcl-0.1.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.swissbox:pax-swissbox-property:0.1.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-property/0.1.0/pax-swissbox-property-0.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-property/0.1.0/pax-swissbox-property-0.1.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-property/0.1.0/pax-swissbox-property-0.1.0-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
