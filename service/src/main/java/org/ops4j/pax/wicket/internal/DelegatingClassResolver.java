@@ -97,22 +97,26 @@ public final class DelegatingClassResolver
      *
      * @return Class
      */
-    public Class resolveClass( final String classname )
+    public Class<?> resolveClass( final String classname )
         throws ClassNotFoundException
     {
         for( IClassResolver resolver : m_resolvers )
         {
             try
             {
-                Class candidate = resolver.resolveClass( classname );
+                Class<?> candidate = resolver.resolveClass( classname );
                 if( candidate != null )
                 {
                     return candidate;
                 }
             }
+            catch( ClassNotFoundException e )
+            {
+                LOGGER.warn( "ClassResolver " + resolver + " could not find class: " + classname );
+            }
             catch( RuntimeException e )
             {
-                LOGGER.warn( "ClassResolver" + resolver + " threw an unexpected exception.", e );
+                LOGGER.warn( "ClassResolver " + resolver + " threw an unexpected exception.", e );
             }
         }
         return null;
