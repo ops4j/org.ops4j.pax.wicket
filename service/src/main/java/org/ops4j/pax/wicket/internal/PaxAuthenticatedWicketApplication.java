@@ -176,20 +176,6 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         return m_signInPage;
     }
 
-    /**
-     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and obfuscated URL which has been encoded by
-     * an appropriate WebResponse.
-     *
-     * @param servletRequest The servlet request.
-     *
-     * @return a WebRequest object
-     */
-    @Override
-    protected WebRequest newWebRequest( final HttpServletRequest servletRequest )
-    {
-        return new PaxWicketRequest( servletRequest );
-    }
-
     final AuthenticatedToken authenticate( String username, String password )
     {
         if( m_authenticator == null )
@@ -230,5 +216,11 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
                 props
             )
         );
+    }
+
+    @Override
+    protected final WebRequest newWebRequest( HttpServletRequest aRequest )
+    {
+        return new PaxWicketRequest( aRequest );
     }
 }

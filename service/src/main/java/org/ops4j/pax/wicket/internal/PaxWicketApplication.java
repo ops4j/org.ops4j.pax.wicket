@@ -130,20 +130,6 @@ public final class PaxWicketApplication extends WebApplication
         }
     }
 
-    /**
-     * Create a new WebRequest. Subclasses of WebRequest could e.g. decode and obfuscated URL which has been encoded by
-     * an appropriate WebResponse.
-     *
-     * @param servletRequest The servlet request
-     *
-     * @return a WebRequest object.
-     */
-    @Override
-    protected final WebRequest newWebRequest( final HttpServletRequest servletRequest )
-    {
-        return new PaxWicketRequest( servletRequest );
-    }
-
     private <T> void addWicketService( final Class<T> service, final T implementation )
     {
         Properties props = new Properties();
@@ -168,5 +154,11 @@ public final class PaxWicketApplication extends WebApplication
         {
             reg.unregister();
         }
+    }
+
+    @Override
+    protected final WebRequest newWebRequest( HttpServletRequest aRequest )
+    {
+        return new PaxWicketRequest( aRequest );
     }
 }

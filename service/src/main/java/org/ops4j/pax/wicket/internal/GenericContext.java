@@ -21,6 +21,7 @@ package org.ops4j.pax.wicket.internal;
 import java.io.IOException;
 import java.net.URL;
 import javax.activation.MimetypesFileTypeMap;
+import static javax.activation.MimetypesFileTypeMap.getDefaultFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.osgi.framework.Bundle;
@@ -34,66 +35,57 @@ public class GenericContext
 
     private static final Logger LOGGER = LoggerFactory.getLogger( GenericContext.class );
 
-    private String m_rootUrl;
-    private MimetypesFileTypeMap m_typeMap;
-    private Bundle m_applicationBundle;
+    private String mountPoint;
+    private MimetypesFileTypeMap typeMap;
+    private Bundle bundle;
 
-    public GenericContext( Bundle applicationBundle, String rootUrl )
+    public GenericContext( Bundle aBundle, String aMountPoint )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "GenericContext(" + rootUrl + " )" );
+            LOGGER.debug( "GenericContext(" + aMountPoint + " )" );
         }
-        m_applicationBundle = applicationBundle;
-        m_rootUrl = rootUrl;
-        m_typeMap = (MimetypesFileTypeMap) MimetypesFileTypeMap.getDefaultFileTypeMap();
-        m_typeMap.addMimeTypes( "text/css css" );
+
+        bundle = aBundle;
+
+        if( !aMountPoint.startsWith( "/" ) )
+        {
+            aMountPoint = "/" + aMountPoint;
+        }
+        mountPoint = aMountPoint;
+        typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
+        typeMap.addMimeTypes( "text/css css" );
     }
 
-    public boolean handleSecurity( HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse )
+    public boolean handleSecurity( HttpServletRequest aRequest, HttpServletResponse aResponse )
         throws IOException
     {
         if( LOGGER.isDebugEnabled() )
         {
             LOGGER.debug( "handleSecurity()" );
         }
+
         return true;
     }
 
-    public URL getResource( String resourcename )
+    public URL getResource( String aResourceName )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "getResource( " + resourcename + " )" );
-        }
-        // The below hack is to compensate for a strange hack in Wicket.AbstractRequestCycleProcessor#resolveExternalResource
-        // See comment in that method's source code.
-        while( resourcename.startsWith( "//" ) )
-        {
-            resourcename = resourcename.substring( 1 );
-        }
-        String resource;
-        if( resourcename.startsWith( m_rootUrl ) )
-        {
-            int prefixLength = m_rootUrl.length();
-            resource = resourcename.substring( prefixLength + 1 );
-        }
-        else
-        {
-            resource = resourcename;
+            LOGGER.debug( "getResource( " + aResourceName + " )" );
         }
 
-        URL result = m_applicationBundle.getResource( resource );
-        return result;
+        aResourceName = aResourceName.substring( mountPoint.length() );
+        return bundle.getResource( aResourceName );
     }
 
-    public String getMimeType( String resourcename )
+    public String getMimeType( String aResourceName )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "getMimeType( " + resourcename + " )" );
+            LOGGER.debug( "getMimeType( " + aResourceName + " )" );
         }
-        URL resource = getResource( resourcename );
+        URL resource = getResource( aResourceName );
         if( resource == null )
         {
             return null;
@@ -104,7 +96,7 @@ public class GenericContext
             LOGGER.debug( "         URL: " + url );
         }
 
-        String contentType = m_typeMap.getContentType( url );
+        String contentType = typeMap.getContentType( url );
         if( LOGGER.isDebugEnabled() )
         {
             LOGGER.debug( " ContentType: " + contentType );

@@ -261,6 +261,19 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="org.springframework.osgi:spring-osgi-extender:1.1.0-m2">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library" exported="">
       <library name="org.springframework.osgi:aopalliance.osgi:1.0-20080321.182649-23">
         <CLASSES>

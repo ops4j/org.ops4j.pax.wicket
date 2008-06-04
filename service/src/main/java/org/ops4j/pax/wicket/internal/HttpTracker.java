@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -36,7 +36,7 @@ final class HttpTracker extends ServiceTracker
 {
 
     private HttpService m_httpService;
-    private HashMap<String, ServletDescriptor> m_servlets;
+    private final HashMap<String, ServletDescriptor> m_servlets;
 
     HttpTracker( BundleContext bundleContext )
     {
@@ -51,8 +51,8 @@ final class HttpTracker extends ServiceTracker
         for( Map.Entry<String, ServletDescriptor> entry : m_servlets.entrySet() )
         {
             ServletDescriptor descriptor = entry.getValue();
-            WicketServlet servlet = descriptor.m_servlet;
-            HttpContext context = descriptor.m_httpContext;
+            Servlet servlet = descriptor.servlet;
+            HttpContext context = descriptor.httpContext;
             String mountpoint = entry.getKey();
             try
             {
@@ -90,7 +90,7 @@ final class HttpTracker extends ServiceTracker
         super.removedService( serviceReference, httpService );
     }
 
-    final void addServlet( String mountPoint, WicketServlet servlet, Bundle paxWicketBundle )
+    final void addServlet( String mountPoint, Servlet servlet, Bundle paxWicketBundle )
         throws NamespaceException, ServletException
     {
         mountPoint = normalizeMountPoint( mountPoint );
@@ -124,23 +124,23 @@ final class HttpTracker extends ServiceTracker
         return mountPoint;
     }
 
-    final WicketServlet getServlet( String mountPoint )
+    final Servlet getServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
         ServletDescriptor descriptor = m_servlets.get( mountPoint );
-        return descriptor.m_servlet;
+        return descriptor.servlet;
     }
 
     private static final class ServletDescriptor
     {
 
-        private WicketServlet m_servlet;
-        private HttpContext m_httpContext;
+        private Servlet servlet;
+        private HttpContext httpContext;
 
-        public ServletDescriptor( WicketServlet servlet, HttpContext httpContext )
+        public ServletDescriptor( Servlet aServlet, HttpContext aContext )
         {
-            m_servlet = servlet;
-            m_httpContext = httpContext;
+            servlet = aServlet;
+            httpContext = aContext;
         }
     }
 }

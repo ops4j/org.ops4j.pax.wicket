@@ -18,11 +18,12 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.io.File;
 import static java.lang.System.identityHashCode;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import org.apache.wicket.protocol.http.WicketServlet;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
@@ -67,8 +68,10 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         }
 
         factory.setPaxWicketBundle( context.getBundle() );
-        WicketServlet servlet = new Servlet( factory, context.getDataFile( "tmp-dir" ) );
+
+        File tmpDir = context.getDataFile( "tmp-dir" );
         String mountPoint = factory.getMountPoint();
+        Servlet servlet = ServletProxy.newServletProxy( factory, tmpDir, mountPoint );
         addServlet( mountPoint, servlet, serviceReference );
 
         synchronized( m_factories )
@@ -95,7 +98,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
             return;
         }
 
-        WicketServlet servlet = m_httpTracker.getServlet( oldMountPoint );
+        Servlet servlet = m_httpTracker.getServlet( oldMountPoint );
         removedService( serviceReference, service );
         addServlet( newMountPoint, servlet, serviceReference );
     }
@@ -121,7 +124,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
         factory.setPaxWicketBundle( null );
     }
 
-    private void addServlet( String mountPoint, WicketServlet servlet, ServiceReference appFactoryReference )
+    private void addServlet( String mountPoint, Servlet servlet, ServiceReference appFactoryReference )
     {
         validateNotEmpty( mountPoint, "mountPoint" );
         validateNotNull( servlet, "servlet" );

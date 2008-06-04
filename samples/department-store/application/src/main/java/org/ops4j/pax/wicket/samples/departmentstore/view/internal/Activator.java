@@ -40,7 +40,8 @@ public class Activator
     public void start( BundleContext bundleContext )
         throws Exception
     {
-        String mountPoint = "deptStore";
+         String mountPoint = "deptStore";
+//        String mountPoint = "/";
         String applicationName = "departmentstore";
         m_store = new RootContentAggregator( bundleContext, applicationName, "swp" );
         m_pageRegistration = m_store.register();

@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.WicketServlet;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.*;
@@ -323,7 +322,7 @@ public final class PaxWicketApplicationFactory
         componentInstantiationListeners.add( listener );
     }
 
-    public final WebApplication createApplication( WicketServlet servlet )
+    public final WebApplication createApplication( WicketFilter aFilter )
     {
         WebApplication paxWicketApplication;
 
@@ -332,34 +331,25 @@ public final class PaxWicketApplicationFactory
             String mountPoint = getMountPoint();
             if( m_authenticator != null && m_signinPage != null )
             {
-                paxWicketApplication = new PaxAuthenticatedWicketApplication( m_bundleContext,
-                                                                              m_applicationName,
-                                                                              mountPoint,
-                                                                              m_pageMounter,
-                                                                              m_homepageClass,
-                                                                              m_pageFactory, m_delegatingClassResolver,
-                                                                              m_authenticator, m_signinPage
+                paxWicketApplication = new PaxAuthenticatedWicketApplication(
+                    m_bundleContext, m_applicationName, mountPoint, m_pageMounter, m_homepageClass, m_pageFactory,
+                    m_delegatingClassResolver, m_authenticator, m_signinPage
                 );
             }
             else
             {
-                paxWicketApplication = new PaxWicketApplication( m_bundleContext, m_applicationName,
-                                                                 mountPoint,
-                                                                 m_pageMounter,
-                                                                 m_homepageClass, m_pageFactory,
-                                                                 m_delegatingClassResolver
+                paxWicketApplication = new PaxWicketApplication(
+                    m_bundleContext, m_applicationName, mountPoint, m_pageMounter, m_homepageClass, m_pageFactory,
+                    m_delegatingClassResolver
                 );
             }
         }
+
         for( IComponentInstantiationListener listener : componentInstantiationListeners )
         {
             paxWicketApplication.addComponentInstantiationListener( listener );
         }
-        return paxWicketApplication;
-    }
 
-    public final WebApplication createApplication( WicketFilter filter )
-    {
-        return createApplication( (WicketServlet) null );
+        return paxWicketApplication;
     }
 }

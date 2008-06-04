@@ -18,7 +18,6 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
@@ -38,7 +37,6 @@ public final class PaxWicketPageFactory
 
     private final BundleContext m_bundleContext;
     private final String m_applicationName;
-    private final HashSet<Class> m_pageClasses;
     private final HashMap<Class, PageFactory> m_contents;
 
     private ServiceTracker m_pageTracker;
@@ -46,7 +44,6 @@ public final class PaxWicketPageFactory
     public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
     {
         m_contents = new HashMap<Class, PageFactory>();
-        m_pageClasses = new HashSet<Class>();
         m_bundleContext = appBundleContext;
         m_applicationName = applicationName;
     }
@@ -139,7 +136,6 @@ public final class PaxWicketPageFactory
         synchronized( this )
         {
             m_contents.put( pageClass, pageSource );
-            m_pageClasses.add( pageClass );
         }
     }
 
@@ -151,7 +147,6 @@ public final class PaxWicketPageFactory
         synchronized( this )
         {
             m_contents.remove( pageClass );
-            m_pageClasses.remove( pageClass );
         }
     }
 }

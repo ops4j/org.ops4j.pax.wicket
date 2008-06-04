@@ -17,81 +17,25 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.util.Enumeration;
-import java.util.NoSuchElementException;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
-public class PaxWicketFilter extends WicketFilter
+final class PaxWicketFilter extends WicketFilter
 {
 
-    private final IWebApplicationFactory m_appFactory;
+    private final IWebApplicationFactory applicationFactory;
 
-    PaxWicketFilter( IWebApplicationFactory appFactory )
+    PaxWicketFilter( IWebApplicationFactory aFactory )
+        throws IllegalArgumentException
     {
-        m_appFactory = appFactory;
+        validateNotNull( aFactory, "aFactory" );
+        applicationFactory = aFactory;
     }
 
     @Override
-    protected IWebApplicationFactory getApplicationFactory()
+    protected final IWebApplicationFactory getApplicationFactory()
     {
-        return m_appFactory;
-    }
-
-    /**
-     * @return The filter config of this WicketFilter
-     */
-    @Override
-    public FilterConfig getFilterConfig()
-    {
-        FilterConfig config = super.getFilterConfig();
-        if( config == null )
-        {
-            return new PaxFilterConfig(m_appFactory);
-        }
-        return config;
-    }
-
-    private static class PaxFilterConfig
-        implements FilterConfig
-    {
-
-        public PaxFilterConfig( IWebApplicationFactory appFactory )
-        {
-            //To change body of created methods use File | Settings | File Templates.
-        }
-
-        public String getFilterName()
-        {
-            return "pax-wicket";
-        }
-
-        public ServletContext getServletContext()
-        {
-            return null;
-        }
-
-        public String getInitParameter( String param )
-        {
-            return null;
-        }
-
-        public Enumeration getInitParameterNames()
-        {
-            return new Enumeration()
-            {
-                public boolean hasMoreElements()
-                {
-                    return false;
-                }
-
-                public Object nextElement()
-                {
-                    throw new NoSuchElementException();
-                }
-            };
-        }
+        return applicationFactory;
     }
 }
