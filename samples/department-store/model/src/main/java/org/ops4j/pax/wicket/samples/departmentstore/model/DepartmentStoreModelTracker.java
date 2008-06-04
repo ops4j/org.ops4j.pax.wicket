@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class DepartmentStoreModelTracker extends ServiceTracker
+public final class DepartmentStoreModelTracker extends ServiceTracker
 {
     private DepartmentStore m_departmentStore;
 
@@ -30,18 +30,20 @@ public class DepartmentStoreModelTracker extends ServiceTracker
         super( bundleContext, DepartmentStore.class.getName(), null );
     }
 
-    public DepartmentStore getDepartmentStore()
+    public final DepartmentStore getDepartmentStore()
     {
         return m_departmentStore;
     }
 
-    public Object addingService( ServiceReference serviceReference )
+    @Override
+    public final Object addingService( ServiceReference serviceReference )
     {
         m_departmentStore = (DepartmentStore) super.addingService( serviceReference );
         return m_departmentStore;
     }
 
-    public void removedService( ServiceReference serviceReference, Object object )
+    @Override
+    public final void removedService( ServiceReference serviceReference, Object object )
     {
         super.removedService( serviceReference, object );
         m_departmentStore = null;

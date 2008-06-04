@@ -18,6 +18,7 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.api.PageFactory;
 
 import org.apache.wicket.PageParameters;
@@ -39,6 +40,7 @@ public class AboutPageFactory
 
     public AboutPage createPage( PageParameters params )
     {
-        return new AboutPage( m_tracker.getDepartmentStore() );
+        DepartmentStore store = m_tracker.getDepartmentStore();
+        return new AboutPage( store );
     }
 }
