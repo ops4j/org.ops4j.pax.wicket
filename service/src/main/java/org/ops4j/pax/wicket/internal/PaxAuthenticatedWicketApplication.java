@@ -164,7 +164,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     public final Session newSession( Request request, Response response )
     {
-        return new PaxWicketSession( this, request );
+        return new PaxWicketSession( request );
     }
 
     /**
@@ -187,10 +187,10 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     protected WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
-        return new PaxWicketRequest( m_mountPoint, servletRequest );
+        return new PaxWicketRequest( servletRequest );
     }
 
-    final AuthenticatedToken authententicate( String username, String password )
+    final AuthenticatedToken authenticate( String username, String password )
     {
         if( m_authenticator == null )
         {

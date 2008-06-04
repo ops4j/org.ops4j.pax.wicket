@@ -69,8 +69,8 @@ public class PaxWicketSessionTestCase extends MockObjectTestCase
 //        method.invoke( application, (Object[]) null );
 
         HttpServletRequest httpRequest = new MockHttpServletRequest( application, null, null );
-        Request request = new PaxWicketRequest( "/mock-point", httpRequest );
-        PaxWicketSession session = new PaxWicketSession( application, request );
+        Request request = new PaxWicketRequest( httpRequest );
+        PaxWicketSession session = new PaxWicketSession( request );
         //PaxWicketSession session = new PaxWicketSession( request );
 
         // Test unsuccesfull authentication

@@ -37,6 +37,7 @@ import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
@@ -98,6 +99,7 @@ public final class PaxWicketApplication extends WebApplication
      * provide custom initialization. This method is called right after this application class is constructed, and the
      * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
      */
+    @Override
     protected final void init()
     {
         super.init();
@@ -139,13 +141,17 @@ public final class PaxWicketApplication extends WebApplication
     @Override
     protected final WebRequest newWebRequest( final HttpServletRequest servletRequest )
     {
-        return new PaxWicketRequest( m_mountPoint, servletRequest );
+        return new PaxWicketRequest( servletRequest );
     }
 
     private <T> void addWicketService( final Class<T> service, final T implementation )
     {
         Properties props = new Properties();
+
+        // Note: This is kept for legacy
         props.setProperty( "applicationId", m_applicationName );
+
+        props.setProperty( APPLICATION_NAME, m_applicationName );
 
         String serviceName = service.getName();
         ServiceRegistration registration = m_bundleContext.registerService( serviceName, implementation, props );

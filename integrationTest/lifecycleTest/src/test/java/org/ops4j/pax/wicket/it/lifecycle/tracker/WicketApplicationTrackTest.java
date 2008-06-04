@@ -16,6 +16,7 @@
  */
 package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
+import static java.lang.Thread.sleep;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import static org.ops4j.pax.wicket.it.bundles.simpleApp.Constants.SYMBOLIC_NAME_SIMPLE_APP;
 import org.osgi.framework.Bundle;
@@ -28,6 +29,7 @@ import org.osgi.framework.ServiceReference;
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest
 {
 
+    @Override
     protected final String[] getTestBundlesNames()
     {
         return new String[]
@@ -39,6 +41,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest
     public final void testApplicationTracker()
         throws Exception
     {
+        sleep( 1000 );
         Bundle simpleAppBundle = getBundleBySymbolicName( SYMBOLIC_NAME_SIMPLE_APP );
         assertNotNull( simpleAppBundle );
         ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();

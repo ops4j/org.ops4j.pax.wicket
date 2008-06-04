@@ -20,7 +20,6 @@ package org.ops4j.pax.wicket.internal;
 import java.io.Serializable;
 
 import org.apache.wicket.Request;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
@@ -39,9 +38,9 @@ public final class PaxWicketSession extends AuthenticatedWebSession
      *
      * @param request     The incoming request.
      */
-    public PaxWicketSession( AuthenticatedWebApplication application, Request request )
+    public PaxWicketSession( Request request )
     {
-        super( application, request );
+        super( request );
     }
 
     /**
@@ -57,7 +56,7 @@ public final class PaxWicketSession extends AuthenticatedWebSession
     {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
 
-        m_token = app.authententicate( username, password );
+        m_token = app.authenticate( username, password );
         if( m_token != null )
         {
             m_loggedInUser = username;
