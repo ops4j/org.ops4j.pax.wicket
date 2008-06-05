@@ -19,24 +19,32 @@
       <groupId>org.eclipse</groupId>
       <artifactId>osgi</artifactId>
       <version>3.2.1.R32x_v20060717</version>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.osgi</groupId>
       <artifactId>services</artifactId>
-      <version>3.1.100.v20060601</version>
+      <version>3.1.200.v20070605</version>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.eclipse.osgi</groupId>
       <artifactId>util</artifactId>
-      <version>3.1.100.v20060601</version>
+      <version>3.1.200.v20070605</version>
+      <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-api</artifactId>
+      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
       <artifactId>pax-logging-service</artifactId>
+      <version>1.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.equinox.servlet</groupId>
@@ -46,7 +54,7 @@
     <dependency>
       <groupId>org.ops4j.pax.web</groupId>
       <artifactId>pax-web-service</artifactId>
-      <version>0.3.1</version>
+      <version>0.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
