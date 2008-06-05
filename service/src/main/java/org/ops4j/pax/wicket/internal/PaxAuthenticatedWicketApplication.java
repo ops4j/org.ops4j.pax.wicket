@@ -61,6 +61,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private final String m_applicationName;
     private final String m_mountPoint;
     private final PageMounter m_pageMounter;
+    private PageMounterTracker m_mounterTracker;
     protected Class<? extends Page> m_homepageClass;
     private PaxWicketPageFactory m_factory;
     private DelegatingClassResolver m_delegatingClassResolver;
@@ -150,6 +151,22 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
                 mount( bookmark.getCodingStrategy() );
             }
         }
+
+        // Now add a tracker so we can still mount pages later
+        m_mounterTracker = new PageMounterTracker( m_bundleContext, this );
+        m_mounterTracker.open();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        if( null != m_mounterTracker )
+        {
+            m_mounterTracker.close();
+            m_mounterTracker = null;
+        }
+
+        super.onDestroy();
     }
 
     /**
