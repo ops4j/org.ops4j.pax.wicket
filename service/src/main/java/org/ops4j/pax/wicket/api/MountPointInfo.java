@@ -4,6 +4,8 @@ import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
 public interface MountPointInfo
 {
+
     String getPath();
-    public IRequestTargetUrlCodingStrategy getCodingStrategy();
+
+    IRequestTargetUrlCodingStrategy getCodingStrategy();
 }

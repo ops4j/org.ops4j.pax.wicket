@@ -35,31 +35,31 @@ public final class PaxWicketPageFactory
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketPageFactory.class );
 
-    private final BundleContext m_bundleContext;
-    private final String m_applicationName;
-    private final HashMap<Class, PageFactory> m_contents;
+    private final BundleContext bundleContext;
+    private final String applicationName;
+    private final HashMap<Class, PageFactory> contents;
 
-    private ServiceTracker m_pageTracker;
+    private ServiceTracker pageTracker;
 
-    public PaxWicketPageFactory( BundleContext appBundleContext, String applicationName )
+    public PaxWicketPageFactory( BundleContext aBundleContext, String anApplicationName )
     {
-        m_contents = new HashMap<Class, PageFactory>();
-        m_bundleContext = appBundleContext;
-        m_applicationName = applicationName;
+        contents = new HashMap<Class, PageFactory>();
+        bundleContext = aBundleContext;
+        applicationName = anApplicationName;
     }
 
     public final void initialize()
     {
-        m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
-        m_pageTracker.open();
+        pageTracker = new PaxWicketPageTracker( bundleContext, applicationName, this );
+        pageTracker.open();
     }
 
     public final void dispose()
     {
         synchronized( this )
         {
-            m_contents.clear();
-            m_pageTracker.close();
+            contents.clear();
+            pageTracker.close();
         }
     }
 
@@ -102,7 +102,7 @@ public final class PaxWicketPageFactory
         PageFactory content;
         synchronized( this )
         {
-            content = m_contents.get( pageClass );
+            content = contents.get( pageClass );
         }
         if( content == null )
         {
@@ -135,7 +135,7 @@ public final class PaxWicketPageFactory
 
         synchronized( this )
         {
-            m_contents.put( pageClass, pageSource );
+            contents.put( pageClass, pageSource );
         }
     }
 
@@ -146,7 +146,7 @@ public final class PaxWicketPageFactory
 
         synchronized( this )
         {
-            m_contents.remove( pageClass );
+            contents.remove( pageClass );
         }
     }
 }

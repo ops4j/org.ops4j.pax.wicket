@@ -10,19 +10,20 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="org.ops4j.pax.logging:pax-logging-api:1.0.0">
+      <library name="org.ops4j.pax.logging:pax-logging-api:1.1.1">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0.0/pax-logging-api-1.0.0.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0.0/pax-logging-api-1.0.0-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0.0/pax-logging-api-1.0.0-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

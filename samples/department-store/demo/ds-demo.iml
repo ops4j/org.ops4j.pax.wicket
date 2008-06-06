@@ -13,28 +13,28 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="org.ops4j.pax.logging:pax-logging-api:1.0-RC2">
+      <library name="org.ops4j.pax.logging:pax-logging-api:1.1.1">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0-RC2/pax-logging-api-1.0-RC2.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0-RC2/pax-logging-api-1.0-RC2-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.0-RC2/pax-logging-api-1.0-RC2-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-api/1.1.1/pax-logging-api-1.1.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="org.ops4j.pax.logging:pax-logging-service:1.0-RC2">
+      <library name="org.ops4j.pax.logging:pax-logging-service:1.1.1">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.0-RC2/pax-logging-service-1.0-RC2.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.1.1/pax-logging-service-1.1.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.0-RC2/pax-logging-service-1.0-RC2-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.1.1/pax-logging-service-1.1.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.0-RC2/pax-logging-service-1.0-RC2-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/logging/pax-logging-service/1.1.1/pax-logging-service-1.1.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

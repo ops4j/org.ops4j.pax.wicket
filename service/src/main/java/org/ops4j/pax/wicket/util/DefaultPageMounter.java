@@ -14,73 +14,62 @@ public class DefaultPageMounter
     implements PageMounter
 {
 
-    private final List<MountPointInfo> m_mountPoints;
+    private final List<MountPointInfo> mountPoints;
 
     public DefaultPageMounter()
     {
         // Using Vector because it is synchronized
         // But not sure if synchronization is really necessary or not...
-        m_mountPoints = new Vector<MountPointInfo>();
+        mountPoints = new Vector<MountPointInfo>();
     }
 
     /**
      * A convenience method that uses a default coding strategy.
      *
-     * @param path      the path on which the page is to be mounted
-     * @param pageClass the class to mount on this mount point using the
-     *                  default strategy
+     * @param aPath      the path on which the page is to be mounted
+     * @param aPageClass the class to mount on this mount point using the
+     *                   default strategy
      */
-    public <T extends Page> void addMountPoint( String path, Class<T> pageClass )
+    public void addMountPoint( String aPath, Class<? extends Page> aPageClass )
     {
-        addMountPoint(
-            path,
-            new BookmarkablePageRequestTargetUrlCodingStrategy(
-                path,
-                pageClass,
-                null
-            )
-        );
+        addMountPoint( aPath, new BookmarkablePageRequestTargetUrlCodingStrategy( aPath, aPageClass, null ) );
     }
 
-    public void addMountPoint(
-        String path,
-        IRequestTargetUrlCodingStrategy codingStrategy )
+    public void addMountPoint( String path, IRequestTargetUrlCodingStrategy codingStrategy )
     {
         MountPointInfo info = new DefaultMountPointInfo( path, codingStrategy );
-        m_mountPoints.add( info );
+        mountPoints.add( info );
     }
 
-    public List<MountPointInfo> getMountPoints()
+    public final List<MountPointInfo> getMountPoints()
     {
-        return m_mountPoints;
+        return mountPoints;
     }
 
-    private class DefaultMountPointInfo
+    private static class DefaultMountPointInfo
         implements MountPointInfo
     {
 
-        private final String m_path;
-        private final IRequestTargetUrlCodingStrategy m_codingStrategy;
+        private final String path;
+        private final IRequestTargetUrlCodingStrategy codingStrategy;
 
-        public DefaultMountPointInfo(
-            String path,
-            IRequestTargetUrlCodingStrategy codingStrategy )
+        private DefaultMountPointInfo( String aPath, IRequestTargetUrlCodingStrategy aCodingStrategy )
         {
-            validateNotEmpty( path, "path" );
-            validateNotNull( codingStrategy, "codingStrategy" );
+            validateNotEmpty( aPath, "aPath" );
+            validateNotNull( aCodingStrategy, "aCodingStrategy" );
 
-            m_path = path;
-            m_codingStrategy = codingStrategy;
+            path = aPath;
+            codingStrategy = aCodingStrategy;
         }
 
-        public String getPath()
+        public final String getPath()
         {
-            return m_path;
+            return path;
         }
 
-        public IRequestTargetUrlCodingStrategy getCodingStrategy()
+        public final IRequestTargetUrlCodingStrategy getCodingStrategy()
         {
-            return m_codingStrategy;
+            return codingStrategy;
         }
     }
 }

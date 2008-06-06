@@ -39,12 +39,14 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                                          "(objectClass=" + PageFactory.class.getName() + "))";
 
     private HashSet<Bundle> m_bundles;
-    private String m_applicationName;
+    private final String m_applicationName;
+    private final Bundle m_paxWicketbundle;
 
     public BundleDelegatingClassResolver( BundleContext context, String applicationName, Bundle paxWicketbundle )
     {
         super( context, createFilter( context ), null );
         m_applicationName = applicationName;
+        m_paxWicketbundle = paxWicketbundle;
         m_bundles = new HashSet<Bundle>();
         m_bundles.add( paxWicketbundle );
         open( true );
@@ -94,6 +96,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             return;
         }
         HashSet<Bundle> revisedSet = new HashSet<Bundle>();
+        revisedSet.add( m_paxWicketbundle );
         try
         {
             ServiceReference[] serviceReferences = context.getAllServiceReferences( null, FILTER );

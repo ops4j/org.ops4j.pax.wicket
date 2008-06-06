@@ -1,6 +1,6 @@
 /*
- * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
+ * Copyright 2008 David Leangen
+ * Copyright 2008 Edward F. Yakop
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -18,59 +18,83 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import static java.lang.System.identityHashCode;
-import java.util.*;
-import javax.servlet.ServletException;
-
+import java.util.List;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketServlet;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-
-import org.ops4j.pax.wicket.api.*;
-import org.osgi.framework.*;
-import org.osgi.service.http.NamespaceException;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import org.ops4j.pax.wicket.api.MountPointInfo;
+import org.ops4j.pax.wicket.api.PageMounter;
+import org.osgi.framework.BundleContext;
+import static org.osgi.framework.Constants.OBJECTCLASS;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
-import org.slf4j.*;
 
 final class PageMounterTracker
     extends ServiceTracker
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger( PageMounterTracker.class );
-    private static final String SERVICE_NAME = PageMounter.class.getName();
 
-    private final WebApplication m_application;
+    private final WebApplication application;
 
-    PageMounterTracker( BundleContext bundleContext, WebApplication application )
+    PageMounterTracker( BundleContext aContext, WebApplication anApplication, String anApplicationName )
         throws IllegalArgumentException
     {
-        super( bundleContext, SERVICE_NAME, null );
-        validateNotNull( application, "WebApplication" );
+        super( aContext, createFilter( aContext, anApplicationName ), null );
+        validateNotNull( anApplication, "anApplication" );
 
-        m_application = application;
+        application = anApplication;
+    }
+
+    private static Filter createFilter( BundleContext aContext, String anApplicationName )
+        throws IllegalArgumentException
+    {
+        validateNotNull( aContext, "aContext" );
+        validateNotNull( anApplicationName, "anApplicationName" );
+
+        String filterString =
+            "(&(" + OBJECTCLASS + "=" + PageMounter.class.getName() + ")"
+            + "(" + APPLICATION_NAME + "=" + anApplicationName + "))";
+
+        try
+        {
+            return aContext.createFilter( filterString );
+        }
+        catch( InvalidSyntaxException e )
+        {
+            // TODO: Shouldn't happened
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public final Object addingService( ServiceReference serviceReference )
+    public final Object addingService( ServiceReference aReference )
     {
-        final PageMounter mounter = (PageMounter)super.addingService( serviceReference );
+        PageMounter mounter = (PageMounter) super.addingService( aReference );
 
-        for( MountPointInfo bookmark : mounter.getMountPoints() )
+        List<MountPointInfo> infos = mounter.getMountPoints();
+        for( MountPointInfo info : infos )
         {
-            m_application.mount( bookmark.getCodingStrategy() );
+            IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
+            application.mount( strategy );
         }
 
         return mounter;
     }
 
     @Override
-    public final void removedService( ServiceReference serviceReference, Object service )
+    public final void removedService( ServiceReference aReference, Object aMounter )
     {
-        final PageMounter mounter = (PageMounter)super.addingService( serviceReference );
-
-        for( MountPointInfo bookmark : mounter.getMountPoints() )
+        PageMounter mounter = (PageMounter) aMounter;
+        List<MountPointInfo> infos = mounter.getMountPoints();
+        for( MountPointInfo bookmark : infos )
         {
-            m_application.unmount( bookmark.getPath() );
+            String path = bookmark.getPath();
+            application.unmount( path );
         }
+
+        super.removedService( aReference, aMounter );
     }
 }

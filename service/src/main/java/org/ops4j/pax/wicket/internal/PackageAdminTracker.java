@@ -59,6 +59,7 @@ public class PackageAdminTracker extends ServiceTracker
         return null;
     }
 
+    @Override
     public Object addingService( ServiceReference serviceReference )
     {
         Object service = super.addingService( serviceReference );
@@ -66,6 +67,7 @@ public class PackageAdminTracker extends ServiceTracker
         return service;
     }
 
+    @Override
     public void removedService( ServiceReference serviceReference, Object object )
     {
         super.removedService( serviceReference, object );

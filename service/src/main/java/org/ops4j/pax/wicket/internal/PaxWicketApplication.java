@@ -46,69 +46,55 @@ import org.osgi.framework.ServiceRegistration;
 public final class PaxWicketApplication extends WebApplication
 {
 
-    private final BundleContext m_bundleContext;
-    private final String m_applicationName;
-    private final String m_mountPoint;
-    private final PageMounter m_pageMounter;
-    protected Class<? extends Page> m_homepageClass;
-    private PaxWicketPageFactory m_factory;
-    private DelegatingClassResolver m_delegatingClassResolver;
-    private final List<ServiceRegistration> m_serviceRegistrations;
+    private final BundleContext bundleContext;
+    private final String applicationName;
+    private final PageMounter pageMounter;
+    private final PaxWicketPageFactory pageFactory;
+    private final DelegatingClassResolver delegatingClassResolver;
+    private final List<ServiceRegistration> serviceRegistrations;
+    protected final Class<? extends Page> homepageClass;
+    private PageMounterTracker mounterTracker;
 
     public PaxWicketApplication(
-        BundleContext bundleContext,
-        String applicationName,
-        String mountPoint,
-        PageMounter pageMounter,
-        Class<? extends Page> homepageClass,
-        PaxWicketPageFactory factory,
-        DelegatingClassResolver delegatingClassResolver )
+        BundleContext aContext,
+        String anApplicationName,
+        PageMounter aPageMounter,
+        Class<? extends Page> aHomepageClass,
+        PaxWicketPageFactory aPageFactory,
+        DelegatingClassResolver aDelegatingClassResolver )
         throws IllegalArgumentException
     {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( applicationName, "applicationName" );
-        validateNotEmpty( mountPoint, "mountPoint" );
-        validateNotNull( homepageClass, "homepageClass" );
-        validateNotNull( factory, "factory" );
-        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        validateNotNull( aContext, "aContext" );
+        validateNotEmpty( anApplicationName, "anApplicationName" );
+        validateNotNull( aHomepageClass, "aHomepageClass" );
+        validateNotNull( aPageFactory, "aPageFactory" );
+        validateNotNull( aDelegatingClassResolver, "aDelegatingClassResolver" );
 
-        m_bundleContext = bundleContext;
-        m_applicationName = applicationName;
-        m_mountPoint = mountPoint;
-        m_pageMounter = pageMounter;
-        m_factory = factory;
-        m_homepageClass = homepageClass;
-        m_delegatingClassResolver = delegatingClassResolver;
-        m_serviceRegistrations = new ArrayList<ServiceRegistration>();
+        bundleContext = aContext;
+        applicationName = anApplicationName;
+        pageMounter = aPageMounter;
+        pageFactory = aPageFactory;
+        homepageClass = aHomepageClass;
+        delegatingClassResolver = aDelegatingClassResolver;
+        serviceRegistrations = new ArrayList<ServiceRegistration>();
     }
 
-    /**
-     * Application subclasses must specify a home page class by implementing this abstract method.
-     *
-     * @return Home page class for this application
-     */
     @Override
     public final Class<? extends Page> getHomePage()
     {
-        return m_homepageClass;
+        return homepageClass;
     }
 
-    /**
-     * Initialize; if you need the wicket servlet for initialization, e.g. because you want to read an initParameter
-     * from web.xml or you want to read a resource from the servlet's context path, you can override this method and
-     * provide custom initialization. This method is called right after this application class is constructed, and the
-     * wicket servlet is set. <strong>Use this method for any application setup instead of the constructor.</strong>
-     */
     @Override
     protected final void init()
     {
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( m_delegatingClassResolver );
+        applicationSettings.setClassResolver( delegatingClassResolver );
         addWicketService( IApplicationSettings.class, applicationSettings );
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( m_factory );
+        sessionSettings.setPageFactory( pageFactory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
 //        addWicketService( IAjaxSettings.class, getAjaxSettings() );
@@ -121,39 +107,48 @@ public final class PaxWicketApplication extends WebApplication
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        if( null != m_pageMounter )
+        if( pageMounter != null )
         {
-            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
+            for( MountPointInfo bookmark : pageMounter.getMountPoints() )
             {
                 mount( bookmark.getCodingStrategy() );
             }
         }
+
+        // Now add a tracker so we can still mount pages later
+        mounterTracker = new PageMounterTracker( bundleContext, this, applicationName );
+        mounterTracker.open();
     }
 
-    private <T> void addWicketService( final Class<T> service, final T implementation )
+    private <T> void addWicketService( Class<T> aService, T aServiceImplementation )
     {
         Properties props = new Properties();
 
         // Note: This is kept for legacy
-        props.setProperty( "applicationId", m_applicationName );
+        props.setProperty( "applicationId", applicationName );
+        props.setProperty( APPLICATION_NAME, applicationName );
 
-        props.setProperty( APPLICATION_NAME, m_applicationName );
-
-        String serviceName = service.getName();
-        ServiceRegistration registration = m_bundleContext.registerService( serviceName, implementation, props );
-        m_serviceRegistrations.add( registration );
+        String serviceName = aService.getName();
+        ServiceRegistration registration = bundleContext.registerService( serviceName, aServiceImplementation, props );
+        serviceRegistrations.add( registration );
     }
 
-    /**
-     * Called by Wicket when the Application is being destroyed and taken down.
-     */
     @Override
     protected void onDestroy()
     {
-        for( ServiceRegistration reg : m_serviceRegistrations )
+        if( mounterTracker != null )
+        {
+            mounterTracker.close();
+            mounterTracker = null;
+        }
+
+        for( ServiceRegistration reg : serviceRegistrations )
         {
             reg.unregister();
         }
+        serviceRegistrations.clear();
+
+        super.onDestroy();
     }
 
     @Override

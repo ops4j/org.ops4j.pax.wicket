@@ -332,14 +332,14 @@ public final class PaxWicketApplicationFactory
             if( m_authenticator != null && m_signinPage != null )
             {
                 paxWicketApplication = new PaxAuthenticatedWicketApplication(
-                    m_bundleContext, m_applicationName, mountPoint, m_pageMounter, m_homepageClass, m_pageFactory,
+                    m_bundleContext, m_applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
                     m_delegatingClassResolver, m_authenticator, m_signinPage
                 );
             }
             else
             {
                 paxWicketApplication = new PaxWicketApplication(
-                    m_bundleContext, m_applicationName, mountPoint, m_pageMounter, m_homepageClass, m_pageFactory,
+                    m_bundleContext, m_applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
                     m_delegatingClassResolver
                 );
             }
