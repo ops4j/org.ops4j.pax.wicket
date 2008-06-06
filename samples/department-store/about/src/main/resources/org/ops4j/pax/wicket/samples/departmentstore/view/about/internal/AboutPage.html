@@ -12,12 +12,16 @@
 
     <br/>
     <hr size="2" align="left" width="50%" color="black">
-    <a wicket:id="refreshBundleList">Refresh Active bundles</a>
+    <a wicket:id="displayAllBundles">All bundles</a>
+    <a wicket:id="displayActiveBundles">Active bundles</a>
+    <a wicket:id="displayResolvedBundles">Resolved bundles</a>
     <hr size="2" align="left" width="50%" color="black">
 
-    <h4>Active bundles</h4>
-    <ul wicket:id="container">
-        <li wicket:id="bundles"></li>
-    </ul>
+    <div wicket:id="container">
+        <h4 wicket:id="displayTitle">[Title Here]</h4>
+        <ul>
+            <li wicket:id="bundles"></li>
+        </ul>
+    </div>
 </body>
 </html>

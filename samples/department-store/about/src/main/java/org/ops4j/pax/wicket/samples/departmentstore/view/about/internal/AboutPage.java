@@ -25,8 +25,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.border.BoxBorder;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.osgi.framework.Bundle;
+import static org.osgi.framework.Bundle.ACTIVE;
+import static org.osgi.framework.Bundle.RESOLVED;
 import org.osgi.framework.BundleContext;
 
 public class AboutPage extends WebPage
@@ -49,9 +52,27 @@ public class AboutPage extends WebPage
         WebMarkupContainer container = new WebMarkupContainer( "container" );
         add( container );
         container.setOutputMarkupId( true );
-        container.add( new BundlesRepeatingView( "bundles", aContext ) );
 
-        add( new RefreshBundlesList( "refreshBundleList", container ) );
+        Model labelModel = new Model( "All bundles" );
+        container.add( new Label( "displayTitle", labelModel ) );
+        Model bundleViewModel = new Model( ACTIVE );
+        container.add( new BundlesRepeatingView( "bundles", bundleViewModel, aContext ) );
+
+        add(
+            new DisplayBundleList(
+                "displayAllBundles", container, bundleViewModel, null, "All bundles", labelModel
+            )
+        );
+        add(
+            new DisplayBundleList(
+                "displayActiveBundles", container, bundleViewModel, ACTIVE, "Active bundles", labelModel
+            )
+        );
+        add(
+            new DisplayBundleList(
+                "displayResolvedBundles", container, bundleViewModel, RESOLVED, "Resolved bundles", labelModel
+            )
+        );
     }
 
     private static class BundlesRepeatingView
@@ -62,9 +83,9 @@ public class AboutPage extends WebPage
 
         private final BundleContext context;
 
-        private BundlesRepeatingView( String aWicketId, BundleContext aContext )
+        private BundlesRepeatingView( String aWicketId, Model aBundleStateToDisplay, BundleContext aContext )
         {
-            super( aWicketId );
+            super( aWicketId, aBundleStateToDisplay );
             context = aContext;
         }
 
@@ -73,11 +94,13 @@ public class AboutPage extends WebPage
         {
             removeAll();
 
+            Integer bundleState = (Integer) getModelObject();
+
             Bundle[] bundles = context.getBundles();
             for( Bundle bundle : bundles )
             {
                 int state = bundle.getState();
-                if( Bundle.ACTIVE == state )
+                if( bundleState == null || bundleState.equals( state ) )
                 {
                     String symbolicName = bundle.getSymbolicName();
                     add( new Label( newChildId(), symbolicName ) );
@@ -86,22 +109,35 @@ public class AboutPage extends WebPage
         }
     }
 
-    private static class RefreshBundlesList extends AjaxLink
+    private static class DisplayBundleList extends AjaxLink
     {
 
         private static final long serialVersionUID = 1L;
 
         private final WebMarkupContainer containerToRefresh;
+        private final Model bundleViewModel;
+        private final Integer bundleStateToDisplay;
 
-        private RefreshBundlesList( String aWicketId, WebMarkupContainer aContainer )
+        private final String labelToDisplay;
+        private final Model labelModel;
+
+        private DisplayBundleList(
+            String aWicketId, WebMarkupContainer aContainer, Model aBundleViewModel, Integer abundleState,
+            String aLabelToDisplay, Model aLabelModel )
         {
             super( aWicketId );
             containerToRefresh = aContainer;
+            bundleViewModel = aBundleViewModel;
+            bundleStateToDisplay = abundleState;
+            labelToDisplay = aLabelToDisplay;
+            labelModel = aLabelModel;
         }
 
         @Override
         public final void onClick( AjaxRequestTarget aTarget )
         {
+            labelModel.setObject( labelToDisplay );
+            bundleViewModel.setObject( bundleStateToDisplay );
             aTarget.addComponent( containerToRefresh );
         }
     }
