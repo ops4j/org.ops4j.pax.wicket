@@ -34,28 +34,37 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     implements IClassResolver
 {
 
-    private static final String FILTER = "(|(objectClass=" + ContentSource.class.getName() + ")" +
-                                         "(objectClass=" + ContentAggregator.class.getName() + ")" +
-                                         "(objectClass=" + PageFactory.class.getName() + "))";
+    private static final String FILTER;
 
-    private HashSet<Bundle> m_bundles;
-    private final String m_applicationName;
-    private final Bundle m_paxWicketbundle;
-
-    public BundleDelegatingClassResolver( BundleContext context, String applicationName, Bundle paxWicketbundle )
+    static
     {
-        super( context, createFilter( context ), null );
-        m_applicationName = applicationName;
-        m_paxWicketbundle = paxWicketbundle;
-        m_bundles = new HashSet<Bundle>();
-        m_bundles.add( paxWicketbundle );
+        FILTER = "(|" +
+                 "(objectClass=" + ContentSource.class.getName() + ")" +
+                 "(objectClass=" + ContentAggregator.class.getName() + ")" +
+                 "(objectClass=" + PageFactory.class.getName() + ")" +
+                 ")";
+    }
+
+    private HashSet<Bundle> bundles;
+    private final String applicationName;
+    private final Bundle paxWicketbundle;
+
+    public BundleDelegatingClassResolver( BundleContext aContext, String anApplicationName, Bundle aPaxWicketBundle )
+    {
+        super( aContext, createFilter( aContext ), null );
+
+        applicationName = anApplicationName;
+        paxWicketbundle = aPaxWicketBundle;
+        bundles = new HashSet<Bundle>();
+        bundles.add( aPaxWicketBundle );
+
         open( true );
     }
 
     public Class resolveClass( String classname )
         throws ClassNotFoundException
     {
-        for( Bundle bundle : m_bundles )
+        for( Bundle bundle : bundles )
         {
             try
             {
@@ -68,22 +77,23 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                 // if the bundle has been uninstalled.
             }
         }
-        return null;
+
+        throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
     }
 
     public Object addingService( ServiceReference serviceReference )
     {
         String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
-        if( !m_applicationName.equals( appName ) )
+        if( !applicationName.equals( appName ) )
         {
             return null;
         }
         synchronized( this )
         {
             Bundle bundle = serviceReference.getBundle();
-            HashSet<Bundle> clone = (HashSet<Bundle>) m_bundles.clone();
+            HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
             clone.add( bundle );
-            m_bundles = clone;
+            bundles = clone;
         }
         return super.addingService( serviceReference );
     }
@@ -91,12 +101,12 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     public void removedService( ServiceReference serviceReference, Object o )
     {
         String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
-        if( !m_applicationName.equals( appName ) )
+        if( !applicationName.equals( appName ) )
         {
             return;
         }
         HashSet<Bundle> revisedSet = new HashSet<Bundle>();
-        revisedSet.add( m_paxWicketbundle );
+        revisedSet.add( paxWicketbundle );
         try
         {
             ServiceReference[] serviceReferences = context.getAllServiceReferences( null, FILTER );
@@ -104,7 +114,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             {
                 revisedSet.add( ref.getBundle() );
             }
-            m_bundles = revisedSet;
+            bundles = revisedSet;
         } catch( InvalidSyntaxException e )
         {
             // Can not happen.

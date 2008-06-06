@@ -20,10 +20,11 @@ package org.ops4j.pax.wicket.samples.departmentstore.service.alternative.interna
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 public class AlternativeDepartmentStoreImpl
     implements DepartmentStore, Serializable
@@ -31,40 +32,44 @@ public class AlternativeDepartmentStoreImpl
 
     private static final long serialVersionUID = 1L;
 
-    private List<Floor> m_floors;
-    private String m_name;
-    private String m_history;
+    private List<Floor> floors;
+    private String name;
+    private String history;
 
-    public AlternativeDepartmentStoreImpl( String name )
+    public AlternativeDepartmentStoreImpl( String aName )
     {
-        m_name = name;
-        m_floors = new ArrayList<Floor>();
+        name = aName;
+
+        floors = new ArrayList<Floor>();
         Floor floor;
         Franchisee franchisee;
 
         floor = new AlternativeFloorImpl( "Basement" );
-        m_floors.add( floor );
-        franchisee = new AlternativeFranchiseeImpl( "DaPietro", "Italian restaurant");
+        floors.add( floor );
+
+        franchisee = new Franchisee( "DaPietro", "Italian restaurant" );
         floor.addFranchisee( franchisee );
-        franchisee = new AlternativeFranchiseeImpl( "Paese", "Corsican Cuisine" );
+
+        franchisee = new Franchisee( "Paese", "Corsican Cuisine" );
         floor.addFranchisee( franchisee );
-            m_history = "No history available";
+
+        history = "No history available";
     }
 
     public String getName()
     {
-        return m_name;
+        return name;
     }
 
     public List<Floor> getFloors()
     {
-        return m_floors;
+        return floors;
     }
 
     public List<Franchisee> getAllFranchisees()
     {
         List<Franchisee> all = new ArrayList<Franchisee>();
-        for( Floor floor : m_floors )
+        for( Floor floor : floors )
         {
             List<Franchisee> franchisees = floor.getFranchisees();
             all.addAll( franchisees );
@@ -74,6 +79,6 @@ public class AlternativeDepartmentStoreImpl
 
     public String getHistory()
     {
-        return m_history;
+        return history;
     }
 }

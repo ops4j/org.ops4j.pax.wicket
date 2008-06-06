@@ -17,11 +17,40 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.model;
 
-public interface Franchisee
+import java.io.Serializable;
+
+public final class Franchisee
+    implements Serializable
 {
-    String getName();
 
-    String getDescription();
+    private static final long serialVersionUID = 1L;
 
-    void setDescription( String description );
+    private String m_name;
+    private String m_description;
+
+    public Franchisee( String name, String description )
+    {
+        m_name = name;
+        m_description = description;
+    }
+
+    public String getName()
+    {
+        return m_name;
+    }
+
+    public void setName( String name )
+    {
+        m_name = name;
+    }
+
+    public String getDescription()
+    {
+        return m_description;
+    }
+
+    public void setDescription( String description )
+    {
+        m_description = description;
+    }
 }

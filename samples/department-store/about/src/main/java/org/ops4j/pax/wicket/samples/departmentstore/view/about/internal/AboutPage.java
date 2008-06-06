@@ -17,23 +17,92 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.border.BoxBorder;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 public class AboutPage extends WebPage
 {
+
     private static final long serialVersionUID = 1L;
 
-    public AboutPage( DepartmentStore store )
+    public AboutPage( DepartmentStore store, BundleContext aContext )
     {
         super();
-        add( new Label( "storeName", store.getName() ) );
+
+        Label storeLabel = new Label( "storeName", store.getName() );
+        add( storeLabel );
+
         BoxBorder border = new BoxBorder( "border" );
         MultiLineLabel multiline = new MultiLineLabel( "history", store.getHistory() );
         border.add( multiline );
         add( border );
+
+        WebMarkupContainer container = new WebMarkupContainer( "container" );
+        add( container );
+        container.setOutputMarkupId( true );
+        container.add( new BundlesRepeatingView( "bundles", aContext ) );
+
+        add( new RefreshBundlesList( "refreshBundleList", container ) );
+    }
+
+    private static class BundlesRepeatingView
+        extends RepeatingView
+    {
+
+        private static final long serialVersionUID = 1L;
+
+        private final BundleContext context;
+
+        private BundlesRepeatingView( String aWicketId, BundleContext aContext )
+        {
+            super( aWicketId );
+            context = aContext;
+        }
+
+        @Override
+        protected final void onPopulate()
+        {
+            removeAll();
+
+            Bundle[] bundles = context.getBundles();
+            for( Bundle bundle : bundles )
+            {
+                int state = bundle.getState();
+                if( Bundle.ACTIVE == state )
+                {
+                    String symbolicName = bundle.getSymbolicName();
+                    add( new Label( newChildId(), symbolicName ) );
+                }
+            }
+        }
+    }
+
+    private static class RefreshBundlesList extends AjaxLink
+    {
+
+        private static final long serialVersionUID = 1L;
+
+        private final WebMarkupContainer containerToRefresh;
+
+        private RefreshBundlesList( String aWicketId, WebMarkupContainer aContainer )
+        {
+            super( aWicketId );
+            containerToRefresh = aContainer;
+        }
+
+        @Override
+        public final void onClick( AjaxRequestTarget aTarget )
+        {
+            aTarget.addComponent( containerToRefresh );
+        }
     }
 }

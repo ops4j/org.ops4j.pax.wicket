@@ -55,6 +55,7 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel>
         m_instances.put( floorName, this );
     }
 
+    @Override
     protected FloorPanel createComponent( String wicketId )
     {
         List<String> sources = getWiredSourceIds( FloorPanel.WICKET_ID_FRANCHISEE, null );

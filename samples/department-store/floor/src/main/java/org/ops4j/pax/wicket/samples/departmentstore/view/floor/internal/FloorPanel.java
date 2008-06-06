@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import static org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.FloorAggregatedSource.*;
 
 /**
  * {@code FloorPanel}
@@ -94,7 +95,7 @@ final class FloorPanel extends Panel
         protected void populateItem( ListItem item )
         {
             String sourceId = (String) item.getModelObject();
-            FloorAggregatedSource instance = FloorAggregatedSource.getInstance( m_floorName );
+            FloorAggregatedSource instance = getInstance( m_floorName );
             Component component = instance.createWiredComponent( sourceId, WICKET_ID_FRANCHISEE );
 
             item.add( component );

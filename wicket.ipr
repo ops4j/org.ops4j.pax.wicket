@@ -106,8 +106,8 @@
         <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
         <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
         <option name="SPACE_BEFORE_SYNCHRONIZED_PARENTHESES" value="false" />
-        <option name="FIELD_NAME_PREFIX" value="m_" />
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="200" />
+        <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="100" />
         <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
           <value />
         </option>

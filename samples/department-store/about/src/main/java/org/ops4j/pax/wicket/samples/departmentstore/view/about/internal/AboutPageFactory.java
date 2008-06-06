@@ -17,20 +17,23 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
-import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
-import org.ops4j.pax.wicket.api.PageFactory;
-
 import org.apache.wicket.PageParameters;
+import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
+import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
+import org.osgi.framework.BundleContext;
 
 public class AboutPageFactory
     implements PageFactory<AboutPage>
 {
-    private DepartmentStoreModelTracker m_tracker;
 
-    public AboutPageFactory( DepartmentStoreModelTracker tracker )
+    private final DepartmentStoreModelTracker tracker;
+    private final BundleContext context;
+
+    public AboutPageFactory( DepartmentStoreModelTracker aTracker, BundleContext aContext )
     {
-        m_tracker = tracker;
+        tracker = aTracker;
+        context = aContext;
     }
 
     public Class<AboutPage> getPageClass()
@@ -40,7 +43,7 @@ public class AboutPageFactory
 
     public AboutPage createPage( PageParameters params )
     {
-        DepartmentStore store = m_tracker.getDepartmentStore();
-        return new AboutPage( store );
+        DepartmentStore store = tracker.getDepartmentStore();
+        return new AboutPage( store, context );
     }
 }

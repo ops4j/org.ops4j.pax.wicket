@@ -119,7 +119,8 @@ public final class DelegatingClassResolver
                 LOGGER.warn( "ClassResolver " + resolver + " threw an unexpected exception.", e );
             }
         }
-        return null;
+
+        throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
     }
 
     private final class ClassResolverTracker extends ServiceTracker

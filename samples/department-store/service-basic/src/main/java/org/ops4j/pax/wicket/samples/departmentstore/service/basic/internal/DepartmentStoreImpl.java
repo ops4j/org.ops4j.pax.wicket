@@ -71,7 +71,7 @@ public class DepartmentStoreImpl
     {
         Floor forthFloor = new FloorImpl( "4th" );
 
-        Franchisee footCourt = new FranchiseeImpl( "Hang Wah Seng", "More food" );
+        Franchisee footCourt = new Franchisee( "Hang Wah Seng", "More food" );
         forthFloor.addFranchisee( footCourt );
 
         return forthFloor;
@@ -81,7 +81,7 @@ public class DepartmentStoreImpl
     {
         Floor thirdFloor = new FloorImpl( "3rd" );
 
-        Franchisee apple = new FranchiseeImpl( "Apple Computers", "Fruity machines" );
+        Franchisee apple = new Franchisee( "Apple Computers", "Fruity machines" );
         thirdFloor.addFranchisee( apple );
 
         return thirdFloor;
@@ -92,7 +92,7 @@ public class DepartmentStoreImpl
         Floor secondFloor = new FloorImpl( "2nd" );
 
         Franchisee teppanyaki =
-            new FranchiseeImpl( "Teppanyaki", "Fried Food of Japan like the Japanese never tasted." );
+            new Franchisee( "Teppanyaki", "Fried Food of Japan like the Japanese never tasted." );
         secondFloor.addFranchisee( teppanyaki );
 
         return secondFloor;
@@ -102,7 +102,7 @@ public class DepartmentStoreImpl
     {
         Floor firstFloor = new FloorImpl( "1st" );
 
-        Franchisee franchisee = new FranchiseeImpl( "Esquire Kitchen", "Chinese Food" );
+        Franchisee franchisee = new Franchisee( "Esquire Kitchen", "Chinese Food" );
         firstFloor.addFranchisee( franchisee );
 
         return firstFloor;
@@ -112,13 +112,13 @@ public class DepartmentStoreImpl
     {
         Floor gFloor = new FloorImpl( "G" );
 
-        Franchisee famouseAmos = new FranchiseeImpl( "Famous Amos", "Who?" );
+        Franchisee famouseAmos = new Franchisee( "Famous Amos", "Who?" );
         gFloor.addFranchisee( famouseAmos );
 
-        Franchisee rejectShop = new FranchiseeImpl( "RejectShop", "Reject the shop" );
+        Franchisee rejectShop = new Franchisee( "RejectShop", "Reject the shop" );
         gFloor.addFranchisee( rejectShop );
 
-        Franchisee watsons = new FranchiseeImpl( "Watson's", "Drugs and Rock'n Roll" );
+        Franchisee watsons = new Franchisee( "Watson's", "Drugs and Rock'n Roll" );
         gFloor.addFranchisee( watsons );
 
         return gFloor;
@@ -128,10 +128,10 @@ public class DepartmentStoreImpl
     {
         Floor floor = new FloorImpl( "LG" );
 
-        Franchisee levi = new FranchiseeImpl( "Levi", "Jeans" );
+        Franchisee levi = new Franchisee( "Levi", "Jeans" );
         floor.addFranchisee( levi );
 
-        Franchisee vinci = new FranchiseeImpl( "Vinci", "Shoes, shoes, shoes..." );
+        Franchisee vinci = new Franchisee( "Vinci", "Shoes, shoes, shoes..." );
         floor.addFranchisee( vinci );
 
         return floor;
@@ -141,10 +141,10 @@ public class DepartmentStoreImpl
     {
         Floor cFloor = new FloorImpl( "C" );
 
-        Franchisee mcDonald = new FranchiseeImpl( "McDonald", "Fast food, bad mouth feel." );
+        Franchisee mcDonald = new Franchisee( "McDonald", "Fast food, bad mouth feel." );
         cFloor.addFranchisee( mcDonald );
 
-        Franchisee kfc = new FranchiseeImpl( "KFC", "Fast Food, Licking your ...." );
+        Franchisee kfc = new Franchisee( "KFC", "Fast Food, Licking your ...." );
         cFloor.addFranchisee( kfc );
 
         return cFloor;

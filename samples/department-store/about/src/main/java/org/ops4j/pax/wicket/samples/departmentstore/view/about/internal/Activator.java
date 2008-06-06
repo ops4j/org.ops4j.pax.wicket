@@ -30,25 +30,29 @@ public class Activator
     implements BundleActivator
 {
 
-    private DepartmentStoreModelTracker m_storeTracker;
-    private ServiceRegistration m_serviceRegistration;
+    private DepartmentStoreModelTracker storeTracker;
+    private ServiceRegistration registration;
 
-    public void start( BundleContext bundleContext )
+    public void start( BundleContext aContext )
         throws Exception
     {
-        m_storeTracker = new DepartmentStoreModelTracker( bundleContext );
-        m_storeTracker.open();
-        AboutPageFactory pageFactory = new AboutPageFactory( m_storeTracker );
+        storeTracker = new DepartmentStoreModelTracker( aContext );
+        storeTracker.open();
+
+        AboutPageFactory pageFactory = new AboutPageFactory( storeTracker, aContext );
         Properties props = new Properties();
         props.put( PAGE_NAME, "about" );
         props.put( APPLICATION_NAME, "departmentstore" );
-        m_serviceRegistration = bundleContext.registerService( PageFactory.class.getName(), pageFactory, props );
+        registration = aContext.registerService( PageFactory.class.getName(), pageFactory, props );
     }
 
-    public void stop( BundleContext bundleContext )
+    public void stop( BundleContext aContext )
         throws Exception
     {
-        m_serviceRegistration.unregister();
-        m_storeTracker.close();
+        registration.unregister();
+        storeTracker.close();
+
+        storeTracker = null;
+        registration = null;
     }
 }

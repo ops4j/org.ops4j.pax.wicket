@@ -18,12 +18,10 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.util.Properties;
-import org.apache.wicket.application.IClassResolver;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import org.ops4j.pax.wicket.internal.serialization.SerializationActivator;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,27 +32,48 @@ public final class Activator
 
     private static final Logger LOGGER = LoggerFactory.getLogger( Activator.class );
 
-    private HttpTracker m_httpTracker;
-    private ServiceTracker m_appFactoryTracker;
+    private HttpTracker httpTracker;
+    private ServiceTracker applicationFactoryTracker;
+    private SerializationActivator serializationActivator;
 
-    public final void start( BundleContext bundleContext )
+    public final void start( BundleContext aContext )
         throws Exception
     {
-        LOGGER.debug( "Initializing the servlet." );
+        if( LOGGER.isDebugEnabled() )
+        {
+            Bundle bundle = aContext.getBundle();
+            String bundleSymbolicName = bundle.getSymbolicName();
 
-        m_httpTracker = new HttpTracker( bundleContext );
-        m_httpTracker.open();
+            LOGGER.debug( "Initializing [" + bundleSymbolicName + "] bundle." );
+        }
 
-        m_appFactoryTracker = new PaxWicketAppFactoryTracker( bundleContext, m_httpTracker );
-        m_appFactoryTracker.open();
+        httpTracker = new HttpTracker( aContext );
+        httpTracker.open();
+
+        applicationFactoryTracker = new PaxWicketAppFactoryTracker( aContext, httpTracker );
+        applicationFactoryTracker.open();
+
+        serializationActivator = new SerializationActivator();
+        serializationActivator.start( aContext );
     }
 
-    public final void stop( BundleContext bundleContext )
+    public final void stop( BundleContext aContext )
         throws Exception
     {
-        m_httpTracker.close();
-        m_httpTracker = null;
-        m_appFactoryTracker.close();
-        m_appFactoryTracker = null;
+        serializationActivator.stop( aContext );
+        httpTracker.close();
+        applicationFactoryTracker.close();
+
+        serializationActivator = null;
+        httpTracker = null;
+        applicationFactoryTracker = null;
+
+        if( LOGGER.isDebugEnabled() )
+        {
+            Bundle bundle = aContext.getBundle();
+            String bundleSymbolicName = bundle.getSymbolicName();
+
+            LOGGER.debug( "Bundle [" + bundleSymbolicName + "] stopped." );
+        }
     }
 }
