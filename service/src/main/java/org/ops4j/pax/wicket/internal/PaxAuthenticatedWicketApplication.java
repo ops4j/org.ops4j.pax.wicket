@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2008 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -23,33 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.Response;
-import org.apache.wicket.Session;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.*;
+import org.apache.wicket.authentication.*;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.settings.IApplicationSettings;
-import org.apache.wicket.settings.IDebugSettings;
-import org.apache.wicket.settings.IExceptionSettings;
-import org.apache.wicket.settings.IFrameworkSettings;
-import org.apache.wicket.settings.IMarkupSettings;
-import org.apache.wicket.settings.IPageSettings;
-import org.apache.wicket.settings.IRequestCycleSettings;
-import org.apache.wicket.settings.IResourceSettings;
-import org.apache.wicket.settings.ISecuritySettings;
-import org.apache.wicket.settings.ISessionSettings;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import org.apache.wicket.request.IRequestCycleProcessor;
+import org.apache.wicket.settings.*;
+import static org.ops4j.lang.NullArgumentException.*;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import org.ops4j.pax.wicket.api.MountPointInfo;
-import org.ops4j.pax.wicket.api.PageMounter;
-import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.ops4j.pax.wicket.api.*;
+import org.osgi.framework.*;
 
 public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
 {
@@ -64,7 +49,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private PageMounterTracker mounterTracker;
 
     protected Class<? extends Page> homepageClass;
-    private final PaxWicketPageFactory factory;
+    private final PaxWicketPageFactory pageFactory;
+    private final RequestCycleProcessorFactory requestCycleProcessorFactory;
     private final DelegatingClassResolver delegatingClassResolver;
     private final PaxWicketAuthenticator authenticator;
     private final Class<? extends WebPage> signInPage;
@@ -76,7 +62,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         String anApplicationName,
         PageMounter aPageMounter,
         Class<? extends Page> aHomePageClass,
-        PaxWicketPageFactory aFactory,
+        PaxWicketPageFactory aPageFactory,
+        RequestCycleProcessorFactory aRequestCycleProcessorFactory,
         DelegatingClassResolver aDelegatingClassResolver,
         PaxWicketAuthenticator anAuthenticator,
         Class<? extends WebPage> aSignInPage )
@@ -85,7 +72,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         validateNotNull( aBundleContext, "aBundleContext" );
         validateNotEmpty( anApplicationName, "anApplicationName" );
         validateNotNull( aHomePageClass, "aHomePageClass" );
-        validateNotNull( aFactory, "aFactory" );
+        validateNotNull( aPageFactory, "aPageFactory" );
+        validateNotNull( aRequestCycleProcessorFactory, "aRequestCycleProcessorFactory" );
         validateNotNull( aDelegatingClassResolver, "aDelegatingClassResolver" );
         validateNotNull( anAuthenticator, "anAuthenticator" );
         validateNotNull( aSignInPage, "aSignInPage" );
@@ -93,7 +81,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         bundleContext = aBundleContext;
         applicationName = anApplicationName;
         pageMounter = aPageMounter;
-        factory = aFactory;
+        pageFactory = aPageFactory;
+        requestCycleProcessorFactory = aRequestCycleProcessorFactory;
         homepageClass = aHomePageClass;
         delegatingClassResolver = aDelegatingClassResolver;
         authenticator = anAuthenticator;
@@ -123,7 +112,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         addWicketService( IApplicationSettings.class, applicationSettings );
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( factory );
+        sessionSettings.setPageFactory( pageFactory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
 //        addWicketService( IAjaxSettings.class, getAjaxSettings() );
@@ -226,6 +215,15 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         props.setProperty( APPLICATION_NAME, applicationName );
 
         serviceRegistrations.add( bundleContext.registerService( service.getName(), implementation, props ) );
+    }
+
+    @Override
+    protected IRequestCycleProcessor newRequestCycleProcessor()
+    {
+        if( null == requestCycleProcessorFactory )
+            return super.newRequestCycleProcessor();
+
+        return requestCycleProcessorFactory.newRequestCycleProcessor();
     }
 
     @Override

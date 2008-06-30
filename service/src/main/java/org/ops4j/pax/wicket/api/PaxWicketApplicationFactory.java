@@ -1,6 +1,7 @@
 /*
  * Copyright 2006 Niclas Hedhman.
  * Copyright 2006 Edward F. Yakop
+ * Copyright 2008 David Leangen
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -22,28 +23,16 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Properties;
-import org.apache.wicket.Page;
-import org.apache.wicket.application.IClassResolver;
-import org.apache.wicket.application.IComponentInstantiationListener;
+import org.apache.wicket.*;
+import org.apache.wicket.application.*;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketFilter;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.HOMEPAGE_CLASSNAME;
-import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
-import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
-import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
-import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
-import org.ops4j.pax.wicket.internal.PaxWicketApplication;
-import org.ops4j.pax.wicket.internal.PaxWicketPageFactory;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
+import org.apache.wicket.protocol.http.*;
+import static org.ops4j.lang.NullArgumentException.*;
+import static org.ops4j.pax.wicket.api.ContentSource.*;
+import org.ops4j.pax.wicket.internal.*;
+import org.osgi.framework.*;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.*;
 
 public final class PaxWicketApplicationFactory
     implements IWebApplicationFactory, ManagedService
@@ -66,6 +55,7 @@ public final class PaxWicketApplicationFactory
     private Class<? extends WebPage> signinPage;
 
     private PageMounter pageMounter;
+    private RequestCycleProcessorFactory requestCycleProcessorFactory;
 
     private List<IComponentInstantiationListener> componentInstantiationListeners;
 
@@ -303,6 +293,11 @@ public final class PaxWicketApplicationFactory
         pageMounter = aPageMounter;
     }
 
+    public void setRequestCycleProcessorFactory( RequestCycleProcessorFactory aFactory )
+    {
+        requestCycleProcessorFactory = aFactory;
+    }
+
     public final void setPaxWicketBundle( Bundle aBundle )
     {
         if( bdcrRegistration != null )
@@ -363,7 +358,7 @@ public final class PaxWicketApplicationFactory
             {
                 paxWicketApplication = new PaxAuthenticatedWicketApplication(
                     bundleContext, applicationName, pageMounter, homepageClass, pageFactory,
-                    delegatingClassResolver, authenticator, signinPage
+                    requestCycleProcessorFactory, delegatingClassResolver, authenticator, signinPage
                 );
             }
             else
