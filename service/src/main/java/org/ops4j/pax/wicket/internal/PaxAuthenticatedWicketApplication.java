@@ -50,6 +50,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
     protected Class<? extends Page> homepageClass;
     private final PaxWicketPageFactory pageFactory;
+    // Can be null, which means that we want to use the default provided by Wicket
     private final RequestCycleProcessorFactory requestCycleProcessorFactory;
     private final DelegatingClassResolver delegatingClassResolver;
     private final PaxWicketAuthenticator authenticator;
@@ -73,7 +74,6 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         validateNotEmpty( anApplicationName, "anApplicationName" );
         validateNotNull( aHomePageClass, "aHomePageClass" );
         validateNotNull( aPageFactory, "aPageFactory" );
-        validateNotNull( aRequestCycleProcessorFactory, "aRequestCycleProcessorFactory" );
         validateNotNull( aDelegatingClassResolver, "aDelegatingClassResolver" );
         validateNotNull( anAuthenticator, "anAuthenticator" );
         validateNotNull( aSignInPage, "aSignInPage" );
