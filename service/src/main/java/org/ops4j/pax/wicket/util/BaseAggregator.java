@@ -17,7 +17,7 @@
 package org.ops4j.pax.wicket.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import static java.util.Collections.sort;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -366,7 +366,7 @@ abstract class BaseAggregator
         List<ContentSource> contents = getContents( wicketId );
         if( comparator != null )
         {
-            Collections.sort( contents, comparator );
+            sort( contents, comparator );
         }
 
         for( ContentSource source : contents )

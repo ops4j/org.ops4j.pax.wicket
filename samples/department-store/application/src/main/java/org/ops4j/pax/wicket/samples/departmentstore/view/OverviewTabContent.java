@@ -19,7 +19,6 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view;
 
 import java.util.Locale;
-
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 
 /**

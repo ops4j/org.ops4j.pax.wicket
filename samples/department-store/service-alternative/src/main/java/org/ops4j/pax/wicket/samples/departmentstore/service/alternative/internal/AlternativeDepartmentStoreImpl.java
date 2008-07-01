@@ -23,8 +23,6 @@ import java.util.List;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 public class AlternativeDepartmentStoreImpl
     implements DepartmentStore, Serializable
@@ -32,20 +30,20 @@ public class AlternativeDepartmentStoreImpl
 
     private static final long serialVersionUID = 1L;
 
-    private List<Floor> floors;
-    private String name;
-    private String history;
+    private List<Floor> m_floors;
+    private String m_name;
+    private String m_history;
 
-    public AlternativeDepartmentStoreImpl( String aName )
+    public AlternativeDepartmentStoreImpl( String name )
     {
-        name = aName;
+        m_name = name;
 
-        floors = new ArrayList<Floor>();
+        m_floors = new ArrayList<Floor>();
         Floor floor;
         Franchisee franchisee;
 
         floor = new AlternativeFloorImpl( "Basement" );
-        floors.add( floor );
+        m_floors.add( floor );
 
         franchisee = new Franchisee( "DaPietro", "Italian restaurant" );
         floor.addFranchisee( franchisee );
@@ -53,23 +51,23 @@ public class AlternativeDepartmentStoreImpl
         franchisee = new Franchisee( "Paese", "Corsican Cuisine" );
         floor.addFranchisee( franchisee );
 
-        history = "No history available";
+        m_history = "No history available";
     }
 
     public String getName()
     {
-        return name;
+        return m_name;
     }
 
     public List<Floor> getFloors()
     {
-        return floors;
+        return m_floors;
     }
 
     public List<Franchisee> getAllFranchisees()
     {
         List<Franchisee> all = new ArrayList<Franchisee>();
-        for( Floor floor : floors )
+        for( Floor floor : m_floors )
         {
             List<Franchisee> franchisees = floor.getFranchisees();
             all.addAll( franchisees );
@@ -79,6 +77,6 @@ public class AlternativeDepartmentStoreImpl
 
     public String getHistory()
     {
-        return history;
+        return m_history;
     }
 }

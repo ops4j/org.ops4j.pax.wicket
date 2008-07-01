@@ -19,10 +19,10 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import java.io.Serializable;
-import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 
 /**
  * {@code FranchiseePanel}
@@ -38,9 +38,9 @@ public class FranchiseePanel extends Panel
     private static final String WICKET_ID_NAME_LABEL = "name";
     private static final String WICKET_ID_DESC_LABEL = "description";
 
-    public FranchiseePanel( String id, Franchisee franchisee )
+    public FranchiseePanel( String wicketId, Franchisee franchisee )
     {
-        super( id );
+        super( wicketId );
 
         AjaxEditableLabel nameLabel = new AjaxEditableLabel( WICKET_ID_NAME_LABEL, new PropertyModel( franchisee, "name") );
         add( nameLabel );

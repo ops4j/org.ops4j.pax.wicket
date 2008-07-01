@@ -24,18 +24,18 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 final class PaxWicketFilter extends WicketFilter
 {
 
-    private final IWebApplicationFactory applicationFactory;
+    private final IWebApplicationFactory m_applicationFactory;
 
-    PaxWicketFilter( IWebApplicationFactory aFactory )
+    PaxWicketFilter( IWebApplicationFactory factory )
         throws IllegalArgumentException
     {
-        validateNotNull( aFactory, "aFactory" );
-        applicationFactory = aFactory;
+        validateNotNull( factory, "factory" );
+        m_applicationFactory = factory;
     }
 
     @Override
     protected final IWebApplicationFactory getApplicationFactory()
     {
-        return applicationFactory;
+        return m_applicationFactory;
     }
 }

@@ -35,47 +35,47 @@ final class ReplaceBundleContext
 
     private static final long serialVersionUID = 1L;
 
-    private static final Map<Long, WeakReference<BundleContext>> placeHolders;
+    private static final Map<Long, WeakReference<BundleContext>> m_placeHolders;
 
     static
     {
-        placeHolders = synchronizedMap( new HashMap<Long, WeakReference<BundleContext>>() );
+        m_placeHolders = synchronizedMap( new HashMap<Long, WeakReference<BundleContext>>() );
     }
 
     /**
      * Removes bundle place holder.
      *
-     * @param aBundleId The bundle id.
+     * @param bundleId The bundle id.
      *
      * @since 0.5.4
      */
-    static void removeBundlePlaceHolder( long aBundleId )
+    static void removeBundlePlaceHolder( long bundleId )
     {
-        placeHolders.remove( aBundleId );
+        m_placeHolders.remove( bundleId );
     }
 
-    private final long bundleId;
+    private final long m_bundleId;
 
     /**
      * Construct a new instance of {@code ReplaceBundleContext}.
      *
-     * @param aBundleContext The bundle context. Must not be {@code null}.
+     * @param bundleContext The bundle context. Must not be {@code null}.
      *
      * @throws IllegalArgumentException Thrown if the specified {@code aBundleContext} is {@code null}.
      * @since 0.5.4
      */
-    ReplaceBundleContext( BundleContext aBundleContext )
+    ReplaceBundleContext( BundleContext bundleContext )
         throws IllegalArgumentException
     {
-        validateNotNull( aBundleContext, "aBundleContext" );
+        validateNotNull( bundleContext, "bundleContext" );
 
-        Bundle bundle = aBundleContext.getBundle();
-        bundleId = bundle.getBundleId();
+        Bundle bundle = bundleContext.getBundle();
+        m_bundleId = bundle.getBundleId();
 
-        WeakReference<BundleContext> reference = placeHolders.get( bundleId );
+        WeakReference<BundleContext> reference = m_placeHolders.get( m_bundleId );
         if( reference == null || reference.get() == null )
         {
-            placeHolders.put( bundleId, new WeakReference<BundleContext>( aBundleContext ) );
+            m_placeHolders.put( m_bundleId, new WeakReference<BundleContext>( bundleContext ) );
         }
     }
 
@@ -89,9 +89,9 @@ final class ReplaceBundleContext
     final BundleContext getBundleContext()
     {
         WeakReference<BundleContext> bundleReference;
-        synchronized( placeHolders )
+        synchronized( m_placeHolders )
         {
-            bundleReference = placeHolders.get( bundleId );
+            bundleReference = m_placeHolders.get( m_bundleId );
         }
 
         if( bundleReference != null )

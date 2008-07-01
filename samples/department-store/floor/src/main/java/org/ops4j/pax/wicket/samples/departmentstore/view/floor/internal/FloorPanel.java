@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import static org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.FloorAggregatedSource.*;
+import static org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.FloorAggregatedSource.getInstance;
 
 /**
  * {@code FloorPanel}

@@ -19,6 +19,7 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
+import static org.ops4j.pax.wicket.internal.TrackingUtil.createAllPageFactoryFilter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -35,7 +36,7 @@ final class PaxWicketPageTracker extends ServiceTracker
 
     PaxWicketPageTracker( BundleContext context, String applicationName, PaxWicketPageFactory paxWicketPageFactory )
     {
-        super( context, TrackingUtil.createAllPageFactoryFilter( context, applicationName ), null );
+        super( context, createAllPageFactoryFilter( context, applicationName ), null );
 
         m_applicationName = applicationName;
         m_paxWicketPageFactory = paxWicketPageFactory;

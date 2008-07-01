@@ -31,15 +31,15 @@ public class Activator
 {
 	private FranchiseeDepartmentStoreModelTracker m_storeTracker;
 
-    public void start( BundleContext bundleContext )
+    public void start( BundleContext context )
         throws Exception
     {
-		m_storeTracker = new FranchiseeDepartmentStoreModelTracker(bundleContext);
+		m_storeTracker = new FranchiseeDepartmentStoreModelTracker(context);
 		m_storeTracker.open();
 
     }
 
-    public void stop( BundleContext bundleContext )
+    public void stop( BundleContext context )
         throws Exception
     {
 		m_storeTracker.close();

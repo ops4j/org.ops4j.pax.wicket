@@ -17,13 +17,13 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.ops4j.pax.wicket.util.PageFinder;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 
 final class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
     implements PageFactory<OverviewPage>

@@ -32,45 +32,46 @@ public final class Activator
 
     private static final Logger LOGGER = LoggerFactory.getLogger( Activator.class );
 
-    private HttpTracker httpTracker;
-    private ServiceTracker applicationFactoryTracker;
-    private SerializationActivator serializationActivator;
+    private HttpTracker m_httpTracker;
+    private ServiceTracker m_applicationFactoryTracker;
+    private SerializationActivator m_serializationActivator;
 
-    public final void start( BundleContext aContext )
+    public final void start( BundleContext context )
         throws Exception
     {
         if( LOGGER.isDebugEnabled() )
         {
-            Bundle bundle = aContext.getBundle();
+            Bundle bundle = context.getBundle();
             String bundleSymbolicName = bundle.getSymbolicName();
 
             LOGGER.debug( "Initializing [" + bundleSymbolicName + "] bundle." );
         }
 
-        httpTracker = new HttpTracker( aContext );
-        httpTracker.open();
+        m_httpTracker = new HttpTracker( context );
+        m_httpTracker.open();
 
-        applicationFactoryTracker = new PaxWicketAppFactoryTracker( aContext, httpTracker );
-        applicationFactoryTracker.open();
+        m_applicationFactoryTracker = new PaxWicketAppFactoryTracker( context, m_httpTracker );
+        m_applicationFactoryTracker.open();
 
-        serializationActivator = new SerializationActivator();
-        serializationActivator.start( aContext );
+        m_serializationActivator = new SerializationActivator();
+        m_serializationActivator.start( context );
+        context.getBundle().getResources( "pathToResource" );
     }
 
-    public final void stop( BundleContext aContext )
+    public final void stop( BundleContext context )
         throws Exception
     {
-        serializationActivator.stop( aContext );
-        httpTracker.close();
-        applicationFactoryTracker.close();
+        m_serializationActivator.stop( context );
+        m_httpTracker.close();
+        m_applicationFactoryTracker.close();
 
-        serializationActivator = null;
-        httpTracker = null;
-        applicationFactoryTracker = null;
+        m_serializationActivator = null;
+        m_httpTracker = null;
+        m_applicationFactoryTracker = null;
 
         if( LOGGER.isDebugEnabled() )
         {
-            Bundle bundle = aContext.getBundle();
+            Bundle bundle = context.getBundle();
             String bundleSymbolicName = bundle.getSymbolicName();
 
             LOGGER.debug( "Bundle [" + bundleSymbolicName + "] stopped." );

@@ -21,8 +21,8 @@ package org.ops4j.pax.wicket.api;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 
-/** PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
- *
+/**
+ * PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
  */
 public interface PageFactory<T extends Page>
 {
@@ -40,6 +40,7 @@ public interface PageFactory<T extends Page>
      * Creates a page with the specified {@code params}.
      *
      * @param params The page parameters.
+     *
      * @return An instance of page.
      *
      * @since 1.0.0

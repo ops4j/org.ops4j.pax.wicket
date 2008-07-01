@@ -36,6 +36,7 @@ public abstract class PaxWicketIntegrationTest extends AbstractConfigurableBundl
      *
      * @since 0.5.4
      */
+    @Override
     protected final String[] getTestFrameworkBundlesNames()
     {
         ArrayList<String> validBundleList = new ArrayList<String>();
@@ -71,19 +72,19 @@ public abstract class PaxWicketIntegrationTest extends AbstractConfigurableBundl
     /**
      * Return bundle given the symbolic name. Returns {@code null} if not found.
      *
-     * @param aSymbolicName The bundle symbolic name.
+     * @param symbolicName The bundle symbolic name.
      *
      * @return The bundle given the symbolic name.
      *
      * @since 0.5.4
      */
-    protected final Bundle getBundleBySymbolicName( String aSymbolicName )
+    protected final Bundle getBundleBySymbolicName( String symbolicName )
     {
         Bundle[] bundles = bundleContext.getBundles();
         for( Bundle bundle : bundles )
         {
             String bundleSymbolicName = bundle.getSymbolicName();
-            if( bundleSymbolicName.equals( aSymbolicName ) )
+            if( bundleSymbolicName.equals( symbolicName ) )
             {
                 return bundle;
             }

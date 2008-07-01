@@ -37,7 +37,7 @@ public class AboutPage extends WebPage
 
     private static final long serialVersionUID = 1L;
 
-    public AboutPage( DepartmentStore store, BundleContext aContext )
+    public AboutPage( DepartmentStore store, BundleContext context )
     {
         super();
 
@@ -56,7 +56,7 @@ public class AboutPage extends WebPage
         Model labelModel = new Model( "All bundles" );
         container.add( new Label( "displayTitle", labelModel ) );
         Model bundleViewModel = new Model( ACTIVE );
-        container.add( new BundlesRepeatingView( "bundles", bundleViewModel, aContext ) );
+        container.add( new BundlesRepeatingView( "bundles", bundleViewModel, context ) );
 
         add(
             new DisplayBundleList(
@@ -81,12 +81,12 @@ public class AboutPage extends WebPage
 
         private static final long serialVersionUID = 1L;
 
-        private final BundleContext context;
+        private final BundleContext m_context;
 
-        private BundlesRepeatingView( String aWicketId, Model aBundleStateToDisplay, BundleContext aContext )
+        private BundlesRepeatingView( String wicketId, Model bundleStateToDisplay, BundleContext context )
         {
-            super( aWicketId, aBundleStateToDisplay );
-            context = aContext;
+            super( wicketId, bundleStateToDisplay );
+            m_context = context;
         }
 
         @Override
@@ -96,7 +96,7 @@ public class AboutPage extends WebPage
 
             Integer bundleState = (Integer) getModelObject();
 
-            Bundle[] bundles = context.getBundles();
+            Bundle[] bundles = m_context.getBundles();
             for( Bundle bundle : bundles )
             {
                 int state = bundle.getState();
@@ -114,31 +114,31 @@ public class AboutPage extends WebPage
 
         private static final long serialVersionUID = 1L;
 
-        private final WebMarkupContainer containerToRefresh;
-        private final Model bundleViewModel;
-        private final Integer bundleStateToDisplay;
+        private final WebMarkupContainer m_containerToRefresh;
+        private final Model m_bundleViewModel;
+        private final Integer m_bundleStateToDisplay;
 
-        private final String labelToDisplay;
-        private final Model labelModel;
+        private final String m_labelToDisplay;
+        private final Model m_labelModel;
 
         private DisplayBundleList(
-            String aWicketId, WebMarkupContainer aContainer, Model aBundleViewModel, Integer abundleState,
-            String aLabelToDisplay, Model aLabelModel )
+            String wicketId, WebMarkupContainer container, Model bundleViewModel, Integer bundleState,
+            String labelToDisplay, Model labelModel )
         {
-            super( aWicketId );
-            containerToRefresh = aContainer;
-            bundleViewModel = aBundleViewModel;
-            bundleStateToDisplay = abundleState;
-            labelToDisplay = aLabelToDisplay;
-            labelModel = aLabelModel;
+            super( wicketId );
+            m_containerToRefresh = container;
+            m_bundleViewModel = bundleViewModel;
+            m_bundleStateToDisplay = bundleState;
+            m_labelToDisplay = labelToDisplay;
+            m_labelModel = labelModel;
         }
 
         @Override
-        public final void onClick( AjaxRequestTarget aTarget )
+        public final void onClick( AjaxRequestTarget target )
         {
-            labelModel.setObject( labelToDisplay );
-            bundleViewModel.setObject( bundleStateToDisplay );
-            aTarget.addComponent( containerToRefresh );
+            m_labelModel.setObject( m_labelToDisplay );
+            m_bundleViewModel.setObject( m_bundleStateToDisplay );
+            target.addComponent( m_containerToRefresh );
         }
     }
 }

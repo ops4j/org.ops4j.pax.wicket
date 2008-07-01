@@ -47,43 +47,43 @@ import org.osgi.framework.ServiceRegistration;
 public final class PaxWicketApplication extends WebApplication
 {
 
-    private final BundleContext bundleContext;
-    private final String applicationName;
-    private final PageMounter pageMounter;
-    private final PaxWicketPageFactory pageFactory;
-    private final DelegatingClassResolver delegatingClassResolver;
-    private final List<ServiceRegistration> serviceRegistrations;
-    protected final Class<? extends Page> homepageClass;
-    private PageMounterTracker mounterTracker;
+    private final BundleContext m_bundleContext;
+    private final String m_applicationName;
+    private final PageMounter m_pageMounter;
+    private final PaxWicketPageFactory m_pageFactory;
+    private final DelegatingClassResolver m_delegatingClassResolver;
+    private final List<ServiceRegistration> m_serviceRegistrations;
+    protected final Class<? extends Page> m_homepageClass;
+    private PageMounterTracker m_mounterTracker;
 
     public PaxWicketApplication(
-        BundleContext aContext,
-        String anApplicationName,
-        PageMounter aPageMounter,
-        Class<? extends Page> aHomepageClass,
-        PaxWicketPageFactory aPageFactory,
-        DelegatingClassResolver aDelegatingClassResolver )
+        BundleContext context,
+        String applicationName,
+        PageMounter pageMounter,
+        Class<? extends Page> homepageClass,
+        PaxWicketPageFactory pageFactory,
+        DelegatingClassResolver delegatingClassResolver )
         throws IllegalArgumentException
     {
-        validateNotNull( aContext, "aContext" );
-        validateNotEmpty( anApplicationName, "anApplicationName" );
-        validateNotNull( aHomepageClass, "aHomepageClass" );
-        validateNotNull( aPageFactory, "aPageFactory" );
-        validateNotNull( aDelegatingClassResolver, "aDelegatingClassResolver" );
+        validateNotNull( context, "context" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( homepageClass, "homepageClass" );
+        validateNotNull( pageFactory, "pageFactory" );
+        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
 
-        bundleContext = aContext;
-        applicationName = anApplicationName;
-        pageMounter = aPageMounter;
-        pageFactory = aPageFactory;
-        homepageClass = aHomepageClass;
-        delegatingClassResolver = aDelegatingClassResolver;
-        serviceRegistrations = new ArrayList<ServiceRegistration>();
+        m_bundleContext = context;
+        m_applicationName = applicationName;
+        m_pageMounter = pageMounter;
+        m_pageFactory = pageFactory;
+        m_homepageClass = homepageClass;
+        m_delegatingClassResolver = delegatingClassResolver;
+        m_serviceRegistrations = new ArrayList<ServiceRegistration>();
     }
 
     @Override
     public final Class<? extends Page> getHomePage()
     {
-        return homepageClass;
+        return m_homepageClass;
     }
 
     @Override
@@ -91,11 +91,11 @@ public final class PaxWicketApplication extends WebApplication
     {
         super.init();
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( delegatingClassResolver );
+        applicationSettings.setClassResolver( m_delegatingClassResolver );
         addWicketService( IApplicationSettings.class, applicationSettings );
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( pageFactory );
+        sessionSettings.setPageFactory( m_pageFactory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
 //        addWicketService( IAjaxSettings.class, getAjaxSettings() );
@@ -108,53 +108,54 @@ public final class PaxWicketApplication extends WebApplication
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        if( pageMounter != null )
+        if( m_pageMounter != null )
         {
-            for( MountPointInfo bookmark : pageMounter.getMountPoints() )
+            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
             {
                 mount( bookmark.getCodingStrategy() );
             }
         }
 
         // Now add a tracker so we can still mount pages later
-        mounterTracker = new PageMounterTracker( bundleContext, this, applicationName );
-        mounterTracker.open();
+        m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
+        m_mounterTracker.open();
     }
 
-    private <T> void addWicketService( Class<T> aService, T aServiceImplementation )
+    private <T> void addWicketService( Class<T> service, T serviceImplementation )
     {
         Properties props = new Properties();
 
         // Note: This is kept for legacy
-        props.setProperty( "applicationId", applicationName );
-        props.setProperty( APPLICATION_NAME, applicationName );
+        props.setProperty( "applicationId", m_applicationName );
+        props.setProperty( APPLICATION_NAME, m_applicationName );
 
-        String serviceName = aService.getName();
-        ServiceRegistration registration = bundleContext.registerService( serviceName, aServiceImplementation, props );
-        serviceRegistrations.add( registration );
+        String serviceName = service.getName();
+        ServiceRegistration registration =
+            m_bundleContext.registerService( serviceName, serviceImplementation, props );
+        m_serviceRegistrations.add( registration );
     }
 
     @Override
     protected void onDestroy()
     {
-        if( mounterTracker != null )
+        if( m_mounterTracker != null )
         {
-            mounterTracker.close();
-            mounterTracker = null;
+            m_mounterTracker.close();
+            m_mounterTracker = null;
         }
 
-        for( ServiceRegistration reg : serviceRegistrations )
+        for( ServiceRegistration reg : m_serviceRegistrations )
         {
             reg.unregister();
         }
-        serviceRegistrations.clear();
+        m_serviceRegistrations.clear();
 
         super.onDestroy();
     }
 
     @Override
-    protected final WebRequest newWebRequest( HttpServletRequest aRequest )
+    protected final WebRequest newWebRequest( HttpServletRequest request )
     {
-        return new PaxWicketRequest( aRequest );
+        return new PaxWicketRequest( request );
     }
 }

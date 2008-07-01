@@ -36,30 +36,30 @@ final class PageMounterTracker
     extends ServiceTracker
 {
 
-    private final WebApplication application;
+    private final WebApplication m_application;
 
-    PageMounterTracker( BundleContext aContext, WebApplication anApplication, String anApplicationName )
+    PageMounterTracker( BundleContext context, WebApplication application, String applicationName )
         throws IllegalArgumentException
     {
-        super( aContext, createFilter( aContext, anApplicationName ), null );
-        validateNotNull( anApplication, "anApplication" );
+        super( context, createFilter( context, applicationName ), null );
+        validateNotNull( application, "application" );
 
-        application = anApplication;
+        m_application = application;
     }
 
-    private static Filter createFilter( BundleContext aContext, String anApplicationName )
+    private static Filter createFilter( BundleContext context, String applicationName )
         throws IllegalArgumentException
     {
-        validateNotNull( aContext, "aContext" );
-        validateNotNull( anApplicationName, "anApplicationName" );
+        validateNotNull( context, "Context" );
+        validateNotNull( applicationName, "applicationName" );
 
         String filterString =
             "(&(" + OBJECTCLASS + "=" + PageMounter.class.getName() + ")"
-            + "(" + APPLICATION_NAME + "=" + anApplicationName + "))";
+            + "(" + APPLICATION_NAME + "=" + applicationName + "))";
 
         try
         {
-            return aContext.createFilter( filterString );
+            return context.createFilter( filterString );
         }
         catch( InvalidSyntaxException e )
         {
@@ -70,31 +70,31 @@ final class PageMounterTracker
     }
 
     @Override
-    public final Object addingService( ServiceReference aReference )
+    public final Object addingService( ServiceReference reference )
     {
-        PageMounter mounter = (PageMounter) super.addingService( aReference );
+        PageMounter mounter = (PageMounter) super.addingService( reference );
 
         List<MountPointInfo> infos = mounter.getMountPoints();
         for( MountPointInfo info : infos )
         {
             IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
-            application.mount( strategy );
+            m_application.mount( strategy );
         }
 
         return mounter;
     }
 
     @Override
-    public final void removedService( ServiceReference aReference, Object aMounter )
+    public final void removedService( ServiceReference reference, Object mounter )
     {
-        PageMounter mounter = (PageMounter) aMounter;
-        List<MountPointInfo> infos = mounter.getMountPoints();
+        PageMounter pageMounter = (PageMounter) mounter;
+        List<MountPointInfo> infos = pageMounter.getMountPoints();
         for( MountPointInfo bookmark : infos )
         {
             String path = bookmark.getPath();
-            application.unmount( path );
+            m_application.unmount( path );
         }
 
-        super.removedService( aReference, aMounter );
+        super.removedService( reference, pageMounter );
     }
 }

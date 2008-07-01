@@ -33,13 +33,13 @@ public final class Initializer
     implements IInitializer
 {
 
-    private final IInitializer wicketInitializer;
-    private final IInitializer wicketExtensionInitializer;
+    private final IInitializer m_wicketInitializer;
+    private final IInitializer m_wicketExtensionInitializer;
 
     public Initializer()
     {
-        wicketInitializer = new org.apache.wicket.Initializer();
-        wicketExtensionInitializer = new org.apache.wicket.extensions.Initializer();
+        m_wicketInitializer = new org.apache.wicket.Initializer();
+        m_wicketExtensionInitializer = new org.apache.wicket.extensions.Initializer();
     }
 
     /**
@@ -51,7 +51,7 @@ public final class Initializer
      */
     public final void init( Application application )
     {
-        wicketInitializer.init( application );
-        wicketExtensionInitializer.init( application );
+        m_wicketInitializer.init( application );
+        m_wicketExtensionInitializer.init( application );
     }
 }

@@ -35,29 +35,29 @@ public class GenericContext
 
     private static final Logger LOGGER = LoggerFactory.getLogger( GenericContext.class );
 
-    private String mountPoint;
-    private MimetypesFileTypeMap typeMap;
-    private Bundle bundle;
+    private String m_mountPoint;
+    private MimetypesFileTypeMap m_typeMap;
+    private Bundle m_bundle;
 
-    public GenericContext( Bundle aBundle, String aMountPoint )
+    public GenericContext( Bundle bundle, String mountPoint )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "GenericContext(" + aMountPoint + " )" );
+            LOGGER.debug( "GenericContext(" + mountPoint + " )" );
         }
 
-        bundle = aBundle;
+        m_bundle = bundle;
 
-        if( !aMountPoint.startsWith( "/" ) )
+        if( !mountPoint.startsWith( "/" ) )
         {
-            aMountPoint = "/" + aMountPoint;
+            mountPoint = "/" + mountPoint;
         }
-        mountPoint = aMountPoint;
-        typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
-        typeMap.addMimeTypes( "text/css css" );
+        m_mountPoint = mountPoint;
+        m_typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
+        m_typeMap.addMimeTypes( "text/css css" );
     }
 
-    public boolean handleSecurity( HttpServletRequest aRequest, HttpServletResponse aResponse )
+    public boolean handleSecurity( HttpServletRequest request, HttpServletResponse response )
         throws IOException
     {
         if( LOGGER.isDebugEnabled() )
@@ -68,24 +68,24 @@ public class GenericContext
         return true;
     }
 
-    public URL getResource( String aResourceName )
+    public URL getResource( String resourceName )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "getResource( " + aResourceName + " )" );
+            LOGGER.debug( "getResource( " + resourceName + " )" );
         }
 
-        aResourceName = aResourceName.substring( mountPoint.length() );
-        return bundle.getResource( aResourceName );
+        resourceName = resourceName.substring( m_mountPoint.length() );
+        return m_bundle.getResource( resourceName );
     }
 
-    public String getMimeType( String aResourceName )
+    public String getMimeType( String resourceName )
     {
         if( LOGGER.isDebugEnabled() )
         {
-            LOGGER.debug( "getMimeType( " + aResourceName + " )" );
+            LOGGER.debug( "getMimeType( " + resourceName + " )" );
         }
-        URL resource = getResource( aResourceName );
+        URL resource = getResource( resourceName );
         if( resource == null )
         {
             return null;
@@ -96,7 +96,7 @@ public class GenericContext
             LOGGER.debug( "         URL: " + url );
         }
 
-        String contentType = typeMap.getContentType( url );
+        String contentType = m_typeMap.getContentType( url );
         if( LOGGER.isDebugEnabled() )
         {
             LOGGER.debug( " ContentType: " + contentType );

@@ -24,17 +24,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.wicket.*;
-import org.apache.wicket.authentication.*;
+import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
+import org.apache.wicket.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
-import org.apache.wicket.settings.*;
-import static org.ops4j.lang.NullArgumentException.*;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.settings.IDebugSettings;
+import org.apache.wicket.settings.IExceptionSettings;
+import org.apache.wicket.settings.IFrameworkSettings;
+import org.apache.wicket.settings.IMarkupSettings;
+import org.apache.wicket.settings.IPageSettings;
+import org.apache.wicket.settings.IRequestCycleSettings;
+import org.apache.wicket.settings.IResourceSettings;
+import org.apache.wicket.settings.ISecuritySettings;
+import org.apache.wicket.settings.ISessionSettings;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import org.ops4j.pax.wicket.api.*;
-import org.osgi.framework.*;
+import org.ops4j.pax.wicket.api.MountPointInfo;
+import org.ops4j.pax.wicket.api.PageMounter;
+import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
+import org.ops4j.pax.wicket.api.RequestCycleProcessorFactory;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 
 public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
 {
@@ -43,52 +61,52 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
     private static final AuthenticatedToken TOKEN_NOT_AUTHENTICATED = new AuthenticatedToken();
 
-    private final BundleContext bundleContext;
-    private final String applicationName;
-    private final PageMounter pageMounter;
-    private PageMounterTracker mounterTracker;
+    private final BundleContext m_bundleContext;
+    private final String m_applicationName;
+    private final PageMounter m_pageMounter;
+    private PageMounterTracker m_mounterTracker;
 
-    protected Class<? extends Page> homepageClass;
-    private final PaxWicketPageFactory pageFactory;
+    protected Class<? extends Page> m_homepageClass;
+    private final PaxWicketPageFactory m_pageFactory;
     // Can be null, which means that we want to use the default provided by Wicket
-    private final RequestCycleProcessorFactory requestCycleProcessorFactory;
-    private final DelegatingClassResolver delegatingClassResolver;
-    private final PaxWicketAuthenticator authenticator;
-    private final Class<? extends WebPage> signInPage;
-    private final HashMap<AuthenticatedToken, Roles> roles;
-    private final List<ServiceRegistration> serviceRegistrations;
+    private final RequestCycleProcessorFactory m_requestCycleProcessorFactory;
+    private final DelegatingClassResolver m_delegatingClassResolver;
+    private final PaxWicketAuthenticator m_authenticator;
+    private final Class<? extends WebPage> m_signInPage;
+    private final HashMap<AuthenticatedToken, Roles> m_roles;
+    private final List<ServiceRegistration> m_serviceRegistrations;
 
     public PaxAuthenticatedWicketApplication(
-        BundleContext aBundleContext,
-        String anApplicationName,
-        PageMounter aPageMounter,
-        Class<? extends Page> aHomePageClass,
-        PaxWicketPageFactory aPageFactory,
-        RequestCycleProcessorFactory aRequestCycleProcessorFactory,
-        DelegatingClassResolver aDelegatingClassResolver,
-        PaxWicketAuthenticator anAuthenticator,
-        Class<? extends WebPage> aSignInPage )
+        BundleContext bundleContext,
+        String applicationName,
+        PageMounter pageMounter,
+        Class<? extends Page> homePageClass,
+        PaxWicketPageFactory pageFactory,
+        RequestCycleProcessorFactory requestCycleProcessorFactory,
+        DelegatingClassResolver delegatingClassResolver,
+        PaxWicketAuthenticator authenticator,
+        Class<? extends WebPage> signInPage )
         throws IllegalArgumentException
     {
-        validateNotNull( aBundleContext, "aBundleContext" );
-        validateNotEmpty( anApplicationName, "anApplicationName" );
-        validateNotNull( aHomePageClass, "aHomePageClass" );
-        validateNotNull( aPageFactory, "aPageFactory" );
-        validateNotNull( aDelegatingClassResolver, "aDelegatingClassResolver" );
-        validateNotNull( anAuthenticator, "anAuthenticator" );
-        validateNotNull( aSignInPage, "aSignInPage" );
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
+        validateNotNull( homePageClass, "homePageClass" );
+        validateNotNull( pageFactory, "pageFactory" );
+        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        validateNotNull( authenticator, "authenticator" );
+        validateNotNull( signInPage, "signInPage" );
 
-        bundleContext = aBundleContext;
-        applicationName = anApplicationName;
-        pageMounter = aPageMounter;
-        pageFactory = aPageFactory;
-        requestCycleProcessorFactory = aRequestCycleProcessorFactory;
-        homepageClass = aHomePageClass;
-        delegatingClassResolver = aDelegatingClassResolver;
-        authenticator = anAuthenticator;
-        signInPage = aSignInPage;
-        roles = new HashMap<AuthenticatedToken, Roles>();
-        serviceRegistrations = new ArrayList<ServiceRegistration>();
+        m_bundleContext = bundleContext;
+        m_applicationName = applicationName;
+        m_pageMounter = pageMounter;
+        m_pageFactory = pageFactory;
+        m_requestCycleProcessorFactory = requestCycleProcessorFactory;
+        m_homepageClass = homePageClass;
+        m_delegatingClassResolver = delegatingClassResolver;
+        m_authenticator = authenticator;
+        m_signInPage = signInPage;
+        m_roles = new HashMap<AuthenticatedToken, Roles>();
+        m_serviceRegistrations = new ArrayList<ServiceRegistration>();
     }
 
     /**
@@ -99,7 +117,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     public Class<? extends Page> getHomePage()
     {
-        return homepageClass;
+        return m_homepageClass;
     }
 
     @Override
@@ -108,11 +126,11 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         super.init();
 
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( delegatingClassResolver );
+        applicationSettings.setClassResolver( m_delegatingClassResolver );
         addWicketService( IApplicationSettings.class, applicationSettings );
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( pageFactory );
+        sessionSettings.setPageFactory( m_pageFactory );
         addWicketService( ISessionSettings.class, sessionSettings );
 
 //        addWicketService( IAjaxSettings.class, getAjaxSettings() );
@@ -125,33 +143,33 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         addWicketService( IResourceSettings.class, getResourceSettings() );
         addWicketService( ISecuritySettings.class, getSecuritySettings() );
 
-        if( null != pageMounter )
+        if( null != m_pageMounter )
         {
-            for( MountPointInfo bookmark : pageMounter.getMountPoints() )
+            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
             {
                 mount( bookmark.getCodingStrategy() );
             }
         }
 
         // Now add a tracker so we can still mount pages later
-        mounterTracker = new PageMounterTracker( bundleContext, this, applicationName );
-        mounterTracker.open();
+        m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
+        m_mounterTracker.open();
     }
 
     @Override
     protected void onDestroy()
     {
-        if( mounterTracker != null )
+        if( m_mounterTracker != null )
         {
-            mounterTracker.close();
-            mounterTracker = null;
+            m_mounterTracker.close();
+            m_mounterTracker = null;
         }
 
-        for( ServiceRegistration reg : serviceRegistrations )
+        for( ServiceRegistration reg : m_serviceRegistrations )
         {
             reg.unregister();
         }
-        serviceRegistrations.clear();
+        m_serviceRegistrations.clear();
 
         super.onDestroy();
     }
@@ -177,21 +195,21 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     protected Class<? extends WebPage> getSignInPageClass()
     {
-        return signInPage;
+        return m_signInPage;
     }
 
     final AuthenticatedToken authenticate( String username, String password )
     {
-        if( authenticator == null )
+        if( m_authenticator == null )
         {
             return TOKEN_NOT_AUTHENTICATED;
         }
 
-        Roles roles = authenticator.authenticate( username, password );
+        Roles roles = m_authenticator.authenticate( username, password );
         if( roles != null )
         {
             AuthenticatedToken authenticatedToken = new AuthenticatedToken();
-            this.roles.put( authenticatedToken, roles );
+            this.m_roles.put( authenticatedToken, roles );
             return authenticatedToken;
         }
 
@@ -205,25 +223,27 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
             return EMPTY_ROLES;
         }
 
-        return roles.get( token );
+        return m_roles.get( token );
     }
 
     private <T> void addWicketService( final Class<T> service, final T implementation )
     {
         Properties props = new Properties();
-        props.setProperty( "applicationId", applicationName );
-        props.setProperty( APPLICATION_NAME, applicationName );
+        props.setProperty( "applicationId", m_applicationName );
+        props.setProperty( APPLICATION_NAME, m_applicationName );
 
-        serviceRegistrations.add( bundleContext.registerService( service.getName(), implementation, props ) );
+        m_serviceRegistrations.add( m_bundleContext.registerService( service.getName(), implementation, props ) );
     }
 
     @Override
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {
-        if( null == requestCycleProcessorFactory )
+        if( null == m_requestCycleProcessorFactory )
+        {
             return super.newRequestCycleProcessor();
+        }
 
-        return requestCycleProcessorFactory.newRequestCycleProcessor();
+        return m_requestCycleProcessorFactory.newRequestCycleProcessor();
     }
 
     @Override

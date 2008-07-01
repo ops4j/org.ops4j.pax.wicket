@@ -17,9 +17,9 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.service.alternative.internal;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 

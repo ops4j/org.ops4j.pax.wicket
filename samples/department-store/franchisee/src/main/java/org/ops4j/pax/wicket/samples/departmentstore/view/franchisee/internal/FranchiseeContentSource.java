@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
-import org.apache.wicket.MarkupContainer;
 
 /**
  * {@code FranchiseeContentSource}

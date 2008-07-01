@@ -18,7 +18,6 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.Serializable;
-
 import org.apache.wicket.Request;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -36,7 +35,7 @@ public final class PaxWicketSession extends AuthenticatedWebSession
     /**
      * Construct the instance of pax wicket session.
      *
-     * @param request     The incoming request.
+     * @param request The incoming request.
      */
     public PaxWicketSession( Request request )
     {

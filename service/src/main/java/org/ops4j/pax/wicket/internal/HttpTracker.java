@@ -35,20 +35,20 @@ import org.osgi.util.tracker.ServiceTracker;
 final class HttpTracker extends ServiceTracker
 {
 
-    private HttpService httpService;
-    private final HashMap<String, ServletDescriptor> servlets;
+    private HttpService m_httpService;
+    private final HashMap<String, ServletDescriptor> m_servlets;
 
-    HttpTracker( BundleContext bundleContext )
+    HttpTracker( BundleContext context )
     {
-        super( bundleContext, HttpService.class.getName(), null );
-        servlets = new HashMap<String, ServletDescriptor>();
+        super( context, HttpService.class.getName(), null );
+        m_servlets = new HashMap<String, ServletDescriptor>();
     }
 
     @Override
     public final Object addingService( ServiceReference serviceReference )
     {
-        httpService = (HttpService) super.addingService( serviceReference );
-        for( Map.Entry<String, ServletDescriptor> entry : servlets.entrySet() )
+        m_httpService = (HttpService) super.addingService( serviceReference );
+        for( Map.Entry<String, ServletDescriptor> entry : m_servlets.entrySet() )
         {
             ServletDescriptor descriptor = entry.getValue();
             Servlet servlet = descriptor.servlet;
@@ -56,7 +56,7 @@ final class HttpTracker extends ServiceTracker
             String mountpoint = entry.getKey();
             try
             {
-                httpService.registerServlet( mountpoint, servlet, null, context );
+                m_httpService.registerServlet( mountpoint, servlet, null, context );
             } catch( NamespaceException e )
             {
                 throw new IllegalArgumentException(
@@ -70,7 +70,7 @@ final class HttpTracker extends ServiceTracker
             }
         }
 
-        return httpService;
+        return m_httpService;
     }
 
     @Override
@@ -79,12 +79,12 @@ final class HttpTracker extends ServiceTracker
         Set<String> mountPoints;
         synchronized( this )
         {
-            mountPoints = new HashSet<String>( servlets.keySet() );
+            mountPoints = new HashSet<String>( m_servlets.keySet() );
         }
 
         for( String mountpoint : mountPoints )
         {
-            this.httpService.unregister( mountpoint );
+            this.m_httpService.unregister( mountpoint );
         }
 
         super.removedService( serviceReference, httpService );
@@ -96,21 +96,21 @@ final class HttpTracker extends ServiceTracker
         mountPoint = normalizeMountPoint( mountPoint );
         HttpContext httpContext = new GenericContext( paxWicketBundle, mountPoint );
         ServletDescriptor descriptor = new ServletDescriptor( servlet, httpContext );
-        servlets.put( mountPoint, descriptor );
-        if( httpService != null )
+        m_servlets.put( mountPoint, descriptor );
+        if( m_httpService != null )
         {
-            httpService.registerServlet( mountPoint, servlet, null, httpContext );
+            m_httpService.registerServlet( mountPoint, servlet, null, httpContext );
         }
     }
 
     final void removeServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
-        if( servlets.remove( mountPoint ) != null )
+        if( m_servlets.remove( mountPoint ) != null )
         {
-            if( httpService != null )
+            if( m_httpService != null )
             {
-                httpService.unregister( mountPoint );
+                m_httpService.unregister( mountPoint );
             }
         }
     }
@@ -127,7 +127,7 @@ final class HttpTracker extends ServiceTracker
     final Servlet getServlet( String mountPoint )
     {
         mountPoint = normalizeMountPoint( mountPoint );
-        ServletDescriptor descriptor = servlets.get( mountPoint );
+        ServletDescriptor descriptor = m_servlets.get( mountPoint );
         return descriptor.servlet;
     }
 

@@ -45,18 +45,18 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                  ")";
     }
 
-    private HashSet<Bundle> bundles;
-    private final String applicationName;
-    private final Bundle paxWicketbundle;
+    private HashSet<Bundle> m_bundles;
+    private final String m_applicationName;
+    private final Bundle m_paxWicketbundle;
 
-    public BundleDelegatingClassResolver( BundleContext aContext, String anApplicationName, Bundle aPaxWicketBundle )
+    public BundleDelegatingClassResolver( BundleContext context, String applicationName, Bundle paxWicketBundle )
     {
-        super( aContext, createFilter( aContext ), null );
+        super( context, createFilter( context ), null );
 
-        applicationName = anApplicationName;
-        paxWicketbundle = aPaxWicketBundle;
-        bundles = new HashSet<Bundle>();
-        bundles.add( aPaxWicketBundle );
+        m_applicationName = applicationName;
+        m_paxWicketbundle = paxWicketBundle;
+        m_bundles = new HashSet<Bundle>();
+        m_bundles.add( paxWicketBundle );
 
         open( true );
     }
@@ -64,7 +64,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     public Class resolveClass( String classname )
         throws ClassNotFoundException
     {
-        for( Bundle bundle : bundles )
+        for( Bundle bundle : m_bundles )
         {
             try
             {
@@ -81,32 +81,35 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
     }
 
+    @Override
+    @SuppressWarnings( "unchecked" )
     public Object addingService( ServiceReference serviceReference )
     {
         String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
-        if( !applicationName.equals( appName ) )
+        if( !m_applicationName.equals( appName ) )
         {
             return null;
         }
         synchronized( this )
         {
             Bundle bundle = serviceReference.getBundle();
-            HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
+            HashSet<Bundle> clone = (HashSet<Bundle>) m_bundles.clone();
             clone.add( bundle );
-            bundles = clone;
+            m_bundles = clone;
         }
         return super.addingService( serviceReference );
     }
 
+    @Override
     public void removedService( ServiceReference serviceReference, Object o )
     {
         String appName = (String) serviceReference.getProperty( APPLICATION_NAME );
-        if( !applicationName.equals( appName ) )
+        if( !m_applicationName.equals( appName ) )
         {
             return;
         }
         HashSet<Bundle> revisedSet = new HashSet<Bundle>();
-        revisedSet.add( paxWicketbundle );
+        revisedSet.add( m_paxWicketbundle );
         try
         {
             ServiceReference[] serviceReferences = context.getAllServiceReferences( null, FILTER );
@@ -114,7 +117,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             {
                 revisedSet.add( ref.getBundle() );
             }
-            bundles = revisedSet;
+            m_bundles = revisedSet;
         } catch( InvalidSyntaxException e )
         {
             // Can not happen.

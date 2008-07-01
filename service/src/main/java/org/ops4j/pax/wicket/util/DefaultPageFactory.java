@@ -17,33 +17,33 @@
 package org.ops4j.pax.wicket.util;
 
 import java.lang.reflect.UndeclaredThrowableException;
-
-import org.osgi.framework.BundleContext;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.osgi.framework.BundleContext;
 
 public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T>
 {
+
     private Class<T> m_pageClass;
 
-    public DefaultPageFactory( 
-            BundleContext bundleContext, 
-            String pageId, 
-            String applicationName, 
-            String pageName,
-            Class<T> pageClass )
+    public DefaultPageFactory(
+        BundleContext bundleContext,
+        String pageId,
+        String applicationName,
+        String pageName,
+        Class<T> pageClass )
         throws IllegalArgumentException
     {
         this( bundleContext, pageId, applicationName, pageName, pageClass, null );
     }
 
-    public DefaultPageFactory( 
-            BundleContext bundleContext, 
-            String pageId, 
-            String applicationName, 
-            String pageName,
-            Class<T> pageClass,
-            String niceUrlPath )
+    public DefaultPageFactory(
+        BundleContext bundleContext,
+        String pageId,
+        String applicationName,
+        String pageName,
+        Class<T> pageClass,
+        String niceUrlPath )
         throws IllegalArgumentException
     {
         super( bundleContext, pageId, applicationName, pageName );

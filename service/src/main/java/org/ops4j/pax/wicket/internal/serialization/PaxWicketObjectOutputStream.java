@@ -37,54 +37,54 @@ final class PaxWicketObjectOutputStream extends ObjectOutputStream
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketObjectOutputStream.class );
 
-    private final ObjectOutputStream outputStream;
+    private final ObjectOutputStream m_outputStream;
 
-    PaxWicketObjectOutputStream( OutputStream anOutputStream )
+    PaxWicketObjectOutputStream( OutputStream outputStream )
         throws IOException, SecurityException, IllegalArgumentException
     {
-        validateNotNull( anOutputStream, "anOutputStream" );
-        outputStream = new ObjectOutputStream( anOutputStream )
+        validateNotNull( outputStream, "outputStream" );
+        m_outputStream = new ObjectOutputStream( outputStream )
         {
             {
                 enableReplaceObject( true );
             }
 
             @Override
-            protected final Object replaceObject( Object anObject )
+            protected final Object replaceObject( Object object )
                 throws IOException
             {
-                if( anObject instanceof BundleContext )
+                if( object instanceof BundleContext )
                 {
-                    BundleContext context = (BundleContext) anObject;
+                    BundleContext context = (BundleContext) object;
                     return new ReplaceBundleContext( context );
                 }
-                else if( anObject instanceof Bundle )
+                else if( object instanceof Bundle )
                 {
-                    Bundle bundle = (Bundle) anObject;
+                    Bundle bundle = (Bundle) object;
                     return new ReplaceBundle( bundle );
                 }
                 else
                 {
-                    return super.replaceObject( anObject );
+                    return super.replaceObject( object );
                 }
             }
         };
     }
 
     @Override
-    protected final void writeObjectOverride( final Object obj )
+    protected final void writeObjectOverride( final Object object )
         throws IOException
     {
         try
         {
-            outputStream.writeObject( obj );
+            m_outputStream.writeObject( object );
         }
         catch( IOException e )
         {
             if( isAvailable() )
             {
                 // trigger serialization again, but this time gather some more info
-                new SerializableChecker( (NotSerializableException) e ).writeObject( obj );
+                new SerializableChecker( (NotSerializableException) e ).writeObject( object );
 
                 // if we get here, we didn't fail, while we should;
                 throw e;
@@ -94,7 +94,7 @@ final class PaxWicketObjectOutputStream extends ObjectOutputStream
         }
         catch( RuntimeException e )
         {
-            LOGGER.error( "error writing object " + obj + ": " + e.getMessage(), e );
+            LOGGER.error( "error writing object " + object + ": " + e.getMessage(), e );
             throw e;
         }
     }
@@ -103,14 +103,14 @@ final class PaxWicketObjectOutputStream extends ObjectOutputStream
     public final void flush()
         throws IOException
     {
-        outputStream.flush();
+        m_outputStream.flush();
     }
 
     @Override
     public final void close()
         throws IOException
     {
-        outputStream.close();
+        m_outputStream.close();
     }
 }
 

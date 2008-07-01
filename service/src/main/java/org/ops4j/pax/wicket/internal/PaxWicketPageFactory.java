@@ -35,31 +35,35 @@ public final class PaxWicketPageFactory
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketPageFactory.class );
 
-    private final BundleContext bundleContext;
-    private final String applicationName;
-    private final HashMap<Class, PageFactory> contents;
+    private final BundleContext m_bundleContext;
+    private final String m_applicationName;
+    private final HashMap<Class, PageFactory> m_contents;
 
-    private ServiceTracker pageTracker;
+    private ServiceTracker m_pageTracker;
 
-    public PaxWicketPageFactory( BundleContext aBundleContext, String anApplicationName )
+    public PaxWicketPageFactory( BundleContext context, String applicationName )
+        throws IllegalArgumentException
     {
-        contents = new HashMap<Class, PageFactory>();
-        bundleContext = aBundleContext;
-        applicationName = anApplicationName;
+        validateNotNull( context, "context" );
+        validateNotNull( applicationName, "applicationName" );
+
+        m_contents = new HashMap<Class, PageFactory>();
+        m_bundleContext = context;
+        m_applicationName = applicationName;
     }
 
     public final void initialize()
     {
-        pageTracker = new PaxWicketPageTracker( bundleContext, applicationName, this );
-        pageTracker.open();
+        m_pageTracker = new PaxWicketPageTracker( m_bundleContext, m_applicationName, this );
+        m_pageTracker.open();
     }
 
     public final void dispose()
     {
         synchronized( this )
         {
-            contents.clear();
-            pageTracker.close();
+            m_contents.clear();
+            m_pageTracker.close();
         }
     }
 
@@ -102,7 +106,7 @@ public final class PaxWicketPageFactory
         PageFactory content;
         synchronized( this )
         {
-            content = contents.get( pageClass );
+            content = m_contents.get( pageClass );
         }
         if( content == null )
         {
@@ -135,7 +139,7 @@ public final class PaxWicketPageFactory
 
         synchronized( this )
         {
-            contents.put( pageClass, pageSource );
+            m_contents.put( pageClass, pageSource );
         }
     }
 
@@ -146,7 +150,7 @@ public final class PaxWicketPageFactory
 
         synchronized( this )
         {
-            contents.remove( pageClass );
+            m_contents.remove( pageClass );
         }
     }
 }

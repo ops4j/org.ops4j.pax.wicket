@@ -39,44 +39,44 @@ public class SerializationActivator
         setObjectStreamFactory( new PaxWicketObjectStreamFactory() );
     }
 
-    private static BundleContext bundleContext;
+    private static BundleContext m_bundleContext;
 
     public static BundleContext bundleContext()
     {
-        return bundleContext;
+        return m_bundleContext;
     }
 
-    private CleanupBundleListener cleanupListener;
+    private CleanupBundleListener m_cleanupListener;
 
-    public final void start( BundleContext aContext )
+    public final void start( BundleContext context )
         throws Exception
     {
-        bundleContext = aContext;
-        cleanupListener = new CleanupBundleListener();
-        aContext.addBundleListener( cleanupListener );
+        m_bundleContext = context;
+        m_cleanupListener = new CleanupBundleListener();
+        context.addBundleListener( m_cleanupListener );
     }
 
-    public final void stop( BundleContext aContext )
+    public final void stop( BundleContext context )
         throws Exception
     {
-        aContext.removeBundleListener( cleanupListener );
+        context.removeBundleListener( m_cleanupListener );
 
-        bundleContext = null;
-        cleanupListener = null;
+        m_bundleContext = null;
+        m_cleanupListener = null;
     }
 
     private static class CleanupBundleListener
         implements BundleListener
     {
 
-        public final void bundleChanged( BundleEvent anEvent )
+        public final void bundleChanged( BundleEvent event )
         {
-            int eventType = anEvent.getType();
+            int eventType = event.getType();
             if( eventType == STOPPING ||
                 eventType == UNINSTALLED ||
                 eventType == UNRESOLVED )
             {
-                Bundle bundle = anEvent.getBundle();
+                Bundle bundle = event.getBundle();
                 long bundleId = bundle.getBundleId();
                 removeBundlePlaceHolder( bundleId );
             }

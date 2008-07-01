@@ -32,17 +32,17 @@ final class ReplaceBundle
 
     private static final long serialVersionUID = 1L;
 
-    private long bundleId;
+    private long m_bundleId;
 
-    ReplaceBundle( Bundle aBundle )
+    ReplaceBundle( Bundle bundle )
     {
-        validateNotNull( aBundle, "aBundle" );
-        bundleId = aBundle.getBundleId();
+        validateNotNull( bundle, "bundle" );
+        m_bundleId = bundle.getBundleId();
     }
 
     final Bundle getBundle()
     {
         BundleContext context = bundleContext();
-        return context.getBundle( bundleId );
+        return context.getBundle( m_bundleId );
     }
 }

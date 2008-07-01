@@ -25,17 +25,17 @@ import org.osgi.framework.ServiceRegistration;
 public class Activator
     implements BundleActivator
 {
-    private DepartmentStoreImpl m_departmentStore;
+
     private ServiceRegistration m_registration;
 
-    public void start( BundleContext bundleContext )
+    public void start( BundleContext context )
         throws Exception
     {
-        m_departmentStore = new DepartmentStoreImpl( "Sungei Wang Plaza" );
-        m_registration = bundleContext.registerService( DepartmentStore.class.getName(), m_departmentStore, null );
+        DepartmentStoreImpl store = new DepartmentStoreImpl( "Sungei Wang Plaza" );
+        m_registration = context.registerService( DepartmentStore.class.getName(), store, null );
     }
 
-    public void stop( BundleContext bundleContext )
+    public void stop( BundleContext context )
         throws Exception
     {
         m_registration.unregister();

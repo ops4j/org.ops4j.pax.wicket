@@ -14,62 +14,62 @@ public class DefaultPageMounter
     implements PageMounter
 {
 
-    private final List<MountPointInfo> mountPoints;
+    private final List<MountPointInfo> m_mountPoints;
 
     public DefaultPageMounter()
     {
         // Using Vector because it is synchronized
         // But not sure if synchronization is really necessary or not...
-        mountPoints = new Vector<MountPointInfo>();
+        m_mountPoints = new Vector<MountPointInfo>();
     }
 
     /**
      * A convenience method that uses a default coding strategy.
      *
-     * @param aPath      the path on which the page is to be mounted
-     * @param aPageClass the class to mount on this mount point using the
-     *                   default strategy
+     * @param path      the path on which the page is to be mounted
+     * @param pageClass the class to mount on this mount point using the
+     *                  default strategy
      */
-    public void addMountPoint( String aPath, Class<? extends Page> aPageClass )
+    public void addMountPoint( String path, Class<? extends Page> pageClass )
     {
-        addMountPoint( aPath, new BookmarkablePageRequestTargetUrlCodingStrategy( aPath, aPageClass, null ) );
+        addMountPoint( path, new BookmarkablePageRequestTargetUrlCodingStrategy( path, pageClass, null ) );
     }
 
     public void addMountPoint( String path, IRequestTargetUrlCodingStrategy codingStrategy )
     {
         MountPointInfo info = new DefaultMountPointInfo( path, codingStrategy );
-        mountPoints.add( info );
+        m_mountPoints.add( info );
     }
 
     public final List<MountPointInfo> getMountPoints()
     {
-        return mountPoints;
+        return m_mountPoints;
     }
 
     private static class DefaultMountPointInfo
         implements MountPointInfo
     {
 
-        private final String path;
-        private final IRequestTargetUrlCodingStrategy codingStrategy;
+        private final String m_path;
+        private final IRequestTargetUrlCodingStrategy m_codingStrategy;
 
-        private DefaultMountPointInfo( String aPath, IRequestTargetUrlCodingStrategy aCodingStrategy )
+        private DefaultMountPointInfo( String path, IRequestTargetUrlCodingStrategy codingStrategy )
         {
-            validateNotEmpty( aPath, "aPath" );
-            validateNotNull( aCodingStrategy, "aCodingStrategy" );
+            validateNotEmpty( path, "path" );
+            validateNotNull( codingStrategy, "codingStrategy" );
 
-            path = aPath;
-            codingStrategy = aCodingStrategy;
+            m_path = path;
+            m_codingStrategy = codingStrategy;
         }
 
         public final String getPath()
         {
-            return path;
+            return m_path;
         }
 
         public final IRequestTargetUrlCodingStrategy getCodingStrategy()
         {
-            return codingStrategy;
+            return m_codingStrategy;
         }
     }
 }

@@ -29,23 +29,23 @@ public final class Activator
     implements BundleActivator
 {
 
-    private PaxWicketApplicationFactory factory;
-    private ServiceRegistration registration;
+    private PaxWicketApplicationFactory m_factory;
+    private ServiceRegistration m_registration;
 
     public final void start( BundleContext context )
         throws Exception
     {
-        factory = new PaxWicketApplicationFactory( context, HomePage.class, "test", APPLICATION_NAME );
-        registration = factory.register();
+        m_factory = new PaxWicketApplicationFactory( context, HomePage.class, "test", APPLICATION_NAME );
+        m_registration = m_factory.register();
     }
 
     public final void stop( BundleContext context )
         throws Exception
     {
-        registration.unregister();
-        registration = null;
+        m_registration.unregister();
+        m_registration = null;
 
-        factory.dispose();
-        factory = null;
+        m_factory.dispose();
+        m_factory = null;
     }
 }

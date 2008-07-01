@@ -27,13 +27,13 @@ public class AboutPageFactory
     implements PageFactory<AboutPage>
 {
 
-    private final DepartmentStoreModelTracker tracker;
-    private final BundleContext context;
+    private final DepartmentStoreModelTracker m_tracker;
+    private final BundleContext m_context;
 
-    public AboutPageFactory( DepartmentStoreModelTracker aTracker, BundleContext aContext )
+    public AboutPageFactory( DepartmentStoreModelTracker tracker, BundleContext context )
     {
-        tracker = aTracker;
-        context = aContext;
+        m_tracker = tracker;
+        m_context = context;
     }
 
     public Class<AboutPage> getPageClass()
@@ -43,7 +43,7 @@ public class AboutPageFactory
 
     public AboutPage createPage( PageParameters params )
     {
-        DepartmentStore store = tracker.getDepartmentStore();
-        return new AboutPage( store, context );
+        DepartmentStore store = m_tracker.getDepartmentStore();
+        return new AboutPage( store, m_context );
     }
 }

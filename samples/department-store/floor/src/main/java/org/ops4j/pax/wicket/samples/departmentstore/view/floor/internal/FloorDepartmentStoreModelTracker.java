@@ -4,10 +4,7 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
@@ -22,32 +19,33 @@ public class FloorDepartmentStoreModelTracker extends ServiceTracker
 
     final List<ContentAggregator> m_floors;
 
+    private final BundleContext m_bundleContext;
 
-    private final BundleContext bundleContext;
-
-    public FloorDepartmentStoreModelTracker(BundleContext bundleContext)
+    public FloorDepartmentStoreModelTracker(BundleContext context)
     {
-        super(bundleContext, DepartmentStore.class.getName(), null);
-        this.bundleContext = bundleContext;
+        super(context, DepartmentStore.class.getName(), null);
+        m_bundleContext = context;
         m_registrations = new ArrayList<ServiceRegistration>();
         m_floors = new ArrayList<ContentAggregator>();
 
     }
 
+    @Override
     public Object addingService(ServiceReference serviceReference)
     {
         DepartmentStore departmentStore = (DepartmentStore) super.addingService(serviceReference);
-        createFloors(bundleContext, departmentStore);
+        createFloors( m_bundleContext, departmentStore);
         return departmentStore;
     }
 
+    @Override
     public void removedService(ServiceReference serviceReference, Object service)
     {
         super.removedService(serviceReference, service);
         removeFloors((DepartmentStore) service);
     }
 
-    private void createFloors(BundleContext bundleContext, DepartmentStore departmentStore)
+    private void createFloors(BundleContext context, DepartmentStore departmentStore)
     {
         List<Floor> floors = departmentStore.getFloors();
         String destinationId = "swp.floor";
@@ -55,7 +53,7 @@ public class FloorDepartmentStoreModelTracker extends ServiceTracker
         {
             String floorName = floor.getName();
             FloorAggregatedSource aggregatedSource = new FloorAggregatedSource(floor, floorName, destinationId,
-                    bundleContext, "departmentstore");
+                    context, "departmentstore");
             aggregatedSource.setDestination(destinationId);
             aggregatedSource.setAggregationPointName(floor.getName());
             ServiceRegistration registration = aggregatedSource.register();

@@ -28,14 +28,14 @@ public class Activator
 
     private ServiceRegistration m_registration;
 
-    public void start( BundleContext bundleContext )
+    public void start( BundleContext context )
         throws Exception
     {
         AlternativeDepartmentStoreImpl deptStore = new AlternativeDepartmentStoreImpl( "Main Market" );
-        m_registration = bundleContext.registerService( DepartmentStore.class.getName(), deptStore, null );
+        m_registration = context.registerService( DepartmentStore.class.getName(), deptStore, null );
     }
 
-    public void stop( BundleContext bundleContext )
+    public void stop( BundleContext context )
         throws Exception
     {
         m_registration.unregister();

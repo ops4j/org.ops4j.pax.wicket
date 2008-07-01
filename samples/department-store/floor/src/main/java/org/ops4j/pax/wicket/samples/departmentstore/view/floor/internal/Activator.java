@@ -21,19 +21,21 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator
+{
 
-	private FloorDepartmentStoreModelTracker m_storeTracker;
+    private FloorDepartmentStoreModelTracker m_storeTracker;
 
-	public Activator() {
-	}
+    public void start( BundleContext context )
+        throws Exception
+    {
+        m_storeTracker = new FloorDepartmentStoreModelTracker( context );
+        m_storeTracker.open();
+    }
 
-	public void start(BundleContext bundleContext) throws Exception {
-		m_storeTracker = new FloorDepartmentStoreModelTracker(bundleContext);
-		m_storeTracker.open();
-	}
-
-	public void stop(BundleContext bundleContext) throws Exception {
-		m_storeTracker.close();
-	}
+    public void stop( BundleContext context )
+        throws Exception
+    {
+        m_storeTracker.close();
+    }
 }

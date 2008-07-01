@@ -42,9 +42,9 @@ public class PackageAdminTracker extends ServiceTracker
     private static final ExportedPackage[] EMPTY_PACKAGE_ARRAY = new ExportedPackage[0];
     private PackageAdmin m_delegate;
 
-    public PackageAdminTracker( BundleContext bundleContext )
+    public PackageAdminTracker( BundleContext context )
     {
-        super( bundleContext, createFilter( bundleContext ), null );
+        super( context, createFilter( context ), null );
     }
 
     private static Filter createFilter( BundleContext context )

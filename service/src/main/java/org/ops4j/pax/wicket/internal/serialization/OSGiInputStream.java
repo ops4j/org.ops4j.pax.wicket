@@ -32,44 +32,44 @@ import org.apache.wicket.settings.IApplicationSettings;
 final class PaxWicketObjectInputStream extends ObjectInputStream
 {
 
-    private final IClassResolver classResolver;
+    private final IClassResolver m_classResolver;
 
-    public PaxWicketObjectInputStream( InputStream anInputStream )
+    public PaxWicketObjectInputStream( InputStream inputStream )
         throws IOException
     {
-        super( anInputStream );
+        super( inputStream );
 
         // Can the application always be taken??
         Application application = Application.get();
         IApplicationSettings applicationSettings = application.getApplicationSettings();
-        classResolver = applicationSettings.getClassResolver();
+        m_classResolver = applicationSettings.getClassResolver();
     }
 
     @Override
-    protected final Object resolveObject( Object anObject )
+    protected final Object resolveObject( Object object )
         throws IOException
     {
-        if( anObject instanceof ReplaceBundleContext )
+        if( object instanceof ReplaceBundleContext )
         {
-            ReplaceBundleContext replaceBundleContext = (ReplaceBundleContext) anObject;
+            ReplaceBundleContext replaceBundleContext = (ReplaceBundleContext) object;
             return replaceBundleContext.getBundleContext();
         }
-        else if( anObject instanceof ReplaceBundle )
+        else if( object instanceof ReplaceBundle )
         {
-            ReplaceBundle replaceBundle = (ReplaceBundle) anObject;
+            ReplaceBundle replaceBundle = (ReplaceBundle) object;
             return replaceBundle.getBundle();
         }
         else
         {
-            return super.resolveObject( anObject );
+            return super.resolveObject( object );
         }
     }
 
     @Override
-    protected final Class resolveClass( ObjectStreamClass anObjectStreamClass )
+    protected final Class resolveClass( ObjectStreamClass objectStreamClass )
         throws IOException, ClassNotFoundException
     {
-        String className = anObjectStreamClass.getName();
+        String className = objectStreamClass.getName();
 
         Class candidate = resolveClassByClassResolver( className );
         if( candidate != null )
@@ -77,16 +77,16 @@ final class PaxWicketObjectInputStream extends ObjectInputStream
             return candidate;
         }
 
-        return super.resolveClass( anObjectStreamClass );
+        return super.resolveClass( objectStreamClass );
     }
 
-    private Class resolveClassByClassResolver( String aClassName )
+    private Class resolveClassByClassResolver( String className )
     {
         Class resolvedClass = null;
 
         try
         {
-            resolvedClass = classResolver.resolveClass( aClassName );
+            resolvedClass = m_classResolver.resolveClass( className );
         }
         catch( WicketRuntimeException ex )
         {
