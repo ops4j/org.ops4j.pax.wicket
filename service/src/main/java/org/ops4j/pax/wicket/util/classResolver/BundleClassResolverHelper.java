@@ -22,6 +22,8 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -52,20 +54,67 @@ public final class BundleClassResolverHelper
         throws IllegalArgumentException
     {
         validateNotNull( bundleContext, "bundle" );
+
         m_bundleContext = bundleContext;
         m_serviceProperties = new Properties();
     }
 
     /**
-     * Sets the application nane.
+     * Sets the service pid of this {@code BundleClassResolverHelper} instance.
+     * This is useful if this class resolver needs to be wired to multiple pax-wicket applications.
      *
-     * @param applicationName The application name.
+     * @param servicePid The service pid.
+     *
+     * @see Constants#SERVICE_PID
+     * @since 0.5.4
+     */
+    public final void setServicePid( String servicePid )
+    {
+        if( servicePid == null )
+        {
+            m_serviceProperties.remove( SERVICE_PID );
+        }
+        else
+        {
+            m_serviceProperties.setProperty( SERVICE_PID, servicePid );
+        }
+
+        synchronized( this )
+        {
+            if( m_serviceRegistration != null )
+            {
+                m_serviceRegistration.setProperties( m_serviceProperties );
+            }
+        }
+    }
+
+    /**
+     * @return The service pid of this {@code BundleClassResolverHelper}. Returns {@code null} if not set.
      *
      * @since 0.5.4
      */
-    public final void setApplicationName( String applicationName )
+    public final String getServicePid()
     {
-        m_serviceProperties.setProperty( APPLICATION_NAME, applicationName );
+        return m_serviceProperties.getProperty( SERVICE_PID );
+    }
+
+    /**
+     * Sets the application nane.
+     *
+     * @param applicationNames The application names.
+     *
+     * @since 0.5.4
+     */
+    public final void setApplicationName( String... applicationNames )
+    {
+        if( applicationNames == null )
+        {
+            m_serviceProperties.remove( APPLICATION_NAME );
+        }
+        else
+        {
+            m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+        }
 
         synchronized( this )
         {
