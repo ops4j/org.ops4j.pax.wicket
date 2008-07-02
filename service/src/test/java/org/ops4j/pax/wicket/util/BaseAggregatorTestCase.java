@@ -251,7 +251,7 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
     private static final class TestBaseAggregator extends BaseAggregator
     {
 
-        public TestBaseAggregator( BundleContext ctx, String appName, String aggregatePoint )
+        private TestBaseAggregator( BundleContext ctx, String appName, String aggregatePoint )
             throws IllegalArgumentException
         {
             super( ctx, appName, aggregatePoint );
