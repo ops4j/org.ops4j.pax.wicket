@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>wicket</artifactId>
@@ -17,6 +17,7 @@
   <modules>
     <module>bootstrap</module>
     <module>bundles</module>
+    <module>classResolverTest</module>
     <module>lifecycleTest</module>
   </modules>
 
@@ -86,13 +87,14 @@
         </dependency>
       </dependencies>
       <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.EquinoxPlatform</org.springframework.osgi.test.framework>
+        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.EquinoxPlatform
+        </org.springframework.osgi.test.framework>
         <log4j.ignoreTCL>true</log4j.ignoreTCL>
       </properties>
     </profile>
     <profile>
       <id>felix</id>
-      <dependencies>       
+      <dependencies>
         <dependency>
           <groupId>org.apache.felix</groupId>
           <artifactId>org.apache.felix.main</artifactId>
@@ -102,25 +104,26 @@
             <exclusion>
               <groupId>org.apache.felix</groupId>
               <artifactId>org.apache.felix.framework</artifactId>
-            </exclusion>          
+            </exclusion>
             <exclusion>
               <groupId>org.apache.felix</groupId>
               <artifactId>org.apache.felix.shell</artifactId>
-            </exclusion>          
+            </exclusion>
             <exclusion>
               <groupId>org.apache.felix</groupId>
               <artifactId>org.apache.felix.shell.tui</artifactId>
-            </exclusion>          
+            </exclusion>
             <exclusion>
               <groupId>org.apache.felix</groupId>
               <artifactId>org.apache.felix.bundlerepository</artifactId>
-            </exclusion>          
-          </exclusions>            
+            </exclusion>
+          </exclusions>
         </dependency>
       </dependencies>
       <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.FelixPlatform</org.springframework.osgi.test.framework>
-        <log4j.ignoreTCL>true</log4j.ignoreTCL>        
+        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.FelixPlatform
+        </org.springframework.osgi.test.framework>
+        <log4j.ignoreTCL>true</log4j.ignoreTCL>
       </properties>
     </profile>
     <profile>
@@ -134,9 +137,10 @@
         </dependency>
       </dependencies>
       <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.KnopflerfishPlatform</org.springframework.osgi.test.framework>
+        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.KnopflerfishPlatform
+        </org.springframework.osgi.test.framework>
         <log4j.ignoreTCL>true</log4j.ignoreTCL>
-        <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>        
+        <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>
       </properties>
     </profile>
   </profiles>

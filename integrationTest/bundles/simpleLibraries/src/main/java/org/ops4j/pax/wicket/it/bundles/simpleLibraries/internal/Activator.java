@@ -14,13 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.it.bundles.simpleApp.internal;
+package org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal;
 
-import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
-import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.APPLICATION_NAME;
+import org.ops4j.pax.wicket.util.classResolver.BundleClassResolverHelper;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author edward.yakop@gmail.com
@@ -29,23 +27,20 @@ public final class Activator
     implements BundleActivator
 {
 
-    private PaxWicketApplicationFactory m_factory;
-    private ServiceRegistration m_registration;
+    private BundleClassResolverHelper helper;
 
     public final void start( BundleContext context )
         throws Exception
     {
-        m_factory = new PaxWicketApplicationFactory( context, HomePage.class, "test", APPLICATION_NAME );
-        m_registration = m_factory.register();
+        helper = new BundleClassResolverHelper( context );
+        helper.setServicePid( "libraryPid" );
+        helper.register();
     }
 
     public final void stop( BundleContext context )
         throws Exception
     {
-        m_registration.unregister();
-        m_registration = null;
-
-        m_factory.dispose();
-        m_factory = null;
+        helper.unregister();
+        helper = null;
     }
 }

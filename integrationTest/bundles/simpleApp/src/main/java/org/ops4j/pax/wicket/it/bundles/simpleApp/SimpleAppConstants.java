@@ -20,7 +20,7 @@ package org.ops4j.pax.wicket.it.bundles.simpleApp;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class Constants
+public final class SimpleAppConstants
 {
 
     public static String SYMBOLIC_NAME_SIMPLE_APP = "org.ops4j.pax.wicket.it.bundles.simpleApp";

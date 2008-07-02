@@ -18,7 +18,7 @@ package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
 import static java.lang.Thread.sleep;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-import static org.ops4j.pax.wicket.it.bundles.simpleApp.Constants.SYMBOLIC_NAME_SIMPLE_APP;
+import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 

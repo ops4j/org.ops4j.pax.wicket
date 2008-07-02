@@ -16,6 +16,7 @@
  */
 package org.ops4j.pax.wicket.util.classResolver;
 
+import java.util.Dictionary;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
@@ -25,6 +26,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
@@ -136,7 +139,7 @@ public final class BundleClassResolverHelper
         {
             if( m_serviceRegistration == null )
             {
-                BundleClassResolver resolver = new BundleClassResolver( m_bundleContext );
+                BundleClassResolver resolver = new BundleClassResolver();
                 m_serviceRegistration = m_bundleContext.registerService( SERVICE_NAME, resolver, m_serviceProperties );
             }
         }
@@ -159,22 +162,23 @@ public final class BundleClassResolverHelper
         }
     }
 
-    private static final class BundleClassResolver
-        implements IClassResolver
+    private final class BundleClassResolver
+        implements IClassResolver, ManagedService
     {
-
-        private final BundleContext m_bundleContext;
-
-        private BundleClassResolver( BundleContext bundleContext )
-        {
-            m_bundleContext = bundleContext;
-        }
 
         public final Class resolveClass( String classname )
             throws ClassNotFoundException
         {
             Bundle bundle = m_bundleContext.getBundle();
             return bundle.loadClass( classname );
+        }
+
+        public final void updated( Dictionary dictionary )
+            throws ConfigurationException
+        {
+            Object applicationNames = dictionary.get( APPLICATION_NAME );
+            m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+            m_serviceRegistration.setProperties( m_serviceProperties );
         }
     }
 }

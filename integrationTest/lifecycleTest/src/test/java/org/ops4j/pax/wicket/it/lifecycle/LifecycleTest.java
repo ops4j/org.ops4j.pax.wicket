@@ -31,6 +31,15 @@ import org.osgi.framework.BundleException;
 public final class LifecycleTest extends PaxWicketIntegrationTest
 {
 
+    @Override
+    protected final String[] getTestBundlesNames()
+    {
+        return new String[]
+            {
+                "org.ops4j.pax.wicket.integrationTest.bundles,simpleApp,0.5.4-SNAPSHOT"
+            };
+    }
+
     /**
      * Tests stopping pax-wicket service bundle.
      *

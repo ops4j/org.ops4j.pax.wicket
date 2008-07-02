@@ -465,6 +465,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" group="wicket and modules/integrationTest and modules" />
       <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/bundles.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/bundles.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" filepath="$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" group="wicket and modules/integrationTest and modules" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/departmentstore.iml" filepath="$PROJECT_DIR$/samples/department-store/departmentstore.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
       <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
@@ -480,6 +481,7 @@
       <module fileurl="file://$PROJECT_DIR$/service/pax-wicket-service.iml" filepath="$PROJECT_DIR$/service/pax-wicket-service.iml" group="wicket and modules" />
       <module fileurl="file://$PROJECT_DIR$/samples/samples.iml" filepath="$PROJECT_DIR$/samples/samples.iml" group="wicket and modules/samples and modules" />
       <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
       <module fileurl="file://$PROJECT_DIR$/wicket.iml" filepath="$PROJECT_DIR$/wicket.iml" group="wicket and modules" />
     </modules>
   </component>

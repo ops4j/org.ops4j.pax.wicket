@@ -90,6 +90,7 @@ public final class PaxWicketApplication extends WebApplication
     protected final void init()
     {
         super.init();
+
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver( m_delegatingClassResolver );
         addWicketService( IApplicationSettings.class, applicationSettings );
