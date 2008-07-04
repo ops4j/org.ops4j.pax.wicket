@@ -158,15 +158,15 @@
     </orderEntry>
     <orderEntry type="module" module-name="pax-wicket-service" exported="" />
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.base:ops4j-base:0.4.0">
+      <library name="org.ops4j.base:ops4j-base:0.5.0">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

@@ -20,8 +20,10 @@ import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorConfiguration;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
 
 /**
@@ -32,17 +34,15 @@ public final class ClassResolverByPidTest
 {
 
     @Override
-    protected final String[] getTestBundlesNames()
+    protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
     {
-        return new String[]
-            {
-                "org.ops4j.pax.wicket.integrationTest.bundles,simpleLibraries,0.5.4-SNAPSHOT"
-            };
+        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
     }
 
     public final void testPrivateLibraries()
         throws Throwable
     {
+        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
         );
@@ -70,6 +70,7 @@ public final class ClassResolverByPidTest
     private void validateThatClassResolverIsExposedToAbcAndDef()
         throws Throwable
     {
+        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)"
         );

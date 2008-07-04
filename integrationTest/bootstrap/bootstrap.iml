@@ -41,15 +41,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="org.ops4j.base:ops4j-base:0.4.0">
+      <library name="org.ops4j.base:ops4j-base:0.5.0">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.4.0/ops4j-base-0.4.0-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base/0.5.0/ops4j-base-0.5.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -119,262 +119,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="org.springframework.osgi:spring-osgi-test:1.1.0-m2">
+      <library name="org.apache.felix:org.osgi.core:1.0.1">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-test/1.1.0-m2/spring-osgi-test-1.1.0-m2.jar!/" />
+          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.1/org.osgi.core-1.0.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-test/1.1.0-m2/spring-osgi-test-1.1.0-m2-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.1/org.osgi.core-1.0.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-test/1.1.0-m2/spring-osgi-test-1.1.0-m2-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework.osgi:junit.osgi:3.8.2-20080321.182649-20">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/junit.osgi/3.8.2-SNAPSHOT/junit.osgi-3.8.2-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/junit.osgi/3.8.2-SNAPSHOT/junit.osgi-3.8.2-SNAPSHOT-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/junit.osgi/3.8.2-SNAPSHOT/junit.osgi-3.8.2-SNAPSHOT-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework:spring-test:2.5.4">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-test/2.5.4/spring-test-2.5.4.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/spring-test/2.5.4/spring-test-2.5.4-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-test/2.5.4/spring-test-2.5.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework.osgi:asm.osgi:2.2.3-20080321.182649-23">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/asm.osgi/2.2.3-SNAPSHOT/asm.osgi-2.2.3-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/asm.osgi/2.2.3-SNAPSHOT/asm.osgi-2.2.3-SNAPSHOT-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/asm.osgi/2.2.3-SNAPSHOT/asm.osgi-2.2.3-SNAPSHOT-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework.osgi:spring-osgi-core:1.1.0-m2">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-core/1.1.0-m2/spring-osgi-core-1.1.0-m2.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-core/1.1.0-m2/spring-osgi-core-1.1.0-m2-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-core/1.1.0-m2/spring-osgi-core-1.1.0-m2-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework.osgi:spring-osgi-io:1.1.0-m2">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-io/1.1.0-m2/spring-osgi-io-1.1.0-m2.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-io/1.1.0-m2/spring-osgi-io-1.1.0-m2-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-io/1.1.0-m2/spring-osgi-io-1.1.0-m2-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework:spring-aop:2.5.4">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-aop/2.5.4/spring-aop-2.5.4.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/spring-aop/2.5.4/spring-aop-2.5.4-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-aop/2.5.4/spring-aop-2.5.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework:spring-beans:2.5.4">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-beans/2.5.4/spring-beans-2.5.4.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/spring-beans/2.5.4/spring-beans-2.5.4-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-beans/2.5.4/spring-beans-2.5.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework:spring-core:2.5.4">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-core/2.5.4/spring-core-2.5.4.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/spring-core/2.5.4/spring-core-2.5.4-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-core/2.5.4/spring-core-2.5.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework:spring-context:2.5.4">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-context/2.5.4/spring-context-2.5.4.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/spring-context/2.5.4/spring-context-2.5.4-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/spring-context/2.5.4/spring-context-2.5.4-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.eclipse:osgi:3.3.0-v20070530">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/eclipse/osgi/3.3.0-v20070530/osgi-3.3.0-v20070530.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/eclipse/osgi/3.3.0-v20070530/osgi-3.3.0-v20070530-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/eclipse/osgi/3.3.0-v20070530/osgi-3.3.0-v20070530-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.springframework.osgi:spring-osgi-extender:1.1.0-m2">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-extender/1.1.0-m2/spring-osgi-extender-1.1.0-m2-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library name="org.springframework.osgi:aopalliance.osgi:1.0-20080321.182649-23">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/aopalliance.osgi/1.0-SNAPSHOT/aopalliance.osgi-1.0-SNAPSHOT-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:org.apache.felix.configadmin:1.0.1">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.1/org.apache.felix.configadmin-1.0.1.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.1/org.apache.felix.configadmin-1.0.1-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.1/org.apache.felix.configadmin-1.0.1-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:org.osgi.core:1.0.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.0/org.osgi.core-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.0/org.osgi.core-1.0.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.0/org.osgi.core-1.0.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:org.osgi.compendium:1.0.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.compendium/1.0.0/org.osgi.compendium-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.compendium/1.0.0/org.osgi.compendium-1.0.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.compendium/1.0.0/org.osgi.compendium-1.0.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:javax.servlet:1.0.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/javax.servlet/1.0.0/javax.servlet-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/javax.servlet/1.0.0/javax.servlet-1.0.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/javax.servlet/1.0.0/javax.servlet-1.0.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:org.osgi.foundation:1.0.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.foundation/1.0.0/org.osgi.foundation-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.foundation/1.0.0/org.osgi.foundation-1.0.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.foundation/1.0.0/org.osgi.foundation-1.0.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.apache.felix:org.apache.felix.eventadmin:1.0.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.knopflerfish.bundle.useradmin:useradmin_api:1.1.0">
-        <CLASSES>
-          <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/apache/felix/org.osgi.core/1.0.1/org.osgi.core-1.0.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -430,29 +183,198 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="org.ops4j.pax.web:pax-web-service:0.4.1">
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.drone:pax-drone-spi:0.1.0">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.0/pax-drone-spi-0.1.0.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.0/pax-drone-spi-0.1.0-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.0/pax-drone-spi-0.1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.drone:pax-drone-api:0.1.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.0/pax-drone-api-0.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.0/pax-drone-api-0.1.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.0/pax-drone-api-0.1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.osgi:org.osgi.core:4.0.1">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/osgi/org.osgi.core/4.0.1/org.osgi.core-4.0.1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/osgi/org.osgi.core/4.0.1/org.osgi.core-4.0.1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/osgi/org.osgi.core/4.0.1/org.osgi.core-4.0.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="biz.aQute:bndlib:0.0.255">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/biz/aQute/bndlib/0.0.255/bndlib-0.0.255.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/biz/aQute/bndlib/0.0.255/bndlib-0.0.255-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/biz/aQute/bndlib/0.0.255/bndlib-0.0.255-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.base:ops4j-base-lang:0.5.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/base/ops4j-base-lang/0.5.0/ops4j-base-lang-0.5.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.runner:pax-runner-handler:0.12.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-handler/0.12.0/pax-runner-handler-0.12.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-handler/0.12.0/pax-runner-handler-0.12.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-handler/0.12.0/pax-runner-handler-0.12.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.swissbox:pax-swissbox-optional-jcl:0.2.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.2.0/pax-swissbox-optional-jcl-0.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.2.0/pax-swissbox-optional-jcl-0.2.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/swissbox/pax-swissbox-optional-jcl/0.2.0/pax-swissbox-optional-jcl-0.2.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.runner:pax-runner-commons:0.12.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-commons/0.12.0/pax-runner-commons-0.12.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-commons/0.12.0/pax-runner-commons-0.12.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-commons/0.12.0/pax-runner-commons-0.12.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.url:pax-url-mvn:0.3.2">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/url/pax-url-mvn/0.3.2/pax-url-mvn-0.3.2.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/url/pax-url-mvn/0.3.2/pax-url-mvn-0.3.2-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/url/pax-url-mvn/0.3.2/pax-url-mvn-0.3.2-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.drone:pax-drone-spi-junit:0.1.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.0/pax-drone-spi-junit-0.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.0/pax-drone-spi-junit-0.1.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.0/pax-drone-spi-junit-0.1.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="org.springframework.osgi:spring-osgi-annotation:1.1.0-m2">
+      <library name="junit:junit:3.8.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-annotation/1.1.0-m2/spring-osgi-annotation-1.1.0-m2.jar!/" />
+          <root url="jar://$M2_REPO$/junit/junit/3.8.2/junit-3.8.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-annotation/1.1.0-m2/spring-osgi-annotation-1.1.0-m2-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/junit/junit/3.8.2/junit-3.8.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/springframework/osgi/spring-osgi-annotation/1.1.0-m2/spring-osgi-annotation-1.1.0-m2-sources.jar!/" />
+          <root url="jar://$M2_REPO$/junit/junit/3.8.2/junit-3.8.2-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.drone:pax-drone-connector-paxrunner:0.1.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.0/pax-drone-connector-paxrunner-0.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.0/pax-drone-connector-paxrunner-0.1.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.0/pax-drone-connector-paxrunner-0.1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.drone:pax-drone-zombie:0.1.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.0/pax-drone-zombie-0.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.0/pax-drone-zombie-0.1.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.0/pax-drone-zombie-0.1.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.ops4j.pax.runner:pax-runner:0.12.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner/0.12.0/pax-runner-0.12.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner/0.12.0/pax-runner-0.12.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner/0.12.0/pax-runner-0.12.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library name="org.apache.felix:org.apache.felix.bundlerepository:1.0.0">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.bundlerepository/1.0.0/org.apache.felix.bundlerepository-1.0.0.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.bundlerepository/1.0.0/org.apache.felix.bundlerepository-1.0.0-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.bundlerepository/1.0.0/org.apache.felix.bundlerepository-1.0.0-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

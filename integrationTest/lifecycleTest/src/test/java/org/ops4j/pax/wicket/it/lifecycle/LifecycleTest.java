@@ -16,6 +16,7 @@
  */
 package org.ops4j.pax.wicket.it.lifecycle;
 
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorConfiguration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import static org.osgi.framework.Bundle.ACTIVE;
@@ -32,12 +33,9 @@ public final class LifecycleTest extends PaxWicketIntegrationTest
 {
 
     @Override
-    protected final String[] getTestBundlesNames()
+    protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
     {
-        return new String[]
-            {
-                "org.ops4j.pax.wicket.integrationTest.bundles,simpleApp,0.5.4-SNAPSHOT"
-            };
+        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles,simpleApp" );
     }
 
     /**

@@ -1,5 +1,5 @@
 Import-Package:\
- org.springframework.osgi.*;version="[1.0.0,2.0.0)", \
+ org.ops4j.pax.drone.*, \
  org.osgi.*;version="[1.0.0,2.0.0)"
 
 Export-Package: \

@@ -30,18 +30,6 @@
           <forkMode>pertest</forkMode>
           <systemProperties>
             <property>
-              <name>org.springframework.osgi.test.framework</name>
-              <value>${org.springframework.osgi.test.framework}</value>
-            </property>
-            <property>
-              <name>log4j.ignoreTCL</name>
-              <value>${log4j.ignoreTCL}</value>
-            </property>
-            <property>
-              <name>org.knopflerfish.osgi.setcontextclassloader</name>
-              <value>${org.knopflerfish.osgi.setcontextclassloader}</value>
-            </property>
-            <property>
               <name>org.osgi.service.http.port</name>
               <value>12345</value>
             </property>
@@ -65,96 +53,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.osgi</groupId>
-      <artifactId>spring-osgi-test</artifactId>
-      <version>1.1.0-m2</version>
-      <scope>test</scope>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>1.0.1</version>
+      <scope>provided</scope>
     </dependency>
+
   </dependencies>
-
-  <profiles>
-    <profile>
-      <id>equinox</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.eclipse</groupId>
-          <artifactId>osgi</artifactId>
-          <version>3.3.0-v20070530</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.EquinoxPlatform
-        </org.springframework.osgi.test.framework>
-        <log4j.ignoreTCL>true</log4j.ignoreTCL>
-      </properties>
-    </profile>
-    <profile>
-      <id>felix</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>org.apache.felix.main</artifactId>
-          <version>1.0.3</version>
-          <scope>provided</scope>
-          <exclusions>
-            <exclusion>
-              <groupId>org.apache.felix</groupId>
-              <artifactId>org.apache.felix.framework</artifactId>
-            </exclusion>
-            <exclusion>
-              <groupId>org.apache.felix</groupId>
-              <artifactId>org.apache.felix.shell</artifactId>
-            </exclusion>
-            <exclusion>
-              <groupId>org.apache.felix</groupId>
-              <artifactId>org.apache.felix.shell.tui</artifactId>
-            </exclusion>
-            <exclusion>
-              <groupId>org.apache.felix</groupId>
-              <artifactId>org.apache.felix.bundlerepository</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-      </dependencies>
-      <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.FelixPlatform
-        </org.springframework.osgi.test.framework>
-        <log4j.ignoreTCL>true</log4j.ignoreTCL>
-      </properties>
-    </profile>
-    <profile>
-      <id>knopflerfish</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.knopflerfish.osgi</groupId>
-          <artifactId>framework</artifactId>
-          <version>2.0.5</version>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
-      <properties>
-        <org.springframework.osgi.test.framework>org.springframework.osgi.test.platform.KnopflerfishPlatform
-        </org.springframework.osgi.test.framework>
-        <log4j.ignoreTCL>true</log4j.ignoreTCL>
-        <org.knopflerfish.osgi.setcontextclassloader>true</org.knopflerfish.osgi.setcontextclassloader>
-      </properties>
-    </profile>
-  </profiles>
-
-  <repositories>
-    <repository>
-      <id>spring-maven-milestone</id>
-      <name>Springframework Maven Repository</name>
-      <url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
-    </repository>
-    <repository>
-      <id>spring-maven-osgi-bundle</id>
-      <name>Springframework Maven Repository</name>
-      <url>http://s3.amazonaws.com/maven.springframework.org/osgi</url>
-    </repository>
-  </repositories>
 </project>
