@@ -35,7 +35,7 @@ public final class LifecycleTest extends PaxWicketIntegrationTest
     @Override
     protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
     {
-        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles,simpleApp" );
+        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" );
     }
 
     /**
