@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Pax Wicket">
+
+  <bannerRight>
+    <name>OPS4J</name>
+    <src>images/logo.png</src>
+    <href>http://www.ops4j.org/</href>
+  </bannerRight>
+
+  <body>
+    <links>
+      <item name="Pax" href="http://www.ops4j.org/pax/" />
+      <item name="Base" href="http://www.ops4j.org/base/" />
+      <item name="Hansa" href="http://www.ops4j.org/hansa/" />
+    </links>
+
+    <menu name="Pax Wicket">
+      <item name="Introduction" href="index.html"/>
+      <item name="Reference" href="reference/index.html">
+        <item name="Concepts" href="reference/concepts.html"/>
+        <item name="Request Sequence" href="reference/request.html"/>
+        <item name="OSGi Registrations" href="reference/registrations.html"/>
+      </item>
+      
+      <item name="Javadoc" href="apidocs/index.html"/>
+
+      <item name="My First App" href="myfirstapp/index.html" collapse="true">
+        <item name="Business Logic" href="myfirstapp/businesslogic.html"/>
+        <item name="Application" href="myfirstapp/application.html"/>
+        <item name="Content Source" href="myfirstapp/contentsource.html"/>
+        <item name="Content Aggregator" href="myfirstapp/contentaggregator.html"/>
+        <item name="About Page" href="myfirstapp/aboutpage.html"/>
+      </item>
+      <item name="Guides" href="guides/index.html">
+        <item name="Advanced Aggregators" href="guides/contentaggregator.html"/>
+        <item name="Advanced Content Sources" href="guides/contentsource.html"/>
+        <item name="Dynamic Applications" href="guides/dynamic-assembly.html"/>
+        <item name="Authentication &amp; Authorization" href="guides/authentication.html"/>
+        <item name="Embedding" href="guides/embedded.html"/>
+      </item>
+      <item name="Getting Started" href="getting-started/index.html">
+        <item name="Requirements" href="getting-started/requirements.html" />
+        <item name="Installation" href="getting-started/installation.html"/>
+        <item name="Building" href="getting-started/building.html"/>
+      </item>
+<!--
+      <item name="Pax Wicket Toolkit" href="toolkit/index.html">
+        <item name="Menus" href="toolkit/menus.html"/>
+      </item>
+-->
+    </menu>
+
+    ${reports}
+  </body>
+</project>

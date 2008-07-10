@@ -1,0 +1,13 @@
+#bannerLeft {
+    float: right;
+    right: 20px;
+    margin-right: 40px;
+    margin-top: 20px;
+}
+
+#bannerRight img {
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

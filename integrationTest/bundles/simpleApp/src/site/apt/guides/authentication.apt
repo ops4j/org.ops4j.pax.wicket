@@ -1,0 +1,69 @@
+
+    --------------------------------
+    Authentication and Authorization
+    --------------------------------
+    Niclas Hedhman
+    --------------------------------
+    2006 June 1
+    --------------------------------
+
+User Level Security
+
+    Pax Wicket user security depends on the wicket-auth-roles subsystem, and the default user management
+    subsystem is utilizing the User Admin service in OSGi.
+
+Authentication
+
+    PAx Wicket comes with a User Admin service Authenticator, which will delegate the authentication to
+    the User Admin service. Unless very special cases, this should be enough.
+
+    To set up the authentication system, you need to instantiate a <<<PaxWicketAuthenticator>>> and pass
+    it to the <<<PaxWicketApplicationFactory>>>.
+
++------------------------------
+Class signInPage = MyLoginPage.class;
+PaxWicketAuthenticator auth = new UserAdminAuthenticator( bundleContext, "my-application" );
+appFactory.setAuthenticator( auth, signInPage );
++------------------------------
+
+    The <<<signInPage>>> must be a non-argument constructor.
+
+    The User Admin service must manage the users, roles and credentials. The username will be fetched
+    from the << \<applicationName\>.userid >> from the User Admin service, and the password is mapped
+    against the credential of << \<applicationName\>.password >>.
+
+    There is support for anonymous users. If the user is an anonymous user, the Roles will be empty.
+
+
+Wicket Annotation Authorization
+
+    Since Pax Wicket after all is still a Wicket application, all the Wicket features are fully supported.
+    This means that you can use the simple, yet powerful, authorization annotations in Wicket. Please
+    see the Wicket documentation for more information.
+    
+
+Custom Authorization
+
+    If you need authorization with runtime support you must write logic instead of annotating the
+    source code. This can for instance be done somthing like this;
+
++------------------------------
+public class SomeContentSource extends AbstractContentSource
+{
+    protected Panel createComponent( String contentId )
+    {
+        PaxWicketAuthentication auth = getAuthentication();
+        Roles roles = auth.getRoles();
+        if( ! roles.hasRole( MyRoles.MEMBER ) )
+        {
+            throw new AuthorizationException( "Only members are allowed in this area." );
+        }
+        String username = auth.getLoggedInUser();
+        return new MyPanel( username, .... );
+    }
+}
++------------------------------
+
+    Roles is from the wicket-auth-roles subsystem, and which are mapped against the roles in the User Admin
+    service.
+
