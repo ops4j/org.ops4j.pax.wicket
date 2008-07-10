@@ -1,0 +1,20 @@
+    -----------------------------------------------
+    Pax Wicket Guides
+    -----------------------------------------------
+    Niclas Hedhman
+    -----------------------------------------------
+    2007 January 15
+    -----------------------------------------------
+
+Pax Wicket Guides
+
+    {{{authentication.html}Authentication & Authorization }}.
+
+    {{{embedded.html}Embedding Pax Wicket in Application Servers}}.
+
+    {{{dynamic-assembly.html}Hints on Dynamic Assembly}}.
+
+    {{{contentsource.html}Advanced creation of ContentSource}}.
+
+    {{{contentaggregator.html}Advanced creation of ContentAggregator}}.
+    

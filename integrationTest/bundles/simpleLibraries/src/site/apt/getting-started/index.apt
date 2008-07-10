@@ -1,0 +1,28 @@
+     -------------------
+     Getting Started with Pax Wicket
+     -------------------
+     Niclas Hedhman
+     -------------------
+     2007 January 15
+     -------------------
+
+
+Getting Started
+
+    If you want to build Pax Wicket and its demos from sources, then check out this
+    {{{building.html}document}}.
+
+    If you just want to use the latest binary release, then follow the instructions on the
+    {{{installation.html}Installation document}} instead.
+
+    You should probably check the {{{requirements.html}requirements}} as well, before proceeding.
+
+    Most people want to see an example before proceeding on their own, so the
+    {{{../myfirstapp/index.html}My First Application}} section goes through the necessary bits and pieces.
+
+    You have a bit more formal {{{../reference/index.html}Reference Manual}} and finally, some useful articles
+    of common needs are found in the {{{../guides/index.html}Guides section}}.
+
+    Welcome to Pax Wicket, the Dynamic Web Application framework.
+
+    
