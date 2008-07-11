@@ -14,7 +14,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <version.pax.drone>0.1.1</version.pax.drone>
+    <version.pax.drone>0.1.2-SNAPSHOT</version.pax.drone>
   </properties>
 
   <build>
