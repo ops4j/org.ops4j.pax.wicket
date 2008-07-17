@@ -93,6 +93,7 @@
   <modules>
     <module>service</module>
     <module>samples</module>
+    <module>integrationTest</module>
   </modules>
 
   <dependencyManagement>
@@ -243,20 +244,4 @@
       </snapshots>
     </repository>
   </repositories>
-
-  <profiles>
-    <profile>
-      <id>IntegrationTest</id>
-      <activation>
-        <property>
-          <name>enablePaxWicketIntegrationTest</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <modules>
-        <module>integrationTest</module>
-      </modules>
-    </profile>
-  </profiles>
-
 </project>

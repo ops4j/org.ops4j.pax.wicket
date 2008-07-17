@@ -10,7 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
-      <excludeFolder url="file://$MODULE_DIR$/target/dependency-maven-plugin-markers" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -185,28 +184,28 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.drone:pax-drone-spi:0.1.1">
+      <library name="org.ops4j.pax.drone:pax-drone-spi:0.1.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.1/pax-drone-spi-0.1.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.2/pax-drone-spi-0.1.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.1/pax-drone-spi-0.1.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.2/pax-drone-spi-0.1.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.1/pax-drone-spi-0.1.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi/0.1.2/pax-drone-spi-0.1.2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.drone:pax-drone-api:0.1.1">
+      <library name="org.ops4j.pax.drone:pax-drone-api:0.1.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.1/pax-drone-api-0.1.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.2/pax-drone-api-0.1.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.1/pax-drone-api-0.1.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.2/pax-drone-api-0.1.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.1/pax-drone-api-0.1.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-api/0.1.2/pax-drone-api-0.1.2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -302,15 +301,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.drone:pax-drone-spi-junit:0.1.1">
+      <library name="org.ops4j.pax.drone:pax-drone-spi-junit:0.1.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.1/pax-drone-spi-junit-0.1.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.2/pax-drone-spi-junit-0.1.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.1/pax-drone-spi-junit-0.1.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.2/pax-drone-spi-junit-0.1.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.1/pax-drone-spi-junit-0.1.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-spi-junit/0.1.2/pax-drone-spi-junit-0.1.2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -328,28 +327,28 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.drone:pax-drone-connector-paxrunner:0.1.1">
+      <library name="org.ops4j.pax.drone:pax-drone-connector-paxrunner:0.1.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.1/pax-drone-connector-paxrunner-0.1.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.2/pax-drone-connector-paxrunner-0.1.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.1/pax-drone-connector-paxrunner-0.1.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.2/pax-drone-connector-paxrunner-0.1.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.1/pax-drone-connector-paxrunner-0.1.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-connector-paxrunner/0.1.2/pax-drone-connector-paxrunner-0.1.2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library" exported="">
-      <library name="org.ops4j.pax.drone:pax-drone-zombie:0.1.1">
+      <library name="org.ops4j.pax.drone:pax-drone-zombie:0.1.2">
         <CLASSES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.1/pax-drone-zombie-0.1.1.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.2/pax-drone-zombie-0.1.2.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.1/pax-drone-zombie-0.1.1-javadoc.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.2/pax-drone-zombie-0.1.2-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.1/pax-drone-zombie-0.1.1-sources.jar!/" />
+          <root url="jar://$M2_REPO$/org/ops4j/pax/drone/pax-drone-zombie/0.1.2/pax-drone-zombie-0.1.2-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
