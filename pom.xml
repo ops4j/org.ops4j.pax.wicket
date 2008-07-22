@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.ops4j.pax</groupId>
     <artifactId>master</artifactId>
@@ -10,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>wicket</artifactId>
-  <version>0.5.4-SNAPSHOT</version>
+  <version>0.5.4</version>
 
   <packaging>pom</packaging>
 
@@ -24,8 +22,8 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.5.4</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.5.4</developerConnection>
   </scm>
 
   <properties>
