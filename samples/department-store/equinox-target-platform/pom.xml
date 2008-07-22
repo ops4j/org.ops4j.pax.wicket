@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>departmentstore</artifactId>
-    <version>0.5.4</version>
+    <version>0.5.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.departmentstore</groupId>
   <artifactId>equinox-target-platform</artifactId>
-  <version>0.5.4</version>
+  <version>0.5.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>OPS4J - Pax Wicket Department Store - Equinox Target Platform for Eclipse PDE</name>
@@ -59,7 +59,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.4</version>
+      <version>0.5.5-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>

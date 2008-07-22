@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>wicket</artifactId>
-  <version>0.5.4</version>
+  <version>0.5.5-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -22,8 +22,8 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.5.4</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/qa/pax/wicket-0.5.4</developerConnection>
+    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
+    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
   </scm>
 
   <properties>
