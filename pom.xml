@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
   <parent>
     <groupId>org.ops4j.pax</groupId>
     <artifactId>master</artifactId>
@@ -93,7 +92,6 @@
   <modules>
     <module>service</module>
     <module>samples</module>
-    <module>integrationTest</module>
   </modules>
 
   <dependencyManagement>
@@ -244,4 +242,18 @@
       </snapshots>
     </repository>
   </repositories>
+
+  <profiles>
+    <profile>
+      <activation>
+        <property>
+          <name>paxWicketIntegrationTest</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <modules>
+        <module>integrationTest</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
