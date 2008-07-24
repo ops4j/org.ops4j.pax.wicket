@@ -44,9 +44,8 @@ public final class DevModeObjectOutputStream extends PaxWicketObjectOutputStream
     protected void writeObjectOverride( Object object )
         throws IOException
     {
-        Object replacedObject = super.replaceObject( object );
-        String replacedObjectClassName = replacedObject.getClass().getName();
-        objOutputStream.writeObject( replacedObject );
+        String replacedObjectClassName = object.getClass().getName();
+        objOutputStream.writeObject( object );
         objOutputStream.flush();
         byte[] replacedObjectByteArray = byteArrayOutputStream.toByteArray();
 

@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization.deployment;
+package org.ops4j.pax.wicket.internal.serialization.development;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -24,47 +25,62 @@ import org.apache.wicket.Application;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.settings.IApplicationSettings;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 /**
  * @author edward.yakop@gmail.com
- * @since 0.5.4
  */
-public final class PaxWicketObjectInputStream extends ObjectInputStream
+public final class DevModeObjectInputStream extends ObjectInputStream
 {
 
     private final IClassResolver m_classResolver;
 
-    public PaxWicketObjectInputStream( InputStream inputStream )
+    public DevModeObjectInputStream( ObjectInputStream ois )
         throws IOException
     {
-        super( inputStream );
+        this( ois, getClassResolver() );
+    }
 
-        // Can the application always be taken??
-        Application application = Application.get();
-        IApplicationSettings applicationSettings = application.getApplicationSettings();
-        m_classResolver = applicationSettings.getClassResolver();
+    public DevModeObjectInputStream( InputStream ois, IClassResolver resolver )
+        throws IOException, IllegalArgumentException
+    {
+        super( ois );
+        validateNotNull( resolver, "resolver" );
+        m_classResolver = resolver;
 
         enableResolveObject( true );
     }
 
     @Override
-    protected final Object resolveObject( Object object )
+    protected final Object resolveObject( Object obj )
         throws IOException
     {
-        if( object instanceof ReplaceBundleContext )
+        if( obj instanceof DevReplaceObject )
         {
-            ReplaceBundleContext replaceBundleContext = (ReplaceBundleContext) object;
-            return replaceBundleContext.getBundleContext();
+            DevReplaceObject replaceObject = (DevReplaceObject) obj;
+            String actualObjectClassName = replaceObject.getClassName();
+
+            byte[] actualObjectArray = replaceObject.getObjectByteArray();
+            try
+            {
+                ByteArrayInputStream actualBAIS = new ByteArrayInputStream( actualObjectArray );
+                DevModeObjectInputStream actualOIS = new DevModeObjectInputStream( actualBAIS, m_classResolver );
+                obj = actualOIS.readObject();
+            }
+            catch( IOException e )
+            {
+                throw new IOException( "Fail to deserialize [" + actualObjectClassName + "]" );
+            }
+            catch( ClassNotFoundException e )
+            {
+                String message = e.getMessage();
+                throw new IOException(
+                    "Fail to deserialize [" + actualObjectClassName + "] with CNFE message [" + message + "]"
+                );
+            }
         }
-        else if( object instanceof ReplaceBundle )
-        {
-            ReplaceBundle replaceBundle = (ReplaceBundle) object;
-            return replaceBundle.getBundle();
-        }
-        else
-        {
-            return super.resolveObject( object );
-        }
+
+        return super.resolveObject( obj );
     }
 
     @Override
@@ -101,4 +117,12 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream
 
         return resolvedClass;
     }
+
+    private static IClassResolver getClassResolver()
+    {
+        Application application = Application.get();
+        IApplicationSettings applicationSettings = application.getApplicationSettings();
+        return applicationSettings.getClassResolver();
+    }
+
 }
