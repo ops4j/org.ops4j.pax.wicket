@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization;
+package org.ops4j.pax.wicket.internal.serialization.deployment;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -29,7 +29,7 @@ import org.osgi.framework.BundleContext;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-final class ReplaceBundleContext
+public final class ReplaceBundleContext
     implements Serializable
 {
 
@@ -49,7 +49,7 @@ final class ReplaceBundleContext
      *
      * @since 0.5.4
      */
-    static void removeBundlePlaceHolder( long bundleId )
+    public static void removeBundlePlaceHolder( long bundleId )
     {
         m_placeHolders.remove( bundleId );
     }

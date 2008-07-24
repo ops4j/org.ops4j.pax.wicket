@@ -22,6 +22,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import org.apache.wicket.util.io.IObjectStreamFactory;
+import org.ops4j.pax.wicket.internal.serialization.deployment.PaxWicketObjectOutputStream;
+import org.ops4j.pax.wicket.internal.serialization.deployment.PaxWicketObjectInputStream;
 
 /**
  * @author edward.yakop@gmail.com

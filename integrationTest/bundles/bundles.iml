@@ -25,7 +25,19 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="pax-wicket-service" exported="" />
+    <orderEntry type="module-library">
+      <library name="org.ops4j.pax.wicket:pax-wicket-service:0.5.4-SNAPSHOT">
+        <CLASSES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/wicket/pax-wicket-service/0.5.4-SNAPSHOT/pax-wicket-service-0.5.4-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/wicket/pax-wicket-service/0.5.4-SNAPSHOT/pax-wicket-service-0.5.4-SNAPSHOT-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$M2_REPO$/org/ops4j/pax/wicket/pax-wicket-service/0.5.4-SNAPSHOT/pax-wicket-service-0.5.4-SNAPSHOT-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library name="javax.activation:activation:1.1">
         <CLASSES>

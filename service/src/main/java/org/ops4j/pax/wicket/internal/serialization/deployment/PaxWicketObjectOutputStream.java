@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization;
+package org.ops4j.pax.wicket.internal.serialization.deployment;
 
 import java.io.IOException;
 import java.io.NotSerializableException;
@@ -32,47 +32,21 @@ import org.slf4j.LoggerFactory;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-final class PaxWicketObjectOutputStream extends ObjectOutputStream
+public class PaxWicketObjectOutputStream extends ObjectOutputStream
 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( PaxWicketObjectOutputStream.class );
+    protected final ObjectOutputStream m_outputStream;
 
-    private final ObjectOutputStream m_outputStream;
-
-    PaxWicketObjectOutputStream( OutputStream outputStream )
-        throws IOException, SecurityException, IllegalArgumentException
+    public PaxWicketObjectOutputStream( OutputStream outputStream )
+        throws IOException
     {
         validateNotNull( outputStream, "outputStream" );
-        m_outputStream = new ObjectOutputStream( outputStream )
-        {
-            {
-                enableReplaceObject( true );
-            }
-
-            @Override
-            protected final Object replaceObject( Object object )
-                throws IOException
-            {
-                if( object instanceof BundleContext )
-                {
-                    BundleContext context = (BundleContext) object;
-                    return new ReplaceBundleContext( context );
-                }
-                else if( object instanceof Bundle )
-                {
-                    Bundle bundle = (Bundle) object;
-                    return new ReplaceBundle( bundle );
-                }
-                else
-                {
-                    return super.replaceObject( object );
-                }
-            }
-        };
+        m_outputStream = new OSGiAwareOutputStream( outputStream );
     }
 
     @Override
-    protected final void writeObjectOverride( final Object object )
+    protected void writeObjectOverride( final Object object )
         throws IOException
     {
         try
@@ -112,5 +86,37 @@ final class PaxWicketObjectOutputStream extends ObjectOutputStream
     {
         m_outputStream.close();
     }
+
+    private static final class OSGiAwareOutputStream extends ObjectOutputStream
+    {
+
+        private OSGiAwareOutputStream( OutputStream outputStream )
+            throws IOException
+        {
+            super( outputStream );
+            enableReplaceObject( true );
+        }
+
+        @Override
+        protected Object replaceObject( Object object )
+            throws IOException
+        {
+            if( object instanceof BundleContext )
+            {
+                BundleContext context = (BundleContext) object;
+                return new ReplaceBundleContext( context );
+            }
+            else if( object instanceof Bundle )
+            {
+                Bundle bundle = (Bundle) object;
+                return new ReplaceBundle( bundle );
+            }
+            else
+            {
+                return super.replaceObject( object );
+            }
+        }
+    }
+
 }
 

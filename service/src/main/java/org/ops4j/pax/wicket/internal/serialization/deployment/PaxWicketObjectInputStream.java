@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization;
+package org.ops4j.pax.wicket.internal.serialization.deployment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ import org.apache.wicket.settings.IApplicationSettings;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-final class PaxWicketObjectInputStream extends ObjectInputStream
+public final class PaxWicketObjectInputStream extends ObjectInputStream
 {
 
     private final IClassResolver m_classResolver;

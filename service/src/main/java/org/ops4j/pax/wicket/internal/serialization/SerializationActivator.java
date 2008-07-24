@@ -17,7 +17,7 @@
 package org.ops4j.pax.wicket.internal.serialization;
 
 import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
-import static org.ops4j.pax.wicket.internal.serialization.ReplaceBundleContext.removeBundlePlaceHolder;
+import static org.ops4j.pax.wicket.internal.serialization.deployment.ReplaceBundleContext.removeBundlePlaceHolder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

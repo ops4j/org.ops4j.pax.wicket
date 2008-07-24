@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization;
+package org.ops4j.pax.wicket.internal.serialization.deployment;
 
 import java.io.Serializable;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
