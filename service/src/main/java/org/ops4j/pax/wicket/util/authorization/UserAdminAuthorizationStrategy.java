@@ -70,33 +70,33 @@ public class UserAdminAuthorizationStrategy
     public final boolean isActionAuthorized( Component component, Action action )
     {
         final Class< ? extends Component> componentClass = component.getClass();
-        final Role roleAnnotation = componentClass.getAnnotation( Role.class );
+        final UserAdminActionRole roleAnnotation = componentClass.getAnnotation( UserAdminActionRole.class );
         return isAuthorized( action, roleAnnotation );
     }
 
     public final boolean isInstantiationAuthorized( Class componentClass )
     {
-        final Role roleAnnotation = (Role)componentClass.getAnnotation( Role.class );
+        final UserAdminActionRole roleAnnotation = (UserAdminActionRole)componentClass.getAnnotation( UserAdminActionRole.class );
         return isAuthorized( roleAnnotation );
     }
 
-    private boolean isAuthorized( Role roleAnnotation )
+    private boolean isAuthorized( UserAdminActionRole roleAnnotation )
     {
         if ( roleAnnotation != null )
         {
-            final String role = roleAnnotation.value();
+            final String role = roleAnnotation.value().getName();
             return isAuthorized( role );
         }
 
         return true;
     }
 
-    private boolean isAuthorized( Action action, Role roleAnnotation )
+    private boolean isAuthorized( Action action, UserAdminActionRole roleAnnotation )
     {
         if ( roleAnnotation != null )
         {
             final StringBuilder s = new StringBuilder();
-            s.append( roleAnnotation.value() );
+            s.append( roleAnnotation.value().getName() );
             s.append( "." );
             s.append( action.getName() );
             return isAuthorized( s.toString() );
@@ -105,7 +105,19 @@ public class UserAdminAuthorizationStrategy
         return true;
     }
 
-    private boolean isAuthorized( String role )
+    /**
+     * Developers can override this method.
+     * 
+     * For example, if a developer has a modeled or otherwise controlled
+     * access to the UserAdmin service, it is possible to provide specialized
+     * access here.
+     * 
+     * @param role the name of the action to test for authorization
+     * @return {@code true} if the currently logged in user is authorized
+     *         to perform the action described in the "role" parameter,
+     *         {@code false} otherwise
+     */
+    public boolean isAuthorized( String role )
     {
         // This is totall hackish.
         // The only way to avoid this is to use something other than
@@ -136,5 +148,15 @@ public class UserAdminAuthorizationStrategy
             return null;
 
         return userAdmin.getUser( PAX_WICKET_USER_PARAM, loginName );
+    }
+
+    /**
+     * Return the UserAdmin service that is backing this class.
+     * 
+     * @return the UserAdmin service
+     */
+    protected UserAdmin getUserAdmin()
+    {
+        return m_userAdmin;
     }
 }

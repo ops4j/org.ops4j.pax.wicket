@@ -21,6 +21,9 @@ package org.ops4j.pax.wicket.util.authorization;
 import java.lang.annotation.*;
 
 /**
+ * Marks the class as having a role. The role is simply based on the class
+ * name.
+ * 
  * Note that I did not add package-level annotations for the simple reason
  * that I did not need them. Feel free to add them in if you need them.
  * 
@@ -30,7 +33,7 @@ import java.lang.annotation.*;
 @Target( ElementType.TYPE )
 @Documented
 @Inherited
-public @interface Role
+public @interface UserAdminActionRole
 {
-    String value();
+    Class value();
 }
