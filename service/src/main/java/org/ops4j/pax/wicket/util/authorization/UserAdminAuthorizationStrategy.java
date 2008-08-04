@@ -17,7 +17,10 @@
 package org.ops4j.pax.wicket.util.authorization;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.*;
+import org.apache.wicket.authorization.strategies.role.IRoleCheckingStrategy;
+import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.service.useradmin.*;
 
 /**
@@ -48,8 +51,6 @@ import org.osgi.service.useradmin.*;
 public class UserAdminAuthorizationStrategy
     implements IAuthorizationStrategy
 {
-    private final UserAdmin m_userAdmin;
-
     /**
      * The default parameter to use for obtaining a user from the UserAdmin
      * service. Use like so:
@@ -58,6 +59,8 @@ public class UserAdminAuthorizationStrategy
      * </pre>
      */
     public static final String PAX_WICKET_USER_PARAM = "wicket.username";
+
+    private final UserAdmin m_userAdmin;
 
     public UserAdminAuthorizationStrategy( UserAdmin userAdmin )
     {
@@ -68,19 +71,13 @@ public class UserAdminAuthorizationStrategy
     {
         final Class< ? extends Component> componentClass = component.getClass();
         final Role roleAnnotation = componentClass.getAnnotation( Role.class );
-        if ( !isAuthorized( action, roleAnnotation ) )
-            return false;
-
-        return true;
+        return isAuthorized( action, roleAnnotation );
     }
 
     public final boolean isInstantiationAuthorized( Class componentClass )
     {
         final Role roleAnnotation = (Role)componentClass.getAnnotation( Role.class );
-        if ( !isAuthorized( roleAnnotation ) )
-            return false;
-
-        return true;
+        return isAuthorized( roleAnnotation );
     }
 
     private boolean isAuthorized( Role roleAnnotation )
@@ -110,11 +107,16 @@ public class UserAdminAuthorizationStrategy
 
     private boolean isAuthorized( String role )
     {
-        // FIXME
-        // This is my only hangup so far... Need to get the name of the
-        // logged in user
-        final String loginName = "";
+        // This is totall hackish.
+        // The only way to avoid this is to use something other than
+        // AuthenticatedWebSession. As it stands, we are trying to force
+        // a use case on AuthenticatedWebSession that it was not intended for.
+        final PaxWicketAuthentication paxWicketAuth = (PaxWicketAuthentication) AuthenticatedWebSession.get();
+        final String loginName = paxWicketAuth.getLoggedInUser();
         final User user = getUser( m_userAdmin, loginName );
+        if( null == user )
+            return false;
+
         final Authorization auth = m_userAdmin.getAuthorization( user );
         return auth.hasRole( role );
     }
