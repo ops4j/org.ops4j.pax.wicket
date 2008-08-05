@@ -21,11 +21,9 @@ package org.ops4j.pax.wicket.util.authorization;
 import java.lang.annotation.*;
 
 /**
- * Marks the class as having a role. The role is simply based on the class
- * name.
- * 
- * Note that I did not add package-level annotations for the simple reason
- * that I did not need them. Feel free to add them in if you need them.
+ * Marks the class as restricting which {@code org.apache.wicket.authorization.Action}s
+ * can be performed by a user. Whether or not the Action is authorized
+ * is determined by the UserAdmin service.
  * 
  * @author David Leangen
  */
@@ -33,7 +31,12 @@ import java.lang.annotation.*;
 @Target( ElementType.TYPE )
 @Documented
 @Inherited
-public @interface UserAdminActionRole
+public @interface RestrictAction
 {
-    Class value();
+    /**
+     * An enumeration (with a small "e") of Wicket Actions that
+     * are to be restricted. The default value is empty, which signifies
+     * that this should be applied to all Actions.
+     */
+    String[] value() default "";
 }

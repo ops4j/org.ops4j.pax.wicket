@@ -70,36 +70,52 @@ public class UserAdminAuthorizationStrategy
     public final boolean isActionAuthorized( Component component, Action action )
     {
         final Class< ? extends Component> componentClass = component.getClass();
-        final UserAdminActionRole roleAnnotation = componentClass.getAnnotation( UserAdminActionRole.class );
-        return isAuthorized( action, roleAnnotation );
-    }
+        final RestrictAction annotation = componentClass.getAnnotation( RestrictAction.class );
 
-    public final boolean isInstantiationAuthorized( Class componentClass )
-    {
-        final UserAdminActionRole roleAnnotation = (UserAdminActionRole)componentClass.getAnnotation( UserAdminActionRole.class );
-        return isAuthorized( roleAnnotation );
-    }
-
-    private boolean isAuthorized( UserAdminActionRole roleAnnotation )
-    {
-        if ( roleAnnotation != null )
+        final boolean doAuthorizeAction;
+        if( null == annotation )
+            // There is no annotation, so no authorization restrictions.
+            doAuthorizeAction = false;
+        else if( "".equals( annotation.value() ) )
+            // There is an annotation with an empty value, which means that
+            // all actions are to be tested.
+            doAuthorizeAction = true;
+        else
         {
-            final String role = roleAnnotation.value().getName();
-            return isAuthorized( role );
+            // There is an annotation with a non-empty value, which means that
+            // we need to test to see if the action should be authorized.
+            boolean isActionSpecified = false;
+            for( final String nextAction : annotation.value() )
+            {
+                if ( action.getName().equals( nextAction ) )
+                {
+                    isActionSpecified = true;
+                    break;
+                }
+            }
+            doAuthorizeAction = isActionSpecified;
+        }
+
+        if( doAuthorizeAction )
+        {
+            final StringBuilder s = new StringBuilder();
+            s.append( componentClass.getName() );
+            s.append( "." );
+            s.append( action.getName() );
+            return isAuthorized( s.toString() );
         }
 
         return true;
     }
 
-    private boolean isAuthorized( Action action, UserAdminActionRole roleAnnotation )
+    public final boolean isInstantiationAuthorized( Class componentClass )
     {
-        if ( roleAnnotation != null )
+        final RestrictInstantiation annotation = (RestrictInstantiation)componentClass.getAnnotation( RestrictInstantiation.class );
+
+        if ( annotation != null )
         {
-            final StringBuilder s = new StringBuilder();
-            s.append( roleAnnotation.value().getName() );
-            s.append( "." );
-            s.append( action.getName() );
-            return isAuthorized( s.toString() );
+            final String role = componentClass.getName();
+            return isAuthorized( role );
         }
 
         return true;
