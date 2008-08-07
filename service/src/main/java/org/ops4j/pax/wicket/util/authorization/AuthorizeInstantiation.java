@@ -34,6 +34,6 @@ import java.lang.annotation.*;
 @Target( ElementType.TYPE )
 @Documented
 @Inherited
-public @interface RestrictInstantiation
+public @interface AuthorizeInstantiation
 {
 }

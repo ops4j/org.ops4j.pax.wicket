@@ -31,7 +31,7 @@ import java.lang.annotation.*;
 @Target( ElementType.TYPE )
 @Documented
 @Inherited
-public @interface RestrictAction
+public @interface AuthorizeAction
 {
     /**
      * An enumeration (with a small "e") of Wicket Actions that

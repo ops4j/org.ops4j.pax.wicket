@@ -70,16 +70,17 @@ public class UserAdminAuthorizationStrategy
     public final boolean isActionAuthorized( Component component, Action action )
     {
         final Class< ? extends Component> componentClass = component.getClass();
-        final RestrictAction annotation = componentClass.getAnnotation( RestrictAction.class );
 
-        final boolean doAuthorizeAction;
+        // First check for denial restrictions on the component
+        final DenyAction annotation = componentClass.getAnnotation( DenyAction.class );
+        final boolean doDenyAction;
         if( null == annotation )
             // There is no annotation, so no authorization restrictions.
-            doAuthorizeAction = false;
+            doDenyAction = false;
         else if( "".equals( annotation.value() ) )
             // There is an annotation with an empty value, which means that
             // all actions are to be tested.
-            doAuthorizeAction = true;
+            doDenyAction = true;
         else
         {
             // There is an annotation with a non-empty value, which means that
@@ -93,8 +94,45 @@ public class UserAdminAuthorizationStrategy
                     break;
                 }
             }
+            doDenyAction = isActionSpecified;
+        }
+
+        if( doDenyAction )
+        {
+            final StringBuilder s = new StringBuilder();
+            s.append( componentClass.getName() );
+            s.append( "." );
+            s.append( action.getName() );
+            return !isAuthorized( s.toString() );
+        }
+
+        // If we do not deny the action, next check for authorization 
+        // restrictions on the component
+        final AuthorizeAction authorizeActionAnnotation = componentClass.getAnnotation( AuthorizeAction.class );
+        final boolean doAuthorizeAction;
+        if( null == authorizeActionAnnotation )
+            // There is no annotation, so no authorization restrictions.
+            doAuthorizeAction = false;
+        else if( "".equals( authorizeActionAnnotation.value() ) )
+            // There is an annotation with an empty value, which means that
+            // all actions are to be tested.
+            doAuthorizeAction = true;
+        else
+        {
+            // There is an annotation with a non-empty value, which means that
+            // we need to test to see if the action should be authorized.
+            boolean isActionSpecified = false;
+            for( final String nextAction : authorizeActionAnnotation.value() )
+            {
+                if ( action.getName().equals( nextAction ) )
+                {
+                    isActionSpecified = true;
+                    break;
+                }
+            }
             doAuthorizeAction = isActionSpecified;
         }
+
 
         if( doAuthorizeAction )
         {
@@ -110,7 +148,7 @@ public class UserAdminAuthorizationStrategy
 
     public final boolean isInstantiationAuthorized( Class componentClass )
     {
-        final RestrictInstantiation annotation = (RestrictInstantiation)componentClass.getAnnotation( RestrictInstantiation.class );
+        final AuthorizeInstantiation annotation = (AuthorizeInstantiation)componentClass.getAnnotation( AuthorizeInstantiation.class );
 
         if ( annotation != null )
         {
@@ -135,7 +173,7 @@ public class UserAdminAuthorizationStrategy
      */
     public boolean isAuthorized( String role )
     {
-        // This is totall hackish.
+        // This is totally hackish.
         // The only way to avoid this is to use something other than
         // AuthenticatedWebSession. As it stands, we are trying to force
         // a use case on AuthenticatedWebSession that it was not intended for.
