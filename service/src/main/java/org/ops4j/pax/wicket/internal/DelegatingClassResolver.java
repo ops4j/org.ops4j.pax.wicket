@@ -112,7 +112,7 @@ public final class DelegatingClassResolver
             }
             catch( ClassNotFoundException e )
             {
-                LOGGER.warn( "ClassResolver " + resolver + " could not find class: " + classname );
+                LOGGER.info( "ClassResolver " + resolver + " could not find class: " + classname );
             }
             catch( RuntimeException e )
             {
