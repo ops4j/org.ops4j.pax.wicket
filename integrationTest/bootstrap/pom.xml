@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>integrationTest</artifactId>
-    <version>0.5.4-SNAPSHOT</version>
+    <version>0.5.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -14,7 +14,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <version.pax.drone>0.1.2</version.pax.drone>
+    <version.pax.drone>0.1.3-SNAPSHOT</version.pax.drone>
   </properties>
 
   <build>

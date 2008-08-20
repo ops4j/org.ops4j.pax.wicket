@@ -17,7 +17,7 @@
 package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
 import static java.lang.Thread.sleep;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorConfiguration;
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
 import org.osgi.framework.Bundle;
@@ -31,9 +31,9 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest
 {
 
     @Override
-    protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
+    protected void onTestBundleConfigure( PaxRunnerConnector connector )
     {
-        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" );
+        connector.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" );
     }
 
     public final void testApplicationTracker()

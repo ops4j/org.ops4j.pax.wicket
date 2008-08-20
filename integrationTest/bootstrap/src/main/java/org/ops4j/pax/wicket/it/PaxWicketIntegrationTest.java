@@ -16,9 +16,9 @@
  */
 package org.ops4j.pax.wicket.it;
 
-import org.ops4j.pax.drone.api.ConnectorConfiguration;
-import org.ops4j.pax.drone.connector.paxrunner.ConnectorConfigurationFactory;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorConfiguration;
+import org.ops4j.pax.drone.api.DroneConnector;
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorFactory;
 import org.ops4j.pax.drone.connector.paxrunner.Platforms;
 import org.ops4j.pax.drone.spi.junit.DroneTestCase;
 import org.osgi.framework.Bundle;
@@ -34,13 +34,13 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
     @Override
-    protected ConnectorConfiguration configure()
+    protected DroneConnector configure()
     {
         String platform = System.getProperty( "pax.wicket.test.platform", "EQUINOX" );
 
-        PaxRunnerConnectorConfiguration configuration = ConnectorConfigurationFactory.create( this );
-        configuration.setPlatform( Platforms.valueOf( platform ) );
-        configuration.addBundle( "mvn:org.ops4j.pax.logging/pax-logging-api" )
+        PaxRunnerConnector connector = PaxRunnerConnectorFactory.create( this );
+        connector.setPlatform( Platforms.valueOf( platform ) );
+        connector.addBundle( "mvn:org.ops4j.pax.logging/pax-logging-api" )
             .addBundle( "mvn:org.ops4j.pax.logging/pax-logging-service" )
             .addBundle( "mvn:org.apache.felix/org.apache.felix.eventadmin" )
             .addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" )
@@ -50,17 +50,17 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
             .addBundle( "mvn:org.apache.felix/org.osgi.compendium" )
             .addBundle( "mvn:org.ops4j.pax.wicket.integrationTest/bootstrap" );
 
-        onTestBundleConfigure( configuration );
+        onTestBundleConfigure( connector );
 
-        return configuration;
+        return connector;
     }
 
     /**
      * Override this method to further initialize configuration.
      *
-     * @param configuration The configuration.
+     * @param connector
      */
-    protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
+    protected void onTestBundleConfigure( PaxRunnerConnector connector )
     {
         // Do nothing
     }

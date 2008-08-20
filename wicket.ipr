@@ -328,6 +328,32 @@
     <option name="IS_EMACS_ERRORS_MODE" value="true" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/integrationTest/bootstrap/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/bundles/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/classResolverTest/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/demo/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/model/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/service-alternative/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/service-basic/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/about/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/application/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/floor/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/franchisee/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/department-store/equinox-target-platform/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/lifecycleTest/pom.xml" />
+        <option value="$PROJECT_DIR$/service/pom.xml" />
+        <option value="$PROJECT_DIR$/samples/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/bundles/simpleApp/pom.xml" />
+        <option value="$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ModuleEditorState">
     <option name="LAST_EDITED_MODULE_NAME" />
     <option name="LAST_EDITED_TAB_NAME" />
@@ -466,26 +492,26 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" group="wicket and modules/integrationTest and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/bundles.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/bundles.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" filepath="$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" group="wicket and modules/integrationTest and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/departmentstore.iml" filepath="$PROJECT_DIR$/samples/department-store/departmentstore.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-alternative/departmentstore-service-alternative.iml" filepath="$PROJECT_DIR$/samples/department-store/service-alternative/departmentstore-service-alternative.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-basic/departmentstore-service-basic.iml" filepath="$PROJECT_DIR$/samples/department-store/service-basic/departmentstore-service-basic.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/departmentstore-view-about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/departmentstore-view-about.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/departmentstore-view-application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/departmentstore-view-application.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/departmentstore-view-floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/departmentstore-view-floor.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/departmentstore-view-franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/departmentstore-view-franchisee.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" filepath="$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" group="wicket and modules/samples and modules/departmentstore and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/integrationTest.iml" filepath="$PROJECT_DIR$/integrationTest/integrationTest.iml" group="wicket and modules/integrationTest and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/lifecycleTest/lifecycleTest.iml" filepath="$PROJECT_DIR$/integrationTest/lifecycleTest/lifecycleTest.iml" group="wicket and modules/integrationTest and modules" />
-      <module fileurl="file://$PROJECT_DIR$/service/pax-wicket-service.iml" filepath="$PROJECT_DIR$/service/pax-wicket-service.iml" group="wicket and modules" />
-      <module fileurl="file://$PROJECT_DIR$/samples/samples.iml" filepath="$PROJECT_DIR$/samples/samples.iml" group="wicket and modules/samples and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
-      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" group="wicket and modules/integrationTest and modules/bundles and modules" />
-      <module fileurl="file://$PROJECT_DIR$/wicket.iml" filepath="$PROJECT_DIR$/wicket.iml" group="wicket and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" filepath="$PROJECT_DIR$/integrationTest/bootstrap/bootstrap.iml" group="integrationTest and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/bundles.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/bundles.iml" group="integrationTest and modules/bundles and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" filepath="$PROJECT_DIR$/integrationTest/classResolverTest/classResolverTest.iml" group="integrationTest and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/departmentstore.iml" filepath="$PROJECT_DIR$/samples/department-store/departmentstore.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" filepath="$PROJECT_DIR$/samples/department-store/demo/departmentstore-demo.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" filepath="$PROJECT_DIR$/samples/department-store/model/departmentstore-model.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-alternative/departmentstore-service-alternative.iml" filepath="$PROJECT_DIR$/samples/department-store/service-alternative/departmentstore-service-alternative.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/service-basic/departmentstore-service-basic.iml" filepath="$PROJECT_DIR$/samples/department-store/service-basic/departmentstore-service-basic.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/about/departmentstore-view-about.iml" filepath="$PROJECT_DIR$/samples/department-store/about/departmentstore-view-about.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/application/departmentstore-view-application.iml" filepath="$PROJECT_DIR$/samples/department-store/application/departmentstore-view-application.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/floor/departmentstore-view-floor.iml" filepath="$PROJECT_DIR$/samples/department-store/floor/departmentstore-view-floor.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/franchisee/departmentstore-view-franchisee.iml" filepath="$PROJECT_DIR$/samples/department-store/franchisee/departmentstore-view-franchisee.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" filepath="$PROJECT_DIR$/samples/department-store/equinox-target-platform/equinox-target-platform.iml" group="samples and modules/departmentstore and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/integrationTest.iml" filepath="$PROJECT_DIR$/integrationTest/integrationTest.iml" group="integrationTest and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/lifecycleTest/lifecycleTest.iml" filepath="$PROJECT_DIR$/integrationTest/lifecycleTest/lifecycleTest.iml" group="integrationTest and modules" />
+      <module fileurl="file://$PROJECT_DIR$/service/pax-wicket-service.iml" filepath="$PROJECT_DIR$/service/pax-wicket-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samples/samples.iml" filepath="$PROJECT_DIR$/samples/samples.iml" group="samples and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleApp/simpleApp.iml" group="integrationTest and modules/bundles and modules" />
+      <module fileurl="file://$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" filepath="$PROJECT_DIR$/integrationTest/bundles/simpleLibraries/simpleLibraries.iml" group="integrationTest and modules/bundles and modules" />
+      <module fileurl="file://$PROJECT_DIR$/wicket.iml" filepath="$PROJECT_DIR$/wicket.iml" />
     </modules>
   </component>
   <component name="ProjectReloadState">
@@ -606,6 +632,9 @@
     <option name="AUTOSCROLL_MODE" value="true" />
     <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
     <option name="ACTIVE_ACTIONS" value="" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myVersion" value="123" />
   </component>
   <component name="SvnConfiguration">
     <option name="USER" value="" />

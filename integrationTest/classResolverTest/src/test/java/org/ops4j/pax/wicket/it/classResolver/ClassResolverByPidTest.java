@@ -18,12 +18,12 @@ package org.ops4j.pax.wicket.it.classResolver;
 
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
+import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorConfiguration;
+import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
 
 /**
@@ -34,9 +34,9 @@ public final class ClassResolverByPidTest
 {
 
     @Override
-    protected void onTestBundleConfigure( PaxRunnerConnectorConfiguration configuration )
+    protected void onTestBundleConfigure( PaxRunnerConnector connector )
     {
-        configuration.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
+        connector.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
     }
 
     public final void testPrivateLibraries()
