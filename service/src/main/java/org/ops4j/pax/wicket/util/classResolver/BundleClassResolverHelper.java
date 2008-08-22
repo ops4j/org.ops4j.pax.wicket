@@ -38,7 +38,11 @@ import org.osgi.service.cm.ManagedService;
 public final class BundleClassResolverHelper
 {
 
-    private static final String SERVICE_NAME = IClassResolver.class.getName();
+    private static final String[] SERVICE_NAMES =
+        {
+            IClassResolver.class.getName(),
+            ManagedService.class.getName()
+        };
 
     private final BundleContext m_bundleContext;
     private final Properties m_serviceProperties;
@@ -140,7 +144,7 @@ public final class BundleClassResolverHelper
             if( m_serviceRegistration == null )
             {
                 BundleClassResolver resolver = new BundleClassResolver();
-                m_serviceRegistration = m_bundleContext.registerService( SERVICE_NAME, resolver, m_serviceProperties );
+                m_serviceRegistration = m_bundleContext.registerService( SERVICE_NAMES, resolver, m_serviceProperties );
             }
         }
     }

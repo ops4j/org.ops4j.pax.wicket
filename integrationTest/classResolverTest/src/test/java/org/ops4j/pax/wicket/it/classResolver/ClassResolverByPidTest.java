@@ -16,6 +16,9 @@
  */
 package org.ops4j.pax.wicket.it.classResolver;
 
+import static java.lang.Thread.sleep;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
@@ -23,7 +26,10 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.SERVICE_PID;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 
 /**
@@ -33,38 +39,39 @@ public final class ClassResolverByPidTest
     extends PaxWicketIntegrationTest
 {
 
+    private static final String TEST_NAME_WITH_CONFIG_ADMIN =
+        "testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin";
+
     @Override
     protected void onTestBundleConfigure( PaxRunnerConnector connector )
     {
         connector.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
+
+        String testName = getName();
+        if( TEST_NAME_WITH_CONFIG_ADMIN.equals( testName ) )
+        {
+            connector.addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" );
+        }
     }
 
-    public final void testPrivateLibraries()
+    public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()
         throws Throwable
     {
         BundleContext bundleContext = droneContext.getBundleContext();
-        ServiceReference[] references = bundleContext.getServiceReferences(
-            IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
-        );
-        assertNotNull( references );
-        assertEquals( references.length, 1 );
-
-        ServiceReference classResolverReference = references[ 0 ];
+        ServiceReference classResolverReference = getLibraryClassResolverReference();
         assertFalse( isApplicationNameKeyExists( classResolverReference ) );
 
         ManagedService managedService = (ManagedService) bundleContext.getService( classResolverReference );
         Properties dictionary = new Properties();
 
         // Lets update configuration to expose our sample library to abc, def application
-        // This is also can be done via configuration admin
         dictionary.put( APPLICATION_NAME, new String[]{ "abc", "def" } );
         managedService.updated( dictionary );
 
-        bundleContext.ungetService( classResolverReference );
-
         assertTrue( isApplicationNameKeyExists( classResolverReference ) );
-
         validateThatClassResolverIsExposedToAbcAndDef();
+
+        bundleContext.ungetService( classResolverReference );
     }
 
     private void validateThatClassResolverIsExposedToAbcAndDef()
@@ -88,6 +95,8 @@ public final class ClassResolverByPidTest
         Class clazz = classResolver.resolveClass( className );
         assertNotNull( clazz );
         assertEquals( clazz.getName(), className );
+
+        bundleContext.ungetService( reference );
     }
 
     private boolean isApplicationNameKeyExists( ServiceReference reference )
@@ -103,5 +112,58 @@ public final class ClassResolverByPidTest
             }
         }
         return isApplicatioNameKeyExists;
+    }
+
+    public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
+        throws Throwable
+    {
+        BundleContext bundleContext = droneContext.getBundleContext();
+        ServiceReference classResolverReference = getLibraryClassResolverReference();
+
+        // Ensure no configuration is applied
+        assertFalse( isApplicationNameKeyExists( classResolverReference ) );
+
+        // Lets update configuration to expose our sample library to abc, def application via Configuration Admin
+        ServiceReference configAdminRef = bundleContext.getServiceReference( ConfigurationAdmin.class.getName() );
+        assertNotNull( configAdminRef );
+        ConfigurationAdmin configAdmin = (ConfigurationAdmin) bundleContext.getService( configAdminRef );
+
+        String classResolverBundleLocation = classResolverReference.getBundle().getLocation();
+        Configuration configuration = configAdmin.getConfiguration( "libraryPid", classResolverBundleLocation );
+        Dictionary properties = configuration.getProperties();
+        if( properties == null )
+        {
+            properties = new Hashtable();
+            properties.put( SERVICE_PID, "libraryPid" );
+        }
+        properties.put( APPLICATION_NAME, new String[]{ "abc", "def" } );
+        configuration.update( properties );
+
+        // Wait for 1 secs
+        sleep( 5000 );
+
+        // Lets test that configuration is now applied
+        classResolverReference = getLibraryClassResolverReference();
+        assertTrue( isApplicationNameKeyExists( classResolverReference ) );
+        validateThatClassResolverIsExposedToAbcAndDef();
+
+        // Remove configuration
+        configuration.delete();
+
+        bundleContext.ungetService( configAdminRef );
+        bundleContext.ungetService( classResolverReference );
+    }
+
+    private ServiceReference getLibraryClassResolverReference()
+        throws InvalidSyntaxException
+    {
+        BundleContext bundleContext = droneContext.getBundleContext();
+        ServiceReference[] references = bundleContext.getServiceReferences(
+            IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
+        );
+        assertNotNull( references );
+        assertEquals( references.length, 1 );
+        return references[ 0 ];
+
     }
 }
