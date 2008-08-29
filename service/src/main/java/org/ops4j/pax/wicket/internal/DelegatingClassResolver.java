@@ -151,10 +151,33 @@ public final class DelegatingClassResolver
         @Override
         public final void modifiedService( ServiceReference reference, Object service )
         {
-            String applName = (String) reference.getProperty( APPLICATION_NAME );
-            if( m_applicationName.equals( applName ) )
+            Object objAppName = reference.getProperty( APPLICATION_NAME );
+            if( objAppName != null )
             {
-                return;
+                Class<?> nameClass = objAppName.getClass();
+
+                if( String.class.isAssignableFrom( nameClass ) )
+                {
+                    if( !nameClass.isArray() )
+                    {
+                        String appName = (String) objAppName;
+                        if( m_applicationName.equals( appName ) )
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        String[] appNames = (String[]) objAppName;
+                        for( String appName : appNames )
+                        {
+                            if( m_applicationName.equals( appName ) )
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
             }
 
             removedService( reference, service );
