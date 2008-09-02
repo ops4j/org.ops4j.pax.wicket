@@ -180,6 +180,9 @@ public final class BundleClassResolverHelper
         public final void updated( Dictionary dictionary )
             throws ConfigurationException
         {
+            if( null == dictionary )
+                return;
+
             Object applicationNames = dictionary.get( APPLICATION_NAME );
             m_serviceProperties.put( APPLICATION_NAME, applicationNames );
             m_serviceRegistration.setProperties( m_serviceProperties );
