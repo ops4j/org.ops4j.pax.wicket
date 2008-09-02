@@ -37,7 +37,6 @@ import org.osgi.service.cm.ManagedService;
  */
 public final class BundleClassResolverHelper
 {
-
     private static final String[] SERVICE_NAMES =
         {
             IClassResolver.class.getName(),
@@ -47,6 +46,7 @@ public final class BundleClassResolverHelper
     private final BundleContext m_bundleContext;
     private final Properties m_serviceProperties;
 
+    private final Object m_lock = new Object();
     private ServiceRegistration m_serviceRegistration;
 
     /**
@@ -86,7 +86,7 @@ public final class BundleClassResolverHelper
             m_serviceProperties.setProperty( SERVICE_PID, servicePid );
         }
 
-        synchronized( this )
+        synchronized( m_lock )
         {
             if( m_serviceRegistration != null )
             {
@@ -123,7 +123,7 @@ public final class BundleClassResolverHelper
             m_serviceProperties.put( APPLICATION_NAME, applicationNames );
         }
 
-        synchronized( this )
+        synchronized( m_lock )
         {
             if( m_serviceRegistration != null )
             {
@@ -139,7 +139,7 @@ public final class BundleClassResolverHelper
      */
     public final void register()
     {
-        synchronized( this )
+        synchronized( m_lock )
         {
             if( m_serviceRegistration == null )
             {
@@ -156,7 +156,7 @@ public final class BundleClassResolverHelper
      */
     public final void unregister()
     {
-        synchronized( this )
+        synchronized( m_lock )
         {
             if( m_serviceRegistration != null )
             {
@@ -184,8 +184,15 @@ public final class BundleClassResolverHelper
                 return;
 
             Object applicationNames = dictionary.get( APPLICATION_NAME );
-            m_serviceProperties.put( APPLICATION_NAME, applicationNames );
-            m_serviceRegistration.setProperties( m_serviceProperties );
+            if( null != applicationNames )
+                m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+            else
+                m_serviceProperties.remove( APPLICATION_NAME );
+
+            synchronized( m_lock )
+            {
+                m_serviceRegistration.setProperties( m_serviceProperties );
+            }
         }
     }
 }
