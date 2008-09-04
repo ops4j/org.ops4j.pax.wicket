@@ -16,8 +16,7 @@
  */
 package org.ops4j.pax.wicket.internal.serialization;
 
-import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
-import static org.ops4j.pax.wicket.internal.serialization.deployment.ReplaceBundleContext.removeBundlePlaceHolder;
+import static org.ops4j.pax.wicket.util.serialization.deployment.ReplaceBundleContext.removeBundlePlaceHolder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -36,7 +35,6 @@ public class SerializationActivator
 
     static
     {
-        setObjectStreamFactory( new PaxWicketObjectStreamFactory() );
     }
 
     private static BundleContext m_bundleContext;

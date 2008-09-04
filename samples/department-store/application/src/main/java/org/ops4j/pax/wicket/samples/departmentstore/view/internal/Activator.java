@@ -20,9 +20,11 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
 
 /**
  * @since 1.0.0
@@ -40,9 +42,10 @@ public class Activator
     public void start( BundleContext bundleContext )
         throws Exception
     {
-         String mountPoint = "deptStore";
+        String mountPoint = "deptStore";
 //        String mountPoint = "/";
         String applicationName = "departmentstore";
+        setObjectStreamFactory( new PaxWicketObjectStreamFactory( true ) );
         m_store = new RootContentAggregator( bundleContext, applicationName, "swp" );
         m_pageRegistration = m_store.register();
 
@@ -53,6 +56,7 @@ public class Activator
             new PaxWicketApplicationFactory( bundleContext, OverviewPage.class, mountPoint, applicationName );
 
         m_serviceRegistration = m_applicationFactory.register();
+
     }
 
     public void stop( BundleContext bundleContext )

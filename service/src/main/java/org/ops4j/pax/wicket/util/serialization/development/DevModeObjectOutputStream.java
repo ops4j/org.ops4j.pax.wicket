@@ -14,13 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization.development;
+package org.ops4j.pax.wicket.util.serialization.development;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import org.ops4j.pax.wicket.internal.serialization.deployment.PaxWicketObjectOutputStream;
+import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectOutputStream;
 
 /**
  * @author edward.yakop@gmail.com
@@ -28,27 +26,18 @@ import org.ops4j.pax.wicket.internal.serialization.deployment.PaxWicketObjectOut
 public final class DevModeObjectOutputStream extends PaxWicketObjectOutputStream
 {
 
-    private final ByteArrayOutputStream byteArrayOutputStream;
-    private final ObjectOutputStream objOutputStream;
-
     public DevModeObjectOutputStream( OutputStream outputStream )
         throws IOException, IllegalArgumentException
     {
         super( outputStream );
-
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        objOutputStream = new ObjectOutputStream( byteArrayOutputStream );
     }
 
     @Override
-    protected void writeObjectOverride( Object object )
+    protected final void writeObjectOverride( Object object )
         throws IOException
     {
-        String replacedObjectClassName = object.getClass().getName();
-        objOutputStream.writeObject( object );
-        objOutputStream.flush();
-        byte[] replacedObjectByteArray = byteArrayOutputStream.toByteArray();
-
-        super.writeObjectOverride( new DevReplaceObject( replacedObjectClassName, replacedObjectByteArray ) );
+        String objectClassName = object.getClass().getName();
+        super.writeObjectOverride( objectClassName );
+        super.writeObjectOverride( object );
     }
 }

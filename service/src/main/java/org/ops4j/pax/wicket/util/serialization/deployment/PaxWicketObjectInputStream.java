@@ -14,16 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.serialization.deployment;
+package org.ops4j.pax.wicket.util.serialization.deployment;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
-import org.apache.wicket.Application;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IClassResolver;
-import org.apache.wicket.settings.IApplicationSettings;
 
 /**
  * @author edward.yakop@gmail.com
@@ -34,16 +32,12 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream
 
     private final IClassResolver m_classResolver;
 
-    public PaxWicketObjectInputStream( InputStream inputStream )
+    public PaxWicketObjectInputStream( InputStream inputStream, IClassResolver resolver )
         throws IOException
     {
         super( inputStream );
 
-        // Can the application always be taken??
-        Application application = Application.get();
-        IApplicationSettings applicationSettings = application.getApplicationSettings();
-        m_classResolver = applicationSettings.getClassResolver();
-
+        m_classResolver = resolver;
         enableResolveObject( true );
     }
 

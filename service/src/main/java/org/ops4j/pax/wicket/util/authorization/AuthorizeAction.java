@@ -18,21 +18,27 @@
  */
 package org.ops4j.pax.wicket.util.authorization;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Marks the class as restricting which {@code org.apache.wicket.authorization.Action}s
  * can be performed by a user. Whether or not the Action is authorized
  * is determined by the UserAdmin service.
- * 
+ *
  * @author David Leangen
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
 @Documented
 @Inherited
 public @interface AuthorizeAction
 {
+
     /**
      * An enumeration (with a small "e") of Wicket Actions that
      * are to be restricted. The default value is empty, which signifies

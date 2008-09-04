@@ -37,6 +37,7 @@ import org.osgi.service.cm.ManagedService;
  */
 public final class BundleClassResolverHelper
 {
+
     private static final String[] SERVICE_NAMES =
         {
             IClassResolver.class.getName(),
@@ -181,13 +182,19 @@ public final class BundleClassResolverHelper
             throws ConfigurationException
         {
             if( null == dictionary )
+            {
                 return;
+            }
 
             Object applicationNames = dictionary.get( APPLICATION_NAME );
             if( null != applicationNames )
+            {
                 m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+            }
             else
+            {
                 m_serviceProperties.remove( APPLICATION_NAME );
+            }
 
             synchronized( m_lock )
             {
