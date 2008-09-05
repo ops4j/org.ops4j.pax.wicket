@@ -266,6 +266,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="simpleApp (org.ops4j.pax.wicket.integrationTest.bundles) (2)" />
+    <orderEntry type="module" module-name="simpleApp" />
     <orderEntryProperties />
   </component>
 </module>
