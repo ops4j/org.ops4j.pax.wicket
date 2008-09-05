@@ -16,15 +16,9 @@
  */
 package org.ops4j.pax.wicket.internal.serialization;
 
-import static org.ops4j.pax.wicket.util.serialization.deployment.ReplaceBundleContext.removeBundlePlaceHolder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import static org.osgi.framework.BundleEvent.STOPPING;
-import static org.osgi.framework.BundleEvent.UNINSTALLED;
-import static org.osgi.framework.BundleEvent.UNRESOLVED;
-import org.osgi.framework.BundleListener;
 
 /**
  * @author edward.yakop@gmail.com
@@ -33,10 +27,6 @@ public class SerializationActivator
     implements BundleActivator
 {
 
-    static
-    {
-    }
-
     private static BundleContext m_bundleContext;
 
     public static BundleContext bundleContext()
@@ -44,40 +34,28 @@ public class SerializationActivator
         return m_bundleContext;
     }
 
-    private CleanupBundleListener m_cleanupListener;
+    public static BundleContext getBundleContextByBundleId( long bundleId )
+    {
+        Bundle bundle = m_bundleContext.getBundle( bundleId );
+        if( bundle != null )
+        {
+            return bundle.getBundleContext();
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     public final void start( BundleContext context )
         throws Exception
     {
         m_bundleContext = context;
-        m_cleanupListener = new CleanupBundleListener();
-        context.addBundleListener( m_cleanupListener );
     }
 
     public final void stop( BundleContext context )
         throws Exception
     {
-        context.removeBundleListener( m_cleanupListener );
-
         m_bundleContext = null;
-        m_cleanupListener = null;
-    }
-
-    private static class CleanupBundleListener
-        implements BundleListener
-    {
-
-        public final void bundleChanged( BundleEvent event )
-        {
-            int eventType = event.getType();
-            if( eventType == STOPPING ||
-                eventType == UNINSTALLED ||
-                eventType == UNRESOLVED )
-            {
-                Bundle bundle = event.getBundle();
-                long bundleId = bundle.getBundleId();
-                removeBundlePlaceHolder( bundleId );
-            }
-        }
     }
 }

@@ -17,11 +17,8 @@
 package org.ops4j.pax.wicket.util.serialization.deployment;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import static java.util.Collections.synchronizedMap;
-import java.util.HashMap;
-import java.util.Map;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import org.ops4j.pax.wicket.internal.serialization.SerializationActivator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
@@ -29,30 +26,11 @@ import org.osgi.framework.BundleContext;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class ReplaceBundleContext
+final class ReplaceBundleContext
     implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Map<Long, WeakReference<BundleContext>> m_placeHolders;
-
-    static
-    {
-        m_placeHolders = synchronizedMap( new HashMap<Long, WeakReference<BundleContext>>() );
-    }
-
-    /**
-     * Removes bundle place holder.
-     *
-     * @param bundleId The bundle id.
-     *
-     * @since 0.5.4
-     */
-    public static void removeBundlePlaceHolder( long bundleId )
-    {
-        m_placeHolders.remove( bundleId );
-    }
 
     private final long m_bundleId;
 
@@ -71,12 +49,6 @@ public final class ReplaceBundleContext
 
         Bundle bundle = bundleContext.getBundle();
         m_bundleId = bundle.getBundleId();
-
-        WeakReference<BundleContext> reference = m_placeHolders.get( m_bundleId );
-        if( reference == null || reference.get() == null )
-        {
-            m_placeHolders.put( m_bundleId, new WeakReference<BundleContext>( bundleContext ) );
-        }
     }
 
     /**
@@ -88,20 +60,7 @@ public final class ReplaceBundleContext
      */
     final BundleContext getBundleContext()
     {
-        WeakReference<BundleContext> bundleReference;
-        synchronized( m_placeHolders )
-        {
-            bundleReference = m_placeHolders.get( m_bundleId );
-        }
-
-        if( bundleReference != null )
-        {
-            return bundleReference.get();
-        }
-        else
-        {
-            return null;
-        }
+        return SerializationActivator.getBundleContextByBundleId( m_bundleId );
     }
 
 }

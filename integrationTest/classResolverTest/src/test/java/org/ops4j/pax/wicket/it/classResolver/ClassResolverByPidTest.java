@@ -114,6 +114,7 @@ public final class ClassResolverByPidTest
         return isApplicatioNameKeyExists;
     }
 
+    @SuppressWarnings( "unchecked" )
     public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
         throws Throwable
     {
