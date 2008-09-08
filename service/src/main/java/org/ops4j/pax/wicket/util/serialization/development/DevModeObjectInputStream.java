@@ -50,15 +50,22 @@ public final class DevModeObjectInputStream extends ObjectInputStream
         }
         catch( ClassNotFoundException e )
         {
+            // Re-throw with additional message
             String message = e.getMessage();
             throw new ClassNotFoundException( "Class [" + className + "] can't be found.\nActual error:\n" + message );
         }
         catch( IOException e )
         {
+            // Re-throw with additional message
             String message = e.getMessage();
             throw new IOException(
                 "Fail to deserialize object of class [" + className + "].\nActual error:\n" + message
             );
+        }
+        catch( RuntimeException e )
+        {
+            // Re-throw with additional message
+            throw new RuntimeException( "Fail to deserialize object of class [" + className + "].", e );
         }
     }
 }
