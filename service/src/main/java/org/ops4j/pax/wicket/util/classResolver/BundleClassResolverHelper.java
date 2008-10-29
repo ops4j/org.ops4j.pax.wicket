@@ -78,17 +78,17 @@ public final class BundleClassResolverHelper
      */
     public final void setServicePid( String servicePid )
     {
-        if( servicePid == null )
-        {
-            m_serviceProperties.remove( SERVICE_PID );
-        }
-        else
-        {
-            m_serviceProperties.setProperty( SERVICE_PID, servicePid );
-        }
-
         synchronized( m_lock )
         {
+            if( servicePid == null )
+            {
+                m_serviceProperties.remove( SERVICE_PID );
+            }
+            else
+            {
+                m_serviceProperties.setProperty( SERVICE_PID, servicePid );
+            }
+
             if( m_serviceRegistration != null )
             {
                 m_serviceRegistration.setProperties( m_serviceProperties );
@@ -103,7 +103,10 @@ public final class BundleClassResolverHelper
      */
     public final String getServicePid()
     {
-        return m_serviceProperties.getProperty( SERVICE_PID );
+        synchronized( m_lock )
+        {
+            return m_serviceProperties.getProperty( SERVICE_PID );
+        }
     }
 
     /**
@@ -115,17 +118,17 @@ public final class BundleClassResolverHelper
      */
     public final void setApplicationName( String... applicationNames )
     {
-        if( applicationNames == null )
-        {
-            m_serviceProperties.remove( APPLICATION_NAME );
-        }
-        else
-        {
-            m_serviceProperties.put( APPLICATION_NAME, applicationNames );
-        }
-
         synchronized( m_lock )
         {
+            if( applicationNames == null )
+            {
+                m_serviceProperties.remove( APPLICATION_NAME );
+            }
+            else
+            {
+                m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+            }
+
             if( m_serviceRegistration != null )
             {
                 m_serviceRegistration.setProperties( m_serviceProperties );
@@ -181,23 +184,23 @@ public final class BundleClassResolverHelper
         public final void updated( Dictionary dictionary )
             throws ConfigurationException
         {
-            if( null == dictionary )
-            {
-                return;
-            }
-
-            Object applicationNames = dictionary.get( APPLICATION_NAME );
-            if( null != applicationNames )
-            {
-                m_serviceProperties.put( APPLICATION_NAME, applicationNames );
-            }
-            else
-            {
-                m_serviceProperties.remove( APPLICATION_NAME );
-            }
-
             synchronized( m_lock )
             {
+                if( dictionary == null )
+                {
+                    return;
+                }
+
+                Object applicationNames = dictionary.get( APPLICATION_NAME );
+                if( applicationNames != null )
+                {
+                    m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+                }
+                else
+                {
+                    m_serviceProperties.remove( APPLICATION_NAME );
+                }
+
                 m_serviceRegistration.setProperties( m_serviceProperties );
             }
         }
