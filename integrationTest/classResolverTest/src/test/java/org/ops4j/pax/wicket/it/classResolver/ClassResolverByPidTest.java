@@ -21,10 +21,9 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
+import org.ops4j.pax.drone.api.BundleProvision;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -43,21 +42,20 @@ public final class ClassResolverByPidTest
         "testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin";
 
     @Override
-    protected void onTestBundleConfigure( PaxRunnerConnector connector )
+    protected void onTestBundleConfigure( BundleProvision bundleProvision )
     {
-        connector.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
+        bundleProvision.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
 
         String testName = getName();
         if( TEST_NAME_WITH_CONFIG_ADMIN.equals( testName ) )
         {
-            connector.addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" );
+            bundleProvision.addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" );
         }
     }
 
     public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()
         throws Throwable
     {
-        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference classResolverReference = getLibraryClassResolverReference();
         assertFalse( isApplicationNameKeyExists( classResolverReference ) );
 
@@ -77,7 +75,6 @@ public final class ClassResolverByPidTest
     private void validateThatClassResolverIsExposedToAbcAndDef()
         throws Throwable
     {
-        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)"
         );
@@ -118,7 +115,6 @@ public final class ClassResolverByPidTest
     public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
         throws Throwable
     {
-        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference classResolverReference = getLibraryClassResolverReference();
 
         // Ensure no configuration is applied
@@ -158,7 +154,6 @@ public final class ClassResolverByPidTest
     private ServiceReference getLibraryClassResolverReference()
         throws InvalidSyntaxException
     {
-        BundleContext bundleContext = droneContext.getBundleContext();
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
         );

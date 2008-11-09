@@ -28,7 +28,7 @@
   </scm>
 
   <properties>
-    <wicket.dependency.version>1.3.4</wicket.dependency.version>
+    <wicket.dependency.version>1.3.5</wicket.dependency.version>
   </properties>
 
   <build>
@@ -91,6 +91,7 @@
   <modules>
     <module>service</module>
     <module>samples</module>
+    <module>integrationTest</module>
   </modules>
 
   <dependencyManagement>
@@ -199,18 +200,4 @@
       </snapshots>
     </repository>
   </repositories>
-
-  <profiles>
-    <profile>
-      <activation>
-        <property>
-          <name>paxWicketIntegrationTest</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <modules>
-        <module>integrationTest</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>

@@ -16,13 +16,14 @@
  */
 package org.ops4j.pax.wicket.it;
 
+import org.ops4j.pax.drone.api.BundleProvision;
 import org.ops4j.pax.drone.api.DroneConnector;
+import static org.ops4j.pax.drone.connector.paxrunner.GenericConnector.create;
+import static org.ops4j.pax.drone.connector.paxrunner.GenericConnector.createBundleProvision;
 import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnectorFactory;
 import org.ops4j.pax.drone.connector.paxrunner.Platforms;
 import org.ops4j.pax.drone.spi.junit.DroneTestCase;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 /**
  * @author edward.yakop@gmail.com
@@ -38,9 +39,8 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
     {
         String platform = System.getProperty( "pax.wicket.test.platform", "EQUINOX" );
 
-        PaxRunnerConnector connector = PaxRunnerConnectorFactory.create( this );
-        connector.setPlatform( Platforms.valueOf( platform ) );
-        connector.addBundle( "mvn:org.ops4j.pax.logging/pax-logging-api" )
+        BundleProvision bundleProvision = createBundleProvision();
+        bundleProvision.addBundle( "mvn:org.ops4j.pax.logging/pax-logging-api" )
             .addBundle( "mvn:org.ops4j.pax.logging/pax-logging-service" )
             .addBundle( "mvn:org.apache.felix/org.apache.felix.eventadmin" )
             .addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" )
@@ -49,18 +49,18 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
             .addBundle( "mvn:org.ops4j.pax.web/pax-web-service" )
             .addBundle( "mvn:org.apache.felix/org.osgi.compendium" )
             .addBundle( "mvn:org.ops4j.pax.wicket.integrationTest/bootstrap" );
+        onTestBundleConfigure( bundleProvision );
 
-        onTestBundleConfigure( connector );
+        PaxRunnerConnector connector = create( bundleProvision );
+        connector.setPlatform( Platforms.valueOf( platform ) );
 
         return connector;
     }
 
     /**
      * Override this method to further initialize configuration.
-     *
-     * @param connector
      */
-    protected void onTestBundleConfigure( PaxRunnerConnector connector )
+    protected void onTestBundleConfigure( BundleProvision bundleProvision )
     {
         // Do nothing
     }
@@ -76,7 +76,6 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
      */
     protected final Bundle getBundleBySymbolicName( String symbolicName )
     {
-        BundleContext bundleContext = droneContext.getBundleContext();
         Bundle[] bundles = bundleContext.getBundles();
         for( Bundle bundle : bundles )
         {
@@ -103,5 +102,4 @@ public abstract class PaxWicketIntegrationTest extends DroneTestCase
         assertNotNull( paxWicketBundle );
         return paxWicketBundle;
     }
-
 }
