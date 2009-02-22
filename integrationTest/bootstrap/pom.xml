@@ -15,7 +15,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <version.pax.drone>0.2.1-SNAPSHOT</version.pax.drone>
+    <version.pax.exam>0.3.0-SNAPSHOT</version.pax.exam>
   </properties>
 
   <build>
@@ -40,21 +40,26 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Pax drone -->
+    <!-- Pax exam -->
     <dependency>
-      <groupId>org.ops4j.pax.drone</groupId>
-      <artifactId>pax-drone-spi</artifactId>
-      <version>${version.pax.drone}</version>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam</artifactId>
+      <version>${version.pax.exam}</version>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.drone</groupId>
-      <artifactId>pax-drone-spi-junit</artifactId>
-      <version>${version.pax.drone}</version>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam-junit</artifactId>
+      <version>${version.pax.exam}</version>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.drone</groupId>
-      <artifactId>pax-drone-connector-paxrunner</artifactId>
-      <version>${version.pax.drone}</version>
+      <groupId>org.ops4j.pax.exam</groupId>
+      <artifactId>pax-exam-container-default</artifactId>
+      <version>${version.pax.exam}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 

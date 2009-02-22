@@ -16,53 +16,51 @@
  */
 package org.ops4j.pax.wicket.it;
 
-import org.ops4j.pax.drone.api.BundleProvision;
-import org.ops4j.pax.drone.api.DroneConnector;
-import static org.ops4j.pax.drone.connector.paxrunner.GenericConnector.create;
-import static org.ops4j.pax.drone.connector.paxrunner.GenericConnector.createBundleProvision;
-import org.ops4j.pax.drone.connector.paxrunner.PaxRunnerConnector;
-import org.ops4j.pax.drone.connector.paxrunner.Platforms;
-import org.ops4j.pax.drone.spi.junit.DroneTestCase;
+import static org.junit.Assert.assertNotNull;
+import org.junit.runner.RunWith;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import org.ops4j.pax.exam.Inject;
+import org.ops4j.pax.exam.Option;
+import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.logProfile;
+import org.ops4j.pax.exam.junit.Configuration;
+import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public abstract class PaxWicketIntegrationTest extends DroneTestCase
+@RunWith( JUnit4TestRunner.class )
+public abstract class PaxWicketIntegrationTest
 {
 
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
-    @Override
-    protected DroneConnector configure()
+    @Inject
+    protected BundleContext bundleContext;
+
+    @Configuration
+    public static Option[] configure()
     {
-        String platform = System.getProperty( "pax.wicket.test.platform", "EQUINOX" );
-
-        BundleProvision bundleProvision = createBundleProvision();
-        bundleProvision.addBundle( "mvn:org.ops4j.pax.logging/pax-logging-api" )
-            .addBundle( "mvn:org.ops4j.pax.logging/pax-logging-service" )
-            .addBundle( "mvn:org.apache.felix/org.apache.felix.eventadmin" )
-            .addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" )
-            .addBundle( "mvn:org.ops4j.pax.wicket/pax-wicket-service" )
-            .addBundle( "mvn:org.knopflerfish.bundle.useradmin/useradmin_api" )
-            .addBundle( "mvn:org.ops4j.pax.web/pax-web-service" )
-            .addBundle( "mvn:org.apache.felix/org.osgi.compendium" )
-            .addBundle( "mvn:org.ops4j.pax.wicket.integrationTest/bootstrap" );
-        onTestBundleConfigure( bundleProvision );
-
-        PaxRunnerConnector connector = create( bundleProvision );
-        connector.setPlatform( Platforms.valueOf( platform ) );
-
-        return connector;
+        return options(
+            logProfile()
+        );
     }
 
-    /**
-     * Override this method to further initialize configuration.
-     */
-    protected void onTestBundleConfigure( BundleProvision bundleProvision )
+    @Configuration
+    protected Option[] configureProvisions()
     {
-        // Do nothing
+        return options(
+            provision( "mvn:org.apache.felix/org.apache.felix.eventadmin" ),
+            provision( "mvn:org.apache.felix/org.apache.felix.configadmin" ),
+            provision( "mvn:org.ops4j.pax.wicket/pax-wicket-service" ),
+            provision( "mvn:org.knopflerfish.bundle.useradmin/useradmin_api" ),
+            provision( "mvn:org.ops4j.pax.web/pax-web-service" ),
+            provision( "mvn:org.apache.felix/org.osgi.compendium" ),
+            provision( "mvn:org.ops4j.pax.wicket.integrationTest/bootstrap" )
+        );
     }
 
     /**

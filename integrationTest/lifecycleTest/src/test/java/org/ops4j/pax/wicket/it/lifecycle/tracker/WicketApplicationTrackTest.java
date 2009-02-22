@@ -17,7 +17,12 @@
 package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
 import static java.lang.Thread.sleep;
-import org.ops4j.pax.drone.api.BundleProvision;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
 import org.osgi.framework.Bundle;
@@ -30,10 +35,12 @@ import org.osgi.framework.ServiceReference;
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest
 {
 
-    @Override
-    protected void onTestBundleConfigure( BundleProvision bundleProvision )
+    @Configuration
+    public final Option[] configureAdditionalProvision()
     {
-        bundleProvision.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" );
+        return options(
+            provision( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" )
+        );
     }
 
     public final void testApplicationTracker()

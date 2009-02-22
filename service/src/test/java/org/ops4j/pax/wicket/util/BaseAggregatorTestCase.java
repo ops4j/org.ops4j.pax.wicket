@@ -20,19 +20,35 @@ package org.ops4j.pax.wicket.util;
 import java.util.Dictionary;
 import java.util.List;
 import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
 
-public final class BaseAggregatorTestCase extends MockObjectTestCase
+@RunWith( JMock.class )
+public final class BaseAggregatorTestCase
 {
 
+    private Mockery mockery;
+
+    @Before
+    public void setup()
+    {
+        mockery = new Mockery();
+    }
+
+    @Test
     public final void testConstructorArguments()
     {
-        BundleContext context = mock( BundleContext.class );
+        BundleContext context = mockery.mock( BundleContext.class );
         Object[][] arguments = {
             { null, "appName", "aggPoint" },
             { context, null, "aggPoint" },
@@ -72,16 +88,18 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
         }
     }
 
+    @Test
     public final void testBaseAggregatorServiceLifeCycle()
         throws Throwable
     {
-        BundleContext context = mock( BundleContext.class );
+        BundleContext context = mockery.mock( BundleContext.class );
 
         TestBaseAggregator aggregator = new TestBaseAggregator( context, "appName", "aggPoint" );
 
         Expectations exp1 = new Expectations();
-        exp1.one( context ).createFilter( exp1.with( exp1.a( String.class ) ) );
-        exp1.returnValue( mock( Filter.class ) );
+        exp1.one( context ).createFilter( exp1.with( exp1.any( String.class ) ) );
+        Filter filter = mockery.mock( Filter.class );
+        exp1.returnValue( filter );
 
         exp1.one( context ).addServiceListener(
             exp1.with( exp1.any( ServiceListener.class ) ),
@@ -98,10 +116,10 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
             exp1.with( exp1.any( Object.class ) ),
             exp1.with( exp1.any( Dictionary.class ) )
         );
-        ServiceRegistration expectedSerReg = mock( ServiceRegistration.class );
+        ServiceRegistration expectedSerReg = mockery.mock( ServiceRegistration.class );
         exp1.will( exp1.returnValue( expectedSerReg ) );
 
-        checking( exp1 );
+        mockery.checking( exp1 );
 
         try
         {
@@ -129,13 +147,13 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
         Expectations exp2 = new Expectations();
         exp2.one( context ).removeServiceListener( exp2.with( exp2.any( ServiceListener.class ) ) );
 
-        checking( exp2 );
+        mockery.checking( exp2 );
 
         aggregator.dispose();
 
         Expectations exp3 = new Expectations();
-        exp3.one( context ).createFilter( exp3.with( exp3.a( String.class ) ) );
-        exp3.returnValue( mock( Filter.class ) );
+        exp3.one( context ).createFilter( exp3.with( exp3.any( String.class ) ) );
+        exp3.returnValue( filter );
 
         exp3.one( context ).addServiceListener(
             exp3.with( exp3.any( ServiceListener.class ) ),
@@ -153,7 +171,7 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
             exp3.with( exp3.any( Dictionary.class ) )
         );
         exp3.will( exp3.returnValue( expectedSerReg ) );
-        checking( exp3 );
+        mockery.checking( exp3 );
 
         try
         {
@@ -167,12 +185,15 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
         }
     }
 
+    @Test
     public final void testAddRemoveGetContent()
     {
-        TestBaseAggregator aggregator = new TestBaseAggregator( mock( BundleContext.class ), "appName", "aggPoint" );
+        TestBaseAggregator aggregator = new TestBaseAggregator(
+            mockery.mock( BundleContext.class ), "appName", "aggPoint"
+        );
 
         String msg = "AddContent with [null] must throw [IllegalArgumentException]";
-        ContentSource cs = mock( ContentSource.class );
+        ContentSource cs = mockery.mock( ContentSource.class );
         Object[][] arguments = {
             { null, null },
             { "wicketId", null },
@@ -202,7 +223,7 @@ public final class BaseAggregatorTestCase extends MockObjectTestCase
         String sourceId = "sourceId";
         exp.will( exp.returnValue( sourceId ) );
 
-        checking( exp );
+        mockery.checking( exp );
 
         String wicketId = "wicketId";
         aggregator.addContent( wicketId, cs );

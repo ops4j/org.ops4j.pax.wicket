@@ -33,5 +33,10 @@
     <orderEntry type="module" module-name="departmentstore-view-about" exported="" />
     <orderEntry type="module" module-name="departmentstore-view-franchisee" exported="" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="2" />
+    </Base>
+  </component>
 </module>
 

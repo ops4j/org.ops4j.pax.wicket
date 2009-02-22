@@ -25,5 +25,10 @@
     <orderEntry type="module" module-name="departmentstore-model" />
     <orderEntry type="module" module-name="departmentstore-view-application" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="2" />
+    </Base>
+  </component>
 </module>
 

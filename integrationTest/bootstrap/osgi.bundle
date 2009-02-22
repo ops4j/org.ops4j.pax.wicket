@@ -1,5 +1,6 @@
 Import-Package:\
- org.ops4j.pax.drone.*, \
+ org.junit.*, \
+ org.ops4j.pax.exam.*, \
  org.osgi.*;version="[1.0.0,2.0.0)"
 
 Export-Package: \

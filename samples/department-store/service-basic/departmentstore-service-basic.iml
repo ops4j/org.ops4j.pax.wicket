@@ -18,5 +18,10 @@
     <orderEntry type="library" name="Maven: org.apache.felix:org.osgi.foundation:1.2.0" level="project" />
     <orderEntry type="module" module-name="departmentstore-model" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="2" />
+    </Base>
+  </component>
 </module>
 

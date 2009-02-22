@@ -18,20 +18,35 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import static org.ops4j.pax.wicket.internal.TrackingUtil.createAllPageFactoryFilter;
 import static org.ops4j.pax.wicket.internal.TrackingUtil.createContentFilter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
-public final class TrackingUtilTestCase extends MockObjectTestCase
+@RunWith( JMock.class )
+public final class TrackingUtilTestCase
 {
+    private Mockery mockery;
 
+    @Before
+    public final void setup()
+    {
+        mockery = new Mockery();
+    }
+
+    @Test
     public final void testCreateContentFilter()
         throws InvalidSyntaxException
     {
-        BundleContext context = mock( BundleContext.class );
+        BundleContext context = mockery.mock( BundleContext.class );
         Object[][] arguments =
             {
                 { null, null },
@@ -62,10 +77,10 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
         exp1.one( context ).createFilter(
             "(&(pax.wicket.applicationname=appName)(objectClass=org.ops4j.pax.wicket.api.ContentSource))"
         );
-        Filter expFilter = mock( Filter.class );
+        Filter expFilter = mockery.mock( Filter.class );
         exp1.will( exp1.returnValue( expFilter ) );
 
-        checking( exp1 );
+        mockery.checking( exp1 );
         Filter filter = createContentFilter( context, "appName" );
         assertEquals( expFilter, filter );
 
@@ -73,7 +88,7 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
         exp2.one( context ).createFilter( exp2.with( exp2.any( String.class ) ) );
         exp2.will( exp2.throwException( new InvalidSyntaxException( "msg", "filter" ) ) );
 
-        checking( exp2 );
+        mockery.checking( exp2 );
 
         try
         {
@@ -89,10 +104,11 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
         }
     }
 
+    @Test
     public final void testCreateAllPageFactoryFilter()
         throws InvalidSyntaxException
     {
-        BundleContext context = mock( BundleContext.class );
+        BundleContext context = mockery.mock( BundleContext.class );
         Object[][] arguments =
             {
                 { null, null },
@@ -123,10 +139,10 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
         exp1.one( context ).createFilter(
             "(&(pax.wicket.applicationname=appName)(objectClass=org.ops4j.pax.wicket.api.PageFactory))"
         );
-        Filter expFilter = mock( Filter.class );
+        Filter expFilter = mockery.mock( Filter.class );
         exp1.will( exp1.returnValue( expFilter ) );
 
-        checking( exp1 );
+        mockery.checking( exp1 );
         Filter filter = createAllPageFactoryFilter( context, "appName" );
         assertEquals( expFilter, filter );
 
@@ -134,7 +150,7 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
         exp2.one( context ).createFilter( exp2.with( exp2.any( String.class ) ) );
         exp2.will( exp2.throwException( new InvalidSyntaxException( "msg", "filter" ) ) );
 
-        checking( exp2 );
+        mockery.checking( exp2 );
 
         try
         {
@@ -149,5 +165,4 @@ public final class TrackingUtilTestCase extends MockObjectTestCase
             fail( "Must throw [IllegalArgumentException]." );
         }
     }
-
 }

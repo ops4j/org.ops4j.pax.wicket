@@ -21,7 +21,13 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
-import org.ops4j.pax.drone.api.BundleProvision;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import org.ops4j.pax.exam.Option;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import static org.osgi.framework.Constants.SERVICE_PID;
@@ -38,19 +44,12 @@ public final class ClassResolverByPidTest
     extends PaxWicketIntegrationTest
 {
 
-    private static final String TEST_NAME_WITH_CONFIG_ADMIN =
-        "testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin";
-
-    @Override
-    protected void onTestBundleConfigure( BundleProvision bundleProvision )
+    @org.ops4j.pax.exam.junit.Configuration
+    protected Option[] onTestBundleConfigure()
     {
-        bundleProvision.addBundle( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" );
-
-        String testName = getName();
-        if( TEST_NAME_WITH_CONFIG_ADMIN.equals( testName ) )
-        {
-            bundleProvision.addBundle( "mvn:org.apache.felix/org.apache.felix.configadmin" );
-        }
+        return options(
+            provision( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" )
+        );
     }
 
     public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()

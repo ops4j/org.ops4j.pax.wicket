@@ -17,11 +17,25 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class PaxWicketSessionTestCase extends MockObjectTestCase
+@RunWith( JMock.class )
+public class PaxWicketSessionTestCase
 {
 
+    private Mockery mockery;
+
+    @Before
+    public void setup()
+    {
+        mockery = new Mockery();
+    }
+
+    @Test
     public final void testAuthentication()
         throws Throwable
     {

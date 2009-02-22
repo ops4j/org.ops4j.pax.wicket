@@ -16,6 +16,8 @@
  */
 package org.ops4j.pax.wicket.it.lifecycle;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import static org.osgi.framework.Bundle.ACTIVE;
@@ -30,6 +32,7 @@ import org.osgi.framework.BundleException;
  */
 public final class LifecycleTest extends PaxWicketIntegrationTest
 {
+
     /**
      * Tests stopping pax-wicket service bundle.
      *

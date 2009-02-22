@@ -23,5 +23,10 @@
     <orderEntry type="library" name="Maven: org.apache.felix:javax.servlet:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.felix:org.osgi.foundation:1.2.0" level="project" />
   </component>
+  <component name="copyright">
+    <Base>
+      <setting name="state" value="2" />
+    </Base>
+  </component>
 </module>
 
