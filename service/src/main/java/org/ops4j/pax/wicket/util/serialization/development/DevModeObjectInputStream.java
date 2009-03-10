@@ -58,6 +58,7 @@ public final class DevModeObjectInputStream extends ObjectInputStream
         {
             // Re-throw with additional message
             String message = e.getMessage();
+            e.printStackTrace();
             throw new IOException(
                 "Fail to deserialize object of class [" + className + "].\nActual error:\n" + message
             );
@@ -67,5 +68,13 @@ public final class DevModeObjectInputStream extends ObjectInputStream
             // Re-throw with additional message
             throw new RuntimeException( "Fail to deserialize object of class [" + className + "].", e );
         }
+    }
+
+    @Override
+    public void close()
+            throws IOException
+    {
+        if( null != m_inputStream )
+            m_inputStream.close();
     }
 }
