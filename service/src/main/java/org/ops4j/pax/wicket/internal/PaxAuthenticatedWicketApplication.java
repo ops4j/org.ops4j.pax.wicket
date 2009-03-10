@@ -33,6 +33,7 @@ import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.pagestore.DiskPageStore;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.session.ISessionStore;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -52,6 +53,7 @@ import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.ops4j.pax.wicket.api.RequestCycleProcessorFactory;
+import org.ops4j.pax.wicket.api.SessionStoreFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -72,7 +74,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     // Can be null, which means that we want to use the default provided by Wicket
     private final RequestCycleProcessorFactory m_requestCycleProcessorFactory;
     // Can be null, which means that we want to use the default provided by Wicket
-    private final ISessionStore m_sessionStore;
+    private final SessionStoreFactory m_sessionStoreFactory;
     private final DelegatingClassResolver m_delegatingClassResolver;
     private final PaxWicketAuthenticator m_authenticator;
     private final Class<? extends WebPage> m_signInPage;
@@ -86,7 +88,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         Class<? extends Page> homePageClass,
         PaxWicketPageFactory pageFactory,
         RequestCycleProcessorFactory requestCycleProcessorFactory,
-        ISessionStore sessionStore,
+        SessionStoreFactory sessionStoreFactory,
         DelegatingClassResolver delegatingClassResolver,
         PaxWicketAuthenticator authenticator,
         Class<? extends WebPage> signInPage )
@@ -105,7 +107,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         m_pageMounter = pageMounter;
         m_pageFactory = pageFactory;
         m_requestCycleProcessorFactory = requestCycleProcessorFactory;
-        m_sessionStore = sessionStore;
+        m_sessionStoreFactory = sessionStoreFactory;
         m_homepageClass = homePageClass;
         m_delegatingClassResolver = delegatingClassResolver;
         m_authenticator = authenticator;
@@ -254,12 +256,12 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     protected ISessionStore newSessionStore()
     {
-        if( m_sessionStore == null )
+        if( m_sessionStoreFactory == null )
         {
             return super.newSessionStore();
         }
 
-        return m_sessionStore;
+        return m_sessionStoreFactory.newSessionStore( this );
     }
 
     @Override

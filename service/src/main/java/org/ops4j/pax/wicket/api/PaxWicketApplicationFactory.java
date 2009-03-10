@@ -70,7 +70,7 @@ public final class PaxWicketApplicationFactory
 
     private PageMounter m_pageMounter;
     private RequestCycleProcessorFactory m_requestCycleProcessorFactory;
-    private ISessionStore m_sessionStore;
+    private SessionStoreFactory m_sessionStoreFactory;
 
     private List<IComponentInstantiationListener> m_componentInstantiationListeners;
 
@@ -313,9 +313,9 @@ public final class PaxWicketApplicationFactory
         m_requestCycleProcessorFactory = factory;
     }
 
-    public void setSessionStore( ISessionStore sessionStore )
+    public void setSessionStoreFactory( SessionStoreFactory sessionStoreFactory )
     {
-        m_sessionStore = sessionStore;
+        m_sessionStoreFactory = sessionStoreFactory;
     }
 
     public final void setPaxWicketBundle( Bundle bundle )
@@ -378,7 +378,7 @@ public final class PaxWicketApplicationFactory
             {
                 paxWicketApplication = new PaxAuthenticatedWicketApplication(
                     m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-                    m_requestCycleProcessorFactory, m_sessionStore, m_delegatingClassResolver, 
+                    m_requestCycleProcessorFactory, m_sessionStoreFactory, m_delegatingClassResolver, 
                     m_authenticator, m_signinPage
                 );
             }
