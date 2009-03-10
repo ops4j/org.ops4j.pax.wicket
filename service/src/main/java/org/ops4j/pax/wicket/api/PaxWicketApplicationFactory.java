@@ -30,6 +30,8 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.session.ISessionStore;
+
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
@@ -68,6 +70,7 @@ public final class PaxWicketApplicationFactory
 
     private PageMounter m_pageMounter;
     private RequestCycleProcessorFactory m_requestCycleProcessorFactory;
+    private ISessionStore m_sessionStore;
 
     private List<IComponentInstantiationListener> m_componentInstantiationListeners;
 
@@ -310,6 +313,11 @@ public final class PaxWicketApplicationFactory
         m_requestCycleProcessorFactory = factory;
     }
 
+    public void setSessionStore( ISessionStore sessionStore )
+    {
+        m_sessionStore = sessionStore;
+    }
+
     public final void setPaxWicketBundle( Bundle bundle )
     {
         if( m_bdcrRegistration != null )
@@ -370,7 +378,8 @@ public final class PaxWicketApplicationFactory
             {
                 paxWicketApplication = new PaxAuthenticatedWicketApplication(
                     m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-                    m_requestCycleProcessorFactory, m_delegatingClassResolver, m_authenticator, m_signinPage
+                    m_requestCycleProcessorFactory, m_sessionStore, m_delegatingClassResolver, 
+                    m_authenticator, m_signinPage
                 );
             }
             else
