@@ -12,6 +12,35 @@
   <groupId>org.ops4j.pax.wicket.integrationTest</groupId>
   <artifactId>classResolverTest</artifactId>
 
+  <build>
+    <plugins>
+      <!-- Required to get around limitation: Unable to create a generic test jar that many tests artifacts depends on -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>compile</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.ops4j.pax.wicket.integrationTest</groupId>
+                  <artifactId>bootstrap</artifactId>
+                  <version>${pom.version}</version>
+                </artifactItem>
+              </artifactItems>
+              <includes>**/*.class</includes>
+              <outputDirectory>${basedir}/target/test-classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.felix</groupId>

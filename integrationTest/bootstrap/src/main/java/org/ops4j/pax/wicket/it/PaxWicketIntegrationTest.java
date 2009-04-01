@@ -20,9 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.runner.RunWith;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
-import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
-import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.logProfile;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.Bundle;
@@ -38,41 +36,32 @@ public abstract class PaxWicketIntegrationTest
 
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
-    @Inject
-    protected BundleContext bundleContext;
-
     @Configuration
-    public static Option[] configure()
+    public final Option[] configureProvisions()
     {
         return options(
-            logProfile()
-        );
-    }
-
-    @Configuration
-    protected Option[] configureProvisions()
-    {
-        return options(
-            provision( "mvn:org.apache.felix/org.apache.felix.eventadmin" ),
-            provision( "mvn:org.apache.felix/org.apache.felix.configadmin" ),
-            provision( "mvn:org.ops4j.pax.wicket/pax-wicket-service" ),
-            provision( "mvn:org.knopflerfish.bundle.useradmin/useradmin_api" ),
-            provision( "mvn:org.ops4j.pax.web/pax-web-service" ),
-            provision( "mvn:org.apache.felix/org.osgi.compendium" ),
-            provision( "mvn:org.ops4j.pax.wicket.integrationTest/bootstrap" )
+            provision( "mvn:org.ops4j.pax.logging/pax-logging-api/1.3.0" ),
+            provision( "mvn:org.ops4j.pax.logging/pax-logging-service/1.3.0" ),
+            provision( "mvn:org.apache.felix/org.apache.felix.eventadmin/1.0.0" ),
+            provision( "mvn:org.apache.felix/org.apache.felix.configadmin/1.0.10" ),
+            provision( "mvn:org.knopflerfish.bundle.useradmin/useradmin_api/1.1.0" ),
+            provision( "mvn:org.ops4j.pax.web/pax-web-service/0.5.2" ),
+            provision( "mvn:org.apache.felix/org.osgi.compendium/1.2.0" ),
+            provision( "mvn:org.ops4j.pax.wicket/pax-wicket-service" )
         );
     }
 
     /**
      * Return bundle given the symbolic name. Returns {@code null} if not found.
      *
-     * @param symbolicName The bundle symbolic name.
+     * @param bundleContext Bundle context. This argument must not be {@code null}.
+     * @param symbolicName  Bundle symbolic name. This argument must not be {@code null}.
      *
      * @return The bundle given the symbolic name.
      *
-     * @since 0.5.4
+     * @since 0.5.5
      */
-    protected final Bundle getBundleBySymbolicName( String symbolicName )
+    protected final Bundle getBundleBySymbolicName( BundleContext bundleContext, String symbolicName )
     {
         Bundle[] bundles = bundleContext.getBundles();
         for( Bundle bundle : bundles )
@@ -90,13 +79,15 @@ public abstract class PaxWicketIntegrationTest
     /**
      * Returns the pax wicket service bundle.
      *
+     * @param bundleContext Bundle context. This argument must not be {@code null}.
+     *
      * @return The pax wicket service bundle.
      *
-     * @since 0.5.4
+     * @since 0.5.5
      */
-    protected final Bundle getPaxWicketServiceBundle()
+    protected final Bundle getPaxWicketServiceBundle( BundleContext bundleContext )
     {
-        Bundle paxWicketBundle = getBundleBySymbolicName( SYMBOLIC_NAME_PAX_WICKET_SERVICE );
+        Bundle paxWicketBundle = getBundleBySymbolicName( bundleContext, SYMBOLIC_NAME_PAX_WICKET_SERVICE );
         assertNotNull( paxWicketBundle );
         return paxWicketBundle;
     }

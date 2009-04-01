@@ -18,10 +18,13 @@ package org.ops4j.pax.wicket.it.lifecycle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import static org.osgi.framework.Bundle.ACTIVE;
 import static org.osgi.framework.Bundle.RESOLVED;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
@@ -32,15 +35,18 @@ import org.osgi.framework.BundleException;
  */
 public final class LifecycleTest extends PaxWicketIntegrationTest
 {
+    @Inject
+    private BundleContext bundleContext;
 
     /**
      * Tests stopping pax-wicket service bundle.
      *
      * @since 0.5.4
      */
+    @Test
     public final void testStopping()
     {
-        Bundle bundle = getPaxWicketServiceBundle();
+        Bundle bundle = getPaxWicketServiceBundle( bundleContext );
 
         // Pax wicket bundle must be active
         assertEquals( ACTIVE, bundle.getState() );

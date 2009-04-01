@@ -610,17 +610,6 @@
         <root url="jar://$M2_REPO$/junit/junit/4.4/junit-4.4-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.eclipse:osgi:3.2.1.R32x_v20060717">
-      <CLASSES>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.2.1.R32x_v20060717/osgi-3.2.1.R32x_v20060717.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.2.1.R32x_v20060717/osgi-3.2.1.R32x_v20060717-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.2.1.R32x_v20060717/osgi-3.2.1.R32x_v20060717-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.eclipse.osgi:services:3.1.200.v20070605">
       <CLASSES>
         <root url="jar://$M2_REPO$/org/eclipse/osgi/services/3.1.200.v20070605/services-3.1.200.v20070605.jar!/" />
@@ -632,17 +621,6 @@
         <root url="jar://$M2_REPO$/org/eclipse/osgi/services/3.1.200.v20070605/services-3.1.200.v20070605-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.eclipse.osgi:util:3.1.200.v20070605">
-      <CLASSES>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.200.v20070605/util-3.1.200.v20070605.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.200.v20070605/util-3.1.200.v20070605-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.200.v20070605/util-3.1.200.v20070605-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.eclipse.equinox.servlet:api:1.0.0.v20060601">
       <CLASSES>
         <root url="jar://$M2_REPO$/org/eclipse/equinox/servlet/api/1.0.0.v20060601/api-1.0.0.v20060601.jar!/" />
@@ -652,17 +630,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$M2_REPO$/org/eclipse/equinox/servlet/api/1.0.0.v20060601/api-1.0.0.v20060601-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.ops4j.pax.web:pax-web-service:0.4.1">
-      <CLASSES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.4.1/pax-web-service-0.4.1-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.jmock:jmock-junit4:2.5.1">
@@ -971,6 +938,116 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$M2_REPO$/org/ops4j/pax/runner/pax-runner-no-jcl/0.17.2/pax-runner-no-jcl-0.17.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: log4j:log4j:1.2.15">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/log4j/log4j/1.2.15/log4j-1.2.15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/log4j/log4j/1.2.15/log4j-1.2.15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/log4j/log4j/1.2.15/log4j-1.2.15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.mail:mail:1.4">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/javax/mail/mail/1.4/mail-1.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/javax/mail/mail/1.4/mail-1.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/javax/mail/mail/1.4/mail-1.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.activation:activation:1.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/javax/activation/activation/1.1/activation-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/javax/activation/activation/1.1/activation-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/javax/activation/activation/1.1/activation-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.jms:jms:1.1">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/javax/jms/jms/1.1/jms-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/javax/jms/jms/1.1/jms-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/javax/jms/jms/1.1/jms-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.eclipse:osgi:3.4.0.v20080205">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.4.0.v20080205/osgi-3.4.0.v20080205.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.4.0.v20080205/osgi-3.4.0.v20080205-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/3.4.0.v20080205/osgi-3.4.0.v20080205-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.eclipse.osgi:util:3.1.300.v20080303">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.300.v20080303/util-3.1.300.v20080303.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.300.v20080303/util-3.1.300.v20080303-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/eclipse/osgi/util/3.1.300.v20080303/util-3.1.300.v20080303-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.ops4j.pax.web:pax-web-service:0.5.2">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.5.2/pax-web-service-0.5.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.5.2/pax-web-service-0.5.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/ops4j/pax/web/pax-web-service/0.5.2/pax-web-service-0.5.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.knopflerfish.bundle.useradmin:useradmin_api:1.1.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/knopflerfish/bundle/useradmin/useradmin_api/1.1.0/useradmin_api-1.1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.felix:org.apache.felix.eventadmin:1.0.0">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.eventadmin/1.0.0/org.apache.felix.eventadmin-1.0.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.felix:org.apache.felix.configadmin:1.0.10">
+      <CLASSES>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.10/org.apache.felix.configadmin-1.0.10.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.10/org.apache.felix.configadmin-1.0.10-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$M2_REPO$/org/apache/felix/org.apache.felix.configadmin/1.0.10/org.apache.felix.configadmin-1.0.10-sources.jar!/" />
       </SOURCES>
     </library>
   </component>

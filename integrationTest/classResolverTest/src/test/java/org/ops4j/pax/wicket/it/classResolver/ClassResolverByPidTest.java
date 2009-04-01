@@ -25,11 +25,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
+import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -43,15 +46,18 @@ import org.osgi.service.cm.ManagedService;
 public final class ClassResolverByPidTest
     extends PaxWicketIntegrationTest
 {
+    @Inject
+    private BundleContext bundleContext;
 
     @org.ops4j.pax.exam.junit.Configuration
-    protected Option[] onTestBundleConfigure()
+    public final Option[] provisionSimpleLibraries()
     {
         return options(
             provision( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" )
         );
     }
 
+    @Test
     public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()
         throws Throwable
     {
@@ -110,6 +116,7 @@ public final class ClassResolverByPidTest
         return isApplicatioNameKeyExists;
     }
 
+    @Test
     @SuppressWarnings( "unchecked" )
     public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
         throws Throwable
