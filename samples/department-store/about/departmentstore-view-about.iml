@@ -13,8 +13,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="pax-wicket-service" exported="" />
-    <orderEntry type="library" exported="" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.ops4j.base:ops4j-base:0.5.0" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.ops4j.base:ops4j-base:0.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.wicket:wicket:1.3.5" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket-auth-roles:1.3.5" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket-extensions:1.3.5" level="project" />
