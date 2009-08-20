@@ -20,6 +20,8 @@ package org.ops4j.pax.wicket.internal;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.SessionDestroyedListener;
+
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
@@ -32,6 +34,26 @@ final class TrackingUtil
 
     private TrackingUtil()
     {
+    }
+
+    static Filter createApplicationFilter( BundleContext bundleContext, String applicationName )
+    {
+        validateNotNull( bundleContext, "bundleContext" );
+        validateNotEmpty( applicationName, "applicationName" );
+
+        Filter filter;
+        try
+        {
+            String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")(" +
+            OBJECTCLASS + "=" + SessionDestroyedListener.class.getName() + "))";
+            filter = bundleContext.createFilter( filterString );
+        } catch( InvalidSyntaxException e )
+        {
+            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
+            );
+        }
+
+        return filter;
     }
 
     static Filter createContentFilter( BundleContext bundleContext, String applicationName )

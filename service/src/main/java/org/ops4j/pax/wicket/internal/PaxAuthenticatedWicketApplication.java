@@ -33,7 +33,6 @@ import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.pagestore.DiskPageStore;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.session.ISessionStore;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -53,11 +52,14 @@ import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
 import org.ops4j.pax.wicket.api.RequestCycleProcessorFactory;
+import org.ops4j.pax.wicket.api.SessionDestroyedListener;
 import org.ops4j.pax.wicket.api.SessionStoreFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication
+public final class PaxAuthenticatedWicketApplication
+    extends AuthenticatedWebApplication
+    implements SessionDestroyedHander
 {
 
     private static final Roles EMPTY_ROLES = new Roles();
@@ -80,6 +82,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private final Class<? extends WebPage> m_signInPage;
     private final HashMap<AuthenticatedToken, Roles> m_roles;
     private final List<ServiceRegistration> m_serviceRegistrations;
+    private final List<SessionDestroyedListener> m_sessionDestroyedListeners;
+    private SessionDestroyedListenerTracker m_sessionDestroyedListenerTracker;
 
     public PaxAuthenticatedWicketApplication(
         BundleContext bundleContext,
@@ -114,6 +118,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         m_signInPage = signInPage;
         m_roles = new HashMap<AuthenticatedToken, Roles>();
         m_serviceRegistrations = new ArrayList<ServiceRegistration>();
+        m_sessionDestroyedListeners = new ArrayList<SessionDestroyedListener>();
     }
 
     /**
@@ -161,6 +166,9 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         // Now add a tracker so we can still mount pages later
         m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
         m_mounterTracker.open();
+
+        m_sessionDestroyedListenerTracker = new SessionDestroyedListenerTracker( m_bundleContext, this );
+        m_sessionDestroyedListenerTracker.open();
     }
 
     @Override
@@ -170,6 +178,12 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         {
             m_mounterTracker.close();
             m_mounterTracker = null;
+        }
+
+        if( m_sessionDestroyedListenerTracker != null )
+        {
+            m_sessionDestroyedListenerTracker.close();
+            m_sessionDestroyedListenerTracker = null;
         }
 
         for( ServiceRegistration reg : m_serviceRegistrations )
@@ -268,5 +282,40 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     protected final WebRequest newWebRequest( HttpServletRequest aRequest )
     {
         return new PaxWicketRequest( aRequest );
+    }
+
+    public void addListener( SessionDestroyedListener listener )
+    {
+        synchronized( m_sessionDestroyedListeners )
+        {
+            m_sessionDestroyedListeners.add( listener );
+        }
+    }
+
+    public String getApplicationName()
+    {
+        return m_applicationName;
+    }
+
+    public void removeListener( SessionDestroyedListener listener )
+    {
+        synchronized( m_sessionDestroyedListeners )
+        {
+            m_sessionDestroyedListeners.remove( listener );
+        }
+    }
+
+    @Override
+    public void sessionDestroyed( String sessionId )
+    {
+        super.sessionDestroyed( sessionId );
+
+        for( final SessionDestroyedListener listener : m_sessionDestroyedListeners )
+        {
+            synchronized( m_sessionDestroyedListeners )
+            {
+                listener.onSessionDestroyed( sessionId );
+            }
+        }
     }
 }
