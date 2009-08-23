@@ -28,6 +28,8 @@
     <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket:1.3.5" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket-auth-roles:1.3.5" level="project" />
     <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket-extensions:1.3.5" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.apache.wicket:wicket-datetime:1.3.5" level="project" />
+    <orderEntry type="library" exported="" name="Maven: joda-time:joda-time:1.4" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.4" level="project" />
   </component>
   <component name="copyright">
