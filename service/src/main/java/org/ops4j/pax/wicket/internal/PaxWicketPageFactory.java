@@ -17,6 +17,8 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
@@ -112,7 +114,11 @@ public final class PaxWicketPageFactory
         {
             try
             {
-                return (Page) pageClass.newInstance();
+                if( parameters == null )
+                    return (Page) pageClass.newInstance();
+
+                final Constructor<?> ctr = pageClass.getConstructor( PageParameters.class );
+                return (Page)ctr.newInstance( parameters );
             }
             catch( InstantiationException e )
             {
@@ -125,6 +131,18 @@ public final class PaxWicketPageFactory
                 String message = "The constructor in " + pageClass + " is not public and without parameters.";
                 LOGGER.error( message, e );
                 throw new WicketRuntimeException( message, e );
+            }
+            catch( NoSuchMethodException e )
+            {
+                String message = "The constructor Page( PageParameters ) could not be found for " + pageClass;
+                LOGGER.error( message, e );
+                throw new WicketRuntimeException( message, e );
+            }
+            catch( InvocationTargetException e )
+            {
+                String message = "Could not construct page using the constructor: Page( PageParameters ) for " + pageClass;
+                LOGGER.error( message, e.getCause() );
+                throw new WicketRuntimeException( message, e.getCause() );
             }
         }
 
