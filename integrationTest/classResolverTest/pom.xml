@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>integrationTest</artifactId>
-    <version>0.5.5-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>0.5.5-SNAPSHOT</version>
+      <version>0.6.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
