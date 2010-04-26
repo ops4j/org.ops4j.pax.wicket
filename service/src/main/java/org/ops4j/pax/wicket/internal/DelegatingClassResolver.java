@@ -17,7 +17,9 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
@@ -121,6 +123,12 @@ public final class DelegatingClassResolver
         }
 
         throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
+    }
+
+    public Iterator<URL> getResources( String name )
+    {
+        // TODO: New in 1.4.7
+        throw new UnsupportedOperationException();
     }
 
     private final class ClassResolverTracker extends ServiceTracker

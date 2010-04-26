@@ -20,6 +20,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.Iterator;
 import java.util.Random;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -39,13 +41,20 @@ public final class SerializationTest
         IClassResolver resolver = new IClassResolver()
         {
 
-            public Class resolveClass( String classname )
+            public Class<?> resolveClass( String classname )
                 throws ClassNotFoundException
             {
                 ClassLoader classLoader = getClass().getClassLoader();
                 return classLoader.loadClass( classname );
             }
+
+            public Iterator<URL> getResources( String name )
+            {
+                // TODO: New in 1.4.7
+                throw new UnsupportedOperationException();
+            }
         };
+
         testSerializeObject( "pax-wicket", resolver );
         testSerializeObject( 1, resolver );
 
@@ -88,6 +97,7 @@ public final class SerializationTest
     public static class SomeObject
         implements Serializable
     {
+        private static final long serialVersionUID = 1L;
 
         private int integer;
         private String string;

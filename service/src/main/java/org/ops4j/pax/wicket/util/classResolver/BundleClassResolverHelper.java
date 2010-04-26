@@ -16,7 +16,10 @@
  */
 package org.ops4j.pax.wicket.util.classResolver;
 
+
+import java.net.URL;
 import java.util.Dictionary;
+import java.util.Iterator;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
@@ -174,13 +177,20 @@ public final class BundleClassResolverHelper
         implements IClassResolver, ManagedService
     {
 
-        public final Class resolveClass( String classname )
+        public final Class<?> resolveClass( String classname )
             throws ClassNotFoundException
         {
             Bundle bundle = m_bundleContext.getBundle();
             return bundle.loadClass( classname );
         }
 
+        public Iterator<URL> getResources( String name )
+        {
+            // TODO: This is new in 1.4.7
+            throw new UnsupportedOperationException();
+        }
+
+        @SuppressWarnings( "unchecked" )
         public final void updated( Dictionary dictionary )
             throws ConfigurationException
         {

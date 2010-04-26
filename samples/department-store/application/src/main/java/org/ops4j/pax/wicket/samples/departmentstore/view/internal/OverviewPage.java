@@ -25,6 +25,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -59,7 +60,7 @@ final class OverviewPage extends WebPage
         Locale locale = getLocale();
         List<ContentSource<Component>> contents = container.getContents( "floor" );
         int numberOfContents = contents.size();
-        List<AbstractTab> tabs = new ArrayList<AbstractTab>( numberOfContents );
+        List<ITab> tabs = new ArrayList<ITab>( numberOfContents );
         for( ContentSource content : contents )
         {
             if( content instanceof OverviewTabContent )

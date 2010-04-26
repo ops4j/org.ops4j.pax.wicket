@@ -94,7 +94,7 @@ public class AboutPage extends WebPage
         {
             removeAll();
 
-            Integer bundleState = (Integer) getModelObject();
+            Integer bundleState = (Integer) getDefaultModelObject();
 
             Bundle[] bundles = m_context.getBundles();
             for( Bundle bundle : bundles )

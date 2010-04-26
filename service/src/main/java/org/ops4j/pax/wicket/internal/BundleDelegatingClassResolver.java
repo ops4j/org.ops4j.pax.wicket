@@ -17,7 +17,10 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.net.URL;
 import java.util.HashSet;
+import java.util.Iterator;
+
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -61,7 +64,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         open( true );
     }
 
-    public Class resolveClass( String classname )
+    public Class<?> resolveClass( String classname )
         throws ClassNotFoundException
     {
         for( Bundle bundle : m_bundles )
@@ -69,7 +72,8 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             try
             {
                 return bundle.loadClass( classname );
-            } catch( ClassNotFoundException e )
+            }
+            catch( ClassNotFoundException e )
             {
                 // ignore, expected in many cases.
             } catch( IllegalStateException e )
@@ -79,6 +83,12 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         }
 
         throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
+    }
+
+    public Iterator<URL> getResources( String name )
+    {
+        // TODO: new in 1.4.7
+        throw new UnsupportedOperationException();
     }
 
     @Override
