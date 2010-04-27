@@ -17,13 +17,17 @@
 package org.ops4j.pax.wicket.util.classResolver;
 
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+
+import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -184,10 +188,18 @@ public final class BundleClassResolverHelper
             return bundle.loadClass( classname );
         }
 
+        @SuppressWarnings( "unchecked" )
         public Iterator<URL> getResources( String name )
         {
-            // TODO: This is new in 1.4.7
-            throw new UnsupportedOperationException();
+            try
+            {
+                final Bundle bundle = m_bundleContext.getBundle();
+                return new EnumerationAdapter<URL>( bundle.getResources( name ) );
+            }
+            catch ( IOException e )
+            {
+                return Collections.<URL>emptyList().iterator();
+            }
         }
 
         @SuppressWarnings( "unchecked" )

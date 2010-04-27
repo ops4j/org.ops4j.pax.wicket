@@ -17,10 +17,11 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -85,10 +86,27 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
     }
 
+    /**
+     * Untested!! Currently, tests are broken in pax-wicket.
+     */
+    @SuppressWarnings( "unchecked" )
     public Iterator<URL> getResources( String name )
     {
-        // TODO: new in 1.4.7
-        throw new UnsupportedOperationException();
+        try
+        {
+            for( Bundle bundle : m_bundles )
+            {
+                final Iterator<URL> iterator = new EnumerationAdapter<URL>( bundle.getResources( name ) );
+                if( iterator.hasNext() )
+                    return iterator;
+            }
+        }
+        catch ( IOException e )
+        {
+            return Collections.<URL>emptyList().iterator();
+        }
+
+        return Collections.<URL>emptyList().iterator();
     }
 
     @Override

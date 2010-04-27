@@ -21,12 +21,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
+import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 
 /**
  * @author edward.yakop@gmail.com
@@ -50,8 +52,15 @@ public final class SerializationTest
 
             public Iterator<URL> getResources( String name )
             {
-                // TODO: New in 1.4.7
-                throw new UnsupportedOperationException();
+                try
+                {
+                    ClassLoader classLoader = getClass().getClassLoader();
+                    return new EnumerationAdapter<URL>( classLoader.getResources( name ) );
+                }
+                catch ( IOException e )
+                {
+                    return Collections.<URL>emptyList().iterator();
+                }
             }
         };
 

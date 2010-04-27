@@ -19,6 +19,7 @@ package org.ops4j.pax.wicket.internal;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.wicket.application.IClassResolver;
@@ -125,10 +126,29 @@ public final class DelegatingClassResolver
         throw new ClassNotFoundException( "Class [" + classname + "] can't be resolved." );
     }
 
+    /**
+     * Untested!!
+     */
     public Iterator<URL> getResources( String name )
     {
-        // TODO: New in 1.4.7
-        throw new UnsupportedOperationException();
+        for( IClassResolver resolver : m_resolvers )
+        {
+            try
+            {
+                Iterator<URL> iterator = resolver.getResources( name );
+                if( iterator.hasNext() )
+                {
+                    return iterator;
+                }
+            }
+            catch( RuntimeException e )
+            {
+                LOGGER.warn( "ClassResolver " + resolver + " threw an unexpected exception.", e );
+                return Collections.<URL>emptyList().iterator();
+            }
+        }
+
+        return Collections.<URL>emptyList().iterator();
     }
 
     private final class ClassResolverTracker extends ServiceTracker
