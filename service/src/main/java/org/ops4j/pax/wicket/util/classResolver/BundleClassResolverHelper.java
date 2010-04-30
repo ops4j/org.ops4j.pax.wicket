@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
 import org.apache.wicket.application.IClassResolver;
