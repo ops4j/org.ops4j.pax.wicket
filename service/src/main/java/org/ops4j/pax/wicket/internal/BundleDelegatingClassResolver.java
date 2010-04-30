@@ -20,6 +20,7 @@ package org.ops4j.pax.wicket.internal;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.apache.wicket.application.IClassResolver;
@@ -96,9 +97,9 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         {
             for( Bundle bundle : m_bundles )
             {
-                final Iterator<URL> iterator = new EnumerationAdapter<URL>( bundle.getResources( name ) );
-                if( iterator.hasNext() )
-                    return iterator;
+                final Enumeration<URL> enumeration = bundle.getResources( name );
+                if( null != enumeration && enumeration.hasMoreElements() )
+                    return new EnumerationAdapter<URL>( enumeration );;
             }
         }
         catch ( IOException e )
