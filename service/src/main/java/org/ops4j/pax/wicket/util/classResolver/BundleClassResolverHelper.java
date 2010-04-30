@@ -194,7 +194,11 @@ public final class BundleClassResolverHelper
             try
             {
                 final Bundle bundle = m_bundleContext.getBundle();
-                return new EnumerationAdapter<URL>( bundle.getResources( name ) );
+                final Enumeration<URL> enumeration = bundle.getResources( name );
+                if( null == enumeration )
+                    return null;
+
+                return new EnumerationAdapter<URL>( enumeration );
             }
             catch ( IOException e )
             {

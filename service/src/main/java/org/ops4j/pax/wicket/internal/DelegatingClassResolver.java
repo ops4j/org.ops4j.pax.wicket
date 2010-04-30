@@ -136,7 +136,7 @@ public final class DelegatingClassResolver
             try
             {
                 Iterator<URL> iterator = resolver.getResources( name );
-                if( iterator.hasNext() )
+                if( iterator != null && iterator.hasNext() )
                 {
                     return iterator;
                 }
