@@ -30,8 +30,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.session.ISessionStore;
-
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;

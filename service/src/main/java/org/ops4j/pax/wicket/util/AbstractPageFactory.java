@@ -59,6 +59,7 @@ public abstract class AbstractPageFactory<T extends Page>
         m_properties.put( Constants.SERVICE_PID, PAGE_ID + "/" + pageId );
     }
 
+    @SuppressWarnings( "unchecked" )
     public final void register()
         throws IllegalStateException
     {
@@ -77,6 +78,7 @@ public abstract class AbstractPageFactory<T extends Page>
         }
     }
 
+    @SuppressWarnings( "unchecked" )
     public final void dispose()
         throws IllegalStateException
     {
@@ -137,6 +139,7 @@ public abstract class AbstractPageFactory<T extends Page>
         }
     }
 
+    @SuppressWarnings( "unchecked" )
     public void updated( Dictionary config )
         throws ConfigurationException
     {

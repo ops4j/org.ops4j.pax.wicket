@@ -19,11 +19,11 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -32,7 +32,6 @@ import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.session.ISessionStore;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -276,12 +275,6 @@ public final class PaxAuthenticatedWicketApplication
         }
 
         return m_sessionStoreFactory.newSessionStore( this );
-    }
-
-    @Override
-    protected final WebRequest newWebRequest( HttpServletRequest aRequest )
-    {
-        return new PaxWicketRequest( aRequest );
     }
 
     public void addListener( SessionDestroyedListener listener )

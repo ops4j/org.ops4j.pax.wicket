@@ -62,12 +62,12 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream
     }
 
     @Override
-    protected final Class resolveClass( ObjectStreamClass objectStreamClass )
+    protected final Class<?> resolveClass( ObjectStreamClass objectStreamClass )
         throws IOException, ClassNotFoundException
     {
         String className = objectStreamClass.getName();
 
-        Class candidate = resolveClassByClassResolver( className );
+        Class<?> candidate = resolveClassByClassResolver( className );
         if( candidate != null )
         {
             return candidate;
@@ -76,9 +76,9 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream
         return super.resolveClass( objectStreamClass );
     }
 
-    private Class resolveClassByClassResolver( String className )
+    private Class<?> resolveClassByClassResolver( String className )
     {
-        Class resolvedClass = null;
+        Class<?> resolvedClass = null;
 
         try
         {

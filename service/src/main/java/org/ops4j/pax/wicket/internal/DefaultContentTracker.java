@@ -97,7 +97,7 @@ public final class DefaultContentTracker extends ServiceTracker
                 for( String destinationId : destinationIds )
                 {
                     String wicketId = destinationId.substring( startIndexOfWicketId );
-                    ContentSource content = (ContentSource) m_context.getService( reference );
+                    ContentSource<?> content = (ContentSource<?>) m_context.getService( reference );
 
                     m_callback.removeContent( wicketId, content );
                 }
@@ -160,7 +160,7 @@ public final class DefaultContentTracker extends ServiceTracker
             synchronized( this )
             {
                 String id = dest.substring( lastParan + 2 );
-                m_callback.addContent( id, (ContentSource) service );
+                m_callback.addContent( id, (ContentSource<?>) service );
                 m_references.add( serviceReference );
             }
         }
@@ -190,7 +190,7 @@ public final class DefaultContentTracker extends ServiceTracker
 
         synchronized( this )
         {
-            m_callback.addContent( id, (ContentSource) service );
+            m_callback.addContent( id, (ContentSource<?>) service );
             m_references.add( serviceReference );
         }
     }
@@ -209,13 +209,13 @@ public final class DefaultContentTracker extends ServiceTracker
             LOGGER.debug( "Service Reference [" + serviceReference + "] has been removed." );
         }
 
-        if( !( object instanceof ContentSource ) )
+        if( !( object instanceof ContentSource<?> ) )
         {
             String message = "OSGi Framework not passing a ContentSource object as specified in R4 spec.";
             throw new IllegalArgumentException( message );
         }
 
-        ContentSource content = (ContentSource) object;
+        ContentSource<?> content = (ContentSource<?>) object;
         String[] destionationIds = content.getDestinations();
         for( String destinationId : destionationIds )
         {

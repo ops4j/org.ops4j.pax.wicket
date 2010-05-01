@@ -35,7 +35,7 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 public class ServletProxy
 {
 
-    private static final Class[] SERVLET_INTERFACES = new Class[]{
+    private static final Class<?>[] SERVLET_INTERFACES = new Class[]{
         Servlet.class
     };
 
@@ -51,7 +51,7 @@ public class ServletProxy
         implements InvocationHandler
     {
 
-        private static final Class[] REQUEST_INTERFACES = new Class[]{
+        private static final Class<?>[] REQUEST_INTERFACES = new Class[]{
             HttpServletRequest.class
         };
 

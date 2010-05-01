@@ -71,8 +71,8 @@ final class PaxWicketPageTracker extends ServiceTracker
     @Override
     public final Object addingService( ServiceReference reference )
     {
-        PageFactory pageSource = (PageFactory) super.addingService( reference );
-        Class pageClass = pageSource.getPageClass();
+        PageFactory<?> pageSource = (PageFactory<?>) super.addingService( reference );
+        Class<?> pageClass = pageSource.getPageClass();
         m_paxWicketPageFactory.add( pageClass, pageSource );
         return pageSource;
     }
@@ -96,11 +96,11 @@ final class PaxWicketPageTracker extends ServiceTracker
     @Override
     public final void modifiedService( ServiceReference reference, Object service )
     {
-        PageFactory pageSource = (PageFactory) service;
+        PageFactory<?> pageSource = (PageFactory<?>) service;
         String appName = (String) reference.getProperty( APPLICATION_NAME );
         if( !m_applicationName.equals( appName ) )
         {
-            Class pageClass = pageSource.getPageClass();
+            Class<?> pageClass = pageSource.getPageClass();
             m_paxWicketPageFactory.remove( pageClass );
         }
     }
@@ -135,8 +135,8 @@ final class PaxWicketPageTracker extends ServiceTracker
         {
             LOGGER.debug( "removedService( " + reference + ", " + service + ");" );
         }
-        PageFactory pageSource = (PageFactory) service;
-        Class pageclass = pageSource.getPageClass();
+        PageFactory<?> pageSource = (PageFactory<?>) service;
+        Class<?> pageclass = pageSource.getPageClass();
         m_paxWicketPageFactory.remove( pageclass );
 
         super.removedService( reference, service );

@@ -38,7 +38,7 @@ public interface ContentTrackingCallback
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    void addContent( String wicketId, ContentSource content )
+    void addContent( String wicketId, ContentSource<?> content )
         throws IllegalArgumentException;
 
     /**
@@ -52,5 +52,5 @@ public interface ContentTrackingCallback
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    boolean removeContent( String wicketId, ContentSource content );
+    boolean removeContent( String wicketId, ContentSource<?> content );
 }

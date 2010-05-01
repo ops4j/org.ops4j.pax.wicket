@@ -384,9 +384,9 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     protected final List<Component> createComponents( String wicketId )
     {
         validateNotEmpty( wicketId, "wicketId" );
-        List<ContentSource> contents = getContents( wicketId );
+        List<ContentSource<?>> contents = getContents( wicketId );
         List<Component> items = new ArrayList<Component>();
-        for( ContentSource content : contents )
+        for( ContentSource<?> content : contents )
         {
             Component comp = content.createSourceComponent( "portal-item" );
             if( comp != null )

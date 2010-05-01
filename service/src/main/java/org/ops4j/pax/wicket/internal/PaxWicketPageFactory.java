@@ -39,7 +39,7 @@ public final class PaxWicketPageFactory
 
     private final BundleContext m_bundleContext;
     private final String m_applicationName;
-    private final HashMap<Class, PageFactory> m_contents;
+    private final HashMap<Class<?>, PageFactory<?>> m_contents;
 
     private ServiceTracker m_pageTracker;
 
@@ -49,7 +49,7 @@ public final class PaxWicketPageFactory
         validateNotNull( context, "context" );
         validateNotNull( applicationName, "applicationName" );
 
-        m_contents = new HashMap<Class, PageFactory>();
+        m_contents = new HashMap<Class<?>, PageFactory<?>>();
         m_bundleContext = context;
         m_applicationName = applicationName;
     }
@@ -79,7 +79,7 @@ public final class PaxWicketPageFactory
      * @throws org.apache.wicket.WicketRuntimeException
      *          Thrown if the page cannot be constructed
      */
-    public final Page newPage( Class pageClass )
+    public final <C extends Page>Page newPage( Class<C> pageClass )
         throws IllegalArgumentException
     {
         validateNotNull( pageClass, "pageClass" );
@@ -100,12 +100,12 @@ public final class PaxWicketPageFactory
      * @throws org.apache.wicket.WicketRuntimeException
      *          Thrown if the page cannot be constructed
      */
-    public final Page newPage( Class pageClass, PageParameters parameters )
+    public final <C extends Page>Page newPage( Class<C> pageClass, PageParameters parameters )
         throws IllegalArgumentException
     {
         validateNotNull( pageClass, "pageClass" );
 
-        PageFactory content;
+        PageFactory<?> content;
         synchronized( this )
         {
             content = m_contents.get( pageClass );
@@ -149,7 +149,7 @@ public final class PaxWicketPageFactory
         return content.createPage( parameters );
     }
 
-    public void add( Class pageClass, PageFactory pageSource )
+    public void add( Class<?> pageClass, PageFactory<?> pageSource )
         throws IllegalArgumentException
     {
         validateNotNull( pageClass, "pageClass" );
@@ -161,7 +161,7 @@ public final class PaxWicketPageFactory
         }
     }
 
-    public final void remove( Class pageClass )
+    public final void remove( Class<?> pageClass )
         throws IllegalArgumentException
     {
         validateNotNull( pageClass, "pageClass" );

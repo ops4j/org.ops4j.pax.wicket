@@ -22,10 +22,8 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.settings.IApplicationSettings;
 import org.apache.wicket.settings.IDebugSettings;
 import org.apache.wicket.settings.IExceptionSettings;
@@ -152,11 +150,5 @@ public final class PaxWicketApplication extends WebApplication
         m_serviceRegistrations.clear();
 
         super.onDestroy();
-    }
-
-    @Override
-    protected final WebRequest newWebRequest( HttpServletRequest request )
-    {
-        return new PaxWicketRequest( request );
     }
 }

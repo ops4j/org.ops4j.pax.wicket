@@ -50,10 +50,10 @@ abstract class BaseAggregator
 
     private Dictionary<String, Object> m_properties;
     private BundleContext m_bundleContext;
-    private HashMap<String, List<ContentSource>> m_children;
+    private HashMap<String, List<ContentSource<?>>> m_children;
     private ServiceRegistration m_registration;
     private DefaultContentTracker m_contentTracker;
-    private HashMap<String, ContentSource> m_wiredSources;
+    private HashMap<String, ContentSource<?>> m_wiredSources;
 
     public BaseAggregator( BundleContext bundleContext, String applicationName, String aggregationPoint )
         throws IllegalArgumentException
@@ -62,8 +62,8 @@ abstract class BaseAggregator
         validateNotEmpty( applicationName, "applicationName" );
         validateNotEmpty( aggregationPoint, "aggregationPoint" );
 
-        m_children = new HashMap<String, List<ContentSource>>();
-        m_wiredSources = new HashMap<String, ContentSource>();
+        m_children = new HashMap<String, List<ContentSource<?>>>();
+        m_wiredSources = new HashMap<String, ContentSource<?>>();
         m_properties = new Hashtable<String, Object>();
         m_properties.put( SERVICE_PID, applicationName + "." + aggregationPoint );
         m_bundleContext = bundleContext;
@@ -204,7 +204,7 @@ abstract class BaseAggregator
         onUpdated( config );
     }
 
-    protected void onUpdated( Dictionary config )
+    protected void onUpdated( Dictionary<?, ?> config )
     {
     }
 
@@ -217,7 +217,7 @@ abstract class BaseAggregator
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    public final void addContent( String wicketId, ContentSource source )
+    public final void addContent( String wicketId, ContentSource<?> source )
         throws IllegalArgumentException
     {
         validateNotEmpty( wicketId, "wicketId" );
@@ -228,10 +228,10 @@ abstract class BaseAggregator
             String sourceId = source.getSourceId();
             m_wiredSources.put( sourceId, source );
 
-            List<ContentSource> contents = m_children.get( wicketId );
+            List<ContentSource<?>> contents = m_children.get( wicketId );
             if( contents == null )
             {
-                contents = new ArrayList<ContentSource>();
+                contents = new ArrayList<ContentSource<?>>();
                 m_children.put( wicketId, contents );
             }
 
@@ -250,7 +250,7 @@ abstract class BaseAggregator
      * @throws IllegalArgumentException Thrown if one or both arguments are {@code null}.
      * @since 1.0.0
      */
-    public final boolean removeContent( String wicketId, ContentSource content )
+    public final boolean removeContent( String wicketId, ContentSource<?> content )
         throws IllegalArgumentException
     {
         validateNotEmpty( wicketId, "wicketId" );
@@ -261,7 +261,7 @@ abstract class BaseAggregator
             String sourceId = content.getSourceId();
             m_wiredSources.remove( sourceId );
 
-            List<ContentSource> contents = m_children.get( wicketId );
+            List<ContentSource<?>> contents = m_children.get( wicketId );
             if( contents == null )
             {
                 return false;
@@ -357,19 +357,19 @@ abstract class BaseAggregator
      * @see #createWiredComponent(String,String)
      * @since 1.0.0
      */
-    public final List<String> getWiredSourceIds( String wicketId, Comparator<ContentSource> comparator )
+    public final List<String> getWiredSourceIds( String wicketId, Comparator<ContentSource<?>> comparator )
         throws IllegalArgumentException
     {
         validateNotEmpty( wicketId, "wicketId" );
 
         ArrayList<String> result = new ArrayList<String>();
-        List<ContentSource> contents = getContents( wicketId );
+        List<ContentSource<?>> contents = getContents( wicketId );
         if( comparator != null )
         {
             sort( contents, comparator );
         }
 
-        for( ContentSource source : contents )
+        for( ContentSource<?> source : contents )
         {
             String sourceId = source.getSourceId();
             result.add( sourceId );
@@ -469,11 +469,11 @@ abstract class BaseAggregator
 
         synchronized( this )
         {
-            List<ContentSource> sourceList = m_children.get( wicketId );
+            List<ContentSource<?>> sourceList = m_children.get( wicketId );
 
             if( sourceList != null )
             {
-                for( ContentSource source : sourceList )
+                for( ContentSource<?> source : sourceList )
                 {
                     String sourceIdToCompare = source.getSourceId();
                     if( sourceId.equals( sourceIdToCompare ) )

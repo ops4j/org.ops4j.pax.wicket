@@ -156,7 +156,7 @@ public class UserAdminAuthorizationStrategy
         return true;
     }
 
-    public final boolean isInstantiationAuthorized( Class componentClass )
+    public final <T extends Component>boolean isInstantiationAuthorized( Class<T> componentClass )
     {
         final AuthorizeInstantiation annotation =
             (AuthorizeInstantiation) componentClass.getAnnotation( AuthorizeInstantiation.class );
