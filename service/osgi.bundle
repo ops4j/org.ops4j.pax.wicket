@@ -1,7 +1,6 @@
 Private-Package:\
  com.sun.activation.registries, \
  javax.activation, \
- org.joda.*,\
  org.ops4j.lang, \
  org.ops4j.pax.wicket.internal.*
 
