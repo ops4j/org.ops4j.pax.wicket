@@ -27,7 +27,7 @@ Import-Package:\
 Export-Package: \
  org.ops4j.pax.wicket.api;version="${pom.version}", \
  org.ops4j.pax.wicket.util.*;version="${pom.version}", \
- org.apache.wicket.*;version=1.4.7
+ org.apache.wicket.*;version=1.4.8
 
 Include-Resource:\
  wicket.properties=src/main/resources/wicket.properties
