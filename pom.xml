@@ -28,7 +28,7 @@
   </scm>
 
   <properties>
-    <wicket.dependency.version>1.4.8</wicket.dependency.version>
+    <wicket.dependency.version>1.4.9</wicket.dependency.version>
   </properties>
 
   <build>
