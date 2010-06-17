@@ -19,10 +19,9 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.apache.wicket.application.IClassResolver;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
@@ -44,7 +43,7 @@ public final class DelegatingClassResolver
 
     private final BundleContext m_context;
     private final String m_applicationName;
-    private final List<IClassResolver> m_resolvers;
+    private final ConcurrentLinkedQueue<IClassResolver> m_resolvers;
 
     private ClassResolverTracker m_tracker;
 
@@ -56,7 +55,7 @@ public final class DelegatingClassResolver
 
         m_context = context;
         m_applicationName = applicationName;
-        m_resolvers = new ArrayList<IClassResolver>();
+        m_resolvers = new ConcurrentLinkedQueue<IClassResolver>();
     }
 
     public final void intialize()
