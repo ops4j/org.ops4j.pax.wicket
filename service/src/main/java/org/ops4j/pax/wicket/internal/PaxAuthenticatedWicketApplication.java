@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
@@ -83,6 +85,7 @@ public final class PaxAuthenticatedWicketApplication
     private final List<ServiceRegistration> m_serviceRegistrations;
     private final List<SessionDestroyedListener> m_sessionDestroyedListeners;
     private SessionDestroyedListenerTracker m_sessionDestroyedListenerTracker;
+    private final List<IInitializer> m_initializers;
 
     public PaxAuthenticatedWicketApplication(
         BundleContext bundleContext,
@@ -94,7 +97,8 @@ public final class PaxAuthenticatedWicketApplication
         SessionStoreFactory sessionStoreFactory,
         DelegatingClassResolver delegatingClassResolver,
         PaxWicketAuthenticator authenticator,
-        Class<? extends WebPage> signInPage )
+        Class<? extends WebPage> signInPage,
+        List<IInitializer> initializers )
         throws IllegalArgumentException
     {
         validateNotNull( bundleContext, "bundleContext" );
@@ -104,6 +108,7 @@ public final class PaxAuthenticatedWicketApplication
         validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
         validateNotNull( authenticator, "authenticator" );
         validateNotNull( signInPage, "signInPage" );
+        validateNotNull( initializers, "initializers" );
 
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
@@ -118,6 +123,8 @@ public final class PaxAuthenticatedWicketApplication
         m_roles = new HashMap<AuthenticatedToken, Roles>();
         m_serviceRegistrations = new ArrayList<ServiceRegistration>();
         m_sessionDestroyedListeners = new ArrayList<SessionDestroyedListener>();
+        m_initializers = new ArrayList<IInitializer>();
+        m_initializers.addAll( initializers );
     }
 
     /**
@@ -168,6 +175,11 @@ public final class PaxAuthenticatedWicketApplication
 
         m_sessionDestroyedListenerTracker = new SessionDestroyedListenerTracker( m_bundleContext, this );
         m_sessionDestroyedListenerTracker.open();
+
+        for( final IInitializer initializer : m_initializers )
+        {
+            initializer.init( this );
+        }
     }
 
     @Override

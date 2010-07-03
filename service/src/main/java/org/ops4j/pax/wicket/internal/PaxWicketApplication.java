@@ -22,6 +22,8 @@ package org.ops4j.pax.wicket.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -53,6 +55,7 @@ public final class PaxWicketApplication extends WebApplication
     private final List<ServiceRegistration> m_serviceRegistrations;
     protected final Class<? extends Page> m_homepageClass;
     private PageMounterTracker m_mounterTracker;
+    private final List<IInitializer> m_initializers;
 
     public PaxWicketApplication(
         BundleContext context,
@@ -60,7 +63,8 @@ public final class PaxWicketApplication extends WebApplication
         PageMounter pageMounter,
         Class<? extends Page> homepageClass,
         PaxWicketPageFactory pageFactory,
-        DelegatingClassResolver delegatingClassResolver )
+        DelegatingClassResolver delegatingClassResolver,
+        List<IInitializer> initializers )
         throws IllegalArgumentException
     {
         validateNotNull( context, "context" );
@@ -68,6 +72,7 @@ public final class PaxWicketApplication extends WebApplication
         validateNotNull( homepageClass, "homepageClass" );
         validateNotNull( pageFactory, "pageFactory" );
         validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
+        validateNotNull( initializers, "initializers" );
 
         m_bundleContext = context;
         m_applicationName = applicationName;
@@ -76,6 +81,8 @@ public final class PaxWicketApplication extends WebApplication
         m_homepageClass = homepageClass;
         m_delegatingClassResolver = delegatingClassResolver;
         m_serviceRegistrations = new ArrayList<ServiceRegistration>();
+        m_initializers = new ArrayList<IInitializer>();
+        m_initializers.addAll( initializers );
     }
 
     @Override
@@ -118,6 +125,11 @@ public final class PaxWicketApplication extends WebApplication
         // Now add a tracker so we can still mount pages later
         m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
         m_mounterTracker.open();
+
+        for( final IInitializer initializer : m_initializers )
+        {
+            initializer.init( this );
+        }
     }
 
     private <T> void addWicketService( Class<T> service, T serviceImplementation )

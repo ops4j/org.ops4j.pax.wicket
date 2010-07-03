@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.application.IComponentInstantiationListener;
@@ -71,6 +73,7 @@ public final class PaxWicketApplicationFactory
     private SessionStoreFactory m_sessionStoreFactory;
 
     private List<IComponentInstantiationListener> m_componentInstantiationListeners;
+    private List<IInitializer> m_initializers;
 
     private ServiceRegistration m_bdcrRegistration;
     private BundleDelegatingClassResolver m_bdcr;
@@ -110,6 +113,7 @@ public final class PaxWicketApplicationFactory
         m_properties.setProperty( HOMEPAGE_CLASSNAME, homepageClassName );
 
         m_componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
+        m_initializers = new ArrayList<IInitializer>();
     }
 
     /**
@@ -357,6 +361,11 @@ public final class PaxWicketApplicationFactory
         m_componentInstantiationListeners.add( listener );
     }
 
+    public void addInitializer( IInitializer initializer )
+    {
+        m_initializers.add( initializer );
+    }
+
     /**
      * Creates a web application.
      *
@@ -377,14 +386,14 @@ public final class PaxWicketApplicationFactory
                 paxWicketApplication = new PaxAuthenticatedWicketApplication(
                     m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
                     m_requestCycleProcessorFactory, m_sessionStoreFactory, m_delegatingClassResolver, 
-                    m_authenticator, m_signinPage
+                    m_authenticator, m_signinPage, m_initializers
                 );
             }
             else
             {
                 paxWicketApplication = new PaxWicketApplication(
                     m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-                    m_delegatingClassResolver
+                    m_delegatingClassResolver, m_initializers
                 );
             }
         }
