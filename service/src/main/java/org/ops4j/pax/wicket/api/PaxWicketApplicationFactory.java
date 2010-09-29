@@ -28,6 +28,8 @@ import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.application.IComponentInstantiationListener;
+import org.apache.wicket.application.IComponentOnAfterRenderListener;
+import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -72,8 +74,10 @@ public final class PaxWicketApplicationFactory
     private RequestCycleProcessorFactory m_requestCycleProcessorFactory;
     private SessionStoreFactory m_sessionStoreFactory;
 
-    private List<IComponentInstantiationListener> m_componentInstantiationListeners;
-    private List<IInitializer> m_initializers;
+    private final List<IComponentInstantiationListener> m_componentInstantiationListeners;
+    private final List<IComponentOnBeforeRenderListener> m_componentOnBeforeRenderListeners;
+    private final List<IComponentOnAfterRenderListener> m_componentOnAfterRenderListeners;
+    private final List<IInitializer> m_initializers;
 
     private ServiceRegistration m_bdcrRegistration;
     private BundleDelegatingClassResolver m_bdcr;
@@ -113,6 +117,8 @@ public final class PaxWicketApplicationFactory
         m_properties.setProperty( HOMEPAGE_CLASSNAME, homepageClassName );
 
         m_componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
+        m_componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
+        m_componentOnAfterRenderListeners = new ArrayList<IComponentOnAfterRenderListener>();
         m_initializers = new ArrayList<IInitializer>();
     }
 
@@ -361,6 +367,16 @@ public final class PaxWicketApplicationFactory
         m_componentInstantiationListeners.add( listener );
     }
 
+    public void addComponentOnBeforeRenderListener( IComponentOnBeforeRenderListener listener )
+    {
+        m_componentOnBeforeRenderListeners.add( listener );
+    }
+
+    public void addComponentOnAfterRenderListener( IComponentOnAfterRenderListener listener )
+    {
+        m_componentOnAfterRenderListeners.add( listener );
+    }
+
     public void addInitializer( IInitializer initializer )
     {
         m_initializers.add( initializer );
@@ -401,6 +417,16 @@ public final class PaxWicketApplicationFactory
         for( IComponentInstantiationListener listener : m_componentInstantiationListeners )
         {
             paxWicketApplication.addComponentInstantiationListener( listener );
+        }
+
+        for( IComponentOnBeforeRenderListener listener : m_componentOnBeforeRenderListeners )
+        {
+            paxWicketApplication.addPostComponentOnBeforeRenderListener( listener );
+        }
+
+        for( IComponentOnAfterRenderListener listener: m_componentOnAfterRenderListeners )
+        {
+            paxWicketApplication.addComponentOnAfterRenderListener( listener );
         }
 
         return paxWicketApplication;
