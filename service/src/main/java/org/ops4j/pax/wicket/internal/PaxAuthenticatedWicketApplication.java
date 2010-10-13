@@ -28,12 +28,14 @@ import java.util.Properties;
 import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.session.ISessionStore;
 import org.apache.wicket.settings.IApplicationSettings;
@@ -52,6 +54,7 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
+import org.ops4j.pax.wicket.api.RequestCycleFactory;
 import org.ops4j.pax.wicket.api.RequestCycleProcessorFactory;
 import org.ops4j.pax.wicket.api.SessionDestroyedListener;
 import org.ops4j.pax.wicket.api.SessionStoreFactory;
@@ -74,6 +77,7 @@ public final class PaxAuthenticatedWicketApplication
 
     protected Class<? extends Page> m_homepageClass;
     private final PaxWicketPageFactory m_pageFactory;
+    private final RequestCycleFactory m_requestCycleFactory;
     // Can be null, which means that we want to use the default provided by Wicket
     private final RequestCycleProcessorFactory m_requestCycleProcessorFactory;
     // Can be null, which means that we want to use the default provided by Wicket
@@ -93,6 +97,7 @@ public final class PaxAuthenticatedWicketApplication
         PageMounter pageMounter,
         Class<? extends Page> homePageClass,
         PaxWicketPageFactory pageFactory,
+        RequestCycleFactory requestCycleFactory,
         RequestCycleProcessorFactory requestCycleProcessorFactory,
         SessionStoreFactory sessionStoreFactory,
         DelegatingClassResolver delegatingClassResolver,
@@ -114,6 +119,7 @@ public final class PaxAuthenticatedWicketApplication
         m_applicationName = applicationName;
         m_pageMounter = pageMounter;
         m_pageFactory = pageFactory;
+        m_requestCycleFactory = requestCycleFactory;
         m_requestCycleProcessorFactory = requestCycleProcessorFactory;
         m_sessionStoreFactory = sessionStoreFactory;
         m_homepageClass = homePageClass;
@@ -265,6 +271,17 @@ public final class PaxAuthenticatedWicketApplication
         props.setProperty( APPLICATION_NAME, m_applicationName );
 
         m_serviceRegistrations.add( m_bundleContext.registerService( service.getName(), implementation, props ) );
+    }
+
+    @Override
+    public RequestCycle newRequestCycle( Request request, Response response)
+    {
+        if( null == m_requestCycleFactory )
+        {
+            return super.newRequestCycle( request, response );
+        }
+
+        return m_requestCycleFactory.newRequestCycle( this, (WebRequest)request, response );
     }
 
     @Override
