@@ -23,13 +23,15 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket</connection>
-    <developerConnection>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket</developerConnection>
+    <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket.git</connection>
+    <developerConnection>${release-paxwicket-altGitURL}</developerConnection>
     <url>http://github.com/ops4j/org.ops4j.pax.wicket</url>
   </scm>
 
   <properties>
     <wicket.dependency.version>1.4.10</wicket.dependency.version>
+    <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <build>
@@ -220,3 +222,4 @@
     </repository>
   </repositories>
 </project>
+
