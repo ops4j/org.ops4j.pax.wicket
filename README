@@ -1,0 +1,49 @@
+h1. Release paxwicket
+
+If you have all required rights to release pax-wicket follow these steps:
+
+1) add this into your ~/.m2/settings.xml
+
+{code}
+<profile>
+  <id>release</id>
+  <properties>
+    <gpg.passphrase>MY_GPG_PASSPHRASE</gpg.passphrase>
+    <release-paxwicket-altGitURL>scm:git:file:///path/to/local/repo/org.ops4j.pax.wicket</release-paxwicket-altGitURL>
+  </properties>
+</profile>
+{code}
+
+2) prepare the release:
+
+{code}
+mvn -Prelease,repos.sonatype.staging -Darguments="-Prelease,repos.sonatype.staging" release:prepare -DautoVersionSubmodules=true
+{code}
+
+3) perform the release (this fails):
+
+{code}
+mvn -Prelease,repos.sonatype.staging -Darguments="-Prelease,repos.sonatype.staging" release:perform
+.... auth failure in site:deploy ...
+{code}
+
+4) go into the checkout directory:
+
+{code}
+cd target/checkout
+{code}
+
+5) push to oss.sonatype.org:
+
+{code}
+mvn -Prelease,repos.sonatype.staging  source:jar javadoc:jar deploy
+{code}
+
+6) push to github:
+
+{code}
+git push
+{code}
+
+8) go to oss.sonatype.org and push pax-url to central
+
