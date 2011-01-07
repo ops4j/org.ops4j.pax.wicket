@@ -23,8 +23,9 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</connection>
-    <developerConnection>scm:svn:https://scm.ops4j.org/repos/ops4j/projects/pax/wicket</developerConnection>
+    <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket</connection>
+    <developerConnection>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket</developerConnection>
+    <url>http://github.com/ops4j/org.ops4j.pax.wicket</url>
   </scm>
 
   <properties>
