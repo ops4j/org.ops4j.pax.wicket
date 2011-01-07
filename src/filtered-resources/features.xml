@@ -16,14 +16,25 @@
       See the License for the specific language governing permissions and
       limitations under the License.
 -->
-<features name="pax-wicket-${project.version}">
-  <feature name="pax-wicket" version="${project.version}">
+<features name="paxwicket-${project.version}">
+  <feature name="paxwicket" version="${project.version}">
     <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-service/${project.version}</bundle>
+  </feature>
+  <feature name="paxwicket-departmentstore" version="${project.version}">
+    <feature version="{project.version}">paxwicket</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-model/${project.version}</bundle>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-service-alternative/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-about/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-application/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-floor/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-franchisee/${project.version}</bundle>
   </feature>
+  <feature name="paxwicket-departmentstore-basic" version="${project.version}">
+    <feature version="{project.version}">paxwicket</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-service-basic/${project.version}</bundle>
+  </feature>
+  <feature name="paxwicket-departmentstore-alternative" version="${project.version}">
+    <feature version="{project.version}">paxwicket</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-service-alternative/${project.version}</bundle>
+  </feature>
 </features>
+
