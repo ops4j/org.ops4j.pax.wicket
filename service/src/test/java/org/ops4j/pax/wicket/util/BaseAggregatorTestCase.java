@@ -13,17 +13,19 @@
  * implied.
  *
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.ops4j.pax.wicket.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.util.Dictionary;
 import java.util.List;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -110,6 +112,9 @@ public final class BaseAggregatorTestCase
             exp1.with( exp1.any( String.class ) ),
             exp1.with( exp1.any( String.class ) )
         );
+
+        exp1.allowing(context).getProperty("org.osgi.framework.version");
+        exp1.will(exp1.returnValue("4.2"));
 
         exp1.one( context ).registerService(
             (String[]) exp1.with( exp1.any( Object.class ) ),
