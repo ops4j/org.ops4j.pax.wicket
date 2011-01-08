@@ -17,11 +17,25 @@
       limitations under the License.
 -->
 <features name="paxwicket-${project.version}">
+  <!-- Karaf Repository to load http service and event admin feature -->
+  <repository>mvn:org.apache.karaf/apache-karaf/${karaf.version}/xml/features</repository>
+
+  <!-- Temporary feature till karaf directly support useradmin feature (KARAF-361) -->
+  <feature name="useradmin" version="${project.version}">
+    <bundle>mvn:org.knopflerfish.bundle.useradmin/useradmin_all/${useradmin.version}</bundle>
+  </feature>
+
+  <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
   <feature name="paxwicket" version="${project.version}">
+    <feature version="${karaf.version}">http</feature>
+    <feature version="${karaf.version}">eventadmin</feature>
+    <feature version="${project.version}">useradmin</feature>
     <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-service/${project.version}</bundle>
   </feature>
+
+  <!-- Example suite provided with paxwicket -->
   <feature name="paxwicket-departmentstore" version="${project.version}">
-    <feature version="{project.version}">paxwicket</feature>
+    <feature version="${project.version}">paxwicket</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-model/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-about/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-application/${project.version}</bundle>
@@ -29,11 +43,11 @@
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore.view/departmentstore-view-franchisee/${project.version}</bundle>
   </feature>
   <feature name="paxwicket-departmentstore-basic" version="${project.version}">
-    <feature version="{project.version}">paxwicket</feature>
+    <feature version="${project.version}">paxwicket</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-service-basic/${project.version}</bundle>
   </feature>
   <feature name="paxwicket-departmentstore-alternative" version="${project.version}">
-    <feature version="{project.version}">paxwicket</feature>
+    <feature version="${project.version}">paxwicket</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.departmentstore/departmentstore-service-alternative/${project.version}</bundle>
   </feature>
 </features>
