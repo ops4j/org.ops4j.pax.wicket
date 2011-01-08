@@ -15,7 +15,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <version.pax.exam>0.3.0</version.pax.exam>
+    <version.pax.exam>1.2.3</version.pax.exam>
   </properties>
 
   <build>
