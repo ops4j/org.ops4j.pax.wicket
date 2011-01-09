@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module relativePaths="true" MavenProjectsManager.isMavenModule="true" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+<module MavenProjectsManager.isMavenModule="true" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Osmorc" name="OSGi">
+      <configuration osmorcControlsManifest="true" manifestLocation="" jarfileLocation="$APPLICATION_HOME_DIR$/bin/simpleLibraries.jar" outputPathType="CompilerOutputPath" useBndFile="false" bndFileLocation="" useBundlorFile="false" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="org.ops4j.pax.wicket.integrationTest.bundles.simpleLibraries" bundleVersion="0.6.0-SNAPSHOT" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="false">
+        <additionalProperties>
+          <property key="_include" value="-osgi.bundle" />
+          <property key="Bundle-DocURL" value="http://www.ops4j.org/projects/pax/wicket/integrationTest/bundles/simpleLibraries" />
+        </additionalProperties>
+        <additionalJARContents />
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -17,12 +28,11 @@
     <orderEntry type="module" module-name="pax-wicket-service" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ops4j.base:ops4j-base:0.5.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-auth-roles:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-extensions:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-datetime:1.3.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: joda-time:joda-time:1.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:org.osgi.core:1.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket:1.4.15" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-auth-roles:1.4.15" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-extensions:1.4.15" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.wicket:wicket-devutils:1.4.15" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:org.osgi.core:4.2.0" level="project" />
   </component>
   <component name="copyright">
     <Base>

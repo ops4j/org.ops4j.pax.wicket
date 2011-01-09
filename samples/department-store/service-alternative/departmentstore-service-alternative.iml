@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module relativePaths="true" MavenProjectsManager.isMavenModule="true" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+<module MavenProjectsManager.isMavenModule="true" org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" relativePaths="true" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Osmorc" name="OSGi">
+      <configuration osmorcControlsManifest="true" manifestLocation="" jarfileLocation="$APPLICATION_HOME_DIR$/bin/departmentstore-service-alternative.jar" outputPathType="CompilerOutputPath" useBndFile="false" bndFileLocation="" useBundlorFile="false" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="org.ops4j.pax.wicket.samples.departmentstore.departmentstore-service-alternative" bundleVersion="0.6.0-SNAPSHOT" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="false">
+        <additionalProperties>
+          <property key="_include" value="-osgi.bundle" />
+          <property key="Bundle-DocURL" value="http://www.ops4j.org/projects/pax/wicket/samples/departmentstore/departmentstore-service-alternative" />
+        </additionalProperties>
+        <additionalJARContents />
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -12,10 +23,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:org.osgi.compendium:1.2.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:org.osgi.core:1.2.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:javax.servlet:1.0.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.felix:org.osgi.foundation:1.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:org.osgi.compendium:4.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.osgi:org.osgi.core:4.2.0" level="project" />
     <orderEntry type="module" module-name="departmentstore-model" scope="PROVIDED" />
   </component>
   <component name="copyright">
