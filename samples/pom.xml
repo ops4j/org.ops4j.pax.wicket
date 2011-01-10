@@ -12,6 +12,7 @@
   <name>OPS4J - Pax Wicket Samples</name>
   <modules>
     <module>department-store</module>
+    <module>assembly</module>
   </modules>
   <dependencyManagement>
     <dependencies>
