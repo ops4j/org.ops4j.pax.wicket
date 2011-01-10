@@ -3,8 +3,8 @@ Private-Package: org.ops4j.lang, \
 
 Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal.Activator
 
-Import-Package:   org.ops4j.pax.wicket.*;version="[0.5.0,1.1.0)", \
+Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
                   org.osgi.*;version="[1.0.0,2.0.0)",  \
-                  org.apache.wicket.*;version="[1.4,1.5)"
+                  org.apache.wicket.*;version="${wicket.dependency.version}"
 
 Export-Package:   

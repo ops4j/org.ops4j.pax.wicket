@@ -16,7 +16,7 @@ Import-Package:\
  javax.servlet.*, \
  javax.swing.*, \
  javax.xml.*, \
- org.apache.wicket.*;version="[1.4.7, 1.5)", \
+ org.apache.wicket.*;version="${wicket.dependency.version}", \
  org.osgi.framework;version="1.4", \
  org.osgi.service.*;version="1", \
  org.osgi.util.*;version="1", \
@@ -25,9 +25,9 @@ Import-Package:\
  !sun.*
 
 Export-Package: \
- org.ops4j.pax.wicket.api;version="${pom.version}", \
- org.ops4j.pax.wicket.util.*;version="${pom.version}", \
- org.apache.wicket.*;version=1.4.10
+ org.ops4j.pax.wicket.api;version="${project.version}", \
+ org.ops4j.pax.wicket.util.*;version="${project.version}", \
+ org.apache.wicket.*;version="${wicket.dependency.version}"
 
 Include-Resource:\
  wicket.properties=src/main/resources/wicket.properties

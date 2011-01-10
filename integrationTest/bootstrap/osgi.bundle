@@ -4,4 +4,4 @@ Import-Package:\
  org.osgi.*;version="[1,2)"
 
 Export-Package: \
- org.ops4j.pax.wicket.it.*;version="${pom.version}"
+ org.ops4j.pax.wicket.it.*;version="${project.version}"
