@@ -29,7 +29,7 @@
                 <artifactItem>
                   <groupId>org.ops4j.pax.wicket.integrationTest</groupId>
                   <artifactId>bootstrap</artifactId>
-                  <version>${pom.version}</version>
+                  <version>${project.version}</version>
                 </artifactItem>
               </artifactItems>
               <includes>**/*.class</includes>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.integrationTest</groupId>
       <artifactId>bootstrap</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -61,7 +61,7 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.integrationTest.bundles</groupId>
       <artifactId>simpleLibraries</artifactId>
-      <version>${pom.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

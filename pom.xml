@@ -45,7 +45,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Bundle-DocURL>${pom.url}</Bundle-DocURL>
+            <Bundle-DocURL>${project.url}</Bundle-DocURL>
             <_include>-osgi.bundle</_include>
           </instructions>
         </configuration>
@@ -69,6 +69,15 @@
         <version>1.4</version>
       </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <reporting>
