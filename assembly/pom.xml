@@ -75,7 +75,7 @@
   <dependencies>
     <dependency>
       <groupId>org.knopflerfish.bundle.useradmin</groupId>
-      <artifactId>useradmin_all</artifactId>
+      <artifactId>useradmin_api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>

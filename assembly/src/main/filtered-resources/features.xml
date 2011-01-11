@@ -26,7 +26,7 @@
 
   <!-- Temporary feature till karaf directly support useradmin feature (KARAF-361) -->
   <feature name="useradmin" version="${project.version}">
-    <bundle>mvn:org.knopflerfish.bundle.useradmin/useradmin_all/${useradmin.version}</bundle>
+    <bundle>mvn:org.knopflerfish.bundle.useradmin/useradmin_api/${useradmin.version}</bundle>
   </feature>
 
   <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->

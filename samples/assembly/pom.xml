@@ -73,16 +73,5 @@
     </plugins>
   </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.knopflerfish.bundle.useradmin</groupId>
-      <artifactId>useradmin_all</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.eventadmin</artifactId>
-    </dependency>
-  </dependencies>
-
 </project>
 
