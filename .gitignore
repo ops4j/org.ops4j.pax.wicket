@@ -6,4 +6,4 @@ wicket.iws
 *.iml
 *.ipr
 *build.properties
-
+*.tmp_*.html*
