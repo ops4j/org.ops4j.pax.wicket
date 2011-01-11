@@ -74,14 +74,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.karaf</groupId>
-      <artifactId>apache-karaf</artifactId>
-      <type>xml</type>
-      <classifier>features</classifier>
+      <groupId>org.knopflerfish.bundle.useradmin</groupId>
+      <artifactId>useradmin_all</artifactId>
     </dependency>
     <dependency>
-        <groupId>org.knopflerfish.bundle.useradmin</groupId>
-        <artifactId>useradmin_all</artifactId>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.eventadmin</artifactId>
     </dependency>
   </dependencies>
 
