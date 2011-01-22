@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Private-Package: org.ops4j.pax.wicket.samples.departmentstore.view.fra
+ nchisee.internal
+Bundle-ClassPath: .,target/pax-eclipse
+Built-By: pieber
+Tool: Bnd-0.0.311
+Bundle-Name: OPS4J - Pax Wicket Department Store - View - Franchisee
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Build-Jdk: 1.6.0_23
+Bundle-Version: 0.6.0.SNAPSHOT
+Bnd-LastModified: 1295236543524
+Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.fr
+ anchisee.internal.Activator
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-Description: Pax Department Store Franchisee View.
+Import-Package: org.apache.wicket;version="1.4.15",org.apache.wicket.e
+ xtensions.ajax.markup.html;version="1.4.15",org.apache.wicket.markup.
+ html.panel;version="1.4.15",org.apache.wicket.model;version="1.4.15",
+ org.ops4j.pax.wicket.samples.departmentstore.model;version="0.6.0.SNA
+ PSHOT",org.ops4j.pax.wicket.util;version="0.6.0.SNAPSHOT",org.osgi.fr
+ amework;version="[1.0.0,2.0.0)",org.osgi.util.tracker;version="[1.0.0
+ ,2.0.0)"
+Bundle-SymbolicName: org.ops4j.pax.wicket.samples.departmentstore.view
+ .departmentstore-view-franchisee
+Bundle-DocURL: http://www.ops4j.org/projects/pax/wicket/samples/depart
+ mentstore/departmentstore-view-franchisee
+

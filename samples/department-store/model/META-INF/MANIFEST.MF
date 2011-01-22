@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Export-Package: org.ops4j.pax.wicket.samples.departmentstore.model;use
+ s:="org.osgi.util.tracker,org.osgi.framework";version="0.6.0.SNAPSHOT
+ "
+Private-Package: org.ops4j.pax.wicket.samples.departmentstore.model,
+Bundle-ClassPath: .,target/pax-eclipse
+Built-By: pieber
+Tool: Bnd-0.0.311
+Bundle-Name: OPS4J - Pax Wicket Department Store Model
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: OPS4J - Open Participation Software for Java
+Build-Jdk: 1.6.0_23
+Bundle-Version: 0.6.0.SNAPSHOT
+Bnd-LastModified: 1295236538959
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.html
+Bundle-Description: Pax Wicket Samples Departmentstore - The model of 
+ the department store, representing the business logic    separated fr
+ om the view.
+Import-Package: org.ops4j.pax.wicket.samples.departmentstore.model;ver
+ sion="0.6.0.SNAPSHOT",org.osgi.framework;version="[1.0.0,2.0.0)",org.
+ osgi.util.tracker;version="[1.0.0,2.0.0)"
+Bundle-SymbolicName: org.ops4j.pax.wicket.samples.departmentstore.mode
+ l
+Bundle-DocURL: http://www.ops4j.org/projects/pax/wicket/samples/depart
+ mentstore/departmentstore-model
+

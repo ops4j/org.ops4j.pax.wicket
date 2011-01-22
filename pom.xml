@@ -111,7 +111,7 @@
     <module>service</module>
     <module>samples</module>
     <module>assembly</module>
-    <module>integrationTest</module>
+    <module>itests</module>
   </modules>
 
   <dependencyManagement>
