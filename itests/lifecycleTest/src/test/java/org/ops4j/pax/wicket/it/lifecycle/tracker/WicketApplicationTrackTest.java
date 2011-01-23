@@ -19,14 +19,15 @@ package org.ops4j.pax.wicket.it.lifecycle.tracker;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
+
+import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -35,35 +36,31 @@ import org.osgi.framework.ServiceReference;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest
-{
+public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Inject
     private BundleContext bundleContext;
 
     @Configuration
-    public final Option[] configureAdditionalProvision()
-    {
-        return options(
-            provision( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleApp" )
-        );
+    public final Option[] configureAdditionalProvision() {
+        return options(provision("mvn:org.ops4j.pax.wicket.itests.bundles/pax-wicket-itests-bundles-simpleApp"));
     }
 
     @Test
     public final void testApplicationTracker()
-        throws Exception
-    {
-        sleep( 1000 );
-        Bundle simpleAppBundle = getBundleBySymbolicName( bundleContext, SYMBOLIC_NAME_SIMPLE_APP );
-        assertNotNull( simpleAppBundle );
+        throws Exception {
+        sleep(1000);
+        Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, SYMBOLIC_NAME_SIMPLE_APP);
+        assertNotNull(simpleAppBundle);
+        assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
         ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();
-        assertEquals( 12, beforeStopServices.length );
+        assertEquals(12, beforeStopServices.length);
 
-        Bundle bundle = getPaxWicketServiceBundle( bundleContext );
+        Bundle bundle = getPaxWicketServiceBundle(bundleContext);
         bundle.stop();
 
         ServiceReference[] services = simpleAppBundle.getRegisteredServices();
-        assertNotNull( services );
-        assertEquals( 1, services.length );
+        assertNotNull(services);
+        assertEquals(1, services.length);
     }
 }

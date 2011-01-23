@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.pde.ui.EquinoxLauncher">
+<intAttribute key="default_start_level" value="4"/>
+<stringAttribute key="bootstrap" value=""/>
+<stringAttribute key="deselected_workspace_plugins" value="org.ops4j.pax.wicket.service"/>
+<booleanAttribute key="tracing" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.service.http.port=8080"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="clearConfig" value="true"/>
+<booleanAttribute key="automaticValidate" value="true"/>
+<booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<booleanAttribute key="useDefaultConfigArea" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+<stringAttribute key="target_bundles" value="org.eclipse.equinox.servlet.api@default:default,org.eclipse.osgi@:,org.eclipse.osgi.services@default:default,org.eclipse.osgi.util@default:default,org.ops4j.pax.logging.api@default:default,org.ops4j.pax.logging.jcl@default:default,org.ops4j.pax.logging.service@default:default,org.ops4j.pax.wicket.service@default:default,org.ops4j.pax.wicket.toolkit@default:default,org.ungoverned.osgi.bundle.http@default:default"/>
+<stringAttribute key="workspace_bundles" value="org.ops4j.pax.wicket.samples.departmentstore.model@default:default,org.ops4j.pax.wicket.samples.departmentstore.service-alternative@default:false,org.ops4j.pax.wicket.samples.departmentstore.service-basic@default:default,org.ops4j.pax.wicket.samples.departmentstore.view.about@default:default,org.ops4j.pax.wicket.samples.departmentstore.view.application@default:default,org.ops4j.pax.wicket.samples.departmentstore.view.floor@default:default,org.ops4j.pax.wicket.samples.departmentstore.view.franchisee@default:default"/>
+<booleanAttribute key="default_auto_start" value="true"/>
+<booleanAttribute key="automaticAdd" value="true"/>
+<stringAttribute key="checked" value="[NONE]"/>
+<booleanAttribute key="includeOptional" value="true"/>
+<stringAttribute key="configLocation" value=""/>
+</launchConfiguration>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
-    <artifactId>wicket</artifactId>
+    <artifactId>pax-wicket</artifactId>
     <version>0.6.0-SNAPSHOT</version>
   </parent>
 
@@ -13,9 +14,10 @@
   <artifactId>pax-wicket-service</artifactId>
   <version>0.6.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>OPS4J Pax Wicket :: Service</name>
 
-  <name>OPS4J - Pax Wicket Service</name>
-  <description>Pax Wicket Service is an OSGi extension of the Wicket framework, allowing for dynamic loading and
+  <description>
+    Pax Wicket Service is an OSGi extension of the Wicket framework, allowing for dynamic loading and
     unloading of Wicket components and pageSources.
   </description>
 
@@ -43,7 +45,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.4_spec</artifactId>
+      <artifactId>geronimo-servlet_2.5_spec</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -85,3 +87,4 @@
     </dependency>
   </dependencies>
 </project>
+

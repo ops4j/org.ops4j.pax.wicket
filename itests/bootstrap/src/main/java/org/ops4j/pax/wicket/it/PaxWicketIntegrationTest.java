@@ -1,4 +1,4 @@
-/*  Copyright 2008 Edward Yakop.
+/*  Copyright 2011 Edward Yakop, Andreas Pieber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,58 +17,71 @@
 package org.ops4j.pax.wicket.it;
 
 import static org.junit.Assert.assertNotNull;
-import org.junit.runner.RunWith;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
+
+import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-/**
- * @author edward.yakop@gmail.com
- * @since 0.5.4
- */
-@RunWith( JUnit4TestRunner.class )
-public abstract class PaxWicketIntegrationTest
-{
+@RunWith(JUnit4TestRunner.class)
+public abstract class PaxWicketIntegrationTest {
 
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
     @Configuration
-    public final Option[] configureProvisions()
-    {
+    public final Option[] configureProvisions() {
         return options(
-            provision( "mvn:org.ops4j.pax.logging/pax-logging-api/1.3.0" ),
-            provision( "mvn:org.ops4j.pax.logging/pax-logging-service/1.3.0" ),
-            provision( "mvn:org.apache.felix/org.apache.felix.eventadmin/1.0.0" ),
-            provision( "mvn:org.apache.felix/org.apache.felix.configadmin/1.0.10" ),
-            provision( "mvn:org.knopflerfish.bundle.useradmin/useradmin_api/1.1.0" ),
-            provision( "mvn:org.ops4j.pax.web/pax-web-service/0.5.2" ),
-            provision( "mvn:org.apache.felix/org.osgi.compendium/1.2.0" ),
-            provision( "mvn:org.ops4j.pax.wicket/pax-wicket-service" )
-        );
+            provision(mavenBundle().groupId("org.ops4j.pax.logging").artifactId("pax-logging-api").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.logging").artifactId("pax-logging-service")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.eventadmin")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.knopflerfish.bundle.useradmin").artifactId("useradmin_api")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-servlet_2.5_spec")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.servicemix.bundles")
+                .artifactId("org.apache.servicemix.bundles.asm")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-util").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-io").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-http").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-continuation").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-server").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-security").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-servlet").versionAsInProject()),
+            provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-xml").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-api").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-spi").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-runtime").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-jetty").versionAsInProject()),
+            provision(mavenBundle().groupId("org.osgi").artifactId("org.osgi.compendium").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+                .versionAsInProject()));
     }
 
     /**
      * Return bundle given the symbolic name. Returns {@code null} if not found.
      *
      * @param bundleContext Bundle context. This argument must not be {@code null}.
-     * @param symbolicName  Bundle symbolic name. This argument must not be {@code null}.
+     * @param symbolicName Bundle symbolic name. This argument must not be {@code null}.
      *
      * @return The bundle given the symbolic name.
      *
      * @since 0.5.5
      */
-    protected final Bundle getBundleBySymbolicName( BundleContext bundleContext, String symbolicName )
-    {
+    protected final Bundle getBundleBySymbolicName(BundleContext bundleContext, String symbolicName) {
         Bundle[] bundles = bundleContext.getBundles();
-        for( Bundle bundle : bundles )
-        {
+        for (Bundle bundle : bundles) {
             String bundleSymbolicName = bundle.getSymbolicName();
-            if( bundleSymbolicName.equals( symbolicName ) )
-            {
+            if (bundleSymbolicName.equals(symbolicName)) {
                 return bundle;
             }
         }
@@ -85,10 +98,9 @@ public abstract class PaxWicketIntegrationTest
      *
      * @since 0.5.5
      */
-    protected final Bundle getPaxWicketServiceBundle( BundleContext bundleContext )
-    {
-        Bundle paxWicketBundle = getBundleBySymbolicName( bundleContext, SYMBOLIC_NAME_PAX_WICKET_SERVICE );
-        assertNotNull( paxWicketBundle );
+    protected final Bundle getPaxWicketServiceBundle(BundleContext bundleContext) {
+        Bundle paxWicketBundle = getBundleBySymbolicName(bundleContext, SYMBOLIC_NAME_PAX_WICKET_SERVICE);
+        assertNotNull(paxWicketBundle);
         return paxWicketBundle;
     }
 }

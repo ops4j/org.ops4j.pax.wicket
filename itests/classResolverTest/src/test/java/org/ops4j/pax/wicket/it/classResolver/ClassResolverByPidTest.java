@@ -1,4 +1,4 @@
-/*  Copyright 2008 Edward Yakop.
+/*  Copyright 2011 Edward Yakop, Andreas Pieber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,98 +17,88 @@
 package org.ops4j.pax.wicket.it.classResolver;
 
 import static java.lang.Thread.sleep;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Properties;
-import org.apache.wicket.application.IClassResolver;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.osgi.framework.Constants.SERVICE_PID;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Properties;
+
+import org.apache.wicket.application.IClassResolver;
+import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.BundleContext;
-import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 
-/**
- * @author edward.yakop@gmail.com
- */
 public final class ClassResolverByPidTest
-    extends PaxWicketIntegrationTest
-{
+        extends PaxWicketIntegrationTest {
     @Inject
     private BundleContext bundleContext;
 
     @org.ops4j.pax.exam.junit.Configuration
-    public final Option[] provisionSimpleLibraries()
-    {
-        return options(
-            provision( "mvn:org.ops4j.pax.wicket.integrationTest.bundles/simpleLibraries" )
-        );
+    public final Option[] provisionSimpleLibraries() {
+        return options(provision("mvn:org.ops4j.pax.wicket.itests.bundles/pax-wicket-itests-bundles-simpleLibraries"));
     }
 
     @Test
     public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()
-        throws Throwable
-    {
+        throws Throwable {
         ServiceReference classResolverReference = getLibraryClassResolverReference();
-        assertFalse( isApplicationNameKeyExists( classResolverReference ) );
+        assertFalse(isApplicationNameKeyExists(classResolverReference));
 
-        ManagedService managedService = (ManagedService) bundleContext.getService( classResolverReference );
+        ManagedService managedService = (ManagedService) bundleContext.getService(classResolverReference);
         Properties dictionary = new Properties();
 
         // Lets update configuration to expose our sample library to abc, def application
-        dictionary.put( APPLICATION_NAME, new String[]{ "abc", "def" } );
-        managedService.updated( dictionary );
+        dictionary.put(APPLICATION_NAME, new String[]{ "abc", "def" });
+        managedService.updated(dictionary);
 
-        assertTrue( isApplicationNameKeyExists( classResolverReference ) );
+        assertTrue(isApplicationNameKeyExists(classResolverReference));
         validateThatClassResolverIsExposedToAbcAndDef();
 
-        bundleContext.ungetService( classResolverReference );
+        bundleContext.ungetService(classResolverReference);
     }
 
     private void validateThatClassResolverIsExposedToAbcAndDef()
-        throws Throwable
-    {
+        throws Throwable {
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)"
-        );
-        assertNotNull( references );
-        assertEquals( references.length, 1 );
-        ServiceReference reference = references[ 0 ];
-        String[] applicationNames = (String[]) reference.getProperty( APPLICATION_NAME );
-        assertEquals( 2, applicationNames.length );
-        assertEquals( applicationNames[ 0 ], "abc" );
-        assertEquals( applicationNames[ 1 ], "def" );
+            );
+        assertNotNull(references);
+        assertEquals(references.length, 1);
+        ServiceReference reference = references[0];
+        String[] applicationNames = (String[]) reference.getProperty(APPLICATION_NAME);
+        assertEquals(2, applicationNames.length);
+        assertEquals(applicationNames[0], "abc");
+        assertEquals(applicationNames[1], "def");
 
         // Verify that this is the simple libraries class resolver
-        IClassResolver classResolver = (IClassResolver) bundleContext.getService( reference );
+        IClassResolver classResolver = (IClassResolver) bundleContext.getService(reference);
         String className = "org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal.PrivateClass";
-        Class clazz = classResolver.resolveClass( className );
-        assertNotNull( clazz );
-        assertEquals( clazz.getName(), className );
+        Class clazz = classResolver.resolveClass(className);
+        assertNotNull(clazz);
+        assertEquals(clazz.getName(), className);
 
-        bundleContext.ungetService( reference );
+        bundleContext.ungetService(reference);
     }
 
-    private boolean isApplicationNameKeyExists( ServiceReference reference )
-    {
+    private boolean isApplicationNameKeyExists(ServiceReference reference) {
         String[] keys = reference.getPropertyKeys();
         boolean isApplicatioNameKeyExists = false;
-        for( String key : keys )
-        {
-            if( APPLICATION_NAME.equals( key ) )
-            {
+        for (String key : keys) {
+            if (APPLICATION_NAME.equals(key)) {
                 isApplicatioNameKeyExists = true;
                 break;
             }
@@ -117,55 +107,52 @@ public final class ClassResolverByPidTest
     }
 
     @Test
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
-        throws Throwable
-    {
+        throws Throwable {
         ServiceReference classResolverReference = getLibraryClassResolverReference();
 
         // Ensure no configuration is applied
-        assertFalse( isApplicationNameKeyExists( classResolverReference ) );
+        assertFalse(isApplicationNameKeyExists(classResolverReference));
 
         // Lets update configuration to expose our sample library to abc, def application via Configuration Admin
-        ServiceReference configAdminRef = bundleContext.getServiceReference( ConfigurationAdmin.class.getName() );
-        assertNotNull( configAdminRef );
-        ConfigurationAdmin configAdmin = (ConfigurationAdmin) bundleContext.getService( configAdminRef );
+        ServiceReference configAdminRef = bundleContext.getServiceReference(ConfigurationAdmin.class.getName());
+        assertNotNull(configAdminRef);
+        ConfigurationAdmin configAdmin = (ConfigurationAdmin) bundleContext.getService(configAdminRef);
 
         String classResolverBundleLocation = classResolverReference.getBundle().getLocation();
-        Configuration configuration = configAdmin.getConfiguration( "libraryPid", classResolverBundleLocation );
+        Configuration configuration = configAdmin.getConfiguration("libraryPid", classResolverBundleLocation);
         Dictionary properties = configuration.getProperties();
-        if( properties == null )
-        {
+        if (properties == null) {
             properties = new Hashtable();
-            properties.put( SERVICE_PID, "libraryPid" );
+            properties.put(SERVICE_PID, "libraryPid");
         }
-        properties.put( APPLICATION_NAME, new String[]{ "abc", "def" } );
-        configuration.update( properties );
+        properties.put(APPLICATION_NAME, new String[]{ "abc", "def" });
+        configuration.update(properties);
 
         // Wait for 1 secs
-        sleep( 5000 );
+        sleep(5000);
 
         // Lets test that configuration is now applied
         classResolverReference = getLibraryClassResolverReference();
-        assertTrue( isApplicationNameKeyExists( classResolverReference ) );
+        assertTrue(isApplicationNameKeyExists(classResolverReference));
         validateThatClassResolverIsExposedToAbcAndDef();
 
         // Remove configuration
         configuration.delete();
 
-        bundleContext.ungetService( configAdminRef );
-        bundleContext.ungetService( classResolverReference );
+        bundleContext.ungetService(configAdminRef);
+        bundleContext.ungetService(classResolverReference);
     }
 
     private ServiceReference getLibraryClassResolverReference()
-        throws InvalidSyntaxException
-    {
+        throws InvalidSyntaxException {
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
-        );
-        assertNotNull( references );
-        assertEquals( references.length, 1 );
-        return references[ 0 ];
+            );
+        assertNotNull(references);
+        assertEquals(references.length, 1);
+        return references[0];
 
     }
 }
