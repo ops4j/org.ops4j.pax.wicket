@@ -1,4 +1,4 @@
-/*  Copyright 2008 Edward Yakop.
+/*  Copyright 2011 Edward Yakop, Andreas Pieber
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package org.ops4j.pax.wicket.it.lifecycle.tracker;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.wicket.it.bundles.simpleApp.SimpleAppConstants.SYMBOLIC_NAME_SIMPLE_APP;
 
 import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
@@ -32,10 +32,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-/**
- * @author edward.yakop@gmail.com
- * @since 0.5.4
- */
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Inject
@@ -43,24 +39,27 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return options(provision("mvn:org.ops4j.pax.wicket.itests.bundles/pax-wicket-itests-bundles-simpleApp"));
+        return options(provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
+            .artifactId("pax-wicket-samples-view-application").versionAsInProject()));
     }
 
     @Test
     public final void testApplicationTracker()
         throws Exception {
-        sleep(1000);
-        Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, SYMBOLIC_NAME_SIMPLE_APP);
+        sleep(2000);
+        Bundle simpleAppBundle =
+            getBundleBySymbolicName(bundleContext,
+                "org.ops4j.pax.wicket.samples.view.pax-wicket-samples-view-application");
         assertNotNull(simpleAppBundle);
         assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
         ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();
-        assertEquals(12, beforeStopServices.length);
+        assertEquals(14, beforeStopServices.length);
 
         Bundle bundle = getPaxWicketServiceBundle(bundleContext);
         bundle.stop();
 
         ServiceReference[] services = simpleAppBundle.getRegisteredServices();
         assertNotNull(services);
-        assertEquals(1, services.length);
+        assertEquals(3, services.length);
     }
 }

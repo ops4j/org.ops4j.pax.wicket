@@ -77,8 +77,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket.itests.bundles</groupId>
-      <artifactId>pax-wicket-itests-bundles-simpleApp</artifactId>
+      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+      <artifactId>pax-wicket-samples-view-application</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
