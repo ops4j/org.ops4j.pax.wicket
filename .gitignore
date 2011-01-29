@@ -7,3 +7,4 @@ wicket.iws
 *.ipr
 *build.properties
 *.tmp_*.html*
+*META-INF
