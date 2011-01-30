@@ -18,12 +18,15 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static javax.activation.FileTypeMap.getDefaultFileTypeMap;
+
 import java.io.IOException;
 import java.net.URL;
+
 import javax.activation.MimetypesFileTypeMap;
-import static javax.activation.MimetypesFileTypeMap.getDefaultFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
 import org.slf4j.Logger;
@@ -75,7 +78,9 @@ public class GenericContext
             LOGGER.debug( "getResource( " + resourceName + " )" );
         }
 
-        resourceName = resourceName.substring( m_mountPoint.length() );
+        if (resourceName.startsWith(m_mountPoint)) {
+            resourceName = resourceName.substring(m_mountPoint.length());
+        }
         return m_bundle.getResource( resourceName );
     }
 
