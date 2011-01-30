@@ -18,7 +18,6 @@
     <module>service</module>
     <module>view</module>
     <module>demo</module>
-    <module>equinox-target-platform</module>
     <module>features</module>
   </modules>
 
