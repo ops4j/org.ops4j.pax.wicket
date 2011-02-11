@@ -17,7 +17,6 @@
     <module>model</module>
     <module>service</module>
     <module>view</module>
-    <module>demo</module>
     <module>features</module>
   </modules>
 
