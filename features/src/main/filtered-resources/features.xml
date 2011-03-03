@@ -18,20 +18,11 @@
 -->
 
 <features name="pax-wicket-features-${project.version}">
-  <feature name="eventadmin" version="${project.version}">
-    <bundle>mvn:org.apache.felix/org.apache.felix.eventadmin/${felix.eventadmin.version}</bundle>
-  </feature>
-
-  <!-- Temporary feature till karaf directly support useradmin feature (KARAF-361) -->
-  <feature name="useradmin" version="${project.version}">
-    <bundle>mvn:org.knopflerfish.bundle.useradmin/useradmin_api/${useradmin.version}</bundle>
-  </feature>
 
   <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
   <feature name="wicket" version="${project.version}">
     <feature>http</feature>
-    <feature version="${project.version}">eventadmin</feature>
-    <feature version="${project.version}">useradmin</feature>
+    <feature version="${karaf.version}">eventadmin</feature>
     <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-service/${project.version}</bundle>
   </feature>
 
