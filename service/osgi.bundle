@@ -7,6 +7,7 @@ Private-Package:\
 Bundle-Activator: org.ops4j.pax.wicket.internal.Activator
 
 Import-Package:\
+ org.osgi.service.useradmin; resolution:=optional, \
  junit.*; resolution:=optional, \
  javax.portlet.*; resolution:=optional, \
  org.apache.portals.*; resolution:=optional, \

@@ -55,11 +55,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.knopflerfish.bundle.useradmin</groupId>
-      <artifactId>useradmin_api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.eventadmin</artifactId>
       <scope>test</scope>

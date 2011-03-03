@@ -94,10 +94,6 @@
       <artifactId>org.apache.felix.eventadmin</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.knopflerfish.bundle.useradmin</groupId>
-      <artifactId>useradmin_api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
       <version>${project.version}</version>
