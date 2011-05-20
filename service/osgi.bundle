@@ -1,6 +1,8 @@
 Private-Package:\
  com.sun.activation.registries, \
  javax.activation, \
+ org.apache.geronimo.osgi.locator, \
+ org.apache.geronimo.osgi.registry.api, \
  org.ops4j.lang, \
  org.ops4j.pax.wicket.internal.*
 
