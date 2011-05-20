@@ -32,7 +32,7 @@
     <pax.exam.version>1.2.4</pax.exam.version>
     <slf4j.version>1.6.1</slf4j.version>
     <karaf.version>2.2.1</karaf.version>
-    <felix.eventadmin.version>1.2.8</felix.eventadmin.version>
+    <felix.eventadmin.version>1.2.10</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
     <wicket.dependency.version>1.4.17</wicket.dependency.version>
     <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
