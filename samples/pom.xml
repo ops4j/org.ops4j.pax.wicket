@@ -14,11 +14,27 @@
   <name>OPS4J Pax Wicket :: Samples :: Parent</name>
 
   <modules>
+    <module>provision</module>
     <module>model</module>
     <module>service</module>
     <module>view</module>
     <module>features</module>
   </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.ops4j</groupId>
+        <artifactId>maven-pax-plugin</artifactId>
+        <configuration>
+          <provision>
+            <param>--platform=felix</param>
+            <param>--workingDirectory=target/runner</param>
+          </provision>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
 

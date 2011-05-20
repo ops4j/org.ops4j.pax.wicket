@@ -118,6 +118,13 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- Internal Dependencies -->
+      <dependency>
+        <groupId>org.ops4j.pax.wicket</groupId>
+        <artifactId>pax-wicket-service</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <!-- External Dependencies -->
       <dependency>
         <groupId>org.apache.karaf</groupId>
         <artifactId>apache-karaf</artifactId>

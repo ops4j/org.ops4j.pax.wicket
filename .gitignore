@@ -8,3 +8,4 @@ wicket.iws
 *build.properties
 *.tmp_*.html*
 *META-INF
+*runner
