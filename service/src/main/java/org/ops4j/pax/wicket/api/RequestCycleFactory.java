@@ -23,13 +23,12 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 
 /**
- * Use if you need to provide your own IRequestCycleProcessor to your
- * Wicket application.
- *
+ * Use if you need to provide your own IRequestCycleProcessor to your Wicket application.
+ * 
  * @author David Leangen
  */
-public interface RequestCycleFactory
-{
+public interface RequestCycleFactory {
 
-    WebRequestCycle newRequestCycle( WebApplication application, WebRequest request, Response response );
+    WebRequestCycle newRequestCycle(WebApplication application, WebRequest request, Response response);
+
 }

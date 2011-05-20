@@ -22,23 +22,22 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * {@code PaxWicketAuthenticator} provides an interface to authenticate users with its password.
- *
+ * 
  * @see org.ops4j.pax.wicket.util.UserAdminAuthenticator
  * @since 1.0.0
  */
-public interface PaxWicketAuthenticator
-{
+public interface PaxWicketAuthenticator {
 
     /**
      * Authenticate the specified {@code userName} with the specified {@code password}. Returns {@code null} if the
      * specified {@code userName} is not authenticate.
-     *
+     * 
      * @param username The username to authenticate.
      * @param password The password to authenticate.
-     *
+     * 
      * @return An instance of {@code Roles} if the arguments can be authenticated, {@code null} otherwise.
-     *
+     * 
      * @since 1.0.0
      */
-    Roles authenticate( String username, String password );
+    Roles authenticate(String username, String password);
 }

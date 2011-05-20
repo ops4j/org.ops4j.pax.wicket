@@ -25,26 +25,25 @@ import org.apache.wicket.PageParameters;
 /**
  * PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
  */
-public interface PageFactory<T extends Page>
-{
+public interface PageFactory<T extends Page> {
 
     /**
      * Returns the page class instance represented by this {@code PageFactory}.
-     *
+     * 
      * @return The page class represented by this {@code PageFactory}.
-     *
+     * 
      * @since 1.0.0
      */
     Class<T> getPageClass();
 
     /**
      * Creates a page with the specified {@code params}.
-     *
+     * 
      * @param params The page parameters.
-     *
+     * 
      * @return An instance of page.
-     *
+     * 
      * @since 1.0.0
      */
-    T createPage( PageParameters params );
+    T createPage(PageParameters params);
 }

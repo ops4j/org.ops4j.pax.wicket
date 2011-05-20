@@ -19,6 +19,12 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.ContentSource.HOMEPAGE_CLASSNAME;
+import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
@@ -34,11 +40,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.HOMEPAGE_CLASSNAME;
-import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
 import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
@@ -51,8 +52,7 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 public final class PaxWicketApplicationFactory
-    implements IWebApplicationFactory, ManagedService
-{
+        implements IWebApplicationFactory, ManagedService {
 
     private static final String[] APPLICATION_FACTORY_SERVICE_NAMES = {
         PaxWicketApplicationFactory.class.getName(), ManagedService.class.getName()
@@ -85,37 +85,36 @@ public final class PaxWicketApplicationFactory
 
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
-     *
-     * @param context         The bundle context. This argument must not be {@code null}.
-     * @param homepageClass   The homepage class. This argument must not be {@code null}.
-     * @param mountPoint      The mount point. This argument must not be be {@code null}.
+     * 
+     * @param context The bundle context. This argument must not be {@code null}.
+     * @param homepageClass The homepage class. This argument must not be {@code null}.
+     * @param mountPoint The mount point. This argument must not be be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      * @since 1.0.0
      */
     public PaxWicketApplicationFactory(
-        BundleContext context,
-        Class<? extends Page> homepageClass,
-        String mountPoint,
-        String applicationName )
-        throws IllegalArgumentException
-    {
-        validateNotNull( context, "context" );
-        validateNotNull( homepageClass, "homepageClass" );
-        validateNotNull( mountPoint, "mountPoint" );
-        validateNotEmpty( applicationName, "applicationName" );
+            BundleContext context,
+            Class<? extends Page> homepageClass,
+            String mountPoint,
+            String applicationName)
+        throws IllegalArgumentException {
+        validateNotNull(context, "context");
+        validateNotNull(homepageClass, "homepageClass");
+        validateNotNull(mountPoint, "mountPoint");
+        validateNotEmpty(applicationName, "applicationName");
 
         m_properties = new Properties();
 
         m_homepageClass = homepageClass;
         m_bundleContext = context;
 
-        setMountPoint( mountPoint );
-        setApplicationName( applicationName );
+        setMountPoint(mountPoint);
+        setApplicationName(applicationName);
 
         String homepageClassName = homepageClass.getName();
-        m_properties.setProperty( HOMEPAGE_CLASSNAME, homepageClassName );
+        m_properties.setProperty(HOMEPAGE_CLASSNAME, homepageClassName);
 
         m_componentInstantiationListeners = new ArrayList<IComponentInstantiationListener>();
         m_componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
@@ -128,21 +127,19 @@ public final class PaxWicketApplicationFactory
      * <p>
      * Note: Value changed will only affect wicket application created after this method invocation.
      * </p>
-     *
+     * 
      * @param authenticator The authenticator.
-     * @param signInPage    The sign in page.
-     *
+     * @param signInPage The sign in page.
+     * 
      * @throws IllegalArgumentException Thrown if one of the arguments are {@code null}.
      * @see #register()
      * @since 1.0.0
      */
-    public final void setAuthenticator( PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage )
-        throws IllegalArgumentException
-    {
-        if( ( authenticator != null && signInPage == null ) || ( authenticator == null && signInPage != null ) )
-        {
+    public final void setAuthenticator(PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage)
+        throws IllegalArgumentException {
+        if (authenticator != null && signInPage == null || authenticator == null && signInPage != null) {
             String message = "Both [authenticator] and [signInPage] argument must not be [null].";
-            throw new IllegalArgumentException( message );
+            throw new IllegalArgumentException(message);
         }
 
         m_authenticator = authenticator;
@@ -154,18 +151,15 @@ public final class PaxWicketApplicationFactory
      * <p>
      * Note: dispose does not unregister this {@code PaxWicketApplicationFactory} instance from the OSGi container.
      * </p>
-     *
+     * 
      * @since 1.0.0
      */
-    public final void dispose()
-    {
-        synchronized( this )
-        {
+    public final void dispose() {
+        synchronized (this) {
             m_pageFactory.dispose();
             m_delegatingClassResolver.dispose();
 
-            if( m_bdcrRegistration != null )
-            {
+            if (m_bdcrRegistration != null) {
                 m_bdcrRegistration.unregister();
             }
         }
@@ -174,265 +168,217 @@ public final class PaxWicketApplicationFactory
     /**
      * Returns the mount point that the wicket application will be accessible. This method must not return {@code null}
      * string.
-     *
+     * 
      * @return The mount point that the wicket application will be accessible.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String getMountPoint()
-    {
-        synchronized( this )
-        {
-            return m_properties.getProperty( MOUNTPOINT );
+    public final String getMountPoint() {
+        synchronized (this) {
+            return m_properties.getProperty(MOUNTPOINT);
         }
     }
 
-    @SuppressWarnings( "unchecked" )
-    public final void updated( Dictionary config )
-        throws ConfigurationException
-    {
-        if( config == null )
-        {
-            synchronized( this )
-            {
-                m_registration.setProperties( m_properties );
+    @SuppressWarnings("unchecked")
+    public final void updated(Dictionary config)
+        throws ConfigurationException {
+        if (config == null) {
+            synchronized (this) {
+                m_registration.setProperties(m_properties);
             }
 
             return;
         }
 
-        String classname = (String) config.get( HOMEPAGE_CLASSNAME );
-        if( classname == null )
-        {
-            synchronized( this )
-            {
+        String classname = (String) config.get(HOMEPAGE_CLASSNAME);
+        if (classname == null) {
+            synchronized (this) {
                 String homepageClassName = m_homepageClass.getName();
-                config.put( HOMEPAGE_CLASSNAME, homepageClassName );
+                config.put(HOMEPAGE_CLASSNAME, homepageClassName);
             }
-        }
-        else
-        {
-            synchronized( this )
-            {
-                try
-                {
+        } else {
+            synchronized (this) {
+                try {
                     Bundle bundle = m_bundleContext.getBundle();
-                    m_homepageClass = bundle.loadClass( classname );
-                }
-                catch( ClassNotFoundException e )
-                {
-                    throw new ConfigurationException( HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e );
+                    m_homepageClass = bundle.loadClass(classname);
+                } catch (ClassNotFoundException e) {
+                    throw new ConfigurationException(HOMEPAGE_CLASSNAME, "Class not found in application bundle.", e);
                 }
             }
         }
 
-        String applicationName = (String) config.get( APPLICATION_NAME );
-        if( applicationName == null )
-        {
+        String applicationName = (String) config.get(APPLICATION_NAME);
+        if (applicationName == null) {
             String currentApplicationName;
-            synchronized( this )
-            {
-                currentApplicationName = (String) m_properties.get( APPLICATION_NAME );
+            synchronized (this) {
+                currentApplicationName = (String) m_properties.get(APPLICATION_NAME);
             }
 
-            config.put( APPLICATION_NAME, currentApplicationName );
-        }
-        else
-        {
-            setApplicationName( applicationName );
+            config.put(APPLICATION_NAME, currentApplicationName);
+        } else {
+            setApplicationName(applicationName);
         }
 
-        String mountPoint = (String) config.get( MOUNTPOINT );
-        if( mountPoint == null )
-        {
+        String mountPoint = (String) config.get(MOUNTPOINT);
+        if (mountPoint == null) {
             String currentMountPoint;
-            synchronized( this )
-            {
-                currentMountPoint = m_properties.getProperty( MOUNTPOINT );
+            synchronized (this) {
+                currentMountPoint = m_properties.getProperty(MOUNTPOINT);
             }
-            config.put( MOUNTPOINT, currentMountPoint );
-        }
-        else
-        {
-            setMountPoint( mountPoint );
+            config.put(MOUNTPOINT, currentMountPoint);
+        } else {
+            setMountPoint(mountPoint);
         }
 
-        m_registration.setProperties( config );
+        m_registration.setProperties(config);
     }
 
     /**
      * Register this {@code PaxWicketApplicationFactory} instance to OSGi container.
-     *
+     * 
      * @return The service registration.
-     *
+     * 
      * @since 1.0.0
      */
-    public final ServiceRegistration register()
-    {
+    public final ServiceRegistration register() {
         Properties serviceProperties;
-        synchronized( this )
-        {
-            serviceProperties = new Properties( m_properties );
+        synchronized (this) {
+            serviceProperties = new Properties(m_properties);
         }
-        m_registration = m_bundleContext.registerService( APPLICATION_FACTORY_SERVICE_NAMES, this, serviceProperties );
+        m_registration = m_bundleContext.registerService(APPLICATION_FACTORY_SERVICE_NAMES, this, serviceProperties);
 
         return m_registration;
     }
 
-    private void setApplicationName( String applicationName )
-    {
-        synchronized( this )
-        {
-            if( m_pageFactory != null )
-            {
+    private void setApplicationName(String applicationName) {
+        synchronized (this) {
+            if (m_pageFactory != null) {
                 m_pageFactory.dispose();
             }
-            if( m_delegatingClassResolver != null )
-            {
+            if (m_delegatingClassResolver != null) {
                 m_delegatingClassResolver.dispose();
             }
 
-            m_delegatingClassResolver = new DelegatingClassResolver( m_bundleContext, applicationName );
+            m_delegatingClassResolver = new DelegatingClassResolver(m_bundleContext, applicationName);
             m_delegatingClassResolver.intialize();
 
-            m_pageFactory = new PaxWicketPageFactory( m_bundleContext, applicationName );
+            m_pageFactory = new PaxWicketPageFactory(m_bundleContext, applicationName);
             m_pageFactory.initialize();
 
-            m_properties.setProperty( APPLICATION_NAME, applicationName );
+            m_properties.setProperty(APPLICATION_NAME, applicationName);
         }
     }
 
-    private void setMountPoint( String mountPoint )
-    {
-        synchronized( this )
-        {
-            m_properties.put( MOUNTPOINT, mountPoint );
+    private void setMountPoint(String mountPoint) {
+        synchronized (this) {
+            m_properties.put(MOUNTPOINT, mountPoint);
         }
     }
 
-    public final void setPageMounter( PageMounter pageMounter )
-    {
-        validateNotNull( pageMounter, "pageMounter" );
+    public final void setPageMounter(PageMounter pageMounter) {
+        validateNotNull(pageMounter, "pageMounter");
 
         m_pageMounter = pageMounter;
     }
 
-    public void setRequestCycleFactory( RequestCycleFactory factory )
-    {
+    public void setRequestCycleFactory(RequestCycleFactory factory) {
         m_requestCycleFactory = factory;
     }
 
-    public void setRequestCycleProcessorFactory( RequestCycleProcessorFactory factory )
-    {
+    public void setRequestCycleProcessorFactory(RequestCycleProcessorFactory factory) {
         m_requestCycleProcessorFactory = factory;
     }
 
-    public void setSessionStoreFactory( SessionStoreFactory sessionStoreFactory )
-    {
+    public void setSessionStoreFactory(SessionStoreFactory sessionStoreFactory) {
         m_sessionStoreFactory = sessionStoreFactory;
     }
 
-    public final void setPaxWicketBundle( Bundle bundle )
-    {
-        if( m_bdcrRegistration != null )
-        {
+    public final void setPaxWicketBundle(Bundle bundle) {
+        if (m_bdcrRegistration != null) {
             m_bdcrRegistration.unregister();
             m_bdcrRegistration = null;
         }
 
-        if( m_bdcr != null )
-        {
+        if (m_bdcr != null) {
             m_bdcr.close();
         }
 
-        if( bundle != null )
-        {
+        if (bundle != null) {
             Properties config = new Properties();
             String applicationName = getApplicationName();
-            config.setProperty( APPLICATION_NAME, applicationName );
+            config.setProperty(APPLICATION_NAME, applicationName);
 
-            m_bdcr = new BundleDelegatingClassResolver( m_bundleContext, applicationName, bundle );
-            m_bdcrRegistration = m_bundleContext.registerService( IClassResolver.class.getName(), m_bdcr, config );
+            m_bdcr = new BundleDelegatingClassResolver(m_bundleContext, applicationName, bundle);
+            m_bdcrRegistration = m_bundleContext.registerService(IClassResolver.class.getName(), m_bdcr, config);
         }
     }
 
     /**
      * Returns the application name.
-     *
+     * 
      * @return The application name.
-     *
+     * 
      * @since 0.5.4
      */
-    private String getApplicationName()
-    {
-        return m_properties.getProperty( APPLICATION_NAME );
+    private String getApplicationName() {
+        return m_properties.getProperty(APPLICATION_NAME);
     }
 
-    public void addComponentInstantiationListener( IComponentInstantiationListener listener )
-    {
-        m_componentInstantiationListeners.add( listener );
+    public void addComponentInstantiationListener(IComponentInstantiationListener listener) {
+        m_componentInstantiationListeners.add(listener);
     }
 
-    public void addComponentOnBeforeRenderListener( IComponentOnBeforeRenderListener listener )
-    {
-        m_componentOnBeforeRenderListeners.add( listener );
+    public void addComponentOnBeforeRenderListener(IComponentOnBeforeRenderListener listener) {
+        m_componentOnBeforeRenderListeners.add(listener);
     }
 
-    public void addComponentOnAfterRenderListener( IComponentOnAfterRenderListener listener )
-    {
-        m_componentOnAfterRenderListeners.add( listener );
+    public void addComponentOnAfterRenderListener(IComponentOnAfterRenderListener listener) {
+        m_componentOnAfterRenderListeners.add(listener);
     }
 
-    public void addInitializer( IInitializer initializer )
-    {
-        m_initializers.add( initializer );
+    public void addInitializer(IInitializer initializer) {
+        m_initializers.add(initializer);
     }
 
     /**
      * Creates a web application.
-     *
+     * 
      * @param filter The wicket filter.
-     *
+     * 
      * @return The new web application.
      */
-    public final WebApplication createApplication( WicketFilter filter )
-    {
+    public final WebApplication createApplication(WicketFilter filter) {
         WebApplication paxWicketApplication;
 
-        synchronized( this )
-        {
+        synchronized (this) {
             String applicationName = getApplicationName();
 
-            if( m_authenticator != null && m_signinPage != null )
-            {
-                paxWicketApplication = new PaxAuthenticatedWicketApplication(
-                    m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-                    m_requestCycleFactory, m_requestCycleProcessorFactory, m_sessionStoreFactory, m_delegatingClassResolver, 
-                    m_authenticator, m_signinPage, m_initializers
-                );
-            }
-            else
-            {
+            if (m_authenticator != null && m_signinPage != null) {
+                paxWicketApplication =
+                    new PaxAuthenticatedWicketApplication(
+                        m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
+                        m_requestCycleFactory, m_requestCycleProcessorFactory, m_sessionStoreFactory,
+                        m_delegatingClassResolver,
+                        m_authenticator, m_signinPage, m_initializers
+                    );
+            } else {
                 paxWicketApplication = new PaxWicketApplication(
                     m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
                     m_delegatingClassResolver, m_initializers
-                );
+                    );
             }
         }
 
-        for( IComponentInstantiationListener listener : m_componentInstantiationListeners )
-        {
-            paxWicketApplication.addComponentInstantiationListener( listener );
+        for (IComponentInstantiationListener listener : m_componentInstantiationListeners) {
+            paxWicketApplication.addComponentInstantiationListener(listener);
         }
 
-        for( IComponentOnBeforeRenderListener listener : m_componentOnBeforeRenderListeners )
-        {
-            paxWicketApplication.addPostComponentOnBeforeRenderListener( listener );
+        for (IComponentOnBeforeRenderListener listener : m_componentOnBeforeRenderListeners) {
+            paxWicketApplication.addPostComponentOnBeforeRenderListener(listener);
         }
 
-        for( IComponentOnAfterRenderListener listener: m_componentOnAfterRenderListeners )
-        {
-            paxWicketApplication.addComponentOnAfterRenderListener( listener );
+        for (IComponentOnAfterRenderListener listener : m_componentOnAfterRenderListeners) {
+            paxWicketApplication.addComponentOnAfterRenderListener(listener);
         }
 
         return paxWicketApplication;

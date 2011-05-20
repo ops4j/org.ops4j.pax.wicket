@@ -26,8 +26,7 @@ import org.apache.wicket.MarkupContainer;
  * This is the model interface of ContentSource. ContentSource is categorized as the model of a Wicket component
  * hierarchy, which can be unloaded, replaced and moved in runtime, without needing to shut the application down.
  */
-public interface ContentSource<E extends Component>
-{
+public interface ContentSource<E extends Component> {
 
     /**
      * Service property name for the configuration of the <i>MountPoint</i>.
@@ -91,8 +90,8 @@ public interface ContentSource<E extends Component>
     /**
      * Required Roles are used for ContentSource authorization.
      * <p>
-     * The current user must have all the roles that are listed in the REQUIRED_ROLES property of a
-     * ContentSource. Otherwise the component(s) of that ContentSource will not be created.
+     * The current user must have all the roles that are listed in the REQUIRED_ROLES property of a ContentSource.
+     * Otherwise the component(s) of that ContentSource will not be created.
      * </p>
      * <p>
      * This service property is an array of Strings.
@@ -102,24 +101,23 @@ public interface ContentSource<E extends Component>
 
     /**
      * Returns the content source id.
-     *
+     * 
      * @return The content source id.
-     *
+     * 
      * @since 1.0.0
      */
     String getSourceId();
 
     /**
-     * Returns the destinations of this {@code ContentSource} instance. This method must not return {@code null}
-     * object.
+     * Returns the destinations of this {@code ContentSource} instance. This method must not return {@code null} object.
      * <p>
      * The <i>Destination</i> is constructed by concatenating the <i>AggregationPointMatchExpression</i>, ".", and the
      * <i>ContentMatchExpression</i>. For example, If the <i>AggregationPointMatchExpression</i> is "overviewtabs" and
      * the <i>ContentMatchExpression</i> is "quickMenu", the returned <i>Destination</i> is "overviewtabs.quickMenu".
      * </p>
-     *
+     * 
      * @return The destination id of this {@code ContentSource} instance.
-     *
+     * 
      * @since 1.0.0
      */
     String[] getDestinations();
@@ -134,28 +132,28 @@ public interface ContentSource<E extends Component>
      * this method;</li>
      * </ul>
      * </p>
-     *
+     * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
-     *
+     * 
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    <T extends MarkupContainer> E createSourceComponent( String wicketId );
+    <T extends MarkupContainer> E createSourceComponent(String wicketId);
 
     /**
      * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
      * {@code null} object.
-     *
+     * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
-     * @param parent   the parent {@code MarkupContainer}
-     *
+     * @param parent the parent {@code MarkupContainer}
+     * 
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      */
-    <T extends MarkupContainer> E createSourceComponent( String wicketId, T parent );
+    <T extends MarkupContainer> E createSourceComponent(String wicketId, T parent);
 }

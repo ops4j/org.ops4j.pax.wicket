@@ -20,13 +20,12 @@ package org.ops4j.pax.wicket.api;
 import org.apache.wicket.request.IRequestCycleProcessor;
 
 /**
- * Use if you need to provide your own IRequestCycleProcessor to your
- * Wicket application.
- *
+ * Use if you need to provide your own IRequestCycleProcessor to your Wicket application.
+ * 
  * @author David Leangen
  */
-public interface RequestCycleProcessorFactory
-{
+public interface RequestCycleProcessorFactory {
 
     IRequestCycleProcessor newRequestCycleProcessor();
+
 }

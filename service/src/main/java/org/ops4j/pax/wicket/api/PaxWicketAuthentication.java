@@ -21,17 +21,16 @@ import org.apache.wicket.authorization.strategies.role.Roles;
 
 /**
  * PaxWicketAuthentication represents a subset of the current Session.
- *
- * Typical usage would be;
- * <code><pre>
+ * 
+ * Typical usage would be; <code><pre>
  * import org.apache.wicket.authorization.AuthorizationException;
  * import org.apache.wicket.authorization.strategies.role.Roles;
- *
+ * 
  * :
- *
+ * 
  * public class SomeContentSource extends AbstractContentSource
  * {
- *
+ * 
  *     protected Panel createComponent( String contentId )
  *     {
  *         PaxWicketAuthentication auth = getAuthentication();
@@ -45,22 +44,21 @@ import org.apache.wicket.authorization.strategies.role.Roles;
  *     }
  * }
  * </pre></code>
- *
+ * 
  * @since 1.0.0
  */
-public interface PaxWicketAuthentication
-{
+public interface PaxWicketAuthentication {
 
     /**
      * @return The user that is logged in, in the request that this PaxWicketAuthentication is part of.
-     *
+     * 
      * @since 1.0.0
      */
     String getLoggedInUser();
 
     /**
      * @return The Roles of the user that is logged in.
-     *
+     * 
      * @since 1.0.0
      */
     Roles getRoles();
