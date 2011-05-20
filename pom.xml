@@ -111,7 +111,6 @@
   <modules>
     <module>service</module>
     <module>samples</module>
-    <module>equinox-target-platform</module>
     <module>features</module>
     <module>itests</module>
   </modules>
