@@ -24,7 +24,7 @@
     <feature>jetty</feature>
     <feature>jetty-jaas</feature>
     <feature>http</feature>
-    <feature version="${karaf.version}">eventadmin</feature>
+    <feature>eventadmin</feature>
     <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-service/${project.version}</bundle>
   </feature>
 
