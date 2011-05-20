@@ -30,7 +30,7 @@
 
   <properties>
     <pax.exam.version>1.2.4</pax.exam.version>
-    <slf4j.version>1.5.3</slf4j.version>
+    <slf4j.version>1.6.1</slf4j.version>
     <karaf.version>2.2.0</karaf.version>
     <felix.eventadmin.version>1.2.8</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
