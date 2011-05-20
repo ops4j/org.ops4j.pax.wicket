@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.ops4j.pax.wicket.itests</groupId>
     <artifactId>pax-wicket-itests-parent</artifactId>
@@ -20,10 +21,6 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.ops4j</groupId>
-        <artifactId>maven-pax-plugin</artifactId>
-      </plugin>
     </plugins>
   </build>
 
@@ -39,8 +36,6 @@
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
     </dependency>
-
-
     <!-- Pax exam -->
     <dependency>
       <groupId>org.ops4j.pax.exam</groupId>
@@ -54,23 +49,13 @@
       <groupId>org.ops4j.pax.exam</groupId>
       <artifactId>pax-exam-container-default</artifactId>
     </dependency>
-
+    <!-- Test Dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>compile</scope>
     </dependency>
-
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>ops4j-snapshots</id>
-      <url>http://repository.ops4j.org/mvn-snapshots</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>daily</updatePolicy>
-      </snapshots>
-    </repository>
-  </repositories>
 </project>
+
