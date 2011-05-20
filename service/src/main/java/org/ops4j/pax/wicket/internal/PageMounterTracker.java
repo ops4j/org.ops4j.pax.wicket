@@ -34,11 +34,11 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
-final class PageMounterTracker extends ServiceTracker {
+public final class PageMounterTracker extends ServiceTracker {
 
     private final WebApplication m_application;
 
-    PageMounterTracker(BundleContext context, WebApplication application, String applicationName)
+    public PageMounterTracker(BundleContext context, WebApplication application, String applicationName)
         throws IllegalArgumentException {
         super(context, createFilter(context, applicationName), null);
         validateNotNull(application, "application");

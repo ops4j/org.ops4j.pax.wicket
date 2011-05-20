@@ -21,6 +21,9 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
 
+import org.apache.wicket.protocol.http.WebApplication;
+import org.ops4j.pax.wicket.api.ApplicationFactory;
+import org.ops4j.pax.wicket.api.ApplicationLifecycleListener;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
@@ -49,10 +52,31 @@ public class Activator implements BundleActivator {
         m_overviewPageFactory = new OverviewPageFactory(bundleContext, m_store, applicationName, "overview");
         m_overviewPageFactory.register();
 
+        // Creating a Wicket Application you've two options:
+        // a) etiher create the WicketApplicationFactory yourself or...
+        createPaxWicketApplicationFactoryUsingOwnWicketApplication(bundleContext, mountPoint, applicationName);
+        // b) ... let pax-wicket do all the work.
+        // createPaxWicketApplicationFactoryPaxWicketDoingTheWork(bundleContext, mountPoint, applicationName);
+
+        // This registers the pax-wicket service as OSGi Service.
+        m_serviceRegistration = m_applicationFactory.register();
+    }
+
+    private void createPaxWicketApplicationFactoryPaxWicketDoingTheWork(BundleContext bundleContext, String mountPoint,
+            String applicationName) {
         m_applicationFactory =
             new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName);
+    }
 
-        m_serviceRegistration = m_applicationFactory.register();
+    private void createPaxWicketApplicationFactoryUsingOwnWicketApplication(BundleContext bundleContext,
+            String mountPoint, String applicationName) {
+        m_applicationFactory =
+            new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName,
+                new ApplicationFactory() {
+                    public WebApplication createWebApplication(ApplicationLifecycleListener lifecycleListener) {
+                        return new WicketApplication(lifecycleListener);
+                    }
+                });
     }
 
     public void stop(BundleContext bundleContext) throws Exception {
