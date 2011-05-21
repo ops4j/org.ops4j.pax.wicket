@@ -32,7 +32,5 @@ Export-Package: \
  org.ops4j.pax.wicket.util.*;version="${project.version}", \
  org.apache.wicket.*;version="${wicket.dependency.version}"
 
-Include-Resource:\
- wicket.properties=src/main/resources/wicket.properties
-
 Bundle-ClassPath: .
+
