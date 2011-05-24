@@ -22,7 +22,7 @@
 
   <!-- Departmentstore example suite provided with paxwicket -->
   <feature name="wicket-samples" version="${project.version}">
-    <feature version="${project.version}">wicket</feature>
+    <feature version="${project.version}">wicket-spring</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.model/pax-wicket-samples-model-core/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.view/pax-wicket-samples-view-about/${project.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket.samples.view/pax-wicket-samples-view-application/${project.version}</bundle>
