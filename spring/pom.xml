@@ -62,35 +62,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <!--<Private-Package>
-            </Private-Package>-->
-            <!--<Import-Package>
-              org.osgi.service.useradmin; resolution:=optional,
-              junit.*; resolution:=optional,
-              javax.portlet.*; resolution:=optional,
-              org.apache.portals.*; resolution:=optional,
-              org.slf4j.*; version="[1,2)",
-              javax.crypto.*,
-              javax.imageio.*,
-              javax.servlet.*,
-              javax.swing.*,
-              javax.xml.*,
-              org.apache.wicket.*;version="${wicket.dependency.version}",
-              org.osgi.framework;version="1.4",
-              org.osgi.service.*;version="1",
-              org.osgi.util.*;version="1",
-              org.xml.sax,
-              org.w3c.dom,
-              !sun.*
-            </Import-Package>-->
-            <!--<Export-Package>
-              org.ops4j.pax.wicket.api;version="${project.version}",
-              org.ops4j.pax.wicket.util.*;version="${project.version}",
-              org.apache.wicket.*;version="${wicket.dependency.version}"
-            </Export-Package>-->
-            <Bundle-ClassPath>
-              .
-            </Bundle-ClassPath>
+            <Bundle-ClassPath>.</Bundle-ClassPath>
           </instructions>
         </configuration>
       </plugin>
@@ -109,6 +81,38 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-extender</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-annotation</artifactId>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.logging</groupId>
