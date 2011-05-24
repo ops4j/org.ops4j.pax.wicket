@@ -59,6 +59,48 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Private-Package>
+              com.sun.activation.registries,
+              javax.activation,
+              org.apache.geronimo.osgi.locator,
+              org.apache.geronimo.osgi.registry.api,
+              org.ops4j.lang,
+              org.ops4j.pax.wicket.internal.*
+            </Private-Package>
+            <Bundle-Activator>
+              org.ops4j.pax.wicket.internal.Activator
+            </Bundle-Activator>
+            <Import-Package>
+              org.osgi.service.useradmin; resolution:=optional,
+              junit.*; resolution:=optional,
+              javax.portlet.*; resolution:=optional,
+              org.apache.portals.*; resolution:=optional,
+              org.slf4j.*; version="[1,2)",
+              javax.crypto.*,
+              javax.imageio.*,
+              javax.servlet.*,
+              javax.swing.*,
+              javax.xml.*,
+              org.apache.wicket.*;version="${wicket.dependency.version}",
+              org.osgi.framework;version="1.4",
+              org.osgi.service.*;version="1",
+              org.osgi.util.*;version="1",
+              org.xml.sax,
+              org.w3c.dom,
+              !sun.*
+            </Import-Package>
+            <Export-Package>
+              org.ops4j.pax.wicket.api;version="${project.version}",
+              org.ops4j.pax.wicket.util.*;version="${project.version}",
+              org.apache.wicket.*;version="${wicket.dependency.version}"
+            </Export-Package>
+            <Bundle-ClassPath>
+              .
+            </Bundle-ClassPath>
+          </instructions>
+        </configuration>
       </plugin>
     </plugins>
   </build>
