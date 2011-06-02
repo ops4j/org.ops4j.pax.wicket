@@ -31,7 +31,6 @@
   <feature name="wicket-spring" version="${project.version}">
     <feature>wicket</feature>
     <feature>spring-dm</feature>
-    <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-spring/${project.version}</bundle>
   </feature>
 
 </features>

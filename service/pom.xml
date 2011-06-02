@@ -87,8 +87,19 @@
               org.osgi.framework;version="1.4",
               org.osgi.service.*;version="1",
               org.osgi.util.*;version="1",
+              net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,
+              net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
               org.xml.sax,
               org.w3c.dom,
+              org.springframework.beans;version="[3.0,4)";resolution:=optional,
+              org.springframework.beans.factory.config;version="[3.0,4)";resolution:=optional,
+              org.springframework.beans.factory.support;version="[3.0,4)";resolution:=optional,
+              org.springframework.beans.factory.xml;version="[3.0,4)";resolution:=optional,
+              org.springframework.context;version="[3.0,4)";resolution:=optional,
+              org.springframework.osgi.context;version="[1.2,2)";resolution:=optional,
+              org.springframework.util;version="[3.0,4)";resolution:=optional,
+              org.springframework.beans.factory;version="[3.0,4)";resolution:=optional,
+              org.springframework.context.support;version="[3.0,4)";resolution:=optional,
               !sun.*
             </Import-Package>
             <Export-Package>
@@ -115,6 +126,38 @@
       <artifactId>geronimo-osgi-registry</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-extender</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.osgi</groupId>
+      <artifactId>spring-osgi-annotation</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-osgi-locator</artifactId>
     </dependency>
@@ -127,7 +170,10 @@
       <artifactId>geronimo-servlet_2.5_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.cglib</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.jmock</groupId>
       <artifactId>jmock-junit4</artifactId>

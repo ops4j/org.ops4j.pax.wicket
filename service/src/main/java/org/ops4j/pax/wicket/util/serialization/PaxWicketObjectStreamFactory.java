@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -28,55 +29,41 @@ import org.apache.wicket.settings.IApplicationSettings;
 import org.apache.wicket.util.io.IObjectStreamFactory;
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectInputStream;
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectOutputStream;
-import org.ops4j.pax.wicket.util.serialization.development.DevModeObjectInputStream;
-import org.ops4j.pax.wicket.util.serialization.development.DevModeObjectOutputStream;
 
 /**
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class PaxWicketObjectStreamFactory
-    implements IObjectStreamFactory
-{
+public final class PaxWicketObjectStreamFactory implements IObjectStreamFactory {
 
     private boolean m_developmentMode;
 
-    public PaxWicketObjectStreamFactory( boolean isDevelopmentMode )
-    {
+    public PaxWicketObjectStreamFactory(boolean isDevelopmentMode) {
         m_developmentMode = isDevelopmentMode;
     }
 
-    public final ObjectInputStream newObjectInputStream( InputStream in )
-        throws IOException
-    {
+    public final ObjectInputStream newObjectInputStream(InputStream in)
+        throws IOException {
         IClassResolver classResolver = getClassResolver();
-        if( m_developmentMode )
-        {
-            return new DevModeObjectInputStream( in, classResolver );
-        }
-        else
-        {
-            return new PaxWicketObjectInputStream( in, classResolver );
+        if (m_developmentMode) {
+            return new PaxWicketObjectInputStream(in, classResolver);
+        } else {
+            return new PaxWicketObjectInputStream(in, classResolver);
         }
     }
 
-    private IClassResolver getClassResolver()
-    {
+    private IClassResolver getClassResolver() {
         Application application = WebApplication.get();
         IApplicationSettings appSettings = application.getApplicationSettings();
         return appSettings.getClassResolver();
     }
 
-    public final ObjectOutputStream newObjectOutputStream( OutputStream out )
-        throws IOException
-    {
-        if( m_developmentMode )
-        {
-            return new DevModeObjectOutputStream( out );
-        }
-        else
-        {
-            return new PaxWicketObjectOutputStream( out );
+    public final ObjectOutputStream newObjectOutputStream(OutputStream out)
+        throws IOException {
+        if (m_developmentMode) {
+            return new PaxWicketObjectOutputStream(out);
+        } else {
+            return new PaxWicketObjectOutputStream(out);
         }
     }
 }

@@ -27,41 +27,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class Activator
-    implements BundleActivator
-{
+        implements BundleActivator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( Activator.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
     private HttpTracker m_httpTracker;
     private ServiceTracker m_applicationFactoryTracker;
     private SerializationActivator m_serializationActivator;
 
-    public final void start( BundleContext context )
-        throws Exception
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
+    public final void start(BundleContext context) throws Exception {
+        if (LOGGER.isDebugEnabled()) {
             Bundle bundle = context.getBundle();
             String bundleSymbolicName = bundle.getSymbolicName();
 
-            LOGGER.debug( "Initializing [" + bundleSymbolicName + "] bundle." );
+            LOGGER.debug("Initializing [" + bundleSymbolicName + "] bundle.");
         }
 
-        m_httpTracker = new HttpTracker( context );
+        m_httpTracker = new HttpTracker(context);
         m_httpTracker.open();
 
-        m_applicationFactoryTracker = new PaxWicketAppFactoryTracker( context, m_httpTracker );
+        m_applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, m_httpTracker);
         m_applicationFactoryTracker.open();
 
         m_serializationActivator = new SerializationActivator();
-        m_serializationActivator.start( context );
-        context.getBundle().getResources( "pathToResource" );
+        m_serializationActivator.start(context);
+        context.getBundle().getResources("pathToResource");
     }
 
-    public final void stop( BundleContext context )
-        throws Exception
-    {
-        m_serializationActivator.stop( context );
+    public final void stop(BundleContext context) throws Exception {
+        m_serializationActivator.stop(context);
         m_httpTracker.close();
         m_applicationFactoryTracker.close();
 
@@ -69,12 +63,12 @@ public final class Activator
         m_httpTracker = null;
         m_applicationFactoryTracker = null;
 
-        if( LOGGER.isDebugEnabled() )
-        {
+        if (LOGGER.isDebugEnabled()) {
             Bundle bundle = context.getBundle();
             String bundleSymbolicName = bundle.getSymbolicName();
 
-            LOGGER.debug( "Bundle [" + bundleSymbolicName + "] stopped." );
+            LOGGER.debug("Bundle [" + bundleSymbolicName + "] stopped.");
         }
     }
+
 }
