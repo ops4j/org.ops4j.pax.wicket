@@ -19,14 +19,14 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Session;
-import org.apache.wicket.authorization.strategies.role.Roles;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.apache.wicket.Session;
+import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
@@ -34,9 +34,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ManagedService;
 
-public abstract class AbstractContentSource<E extends Component>
-    implements ContentSource<E>, ManagedService
-{
+public abstract class AbstractContentSource implements ContentSource, ManagedService {
 
     private static final String[] ROLES_TYPE = new String[0];
     private static final PaxWicketAuthentication DUMMY_AUTHENTICATION = new PaxWicketAuthentication()
@@ -60,158 +58,116 @@ public abstract class AbstractContentSource<E extends Component>
 
     /**
      * Construct an instance with {@code AbstractContentSource}.
-     *
-     * @param bundleContext   The bundle context. This argument must not be {@code null}.
-     * @param wicketId        The WicketId. This argument must not be {@code null} or empty.
+     * 
+     * @param bundleContext The bundle context. This argument must not be {@code null}.
+     * @param wicketId The WicketId. This argument must not be {@code null} or empty.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      * @since 1.0.0
      */
-    protected AbstractContentSource( BundleContext bundleContext, String wicketId, String applicationName )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( wicketId, "wicketId" );
-        validateNotEmpty( applicationName, "applicationName" );
+    protected AbstractContentSource(BundleContext bundleContext, String wicketId, String applicationName)
+        throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundleContext");
+        validateNotEmpty(wicketId, "wicketId");
+        validateNotEmpty(applicationName, "applicationName");
 
         m_properties = new Hashtable<String, Object>();
-        m_properties.put( Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId );
+        m_properties.put(Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId);
         m_bundleContext = bundleContext;
 
-        setWicketId( wicketId );
-        setApplicationName( applicationName );
+        setWicketId(wicketId);
+        setApplicationName(applicationName);
     }
 
     /**
      * Returns the destinations.
-     *
+     * 
      * @return The destinations.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String[] getDestinations()
-    {
-        return getStringArrayProperty( DESTINATIONS );
+    public final String[] getDestinations() {
+        return getStringArrayProperty(DESTINATIONS);
     }
 
     /**
      * Sets the destination id.
-     *
+     * 
      * @param destinationIds The destination ids. This argument must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
      * @since 1.0.0
      */
-    public final void setDestination( String... destinationIds )
-        throws IllegalArgumentException
-    {
-        validateNotNull( destinationIds, "destinationIds" );
+    public final void setDestination(String... destinationIds)
+        throws IllegalArgumentException {
+        validateNotNull(destinationIds, "destinationIds");
 
-        m_properties.put( DESTINATIONS, destinationIds );
+        m_properties.put(DESTINATIONS, destinationIds);
     }
 
-    /**
-     * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
-     * {@code null} object.
-     * <p>
-     * General convention:<br/>
-     * <ul>
-     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
-     * this method;</li>
-     * </ul>
-     * </p>
-     *
-     * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
-     *         this ContentSource.
-     *
-     * @since 1.0.0
-     */
-    public final E createSourceComponent( String wicketId )
-        throws IllegalArgumentException
-    {
-        boolean isRolesApproved = isRolesAuthorized();
-        if( isRolesApproved )
-        {
-            return createWicketComponent( wicketId );
-        }
-        else
-        {
-            return onAuthorizationFailed( wicketId );
-        }
-    }
+    // public final E createSourceComponent(String wicketId)
+    // throws IllegalArgumentException {
+    // boolean isRolesApproved = isRolesAuthorized();
+    // if (isRolesApproved) {
+    // return createWicketComponent(wicketId);
+    // } else {
+    // return onAuthorizationFailed(wicketId);
+    // }
+    // }
+    //
+    // public final E createSourceComponent(String wicketId, MarkupContainer parent)
+    // throws IllegalArgumentException {
+    // boolean isRolesApproved = isRolesAuthorized();
+    // if (isRolesApproved) {
+    // return createWicketComponent(wicketId, parent);
+    // } else {
+    // return onAuthorizationFailed(wicketId);
+    // }
+    // }
 
-    public final E createSourceComponent( String wicketId, MarkupContainer parent )
-        throws IllegalArgumentException
-    {
-        boolean isRolesApproved = isRolesAuthorized();
-        if( isRolesApproved )
-        {
-            return createWicketComponent( wicketId, parent );
-        }
-        else
-        {
-            return onAuthorizationFailed( wicketId );
-        }
-    }
-
-    /**
-     * This method is called when the Authorization of the ContentSource has failed.
-     *
-     * @param wicketId The WicketId of the content to be created.
-     *
-     * @return null by default. Override to return a customized <i>protected</i> component, such as a label
-     *         without the link.
-     */
-    protected E onAuthorizationFailed( String wicketId )
-    {
-        return null;
-    }
+    // protected E onAuthorizationFailed(String wicketId) {
+    // return null;
+    // }
 
     /**
      * Returns {@code true} if the user roles is authorized to create this content source component, {@code false}
      * otherwise.
-     *
+     * 
      * @return A {@code boolean} indicator whether the user roles can create this content source component.
-     *
+     * 
      * @since 1.0.0
      */
-    private boolean isRolesAuthorized()
-    {
+    private boolean isRolesAuthorized() {
         PaxWicketAuthentication authentication = getAuthentication();
         Roles userRoles = authentication.getRoles();
 
         boolean isRequiredRolesAuthorized = true;
-        if( m_requiredRoles != null )
-        {
-            isRequiredRolesAuthorized = m_requiredRoles.hasAllRoles( userRoles );
+        if (m_requiredRoles != null) {
+            isRequiredRolesAuthorized = m_requiredRoles.hasAllRoles(userRoles);
         }
 
         boolean isBasicRolesAuthorized = true;
-        if( m_basicRoles != null && !m_basicRoles.isEmpty() )
-        {
-            isBasicRolesAuthorized = userRoles.hasAnyRole( m_basicRoles );
+        if (m_basicRoles != null && !m_basicRoles.isEmpty()) {
+            isBasicRolesAuthorized = userRoles.hasAnyRole(m_basicRoles);
         }
 
         return isRequiredRolesAuthorized && isBasicRolesAuthorized;
     }
 
-    private String[] getStringArrayProperty( String key )
-        throws IllegalArgumentException
-    {
-        validateNotEmpty( key, "key" );
+    private String[] getStringArrayProperty(String key)
+        throws IllegalArgumentException {
+        validateNotEmpty(key, "key");
 
-        return (String[]) m_properties.get( key );
+        return (String[]) m_properties.get(key);
     }
 
-    private String getStringProperty( String key, String defaultValue )
-        throws IllegalArgumentException
-    {
-        validateNotEmpty( key, "key" );
+    private String getStringProperty(String key, String defaultValue)
+        throws IllegalArgumentException {
+        validateNotEmpty(key, "key");
 
-        String value = (String) m_properties.get( key );
-        if( value == null )
-        {
+        String value = (String) m_properties.get(key);
+        if (value == null) {
             return defaultValue;
         }
         return value;
@@ -219,56 +175,51 @@ public abstract class AbstractContentSource<E extends Component>
 
     /**
      * Returns the content source id.
-     *
+     * 
      * @return The content source id.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String getSourceId()
-    {
-        return getStringProperty( SOURCE_ID, null );
+    public final String getSourceId() {
+        return getStringProperty(SOURCE_ID, null);
     }
 
     /**
      * Set the WicketId.
-     *
+     * 
      * @param wicketId The WicketId. This argument must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    private void setWicketId( String wicketId )
-        throws IllegalArgumentException
-    {
-        validateNotEmpty( wicketId, "wicketId" );
-        m_properties.put( SOURCE_ID, wicketId );
+    private void setWicketId(String wicketId)
+        throws IllegalArgumentException {
+        validateNotEmpty(wicketId, "wicketId");
+        m_properties.put(SOURCE_ID, wicketId);
     }
 
     /**
      * Returns the application name.
-     *
+     * 
      * @return The application name.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String getApplicationName()
-    {
-        return getStringProperty( APPLICATION_NAME, null );
+    public final String getApplicationName() {
+        return getStringProperty(APPLICATION_NAME, null);
     }
 
     /**
      * Returns the Authentication of the current request.
-     *
+     * 
      * It is possible to obtain the Username of the logged in user as well as which roles that this user has assigned to
      * it.
-     *
+     * 
      * @return the Authentication of the current request.
      */
-    protected PaxWicketAuthentication getAuthentication()
-    {
+    protected PaxWicketAuthentication getAuthentication() {
         Session session = Session.get();
-        if( session instanceof PaxWicketAuthentication )
-        {
+        if (session instanceof PaxWicketAuthentication) {
             return (PaxWicketAuthentication) session;
         }
 
@@ -277,139 +228,87 @@ public abstract class AbstractContentSource<E extends Component>
 
     /**
      * Sets the application name.
-     *
+     * 
      * @param applicationName The application name. This argument must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code applicationName} argument is {@code null}.
      * @since 1.0.0
      */
-    public final void setApplicationName( String applicationName )
-        throws IllegalArgumentException
-    {
-        validateNotEmpty( applicationName, "applicationName" );
+    public final void setApplicationName(String applicationName)
+        throws IllegalArgumentException {
+        validateNotEmpty(applicationName, "applicationName");
 
-        m_properties.put( APPLICATION_NAME, applicationName );
+        m_properties.put(APPLICATION_NAME, applicationName);
     }
 
-    /**
-     * Create component with the specified {@code wicketId}.
-     * <p>
-     * General convention:<br/>
-     * <ul>
-     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
-     * this method;</li>
-     * </ul>
-     * </p>
-     *
-     * @param wicketId The WicketId. This argument must not be {@code null}.
-     *
-     * @return The wicket component with the specified {@code wicketId}.
-     *
-     * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
-     * @since 1.0.0
-     */
-    protected abstract E createWicketComponent( String wicketId )
-        throws IllegalArgumentException;
-
-    /**
-     * Default implementation that ignores the parent component.
-     * Override this if you want to inject the parent component into your
-     * created Wicket {@code Component}
-     *
-     * @param wicketId The WicketId. This argument must not be {@code null}.
-     * @param parent   the parent {@code MarkupContainer}
-     *
-     * @return The wicket component with the specified {@code wicketId}.
-     *
-     * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
-     */
-    protected <C extends MarkupContainer> E createWicketComponent( String wicketId, C parent )
-        throws IllegalArgumentException
-    {
-        return createWicketComponent( wicketId );
-    }
-
-    @SuppressWarnings( "unchecked" )
-    public final void updated( Dictionary config )
-    {
-        synchronized( this )
-        {
-            if( config != null )
-            {
+    @SuppressWarnings("unchecked")
+    public final void updated(Dictionary config) {
+        synchronized (this) {
+            if (config != null) {
                 m_properties = config;
-                String[] required = (String[]) m_properties.get( REQUIRED_ROLES );
-                if( required != null )
-                {
-                    m_requiredRoles = new Roles( required );
-                }
-                else
-                {
+                String[] required = (String[]) m_properties.get(REQUIRED_ROLES);
+                if (required != null) {
+                    m_requiredRoles = new Roles(required);
+                } else {
                     m_requiredRoles = new Roles();
                 }
-                String[] basic = (String[]) m_properties.get( BASIC_ROLES );
-                if( basic != null )
-                {
-                    m_basicRoles = new Roles( basic );
-                }
-                else
-                {
+                String[] basic = (String[]) m_properties.get(BASIC_ROLES);
+                if (basic != null) {
+                    m_basicRoles = new Roles(basic);
+                } else {
                     m_basicRoles = new Roles();
                 }
-                m_registration.setProperties( m_properties );
+                m_registration.setProperties(m_properties);
             }
         }
     }
 
     /**
      * Register the specified {@code AbstractContentSource} instance.
-     *
+     * 
      * @return The specified {@code AbstractContentSource}.
-     *
+     * 
      * @since 1.0.0
      */
-    public final ServiceRegistration register()
-    {
-        synchronized( this )
-        {
+    public void register() {
+        synchronized (this) {
             String[] serviceNames =
                 {
                     ContentSource.class.getName(), ManagedService.class.getName()
                 };
-            m_registration = m_bundleContext.registerService( serviceNames, this, m_properties );
-            return m_registration;
+            m_registration = m_bundleContext.registerService(serviceNames, this, m_properties);
         }
     }
 
-    public Roles getRequiredRoles()
-    {
+    public void dispose() {
+        m_registration.unregister();
+    }
+
+    public Roles getRequiredRoles() {
         return m_requiredRoles;
     }
 
-    public Roles getBasicRoles()
-    {
+    public Roles getBasicRoles() {
         return m_basicRoles;
     }
 
-    public final void setRoles( Roles requiredRoles, Roles basicRoles )
-    {
+    public final void setRoles(Roles requiredRoles, Roles basicRoles) {
         boolean changed = false;
-        if( requiredRoles != null )
-        {
+        if (requiredRoles != null) {
             changed = true;
             m_requiredRoles = requiredRoles;
-            m_properties.put( REQUIRED_ROLES, requiredRoles.toArray( ROLES_TYPE ) );
+            m_properties.put(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
         }
 
-        if( basicRoles != null )
-        {
+        if (basicRoles != null) {
             m_basicRoles = basicRoles;
-            m_properties.put( REQUIRED_ROLES, basicRoles.toArray( ROLES_TYPE ) );
+            m_properties.put(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
             changed = true;
         }
 
-        if( changed && m_registration != null )
-        {
-            m_registration.setProperties( m_properties );
+        if (changed && m_registration != null) {
+            m_registration.setProperties(m_properties);
         }
     }
+
 }

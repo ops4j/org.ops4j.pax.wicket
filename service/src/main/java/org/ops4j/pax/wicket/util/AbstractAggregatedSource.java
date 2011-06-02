@@ -19,13 +19,12 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authorization.strategies.role.Roles;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
@@ -58,9 +57,9 @@ import org.osgi.service.cm.ManagedService;
  *             }
  *         }
  * </pre></code>
- *
+ * 
  * And the MyPanel handles the generation of the Wicket Panel instance. Example;
- *
+ * 
  * <code><pre>
  * public class PrintersPanel extends Panel
  * {
@@ -68,14 +67,14 @@ import org.osgi.service.cm.ManagedService;
  *     public static final String WICKET_ID_NAME_LABEL = &quot;name&quot;;
  *     private static final String WICKET_ID_PRINTER = &quot;printer&quot;;
  *     private static final String WICKET_ID_PRINTERS = &quot;printers&quot;;
- *
+ * 
  *     FloorPanel( String id, ContentAggregator container, Floor floor )
  *     {
  *         super( id, new Model( &quot;printers&quot; ) );
  *         ListView listView = new ListView( WICKET_ID_PRINTERS )
  *         {
  *             private static final long serialVersionUID = 1L;
- *
+ * 
  *             protected void populateItem( final ListItem item )
  *             {
  *                 Component modelObject = (Component) item.getModelObject();
@@ -93,9 +92,9 @@ import org.osgi.service.cm.ManagedService;
  *         add( listView );
  *     }
  * }
- * </pre></code> In the above example, we are wiring printer <i>ContentSource</i>s to a printers panel. The rendering of each
- * Printer view is up to the wired printer, and the aggregator just need a little bit of html to define its own panel.
- * Something like this; <code><pre>
+ * </pre></code> In the above example, we are wiring printer <i>ContentSource</i>s to a printers panel. The rendering of
+ * each Printer view is up to the wired printer, and the aggregator just need a little bit of html to define its own
+ * panel. Something like this; <code><pre>
  *           &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
  *                    xmlns:wicket=&quot;http://wicket.sourceforge.net/&quot;
  *                    xml:lang=&quot;en&quot;
@@ -115,8 +114,7 @@ import org.osgi.service.cm.ManagedService;
  * </p>
  */
 public abstract class AbstractAggregatedSource<E extends Component> extends BaseAggregator
-    implements ContentAggregator, ContentSource<E>, ContentTrackingCallback, ManagedService
-{
+        implements ContentAggregator, ContentSource, ContentTrackingCallback, ManagedService {
 
     private static final String[] ROLES_TYPE = new String[0];
 
@@ -125,45 +123,42 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
 
     /**
      * Construct an instance of {@code AbstractContentAggregator} with the specified arguments.
-     *
-     * @param bundleContext    The bundle context. This argument must not be {@code null}.
-     * @param applicationName  The application name. This argument must not be {@code null} or empty.
+     * 
+     * @param bundleContext The bundle context. This argument must not be {@code null}.
+     * @param applicationName The application name. This argument must not be {@code null} or empty.
      * @param aggregationPoint The aggregation point id. This argument must not be {@code null} or empty.
-     * @param destination      The destination id. This argument must not be {@code null} or empty.
-     *
+     * @param destination The destination id. This argument must not be {@code null} or empty.
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
-    protected AbstractAggregatedSource( BundleContext bundleContext, String applicationName, String aggregationPoint,
-                                        String destination )
-        throws IllegalArgumentException
-    {
-        super( bundleContext, applicationName, aggregationPoint );
-        validateNotEmpty( destination, "destination" );
+    protected AbstractAggregatedSource(BundleContext bundleContext, String applicationName, String aggregationPoint,
+                                        String destination)
+        throws IllegalArgumentException {
+        super(bundleContext, applicationName, aggregationPoint);
+        validateNotEmpty(destination, "destination");
 
-        setDestination( destination );
+        setDestination(destination);
     }
 
     /**
      * Returns the source id.
-     *
+     * 
      * @return The source id.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String getSourceId()
-    {
-        return getStringProperty( SOURCE_ID, null );
+    public final String getSourceId() {
+        return getStringProperty(SOURCE_ID, null);
     }
 
     /**
      * Returns the destination of this {@code ContentSource} instance. This method must not return {@code null} object.
-     *
+     * 
      * @since 1.0.0
      */
-    public final String[] getDestinations()
-    {
-        return getStringArrayProperty( ContentSource.DESTINATIONS );
+    public final String[] getDestinations() {
+        return getStringArrayProperty(ContentSource.DESTINATIONS);
     }
 
     /**
@@ -172,29 +167,25 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * Note: Destination property must not be set after this {@code ContentSource} instance is registered to OSGi
      * framework.
      * </p>
-     *
+     * 
      * @param destinations The destinations. This argument must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the specified {@code destination} argument is {@code null} or empty.
      * @since 1.0.0
      */
-    public final void setDestination( String... destinations )
-        throws IllegalArgumentException
-    {
-        validateNotNull( destinations, "destinations" );
+    public final void setDestination(String... destinations)
+        throws IllegalArgumentException {
+        validateNotNull(destinations, "destinations");
 
-        setProperty( ContentSource.DESTINATIONS, destinations );
+        setProperty(ContentSource.DESTINATIONS, destinations);
 
         updateRegistration();
     }
 
     @Override
-    protected String[] getServiceNames()
-    {
-        return new String[]
-            {
-                ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName()
-            };
+    protected String[] getServiceNames() {
+        return new String[]{
+                ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName() };
     }
 
     /**
@@ -207,25 +198,21 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * this method;</li>
      * </ul>
      * </p>
-     *
+     * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
-     *
+     * 
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    public final E createSourceComponent( String wicketId )
-        throws IllegalArgumentException
-    {
+    public final E createSourceComponent(String wicketId)
+        throws IllegalArgumentException {
         boolean isRolesApproved = isRolesAuthorized();
-        if( isRolesApproved )
-        {
-            return createComponent( wicketId );
-        }
-        else
-        {
+        if (isRolesApproved) {
+            return createComponent(wicketId);
+        } else {
             return null;
         }
     }
@@ -240,25 +227,21 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * this method;</li>
      * </ul>
      * </p>
-     *
+     * 
      * @param wicketId The wicket id. This argument must not be {@code null}.
-     *
+     * 
      * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
      *         this ContentSource.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    public <T extends MarkupContainer> E createSourceComponent( String wicketId, T parent )
-        throws IllegalArgumentException
-    {
+    public <T extends MarkupContainer> E createSourceComponent(String wicketId, T parent)
+        throws IllegalArgumentException {
         boolean isRolesApproved = isRolesAuthorized();
-        if( isRolesApproved )
-        {
-            return createComponent( wicketId, parent );
-        }
-        else
-        {
+        if (isRolesApproved) {
+            return createComponent(wicketId, parent);
+        } else {
             return null;
         }
     }
@@ -266,55 +249,47 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     /**
      * Returns {@code true} if the user roles is approved to create this content source component, {@code false}
      * otherwise.
-     *
+     * 
      * @return A {@code boolean} indicator whether user roles is approved to create this content source component.
-     *
+     * 
      * @since 1.0.0
      */
-    private boolean isRolesAuthorized()
-    {
+    private boolean isRolesAuthorized() {
         PaxWicketAuthentication paxWicketAuthentication = getAuthentication();
         Roles userRoles;
-        if( paxWicketAuthentication != null )
-        {
+        if (paxWicketAuthentication != null) {
             userRoles = paxWicketAuthentication.getRoles();
-        }
-        else
-        {
-            userRoles = newRoles( null );
+        } else {
+            userRoles = newRoles(null);
         }
 
-        Roles requiredRoles = newRoles( getStringProperty( REQUIRED_ROLES, null ) );
-        Roles basicRoles = newRoles( getStringProperty( BASIC_ROLES, null ) );
+        Roles requiredRoles = newRoles(getStringProperty(REQUIRED_ROLES, null));
+        Roles basicRoles = newRoles(getStringProperty(BASIC_ROLES, null));
 
         boolean isRequiredRolesAuthorized = true;
-        if( !requiredRoles.isEmpty() )
-        {
-            isRequiredRolesAuthorized = userRoles.hasAllRoles( requiredRoles );
+        if (!requiredRoles.isEmpty()) {
+            isRequiredRolesAuthorized = userRoles.hasAllRoles(requiredRoles);
         }
 
         boolean isBasicRolesAuthorized = true;
-        if( !basicRoles.isEmpty() )
-        {
-            isBasicRolesAuthorized = userRoles.hasAnyRole( basicRoles );
+        if (!basicRoles.isEmpty()) {
+            isBasicRolesAuthorized = userRoles.hasAnyRole(basicRoles);
         }
 
         return isRequiredRolesAuthorized && isBasicRolesAuthorized;
     }
 
-    private Roles newRoles( String rolesAsString )
-    {
-        if( rolesAsString == null || rolesAsString.trim().length() == 0 )
-        {
+    private Roles newRoles(String rolesAsString) {
+        if (rolesAsString == null || rolesAsString.trim().length() == 0) {
             return new Roles();
         }
 
-        return new Roles( rolesAsString );
+        return new Roles(rolesAsString);
     }
 
     /**
      * Create component represented by this {@code AbstractContentAggregator} with the specified {@code wicketId}.
-     *
+     * 
      * <p>
      * General convention:<br/>
      * <ul>
@@ -322,80 +297,57 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * this method;</li>
      * </ul>
      * </p>
-     *
+     * 
      * @param wicketId The wicketId. This argument must not be {@code null} nor empty. It maps to the wicket:id of the
-     *                 rendering process in Wicket.
-     *
+     *        rendering process in Wicket.
+     * 
      * @return A new instance of wicket component represented by this {@code AbstractContentAggregator}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if argument is {@code null}.
      * @since 1.0.0
      */
-    protected abstract E createComponent( String wicketId )
+    protected abstract E createComponent(String wicketId)
         throws IllegalArgumentException;
 
     /**
-     * Default implementation that ignores the parent component.
-     * Override this if you want to inject the parent component into your created Wicket {@code Component}
-     *
+     * Default implementation that ignores the parent component. Override this if you want to inject the parent
+     * component into your created Wicket {@code Component}
+     * 
      * @param wicketId The WicketId. This argument must not be {@code null}.
-     * @param parent   the parent {@code MarkupContainer}
-     *
+     * @param parent the parent {@code MarkupContainer}
+     * 
      * @return The wicket component with the specified {@code wicketId}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the either or both arguments are {@code null}.
      * @since 0.5.2
      */
-    protected <T extends MarkupContainer> E createComponent( String wicketId, T parent )
-    {
-        return createComponent( wicketId );
+    protected <T extends MarkupContainer> E createComponent(String wicketId, T parent) {
+        return createComponent(wicketId);
     }
 
-    public final Roles getRequiredRoles()
-    {
+    public final Roles getRequiredRoles() {
         return m_requiredRoles;
     }
 
-    public final Roles getBasicRoles()
-    {
+    public final Roles getBasicRoles() {
         return m_basicRoles;
     }
 
-    public final void setRoles( Roles requiredRoles, Roles basicRoles )
-    {
+    public final void setRoles(Roles requiredRoles, Roles basicRoles) {
         boolean changed = false;
-        if( requiredRoles != null )
-        {
+        if (requiredRoles != null) {
             changed = true;
             m_requiredRoles = requiredRoles;
-            setProperty( REQUIRED_ROLES, requiredRoles.toArray( ROLES_TYPE ) );
+            setProperty(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
         }
-        if( basicRoles != null )
-        {
+        if (basicRoles != null) {
             m_basicRoles = basicRoles;
-            setProperty( REQUIRED_ROLES, basicRoles.toArray( ROLES_TYPE ) );
+            setProperty(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
             changed = true;
         }
-        if( changed )
-        {
+        if (changed) {
             updateRegistration();
         }
-    }
-
-    protected final List<Component> createComponents( String wicketId )
-    {
-        validateNotEmpty( wicketId, "wicketId" );
-        List<ContentSource<?>> contents = getContents( wicketId );
-        List<Component> items = new ArrayList<Component>();
-        for( ContentSource<?> content : contents )
-        {
-            Component comp = content.createSourceComponent( "portal-item" );
-            if( comp != null )
-            {
-                items.add( comp );
-            }
-        }
-        return items;
     }
 
 }

@@ -19,14 +19,11 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-
 /**
  * This is the model interface of ContentSource. ContentSource is categorized as the model of a Wicket component
  * hierarchy, which can be unloaded, replaced and moved in runtime, without needing to shut the application down.
  */
-public interface ContentSource<E extends Component> {
+public interface ContentSource {
 
     /**
      * Service property name for the configuration of the <i>MountPoint</i>.
@@ -122,38 +119,4 @@ public interface ContentSource<E extends Component> {
      */
     String[] getDestinations();
 
-    /**
-     * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
-     * {@code null} object.
-     * <p>
-     * General convention:<br/>
-     * <ul>
-     * <li>In the use case of Wicket 1 environment. The callee of this method responsibles to add the component created
-     * this method;</li>
-     * </ul>
-     * </p>
-     * 
-     * @param wicketId The wicket id. This argument must not be {@code null}.
-     * 
-     * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
-     *         this ContentSource.
-     * 
-     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
-     * @since 1.0.0
-     */
-    <T extends MarkupContainer> E createSourceComponent(String wicketId);
-
-    /**
-     * Create the wicket component represented by this {@code ContentSource} instance. This method must not return
-     * {@code null} object.
-     * 
-     * @param wicketId The wicket id. This argument must not be {@code null}.
-     * @param parent the parent {@code MarkupContainer}
-     * 
-     * @return The wicket component represented by this {@code ContentSource} instance, or null if user has no access to
-     *         this ContentSource.
-     * 
-     * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
-     */
-    <T extends MarkupContainer> E createSourceComponent(String wicketId, T parent);
 }
