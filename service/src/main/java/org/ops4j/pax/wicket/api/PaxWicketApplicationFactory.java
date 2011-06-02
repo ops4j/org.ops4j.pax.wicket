@@ -389,7 +389,7 @@ public final class PaxWicketApplicationFactory
         synchronized (this) {
             String applicationName = getApplicationName();
 
-            if (m_applicationFactory != null) {
+            if (m_applicationFactory == null) {
                 if (m_authenticator != null && m_signinPage != null) {
                     paxWicketApplication = createPredefinedPaxAuthenticatedWicketApplication(applicationName);
                 } else {
