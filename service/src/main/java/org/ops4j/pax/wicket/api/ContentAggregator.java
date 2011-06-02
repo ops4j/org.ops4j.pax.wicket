@@ -19,6 +19,9 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * The <i>ContentAggregator</i> defines the <i>AggregationPoint</i>.
  * <p>
@@ -74,6 +77,18 @@ public interface ContentAggregator {
      * @since 1.0.0
      */
     String getApplicationName();
+
+    boolean isEmpty();
+
+    List<String> getRegisteredSourceIds(String groupId);
+
+    List<String> getRegisteredSourceIds(String groupId, Comparator<ContentSource> comparator);
+
+    <ContentSourceType extends ContentSource> List<ContentSourceType> getEntireAggregationPointContent();
+
+    <ContentSourceType extends ContentSource> List<ContentSourceType> getContentByGroupId(String goupId);
+
+    <ContentSourceType extends ContentSource> ContentSourceType getContentBySourceId(String sourceId);
 
     /**
      * Dispose this {@code ContentAggregator} instance.
