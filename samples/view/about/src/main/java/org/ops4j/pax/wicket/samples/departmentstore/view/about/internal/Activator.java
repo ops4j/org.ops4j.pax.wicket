@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Niclas Hedhman.
+ * Copyright OPS4J
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,38 +17,36 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
-import java.util.Properties;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
+
+import java.util.Properties;
+
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public class Activator
-    implements BundleActivator
-{
+public class Activator implements BundleActivator {
 
     private DepartmentStoreModelTracker m_storeTracker;
     private ServiceRegistration m_registration;
 
-    public void start( BundleContext context )
-        throws Exception
-    {
-        m_storeTracker = new DepartmentStoreModelTracker( context );
+    public void start(BundleContext context)
+        throws Exception {
+        m_storeTracker = new DepartmentStoreModelTracker(context);
         m_storeTracker.open();
 
-        AboutPageFactory pageFactory = new AboutPageFactory( m_storeTracker, context );
+        AboutPageFactory pageFactory = new AboutPageFactory(m_storeTracker, context);
         Properties props = new Properties();
-        props.put( PAGE_NAME, "about" );
-        props.put( APPLICATION_NAME, "departmentstore" );
-        m_registration = context.registerService( PageFactory.class.getName(), pageFactory, props );
+        props.put(PAGE_NAME, "about");
+        props.put(APPLICATION_NAME, "departmentstore");
+        m_registration = context.registerService(PageFactory.class.getName(), pageFactory, props);
     }
 
-    public void stop( BundleContext context )
-        throws Exception
-    {
+    public void stop(BundleContext context)
+        throws Exception {
         m_registration.unregister();
         m_storeTracker.close();
 

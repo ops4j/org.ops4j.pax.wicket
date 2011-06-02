@@ -1,7 +1,5 @@
 /*
- * Copyright 2006 Niclas Hedhman.
- * Copyright 2006 Edward F. Yakop
- * Copyright 2010 Andreas Pieber
+ * Copyright OPS4J
  *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -17,13 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
 import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
 
-import org.apache.wicket.protocol.http.WebApplication;
-import org.ops4j.pax.wicket.api.ApplicationFactory;
-import org.ops4j.pax.wicket.api.ApplicationLifecycleListener;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
@@ -35,7 +31,6 @@ public class Activator implements BundleActivator {
 
     private RootContentAggregator m_store;
     private ServiceRegistration m_serviceRegistration;
-    private ServiceRegistration m_pageRegistration;
     private PaxWicketApplicationFactory m_applicationFactory;
     private OverviewPageFactory m_overviewPageFactory;
 
@@ -47,16 +42,16 @@ public class Activator implements BundleActivator {
         String applicationName = "departmentstore";
         setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
         m_store = new RootContentAggregator(bundleContext, applicationName, "swp");
-        m_pageRegistration = m_store.register();
+        m_store.register();
 
         m_overviewPageFactory = new OverviewPageFactory(bundleContext, m_store, applicationName, "overview");
         m_overviewPageFactory.register();
 
         // Creating a Wicket Application you've two options:
         // a) etiher create the WicketApplicationFactory yourself or...
-        createPaxWicketApplicationFactoryUsingOwnWicketApplication(bundleContext, mountPoint, applicationName);
+        // createPaxWicketApplicationFactoryUsingOwnWicketApplication(bundleContext, mountPoint, applicationName);
         // b) ... let pax-wicket do all the work.
-        // createPaxWicketApplicationFactoryPaxWicketDoingTheWork(bundleContext, mountPoint, applicationName);
+        createPaxWicketApplicationFactoryPaxWicketDoingTheWork(bundleContext, mountPoint, applicationName);
 
         // This registers the pax-wicket service as OSGi Service.
         m_serviceRegistration = m_applicationFactory.register();
@@ -68,19 +63,15 @@ public class Activator implements BundleActivator {
             new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName);
     }
 
+    @SuppressWarnings("unused")
     private void createPaxWicketApplicationFactoryUsingOwnWicketApplication(BundleContext bundleContext,
             String mountPoint, String applicationName) {
         m_applicationFactory =
             new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName,
-                new ApplicationFactory() {
-                    public WebApplication createWebApplication(ApplicationLifecycleListener lifecycleListener) {
-                        return new WicketApplication(lifecycleListener);
-                    }
-                });
+                new DeptStoreApplicationFactory());
     }
 
     public void stop(BundleContext bundleContext) throws Exception {
-        m_pageRegistration.unregister();
         m_serviceRegistration.unregister();
         m_overviewPageFactory.dispose();
         m_store.dispose();

@@ -17,6 +17,9 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.about.internal;
 
+import static org.osgi.framework.Bundle.ACTIVE;
+import static org.osgi.framework.Bundle.RESOLVED;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -27,90 +30,85 @@ import org.apache.wicket.markup.html.border.BoxBorder;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
+import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 import org.osgi.framework.Bundle;
-import static org.osgi.framework.Bundle.ACTIVE;
-import static org.osgi.framework.Bundle.RESOLVED;
 import org.osgi.framework.BundleContext;
 
-public class AboutPage extends WebPage
-{
+public class AboutPage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
-    public AboutPage( DepartmentStore store, BundleContext context )
-    {
+    @PaxWicketBean(name = "bundleContext")
+    private BundleContext bundleContext;
+    @PaxWicketBean
+    private DepartmentStore departmentStore;
+
+    public AboutPage() {
         super();
+        createAboutPage(departmentStore, bundleContext);
+    }
 
-        Label storeLabel = new Label( "storeName", store.getName() );
-        add( storeLabel );
+    public AboutPage(DepartmentStore store, BundleContext context) {
+        super();
+        createAboutPage(store, context);
+    }
 
-        BoxBorder border = new BoxBorder( "border" );
-        MultiLineLabel multiline = new MultiLineLabel( "history", store.getHistory() );
-        border.add( multiline );
-        add( border );
+    private void createAboutPage(DepartmentStore store, BundleContext context) {
+        Label storeLabel = new Label("storeName", store.getName());
+        add(storeLabel);
 
-        WebMarkupContainer container = new WebMarkupContainer( "container" );
-        add( container );
-        container.setOutputMarkupId( true );
+        BoxBorder border = new BoxBorder("border");
+        MultiLineLabel multiline = new MultiLineLabel("history", store.getHistory());
+        border.add(multiline);
+        add(border);
 
-        Model labelModel = new Model( "All bundles" );
-        container.add( new Label( "displayTitle", labelModel ) );
-        Model bundleViewModel = new Model( ACTIVE );
-        container.add( new BundlesRepeatingView( "bundles", bundleViewModel, context ) );
+        WebMarkupContainer container = new WebMarkupContainer("container");
+        add(container);
+        container.setOutputMarkupId(true);
 
-        add(
-            new DisplayBundleList(
-                "displayAllBundles", container, bundleViewModel, null, "All bundles", labelModel
-            )
-        );
-        add(
-            new DisplayBundleList(
-                "displayActiveBundles", container, bundleViewModel, ACTIVE, "Active bundles", labelModel
-            )
-        );
-        add(
-            new DisplayBundleList(
-                "displayResolvedBundles", container, bundleViewModel, RESOLVED, "Resolved bundles", labelModel
-            )
-        );
+        Model labelModel = new Model("All bundles");
+        container.add(new Label("displayTitle", labelModel));
+        Model bundleViewModel = new Model(ACTIVE);
+        container.add(new BundlesRepeatingView("bundles", bundleViewModel, context));
+
+        add(new DisplayBundleList(
+                "displayAllBundles", container, bundleViewModel, null, "All bundles", labelModel));
+        add(new DisplayBundleList(
+                "displayActiveBundles", container, bundleViewModel, ACTIVE, "Active bundles", labelModel));
+        add(new DisplayBundleList(
+                "displayResolvedBundles", container, bundleViewModel, RESOLVED, "Resolved bundles", labelModel));
     }
 
     private static class BundlesRepeatingView
-        extends RepeatingView
-    {
+            extends RepeatingView {
 
         private static final long serialVersionUID = 1L;
 
         private final BundleContext m_context;
 
-        private BundlesRepeatingView( String wicketId, Model bundleStateToDisplay, BundleContext context )
-        {
-            super( wicketId, bundleStateToDisplay );
+        private BundlesRepeatingView(String wicketId, Model bundleStateToDisplay, BundleContext context) {
+            super(wicketId, bundleStateToDisplay);
             m_context = context;
         }
 
         @Override
-        protected final void onPopulate()
-        {
+        protected final void onPopulate() {
             removeAll();
 
             Integer bundleState = (Integer) getDefaultModelObject();
 
             Bundle[] bundles = m_context.getBundles();
-            for( Bundle bundle : bundles )
-            {
+            for (Bundle bundle : bundles) {
                 int state = bundle.getState();
-                if( bundleState == null || bundleState.equals( state ) )
-                {
+                if (bundleState == null || bundleState.equals(state)) {
                     String symbolicName = bundle.getSymbolicName();
-                    add( new Label( newChildId(), symbolicName ) );
+                    add(new Label(newChildId(), symbolicName));
                 }
             }
         }
     }
 
-    private static class DisplayBundleList extends AjaxLink
-    {
+    private static class DisplayBundleList extends AjaxLink {
 
         private static final long serialVersionUID = 1L;
 
@@ -122,10 +120,9 @@ public class AboutPage extends WebPage
         private final Model m_labelModel;
 
         private DisplayBundleList(
-            String wicketId, WebMarkupContainer container, Model bundleViewModel, Integer bundleState,
-            String labelToDisplay, Model labelModel )
-        {
-            super( wicketId );
+                String wicketId, WebMarkupContainer container, Model bundleViewModel, Integer bundleState,
+                String labelToDisplay, Model labelModel) {
+            super(wicketId);
             m_containerToRefresh = container;
             m_bundleViewModel = bundleViewModel;
             m_bundleStateToDisplay = bundleState;
@@ -134,11 +131,10 @@ public class AboutPage extends WebPage
         }
 
         @Override
-        public final void onClick( AjaxRequestTarget target )
-        {
-            m_labelModel.setObject( m_labelToDisplay );
-            m_bundleViewModel.setObject( m_bundleStateToDisplay );
-            target.addComponent( m_containerToRefresh );
+        public final void onClick(AjaxRequestTarget target) {
+            m_labelModel.setObject(m_labelToDisplay);
+            m_bundleViewModel.setObject(m_bundleStateToDisplay);
+            target.addComponent(m_containerToRefresh);
         }
     }
 }

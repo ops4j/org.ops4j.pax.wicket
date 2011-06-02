@@ -19,33 +19,44 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import java.io.Serializable;
+
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
+import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 
 /**
  * {@code FranchiseePanel}
- *
+ * 
  * @since 1.0.0
  */
-public class FranchiseePanel extends Panel
-    implements Serializable
-{
+public class FranchiseePanel extends Panel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static final String WICKET_ID_NAME_LABEL = "name";
     private static final String WICKET_ID_DESC_LABEL = "description";
 
-    public FranchiseePanel( String wicketId, Franchisee franchisee )
-    {
-        super( wicketId );
+    @PaxWicketBean(name = FranchiseeModelFactory.REFERENCE_MODEL)
+    private Franchisee model;
 
-        AjaxEditableLabel nameLabel = new AjaxEditableLabel( WICKET_ID_NAME_LABEL, new PropertyModel( franchisee, "name") );
-        add( nameLabel );
+    public FranchiseePanel(String wicketId) {
+        super(wicketId);
+        createPage(model);
+    }
 
-        AjaxEditableLabel descLabel = new AjaxEditableLabel( WICKET_ID_DESC_LABEL, new PropertyModel( franchisee, "description") );
-        add( descLabel );
+    public FranchiseePanel(String wicketId, Franchisee franchisee) {
+        super(wicketId);
+        createPage(franchisee);
+    }
+
+    private void createPage(Franchisee franchisee) {
+        AjaxEditableLabel nameLabel =
+            new AjaxEditableLabel(WICKET_ID_NAME_LABEL, new PropertyModel(franchisee, "name"));
+        add(nameLabel);
+        AjaxEditableLabel descLabel =
+            new AjaxEditableLabel(WICKET_ID_DESC_LABEL, new PropertyModel(franchisee, "description"));
+        add(descLabel);
     }
 }

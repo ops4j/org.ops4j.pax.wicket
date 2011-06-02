@@ -18,31 +18,29 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
+import org.ops4j.pax.wicket.api.ComponentContentSource;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
 
 /**
  * {@code FranchiseeContentSource}
- *
+ * 
  * @author Niclas Hedhman, Edward Yakop
  * @since 1.0.0
  */
-public class FranchiseeContentSource extends AbstractContentSource<FranchiseePanel>
-{
+public class FranchiseeContentSource extends AbstractContentSource implements
+        ComponentContentSource<FranchiseePanel> {
 
     private Franchisee m_franchisee;
 
-    public FranchiseeContentSource( BundleContext context, Franchisee franchisee, String applicationName )
-    {
-        super( context, franchisee.getName(), applicationName );
+    public FranchiseeContentSource(BundleContext context, Franchisee franchisee, String applicationName) {
+        super(context, franchisee.getName(), applicationName);
         m_franchisee = franchisee;
     }
 
-    @Override
-    protected FranchiseePanel createWicketComponent( String wicketId )
-        throws IllegalArgumentException
-    {
-        return new FranchiseePanel( wicketId, m_franchisee );
+    public FranchiseePanel createSourceComponent(String wicketId) {
+        return new FranchiseePanel(wicketId, m_franchisee);
     }
+
 }

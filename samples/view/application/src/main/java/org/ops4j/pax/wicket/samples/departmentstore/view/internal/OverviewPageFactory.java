@@ -17,6 +17,8 @@
  */
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
+import java.util.Arrays;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -26,37 +28,25 @@ import org.ops4j.pax.wicket.util.RootContentAggregator;
 import org.osgi.framework.BundleContext;
 
 final class OverviewPageFactory extends AbstractPageFactory<OverviewPage>
-    implements PageFactory<OverviewPage>
-{
+        implements PageFactory<OverviewPage> {
 
-    private BundleContext m_context;
-    private RootContentAggregator m_aggregator;
+    private BundleContext bundleContext;
+    private RootContentAggregator aggregator;
 
-    public OverviewPageFactory( BundleContext context, RootContentAggregator aggregator, String applicationName,
-                                String pageName )
-    {
-        super( context, "overview", applicationName, pageName );
-        m_context = context;
-        m_aggregator = aggregator;
+    public OverviewPageFactory(BundleContext context, RootContentAggregator aggregator, String applicationName,
+                                String pageName) {
+        super(context, "overview", applicationName, pageName);
+        bundleContext = context;
+        this.aggregator = aggregator;
     }
 
-    public Class<OverviewPage> getPageClass()
-    {
+    public Class<OverviewPage> getPageClass() {
         return OverviewPage.class;
     }
 
-    public OverviewPage createPage( PageParameters params )
-    {
-        PageFactory<Page>[] pageSources = PageFinder.findPages( m_context, "departmentstore", "about" );
-        Class pageClass;
-        if( pageSources.length == 0 )
-        {
-            pageClass = null;
-        }
-        else
-        {
-            pageClass = pageSources[ 0 ].getPageClass();
-        }
-        return new OverviewPage( m_aggregator, "Sungei Wang Plaza", pageClass );
+    public OverviewPage createPage(PageParameters params) {
+        PageFactory<Page>[] pageSources = PageFinder.findPages(bundleContext, "departmentstore", "about");
+        return new OverviewPage(aggregator, new StoreDescription("Sungei Wang Plaza (Activator-Powered)"),
+            Arrays.asList(pageSources));
     }
 }

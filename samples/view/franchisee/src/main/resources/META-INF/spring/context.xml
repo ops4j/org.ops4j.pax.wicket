@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:osgi="http://www.springframework.org/schema/osgi"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:osgix="http://www.springframework.org/schema/osgi-compendium" xmlns:wicket="http://www.ops4j.org/schema/wicket"
+  xsi:schemaLocation="http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
+        http://www.ops4j.org/schema/wicket http://www.ops4j.org/schema/wicket/wicket.xsd">
+
+  <bean id="contentSourceFactoryBean" class="org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal.FranchiseeModelFactory" />
+
+  <wicket:contentSourceModelMapping id="floorModelMapping" applicationName="springDeptStore"
+    serviceClass="org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore" contentSourceFactoryImpl="contentSourceFactoryBean" />
+
+</beans>

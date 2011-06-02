@@ -17,7 +17,7 @@
   <name>OPS4J Pax Wicket :: Samples :: Pax Construct Provision Pom</name>
 
   <packaging>pom</packaging>
-  
+
   <build>
     <plugins>
       <plugin>
@@ -178,12 +178,12 @@
       <artifactId>spring-osgi-annotation</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.cglib</artifactId>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-spring</artifactId>
+      <artifactId>pax-wicket-service</artifactId>
     </dependency>
   </dependencies>
 

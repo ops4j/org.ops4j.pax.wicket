@@ -21,7 +21,9 @@ package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -29,57 +31,64 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.samples.departmentstore.view.OverviewTabContent;
-import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.api.TabContentSource;
+import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 
-@AuthorizeInstantiation( "user" )
-final class OverviewPage extends WebPage
-{
+@AuthorizeInstantiation("user")
+public class OverviewPage extends WebPage {
 
-    private static final long serialVersionUID = 1L;
+    @PaxWicketBean
+    private ContentAggregator container;
+    @PaxWicketBean
+    private StoreDescription storeDescription;
+    @PaxWicketBean(name = "about")
+    private List<PageFactory<Page>> aboutPageClass;
 
-    private static final String WICKET_ID_LABEL = "storeName";
+    public OverviewPage() {
+        setupOverviewPage(container, storeDescription, aboutPageClass);
+    }
 
-    @SuppressWarnings( "unchecked" )
-    OverviewPage( RootContentAggregator container, String storeName, Class aboutPageClass )
-    {
-        Label label = new Label( WICKET_ID_LABEL, storeName );
-        add( label );
-        Component link;
-        if( aboutPageClass == null )
-        {
-            link = new Label( "aboutlink", "" );
-        }
-        else
-        {
-            link = new BookmarkablePageLink( "aboutlink", aboutPageClass );
-        }
-        add( link );
+    public OverviewPage(ContentAggregator container, StoreDescription storeDescription,
+            List<PageFactory<Page>> aboutPageClass) {
+        setupOverviewPage(container, storeDescription, aboutPageClass);
+    }
 
+    private void setupOverviewPage(ContentAggregator container, StoreDescription storeDescription,
+            List<PageFactory<Page>> aboutPages) {
+        Label label = new Label("storeName", storeDescription.getStoreName());
+        add(label);
+        createAboutPage(aboutPages);
         Locale locale = getLocale();
-        List<ContentSource<Component>> contents = container.getContents( "floor" );
+        List<ContentSource> contents = container.getContentByGroupId("floor");
         int numberOfContents = contents.size();
-        List<ITab> tabs = new ArrayList<ITab>( numberOfContents );
-        for( ContentSource content : contents )
-        {
-            if( content instanceof OverviewTabContent )
-            {
-                OverviewTabContent otc = (OverviewTabContent) content;
-                AbstractTab tab = otc.createTab( locale );
-                tabs.add( tab );
+        List<ITab> tabs = new ArrayList<ITab>(numberOfContents);
+        for (ContentSource content : contents) {
+            if (content instanceof TabContentSource) {
+                TabContentSource<AbstractTab> otc = (TabContentSource<AbstractTab>) content;
+                AbstractTab tab = otc.createSourceTab();
+                tabs.add(tab);
             }
         }
+        if (tabs.isEmpty()) {
+            Label niceMsg = new Label("floors", "No Floors installed yet.");
+            add(niceMsg);
+        } else {
+            AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel("floors", tabs);
+            add(tabbedPanel);
+        }
+    }
 
-        if( tabs.isEmpty() )
-        {
-            Label niceMsg = new Label( "floors", "No Floors installed yet." );
-            add( niceMsg );
+    private void createAboutPage(List<PageFactory<Page>> aboutPages) {
+        Component link;
+        if (aboutPages.size() == 0) {
+            link = new Label("aboutlink", "");
+        } else {
+            Class<? extends Page> aboutPage = aboutPages.get(0).getPageClass();
+            link = new BookmarkablePageLink("aboutlink", aboutPage);
         }
-        else
-        {
-            AjaxTabbedPanel tabbedPanel = new AjaxTabbedPanel( "floors", tabs );
-            add( tabbedPanel );
-        }
+        add(link);
     }
 }

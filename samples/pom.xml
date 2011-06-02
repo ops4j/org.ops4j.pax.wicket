@@ -28,6 +28,7 @@
         <artifactId>maven-pax-plugin</artifactId>
         <configuration>
           <provision>
+            <param>--vmOptions=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005</param>
             <param>--platform=felix</param>
             <param>--workingDirectory=target/runner</param>
           </provision>
