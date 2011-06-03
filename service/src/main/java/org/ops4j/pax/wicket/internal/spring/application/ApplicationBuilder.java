@@ -23,6 +23,8 @@ import org.ops4j.pax.wicket.api.ApplicationFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -30,6 +32,8 @@ import org.springframework.osgi.context.BundleContextAware;
 import org.springframework.util.StringUtils;
 
 public class ApplicationBuilder implements ApplicationContextAware, BundleContextAware {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationFactory.class);
 
     private BundleContext bundleContext;
     private ApplicationContext applicationContext;
@@ -42,49 +46,40 @@ public class ApplicationBuilder implements ApplicationContextAware, BundleContex
     private ServiceRegistration serviceRegistration;
 
     public void register() {
-        System.out.println("=======STARTUP ApplicationBuilder========");
-        System.out.println("=======================");
-        System.out.println("=======================");
-        System.out
-            .println(String
+        LOGGER
+            .info(String
                 .format(
-                    "bundleContext: %s, applicationContext: %s, homepageClass: %s, mountPoint: %s, applicationName: %s, applicationFactory: %s",
+                    "Trying to register pax-wicket application with the following settings: bundleContext: %s, applicationContext: %s, "
+                            + "homepageClass: %s, mountPoint: %s, applicationName: %s, applicationFactory: %s",
                     bundleContext.toString(), applicationContext.toString(), homepageClass.toString(), mountPoint,
                     applicationName, applicationFactory.toString()));
-        System.out.println("Check if applicationFactory exists");
+        LOGGER.trace("Check if applicationFactory exists");
         if (StringUtils.hasText(applicationFactory)) {
-            System.out.println("Found applicationFactory; trying to create bean");
+            LOGGER.debug("Found applicationFactory; trying to create bean");
             ApplicationFactory realFactory = applicationContext.getBean(applicationFactory, ApplicationFactory.class);
-            System.out.println("Created bean; creating paxwicket applicaiton");
+            LOGGER.debug("Created bean; creating paxwicket applicaiton");
             paxWicketApplicationService =
                 new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName, realFactory);
         } else {
-            System.out.println("No own application factory found; falling back to old method");
+            LOGGER.debug("No own application factory found; falling back to old method");
             paxWicketApplicationService =
                 new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName);
         }
         serviceRegistration = paxWicketApplicationService.register();
-        System.out.println("=======================");
-        System.out.println("=======================");
-        System.out.println("=======================");
+        LOGGER.info("Successfully registered application factory");
     }
 
     public void unregister() {
-        System.out.println("=======Kill ApplicationBuilder========");
-        System.out.println("=======================");
-        System.out.println("=======================");
-        System.out
-            .println(String
+        LOGGER
+            .info(String
                 .format(
-                    "bundleContext: %s, applicationContext: %s, homepageClass: %s, mountPoint: %s, applicationName: %s, applicationFactory: %s",
+                    "Removing pax-wicket application with the following settings: bundleContext: %s, applicationContext: %s, "
+                            +
+                            "homepageClass: %s, mountPoint: %s, applicationName: %s, applicationFactory: %s",
                     bundleContext.toString(), applicationContext.toString(), homepageClass.toString(), mountPoint,
                     applicationName, applicationFactory.toString()));
-        System.out.println("Unregister service and dispose application factory");
         serviceRegistration.unregister();
         paxWicketApplicationService.dispose();
-        System.out.println("=======================");
-        System.out.println("=======================");
-        System.out.println("=======================");
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
