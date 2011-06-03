@@ -18,6 +18,8 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+
 import java.io.File;
 import static java.lang.System.identityHashCode;
 import java.util.HashMap;
@@ -71,7 +73,17 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker
 
         File tmpDir = context.getDataFile( "tmp-dir" );
         String mountPoint = factory.getMountPoint();
-        Servlet servlet = ServletProxy.newServletProxy( factory, tmpDir, mountPoint );
+        Servlet servlet = null;
+        if ( factory.getFilterConfiguration().getFilters().isEmpty() )
+        {
+            servlet = ServletProxy.newServletProxy( factory, tmpDir, mountPoint );
+        }
+        else
+        {
+            FilterDelegator filterDelegator = new FilterDelegator( reference.getBundle().getBundleContext(), 
+                factory.getFilterConfiguration(), tmpDir, mountPoint, (String) reference.getProperty( APPLICATION_NAME ) );
+            servlet = ServletProxy.newServletProxy( factory, tmpDir, mountPoint, filterDelegator );
+        }
         addServlet( mountPoint, servlet, reference );
 
         synchronized( m_factories )
