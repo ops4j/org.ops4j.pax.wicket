@@ -18,18 +18,23 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static java.lang.reflect.Proxy.isProxyClass;
+import static java.lang.reflect.Proxy.newProxyInstance;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import static java.lang.reflect.Proxy.isProxyClass;
-import static java.lang.reflect.Proxy.newProxyInstance;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.WicketServlet;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 
 /**
  * @author edward.yakop@gmail.com
@@ -40,12 +45,23 @@ public class ServletProxy
     private static final Class<?>[] SERVLET_INTERFACES = new Class[]{
         Servlet.class
     };
-
+    
     static Servlet newServletProxy(
-        IWebApplicationFactory applicationFactory, File tempDir, String mountPoint )
+        IWebApplicationFactory applicationFactory, File tempDir, String mountPoint, FilterDelegator filterDelegator )
+    {
+        ServletInvocationHandler ih = new ServletInvocationHandler( applicationFactory, tempDir, mountPoint, filterDelegator );
+        return newServletProxy( ih );
+    }
+    
+    static Servlet newServletProxy( PaxWicketApplicationFactory applicationFactory, File tempDir, String mountPoint )
+    {
+        ServletInvocationHandler ih = new ServletInvocationHandler( applicationFactory, tempDir, mountPoint );
+        return newServletProxy( ih );
+    }
+    
+    private static Servlet newServletProxy( ServletInvocationHandler ih )
     {
         ClassLoader classLoader = ServletProxy.class.getClassLoader();
-        ServletInvocationHandler ih = new ServletInvocationHandler( applicationFactory, tempDir, mountPoint );
         return (Servlet) newProxyInstance( classLoader, SERVLET_INTERFACES, ih );
     }
 
@@ -59,10 +75,20 @@ public class ServletProxy
 
         private final String m_mountPoint;
         private final ServletDelegator m_delegator;
+        private FilterDelegator m_filterDelegator;
 
         public ServletInvocationHandler(
-            IWebApplicationFactory applicationFactory, File tempDir, String mountPoint
+            IWebApplicationFactory applicationFactory, File tempDir, String mountPoint, FilterDelegator filterDelegator
         )
+        {
+            m_mountPoint = mountPoint;
+            m_delegator = new ServletDelegator( applicationFactory, tempDir );
+            m_filterDelegator = filterDelegator;
+            m_filterDelegator.setServlet(m_delegator);
+        }
+        
+        public ServletInvocationHandler(
+            IWebApplicationFactory applicationFactory, File tempDir, String mountPoint )
         {
             m_mountPoint = mountPoint;
             m_delegator = new ServletDelegator( applicationFactory, tempDir );
@@ -72,6 +98,14 @@ public class ServletProxy
             throws Throwable
         {
             replaceHttpRequestArgument( args );
+            if ( m_filterDelegator != null)
+            {
+                if ( method.getName().equals( "service" ) )
+                {
+                    m_filterDelegator.doFilter( (HttpServletRequest) args[0], (HttpServletResponse) args[1] );
+                    return null;
+                }
+            }
             return method.invoke( m_delegator, args );
         }
 
@@ -211,4 +245,5 @@ public class ServletProxy
             }
         }
     }
+
 }
