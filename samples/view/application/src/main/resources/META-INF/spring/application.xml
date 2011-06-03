@@ -13,8 +13,8 @@
 
   <bean id="springDeptStoreApplicationFactory" class="org.ops4j.pax.wicket.samples.departmentstore.view.internal.DeptStoreApplicationFactory" />
 
-  <wicket:page id="overviewPage" pageId="overview" applicationName="springDeptStore"
-    pageName="overview" pageClass="org.ops4j.pax.wicket.samples.departmentstore.view.internal.OverviewPage" />
+  <wicket:page id="overviewPage" pageId="overview" applicationName="springDeptStore" pageName="overview"
+    pageClass="org.ops4j.pax.wicket.samples.departmentstore.view.internal.OverviewPage" />
 
   <wicket:contentAggregator id="rootContentAggregator" applicationName="springDeptStore"
     aggregationPointName="swp" />
