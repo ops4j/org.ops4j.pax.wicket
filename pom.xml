@@ -138,6 +138,7 @@
 
   <modules>
     <module>service</module>
+    <module>test</module>
     <module>samples</module>
     <module>features</module>
     <module>itests</module>
@@ -150,6 +151,13 @@
         <groupId>org.ops4j.pax.wicket</groupId>
         <artifactId>pax-wicket-service</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <!-- Internal Dependencies -->
+      <dependency>
+        <groupId>org.ops4j.pax.wicket</groupId>
+        <artifactId>pax-wicket-test</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <scope>test</scope>
       </dependency>
       <!-- External Dependencies -->
       <dependency>
@@ -466,6 +474,12 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.8.2</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <version>1.8.5</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
