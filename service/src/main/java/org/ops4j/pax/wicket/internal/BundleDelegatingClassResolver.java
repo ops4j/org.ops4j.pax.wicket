@@ -31,6 +31,7 @@ import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -48,6 +49,7 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                  "(objectClass=" + ContentSource.class.getName() + ")" +
                  "(objectClass=" + ContentAggregator.class.getName() + ")" +
                  "(objectClass=" + PageFactory.class.getName() + ")" +
+                 "(objectClass=" + PaxWicketApplicationFactory.class.getName() + ")" +
                  ")";
     }
 
