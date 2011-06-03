@@ -50,6 +50,7 @@
   <properties>
     <pax.exam.version>1.2.4</pax.exam.version>
     <slf4j.version>1.6.1</slf4j.version>
+    <pax.logging.version>1.6.2</pax.logging.version> 
     <karaf.version>2.2.1</karaf.version>
     <felix.eventadmin.version>1.2.10</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
@@ -253,7 +254,7 @@
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-api</artifactId>
-        <version>${slf4j.version}</version>
+        <version>${pax.logging.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
@@ -359,7 +360,7 @@
       <dependency>
         <groupId>org.ops4j.pax.logging</groupId>
         <artifactId>pax-logging-service</artifactId>
-        <version>${slf4j.version}</version>
+        <version>${pax.logging.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
