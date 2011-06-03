@@ -277,12 +277,7 @@ public final class PaxWicketApplicationFactory
      * @since 1.0.0
      */
     public final ServiceRegistration register() {
-        Properties serviceProperties;
-        synchronized (this) {
-            serviceProperties = new Properties(m_properties);
-        }
-        m_registration = m_bundleContext.registerService(APPLICATION_FACTORY_SERVICE_NAMES, this, serviceProperties);
-
+        m_registration = m_bundleContext.registerService(APPLICATION_FACTORY_SERVICE_NAMES, this, m_properties);
         return m_registration;
     }
 
