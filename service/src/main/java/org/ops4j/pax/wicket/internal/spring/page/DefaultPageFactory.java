@@ -24,29 +24,28 @@ import java.util.Map;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.internal.spring.util.ComponentInstantiationListener;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
-import org.springframework.osgi.context.BundleContextAware;
 
 @SuppressWarnings("rawtypes")
-public class DefaultPageFactory extends AbstractPageFactory implements BundleContextAware {
+public class DefaultPageFactory extends AbstractPageFactory {
 
     private Class<? extends Page> pageClass;
     private Map<String, String> overwrite;
     private BundleContext bundleContext;
 
-    public void setPageClass(Class<? extends Page> pageClass) {
-        this.pageClass = pageClass;
-    }
-
     public void setOverwrite(Map<String, String> overwrite) {
         this.overwrite = overwrite;
     }
 
-    public DefaultPageFactory(String pageId, String applicationName, String pageName)
+    public DefaultPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName,
+            Class<? extends WebPage> pageClass)
         throws IllegalArgumentException {
-        super(null, pageId, applicationName, pageName);
+        super(bundleContext, pageId, applicationName, pageName, pageClass);
+        this.pageClass = pageClass;
+        this.bundleContext = bundleContext;
     }
 
     public Page createPage(PageParameters params) {
@@ -74,11 +73,6 @@ public class DefaultPageFactory extends AbstractPageFactory implements BundleCon
 
     public Class<? extends Page> getPageClass() {
         return pageClass;
-    }
-
-    public void setBundleContext(BundleContext bundleContext) {
-        super.setInternalBundleContext(bundleContext);
-        this.bundleContext = bundleContext;
     }
 
 }

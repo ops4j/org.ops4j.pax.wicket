@@ -31,10 +31,11 @@ public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitio
 
     @Override
     protected void doParse(Element element, BeanDefinitionBuilder bean) {
+        bean.addConstructorArgReference("bundleContext");
         setConstructor("pageId", element, bean);
         setConstructor("applicationName", element, bean);
         setConstructor("pageName", element, bean);
-        setElement("pageClass", element, bean);
+        setConstructor("pageClass", element, bean);
         bean.setLazyInit(false);
         bean.setInitMethodName("register");
         bean.setDestroyMethodName("dispose");
@@ -43,11 +44,6 @@ public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitio
     private void setConstructor(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addConstructorArgValue(beanElement);
-    }
-
-    private void setElement(String id, Element element, BeanDefinitionBuilder bean) {
-        String beanElement = element.getAttribute(id);
-        bean.addPropertyValue(id, beanElement);
     }
 
 }

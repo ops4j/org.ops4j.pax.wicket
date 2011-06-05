@@ -29,8 +29,10 @@ import java.util.Hashtable;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
+import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -40,16 +42,34 @@ import org.osgi.service.cm.ManagedService;
 public abstract class AbstractPageFactory<T extends Page> implements PageFactory<T>, ManagedService {
 
     private BundleContext bundleContext;
-    private ServiceRegistration serviceRegistration;
     private Hashtable<String, String> properties = new Hashtable<String, String>();
+    private Class<? extends WebPage> pageClass;
 
+    private ServiceRegistration pageServiceRegistration;
+    private DefaultPageMounter mountPointRegistration;
+
+    /**
+     * While this constructor does not require a pageClass it will NOT analyse the loaded classes automatically for the
+     * {@link PaxWicketMountPoint} annotation.
+     */
     protected AbstractPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName)
         throws IllegalArgumentException {
+        this(bundleContext, pageId, applicationName, pageName, null);
+    }
+
+    /**
+     * This constructor expects an {@link #pageClass}. This class is expected to be the exported page and is
+     * automatically scanned for the {@link PaxWicketMountPoint} annotation. The found page is automatically exported as
+     * service mounting the page on the defined place.
+     */
+    protected AbstractPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName,
+            Class<? extends WebPage> pageClass) throws IllegalArgumentException {
         // bundle context could be temporary null; some situations only allow to retrieve it lazy
         validateNotEmpty(pageId, "pageId");
         validateNotEmpty(applicationName, "applicationName");
         validateNotEmpty(pageName, "pageName");
 
+        this.pageClass = pageClass;
         setInternalBundleContext(bundleContext);
         setPageId(pageId);
         setApplicationName(applicationName);
@@ -60,22 +80,34 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         validateNotNull(bundleContext, "bundleContext");
         String[] classes = { PageFactory.class.getName(), ManagedService.class.getName() };
         synchronized (this) {
-            if (serviceRegistration != null) {
+            if (pageServiceRegistration != null) {
                 throw new IllegalStateException(String.format("%s [%s] has been registered.", getClass()
                     .getSimpleName(), this));
             }
-            serviceRegistration = bundleContext.registerService(classes, this, properties);
+            if (pageClass != null) {
+                PaxWicketMountPoint mountPoint = pageClass.getAnnotation(PaxWicketMountPoint.class);
+                if (mountPoint != null) {
+                    mountPointRegistration = new DefaultPageMounter(getApplicationName(), bundleContext);
+                    mountPointRegistration.addMountPoint(mountPoint.mountPoint(), pageClass);
+                    mountPointRegistration.register();
+                }
+            }
+            pageServiceRegistration = bundleContext.registerService(classes, this, properties);
         }
     }
 
     public final void dispose() throws IllegalStateException {
         synchronized (this) {
-            if (serviceRegistration == null) {
+            if (pageServiceRegistration == null) {
                 throw new IllegalStateException(String.format("%s [%s] has not been registered.", getClass()
                     .getSimpleName(), this));
             }
-            serviceRegistration.unregister();
-            serviceRegistration = null;
+            pageServiceRegistration.unregister();
+            pageServiceRegistration = null;
+            if (mountPointRegistration != null) {
+                mountPointRegistration.dispose();
+                mountPointRegistration = null;
+            }
         }
     }
 
@@ -121,7 +153,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         throws ConfigurationException {
         if (config == null) {
             synchronized (this) {
-                serviceRegistration.setProperties(properties);
+                pageServiceRegistration.setProperties(properties);
             }
 
             return;
@@ -132,7 +164,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         setPageName(pagename);
         setApplicationName(appname);
         synchronized (this) {
-            serviceRegistration.setProperties(config);
+            pageServiceRegistration.setProperties(config);
         }
     }
 
@@ -146,7 +178,6 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
      */
     protected final void setApplicationName(String applicationName) throws IllegalArgumentException {
         validateNotEmpty(applicationName, "applicationName");
-
         synchronized (this) {
             properties.put(APPLICATION_NAME, applicationName);
         }
@@ -154,7 +185,6 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     protected final void setPageId(String pageId) throws IllegalArgumentException {
         validateNotEmpty(pageId, "pageId");
-
         synchronized (this) {
             properties.put(Constants.SERVICE_PID, PAGE_ID + "/" + pageId);
         }
