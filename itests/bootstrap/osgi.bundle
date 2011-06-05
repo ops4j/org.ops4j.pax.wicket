@@ -1,7 +1,0 @@
-Import-Package:\
- org.junit.*, \
- org.ops4j.pax.exam.*, \
- org.osgi.*;version="[1,2)"
-
-Export-Package: \
- org.ops4j.pax.wicket.it.*;version="${project.version}"
