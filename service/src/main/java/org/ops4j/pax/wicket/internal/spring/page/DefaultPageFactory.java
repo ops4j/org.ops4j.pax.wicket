@@ -59,14 +59,13 @@ public class DefaultPageFactory extends AbstractPageFactory implements BundleCon
                     Constructor<? extends Page> constructor = pageClass.getConstructor(PageParameters.class);
                     return constructor.newInstance(params);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
                 }
             }
             try {
                 return pageClass.newInstance();
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("Peng");
+                throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
             }
         } finally {
             Application.get().removeComponentInstantiationListener(componentInstantiationListener);
