@@ -2,6 +2,7 @@ package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,14 +22,74 @@ import org.osgi.service.cm.ManagedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultPageMounter implements PageMounter {
+public class DefaultPageMounter implements PageMounter, ManagedService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPageMounter.class);
 
     private final List<MountPointInfo> mountPoints;
+    private final Dictionary<String, String> properties;
+    private final BundleContext bundleContext;
 
-    public DefaultPageMounter() {
-        // Using Vector because it is synchronized
-        // But not sure if synchronization is really necessary or not...
-        mountPoints = new Vector<MountPointInfo>();
+    private ServiceRegistration serviceRegistration;
+
+    public DefaultPageMounter(String applicationName, BundleContext bundleContext) {
+        validateNotNull(bundleContext, "bundleContext");
+        LOGGER.trace("Initializing MountTracker for {}", applicationName);
+        mountPoints = new ArrayList<MountPointInfo>();
+        properties = new Hashtable<String, String>();
+        this.bundleContext = bundleContext;
+        setApplicationName(applicationName);
+    }
+
+    /**
+     * Automatically regsiteres the {@link PageMounter} as OSGi service
+     */
+    public void register() {
+        LOGGER.debug("Register mount tracker as OSGi service");
+        String[] classes = { PageMounter.class.getName(), ManagedService.class.getName() };
+        synchronized (this) {
+            if (serviceRegistration != null) {
+                throw new IllegalStateException(String.format("%s [%s] had been already registered.", getClass()
+                    .getSimpleName(), this));
+            }
+            serviceRegistration = bundleContext.registerService(classes, this, properties);
+        }
+    }
+
+    /**
+     * Automatically unregister the {@link PageMounter} from the OSGi registry
+     */
+    public void dispose() {
+        synchronized (this) {
+            if (serviceRegistration != null) {
+                throw new IllegalStateException(String.format("%s [%s] had not been registered.", getClass()
+                    .getSimpleName(), this));
+            }
+            serviceRegistration.unregister();
+            serviceRegistration = null;
+        }
+    }
+
+    public void updated(Dictionary properties) throws ConfigurationException {
+        if (properties != null) {
+            setApplicationName((String) properties.get(APPLICATION_NAME));
+        }
+        synchronized (this) {
+            serviceRegistration.setProperties(properties);
+        }
+    }
+
+    public void setApplicationName(String applicationName) {
+        validateNotEmpty(applicationName, "applicationName");
+        synchronized (this) {
+            properties.put(APPLICATION_NAME, applicationName);
+        }
+    }
+
+    public String getApplicationName() {
+        synchronized (this) {
+            return properties.get(APPLICATION_NAME);
+        }
     }
 
     /**
@@ -42,6 +103,7 @@ public class DefaultPageMounter implements PageMounter {
     }
 
     public void addMountPoint(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
+        LOGGER.info("Adding mount point for {} with path {}", path, codingStrategy.getMountPath());
         MountPointInfo info = new DefaultMountPointInfo(path, codingStrategy);
         mountPoints.add(info);
     }
