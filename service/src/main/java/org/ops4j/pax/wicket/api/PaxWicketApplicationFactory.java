@@ -28,6 +28,7 @@ import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.apache.wicket.IInitializer;
@@ -95,6 +96,8 @@ public final class PaxWicketApplicationFactory
 
     private ServiceRegistration m_bdcrRegistration;
     private BundleDelegatingClassResolver m_bdcr;
+    
+    private FilterConfiguration m_filterConfiguration;
 
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
@@ -156,6 +159,8 @@ public final class PaxWicketApplicationFactory
         m_componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
         m_componentOnAfterRenderListeners = new ArrayList<IComponentOnAfterRenderListener>();
         m_initializers = new ArrayList<IInitializer>();
+        
+        m_filterConfiguration = new FilterConfiguration();
     }
 
     /**
@@ -277,9 +282,12 @@ public final class PaxWicketApplicationFactory
      * @since 1.0.0
      */
     public final ServiceRegistration register() {
-        Properties serviceProperties;
+        Properties serviceProperties = new Properties();
         synchronized (this) {
-            serviceProperties = new Properties(m_properties);
+            for (Entry<Object, Object> entry : m_properties.entrySet() )
+            {
+                serviceProperties.put( entry.getKey(), entry.getValue() );
+            }
         }
         m_registration = m_bundleContext.registerService(APPLICATION_FACTORY_SERVICE_NAMES, this, serviceProperties);
 
@@ -509,4 +517,10 @@ public final class PaxWicketApplicationFactory
             );
         return paxWicketApplication;
     }
+
+    public FilterConfiguration getFilterConfiguration()
+    {
+        return m_filterConfiguration;
+    }
+
 }
