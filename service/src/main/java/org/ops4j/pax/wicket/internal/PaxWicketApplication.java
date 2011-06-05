@@ -19,6 +19,10 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -36,16 +40,12 @@ import org.apache.wicket.settings.IRequestCycleSettings;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public final class PaxWicketApplication extends WebApplication
-{
+public final class PaxWicketApplication extends WebApplication {
 
     private final BundleContext m_bundleContext;
     private final String m_applicationName;
@@ -58,21 +58,20 @@ public final class PaxWicketApplication extends WebApplication
     private final List<IInitializer> m_initializers;
 
     public PaxWicketApplication(
-        BundleContext context,
-        String applicationName,
-        PageMounter pageMounter,
-        Class<? extends Page> homepageClass,
-        PaxWicketPageFactory pageFactory,
-        DelegatingClassResolver delegatingClassResolver,
-        List<IInitializer> initializers )
-        throws IllegalArgumentException
-    {
-        validateNotNull( context, "context" );
-        validateNotEmpty( applicationName, "applicationName" );
-        validateNotNull( homepageClass, "homepageClass" );
-        validateNotNull( pageFactory, "pageFactory" );
-        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
-        validateNotNull( initializers, "initializers" );
+            BundleContext context,
+            String applicationName,
+            PageMounter pageMounter,
+            Class<? extends Page> homepageClass,
+            PaxWicketPageFactory pageFactory,
+            DelegatingClassResolver delegatingClassResolver,
+            List<IInitializer> initializers)
+        throws IllegalArgumentException {
+        validateNotNull(context, "context");
+        validateNotEmpty(applicationName, "applicationName");
+        validateNotNull(homepageClass, "homepageClass");
+        validateNotNull(pageFactory, "pageFactory");
+        validateNotNull(delegatingClassResolver, "delegatingClassResolver");
+        validateNotNull(initializers, "initializers");
 
         m_bundleContext = context;
         m_applicationName = applicationName;
@@ -82,81 +81,74 @@ public final class PaxWicketApplication extends WebApplication
         m_delegatingClassResolver = delegatingClassResolver;
         m_serviceRegistrations = new ArrayList<ServiceRegistration>();
         m_initializers = new ArrayList<IInitializer>();
-        m_initializers.addAll( initializers );
+        m_initializers.addAll(initializers);
     }
 
     @Override
-    public final Class<? extends Page> getHomePage()
-    {
+    public final Class<? extends Page> getHomePage() {
         return m_homepageClass;
     }
 
     @Override
-    protected final void init()
-    {
+    protected final void init() {
         super.init();
 
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( m_delegatingClassResolver );
-        addWicketService( IApplicationSettings.class, applicationSettings );
+        applicationSettings.setClassResolver(m_delegatingClassResolver);
+        addWicketService(IApplicationSettings.class, applicationSettings);
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( m_pageFactory );
-        addWicketService( ISessionSettings.class, sessionSettings );
+        sessionSettings.setPageFactory(m_pageFactory);
+        addWicketService(ISessionSettings.class, sessionSettings);
 
-//        addWicketService( IAjaxSettings.class, getAjaxSettings() );
-        addWicketService( IDebugSettings.class, getDebugSettings() );
-        addWicketService( IExceptionSettings.class, getExceptionSettings() );
-        addWicketService( IFrameworkSettings.class, getFrameworkSettings() );
-        addWicketService( IMarkupSettings.class, getMarkupSettings() );
-        addWicketService( IPageSettings.class, getPageSettings() );
-        addWicketService( IRequestCycleSettings.class, getRequestCycleSettings() );
-        addWicketService( IResourceSettings.class, getResourceSettings() );
-        addWicketService( ISecuritySettings.class, getSecuritySettings() );
+        setApplicationKey(m_applicationName);
 
-        if( m_pageMounter != null )
-        {
-            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
-            {
-                mount( bookmark.getCodingStrategy() );
+        // addWicketService( IAjaxSettings.class, getAjaxSettings() );
+        addWicketService(IDebugSettings.class, getDebugSettings());
+        addWicketService(IExceptionSettings.class, getExceptionSettings());
+        addWicketService(IFrameworkSettings.class, getFrameworkSettings());
+        addWicketService(IMarkupSettings.class, getMarkupSettings());
+        addWicketService(IPageSettings.class, getPageSettings());
+        addWicketService(IRequestCycleSettings.class, getRequestCycleSettings());
+        addWicketService(IResourceSettings.class, getResourceSettings());
+        addWicketService(ISecuritySettings.class, getSecuritySettings());
+
+        if (m_pageMounter != null) {
+            for (MountPointInfo bookmark : m_pageMounter.getMountPoints()) {
+                mount(bookmark.getCodingStrategy());
             }
         }
 
         // Now add a tracker so we can still mount pages later
-        m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
+        m_mounterTracker = new PageMounterTracker(m_bundleContext, this, m_applicationName);
         m_mounterTracker.open();
 
-        for( final IInitializer initializer : m_initializers )
-        {
-            initializer.init( this );
+        for (final IInitializer initializer : m_initializers) {
+            initializer.init(this);
         }
     }
 
-    private <T> void addWicketService( Class<T> service, T serviceImplementation )
-    {
+    private <T> void addWicketService(Class<T> service, T serviceImplementation) {
         Properties props = new Properties();
 
         // Note: This is kept for legacy
-        props.setProperty( "applicationId", m_applicationName );
-        props.setProperty( APPLICATION_NAME, m_applicationName );
+        props.setProperty("applicationId", m_applicationName);
+        props.setProperty(APPLICATION_NAME, m_applicationName);
 
         String serviceName = service.getName();
         ServiceRegistration registration =
-            m_bundleContext.registerService( serviceName, serviceImplementation, props );
-        m_serviceRegistrations.add( registration );
+            m_bundleContext.registerService(serviceName, serviceImplementation, props);
+        m_serviceRegistrations.add(registration);
     }
 
     @Override
-    protected void onDestroy()
-    {
-        if( m_mounterTracker != null )
-        {
+    protected void onDestroy() {
+        if (m_mounterTracker != null) {
             m_mounterTracker.close();
             m_mounterTracker = null;
         }
 
-        for( ServiceRegistration reg : m_serviceRegistrations )
-        {
+        for (ServiceRegistration reg : m_serviceRegistrations) {
             reg.unregister();
         }
         m_serviceRegistrations.clear();

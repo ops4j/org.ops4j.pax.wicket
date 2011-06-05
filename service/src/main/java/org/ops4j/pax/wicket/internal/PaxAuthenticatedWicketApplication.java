@@ -19,6 +19,9 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,9 +51,6 @@ import org.apache.wicket.settings.IRequestCycleSettings;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.ops4j.pax.wicket.api.PaxWicketAuthenticator;
@@ -62,9 +62,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 public final class PaxAuthenticatedWicketApplication
-    extends AuthenticatedWebApplication
-    implements SessionDestroyedHander
-{
+        extends AuthenticatedWebApplication
+        implements SessionDestroyedHander {
 
     private static final Roles EMPTY_ROLES = new Roles();
 
@@ -92,28 +91,27 @@ public final class PaxAuthenticatedWicketApplication
     private final List<IInitializer> m_initializers;
 
     public PaxAuthenticatedWicketApplication(
-        BundleContext bundleContext,
-        String applicationName,
-        PageMounter pageMounter,
-        Class<? extends Page> homePageClass,
-        PaxWicketPageFactory pageFactory,
-        RequestCycleFactory requestCycleFactory,
-        RequestCycleProcessorFactory requestCycleProcessorFactory,
-        SessionStoreFactory sessionStoreFactory,
-        DelegatingClassResolver delegatingClassResolver,
-        PaxWicketAuthenticator authenticator,
-        Class<? extends WebPage> signInPage,
-        List<IInitializer> initializers )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( applicationName, "applicationName" );
-        validateNotNull( homePageClass, "homePageClass" );
-        validateNotNull( pageFactory, "pageFactory" );
-        validateNotNull( delegatingClassResolver, "delegatingClassResolver" );
-        validateNotNull( authenticator, "authenticator" );
-        validateNotNull( signInPage, "signInPage" );
-        validateNotNull( initializers, "initializers" );
+            BundleContext bundleContext,
+            String applicationName,
+            PageMounter pageMounter,
+            Class<? extends Page> homePageClass,
+            PaxWicketPageFactory pageFactory,
+            RequestCycleFactory requestCycleFactory,
+            RequestCycleProcessorFactory requestCycleProcessorFactory,
+            SessionStoreFactory sessionStoreFactory,
+            DelegatingClassResolver delegatingClassResolver,
+            PaxWicketAuthenticator authenticator,
+            Class<? extends WebPage> signInPage,
+            List<IInitializer> initializers)
+        throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundleContext");
+        validateNotEmpty(applicationName, "applicationName");
+        validateNotNull(homePageClass, "homePageClass");
+        validateNotNull(pageFactory, "pageFactory");
+        validateNotNull(delegatingClassResolver, "delegatingClassResolver");
+        validateNotNull(authenticator, "authenticator");
+        validateNotNull(signInPage, "signInPage");
+        validateNotNull(initializers, "initializers");
 
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
@@ -130,81 +128,74 @@ public final class PaxAuthenticatedWicketApplication
         m_serviceRegistrations = new ArrayList<ServiceRegistration>();
         m_sessionDestroyedListeners = new ArrayList<SessionDestroyedListener>();
         m_initializers = new ArrayList<IInitializer>();
-        m_initializers.addAll( initializers );
+        m_initializers.addAll(initializers);
     }
 
     /**
      * Application subclasses must specify a home page class by implementing this abstract method.
-     *
+     * 
      * @return Home page class for this application
      */
     @Override
-    public Class<? extends Page> getHomePage()
-    {
+    public Class<? extends Page> getHomePage() {
         return m_homepageClass;
     }
 
     @Override
-    protected final void init()
-    {
+    protected final void init() {
         super.init();
 
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver( m_delegatingClassResolver );
-        addWicketService( IApplicationSettings.class, applicationSettings );
+        applicationSettings.setClassResolver(m_delegatingClassResolver);
+        addWicketService(IApplicationSettings.class, applicationSettings);
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory( m_pageFactory );
-        addWicketService( ISessionSettings.class, sessionSettings );
+        sessionSettings.setPageFactory(m_pageFactory);
+        addWicketService(ISessionSettings.class, sessionSettings);
 
-//        addWicketService( IAjaxSettings.class, getAjaxSettings() );
-        addWicketService( IDebugSettings.class, getDebugSettings() );
-        addWicketService( IExceptionSettings.class, getExceptionSettings() );
-        addWicketService( IFrameworkSettings.class, getFrameworkSettings() );
-        addWicketService( IMarkupSettings.class, getMarkupSettings() );
-        addWicketService( IPageSettings.class, getPageSettings() );
-        addWicketService( IRequestCycleSettings.class, getRequestCycleSettings() );
-        addWicketService( IResourceSettings.class, getResourceSettings() );
-        addWicketService( ISecuritySettings.class, getSecuritySettings() );
+        setApplicationKey(m_applicationName);
 
-        if( null != m_pageMounter )
-        {
-            for( MountPointInfo bookmark : m_pageMounter.getMountPoints() )
-            {
-                mount( bookmark.getCodingStrategy() );
+        // addWicketService( IAjaxSettings.class, getAjaxSettings() );
+        addWicketService(IDebugSettings.class, getDebugSettings());
+        addWicketService(IExceptionSettings.class, getExceptionSettings());
+        addWicketService(IFrameworkSettings.class, getFrameworkSettings());
+        addWicketService(IMarkupSettings.class, getMarkupSettings());
+        addWicketService(IPageSettings.class, getPageSettings());
+        addWicketService(IRequestCycleSettings.class, getRequestCycleSettings());
+        addWicketService(IResourceSettings.class, getResourceSettings());
+        addWicketService(ISecuritySettings.class, getSecuritySettings());
+
+        if (null != m_pageMounter) {
+            for (MountPointInfo bookmark : m_pageMounter.getMountPoints()) {
+                mount(bookmark.getCodingStrategy());
             }
         }
 
         // Now add a tracker so we can still mount pages later
-        m_mounterTracker = new PageMounterTracker( m_bundleContext, this, m_applicationName );
+        m_mounterTracker = new PageMounterTracker(m_bundleContext, this, m_applicationName);
         m_mounterTracker.open();
 
-        m_sessionDestroyedListenerTracker = new SessionDestroyedListenerTracker( m_bundleContext, this );
+        m_sessionDestroyedListenerTracker = new SessionDestroyedListenerTracker(m_bundleContext, this);
         m_sessionDestroyedListenerTracker.open();
 
-        for( final IInitializer initializer : m_initializers )
-        {
-            initializer.init( this );
+        for (final IInitializer initializer : m_initializers) {
+            initializer.init(this);
         }
     }
 
     @Override
-    protected void onDestroy()
-    {
-        if( m_mounterTracker != null )
-        {
+    protected void onDestroy() {
+        if (m_mounterTracker != null) {
             m_mounterTracker.close();
             m_mounterTracker = null;
         }
 
-        if( m_sessionDestroyedListenerTracker != null )
-        {
+        if (m_sessionDestroyedListenerTracker != null) {
             m_sessionDestroyedListenerTracker.close();
             m_sessionDestroyedListenerTracker = null;
         }
 
-        for( ServiceRegistration reg : m_serviceRegistrations )
-        {
+        for (ServiceRegistration reg : m_serviceRegistrations) {
             reg.unregister();
         }
         m_serviceRegistrations.clear();
@@ -216,79 +207,66 @@ public final class PaxAuthenticatedWicketApplication
      * @return AuthenticatedWebSession subclass to use in this authenticated web application.
      */
     @Override
-    protected final Class<? extends AuthenticatedWebSession> getWebSessionClass()
-    {
+    protected final Class<? extends AuthenticatedWebSession> getWebSessionClass() {
         return PaxWicketSession.class;
     }
 
     @Override
-    public final Session newSession( Request request, Response response )
-    {
-        return new PaxWicketSession( request );
+    public final Session newSession(Request request, Response response) {
+        return new PaxWicketSession(request);
     }
 
     /**
      * @return Subclass of sign-in page
      */
     @Override
-    protected Class<? extends WebPage> getSignInPageClass()
-    {
+    protected Class<? extends WebPage> getSignInPageClass() {
         return m_signInPage;
     }
 
-    final AuthenticatedToken authenticate( String username, String password )
-    {
-        if( m_authenticator == null )
-        {
+    final AuthenticatedToken authenticate(String username, String password) {
+        if (m_authenticator == null) {
             return TOKEN_NOT_AUTHENTICATED;
         }
 
-        Roles roles = m_authenticator.authenticate( username, password );
-        if( roles != null )
-        {
+        Roles roles = m_authenticator.authenticate(username, password);
+        if (roles != null) {
             AuthenticatedToken authenticatedToken = new AuthenticatedToken();
-            this.m_roles.put( authenticatedToken, roles );
+            m_roles.put(authenticatedToken, roles);
             return authenticatedToken;
         }
 
         return null;
     }
 
-    final Roles getRoles( AuthenticatedToken token )
-    {
-        if( token == null || token == TOKEN_NOT_AUTHENTICATED )
-        {
+    final Roles getRoles(AuthenticatedToken token) {
+        if (token == null || token == TOKEN_NOT_AUTHENTICATED) {
             return EMPTY_ROLES;
         }
 
-        return m_roles.get( token );
+        return m_roles.get(token);
     }
 
-    private <T> void addWicketService( final Class<T> service, final T implementation )
-    {
+    private <T> void addWicketService(final Class<T> service, final T implementation) {
         Properties props = new Properties();
-        props.setProperty( "applicationId", m_applicationName );
-        props.setProperty( APPLICATION_NAME, m_applicationName );
+        props.setProperty("applicationId", m_applicationName);
+        props.setProperty(APPLICATION_NAME, m_applicationName);
 
-        m_serviceRegistrations.add( m_bundleContext.registerService( service.getName(), implementation, props ) );
+        m_serviceRegistrations.add(m_bundleContext.registerService(service.getName(), implementation, props));
     }
 
     @Override
-    public RequestCycle newRequestCycle( Request request, Response response)
-    {
-        if( null == m_requestCycleFactory )
-        {
-            return super.newRequestCycle( request, response );
+    public RequestCycle newRequestCycle(Request request, Response response) {
+        if (null == m_requestCycleFactory) {
+            return super.newRequestCycle(request, response);
         }
 
-        return m_requestCycleFactory.newRequestCycle( this, (WebRequest)request, response );
+        return m_requestCycleFactory.newRequestCycle(this, (WebRequest) request, response);
     }
 
     @Override
-    protected IRequestCycleProcessor newRequestCycleProcessor()
-    {
-        if( null == m_requestCycleProcessorFactory )
-        {
+    protected IRequestCycleProcessor newRequestCycleProcessor() {
+        if (null == m_requestCycleProcessorFactory) {
             return super.newRequestCycleProcessor();
         }
 
@@ -296,47 +274,37 @@ public final class PaxAuthenticatedWicketApplication
     }
 
     @Override
-    protected ISessionStore newSessionStore()
-    {
-        if( m_sessionStoreFactory == null )
-        {
+    protected ISessionStore newSessionStore() {
+        if (m_sessionStoreFactory == null) {
             return super.newSessionStore();
         }
 
-        return m_sessionStoreFactory.newSessionStore( this );
+        return m_sessionStoreFactory.newSessionStore(this);
     }
 
-    public void addListener( SessionDestroyedListener listener )
-    {
-        synchronized( m_sessionDestroyedListeners )
-        {
-            m_sessionDestroyedListeners.add( listener );
+    public void addListener(SessionDestroyedListener listener) {
+        synchronized (m_sessionDestroyedListeners) {
+            m_sessionDestroyedListeners.add(listener);
         }
     }
 
-    public String getApplicationName()
-    {
+    public String getApplicationName() {
         return m_applicationName;
     }
 
-    public void removeListener( SessionDestroyedListener listener )
-    {
-        synchronized( m_sessionDestroyedListeners )
-        {
-            m_sessionDestroyedListeners.remove( listener );
+    public void removeListener(SessionDestroyedListener listener) {
+        synchronized (m_sessionDestroyedListeners) {
+            m_sessionDestroyedListeners.remove(listener);
         }
     }
 
     @Override
-    public void sessionDestroyed( String sessionId )
-    {
-        super.sessionDestroyed( sessionId );
+    public void sessionDestroyed(String sessionId) {
+        super.sessionDestroyed(sessionId);
 
-        for( final SessionDestroyedListener listener : m_sessionDestroyedListeners )
-        {
-            synchronized( m_sessionDestroyedListeners )
-            {
-                listener.onSessionDestroyed( sessionId );
+        for (final SessionDestroyedListener listener : m_sessionDestroyedListeners) {
+            synchronized (m_sessionDestroyedListeners) {
+                listener.onSessionDestroyed(sessionId);
             }
         }
     }
