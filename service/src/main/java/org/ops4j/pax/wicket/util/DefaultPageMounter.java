@@ -3,14 +3,23 @@ package org.ops4j.pax.wicket.util;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultPageMounter implements PageMounter {
 
@@ -38,7 +47,7 @@ public class DefaultPageMounter implements PageMounter {
     }
 
     public final List<MountPointInfo> getMountPoints() {
-        return mountPoints;
+        return Collections.unmodifiableList(mountPoints);
     }
 
     private static class DefaultMountPointInfo implements MountPointInfo {
@@ -60,4 +69,5 @@ public class DefaultPageMounter implements PageMounter {
             return codingStrategy;
         }
     }
+
 }
