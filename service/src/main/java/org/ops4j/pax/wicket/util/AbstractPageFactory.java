@@ -61,11 +61,9 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         String[] classes = { PageFactory.class.getName(), ManagedService.class.getName() };
         synchronized (this) {
             if (serviceRegistration != null) {
-                Class<? extends AbstractPageFactory> clazz = getClass();
-                String className = clazz.getSimpleName();
-                throw new IllegalArgumentException(className + "[" + this + "] has been registered.");
+                throw new IllegalStateException(String.format("%s [%s] has been registered.", getClass()
+                    .getSimpleName(), this));
             }
-
             serviceRegistration = bundleContext.registerService(classes, this, properties);
         }
     }
@@ -73,11 +71,9 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
     public final void dispose() throws IllegalStateException {
         synchronized (this) {
             if (serviceRegistration == null) {
-                Class<? extends AbstractPageFactory> clazz = getClass();
-                String className = clazz.getSimpleName();
-                throw new IllegalStateException(className + "[" + this + "] has not been registered.");
+                throw new IllegalStateException(String.format("%s [%s] has not been registered.", getClass()
+                    .getSimpleName(), this));
             }
-
             serviceRegistration.unregister();
             serviceRegistration = null;
         }
