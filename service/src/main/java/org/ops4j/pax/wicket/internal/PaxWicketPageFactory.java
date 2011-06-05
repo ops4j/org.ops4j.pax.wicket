@@ -113,6 +113,8 @@ public final class PaxWicketPageFactory
         }
         if( content == null )
         {
+            LOGGER.warn("No factory available for page {}. Please be aware that this is required if you like"
+                + " to use @PaxWicketBean annotations!", pageClass);
             try
             {
                 if( parameters == null )
