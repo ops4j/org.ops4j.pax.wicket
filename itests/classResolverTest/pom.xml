@@ -90,6 +90,13 @@
     <dependency>
       <groupId>org.ops4j.pax.swissbox</groupId>
       <artifactId>pax-swissbox-tinybundles</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+      <artifactId>pax-wicket-samples-view-application</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
