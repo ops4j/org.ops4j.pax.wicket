@@ -18,7 +18,9 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import org.apache.wicket.util.lang.Objects;
 import org.ops4j.pax.wicket.internal.serialization.SerializationActivator;
+import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -42,6 +44,9 @@ public final class Activator
 
             LOGGER.debug("Initializing [" + bundleSymbolicName + "] bundle.");
         }
+
+        LOGGER.debug("Set object stream factory");
+        Objects.setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
 
         m_httpTracker = new HttpTracker(context);
         m_httpTracker.open();

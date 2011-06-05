@@ -18,11 +18,8 @@
 
 package org.ops4j.pax.wicket.samples.departmentstore.view.internal;
 
-import static org.apache.wicket.util.lang.Objects.setObjectStreamFactory;
-
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.util.RootContentAggregator;
-import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -40,7 +37,6 @@ public class Activator implements BundleActivator {
         // change deptStore/stylesheets/style.css in OverviewPage.html to stylesheets/style.css
         String mountPoint = "deptStore";
         String applicationName = "departmentstore";
-        setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
         m_store = new RootContentAggregator(bundleContext, applicationName, "swp");
         m_store.register();
 
