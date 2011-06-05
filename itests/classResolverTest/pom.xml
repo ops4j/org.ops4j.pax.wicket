@@ -88,14 +88,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
+      <groupId>org.ops4j.pax.swissbox</groupId>
+      <artifactId>pax-swissbox-tinybundles</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket.itests.bundles</groupId>
-      <artifactId>pax-wicket-itests-bundles-simpleLibraries</artifactId>
+      <groupId>org.ops4j.pax.wicket</groupId>
+      <artifactId>pax-wicket-service</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>

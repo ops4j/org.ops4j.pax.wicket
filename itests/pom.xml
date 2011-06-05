@@ -16,7 +16,6 @@
 
   <modules>
     <module>bootstrap</module>
-    <module>bundles</module>
     <module>classResolverTest</module>
     <module>lifecycleTest</module>
   </modules>

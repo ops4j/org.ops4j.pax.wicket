@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal;
+package org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal;
 
 import org.ops4j.pax.wicket.util.classResolver.BundleClassResolverHelper;
 import org.osgi.framework.BundleActivator;
@@ -24,22 +24,18 @@ import org.osgi.framework.BundleContext;
  * @author edward.yakop@gmail.com
  */
 public final class Activator
-    implements BundleActivator
-{
+        implements BundleActivator {
 
     private BundleClassResolverHelper helper;
 
-    public final void start( BundleContext context )
-        throws Exception
-    {
-        helper = new BundleClassResolverHelper( context );
-        helper.setServicePid( "libraryPid" );
+    public final void start(BundleContext context) throws Exception {
+        helper = new BundleClassResolverHelper(context);
+        helper.setServicePid("libraryPid");
         helper.register();
     }
 
-    public final void stop( BundleContext context )
-        throws Exception
-    {
+    public final void stop(BundleContext context)
+        throws Exception {
         helper.unregister();
         helper = null;
     }

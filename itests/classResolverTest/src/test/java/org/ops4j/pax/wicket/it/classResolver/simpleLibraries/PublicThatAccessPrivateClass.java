@@ -14,12 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal;
+package org.ops4j.pax.wicket.it.classResolver.simpleLibraries;
+
+import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.PrivateClass;
 
 /**
  * @author edward.yakop@gmail.com
  */
-public class PrivateClass
+public class PublicThatAccessPrivateClass
 {
+
+    PrivateClass privateClass;
 
 }

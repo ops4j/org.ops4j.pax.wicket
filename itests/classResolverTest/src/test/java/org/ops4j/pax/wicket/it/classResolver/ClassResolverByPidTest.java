@@ -22,7 +22,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
@@ -32,10 +31,17 @@ import java.util.Properties;
 
 import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
+import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.swissbox.tinybundles.core.TinyBundles;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.PublicClass;
+import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.PublicThatAccessPrivateClass;
+import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator;
+import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.PrivateClass;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
@@ -49,7 +55,19 @@ public final class ClassResolverByPidTest
 
     @org.ops4j.pax.exam.junit.Configuration
     public final Option[] provisionSimpleLibraries() {
-        return options(provision("mvn:org.ops4j.pax.wicket.itests.bundles/pax-wicket-itests-bundles-simpleLibraries"));
+        return options(CoreOptions.provision(TinyBundles
+                .newBundle()
+                .add(PublicClass.class)
+                .add(PublicThatAccessPrivateClass.class)
+                .add(PrivateClass.class)
+                .add(Activator.class)
+                .set(Constants.EXPORT_PACKAGE, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries")
+                .set(Constants.BUNDLE_ACTIVATOR,
+                    "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator")
+                .set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.bundles.simpleLibraries")
+                .set(Constants.IMPORT_PACKAGE, " org.ops4j.pax.wicket.*,org.apache.wicket.*,org.osgi.*;")
+                /* .set("Private-Package", "org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal.*") */
+                .build(TinyBundles.withBnd())));
     }
 
     @Test
@@ -86,7 +104,7 @@ public final class ClassResolverByPidTest
 
         // Verify that this is the simple libraries class resolver
         IClassResolver classResolver = (IClassResolver) bundleContext.getService(reference);
-        String className = "org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal.PrivateClass";
+        String className = "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.PrivateClass";
         Class clazz = classResolver.resolveClass(className);
         assertNotNull(clazz);
         assertEquals(clazz.getName(), className);
