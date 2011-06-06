@@ -50,12 +50,12 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    private Dictionary<String, Object> m_properties;
-    private BundleContext m_bundleContext;
-    private HashMap<String, List<ContentSource>> m_children;
-    private ServiceRegistration m_registration;
-    private DefaultContentTracker m_contentTracker;
-    private HashMap<String, ContentSource> m_wiredSources;
+    private Dictionary<String, Object> properties;
+    private BundleContext bundleContext;
+    private HashMap<String, List<ContentSource>> children;
+    private ServiceRegistration registration;
+    private DefaultContentTracker contentTracker;
+    private HashMap<String, ContentSource> wiredSources;
 
     public BaseAggregator(BundleContext bundleContext, String applicationName, String aggregationPoint)
         throws IllegalArgumentException {
@@ -63,11 +63,11 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
         validateNotEmpty(applicationName, "applicationName");
         validateNotEmpty(aggregationPoint, "aggregationPoint");
 
-        m_children = new HashMap<String, List<ContentSource>>();
-        m_wiredSources = new HashMap<String, ContentSource>();
-        m_properties = new Hashtable<String, Object>();
-        m_properties.put(SERVICE_PID, applicationName + "." + aggregationPoint);
-        m_bundleContext = bundleContext;
+        children = new HashMap<String, List<ContentSource>>();
+        wiredSources = new HashMap<String, ContentSource>();
+        properties = new Hashtable<String, Object>();
+        properties.put(SERVICE_PID, applicationName + "." + aggregationPoint);
+        this.bundleContext = bundleContext;
         setAggregationPointName(aggregationPoint);
         setApplicationName(applicationName);
     }
@@ -144,14 +144,14 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
     public final void dispose()
         throws IllegalStateException {
         synchronized (this) {
-            if (m_contentTracker == null) {
+            if (contentTracker == null) {
                 throw new IllegalStateException("RootContentAggregator [" + this + "] has not been registered.");
             }
 
-            m_contentTracker.close();
-            m_registration.unregister();
+            contentTracker.close();
+            registration.unregister();
             onDispose();
-            m_contentTracker = null;
+            contentTracker = null;
         }
     }
 
@@ -161,16 +161,16 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
      * @return the BundleContext that this ContentAggregator belongs to.
      */
     protected final BundleContext getInternalBundleContext() {
-        return m_bundleContext;
+        return bundleContext;
     }
 
     protected final void setInternalBundleContext(BundleContext bundleContext) {
-        m_bundleContext = bundleContext;
+        this.bundleContext = bundleContext;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public final void updated(Dictionary config) throws ConfigurationException {
-        validateNotNull(m_bundleContext, "bundleContext");
+        validateNotNull(bundleContext, "bundleContext");
         if (config == null) {
             return;
         }
@@ -187,13 +187,13 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
         if (existingAggregationPointName != null && existingAggregationPointName.equals(newAggregationPointName)) {
             return;
         }
-        m_properties = config;
-        m_registration.setProperties(config);
-        m_contentTracker.close();
-        m_children.clear();
-        m_contentTracker =
-            new DefaultContentTracker(m_bundleContext, this, newApplicationName, newAggregationPointName);
-        m_contentTracker.open();
+        properties = config;
+        registration.setProperties(config);
+        contentTracker.close();
+        children.clear();
+        contentTracker =
+            new DefaultContentTracker(bundleContext, this, newApplicationName, newAggregationPointName);
+        contentTracker.open();
         onUpdated(config);
     }
 
@@ -216,12 +216,12 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
 
         synchronized (this) {
             String sourceId = source.getSourceId();
-            m_wiredSources.put(sourceId, source);
+            wiredSources.put(sourceId, source);
 
-            List<ContentSource> contents = m_children.get(wicketId);
+            List<ContentSource> contents = children.get(wicketId);
             if (contents == null) {
                 contents = new ArrayList<ContentSource>();
-                m_children.put(wicketId, contents);
+                children.put(wicketId, contents);
             }
 
             contents.add(source);
@@ -246,16 +246,16 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
 
         synchronized (this) {
             String sourceId = content.getSourceId();
-            m_wiredSources.remove(sourceId);
+            wiredSources.remove(sourceId);
 
-            List<ContentSource> contents = m_children.get(wicketId);
+            List<ContentSource> contents = children.get(wicketId);
             if (contents == null) {
                 return false;
             }
 
             contents.remove(content);
             if (contents.isEmpty()) {
-                return m_children.remove(wicketId) != null;
+                return children.remove(wicketId) != null;
             }
         }
 
@@ -265,28 +265,28 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
     public final void register()
         throws IllegalStateException {
         synchronized (this) {
-            if (m_contentTracker != null) {
+            if (contentTracker != null) {
                 throw new IllegalStateException("This ContentAggregator [" + this + "] has already been registered.");
             }
-            validateNotNull(m_bundleContext, "bundleContext");
+            validateNotNull(bundleContext, "bundleContext");
             String applicationName = getApplicationName();
             String aggregationPoint = getAggregationPointName();
-            m_contentTracker = new DefaultContentTracker(m_bundleContext, this, applicationName, aggregationPoint);
-            m_contentTracker.open();
+            contentTracker = new DefaultContentTracker(bundleContext, this, applicationName, aggregationPoint);
+            contentTracker.open();
 
             String[] serviceNames = getServiceNames();
-            m_registration = m_bundleContext.registerService(serviceNames, this, m_properties);
+            registration = bundleContext.registerService(serviceNames, this, properties);
         }
     }
 
     protected abstract String[] getServiceNames();
 
     protected String[] getStringArrayProperty(String key) {
-        return (String[]) m_properties.get(key);
+        return (String[]) properties.get(key);
     }
 
     protected String getStringProperty(String key, String defaultValue) {
-        String value = (String) m_properties.get(key);
+        String value = (String) properties.get(key);
 
         if (value == null) {
             return defaultValue;
@@ -296,17 +296,17 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
     }
 
     protected void setProperty(String key, Object value) {
-        m_properties.put(key, value);
+        properties.put(key, value);
     }
 
     protected void updateRegistration() {
-        if (m_registration != null) {
-            m_registration.setProperties(m_properties);
+        if (registration != null) {
+            registration.setProperties(properties);
         }
     }
 
     protected Object getObjectProperty(String key) {
-        return m_properties.get(key);
+        return properties.get(key);
     }
 
     /**
@@ -343,7 +343,7 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
             throws IllegalArgumentException {
         List<ContentSourceType> contents = new ArrayList<ContentSourceType>();
         synchronized (this) {
-            for (Entry<String, ContentSource> contentSource : m_wiredSources.entrySet()) {
+            for (Entry<String, ContentSource> contentSource : wiredSources.entrySet()) {
                 contents.add((ContentSourceType) contentSource.getValue());
             }
         }
@@ -356,7 +356,7 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
         validateNotEmpty(groupId, "wicketId");
         List<V> contents;
         synchronized (this) {
-            contents = (List<V>) m_children.get(groupId);
+            contents = (List<V>) children.get(groupId);
         }
         if (contents != null) {
             contents = new ArrayList<V>(contents);
@@ -371,7 +371,7 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
         validateNotEmpty(sourceId, "sourceId");
         ContentSource source;
         synchronized (this) {
-            source = m_wiredSources.get(sourceId);
+            source = wiredSources.get(sourceId);
         }
 
         if (source == null) {
@@ -403,7 +403,7 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
     protected void finalize()
         throws Throwable {
         synchronized (this) {
-            if (m_contentTracker != null) {
+            if (contentTracker != null) {
                 LOGGER.warn("RootContentAggregator [" + this + "] is not disposed.");
             }
             dispose();
@@ -412,7 +412,7 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
     }
 
     public boolean isEmpty() {
-        return m_wiredSources == null || m_wiredSources.size() == 0;
+        return wiredSources == null || wiredSources.size() == 0;
     }
 
 }

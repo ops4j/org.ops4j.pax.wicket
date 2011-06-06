@@ -19,65 +19,59 @@
 package org.ops4j.pax.wicket.internal;
 
 import java.io.Serializable;
+
 import org.apache.wicket.Request;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 
-public final class PaxWicketSession extends AuthenticatedWebSession
-    implements Serializable, PaxWicketAuthentication
-{
+public final class PaxWicketSession extends AuthenticatedWebSession implements Serializable, PaxWicketAuthentication {
 
     private static final long serialVersionUID = 1L;
 
-    private AuthenticatedToken m_token;
-    private String m_loggedInUser;
+    private AuthenticatedToken token;
+    private String loggedInUser;
 
     /**
      * Construct the instance of pax wicket session.
-     *
+     * 
      * @param request The incoming request.
      */
-    public PaxWicketSession( Request request )
-    {
-        super( request );
+    public PaxWicketSession(Request request) {
+        super(request);
     }
 
     /**
      * Authenticates this session using the given username and password
-     *
+     * 
      * @param username The username
      * @param password The password
-     *
+     * 
      * @return True if the user was authenticated successfully
      */
     @Override
-    public final boolean authenticate( String username, String password )
-    {
+    public final boolean authenticate(String username, String password) {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
 
-        m_token = app.authenticate( username, password );
-        if( m_token != null )
-        {
-            m_loggedInUser = username;
+        token = app.authenticate(username, password);
+        if (token != null) {
+            loggedInUser = username;
             return true;
         }
 
-        m_loggedInUser = null;
+        loggedInUser = null;
 
         return false;
     }
 
-    public final String getLoggedInUser()
-    {
-        return m_loggedInUser;
+    public final String getLoggedInUser() {
+        return loggedInUser;
     }
 
     @Override
-    public final void invalidateNow()
-    {
-        m_token = null;
-        m_loggedInUser = null;
+    public final void invalidateNow() {
+        token = null;
+        loggedInUser = null;
 
         super.invalidateNow();
     }
@@ -86,10 +80,9 @@ public final class PaxWicketSession extends AuthenticatedWebSession
      * @return Get the roles that this session can play
      */
     @Override
-    public final Roles getRoles()
-    {
+    public final Roles getRoles() {
         PaxAuthenticatedWicketApplication app = (PaxAuthenticatedWicketApplication) getApplication();
-        return app.getRoles( m_token );
+        return app.getRoles(token);
     }
 
 }

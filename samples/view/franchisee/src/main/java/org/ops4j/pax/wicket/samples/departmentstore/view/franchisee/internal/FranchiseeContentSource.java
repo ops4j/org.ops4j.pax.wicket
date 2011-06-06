@@ -29,18 +29,17 @@ import org.osgi.framework.BundleContext;
  * @author Niclas Hedhman, Edward Yakop
  * @since 1.0.0
  */
-public class FranchiseeContentSource extends AbstractContentSource implements
-        ComponentContentSource<FranchiseePanel> {
+public class FranchiseeContentSource extends AbstractContentSource implements ComponentContentSource<FranchiseePanel> {
 
-    private Franchisee m_franchisee;
+    private Franchisee franchisee;
 
     public FranchiseeContentSource(BundleContext context, Franchisee franchisee, String applicationName) {
         super(context, franchisee.getName(), applicationName);
-        m_franchisee = franchisee;
+        this.franchisee = franchisee;
     }
 
     public FranchiseePanel createSourceComponent(String wicketId) {
-        return new FranchiseePanel(wicketId, m_franchisee);
+        return new FranchiseePanel(wicketId, franchisee);
     }
 
 }

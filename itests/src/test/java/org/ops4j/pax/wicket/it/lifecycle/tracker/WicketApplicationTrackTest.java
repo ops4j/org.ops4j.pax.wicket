@@ -44,8 +44,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     }
 
     @Test
-    public final void testApplicationTracker()
-        throws Exception {
+    public final void testApplicationTracker() throws Exception {
         sleep(2000);
         Bundle simpleAppBundle =
             getBundleBySymbolicName(bundleContext,

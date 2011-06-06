@@ -19,7 +19,6 @@ package org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal;
 /**
  * @author edward.yakop@gmail.com
  */
-public class PrivateClass
-{
+public class PrivateClass {
 
 }

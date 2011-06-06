@@ -41,45 +41,45 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingClassResolver.class);
 
-    private final BundleContext m_context;
-    private final String m_applicationName;
-    private final ConcurrentLinkedQueue<IClassResolver> m_resolvers;
+    private final BundleContext context;
+    private final String applicationName;
+    private final ConcurrentLinkedQueue<IClassResolver> resolvers;
 
-    private ClassResolverTracker m_tracker;
+    private ClassResolverTracker tracker;
 
     public DelegatingClassResolver(BundleContext context, String applicationName) throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotEmpty(applicationName, "applicationName");
-        m_context = context;
-        m_applicationName = applicationName;
-        m_resolvers = new ConcurrentLinkedQueue<IClassResolver>();
+        this.context = context;
+        this.applicationName = applicationName;
+        resolvers = new ConcurrentLinkedQueue<IClassResolver>();
     }
 
     public final void intialize() throws IllegalStateException {
         synchronized (this) {
-            if (m_tracker != null) {
+            if (tracker != null) {
                 throw new IllegalStateException(
                     "DelegatingClassResolver [" + this + "] had been initialized.");
             }
-            m_tracker = new ClassResolverTracker(m_context, m_applicationName);
-            m_tracker.open();
+            tracker = new ClassResolverTracker(context, applicationName);
+            tracker.open();
         }
     }
 
     public void dispose() throws IllegalStateException {
         synchronized (this) {
-            if (m_tracker == null) {
+            if (tracker == null) {
                 throw new IllegalStateException(
                     "DelegatingClassResolver [" + this + "] had not been initialized.");
             }
-            m_tracker.close();
-            m_tracker = null;
+            tracker.close();
+            tracker = null;
         }
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {
-        LOGGER.trace("Try to resolve %s from %s resolvers", classname, m_resolvers.size());
-        for (IClassResolver resolver : m_resolvers) {
+        LOGGER.trace("Try to resolve %s from %s resolvers", classname, resolvers.size());
+        for (IClassResolver resolver : resolvers) {
             try {
                 Class<?> candidate = resolver.resolveClass(classname);
                 if (candidate != null) {
@@ -95,7 +95,7 @@ public final class DelegatingClassResolver implements IClassResolver {
     }
 
     public Iterator<URL> getResources(String name) {
-        for (IClassResolver resolver : m_resolvers) {
+        for (IClassResolver resolver : resolvers) {
             try {
                 Iterator<URL> iterator = resolver.getResources(name);
                 if (iterator != null && iterator.hasNext()) {
@@ -122,7 +122,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         public final Object addingService(ServiceReference reference) {
             IClassResolver resolver = (IClassResolver) super.addingService(reference);
             synchronized (DelegatingClassResolver.this) {
-                m_resolvers.add(resolver);
+                resolvers.add(resolver);
             }
             return resolver;
         }
@@ -155,7 +155,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         public final void removedService(ServiceReference reference, Object service) {
             IClassResolver resolver = (IClassResolver) service;
             synchronized (DelegatingClassResolver.this) {
-                m_resolvers.remove(resolver);
+                resolvers.remove(resolver);
             }
             super.removedService(reference, service);
         }

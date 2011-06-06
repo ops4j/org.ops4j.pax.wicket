@@ -26,23 +26,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks the class as restricting which {@code org.apache.wicket.authorization.Action}s
- * can be performed by a user. Whether or not the Action is authorized
- * is determined by the UserAdmin service.
- *
+ * Marks the class as restricting which {@code org.apache.wicket.authorization.Action}s can be performed by a user.
+ * Whether or not the Action is authorized is determined by the UserAdmin service.
+ * 
  * @author David Leangen
  */
-@Retention( RetentionPolicy.RUNTIME )
-@Target( ElementType.TYPE )
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 @Documented
 @Inherited
-public @interface AuthorizeAction
-{
+public @interface AuthorizeAction {
 
     /**
-     * An enumeration (with a small "e") of Wicket Actions that
-     * are to be restricted. The default value is empty, which signifies
-     * that this should be applied to all Actions.
+     * An enumeration (with a small "e") of Wicket Actions that are to be restricted. The default value is empty, which
+     * signifies that this should be applied to all Actions.
      */
     String[] value() default "";
 }

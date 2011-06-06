@@ -21,8 +21,7 @@ import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.PrivateCla
 /**
  * @author edward.yakop@gmail.com
  */
-public class PublicThatAccessPrivateClass
-{
+public class PublicThatAccessPrivateClass {
 
     PrivateClass privateClass;
 

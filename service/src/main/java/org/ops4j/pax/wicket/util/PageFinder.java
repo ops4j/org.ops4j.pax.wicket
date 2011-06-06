@@ -17,11 +17,12 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.wicket.Page;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
+
+import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -29,56 +30,48 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PageFinder
-{
+public class PageFinder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( PageFinder.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageFinder.class);
 
     /**
      * Returns the page content from the specified {@code context} for the specified {@code applicationName} and
      * {@code pageName}.
-     *
-     * @param <T>             The page subclass.
-     * @param context         The bundle context. This argument must not be {@code null}.
+     * 
+     * @param <T> The page subclass.
+     * @param context The bundle context. This argument must not be {@code null}.
      * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * @param pageName        The page name. This argument must not be {@code null} or empty.
-     *
+     * @param pageName The page name. This argument must not be {@code null} or empty.
+     * 
      * @return The page of the specified {@code applicationName} and {@code pageName}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null} or empty.
      * @since 1.0.0
      */
-    @SuppressWarnings( "unchecked" )
-    public static <T extends Page> PageFactory<T>[] findPages(
-        BundleContext context, String applicationName, String pageName )
-        throws IllegalArgumentException
-    {
-        validateNotNull( context, "context" );
-        validateNotEmpty( applicationName, "applicationName" );
-        validateNotEmpty( pageName, "pageName" );
+    @SuppressWarnings("unchecked")
+    public static <T extends Page> PageFactory<T>[] findPages(BundleContext context, String applicationName,
+            String pageName) throws IllegalArgumentException {
+        validateNotNull(context, "context");
+        validateNotEmpty(applicationName, "applicationName");
+        validateNotEmpty(pageName, "pageName");
 
         String filter =
             "(&(" + APPLICATION_NAME + "=" + applicationName + ")" + "(" + PAGE_NAME + "=" + pageName + "))";
-        try
-        {
-            ServiceReference[] refs = context.getServiceReferences( PageFactory.class.getName(), filter );
-            if( refs == null )
-            {
+        try {
+            ServiceReference[] refs = context.getServiceReferences(PageFactory.class.getName(), filter);
+            if (refs == null) {
                 return new PageFactory[0];
             }
             PageFactory<T>[] pageSources = new PageFactory[refs.length];
             int count = 0;
-            for( ServiceReference ref : refs )
-            {
-                pageSources[ count++ ] = (PageFactory<T>) context.getService( ref );
+            for (ServiceReference ref : refs) {
+                pageSources[count++] = (PageFactory<T>) context.getService(ref);
             }
             return pageSources;
-        }
-        catch( InvalidSyntaxException e )
-        {
-            LOGGER.warn( "Invalid syntax [" + filter + "]. This should not happen unless if both application name " +
+        } catch (InvalidSyntaxException e) {
+            LOGGER.warn("Invalid syntax [" + filter + "]. This should not happen unless if both application name " +
                          "and page name contains ldap filters.", e
-            );
+                );
 
             // can not happen, RIGHT!
             return new PageFactory[0];

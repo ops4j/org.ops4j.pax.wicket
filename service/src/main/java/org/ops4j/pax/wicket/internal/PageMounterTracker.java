@@ -36,14 +36,13 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public final class PageMounterTracker extends ServiceTracker {
 
-    private final WebApplication m_application;
+    private final WebApplication application;
 
     public PageMounterTracker(BundleContext context, WebApplication application, String applicationName)
         throws IllegalArgumentException {
         super(context, createFilter(context, applicationName), null);
         validateNotNull(application, "application");
-
-        m_application = application;
+        this.application = application;
     }
 
     private static Filter createFilter(BundleContext context, String applicationName)
@@ -71,7 +70,7 @@ public final class PageMounterTracker extends ServiceTracker {
         List<MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
             IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
-            m_application.mount(strategy);
+            application.mount(strategy);
         }
 
         return mounter;
@@ -83,7 +82,7 @@ public final class PageMounterTracker extends ServiceTracker {
         List<MountPointInfo> infos = pageMounter.getMountPoints();
         for (MountPointInfo bookmark : infos) {
             String path = bookmark.getPath();
-            m_application.unmount(path);
+            application.unmount(path);
         }
 
         super.removedService(reference, pageMounter);

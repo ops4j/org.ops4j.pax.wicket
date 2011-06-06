@@ -23,25 +23,20 @@ import org.osgi.framework.BundleContext;
 
 /**
  * {@code Activator}
- *
+ * 
  * @since 1.0.0
  */
-public class Activator
-    implements BundleActivator
-{
-	private FranchiseeDepartmentStoreModelTracker m_storeTracker;
+public class Activator implements BundleActivator {
 
-    public void start( BundleContext context )
-        throws Exception
-    {
-		m_storeTracker = new FranchiseeDepartmentStoreModelTracker(context);
-		m_storeTracker.open();
+    private FranchiseeDepartmentStoreModelTracker storeTracker;
+
+    public void start(BundleContext context) throws Exception {
+        storeTracker = new FranchiseeDepartmentStoreModelTracker(context);
+        storeTracker.open();
 
     }
 
-    public void stop( BundleContext context )
-        throws Exception
-    {
-		m_storeTracker.close();
+    public void stop(BundleContext context) throws Exception {
+        storeTracker.close();
     }
 }

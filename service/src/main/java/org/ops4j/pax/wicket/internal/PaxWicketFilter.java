@@ -17,25 +17,22 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
-import org.apache.wicket.protocol.http.WicketFilter;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
-final class PaxWicketFilter extends WicketFilter
-{
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.apache.wicket.protocol.http.WicketFilter;
 
-    private final IWebApplicationFactory m_applicationFactory;
+final class PaxWicketFilter extends WicketFilter {
 
-    PaxWicketFilter( IWebApplicationFactory factory )
-        throws IllegalArgumentException
-    {
-        validateNotNull( factory, "factory" );
-        m_applicationFactory = factory;
+    private final IWebApplicationFactory applicationFactory;
+
+    PaxWicketFilter(IWebApplicationFactory factory) throws IllegalArgumentException {
+        validateNotNull(factory, "factory");
+        applicationFactory = factory;
     }
 
     @Override
-    protected final IWebApplicationFactory getApplicationFactory()
-    {
-        return m_applicationFactory;
+    protected final IWebApplicationFactory getApplicationFactory() {
+        return applicationFactory;
     }
 }

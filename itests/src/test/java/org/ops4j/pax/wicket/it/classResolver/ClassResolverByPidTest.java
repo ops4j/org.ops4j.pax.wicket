@@ -48,8 +48,8 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 
-public final class ClassResolverByPidTest
-        extends PaxWicketIntegrationTest {
+public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
+
     @Inject
     private BundleContext bundleContext;
 
@@ -70,8 +70,7 @@ public final class ClassResolverByPidTest
     }
 
     @Test
-    public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly()
-        throws Throwable {
+    public final void testPrivateLibrariesByUpdatingConfigurationByInvokingDirectly() throws Throwable {
         ServiceReference classResolverReference = getLibraryClassResolverReference();
         assertFalse(isApplicationNameKeyExists(classResolverReference));
 
@@ -88,8 +87,7 @@ public final class ClassResolverByPidTest
         bundleContext.ungetService(classResolverReference);
     }
 
-    private void validateThatClassResolverIsExposedToAbcAndDef()
-        throws Throwable {
+    private void validateThatClassResolverIsExposedToAbcAndDef() throws Throwable {
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)"
             );
@@ -125,8 +123,7 @@ public final class ClassResolverByPidTest
 
     @Test
     @SuppressWarnings("unchecked")
-    public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin()
-        throws Throwable {
+    public final void testPrivateLibrariesByUpdatingConfigurationViaConfigAdmin() throws Throwable {
         ServiceReference classResolverReference = getLibraryClassResolverReference();
 
         // Ensure no configuration is applied
@@ -162,8 +159,7 @@ public final class ClassResolverByPidTest
         bundleContext.ungetService(classResolverReference);
     }
 
-    private ServiceReference getLibraryClassResolverReference()
-        throws InvalidSyntaxException {
+    private ServiceReference getLibraryClassResolverReference() throws InvalidSyntaxException {
         ServiceReference[] references = bundleContext.getServiceReferences(
             IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
             );

@@ -25,33 +25,29 @@ import org.apache.wicket.IInitializer;
  * <p>
  * This is done to get around PAXCONSTRUCT-7, and being able to use pax-wicket-service in eclipse target platform.
  * </p>
- *
+ * 
  * @author Edward Yakop
  * @since 0.5.0
  */
-public final class Initializer
-    implements IInitializer
-{
+public final class Initializer implements IInitializer {
 
-    private final IInitializer m_wicketInitializer;
-    private final IInitializer m_wicketExtensionInitializer;
+    private final IInitializer wicketInitializer;
+    private final IInitializer wicketExtensionInitializer;
 
-    public Initializer()
-    {
-        m_wicketInitializer = new org.apache.wicket.Initializer();
-        m_wicketExtensionInitializer = new org.apache.wicket.extensions.Initializer();
+    public Initializer() {
+        wicketInitializer = new org.apache.wicket.Initializer();
+        wicketExtensionInitializer = new org.apache.wicket.extensions.Initializer();
     }
 
     /**
      * Initialize the application.
-     *
+     * 
      * @param application The application loading the component
-     *
+     * 
      * @since 0.5.0
      */
-    public final void init( Application application )
-    {
-        m_wicketInitializer.init( application );
-        m_wicketExtensionInitializer.init( application );
+    public final void init(Application application) {
+        wicketInitializer.init(application);
+        wicketExtensionInitializer.init(application);
     }
 }

@@ -23,39 +23,28 @@ import org.osgi.framework.BundleContext;
 /**
  * @author edward.yakop@gmail.com
  */
-public class SerializationActivator
-    implements BundleActivator
-{
+public class SerializationActivator implements BundleActivator {
 
-    private static BundleContext m_bundleContext;
+    private static BundleContext bundleContext;
 
-    public static BundleContext bundleContext()
-    {
-        return m_bundleContext;
+    public static BundleContext bundleContext() {
+        return bundleContext;
     }
 
-    public static BundleContext getBundleContextByBundleId( long bundleId )
-    {
-        Bundle bundle = m_bundleContext.getBundle( bundleId );
-        if( bundle != null )
-        {
+    public static BundleContext getBundleContextByBundleId(long bundleId) {
+        Bundle bundle = bundleContext.getBundle(bundleId);
+        if (bundle != null) {
             return bundle.getBundleContext();
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public final void start( BundleContext context )
-        throws Exception
-    {
-        m_bundleContext = context;
+    public final void start(BundleContext context) throws Exception {
+        bundleContext = context;
     }
 
-    public final void stop( BundleContext context )
-        throws Exception
-    {
-        m_bundleContext = null;
+    public final void stop(BundleContext context) throws Exception {
+        bundleContext = null;
     }
 }

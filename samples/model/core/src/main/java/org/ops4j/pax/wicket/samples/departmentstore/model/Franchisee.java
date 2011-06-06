@@ -23,30 +23,30 @@ public class Franchisee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String m_name;
-    private String m_description;
+    private String name;
+    private String description;
 
     public Franchisee() {
     }
 
     public Franchisee(String name, String description) {
-        m_name = name;
-        m_description = description;
+        this.name = name;
+        this.description = description;
     }
 
     public String getName() {
-        return m_name;
+        return name;
     }
 
     public void setName(String name) {
-        m_name = name;
+        this.name = name;
     }
 
     public String getDescription() {
-        return m_description;
+        return description;
     }
 
     public void setDescription(String description) {
-        m_description = description;
+        this.description = description;
     }
 }

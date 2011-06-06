@@ -22,16 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class FilterConfiguration
-{
+public final class FilterConfiguration {
 
     private List<FilterDescription> m_filterDescriptions = new ArrayList<FilterDescription>();
 
-    public FilterConfiguration add( String classNameOfFilter, boolean required )
-    {
-        synchronized ( m_filterDescriptions )
-        {
-            m_filterDescriptions.add( new FilterDescription( classNameOfFilter, required ) );
+    public FilterConfiguration add(String classNameOfFilter, boolean required) {
+        synchronized (m_filterDescriptions) {
+            m_filterDescriptions.add(new FilterDescription(classNameOfFilter, required));
         }
         return this;
     }
@@ -39,9 +36,8 @@ public final class FilterConfiguration
     /**
      * @return an unmodifiable list of descriptions of all filters registered in this configuration
      */
-    public List<FilterDescription> getFilters()
-    {
-        return Collections.unmodifiableList( m_filterDescriptions );
+    public List<FilterDescription> getFilters() {
+        return Collections.unmodifiableList(m_filterDescriptions);
     }
-    
+
 }

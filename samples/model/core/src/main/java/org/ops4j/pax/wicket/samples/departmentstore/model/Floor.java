@@ -19,13 +19,12 @@ package org.ops4j.pax.wicket.samples.departmentstore.model;
 
 import java.util.List;
 
-public interface Floor
-{
+public interface Floor {
     String getName();
 
     List<Franchisee> getFranchisees();
 
-    void addFranchisee( Franchisee franchisee );
+    void addFranchisee(Franchisee franchisee);
 
-    void removeFranchise( Franchisee franchisee );
+    void removeFranchise(Franchisee franchisee);
 }

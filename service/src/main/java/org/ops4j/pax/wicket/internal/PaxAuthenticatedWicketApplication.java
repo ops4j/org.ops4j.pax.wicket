@@ -61,9 +61,8 @@ import org.ops4j.pax.wicket.api.SessionStoreFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public final class PaxAuthenticatedWicketApplication
-        extends AuthenticatedWebApplication
-        implements SessionDestroyedHander {
+public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApplication implements
+        SessionDestroyedHander {
 
     private static final Roles EMPTY_ROLES = new Roles();
 

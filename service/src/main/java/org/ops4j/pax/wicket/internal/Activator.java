@@ -28,14 +28,13 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Activator
-        implements BundleActivator {
+public final class Activator implements BundleActivator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
-    private HttpTracker m_httpTracker;
-    private ServiceTracker m_applicationFactoryTracker;
-    private SerializationActivator m_serializationActivator;
+    private HttpTracker httpTracker;
+    private ServiceTracker applicationFactoryTracker;
+    private SerializationActivator serializationActivator;
 
     public final void start(BundleContext context) throws Exception {
         if (LOGGER.isDebugEnabled()) {
@@ -48,25 +47,25 @@ public final class Activator
         LOGGER.debug("Set object stream factory");
         Objects.setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
 
-        m_httpTracker = new HttpTracker(context);
-        m_httpTracker.open();
+        httpTracker = new HttpTracker(context);
+        httpTracker.open();
 
-        m_applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, m_httpTracker);
-        m_applicationFactoryTracker.open();
+        applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
+        applicationFactoryTracker.open();
 
-        m_serializationActivator = new SerializationActivator();
-        m_serializationActivator.start(context);
+        serializationActivator = new SerializationActivator();
+        serializationActivator.start(context);
         context.getBundle().getResources("pathToResource");
     }
 
     public final void stop(BundleContext context) throws Exception {
-        m_serializationActivator.stop(context);
-        m_httpTracker.close();
-        m_applicationFactoryTracker.close();
+        serializationActivator.stop(context);
+        httpTracker.close();
+        applicationFactoryTracker.close();
 
-        m_serializationActivator = null;
-        m_httpTracker = null;
-        m_applicationFactoryTracker = null;
+        serializationActivator = null;
+        httpTracker = null;
+        applicationFactoryTracker = null;
 
         if (LOGGER.isDebugEnabled()) {
             Bundle bundle = context.getBundle();

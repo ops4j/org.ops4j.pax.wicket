@@ -20,80 +20,66 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.SessionDestroyedListener;
-
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import org.ops4j.pax.wicket.api.PageFactory;
-import org.osgi.framework.BundleContext;
 import static org.osgi.framework.Constants.OBJECTCLASS;
+
+import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.api.SessionDestroyedListener;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
-final class TrackingUtil
-{
+final class TrackingUtil {
 
-    private TrackingUtil()
-    {
+    private TrackingUtil() {
     }
 
-    static Filter createApplicationFilter( BundleContext bundleContext, String applicationName )
-    {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( applicationName, "applicationName" );
+    static Filter createApplicationFilter(BundleContext bundleContext, String applicationName) {
+        validateNotNull(bundleContext, "bundleContext");
+        validateNotEmpty(applicationName, "applicationName");
 
         Filter filter;
-        try
-        {
+        try {
             String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")(" +
-            OBJECTCLASS + "=" + SessionDestroyedListener.class.getName() + "))";
-            filter = bundleContext.createFilter( filterString );
-        } catch( InvalidSyntaxException e )
-        {
-            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
-            );
+                    OBJECTCLASS + "=" + SessionDestroyedListener.class.getName() + "))";
+            filter = bundleContext.createFilter(filterString);
+        } catch (InvalidSyntaxException e) {
+            throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
         }
 
         return filter;
     }
 
-    static Filter createContentFilter( BundleContext bundleContext, String applicationName )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( applicationName, "applicationName" );
+    static Filter createContentFilter(BundleContext bundleContext, String applicationName)
+        throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundleContext");
+        validateNotEmpty(applicationName, "applicationName");
 
         Filter filter;
-        try
-        {
+        try {
             String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")(" +
                                   OBJECTCLASS + "=" + ContentSource.class.getName() + "))";
-            filter = bundleContext.createFilter( filterString );
-        } catch( InvalidSyntaxException e )
-        {
-            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
-            );
+            filter = bundleContext.createFilter(filterString);
+        } catch (InvalidSyntaxException e) {
+            throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
         }
 
         return filter;
     }
 
-    static Filter createAllPageFactoryFilter( BundleContext bundleContext, String applicationName )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundleContext" );
-        validateNotEmpty( applicationName, "applicationName" );
+    static Filter createAllPageFactoryFilter(BundleContext bundleContext, String applicationName)
+        throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundleContext");
+        validateNotEmpty(applicationName, "applicationName");
 
         Filter filter;
-        try
-        {
+        try {
             String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")"
                                   + "(" + OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
-            filter = bundleContext.createFilter( filterString );
-        } catch( InvalidSyntaxException e )
-        {
-            throw new IllegalArgumentException( "applicationName can not contain '*', '(' or ')' : " + applicationName
-            );
+            filter = bundleContext.createFilter(filterString);
+        } catch (InvalidSyntaxException e) {
+            throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
         }
         return filter;
     }

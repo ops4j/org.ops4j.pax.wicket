@@ -22,22 +22,17 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-public class Activator
-    implements BundleActivator
-{
+public class Activator implements BundleActivator {
 
-    private ServiceRegistration m_registration;
+    private ServiceRegistration registration;
 
-    public void start( BundleContext context )
-        throws Exception
-    {
-        DepartmentStoreImpl store = new DepartmentStoreImpl( "Sungei Wang Plaza" );
-        m_registration = context.registerService( DepartmentStore.class.getName(), store, null );
+    public void start(BundleContext context) throws Exception {
+        DepartmentStoreImpl store = new DepartmentStoreImpl("Sungei Wang Plaza");
+        registration = context.registerService(DepartmentStore.class.getName(), store, null);
     }
 
-    public void stop( BundleContext context )
-        throws Exception
-    {
-        m_registration.unregister();
+    public void stop(BundleContext context)
+        throws Exception {
+        registration.unregister();
     }
 }

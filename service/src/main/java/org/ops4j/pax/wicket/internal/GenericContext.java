@@ -32,79 +32,62 @@ import org.osgi.service.http.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GenericContext
-    implements HttpContext
-{
+public class GenericContext implements HttpContext {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( GenericContext.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericContext.class);
 
-    private String m_mountPoint;
-    private MimetypesFileTypeMap m_typeMap;
-    private Bundle m_bundle;
+    private String mountPoint;
+    private MimetypesFileTypeMap typeMap;
+    private Bundle bundle;
 
-    public GenericContext( Bundle bundle, String mountPoint )
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "GenericContext(" + mountPoint + " )" );
+    public GenericContext(Bundle bundle, String mountPoint) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("GenericContext(" + mountPoint + " )");
         }
-
-        m_bundle = bundle;
-
-        if( !mountPoint.startsWith( "/" ) )
-        {
+        this.bundle = bundle;
+        if (!mountPoint.startsWith("/")) {
             mountPoint = "/" + mountPoint;
         }
-        m_mountPoint = mountPoint;
-        m_typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
-        m_typeMap.addMimeTypes( "text/css css" );
+        this.mountPoint = mountPoint;
+        typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
+        typeMap.addMimeTypes("text/css css");
     }
 
-    public boolean handleSecurity( HttpServletRequest request, HttpServletResponse response )
-        throws IOException
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "handleSecurity()" );
+    public boolean handleSecurity(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("handleSecurity()");
         }
-
         return true;
     }
 
-    public URL getResource( String resourceName )
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "getResource( " + resourceName + " )" );
+    public URL getResource(String resourceName) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("getResource( " + resourceName + " )");
         }
 
-        if (resourceName.startsWith(m_mountPoint)) {
-            resourceName = resourceName.substring(m_mountPoint.length());
+        if (resourceName.startsWith(mountPoint)) {
+            resourceName = resourceName.substring(mountPoint.length());
         }
-        return m_bundle.getResource( resourceName );
+        return bundle.getResource(resourceName);
     }
 
-    public String getMimeType( String resourceName )
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "getMimeType( " + resourceName + " )" );
+    public String getMimeType(String resourceName) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("getMimeType( " + resourceName + " )");
         }
-        URL resource = getResource( resourceName );
-        if( resource == null )
-        {
+        URL resource = getResource(resourceName);
+        if (resource == null) {
             return null;
         }
         String url = resource.toString();
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "         URL: " + url );
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("         URL: " + url);
         }
 
-        String contentType = m_typeMap.getContentType( url );
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( " ContentType: " + contentType );
+        String contentType = typeMap.getContentType(url);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(" ContentType: " + contentType);
         }
         return contentType;
     }

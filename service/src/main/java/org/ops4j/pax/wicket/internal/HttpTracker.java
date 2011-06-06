@@ -22,8 +22,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -32,113 +34,92 @@ import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 
-final class HttpTracker extends ServiceTracker
-{
+final class HttpTracker extends ServiceTracker {
 
-    private HttpService m_httpService;
-    private final HashMap<String, ServletDescriptor> m_servlets;
+    private HttpService httpService;
+    private final HashMap<String, ServletDescriptor> servlets;
 
-    HttpTracker( BundleContext context )
-    {
-        super( context, HttpService.class.getName(), null );
-        m_servlets = new HashMap<String, ServletDescriptor>();
+    HttpTracker(BundleContext context) {
+        super(context, HttpService.class.getName(), null);
+        servlets = new HashMap<String, ServletDescriptor>();
     }
 
     @Override
-    public final Object addingService( ServiceReference serviceReference )
-    {
-        m_httpService = (HttpService) super.addingService( serviceReference );
-        for( Map.Entry<String, ServletDescriptor> entry : m_servlets.entrySet() )
-        {
+    public final Object addingService(ServiceReference serviceReference) {
+        httpService = (HttpService) super.addingService(serviceReference);
+        for (Map.Entry<String, ServletDescriptor> entry : servlets.entrySet()) {
             ServletDescriptor descriptor = entry.getValue();
             Servlet servlet = descriptor.servlet;
             HttpContext context = descriptor.httpContext;
             String mountpoint = entry.getKey();
-            try
-            {
-                m_httpService.registerServlet( mountpoint, servlet, null, context );
-            } catch( NamespaceException e )
-            {
+            try {
+                httpService.registerServlet(mountpoint, servlet, null, context);
+            } catch (NamespaceException e) {
                 throw new IllegalArgumentException(
-                    "Unable to mount [" + servlet + "] on mount point '" + mountpoint + "'."
-                );
-            } catch( ServletException e )
-            {
+                    "Unable to mount [" + servlet + "] on mount point '" + mountpoint + "'.");
+            } catch (ServletException e) {
                 String message = "Wicket Servlet [" + servlet + "] is unable to initialize. "
                                  + "This servlet was tried to be mounted on '" + mountpoint + "'.";
-                throw new IllegalArgumentException( message, e );
+                throw new IllegalArgumentException(message, e);
             }
         }
 
-        return m_httpService;
+        return httpService;
     }
 
     @Override
-    public final void removedService( ServiceReference serviceReference, Object httpService )
-    {
+    public final void removedService(ServiceReference serviceReference, Object httpService) {
         Set<String> mountPoints;
-        synchronized( this )
-        {
-            mountPoints = new HashSet<String>( m_servlets.keySet() );
+        synchronized (this) {
+            mountPoints = new HashSet<String>(servlets.keySet());
         }
 
-        for( String mountpoint : mountPoints )
-        {
-            this.m_httpService.unregister( mountpoint );
+        for (String mountpoint : mountPoints) {
+            this.httpService.unregister(mountpoint);
         }
 
-        super.removedService( serviceReference, httpService );
+        super.removedService(serviceReference, httpService);
     }
 
-    final void addServlet( String mountPoint, Servlet servlet, Bundle paxWicketBundle )
-        throws NamespaceException, ServletException
-    {
-        mountPoint = normalizeMountPoint( mountPoint );
-        HttpContext httpContext = new GenericContext( paxWicketBundle, mountPoint );
-        ServletDescriptor descriptor = new ServletDescriptor( servlet, httpContext );
-        m_servlets.put( mountPoint, descriptor );
-        if( m_httpService != null )
-        {
-            m_httpService.registerServlet( mountPoint, servlet, null, httpContext );
+    final void addServlet(String mountPoint, Servlet servlet, Bundle paxWicketBundle)
+        throws NamespaceException, ServletException {
+        mountPoint = normalizeMountPoint(mountPoint);
+        HttpContext httpContext = new GenericContext(paxWicketBundle, mountPoint);
+        ServletDescriptor descriptor = new ServletDescriptor(servlet, httpContext);
+        servlets.put(mountPoint, descriptor);
+        if (httpService != null) {
+            httpService.registerServlet(mountPoint, servlet, null, httpContext);
         }
     }
 
-    final void removeServlet( String mountPoint )
-    {
-        mountPoint = normalizeMountPoint( mountPoint );
-        if( m_servlets.remove( mountPoint ) != null )
-        {
-            if( m_httpService != null )
-            {
-                m_httpService.unregister( mountPoint );
+    final void removeServlet(String mountPoint) {
+        mountPoint = normalizeMountPoint(mountPoint);
+        if (servlets.remove(mountPoint) != null) {
+            if (httpService != null) {
+                httpService.unregister(mountPoint);
             }
         }
     }
 
-    private String normalizeMountPoint( String mountPoint )
-    {
-        if( !mountPoint.startsWith( "/" ) )
-        {
+    private String normalizeMountPoint(String mountPoint) {
+        if (!mountPoint.startsWith("/")) {
             mountPoint = "/" + mountPoint;
         }
         return mountPoint;
     }
 
-    final Servlet getServlet( String mountPoint )
-    {
-        mountPoint = normalizeMountPoint( mountPoint );
-        ServletDescriptor descriptor = m_servlets.get( mountPoint );
+    final Servlet getServlet(String mountPoint) {
+        mountPoint = normalizeMountPoint(mountPoint);
+        ServletDescriptor descriptor = servlets.get(mountPoint);
         return descriptor.servlet;
     }
 
-    private static final class ServletDescriptor
-    {
+    private static final class ServletDescriptor {
 
         private Servlet servlet;
         private HttpContext httpContext;
 
-        public ServletDescriptor( Servlet aServlet, HttpContext aContext )
-        {
+        public ServletDescriptor(Servlet aServlet, HttpContext aContext) {
             servlet = aServlet;
             httpContext = aContext;
         }

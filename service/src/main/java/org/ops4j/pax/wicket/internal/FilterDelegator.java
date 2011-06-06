@@ -39,76 +39,63 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class FilterDelegator
-{
-    private static final Logger LOGGER = LoggerFactory.getLogger( FilterDelegator.class );
+public final class FilterDelegator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
-    private FilterConfiguration m_filterConfiguration;
-    private FilterTracker m_filterTracker;
+    private FilterConfiguration filterConfiguration;
+    private FilterTracker filterTracker;
 
-    private Servlet m_servlet;
+    private Servlet servlet;
 
-    public FilterDelegator( BundleContext context, FilterConfiguration filterConfiguration, 
-            File tmpDir, String mountPoint, String applicationName )
-    {
-        validateNotNull( filterConfiguration, "filterConfiguration" );
+    public FilterDelegator(BundleContext context, FilterConfiguration filterConfiguration, File tmpDir,
+            String mountPoint, String applicationName) {
+        validateNotNull(filterConfiguration, "filterConfiguration");
 
-        m_filterConfiguration = filterConfiguration;
-        m_filterTracker = new FilterTracker( context, applicationName );
-        m_filterTracker.open();
+        this.filterConfiguration = filterConfiguration;
+        filterTracker = new FilterTracker(context, applicationName);
+        filterTracker.open();
     }
 
-    public void doFilter( HttpServletRequest servletRequest, HttpServletResponse servletResponse )
-        throws ServletException, IOException
-    {
-        FilterChain chain = new Chain( m_filterConfiguration.getFilters() );
-        chain.doFilter( servletRequest, servletResponse );
+    public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
+        throws ServletException, IOException {
+        FilterChain chain = new Chain(filterConfiguration.getFilters());
+        chain.doFilter(servletRequest, servletResponse);
     }
 
-    private class Chain implements FilterChain
-    {
+    private class Chain implements FilterChain {
         private int m_filterIndex = 0;
         private final List<FilterDescription> m_filterDescList;
 
-        Chain( final List<FilterDescription> filterDescList )
-        {
+        Chain(final List<FilterDescription> filterDescList) {
             m_filterDescList = filterDescList;
         }
 
-        public void doFilter( ServletRequest request, ServletResponse response ) throws IOException, ServletException
-        {
-            if ( m_filterIndex < m_filterDescList.size() )
-            {
-                FilterDescription filterDesc = m_filterDescList.get( m_filterIndex );
-                LOGGER.debug( "call filter {} of type {} ", m_filterIndex, filterDesc.getClassName() );
+        public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+            if (m_filterIndex < m_filterDescList.size()) {
+                FilterDescription filterDesc = m_filterDescList.get(m_filterIndex);
+                LOGGER.debug("call filter {} of type {} ", m_filterIndex, filterDesc.getClassName());
                 m_filterIndex++;
 
-                Filter filter = getFilter( filterDesc );
-                filter.doFilter( request, response, this );
-            }
-            else
-            {
-                m_servlet.service( request, response );
+                Filter filter = getFilter(filterDesc);
+                filter.doFilter(request, response, this);
+            } else {
+                servlet.service(request, response);
             }
         }
     }
 
-    private Filter getFilter(FilterDescription filterDesc) throws ServletException
-    {
-        Filter filter = m_filterTracker.getFilter( filterDesc.getClassName() );
-        if ( filter == null && filterDesc.isRequired() )
-        {
-            throw new ServletException( 
-                String.format( "required filter %s is not available", filterDesc.getClassName() ) );
+    private Filter getFilter(FilterDescription filterDesc) throws ServletException {
+        Filter filter = filterTracker.getFilter(filterDesc.getClassName());
+        if (filter == null && filterDesc.isRequired()) {
+            throw new ServletException(
+                String.format("required filter %s is not available", filterDesc.getClassName()));
         }
         return filter;
     }
 
-    public void setServlet( Servlet servlet )
-    {
-        validateNotNull( servlet, "servlet" );
-
-        m_servlet = servlet;
+    public void setServlet(Servlet servlet) {
+        validateNotNull(servlet, "servlet");
+        this.servlet = servlet;
     }
 
 }

@@ -45,9 +45,9 @@ public final class DefaultContentTracker extends ServiceTracker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultContentTracker.class);
 
-    private final BundleContext m_context;
-    private final ContentTrackingCallback m_callback;
-    private final String m_aggregationId;
+    private final BundleContext context;
+    private final ContentTrackingCallback callback;
+    private final String aggregationId;
 
     private final List<ServiceReference> m_references;
 
@@ -63,16 +63,15 @@ public final class DefaultContentTracker extends ServiceTracker {
      * @since 1.0.0
      */
     public DefaultContentTracker(BundleContext context, ContentTrackingCallback callback, String applicationName,
-                                  String aggregationPointName)
-        throws IllegalArgumentException {
+            String aggregationPointName) throws IllegalArgumentException {
         super(context, createContentFilter(context, applicationName), null);
 
         validateNotEmpty(aggregationPointName, "aggregationPointName");
         validateNotNull(callback, "callback");
 
-        m_context = context;
-        m_callback = callback;
-        m_aggregationId = aggregationPointName;
+        this.context = context;
+        this.callback = callback;
+        aggregationId = aggregationPointName;
 
         m_references = new ArrayList<ServiceReference>();
     }
@@ -86,20 +85,20 @@ public final class DefaultContentTracker extends ServiceTracker {
     @Override
     public final synchronized void close() {
         synchronized (this) {
-            int startIndexOfWicketId = m_aggregationId.length() + 1;
+            int startIndexOfWicketId = aggregationId.length() + 1;
 
             for (ServiceReference reference : m_references) {
                 String[] destinationIds = (String[]) reference.getProperty(DESTINATIONS);
 
                 for (String destinationId : destinationIds) {
                     String wicketId = destinationId.substring(startIndexOfWicketId);
-                    ContentSource content = (ContentSource) m_context.getService(reference);
+                    ContentSource content = (ContentSource) context.getService(reference);
 
-                    m_callback.removeContent(wicketId, content);
+                    callback.removeContent(wicketId, content);
                 }
 
-                m_context.ungetService(reference); // Removal for the first get during add
-                m_context.ungetService(reference); // Removal for the second get in this loop block
+                context.ungetService(reference); // Removal for the first get during add
+                context.ungetService(reference); // Removal for the second get in this loop block
             }
 
             m_references.clear();
@@ -121,12 +120,12 @@ public final class DefaultContentTracker extends ServiceTracker {
         }
 
         String[] destinations = (String[]) serviceReference.getProperty(DESTINATIONS);
-        Object service = m_context.getService(serviceReference);
+        Object service = context.getService(serviceReference);
         if (destinations != null) {
             for (String destination : destinations) {
                 if (destination.startsWith("regexp(")) {
                     matchRegularExpression(destination, service, serviceReference);
-                } else if (destination.startsWith(m_aggregationId)) {
+                } else if (destination.startsWith(aggregationId)) {
                     matchDirect(destination, service, serviceReference);
                 }
             }
@@ -142,17 +141,17 @@ public final class DefaultContentTracker extends ServiceTracker {
             throw new IllegalArgumentException(message);
         }
         String expression = dest.substring(7, lastParan);
-        if (Pattern.matches(expression, m_aggregationId)) {
+        if (Pattern.matches(expression, aggregationId)) {
             synchronized (this) {
                 String id = dest.substring(lastParan + 2);
-                m_callback.addContent(id, (ContentSource) service);
+                callback.addContent(id, (ContentSource) service);
                 m_references.add(serviceReference);
             }
         }
     }
 
     private void matchDirect(String dest, Object service, ServiceReference serviceReference) {
-        int aggregationIdLength = m_aggregationId.length();
+        int aggregationIdLength = aggregationId.length();
         if (dest.length() == aggregationIdLength) {
             String message = "The '" + DESTINATIONS + "' property have the form [" + AGGREGATION_POINT
                              + "].[wicketId] but was " + dest;
@@ -166,11 +165,11 @@ public final class DefaultContentTracker extends ServiceTracker {
         String id = dest.substring(aggregationIdLength + 1);
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Attaching content with wicket:id [" + id + "] to aggregation [" + m_aggregationId + "]");
+            LOGGER.info("Attaching content with wicket:id [" + id + "] to aggregation [" + aggregationId + "]");
         }
 
         synchronized (this) {
-            m_callback.addContent(id, (ContentSource) service);
+            callback.addContent(id, (ContentSource) service);
             m_references.add(serviceReference);
         }
     }
@@ -198,10 +197,10 @@ public final class DefaultContentTracker extends ServiceTracker {
             for (String destinationId : destionationIds) {
                 int pos = destinationId.lastIndexOf('.');
                 String id = destinationId.substring(pos + 1);
-                boolean wasContentRemoved = m_callback.removeContent(id, content);
+                boolean wasContentRemoved = callback.removeContent(id, content);
 
                 if (LOGGER.isInfoEnabled() && wasContentRemoved) {
-                    LOGGER.info("Detaching content with wicket:id [" + id + "] from aggregation [" + m_aggregationId
+                    LOGGER.info("Detaching content with wicket:id [" + id + "] from aggregation [" + aggregationId
                              + "]"
                         );
                 }
@@ -209,7 +208,7 @@ public final class DefaultContentTracker extends ServiceTracker {
         }
 
         synchronized (this) {
-            m_context.ungetService(serviceReference);
+            context.ungetService(serviceReference);
             m_references.remove(serviceReference);
         }
     }

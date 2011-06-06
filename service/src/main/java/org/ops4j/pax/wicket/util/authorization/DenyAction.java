@@ -26,29 +26,24 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks the class as denying which {@code org.apache.wicket.authorization.Action}s
- * can be performed by a user. Whether or not the Action is denied
- * is determined by the UserAdmin service.
- *
- * The difference between {@code DenyAction} and {@code AuthorizeAction} is
- * that {@code AuthorizeAction} will authorize any roles implied by
- * the action, while {@code DenyAction} will deny any roles implied
- * by the action. See the UserAdmin service for more details.
- *
+ * Marks the class as denying which {@code org.apache.wicket.authorization.Action}s can be performed by a user. Whether
+ * or not the Action is denied is determined by the UserAdmin service.
+ * 
+ * The difference between {@code DenyAction} and {@code AuthorizeAction} is that {@code AuthorizeAction} will authorize
+ * any roles implied by the action, while {@code DenyAction} will deny any roles implied by the action. See the
+ * UserAdmin service for more details.
+ * 
  * @author David Leangen
  */
-@Retention( RetentionPolicy.RUNTIME )
-@Target( ElementType.TYPE )
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 @Documented
 @Inherited
-public @interface DenyAction
-{
+public @interface DenyAction {
 
     /**
-     * An enumeration (with a small "e") of Wicket Actions that
-     * are to be denied to the specified users. The default value is
-     * empty, which signifies that this should be applied to
-     * all Actions.
+     * An enumeration (with a small "e") of Wicket Actions that are to be denied to the specified users. The default
+     * value is empty, which signifies that this should be applied to all Actions.
      */
     String[] value() default "";
 }

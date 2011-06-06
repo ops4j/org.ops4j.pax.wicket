@@ -20,43 +20,36 @@ package org.ops4j.pax.wicket.internal;
 import java.io.Serializable;
 import java.util.Random;
 
-final class AuthenticatedToken
-    implements Serializable
-{
+final class AuthenticatedToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static long m_IdSequence = 0;
+    private static long idSequence = 0;
 
-    private String m_Id;
+    private String Id;
 
-    AuthenticatedToken()
-    {
+    AuthenticatedToken() {
         Random random = new Random();
-        m_IdSequence = m_IdSequence + ( random.nextInt() % 100000 );
-        m_Id = String.valueOf( m_IdSequence );
+        idSequence = idSequence + random.nextInt() % 100000;
+        Id = String.valueOf(idSequence);
     }
 
     @Override
-    public final boolean equals( Object o )
-    {
-        if( this == o )
-        {
+    public final boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if( o == null || getClass() != o.getClass() )
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         final AuthenticatedToken that = (AuthenticatedToken) o;
 
-        return m_Id.equals( that.m_Id );
+        return Id.equals(that.Id);
     }
 
     @Override
-    public final int hashCode()
-    {
-        return m_Id.hashCode();
+    public final int hashCode() {
+        return Id.hashCode();
     }
 }

@@ -22,26 +22,20 @@ import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
 
-public class RootContentAggregator extends BaseAggregator
-{
+public class RootContentAggregator extends BaseAggregator {
 
     /**
-     * @param bundleContext        The client bundle context.
-     * @param applicationName      The name of the application this RootContentAggregator belongs to.
+     * @param bundleContext The client bundle context.
+     * @param applicationName The name of the application this RootContentAggregator belongs to.
      * @param aggregationPointName The name of the AggregationPoint handled by this ContentAggregator.
      */
-    public RootContentAggregator( BundleContext bundleContext, String applicationName, String aggregationPointName
-    )
-    {
-        super( bundleContext, applicationName, aggregationPointName );
+    public RootContentAggregator(BundleContext bundleContext, String applicationName, String aggregationPointName) {
+        super(bundleContext, applicationName, aggregationPointName);
     }
 
     @Override
-    protected String[] getServiceNames()
-    {
-        return new String[]
-            {
-                ContentAggregator.class.getName(), ManagedService.class.getName()
-            };
+    protected String[] getServiceNames() {
+        return new String[]{
+                ContentAggregator.class.getName(), ManagedService.class.getName() };
     }
 }

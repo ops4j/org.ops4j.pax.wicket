@@ -26,10 +26,10 @@ import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
 
-    private RootContentAggregator m_store;
-    private ServiceRegistration m_serviceRegistration;
-    private PaxWicketApplicationFactory m_applicationFactory;
-    private OverviewPageFactory m_overviewPageFactory;
+    private RootContentAggregator store;
+    private ServiceRegistration serviceRegistration;
+    private PaxWicketApplicationFactory applicationFactory;
+    private OverviewPageFactory overviewPageFactory;
 
     public void start(BundleContext bundleContext) throws Exception {
         // to mount in root context use "/" instead. Please keep in mind that if you change this value you also have to
@@ -37,11 +37,11 @@ public class Activator implements BundleActivator {
         // change deptStore/stylesheets/style.css in OverviewPage.html to stylesheets/style.css
         String mountPoint = "deptStore";
         String applicationName = "departmentstore";
-        m_store = new RootContentAggregator(bundleContext, applicationName, "swp");
-        m_store.register();
+        store = new RootContentAggregator(bundleContext, applicationName, "swp");
+        store.register();
 
-        m_overviewPageFactory = new OverviewPageFactory(bundleContext, m_store, applicationName, "overview");
-        m_overviewPageFactory.register();
+        overviewPageFactory = new OverviewPageFactory(bundleContext, store, applicationName, "overview");
+        overviewPageFactory.register();
 
         // Creating a Wicket Application you've two options:
         // a) etiher create the WicketApplicationFactory yourself or...
@@ -50,28 +50,28 @@ public class Activator implements BundleActivator {
         createPaxWicketApplicationFactoryPaxWicketDoingTheWork(bundleContext, mountPoint, applicationName);
 
         // This registers the pax-wicket service as OSGi Service.
-        m_serviceRegistration = m_applicationFactory.register();
+        serviceRegistration = applicationFactory.register();
     }
 
     private void createPaxWicketApplicationFactoryPaxWicketDoingTheWork(BundleContext bundleContext, String mountPoint,
             String applicationName) {
-        m_applicationFactory =
+        applicationFactory =
             new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName);
     }
 
     @SuppressWarnings("unused")
     private void createPaxWicketApplicationFactoryUsingOwnWicketApplication(BundleContext bundleContext,
             String mountPoint, String applicationName) {
-        m_applicationFactory =
+        applicationFactory =
             new PaxWicketApplicationFactory(bundleContext, OverviewPage.class, mountPoint, applicationName,
                 new DeptStoreApplicationFactory());
     }
 
     public void stop(BundleContext bundleContext) throws Exception {
-        m_serviceRegistration.unregister();
-        m_overviewPageFactory.dispose();
-        m_store.dispose();
-        m_applicationFactory.dispose();
+        serviceRegistration.unregister();
+        overviewPageFactory.dispose();
+        store.dispose();
+        applicationFactory.dispose();
     }
 
 }

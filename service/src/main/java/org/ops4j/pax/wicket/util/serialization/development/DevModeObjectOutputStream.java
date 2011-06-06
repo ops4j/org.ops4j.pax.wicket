@@ -18,26 +18,24 @@ package org.ops4j.pax.wicket.util.serialization.development;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectOutputStream;
 
 /**
  * @author edward.yakop@gmail.com
  */
-public final class DevModeObjectOutputStream extends PaxWicketObjectOutputStream
-{
+public final class DevModeObjectOutputStream extends PaxWicketObjectOutputStream {
 
-    public DevModeObjectOutputStream( OutputStream outputStream )
-        throws IOException, IllegalArgumentException
-    {
-        super( outputStream );
+    public DevModeObjectOutputStream(OutputStream outputStream)
+        throws IOException, IllegalArgumentException {
+        super(outputStream);
     }
 
     @Override
-    protected final void writeObjectOverride( Object object )
-        throws IOException
-    {
+    protected final void writeObjectOverride(Object object)
+        throws IOException {
         String objectClassName = object.getClass().getName();
-        super.writeObjectOverride( objectClassName );
-        super.writeObjectOverride( object );
+        super.writeObjectOverride(objectClassName);
+        super.writeObjectOverride(object);
     }
 }

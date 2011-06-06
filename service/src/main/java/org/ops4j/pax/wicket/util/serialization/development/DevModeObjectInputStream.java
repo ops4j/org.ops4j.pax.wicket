@@ -16,65 +16,54 @@
  */
 package org.ops4j.pax.wicket.util.serialization.development;
 
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+
 import org.apache.wicket.application.IClassResolver;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectInputStream;
 
 /**
  * @author edward.yakop@gmail.com
  */
-public final class DevModeObjectInputStream extends ObjectInputStream
-{
+public final class DevModeObjectInputStream extends ObjectInputStream {
 
-    private PaxWicketObjectInputStream m_inputStream;
+    private PaxWicketObjectInputStream inputStream;
 
-    public DevModeObjectInputStream( InputStream ois, IClassResolver resolver )
-        throws IOException, IllegalArgumentException
-    {
-        validateNotNull( resolver, "resolver" );
-        m_inputStream = new PaxWicketObjectInputStream( ois, resolver );
+    public DevModeObjectInputStream(InputStream ois, IClassResolver resolver) throws IOException,
+        IllegalArgumentException {
+        validateNotNull(resolver, "resolver");
+        inputStream = new PaxWicketObjectInputStream(ois, resolver);
     }
 
     @Override
-    protected final Object readObjectOverride()
-        throws IOException, ClassNotFoundException
-    {
-        String className = (String) m_inputStream.readObject();
+    protected final Object readObjectOverride() throws IOException, ClassNotFoundException {
+        String className = (String) inputStream.readObject();
 
-        try
-        {
-            return m_inputStream.readObject();
-        }
-        catch( ClassNotFoundException e )
-        {
+        try {
+            return inputStream.readObject();
+        } catch (ClassNotFoundException e) {
             // Re-throw with additional message
             String message = e.getMessage();
-            throw new ClassNotFoundException( "Class [" + className + "] can't be found.\nActual error:\n" + message );
-        }
-        catch( IOException e )
-        {
+            throw new ClassNotFoundException("Class [" + className + "] can't be found.\nActual error:\n" + message);
+        } catch (IOException e) {
             // Re-throw with additional message
             String message = e.getMessage();
             e.printStackTrace();
             throw new IOException(
-                "Fail to deserialize object of class [" + className + "].\nActual error:\n" + message
-            );
-        }
-        catch( RuntimeException e )
-        {
+                "Fail to deserialize object of class [" + className + "].\nActual error:\n" + message);
+        } catch (RuntimeException e) {
             // Re-throw with additional message
-            throw new RuntimeException( "Fail to deserialize object of class [" + className + "].", e );
+            throw new RuntimeException("Fail to deserialize object of class [" + className + "].", e);
         }
     }
 
     @Override
-    public void close()
-            throws IOException
-    {
-        if( null != m_inputStream )
-            m_inputStream.close();
+    public void close() throws IOException {
+        if (null != inputStream) {
+            inputStream.close();
+        }
     }
 }

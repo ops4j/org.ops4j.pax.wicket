@@ -17,9 +17,9 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.ops4j.pax.wicket.api.SessionDestroyedListener;
-
 import static org.ops4j.pax.wicket.internal.TrackingUtil.createApplicationFilter;
+
+import org.ops4j.pax.wicket.api.SessionDestroyedListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -28,66 +28,61 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Tracks {@link SessionDestroyedListener}s and registers them to an Application.
+ * 
  * @author David Leangen
  */
-public final class SessionDestroyedListenerTracker extends ServiceTracker
-{
+public final class SessionDestroyedListenerTracker extends ServiceTracker {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( SessionDestroyedListenerTracker.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDestroyedListenerTracker.class);
 
-    private final BundleContext m_context;
-    private final SessionDestroyedHander m_handler;
+    private final BundleContext context;
+    private final SessionDestroyedHander handler;
 
     /**
      * Construct an instance of {@code SessionDestroyedListenerTracker} with the specified arguments.
-     *
+     * 
      * @param context The bundle context. This argument must not be {@code null}.
      * @param handler The handler that will handle the listeners.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      */
-    public SessionDestroyedListenerTracker( BundleContext context, SessionDestroyedHander handler )
-        throws IllegalArgumentException
-    {
-        super( context, createApplicationFilter( context, handler.getApplicationName() ), null );
+    public SessionDestroyedListenerTracker(BundleContext context, SessionDestroyedHander handler)
+        throws IllegalArgumentException {
+        super(context, createApplicationFilter(context, handler.getApplicationName()), null);
 
-        m_context = context;
-        m_handler = handler;
+        this.context = context;
+        this.handler = handler;
     }
 
     /**
      * Adding service.
-     *
+     * 
      * @see ServiceTracker#addingService(ServiceReference)
      */
     @Override
-    public final Object addingService( ServiceReference serviceReference )
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "Listener [" + serviceReference + "] has been added." );
+    public final Object addingService(ServiceReference serviceReference) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Listener [" + serviceReference + "] has been added.");
         }
 
-        final SessionDestroyedListener listener = (SessionDestroyedListener)m_context.getService( serviceReference );
-        m_handler.addListener( listener );
+        final SessionDestroyedListener listener = (SessionDestroyedListener) context.getService(serviceReference);
+        handler.addListener(listener);
 
         return listener;
     }
 
     /**
      * Handle removed service.
-     *
+     * 
      * @see ServiceTracker#removedService(ServiceReference,Object)
      */
     @Override
-    public void removedService( ServiceReference serviceReference, Object object )
-    {
-        if( LOGGER.isDebugEnabled() )
-        {
-            LOGGER.debug( "Listener [" + serviceReference + "] has been removed." );
+    public void removedService(ServiceReference serviceReference, Object object) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Listener [" + serviceReference + "] has been removed.");
         }
 
-        final SessionDestroyedListener listener = (SessionDestroyedListener)m_context.getService( serviceReference );
-        m_handler.removeListener( listener );
+        final SessionDestroyedListener listener = (SessionDestroyedListener) context.getService(serviceReference);
+        handler.removeListener(listener);
     }
 }

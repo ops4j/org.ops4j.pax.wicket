@@ -53,24 +53,23 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                  ")";
     }
 
-    private HashSet<Bundle> m_bundles;
-    private final String m_applicationName;
-    private final Bundle m_paxWicketbundle;
+    private HashSet<Bundle> bundles;
+    private final String applicationName;
+    private final Bundle paxWicketBundle;
 
     public BundleDelegatingClassResolver(BundleContext context, String applicationName, Bundle paxWicketBundle) {
         super(context, createFilter(context), null);
 
-        m_applicationName = applicationName;
-        m_paxWicketbundle = paxWicketBundle;
-        m_bundles = new HashSet<Bundle>();
-        m_bundles.add(paxWicketBundle);
+        this.applicationName = applicationName;
+        this.paxWicketBundle = paxWicketBundle;
+        bundles = new HashSet<Bundle>();
+        bundles.add(paxWicketBundle);
 
         open(true);
     }
 
-    public Class<?> resolveClass(String classname)
-        throws ClassNotFoundException {
-        for (Bundle bundle : m_bundles) {
+    public Class<?> resolveClass(String classname) throws ClassNotFoundException {
+        for (Bundle bundle : bundles) {
             try {
                 return bundle.loadClass(classname);
             } catch (ClassNotFoundException e) {
@@ -79,7 +78,6 @@ public class BundleDelegatingClassResolver extends ServiceTracker
                 // if the bundle has been uninstalled.
             }
         }
-
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
     }
 
@@ -89,17 +87,15 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     @SuppressWarnings("unchecked")
     public Iterator<URL> getResources(String name) {
         try {
-            for (Bundle bundle : m_bundles) {
+            for (Bundle bundle : bundles) {
                 final Enumeration<URL> enumeration = bundle.getResources(name);
                 if (null != enumeration && enumeration.hasMoreElements()) {
                     return new EnumerationAdapter<URL>(enumeration);
                 }
-                ;
             }
         } catch (IOException e) {
             return Collections.<URL> emptyList().iterator();
         }
-
         return Collections.<URL> emptyList().iterator();
     }
 
@@ -107,14 +103,14 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     @SuppressWarnings("unchecked")
     public Object addingService(ServiceReference serviceReference) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
-        if (!m_applicationName.equals(appName)) {
+        if (!applicationName.equals(appName)) {
             return null;
         }
         synchronized (this) {
             Bundle bundle = serviceReference.getBundle();
-            HashSet<Bundle> clone = (HashSet<Bundle>) m_bundles.clone();
+            HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
             clone.add(bundle);
-            m_bundles = clone;
+            bundles = clone;
         }
         return super.addingService(serviceReference);
     }
@@ -122,17 +118,17 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     @Override
     public void removedService(ServiceReference serviceReference, Object o) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
-        if (!m_applicationName.equals(appName)) {
+        if (!applicationName.equals(appName)) {
             return;
         }
         HashSet<Bundle> revisedSet = new HashSet<Bundle>();
-        revisedSet.add(m_paxWicketbundle);
+        revisedSet.add(paxWicketBundle);
         try {
             ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
             for (ServiceReference ref : serviceReferences) {
                 revisedSet.add(ref.getBundle());
             }
-            m_bundles = revisedSet;
+            bundles = revisedSet;
         } catch (InvalidSyntaxException e) {
             // Can not happen.
         }
@@ -146,7 +142,6 @@ public class BundleDelegatingClassResolver extends ServiceTracker
             // Should not happened
             e.printStackTrace();
         }
-
         return null;
     }
 }

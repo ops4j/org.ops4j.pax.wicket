@@ -23,27 +23,22 @@ import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStoreModelTracker;
 import org.osgi.framework.BundleContext;
 
-public class AboutPageFactory
-    implements PageFactory<AboutPage>
-{
+public class AboutPageFactory implements PageFactory<AboutPage> {
 
-    private final DepartmentStoreModelTracker m_tracker;
-    private final BundleContext m_context;
+    private final DepartmentStoreModelTracker tracker;
+    private final BundleContext context;
 
-    public AboutPageFactory( DepartmentStoreModelTracker tracker, BundleContext context )
-    {
-        m_tracker = tracker;
-        m_context = context;
+    public AboutPageFactory(DepartmentStoreModelTracker tracker, BundleContext context) {
+        this.tracker = tracker;
+        this.context = context;
     }
 
-    public Class<AboutPage> getPageClass()
-    {
+    public Class<AboutPage> getPageClass() {
         return AboutPage.class;
     }
 
-    public AboutPage createPage( PageParameters params )
-    {
-        DepartmentStore store = m_tracker.getDepartmentStore();
-        return new AboutPage( store, m_context );
+    public AboutPage createPage(PageParameters params) {
+        DepartmentStore store = tracker.getDepartmentStore();
+        return new AboutPage(store, context);
     }
 }

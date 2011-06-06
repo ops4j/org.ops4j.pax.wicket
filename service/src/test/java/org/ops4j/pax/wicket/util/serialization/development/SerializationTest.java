@@ -16,6 +16,9 @@
  */
 package org.ops4j.pax.wicket.util.serialization.development;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,8 +27,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+
 import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.EnumerationAdapter;
@@ -33,49 +35,45 @@ import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 /**
  * @author edward.yakop@gmail.com
  */
-public final class SerializationTest
-{
+public final class SerializationTest {
 
     @Test
-    public final void testSerialization()
-        throws Throwable
-    {
+    public final void testSerialization() throws Throwable {
         IClassResolver resolver = new IClassResolver()
         {
 
-            public Class<?> resolveClass( String classname )
+            public Class<?> resolveClass(String classname)
                 throws ClassNotFoundException
             {
                 ClassLoader classLoader = getClass().getClassLoader();
-                return classLoader.loadClass( classname );
+                return classLoader.loadClass(classname);
             }
 
-            public Iterator<URL> getResources( String name )
+            public Iterator<URL> getResources(String name)
             {
                 try
                 {
                     ClassLoader classLoader = getClass().getClassLoader();
-                    return new EnumerationAdapter<URL>( classLoader.getResources( name ) );
+                    return new EnumerationAdapter<URL>(classLoader.getResources(name));
                 }
-                catch ( IOException e )
+                catch (IOException e)
                 {
-                    return Collections.<URL>emptyList().iterator();
+                    return Collections.<URL> emptyList().iterator();
                 }
             }
         };
 
-        testSerializeObject( "pax-wicket", resolver );
-        testSerializeObject( 1, resolver );
+        testSerializeObject("pax-wicket", resolver);
+        testSerializeObject(1, resolver);
 
         // Test serialialize a more complex object
         SomeObject someObject = createSomeObject();
-        testSerializeObject( someObject, resolver );
+        testSerializeObject(someObject, resolver);
     }
 
-    private SomeObject createSomeObject()
-    {
+    private SomeObject createSomeObject() {
         SomeObject someObject = new SomeObject();
-        Random random = new Random( System.currentTimeMillis() );
+        Random random = new Random(System.currentTimeMillis());
         someObject.integer = random.nextInt();
         someObject.string = "pax-wicket-rules";
         someObject.longNumber = random.nextLong();
@@ -84,28 +82,26 @@ public final class SerializationTest
         return someObject;
     }
 
-    private void testSerializeObject( Object objectToSerialize, IClassResolver resolver )
-        throws IOException, ClassNotFoundException
-    {
+    private void testSerializeObject(Object objectToSerialize, IClassResolver resolver) throws IOException,
+        ClassNotFoundException {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        DevModeObjectOutputStream devModeOS = new DevModeObjectOutputStream( byteArrayOS );
+        DevModeObjectOutputStream devModeOS = new DevModeObjectOutputStream(byteArrayOS);
 
-        devModeOS.writeObject( objectToSerialize );
+        devModeOS.writeObject(objectToSerialize);
         devModeOS.flush();
 
         byte[] serializedBA = byteArrayOS.toByteArray();
-        assertNotNull( serializedBA );
+        assertNotNull(serializedBA);
 
-        ByteArrayInputStream roBAIS = new ByteArrayInputStream( serializedBA );
-        DevModeObjectInputStream roOIS = new DevModeObjectInputStream( roBAIS, resolver );
+        ByteArrayInputStream roBAIS = new ByteArrayInputStream(serializedBA);
+        DevModeObjectInputStream roOIS = new DevModeObjectInputStream(roBAIS, resolver);
         Object object = roOIS.readObject();
-        assertNotNull( object );
-        assertEquals( objectToSerialize, object );
+        assertNotNull(object);
+        assertEquals(objectToSerialize, object);
     }
 
     public static class SomeObject
-        implements Serializable
-    {
+            implements Serializable {
         private static final long serialVersionUID = 1L;
 
         private int integer;
@@ -113,46 +109,40 @@ public final class SerializationTest
         private long longNumber;
         private Long longObject;
 
-        public boolean equals( Object o )
-        {
-            if( this == o )
-            {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
                 return true;
             }
-            if( o == null || getClass() != o.getClass() )
-            {
+            if (o == null || getClass() != o.getClass()) {
                 return false;
             }
 
             SomeObject that = (SomeObject) o;
 
-            if( integer != that.integer )
-            {
+            if (integer != that.integer) {
                 return false;
             }
-            if( longNumber != that.longNumber )
-            {
+            if (longNumber != that.longNumber) {
                 return false;
             }
-            if( longObject != null ? !longObject.equals( that.longObject ) : that.longObject != null )
-            {
+            if (longObject != null ? !longObject.equals(that.longObject) : that.longObject != null) {
                 return false;
             }
-            if( string != null ? !string.equals( that.string ) : that.string != null )
-            {
+            if (string != null ? !string.equals(that.string) : that.string != null) {
                 return false;
             }
 
             return true;
         }
 
-        public int hashCode()
-        {
+        @Override
+        public int hashCode() {
             int result;
             result = integer;
-            result = 31 * result + ( string != null ? string.hashCode() : 0 );
-            result = 31 * result + (int) ( longNumber ^ ( longNumber >>> 32 ) );
-            result = 31 * result + ( longObject != null ? longObject.hashCode() : 0 );
+            result = 31 * result + (string != null ? string.hashCode() : 0);
+            result = 31 * result + (int) (longNumber ^ longNumber >>> 32);
+            result = 31 * result + (longObject != null ? longObject.hashCode() : 0);
             return result;
         }
     }

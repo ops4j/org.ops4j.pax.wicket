@@ -113,13 +113,13 @@ import org.osgi.service.cm.ManagedService;
  * </pre></code>
  * </p>
  */
-public abstract class AbstractAggregatedSource<E extends Component> extends BaseAggregator
-        implements ContentAggregator, ContentSource, ContentTrackingCallback, ManagedService {
+public abstract class AbstractAggregatedSource<E extends Component> extends BaseAggregator implements
+        ContentAggregator, ContentSource, ContentTrackingCallback, ManagedService {
 
     private static final String[] ROLES_TYPE = new String[0];
 
-    private Roles m_requiredRoles;
-    private Roles m_basicRoles;
+    private Roles requiredRoles;
+    private Roles basicRoles;
 
     /**
      * Construct an instance of {@code AbstractContentAggregator} with the specified arguments.
@@ -133,8 +133,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @since 1.0.0
      */
     protected AbstractAggregatedSource(BundleContext bundleContext, String applicationName, String aggregationPoint,
-                                        String destination)
-        throws IllegalArgumentException {
+            String destination) throws IllegalArgumentException {
         super(bundleContext, applicationName, aggregationPoint);
         validateNotEmpty(destination, "destination");
 
@@ -173,8 +172,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @throws IllegalArgumentException Thrown if the specified {@code destination} argument is {@code null} or empty.
      * @since 1.0.0
      */
-    public final void setDestination(String... destinations)
-        throws IllegalArgumentException {
+    public final void setDestination(String... destinations) throws IllegalArgumentException {
         validateNotNull(destinations, "destinations");
 
         setProperty(ContentSource.DESTINATIONS, destinations);
@@ -207,8 +205,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @throws IllegalArgumentException Thrown if the {@code wicketId} argument is {@code null}.
      * @since 1.0.0
      */
-    public final E createSourceComponent(String wicketId)
-        throws IllegalArgumentException {
+    public final E createSourceComponent(String wicketId) throws IllegalArgumentException {
         boolean isRolesApproved = isRolesAuthorized();
         if (isRolesApproved) {
             return createComponent(wicketId);
@@ -326,22 +323,22 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     }
 
     public final Roles getRequiredRoles() {
-        return m_requiredRoles;
+        return requiredRoles;
     }
 
     public final Roles getBasicRoles() {
-        return m_basicRoles;
+        return basicRoles;
     }
 
     public final void setRoles(Roles requiredRoles, Roles basicRoles) {
         boolean changed = false;
         if (requiredRoles != null) {
             changed = true;
-            m_requiredRoles = requiredRoles;
+            this.requiredRoles = requiredRoles;
             setProperty(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
         }
         if (basicRoles != null) {
-            m_basicRoles = basicRoles;
+            this.basicRoles = basicRoles;
             setProperty(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
             changed = true;
         }

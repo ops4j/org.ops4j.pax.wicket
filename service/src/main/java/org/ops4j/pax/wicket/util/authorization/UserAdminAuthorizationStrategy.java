@@ -28,77 +28,61 @@ import org.osgi.service.useradmin.User;
 import org.osgi.service.useradmin.UserAdmin;
 
 /**
- * Implementation of IAuthorizationStrategy that is backed directly by the
- * OSGi UserAdmin service. Note that this is a simple and probably incomplete
- * implementation. Some issues not addressed:
- *
- * - how do we handle anonymous classes?
- * - how do we handle class hierarchies?
- *
- * The approach is to create a {@code Group} with the name of the action to
- * authorize (or not). This is done by using the Role annotation. Since
- * there are several actions for each wicket component, this is the
- * convention:
- *
- * NameOfAction --> instantiation of that component
- * NameOfAction.ENABLE --> enable for that component
+ * Implementation of IAuthorizationStrategy that is backed directly by the OSGi UserAdmin service. Note that this is a
+ * simple and probably incomplete implementation. Some issues not addressed:
+ * 
+ * - how do we handle anonymous classes? - how do we handle class hierarchies?
+ * 
+ * The approach is to create a {@code Group} with the name of the action to authorize (or not). This is done by using
+ * the Role annotation. Since there are several actions for each wicket component, this is the convention:
+ * 
+ * NameOfAction --> instantiation of that component NameOfAction.ENABLE --> enable for that component
  * NameOfAction.RENDER --> render for that component
- *
- * This will of course be expanded if/when the wicket team adds additional
- * {@code Action}s.
- *
- * As for the actual authorization logic, this is handled normally via
- * the UserAdmin service.
- *
+ * 
+ * This will of course be expanded if/when the wicket team adds additional {@code Action}s.
+ * 
+ * As for the actual authorization logic, this is handled normally via the UserAdmin service.
+ * 
  * @author David Leangen
  */
-public class UserAdminAuthorizationStrategy
-    implements IAuthorizationStrategy
-{
+public class UserAdminAuthorizationStrategy implements IAuthorizationStrategy {
 
     /**
-     * The default parameter to use for obtaining a user from the UserAdmin
-     * service. Use like so:
+     * The default parameter to use for obtaining a user from the UserAdmin service. Use like so:
+     * 
      * <pre>
-     *     User user = userAdmin.getUser( PAX_WICKET_USER_PARAM, loginName );
+     * User user = userAdmin.getUser(PAX_WICKET_USER_PARAM, loginName);
      * </pre>
      */
     public static final String PAX_WICKET_USER_PARAM = "wicket.username";
 
-    private final UserAdmin m_userAdmin;
+    private final UserAdmin userAdmin;
 
-    public UserAdminAuthorizationStrategy( UserAdmin userAdmin )
-    {
-        m_userAdmin = userAdmin;
+    public UserAdminAuthorizationStrategy(UserAdmin userAdmin) {
+        this.userAdmin = userAdmin;
     }
 
-    public final boolean isActionAuthorized( Component component, Action action )
-    {
+    public final boolean isActionAuthorized(Component component, Action action) {
         final Class<? extends Component> componentClass = component.getClass();
 
         // First check for denial restrictions on the component
-        final DenyAction annotation = componentClass.getAnnotation( DenyAction.class );
+        final DenyAction annotation = componentClass.getAnnotation(DenyAction.class);
         final boolean doDenyAction;
-        if( null == annotation )
+        if (null == annotation)
         // There is no annotation, so no authorization restrictions.
         {
             doDenyAction = false;
-        }
-        else if( "".equals( annotation.value() ) )
+        } else if ("".equals(annotation.value()))
         // There is an annotation with an empty value, which means that
         // all actions are to be tested.
         {
             doDenyAction = true;
-        }
-        else
-        {
+        } else {
             // There is an annotation with a non-empty value, which means that
             // we need to test to see if the action should be authorized.
             boolean isActionSpecified = false;
-            for( final String nextAction : annotation.value() )
-            {
-                if( action.getName().equals( nextAction ) )
-                {
+            for (final String nextAction : annotation.value()) {
+                if (action.getName().equals(nextAction)) {
                     isActionSpecified = true;
                     break;
                 }
@@ -106,39 +90,33 @@ public class UserAdminAuthorizationStrategy
             doDenyAction = isActionSpecified;
         }
 
-        if( doDenyAction )
-        {
+        if (doDenyAction) {
             final StringBuilder s = new StringBuilder();
-            s.append( componentClass.getName() );
-            s.append( "." );
-            s.append( action.getName() );
-            return !isAuthorized( s.toString() );
+            s.append(componentClass.getName());
+            s.append(".");
+            s.append(action.getName());
+            return !isAuthorized(s.toString());
         }
 
-        // If we do not deny the action, next check for authorization 
+        // If we do not deny the action, next check for authorization
         // restrictions on the component
-        final AuthorizeAction authorizeActionAnnotation = componentClass.getAnnotation( AuthorizeAction.class );
+        final AuthorizeAction authorizeActionAnnotation = componentClass.getAnnotation(AuthorizeAction.class);
         final boolean doAuthorizeAction;
-        if( null == authorizeActionAnnotation )
+        if (null == authorizeActionAnnotation)
         // There is no annotation, so no authorization restrictions.
         {
             doAuthorizeAction = false;
-        }
-        else if( "".equals( authorizeActionAnnotation.value() ) )
+        } else if ("".equals(authorizeActionAnnotation.value()))
         // There is an annotation with an empty value, which means that
         // all actions are to be tested.
         {
             doAuthorizeAction = true;
-        }
-        else
-        {
+        } else {
             // There is an annotation with a non-empty value, which means that
             // we need to test to see if the action should be authorized.
             boolean isActionSpecified = false;
-            for( final String nextAction : authorizeActionAnnotation.value() )
-            {
-                if( action.getName().equals( nextAction ) )
-                {
+            for (final String nextAction : authorizeActionAnnotation.value()) {
+                if (action.getName().equals(nextAction)) {
                     isActionSpecified = true;
                     break;
                 }
@@ -146,27 +124,24 @@ public class UserAdminAuthorizationStrategy
             doAuthorizeAction = isActionSpecified;
         }
 
-        if( doAuthorizeAction )
-        {
+        if (doAuthorizeAction) {
             final StringBuilder s = new StringBuilder();
-            s.append( componentClass.getName() );
-            s.append( "." );
-            s.append( action.getName() );
-            return isAuthorized( s.toString() );
+            s.append(componentClass.getName());
+            s.append(".");
+            s.append(action.getName());
+            return isAuthorized(s.toString());
         }
 
         return true;
     }
 
-    public final <T extends Component>boolean isInstantiationAuthorized( Class<T> componentClass )
-    {
+    public final <T extends Component> boolean isInstantiationAuthorized(Class<T> componentClass) {
         final AuthorizeInstantiation annotation =
-            (AuthorizeInstantiation) componentClass.getAnnotation( AuthorizeInstantiation.class );
+            componentClass.getAnnotation(AuthorizeInstantiation.class);
 
-        if( annotation != null )
-        {
+        if (annotation != null) {
             final String role = componentClass.getName();
-            return isAuthorized( role );
+            return isAuthorized(role);
         }
 
         return true;
@@ -174,61 +149,53 @@ public class UserAdminAuthorizationStrategy
 
     /**
      * Developers can override this method.
-     *
-     * For example, if a developer has a modeled or otherwise controlled
-     * access to the UserAdmin service, it is possible to provide specialized
-     * access here.
-     *
+     * 
+     * For example, if a developer has a modeled or otherwise controlled access to the UserAdmin service, it is possible
+     * to provide specialized access here.
+     * 
      * @param role the name of the action to test for authorization
-     *
-     * @return {@code true} if the currently logged in user is authorized
-     *         to perform the action described in the "role" parameter,
-     *         {@code false} otherwise
+     * 
+     * @return {@code true} if the currently logged in user is authorized to perform the action described in the "role"
+     *         parameter, {@code false} otherwise
      */
-    public boolean isAuthorized( String role )
-    {
+    public boolean isAuthorized(String role) {
         // This is totally hackish.
         // The only way to avoid this is to use something other than
         // AuthenticatedWebSession. As it stands, we are trying to force
         // a use case on AuthenticatedWebSession that it was not intended for.
         final PaxWicketAuthentication paxWicketAuth = (PaxWicketAuthentication) AuthenticatedWebSession.get();
         final String loginName = paxWicketAuth.getLoggedInUser();
-        final User user = getUser( m_userAdmin, loginName );
-        if( null == user )
-        {
+        final User user = getUser(userAdmin, loginName);
+        if (null == user) {
             return false;
         }
 
-        final Authorization auth = m_userAdmin.getAuthorization( user );
-        return auth.hasRole( role );
+        final Authorization auth = userAdmin.getAuthorization(user);
+        return auth.hasRole(role);
     }
 
     /**
-     * Override this method in order to provide a different way
-     * of obtaining the User from the UserAdmin service.
-     *
+     * Override this method in order to provide a different way of obtaining the User from the UserAdmin service.
+     * 
      * @param userAdmin UserAdmin service
      * @param loginName the name under which the user is logged in
-     *
+     * 
      * @return the User object, or {@code null} if no such user
      */
-    protected User getUser( UserAdmin userAdmin, String loginName )
-    {
-        if( null == loginName )
-        {
+    protected User getUser(UserAdmin userAdmin, String loginName) {
+        if (null == loginName) {
             return null;
         }
 
-        return userAdmin.getUser( PAX_WICKET_USER_PARAM, loginName );
+        return userAdmin.getUser(PAX_WICKET_USER_PARAM, loginName);
     }
 
     /**
      * Return the UserAdmin service that is backing this class.
-     *
+     * 
      * @return the UserAdmin service
      */
-    protected UserAdmin getUserAdmin()
-    {
-        return m_userAdmin;
+    protected UserAdmin getUserAdmin() {
+        return userAdmin;
     }
 }

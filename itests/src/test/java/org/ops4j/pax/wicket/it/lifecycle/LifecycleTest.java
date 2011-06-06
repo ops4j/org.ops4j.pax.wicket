@@ -18,49 +18,45 @@ package org.ops4j.pax.wicket.it.lifecycle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.osgi.framework.Bundle.ACTIVE;
+import static org.osgi.framework.Bundle.RESOLVED;
+
 import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
-import static org.osgi.framework.Bundle.ACTIVE;
-import static org.osgi.framework.Bundle.RESOLVED;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 /**
  * {@code LifecycleTest} tests pax wicket service lifecycle.
- *
+ * 
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class LifecycleTest extends PaxWicketIntegrationTest
-{
+public final class LifecycleTest extends PaxWicketIntegrationTest {
     @Inject
     private BundleContext bundleContext;
 
     /**
      * Tests stopping pax-wicket service bundle.
-     *
+     * 
      * @since 0.5.4
      */
     @Test
-    public final void testStopping()
-    {
-        Bundle bundle = getPaxWicketServiceBundle( bundleContext );
+    public final void testStopping() {
+        Bundle bundle = getPaxWicketServiceBundle(bundleContext);
 
         // Pax wicket bundle must be active
-        assertEquals( ACTIVE, bundle.getState() );
+        assertEquals(ACTIVE, bundle.getState());
 
-        try
-        {
+        try {
             bundle.stop();
-        }
-        catch( BundleException e )
-        {
-            fail( "Stopping bundle must not throw any exception." );
+        } catch (BundleException e) {
+            fail("Stopping bundle must not throw any exception.");
         }
 
         // Once stopped, bundle state must be in resolved state
-        assertEquals( RESOLVED, bundle.getState() );
+        assertEquals(RESOLVED, bundle.getState());
     }
 }

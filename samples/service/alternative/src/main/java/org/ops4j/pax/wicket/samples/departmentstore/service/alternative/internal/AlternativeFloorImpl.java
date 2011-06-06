@@ -20,41 +20,35 @@ package org.ops4j.pax.wicket.samples.departmentstore.service.alternative.interna
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.ops4j.pax.wicket.samples.departmentstore.model.Floor;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
 
-public class AlternativeFloorImpl
-    implements Floor, Serializable
-{
+public class AlternativeFloorImpl implements Floor, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String m_name;
-    private List<Franchisee> m_franchisees;
+    private String name;
+    private List<Franchisee> franchisees;
 
-    public AlternativeFloorImpl( String name )
-    {
-        m_name = name;
-        m_franchisees = new ArrayList<Franchisee>();
+    public AlternativeFloorImpl(String name) {
+        this.name = name;
+        franchisees = new ArrayList<Franchisee>();
     }
 
-    public String getName()
-    {
-        return m_name;
+    public String getName() {
+        return name;
     }
 
-    public List<Franchisee> getFranchisees()
-    {
-        return m_franchisees;
+    public List<Franchisee> getFranchisees() {
+        return franchisees;
     }
 
-    public void addFranchisee( Franchisee franchisee )
-    {
-        m_franchisees.add( franchisee );
+    public void addFranchisee(Franchisee franchisee) {
+        franchisees.add(franchisee);
     }
 
-    public void removeFranchise( Franchisee franchisee )
-    {
-        m_franchisees.remove( franchisee );
+    public void removeFranchise(Franchisee franchisee) {
+        franchisees.remove(franchisee);
     }
 }

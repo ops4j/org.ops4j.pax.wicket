@@ -50,11 +50,11 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         }
     };
 
-    private BundleContext m_bundleContext;
-    private Dictionary<String, Object> m_properties;
-    private ServiceRegistration m_registration;
-    private Roles m_requiredRoles;
-    private Roles m_basicRoles;
+    private BundleContext bundleContext;
+    private Dictionary<String, Object> properties;
+    private ServiceRegistration registration;
+    private Roles requiredRoles;
+    private Roles basicRoles;
 
     /**
      * Construct an instance with {@code AbstractContentSource}.
@@ -72,9 +72,9 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         validateNotEmpty(wicketId, "wicketId");
         validateNotEmpty(applicationName, "applicationName");
 
-        m_properties = new Hashtable<String, Object>();
-        m_properties.put(Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId);
-        m_bundleContext = bundleContext;
+        properties = new Hashtable<String, Object>();
+        properties.put(Constants.SERVICE_PID, SOURCE_ID + "/" + wicketId);
+        this.bundleContext = bundleContext;
 
         setWicketId(wicketId);
         setApplicationName(applicationName);
@@ -103,7 +103,7 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         throws IllegalArgumentException {
         validateNotNull(destinationIds, "destinationIds");
 
-        m_properties.put(DESTINATIONS, destinationIds);
+        properties.put(DESTINATIONS, destinationIds);
     }
 
     // public final E createSourceComponent(String wicketId)
@@ -143,13 +143,13 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         Roles userRoles = authentication.getRoles();
 
         boolean isRequiredRolesAuthorized = true;
-        if (m_requiredRoles != null) {
-            isRequiredRolesAuthorized = m_requiredRoles.hasAllRoles(userRoles);
+        if (requiredRoles != null) {
+            isRequiredRolesAuthorized = requiredRoles.hasAllRoles(userRoles);
         }
 
         boolean isBasicRolesAuthorized = true;
-        if (m_basicRoles != null && !m_basicRoles.isEmpty()) {
-            isBasicRolesAuthorized = userRoles.hasAnyRole(m_basicRoles);
+        if (basicRoles != null && !basicRoles.isEmpty()) {
+            isBasicRolesAuthorized = userRoles.hasAnyRole(basicRoles);
         }
 
         return isRequiredRolesAuthorized && isBasicRolesAuthorized;
@@ -159,14 +159,14 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         throws IllegalArgumentException {
         validateNotEmpty(key, "key");
 
-        return (String[]) m_properties.get(key);
+        return (String[]) properties.get(key);
     }
 
     private String getStringProperty(String key, String defaultValue)
         throws IllegalArgumentException {
         validateNotEmpty(key, "key");
 
-        String value = (String) m_properties.get(key);
+        String value = (String) properties.get(key);
         if (value == null) {
             return defaultValue;
         }
@@ -195,7 +195,7 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
     private void setWicketId(String wicketId)
         throws IllegalArgumentException {
         validateNotEmpty(wicketId, "wicketId");
-        m_properties.put(SOURCE_ID, wicketId);
+        properties.put(SOURCE_ID, wicketId);
     }
 
     /**
@@ -238,27 +238,27 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         throws IllegalArgumentException {
         validateNotEmpty(applicationName, "applicationName");
 
-        m_properties.put(APPLICATION_NAME, applicationName);
+        properties.put(APPLICATION_NAME, applicationName);
     }
 
     @SuppressWarnings("unchecked")
     public final void updated(Dictionary config) {
         synchronized (this) {
             if (config != null) {
-                m_properties = config;
-                String[] required = (String[]) m_properties.get(REQUIRED_ROLES);
+                properties = config;
+                String[] required = (String[]) properties.get(REQUIRED_ROLES);
                 if (required != null) {
-                    m_requiredRoles = new Roles(required);
+                    requiredRoles = new Roles(required);
                 } else {
-                    m_requiredRoles = new Roles();
+                    requiredRoles = new Roles();
                 }
-                String[] basic = (String[]) m_properties.get(BASIC_ROLES);
+                String[] basic = (String[]) properties.get(BASIC_ROLES);
                 if (basic != null) {
-                    m_basicRoles = new Roles(basic);
+                    basicRoles = new Roles(basic);
                 } else {
-                    m_basicRoles = new Roles();
+                    basicRoles = new Roles();
                 }
-                m_registration.setProperties(m_properties);
+                registration.setProperties(properties);
             }
         }
     }
@@ -276,38 +276,38 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
                 {
                     ContentSource.class.getName(), ManagedService.class.getName()
                 };
-            m_registration = m_bundleContext.registerService(serviceNames, this, m_properties);
+            registration = bundleContext.registerService(serviceNames, this, properties);
         }
     }
 
     public void dispose() {
-        m_registration.unregister();
+        registration.unregister();
     }
 
     public Roles getRequiredRoles() {
-        return m_requiredRoles;
+        return requiredRoles;
     }
 
     public Roles getBasicRoles() {
-        return m_basicRoles;
+        return basicRoles;
     }
 
     public final void setRoles(Roles requiredRoles, Roles basicRoles) {
         boolean changed = false;
         if (requiredRoles != null) {
             changed = true;
-            m_requiredRoles = requiredRoles;
-            m_properties.put(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
+            this.requiredRoles = requiredRoles;
+            properties.put(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
         }
 
         if (basicRoles != null) {
-            m_basicRoles = basicRoles;
-            m_properties.put(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
+            this.basicRoles = basicRoles;
+            properties.put(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
             changed = true;
         }
 
-        if (changed && m_registration != null) {
-            m_registration.setProperties(m_properties);
+        if (changed && registration != null) {
+            registration.setProperties(properties);
         }
     }
 

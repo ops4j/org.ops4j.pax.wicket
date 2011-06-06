@@ -16,8 +16,10 @@
  */
 package org.ops4j.pax.wicket.util.serialization.deployment;
 
-import java.io.Serializable;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
+import java.io.Serializable;
+
 import org.ops4j.pax.wicket.internal.serialization.SerializationActivator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -26,41 +28,36 @@ import org.osgi.framework.BundleContext;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-final class ReplaceBundleContext
-    implements Serializable
-{
+final class ReplaceBundleContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final long m_bundleId;
+    private final long bundleId;
 
     /**
      * Construct a new instance of {@code ReplaceBundleContext}.
-     *
+     * 
      * @param bundleContext The bundle context. Must not be {@code null}.
-     *
+     * 
      * @throws IllegalArgumentException Thrown if the specified {@code aBundleContext} is {@code null}.
      * @since 0.5.4
      */
-    ReplaceBundleContext( BundleContext bundleContext )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundleContext" );
+    ReplaceBundleContext(BundleContext bundleContext) throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundleContext");
 
         Bundle bundle = bundleContext.getBundle();
-        m_bundleId = bundle.getBundleId();
+        bundleId = bundle.getBundleId();
     }
 
     /**
      * Returns the bundle context.
-     *
+     * 
      * @return The bundle context.
-     *
+     * 
      * @since 0.5.4
      */
-    final BundleContext getBundleContext()
-    {
-        return SerializationActivator.getBundleContextByBundleId( m_bundleId );
+    final BundleContext getBundleContext() {
+        return SerializationActivator.getBundleContextByBundleId(bundleId);
     }
 
 }

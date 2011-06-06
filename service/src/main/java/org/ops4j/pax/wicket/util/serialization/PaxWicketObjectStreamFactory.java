@@ -42,8 +42,7 @@ public final class PaxWicketObjectStreamFactory implements IObjectStreamFactory 
         m_developmentMode = isDevelopmentMode;
     }
 
-    public final ObjectInputStream newObjectInputStream(InputStream in)
-        throws IOException {
+    public final ObjectInputStream newObjectInputStream(InputStream in) throws IOException {
         IClassResolver classResolver = getClassResolver();
         if (m_developmentMode) {
             return new PaxWicketObjectInputStream(in, classResolver);
@@ -58,8 +57,7 @@ public final class PaxWicketObjectStreamFactory implements IObjectStreamFactory 
         return appSettings.getClassResolver();
     }
 
-    public final ObjectOutputStream newObjectOutputStream(OutputStream out)
-        throws IOException {
+    public final ObjectOutputStream newObjectOutputStream(OutputStream out) throws IOException {
         if (m_developmentMode) {
             return new PaxWicketObjectOutputStream(out);
         } else {

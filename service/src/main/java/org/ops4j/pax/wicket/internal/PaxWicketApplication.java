@@ -47,15 +47,15 @@ import org.osgi.framework.ServiceRegistration;
 
 public final class PaxWicketApplication extends WebApplication {
 
-    private final BundleContext m_bundleContext;
-    private final String m_applicationName;
-    private final PageMounter m_pageMounter;
-    private final PaxWicketPageFactory m_pageFactory;
-    private final DelegatingClassResolver m_delegatingClassResolver;
-    private final List<ServiceRegistration> m_serviceRegistrations;
-    protected final Class<? extends Page> m_homepageClass;
-    private PageMounterTracker m_mounterTracker;
-    private final List<IInitializer> m_initializers;
+    private final BundleContext bundleContext;
+    private final String applicationName;
+    private final PageMounter pageMounter;
+    private final PaxWicketPageFactory pageFactory;
+    private final DelegatingClassResolver delegatingClassResolver;
+    private final List<ServiceRegistration> serviceRegistrations;
+    protected final Class<? extends Page> homepageClass;
+    private PageMounterTracker mounterTracker;
+    private final List<IInitializer> initializers;
 
     public PaxWicketApplication(
             BundleContext context,
@@ -72,21 +72,20 @@ public final class PaxWicketApplication extends WebApplication {
         validateNotNull(pageFactory, "pageFactory");
         validateNotNull(delegatingClassResolver, "delegatingClassResolver");
         validateNotNull(initializers, "initializers");
-
-        m_bundleContext = context;
-        m_applicationName = applicationName;
-        m_pageMounter = pageMounter;
-        m_pageFactory = pageFactory;
-        m_homepageClass = homepageClass;
-        m_delegatingClassResolver = delegatingClassResolver;
-        m_serviceRegistrations = new ArrayList<ServiceRegistration>();
-        m_initializers = new ArrayList<IInitializer>();
-        m_initializers.addAll(initializers);
+        bundleContext = context;
+        this.applicationName = applicationName;
+        this.pageMounter = pageMounter;
+        this.pageFactory = pageFactory;
+        this.homepageClass = homepageClass;
+        this.delegatingClassResolver = delegatingClassResolver;
+        serviceRegistrations = new ArrayList<ServiceRegistration>();
+        this.initializers = new ArrayList<IInitializer>();
+        this.initializers.addAll(initializers);
     }
 
     @Override
     public final Class<? extends Page> getHomePage() {
-        return m_homepageClass;
+        return homepageClass;
     }
 
     @Override
@@ -94,14 +93,14 @@ public final class PaxWicketApplication extends WebApplication {
         super.init();
 
         IApplicationSettings applicationSettings = getApplicationSettings();
-        applicationSettings.setClassResolver(m_delegatingClassResolver);
+        applicationSettings.setClassResolver(delegatingClassResolver);
         addWicketService(IApplicationSettings.class, applicationSettings);
 
         ISessionSettings sessionSettings = getSessionSettings();
-        sessionSettings.setPageFactory(m_pageFactory);
+        sessionSettings.setPageFactory(pageFactory);
         addWicketService(ISessionSettings.class, sessionSettings);
 
-        setApplicationKey(m_applicationName);
+        setApplicationKey(applicationName);
 
         // addWicketService( IAjaxSettings.class, getAjaxSettings() );
         addWicketService(IDebugSettings.class, getDebugSettings());
@@ -113,17 +112,17 @@ public final class PaxWicketApplication extends WebApplication {
         addWicketService(IResourceSettings.class, getResourceSettings());
         addWicketService(ISecuritySettings.class, getSecuritySettings());
 
-        if (m_pageMounter != null) {
-            for (MountPointInfo bookmark : m_pageMounter.getMountPoints()) {
+        if (pageMounter != null) {
+            for (MountPointInfo bookmark : pageMounter.getMountPoints()) {
                 mount(bookmark.getCodingStrategy());
             }
         }
 
         // Now add a tracker so we can still mount pages later
-        m_mounterTracker = new PageMounterTracker(m_bundleContext, this, m_applicationName);
-        m_mounterTracker.open();
+        mounterTracker = new PageMounterTracker(bundleContext, this, applicationName);
+        mounterTracker.open();
 
-        for (final IInitializer initializer : m_initializers) {
+        for (final IInitializer initializer : initializers) {
             initializer.init(this);
         }
     }
@@ -132,26 +131,26 @@ public final class PaxWicketApplication extends WebApplication {
         Properties props = new Properties();
 
         // Note: This is kept for legacy
-        props.setProperty("applicationId", m_applicationName);
-        props.setProperty(APPLICATION_NAME, m_applicationName);
+        props.setProperty("applicationId", applicationName);
+        props.setProperty(APPLICATION_NAME, applicationName);
 
         String serviceName = service.getName();
         ServiceRegistration registration =
-            m_bundleContext.registerService(serviceName, serviceImplementation, props);
-        m_serviceRegistrations.add(registration);
+            bundleContext.registerService(serviceName, serviceImplementation, props);
+        serviceRegistrations.add(registration);
     }
 
     @Override
     protected void onDestroy() {
-        if (m_mounterTracker != null) {
-            m_mounterTracker.close();
-            m_mounterTracker = null;
+        if (mounterTracker != null) {
+            mounterTracker.close();
+            mounterTracker = null;
         }
 
-        for (ServiceRegistration reg : m_serviceRegistrations) {
+        for (ServiceRegistration reg : serviceRegistrations) {
             reg.unregister();
         }
-        m_serviceRegistrations.clear();
+        serviceRegistrations.clear();
 
         super.onDestroy();
     }

@@ -39,206 +39,171 @@ import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 /**
  * @author edward.yakop@gmail.com
  */
-public class ServletProxy
-{
+public class ServletProxy {
 
     private static final Class<?>[] SERVLET_INTERFACES = new Class[]{
         Servlet.class
     };
-    
-    static Servlet newServletProxy(
-        IWebApplicationFactory applicationFactory, File tempDir, String mountPoint, FilterDelegator filterDelegator )
-    {
-        ServletInvocationHandler ih = new ServletInvocationHandler( applicationFactory, tempDir, mountPoint, filterDelegator );
-        return newServletProxy( ih );
-    }
-    
-    static Servlet newServletProxy( PaxWicketApplicationFactory applicationFactory, File tempDir, String mountPoint )
-    {
-        ServletInvocationHandler ih = new ServletInvocationHandler( applicationFactory, tempDir, mountPoint );
-        return newServletProxy( ih );
-    }
-    
-    private static Servlet newServletProxy( ServletInvocationHandler ih )
-    {
-        ClassLoader classLoader = ServletProxy.class.getClassLoader();
-        return (Servlet) newProxyInstance( classLoader, SERVLET_INTERFACES, ih );
+
+    static Servlet
+        newServletProxy(
+                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
+                FilterDelegator filterDelegator) {
+        ServletInvocationHandler ih =
+            new ServletInvocationHandler(applicationFactory, tempDir, mountPoint, filterDelegator);
+        return newServletProxy(ih);
     }
 
-    private static class ServletInvocationHandler
-        implements InvocationHandler
-    {
+    static Servlet newServletProxy(PaxWicketApplicationFactory applicationFactory, File tempDir, String mountPoint) {
+        ServletInvocationHandler ih = new ServletInvocationHandler(applicationFactory, tempDir, mountPoint);
+        return newServletProxy(ih);
+    }
+
+    private static Servlet newServletProxy(ServletInvocationHandler ih) {
+        ClassLoader classLoader = ServletProxy.class.getClassLoader();
+        return (Servlet) newProxyInstance(classLoader, SERVLET_INTERFACES, ih);
+    }
+
+    private static class ServletInvocationHandler implements InvocationHandler {
 
         private static final Class<?>[] REQUEST_INTERFACES = new Class[]{
             HttpServletRequest.class
         };
 
-        private final String m_mountPoint;
-        private final ServletDelegator m_delegator;
-        private FilterDelegator m_filterDelegator;
+        private final String mountPoint;
+        private final ServletDelegator delegator;
+        private FilterDelegator filterDelegator;
 
         public ServletInvocationHandler(
-            IWebApplicationFactory applicationFactory, File tempDir, String mountPoint, FilterDelegator filterDelegator
-        )
-        {
-            m_mountPoint = mountPoint;
-            m_delegator = new ServletDelegator( applicationFactory, tempDir );
-            m_filterDelegator = filterDelegator;
-            m_filterDelegator.setServlet(m_delegator);
-        }
-        
-        public ServletInvocationHandler(
-            IWebApplicationFactory applicationFactory, File tempDir, String mountPoint )
-        {
-            m_mountPoint = mountPoint;
-            m_delegator = new ServletDelegator( applicationFactory, tempDir );
+                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
+                FilterDelegator filterDelegator) {
+            this.mountPoint = mountPoint;
+            delegator = new ServletDelegator(applicationFactory, tempDir);
+            this.filterDelegator = filterDelegator;
+            this.filterDelegator.setServlet(delegator);
         }
 
-        public Object invoke( Object proxy, Method method, Object[] args )
-            throws Throwable
-        {
-            replaceHttpRequestArgument( args );
-            if ( m_filterDelegator != null)
-            {
-                if ( method.getName().equals( "service" ) )
-                {
-                    m_filterDelegator.doFilter( (HttpServletRequest) args[0], (HttpServletResponse) args[1] );
+        public ServletInvocationHandler(
+                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint) {
+            this.mountPoint = mountPoint;
+            delegator = new ServletDelegator(applicationFactory, tempDir);
+        }
+
+        public Object invoke(Object proxy, Method method, Object[] args)
+            throws Throwable {
+            replaceHttpRequestArgument(args);
+            if (filterDelegator != null) {
+                if (method.getName().equals("service")) {
+                    filterDelegator.doFilter((HttpServletRequest) args[0], (HttpServletResponse) args[1]);
                     return null;
                 }
             }
-            return method.invoke( m_delegator, args );
+            return method.invoke(delegator, args);
         }
 
-        private void replaceHttpRequestArgument( Object[] args )
-        {
-            if( args == null || args.length == 0 )
-            {
+        private void replaceHttpRequestArgument(Object[] args) {
+            if (args == null || args.length == 0) {
                 return;
             }
 
-            for( int i = 0; i < args.length; i++ )
-            {
-                Object arg = args[ i ];
-                if( arg == null )
-                {
+            for (int i = 0; i < args.length; i++) {
+                Object arg = args[i];
+                if (arg == null) {
                     continue;
                 }
 
                 Class<?> argumentClass = arg.getClass();
-                if( HttpServletRequest.class.isAssignableFrom( argumentClass ) &&
-                    !isProxyClass( argumentClass ) )
-                {
+                if (HttpServletRequest.class.isAssignableFrom(argumentClass) &&
+                        !isProxyClass(argumentClass)) {
                     HttpServletRequest request = (HttpServletRequest) arg;
                     // Replace the request
-                    args[ i ] = newProxyRequest( request );
+                    args[i] = newProxyRequest(request);
                 }
             }
         }
 
-        private HttpServletRequest newProxyRequest( HttpServletRequest request )
-        {
+        private HttpServletRequest newProxyRequest(HttpServletRequest request) {
             ClassLoader loader = ServletProxy.class.getClassLoader();
-            ServletRequestInvocationHandler ih = new ServletRequestInvocationHandler( request, m_mountPoint );
-            return (HttpServletRequest) newProxyInstance( loader, REQUEST_INTERFACES, ih );
+            ServletRequestInvocationHandler ih = new ServletRequestInvocationHandler(request, mountPoint);
+            return (HttpServletRequest) newProxyInstance(loader, REQUEST_INTERFACES, ih);
         }
 
-        private static final class ServletDelegator extends WicketServlet
-        {
+        private static final class ServletDelegator extends WicketServlet {
 
             private static final long serialVersionUID = 1L;
 
             private static final String WICKET_REQUIRED_ATTRIBUTE = "javax.servlet.context.tempdir";
 
-            private final IWebApplicationFactory m_appFactory;
-            private final File m_tmpDir;
+            private final IWebApplicationFactory appFactory;
+            private final File tmpDir;
 
-            ServletDelegator( IWebApplicationFactory applicationFactory, File tempDir )
-                throws IllegalArgumentException
-            {
-                validateNotNull( applicationFactory, "applicationFactory" );
-                validateNotNull( tempDir, "tempDir" );
+            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir)
+                throws IllegalArgumentException {
+                validateNotNull(applicationFactory, "applicationFactory");
+                validateNotNull(tempDir, "tempDir");
 
-                m_appFactory = applicationFactory;
-                m_tmpDir = tempDir;
-                m_tmpDir.mkdirs();
+                appFactory = applicationFactory;
+                tmpDir = tempDir;
+                tmpDir.mkdirs();
             }
 
             @Override
-            protected WicketFilter newWicketFilter()
-            {
+            protected WicketFilter newWicketFilter() {
                 ServletContext servletContext = getServletContext();
-                if( servletContext.getAttribute( WICKET_REQUIRED_ATTRIBUTE ) == null )
-                {
-                    servletContext.setAttribute( WICKET_REQUIRED_ATTRIBUTE, m_tmpDir );
+                if (servletContext.getAttribute(WICKET_REQUIRED_ATTRIBUTE) == null) {
+                    servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, tmpDir);
                 }
 
-                return new PaxWicketFilter( m_appFactory );
+                return new PaxWicketFilter(appFactory);
             }
 
             @Override
-            public String toString()
-            {
+            public String toString() {
                 return "Pax Wicket Servlet";
             }
         }
 
         private static class ServletRequestInvocationHandler
-            implements InvocationHandler
-        {
+                implements InvocationHandler {
 
             private final HttpServletRequest m_request;
             private final String m_mountPoint;
 
-            private ServletRequestInvocationHandler( HttpServletRequest request, String mountPoint )
-                throws IllegalArgumentException
-            {
-                validateNotNull( request, "request" );
-                validateNotNull( mountPoint, "mountPoint" );
+            private ServletRequestInvocationHandler(HttpServletRequest request, String mountPoint)
+                throws IllegalArgumentException {
+                validateNotNull(request, "request");
+                validateNotNull(mountPoint, "mountPoint");
 
                 m_request = request;
 
-                if( mountPoint.length() <= 1 )
-                {
-                    if( mountPoint.startsWith( "/" ) )
-                    {
-                        mountPoint = mountPoint.substring( 1 );
+                if (mountPoint.length() <= 1) {
+                    if (mountPoint.startsWith("/")) {
+                        mountPoint = mountPoint.substring(1);
                     }
-                }
-                else
-                {
-                    if( !mountPoint.startsWith( "/" ) )
-                    {
+                } else {
+                    if (!mountPoint.startsWith("/")) {
                         mountPoint = "/" + mountPoint;
                     }
                 }
                 m_mountPoint = mountPoint;
             }
 
-            public Object invoke( Object proxy, Method method, Object[] arguments )
-                throws Throwable
-            {
+            public Object invoke(Object proxy, Method method, Object[] arguments)
+                throws Throwable {
                 String methodName = method.getName();
 
                 Object returnValue;
-                if( m_mountPoint.length() == 0 )
-                {
-                    if( "getContextPath".equals( methodName ) ||
-                        "getServletPath".equals( methodName ) )
-                    {
+                if (m_mountPoint.length() == 0) {
+                    if ("getContextPath".equals(methodName) ||
+                            "getServletPath".equals(methodName)) {
                         returnValue = "";
-                    }
-                    else if( "getPathInfo".equals( methodName ) )
-                    {
+                    } else if ("getPathInfo".equals(methodName)) {
                         returnValue = m_request.getServletPath();
+                    } else {
+                        returnValue = method.invoke(m_request, arguments);
                     }
-                    else
-                    {
-                        returnValue = method.invoke( m_request, arguments );
-                    }
-                }
-                else
-                {
-                    returnValue = method.invoke( m_request, arguments );
+                } else {
+                    returnValue = method.invoke(m_request, arguments);
                 }
 
                 return returnValue;

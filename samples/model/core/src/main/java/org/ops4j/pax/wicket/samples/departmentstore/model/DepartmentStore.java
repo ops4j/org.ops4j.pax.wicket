@@ -19,8 +19,7 @@ package org.ops4j.pax.wicket.samples.departmentstore.model;
 
 import java.util.List;
 
-public interface DepartmentStore
-{
+public interface DepartmentStore {
     String getName();
 
     List<Floor> getFloors();

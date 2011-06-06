@@ -21,13 +21,11 @@ import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
 
-public final class PageFilterFactory
-{
+public final class PageFilterFactory {
 
-    public static String createPageFilter( String pagename, String applicationName )
-    {
-        validateNotEmpty( pagename, "pagename" );
-        validateNotEmpty( applicationName, "applicationName" );
+    public static String createPageFilter(String pagename, String applicationName) {
+        validateNotEmpty(pagename, "pagename");
+        validateNotEmpty(applicationName, "applicationName");
 
         return "(&(" + PAGE_NAME + "=" + pagename + ")(" + APPLICATION_NAME + "=" + applicationName + "))";
     }

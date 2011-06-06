@@ -18,44 +18,36 @@
 
 package org.ops4j.pax.wicket.api;
 
-public final class FilterDescription
-{
-    private String m_className;
-    private boolean m_required;
+public final class FilterDescription {
+    private String className;
+    private boolean required;
 
-    public FilterDescription()
-    {
+    public FilterDescription() {
     }
 
-    public FilterDescription( String className, boolean required )
-    {
-        m_className = className;
-        m_required = required;
+    public FilterDescription(String className, boolean required) {
+        this.className = className;
+        this.required = required;
     }
 
-    public String getClassName()
-    {
-        return m_className;
+    public String getClassName() {
+        return className;
     }
 
-    public void setClassName( String className )
-    {
-        m_className = className;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public boolean isRequired()
-    {
-        return m_required;
+    public boolean isRequired() {
+        return required;
     }
 
-    public void setRequired( boolean required )
-    {
-        m_required = required;
+    public void setRequired(boolean required) {
+        this.required = required;
     }
-    
+
     @Override
-    public String toString()
-    {
-        return m_className + " (required=" + m_required + ")";
+    public String toString() {
+        return className + " (required=" + required + ")";
     }
 }

@@ -37,8 +37,8 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel> 
 
     private static final HashMap<String, FloorAggregatedSource> m_instances;
 
-    private final Model m_floor;
-    private final String m_tabId;
+    private final Model floor;
+    private final String tabId;
 
     static {
         m_instances = new HashMap<String, FloorAggregatedSource>();
@@ -47,21 +47,21 @@ public class FloorAggregatedSource extends AbstractAggregatedSource<FloorPanel> 
     public FloorAggregatedSource(Floor floor, String aggregationPoint, String destination,
                                   BundleContext bundleContext, String applicationname) {
         super(bundleContext, applicationname, aggregationPoint, destination);
-        m_tabId = aggregationPoint;
+        tabId = aggregationPoint;
         String floorName = floor.getName();
-        m_floor = new Model<String>(floorName);
+        this.floor = new Model<String>(floorName);
         m_instances.put(floorName, this);
     }
 
     @Override
     protected FloorPanel createComponent(String wicketId) {
         List<String> sources = getRegisteredSourceIds(FloorPanel.WICKET_ID_FRANCHISEE);
-        String floorName = (String) m_floor.getObject();
+        String floorName = (String) floor.getObject();
         return new FloorPanel(wicketId, sources, floorName);
     }
 
     public AbstractTab createSourceTab() {
-        return new FloorTab(m_floor);
+        return new FloorTab(floor);
     }
 
     public AbstractTab createSourceTab(String title) {

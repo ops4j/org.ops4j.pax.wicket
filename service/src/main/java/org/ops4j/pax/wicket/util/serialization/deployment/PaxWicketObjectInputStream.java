@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
+
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IClassResolver;
 
@@ -27,69 +28,51 @@ import org.apache.wicket.application.IClassResolver;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class PaxWicketObjectInputStream extends ObjectInputStream
-{
+public final class PaxWicketObjectInputStream extends ObjectInputStream {
 
-    private final IClassResolver m_classResolver;
+    private final IClassResolver classResolver;
 
-    public PaxWicketObjectInputStream( InputStream inputStream, IClassResolver resolver )
-        throws IOException
-    {
-        super( inputStream );
+    public PaxWicketObjectInputStream(InputStream inputStream, IClassResolver resolver) throws IOException {
+        super(inputStream);
 
-        m_classResolver = resolver;
-        enableResolveObject( true );
+        classResolver = resolver;
+        enableResolveObject(true);
     }
 
     @Override
-    protected final Object resolveObject( Object object )
-        throws IOException
-    {
-        if( object instanceof ReplaceBundleContext )
-        {
+    protected final Object resolveObject(Object object) throws IOException {
+        if (object instanceof ReplaceBundleContext) {
             ReplaceBundleContext replaceBundleContext = (ReplaceBundleContext) object;
             return replaceBundleContext.getBundleContext();
-        }
-        else if( object instanceof ReplaceBundle )
-        {
+        } else if (object instanceof ReplaceBundle) {
             ReplaceBundle replaceBundle = (ReplaceBundle) object;
             return replaceBundle.getBundle();
-        }
-        else
-        {
-            return super.resolveObject( object );
+        } else {
+            return super.resolveObject(object);
         }
     }
 
     @Override
-    protected final Class<?> resolveClass( ObjectStreamClass objectStreamClass )
-        throws IOException, ClassNotFoundException
-    {
+    protected final Class<?> resolveClass(ObjectStreamClass objectStreamClass) throws IOException,
+        ClassNotFoundException {
         String className = objectStreamClass.getName();
 
-        Class<?> candidate = resolveClassByClassResolver( className );
-        if( candidate != null )
-        {
+        Class<?> candidate = resolveClassByClassResolver(className);
+        if (candidate != null) {
             return candidate;
         }
 
-        return super.resolveClass( objectStreamClass );
+        return super.resolveClass(objectStreamClass);
     }
 
-    private Class<?> resolveClassByClassResolver( String className )
-    {
+    private Class<?> resolveClassByClassResolver(String className) {
         Class<?> resolvedClass = null;
 
-        try
-        {
-            resolvedClass = m_classResolver.resolveClass( className );
-        }
-        catch( WicketRuntimeException ex )
-        {
+        try {
+            resolvedClass = classResolver.resolveClass(className);
+        } catch (WicketRuntimeException ex) {
             // Ignore
-        }
-        catch( ClassNotFoundException e )
-        {
+        } catch (ClassNotFoundException e) {
             // Ignore
         }
 

@@ -30,27 +30,25 @@ import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
 
-    private DepartmentStoreModelTracker m_storeTracker;
-    private ServiceRegistration m_registration;
+    private DepartmentStoreModelTracker storeTracker;
+    private ServiceRegistration registration;
 
-    public void start(BundleContext context)
-        throws Exception {
-        m_storeTracker = new DepartmentStoreModelTracker(context);
-        m_storeTracker.open();
+    public void start(BundleContext context) throws Exception {
+        storeTracker = new DepartmentStoreModelTracker(context);
+        storeTracker.open();
 
-        AboutPageFactory pageFactory = new AboutPageFactory(m_storeTracker, context);
+        AboutPageFactory pageFactory = new AboutPageFactory(storeTracker, context);
         Properties props = new Properties();
         props.put(PAGE_NAME, "about");
         props.put(APPLICATION_NAME, "departmentstore");
-        m_registration = context.registerService(PageFactory.class.getName(), pageFactory, props);
+        registration = context.registerService(PageFactory.class.getName(), pageFactory, props);
     }
 
-    public void stop(BundleContext context)
-        throws Exception {
-        m_registration.unregister();
-        m_storeTracker.close();
+    public void stop(BundleContext context) throws Exception {
+        registration.unregister();
+        storeTracker.close();
 
-        m_storeTracker = null;
-        m_registration = null;
+        storeTracker = null;
+        registration = null;
     }
 }

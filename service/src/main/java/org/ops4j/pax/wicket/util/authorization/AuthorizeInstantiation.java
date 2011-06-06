@@ -26,20 +26,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks the class as restricting its instatiation to authorized users
- * only. Who is authorized and who is not is determined by the
- * UserAdmin service.
- *
- * Note that I did not add package-level annotations for the simple reason
- * that I did not need them. Feel free to add them in if you need them.
- *
+ * Marks the class as restricting its instatiation to authorized users only. Who is authorized and who is not is
+ * determined by the UserAdmin service.
+ * 
+ * Note that I did not add package-level annotations for the simple reason that I did not need them. Feel free to add
+ * them in if you need them.
+ * 
  * @author David Leangen
  */
-@Retention( RetentionPolicy.RUNTIME )
-@Target( ElementType.TYPE )
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 @Documented
 @Inherited
-public @interface AuthorizeInstantiation
-{
+public @interface AuthorizeInstantiation {
 
 }
