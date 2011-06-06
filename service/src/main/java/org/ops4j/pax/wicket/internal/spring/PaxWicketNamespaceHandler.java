@@ -1,6 +1,7 @@
 package org.ops4j.pax.wicket.internal.spring;
 
 import org.ops4j.pax.wicket.internal.spring.application.ApplicationBeanDefinitionParser;
+import org.ops4j.pax.wicket.internal.spring.classResolver.ClassResolverDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.contentAggregator.RootContentAggregatorBeanDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.contentSource.ContentSourceFactoryBeanDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.contentSourceModelMapping.ContentSourceModelMappingFactoryBeanDefinitionParser;
@@ -16,6 +17,7 @@ public class PaxWicketNamespaceHandler extends NamespaceHandlerSupport {
         registerBeanDefinitionParser("contentSourceModelMapping",
             new ContentSourceModelMappingFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("contentAggregator", new RootContentAggregatorBeanDefinitionParser());
+        registerBeanDefinitionParser("classResolver", new ClassResolverDefinitionParser());
     }
 
 }

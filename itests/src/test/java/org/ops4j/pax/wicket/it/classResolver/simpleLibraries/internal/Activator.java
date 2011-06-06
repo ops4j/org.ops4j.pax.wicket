@@ -36,7 +36,7 @@ public final class Activator
 
     public final void stop(BundleContext context)
         throws Exception {
-        helper.unregister();
+        helper.dispose();
         helper = null;
     }
 }
