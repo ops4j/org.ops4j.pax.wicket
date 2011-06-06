@@ -1,6 +1,5 @@
 /* 
- * Copyright 2008 Edward Yakop.
- * Copyright 2010 David Leangen.
+ * Copyright OPS4J
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +17,9 @@
  */
 package org.ops4j.pax.wicket.util.classResolver;
 
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.osgi.framework.Constants.SERVICE_PID;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,27 +28,19 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
-import org.apache.wicket.application.IClassResolver;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
+import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import static org.osgi.framework.Constants.SERVICE_PID;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
- *
- * @author edward.yakop@gmail.com
- * @since 0.5.4
  */
-public final class BundleClassResolverHelper
-{
+public final class BundleClassResolverHelper {
 
     private static final String[] SERVICE_NAMES =
         {
@@ -54,183 +48,123 @@ public final class BundleClassResolverHelper
             ManagedService.class.getName()
         };
 
-    private final BundleContext m_bundleContext;
-    private final Properties m_serviceProperties;
+    private final BundleContext bundleContext;
+    private final Properties serviceProperties;
 
-    private final Object m_lock = new Object();
-    private ServiceRegistration m_serviceRegistration;
+    private final Object lock = new Object();
+    private ServiceRegistration serviceRegistration;
 
     /**
      * Construct an instance of {@code BundleClassResolver}.
-     *
-     * @param bundleContext The bundle context. This argument must not be {@code null}.
-     *
-     * @throws IllegalArgumentException Thrown if the specified {@code bundleContext} argument is {@code null}.
-     * @since 0.5.4
      */
-    public BundleClassResolverHelper( BundleContext bundleContext )
-        throws IllegalArgumentException
-    {
-        validateNotNull( bundleContext, "bundle" );
-
-        m_bundleContext = bundleContext;
-        m_serviceProperties = new Properties();
+    public BundleClassResolverHelper(BundleContext bundleContext) throws IllegalArgumentException {
+        validateNotNull(bundleContext, "bundle");
+        this.bundleContext = bundleContext;
+        serviceProperties = new Properties();
     }
 
     /**
-     * Sets the service pid of this {@code BundleClassResolverHelper} instance.
-     * This is useful if this class resolver needs to be wired to multiple pax-wicket applications.
-     *
-     * @param servicePid The service pid.
-     *
-     * @see Constants#SERVICE_PID
-     * @since 0.5.4
+     * Sets the service pid of this {@code BundleClassResolverHelper} instance. This is useful if this class resolver
+     * needs to be wired to multiple pax-wicket applications.
      */
-    public final void setServicePid( String servicePid )
-    {
-        synchronized( m_lock )
-        {
-            if( servicePid == null )
-            {
-                m_serviceProperties.remove( SERVICE_PID );
-            }
-            else
-            {
-                m_serviceProperties.setProperty( SERVICE_PID, servicePid );
+    public final void setServicePid(String servicePid) {
+        synchronized (lock) {
+            if (servicePid == null) {
+                serviceProperties.remove(SERVICE_PID);
+            } else {
+                serviceProperties.setProperty(SERVICE_PID, servicePid);
             }
 
-            if( m_serviceRegistration != null )
-            {
-                m_serviceRegistration.setProperties( m_serviceProperties );
+            if (serviceRegistration != null) {
+                serviceRegistration.setProperties(serviceProperties);
             }
         }
     }
 
     /**
      * @return The service pid of this {@code BundleClassResolverHelper}. Returns {@code null} if not set.
-     *
-     * @since 0.5.4
      */
-    public final String getServicePid()
-    {
-        synchronized( m_lock )
-        {
-            return m_serviceProperties.getProperty( SERVICE_PID );
+    public final String getServicePid() {
+        synchronized (lock) {
+            return serviceProperties.getProperty(SERVICE_PID);
         }
     }
 
     /**
      * Sets the application nane.
-     *
-     * @param applicationNames The application names.
-     *
-     * @since 0.5.4
      */
-    public final void setApplicationName( String... applicationNames )
-    {
-        synchronized( m_lock )
-        {
-            if( applicationNames == null )
-            {
-                m_serviceProperties.remove( APPLICATION_NAME );
-            }
-            else
-            {
-                m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+    public final void setApplicationName(String... applicationNames) {
+        synchronized (lock) {
+            if (applicationNames == null) {
+                serviceProperties.remove(APPLICATION_NAME);
+            } else {
+                serviceProperties.put(APPLICATION_NAME, applicationNames);
             }
 
-            if( m_serviceRegistration != null )
-            {
-                m_serviceRegistration.setProperties( m_serviceProperties );
+            if (serviceRegistration != null) {
+                serviceRegistration.setProperties(serviceProperties);
             }
         }
     }
 
     /**
      * Register class resolver.
-     *
-     * @since 0.5.4
      */
-    public final void register()
-    {
-        synchronized( m_lock )
-        {
-            if( m_serviceRegistration == null )
-            {
+    public final void register() {
+        synchronized (lock) {
+            if (serviceRegistration == null) {
                 BundleClassResolver resolver = new BundleClassResolver();
-                m_serviceRegistration = m_bundleContext.registerService( SERVICE_NAMES, resolver, m_serviceProperties );
+                serviceRegistration = bundleContext.registerService(SERVICE_NAMES, resolver, serviceProperties);
             }
         }
     }
 
     /**
      * Unregister class resolver.
-     *
-     * @since 0.5.4
      */
-    public final void unregister()
-    {
-        synchronized( m_lock )
-        {
-            if( m_serviceRegistration != null )
-            {
-                m_serviceRegistration.unregister();
-                m_serviceRegistration = null;
+    public final void dispose() {
+        synchronized (lock) {
+            if (serviceRegistration != null) {
+                serviceRegistration.unregister();
+                serviceRegistration = null;
             }
         }
     }
 
-    private final class BundleClassResolver
-        implements IClassResolver, ManagedService
-    {
+    private final class BundleClassResolver implements IClassResolver, ManagedService {
 
-        public final Class<?> resolveClass( String classname )
-            throws ClassNotFoundException
-        {
-            Bundle bundle = m_bundleContext.getBundle();
-            return bundle.loadClass( classname );
+        public final Class<?> resolveClass(String classname) throws ClassNotFoundException {
+            Bundle bundle = bundleContext.getBundle();
+            return bundle.loadClass(classname);
         }
 
-        @SuppressWarnings( "unchecked" )
-        public Iterator<URL> getResources( String name )
-        {
-            try
-            {
-                final Bundle bundle = m_bundleContext.getBundle();
-                final Enumeration<URL> enumeration = bundle.getResources( name );
-                if( null == enumeration )
+        @SuppressWarnings("unchecked")
+        public Iterator<URL> getResources(String name) {
+            try {
+                final Bundle bundle = bundleContext.getBundle();
+                final Enumeration<URL> enumeration = bundle.getResources(name);
+                if (null == enumeration) {
                     return null;
-
-                return new EnumerationAdapter<URL>( enumeration );
-            }
-            catch ( IOException e )
-            {
-                return Collections.<URL>emptyList().iterator();
+                }
+                return new EnumerationAdapter<URL>(enumeration);
+            } catch (IOException e) {
+                return Collections.<URL> emptyList().iterator();
             }
         }
 
-        @SuppressWarnings( "unchecked" )
-        public final void updated( Dictionary dictionary )
-            throws ConfigurationException
-        {
-            synchronized( m_lock )
-            {
-                if( dictionary == null )
-                {
+        @SuppressWarnings("rawtypes")
+        public final void updated(Dictionary dictionary) throws ConfigurationException {
+            synchronized (lock) {
+                if (dictionary == null) {
                     return;
                 }
-
-                Object applicationNames = dictionary.get( APPLICATION_NAME );
-                if( applicationNames != null )
-                {
-                    m_serviceProperties.put( APPLICATION_NAME, applicationNames );
+                Object applicationNames = dictionary.get(APPLICATION_NAME);
+                if (applicationNames != null) {
+                    serviceProperties.put(APPLICATION_NAME, applicationNames);
+                } else {
+                    serviceProperties.remove(APPLICATION_NAME);
                 }
-                else
-                {
-                    m_serviceProperties.remove( APPLICATION_NAME );
-                }
-
-                m_serviceRegistration.setProperties( m_serviceProperties );
+                serviceRegistration.setProperties(serviceProperties);
             }
         }
     }
