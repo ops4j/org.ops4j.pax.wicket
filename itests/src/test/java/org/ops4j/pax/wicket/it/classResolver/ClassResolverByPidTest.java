@@ -64,9 +64,8 @@ public final class ClassResolverByPidTest
                 .set(Constants.EXPORT_PACKAGE, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries")
                 .set(Constants.BUNDLE_ACTIVATOR,
                     "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator")
-                .set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.bundles.simpleLibraries")
+                .set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries")
                 .set(Constants.IMPORT_PACKAGE, " org.ops4j.pax.wicket.*,org.apache.wicket.*,org.osgi.*;")
-                /* .set("Private-Package", "org.ops4j.pax.wicket.it.bundles.simpleLibraries.internal.*") */
                 .build(TinyBundles.withBnd())));
     }
 
