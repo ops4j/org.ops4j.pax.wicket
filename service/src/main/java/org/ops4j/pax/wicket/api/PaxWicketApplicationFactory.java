@@ -96,8 +96,6 @@ public final class PaxWicketApplicationFactory
     private ServiceRegistration m_bdcrRegistration;
     private BundleDelegatingClassResolver m_bdcr;
 
-    private FilterConfiguration m_filterConfiguration;
-
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
      * 
@@ -158,8 +156,6 @@ public final class PaxWicketApplicationFactory
         m_componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
         m_componentOnAfterRenderListeners = new ArrayList<IComponentOnAfterRenderListener>();
         m_initializers = new ArrayList<IInitializer>();
-
-        m_filterConfiguration = new FilterConfiguration();
     }
 
     /**
@@ -219,7 +215,7 @@ public final class PaxWicketApplicationFactory
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public final void updated(Dictionary config)
         throws ConfigurationException {
         if (config == null) {
@@ -507,10 +503,6 @@ public final class PaxWicketApplicationFactory
                 m_authenticator, m_signinPage, m_initializers
             );
         return paxWicketApplication;
-    }
-
-    public FilterConfiguration getFilterConfiguration() {
-        return m_filterConfiguration;
     }
 
 }

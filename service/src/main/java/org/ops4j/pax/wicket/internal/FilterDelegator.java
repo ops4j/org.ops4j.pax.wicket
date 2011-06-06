@@ -20,7 +20,6 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,8 +32,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ops4j.pax.wicket.api.FilterConfiguration;
-import org.ops4j.pax.wicket.api.FilterDescription;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,55 +39,39 @@ import org.slf4j.LoggerFactory;
 public final class FilterDelegator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
-    private FilterConfiguration filterConfiguration;
     private FilterTracker filterTracker;
 
     private Servlet servlet;
 
-    public FilterDelegator(BundleContext context, FilterConfiguration filterConfiguration, File tmpDir,
-            String mountPoint, String applicationName) {
-        validateNotNull(filterConfiguration, "filterConfiguration");
-
-        this.filterConfiguration = filterConfiguration;
+    public FilterDelegator(BundleContext context, String applicationName) {
         filterTracker = new FilterTracker(context, applicationName);
         filterTracker.open();
     }
 
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
         throws ServletException, IOException {
-        FilterChain chain = new Chain(filterConfiguration.getFilters());
+        FilterChain chain = new Chain(filterTracker.getFiltersSortedWithHighestPriorityAsFirstFilter());
         chain.doFilter(servletRequest, servletResponse);
     }
 
     private class Chain implements FilterChain {
-        private int m_filterIndex = 0;
-        private final List<FilterDescription> m_filterDescList;
+        private int filterIndex = 0;
+        private List<Filter> filters;
 
-        Chain(final List<FilterDescription> filterDescList) {
-            m_filterDescList = filterDescList;
+        public Chain(List<Filter> filter) {
+            filters = filter;
         }
 
         public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
-            if (m_filterIndex < m_filterDescList.size()) {
-                FilterDescription filterDesc = m_filterDescList.get(m_filterIndex);
-                LOGGER.debug("call filter {} of type {} ", m_filterIndex, filterDesc.getClassName());
-                m_filterIndex++;
-
-                Filter filter = getFilter(filterDesc);
+            if (filterIndex < filters.size()) {
+                Filter filter = filters.get(filterIndex);
+                LOGGER.debug("call filter {} of type {} ", filterIndex, filter.getClass().getName());
+                filterIndex++;
                 filter.doFilter(request, response, this);
             } else {
                 servlet.service(request, response);
             }
         }
-    }
-
-    private Filter getFilter(FilterDescription filterDesc) throws ServletException {
-        Filter filter = filterTracker.getFilter(filterDesc.getClassName());
-        if (filter == null && filterDesc.isRequired()) {
-            throw new ServletException(
-                String.format("required filter %s is not available", filterDesc.getClassName()));
-        }
-        return filter;
     }
 
     public void setServlet(Servlet servlet) {

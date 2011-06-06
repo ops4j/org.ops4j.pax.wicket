@@ -34,7 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.WicketServlet;
-import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 
 /**
  * @author edward.yakop@gmail.com
@@ -45,17 +44,10 @@ public class ServletProxy {
         Servlet.class
     };
 
-    static Servlet
-        newServletProxy(
-                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
-                FilterDelegator filterDelegator) {
+    static Servlet newServletProxy(IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
+            FilterDelegator filterDelegator) {
         ServletInvocationHandler ih =
             new ServletInvocationHandler(applicationFactory, tempDir, mountPoint, filterDelegator);
-        return newServletProxy(ih);
-    }
-
-    static Servlet newServletProxy(PaxWicketApplicationFactory applicationFactory, File tempDir, String mountPoint) {
-        ServletInvocationHandler ih = new ServletInvocationHandler(applicationFactory, tempDir, mountPoint);
         return newServletProxy(ih);
     }
 
@@ -81,12 +73,6 @@ public class ServletProxy {
             delegator = new ServletDelegator(applicationFactory, tempDir);
             this.filterDelegator = filterDelegator;
             this.filterDelegator.setServlet(delegator);
-        }
-
-        public ServletInvocationHandler(
-                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint) {
-            this.mountPoint = mountPoint;
-            delegator = new ServletDelegator(applicationFactory, tempDir);
         }
 
         public Object invoke(Object proxy, Method method, Object[] args)

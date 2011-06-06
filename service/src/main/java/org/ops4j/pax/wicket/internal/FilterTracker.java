@@ -22,11 +22,15 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.Filter;
 
+import org.ops4j.pax.wicket.api.FilterFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -37,28 +41,30 @@ import org.slf4j.LoggerFactory;
 public final class FilterTracker extends ServiceTracker {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterTracker.class);
 
-    private Map<String, Filter> filters = new HashMap<String, Filter>();
+    private Map<ServiceReference, FilterFactory> filterFactories = new HashMap<ServiceReference, FilterFactory>();
+    private String applicationName;
 
     public FilterTracker(BundleContext bundleContext, String applicationName) {
         super(bundleContext, createOsgiFilter(bundleContext, applicationName), null);
+        this.applicationName = applicationName;
     }
 
     @Override
     public final Object addingService(ServiceReference reference) {
-        Filter filter = (Filter) super.addingService(reference);
-        synchronized (filters) {
-            filters.put(filter.getClass().getName(), filter);
+        FilterFactory filterFactory = (FilterFactory) super.addingService(reference);
+        synchronized (this) {
+            filterFactories.put(reference, filterFactory);
         }
-        LOGGER.info("added filter of type {}", filter.getClass().getName());
-        return filter;
+        LOGGER.info("added filter of type {} for application {}", filter.getClass().getName(), applicationName);
+        return filterFactory;
     }
 
     @Override
     public void removedService(ServiceReference reference, Object service) {
-        synchronized (filters) {
-            filters.remove(service.getClass().getName());
+        synchronized (this) {
+            filterFactories.remove(reference);
         }
-        LOGGER.info("removed filter of type {}", filter.getClass().getName());
+        LOGGER.info("removed filter of type {} for application {}", filter.getClass().getName(), applicationName);
         super.removedService(reference, service);
     }
 
@@ -70,8 +76,8 @@ public final class FilterTracker extends ServiceTracker {
         org.osgi.framework.Filter filter;
         try {
             String filterString = String.format("(&(%s=%s)(%s=%s))", APPLICATION_NAME, applicationName,
-                                  OBJECTCLASS, Filter.class.getName());
-            LOGGER.debug("apply FilterTracker with OsgiFilter={}", filterString);
+                                  OBJECTCLASS, FilterFactory.class.getName());
+            LOGGER.debug("apply FilterTracker with OsgiFilter={} for applicaiton {}", filterString, applicationName);
             filter = bundleContext.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
             throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
@@ -79,10 +85,17 @@ public final class FilterTracker extends ServiceTracker {
         return filter;
     }
 
-    public Filter getFilter(String type) {
-        validateNotNull(type, "type");
-
-        return filters.get(type);
+    public List<Filter> getFiltersSortedWithHighestPriorityAsFirstFilter() {
+        synchronized (this) {
+            List<Filter> filters = new ArrayList<Filter>();
+            List<FilterFactory> factories = new ArrayList<FilterFactory>(filterFactories.values());
+            LOGGER.debug("Retrieved {} factories to create filters to apply", factories.size());
+            Collections.sort(factories);
+            for (FilterFactory filterFactory : factories) {
+                filters.add(filterFactory.createFilter());
+            }
+            return filters;
+        }
     }
 
 }
