@@ -38,10 +38,12 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class BundleDelegatingClassResolver extends ServiceTracker
-        implements IClassResolver {
+public class BundleDelegatingClassResolver extends ServiceTracker implements IClassResolver {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingClassResolver.class);
     private static final String FILTER;
 
     static {
@@ -69,13 +71,19 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     }
 
     public Class<?> resolveClass(String classname) throws ClassNotFoundException {
+        LOGGER.trace("Trying to resolve class {} from BundleDelegatingClassResolver", classname);
         for (Bundle bundle : bundles) {
             try {
-                return bundle.loadClass(classname);
+                LOGGER.trace("Trying to load class {} from bundle {}", classname, bundle.getSymbolicName());
+                Class<?> loadedClass = bundle.loadClass(classname);
+                LOGGER.debug("Loaded class {} from bundle {}", classname, bundle.getSymbolicName());
+                return loadedClass;
             } catch (ClassNotFoundException e) {
-                // ignore, expected in many cases.
+                LOGGER.trace("Could not load class {} from bundle {} because bundle does not contain the class",
+                    classname, bundle.getSymbolicName());
             } catch (IllegalStateException e) {
-                // if the bundle has been uninstalled.
+                LOGGER.trace("Could not load class {} from bundle {} because bundle had been uninstalled", classname,
+                    bundle.getSymbolicName());
             }
         }
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
@@ -104,8 +112,10 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     public Object addingService(ServiceReference serviceReference) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
         if (!applicationName.equals(appName)) {
+            LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return null;
         }
+        LOGGER.info("Adding bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
         synchronized (this) {
             Bundle bundle = serviceReference.getBundle();
             HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
@@ -119,16 +129,20 @@ public class BundleDelegatingClassResolver extends ServiceTracker
     public void removedService(ServiceReference serviceReference, Object o) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
         if (!applicationName.equals(appName)) {
+            LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return;
         }
         HashSet<Bundle> revisedSet = new HashSet<Bundle>();
         revisedSet.add(paxWicketBundle);
         try {
-            ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
-            for (ServiceReference ref : serviceReferences) {
-                revisedSet.add(ref.getBundle());
+            LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
+            synchronized (this) {
+                ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
+                for (ServiceReference ref : serviceReferences) {
+                    revisedSet.add(ref.getBundle());
+                }
+                bundles = revisedSet;
             }
-            bundles = revisedSet;
         } catch (InvalidSyntaxException e) {
             // Can not happen.
         }
@@ -139,9 +153,8 @@ public class BundleDelegatingClassResolver extends ServiceTracker
         try {
             return context.createFilter(FILTER);
         } catch (InvalidSyntaxException e) {
-            // Should not happened
-            e.printStackTrace();
+            throw new IllegalStateException(
+                String.format("Unexpected behavior! The filter %s should not fail", FILTER), e);
         }
-        return null;
     }
 }
