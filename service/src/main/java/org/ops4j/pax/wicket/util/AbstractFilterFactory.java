@@ -33,6 +33,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         validateNotNull(bundleContext, "bundleContext");
         validateNotEmpty(applicationName, "applicationName");
         validateNotNull(priority, "priority");
+        this.bundleContext = bundleContext;
         setApplicationName(applicationName);
         setPriority(priority);
     }
@@ -101,5 +102,9 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
 
     public int compareTo(FilterFactory o) {
         return getPriority() - o.getPriority();
+    }
+    
+    protected BundleContext getBundleContext() {
+        return this.bundleContext;
     }
 }
