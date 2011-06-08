@@ -63,5 +63,10 @@
         <artifactId>spring-expression</artifactId>
         <license>Apache License, Version 2.0</license>
     </artifact>
+    <artifact>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <license>Apache License, Version 2.0</license>
+    </artifact>
 </license-lookup>
 

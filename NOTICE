@@ -24,6 +24,7 @@ This project includes:
   Apache ServiceMix :: Bundles :: asm under The Apache Software License, Version 2.0
   Apache ServiceMix :: Bundles :: cglib under The Apache Software License, Version 2.0
   Apache ServiceMix :: Bundles :: mail under The Apache Software License, Version 2.0
+  BND Library under This material is licensed under the Apache Software License, Version 2.0
   Commons Logging under The Apache Software License, Version 2.0
   Discovery under The Apache Software License, Version 2.0
   Dough Lea's util.concurrent package under Public domain, Sun Microsoystems
@@ -46,6 +47,7 @@ This project includes:
   jMock JUnit 4 Extension under BSD style
   JTA 1.1 under The Apache Software License, Version 2.0
   JUnit under Common Public License Version 1.0
+  log4j under Apache License, Version 2.0
   Logging under The Apache Software License, Version 2.0
   Mockito under The MIT License
   OPS4J Base - All under ALv2
@@ -65,16 +67,13 @@ This project includes:
   OPS4J Pax Logging - API under ALv2
   OPS4J Pax Logging - Service under ALv2
   OPS4J Pax Runner - Core - No JCL under ALv2
+  OPS4J Pax Swissbox :: Bnd Utils under ALv2
+  OPS4J Pax Swissbox :: TinyBundles under ALv2
   OPS4J Pax Web - API under ALv2
   OPS4J Pax Web - Jetty under ALv2
   OPS4J Pax Web - Runtime under ALv2
   OPS4J Pax Web - Service SPI under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Bootstrap under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Class Resolver Tests under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Lifecycle Tests under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Parent under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Test Bundles :: Parent under ALv2
-  OPS4J Pax Wicket :: Integration Tests :: Test Bundles :: Simple Libraries under ALv2
+  OPS4J Pax Wicket :: Integration Tests under ALv2
   OPS4J Pax Wicket :: Karaf Feature File under ALv2
   OPS4J Pax Wicket :: Parent under ALv2
   OPS4J Pax Wicket :: Samples :: Karaf Feature File under ALv2
