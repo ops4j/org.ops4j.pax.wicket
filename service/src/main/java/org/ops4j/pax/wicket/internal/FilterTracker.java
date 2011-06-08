@@ -55,7 +55,7 @@ public final class FilterTracker extends ServiceTracker {
         synchronized (this) {
             filterFactories.put(reference, filterFactory);
         }
-        LOGGER.info("added filter of type {} for application {}", filter.getClass().getName(), applicationName);
+        LOGGER.debug("added filterFactory for application {}", applicationName);
         return filterFactory;
     }
 
@@ -64,7 +64,7 @@ public final class FilterTracker extends ServiceTracker {
         synchronized (this) {
             filterFactories.remove(reference);
         }
-        LOGGER.info("removed filter of type {} for application {}", filter.getClass().getName(), applicationName);
+        LOGGER.debug("removed filterFactory for application {}", applicationName);
         super.removedService(reference, service);
     }
 
@@ -77,7 +77,7 @@ public final class FilterTracker extends ServiceTracker {
         try {
             String filterString = String.format("(&(%s=%s)(%s=%s))", APPLICATION_NAME, applicationName,
                                   OBJECTCLASS, FilterFactory.class.getName());
-            LOGGER.debug("apply FilterTracker with OsgiFilter={} for applicaiton {}", filterString, applicationName);
+            LOGGER.debug("apply FilterTracker with OsgiFilter={} for application {}", filterString, applicationName);
             filter = bundleContext.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
             throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
