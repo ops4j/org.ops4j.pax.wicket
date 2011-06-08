@@ -34,6 +34,7 @@ import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -72,6 +73,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     private final String m_applicationName;
     private final PageMounter m_pageMounter;
     private PageMounterTracker m_mounterTracker;
+    private IComponentInstantiationListener m_componentInstanciationListener;
 
     protected Class<? extends Page> m_homepageClass;
     private final PaxWicketPageFactory m_pageFactory;
@@ -101,7 +103,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
             DelegatingClassResolver delegatingClassResolver,
             PaxWicketAuthenticator authenticator,
             Class<? extends WebPage> signInPage,
-            List<IInitializer> initializers)
+            List<IInitializer> initializers,
+            IComponentInstantiationListener componentInstantiationListener)
         throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundleContext");
         validateNotEmpty(applicationName, "applicationName");
@@ -111,6 +114,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         validateNotNull(authenticator, "authenticator");
         validateNotNull(signInPage, "signInPage");
         validateNotNull(initializers, "initializers");
+        validateNotNull(componentInstantiationListener, "componentInstantiationListener");
 
         m_bundleContext = bundleContext;
         m_applicationName = applicationName;
@@ -128,6 +132,7 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         m_sessionDestroyedListeners = new ArrayList<SessionDestroyedListener>();
         m_initializers = new ArrayList<IInitializer>();
         m_initializers.addAll(initializers);
+        m_componentInstanciationListener = componentInstantiationListener;
     }
 
     /**
@@ -143,6 +148,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
     @Override
     protected final void init() {
         super.init();
+
+        addComponentInstantiationListener(m_componentInstanciationListener);
 
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver(m_delegatingClassResolver);
@@ -184,6 +191,8 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
 
     @Override
     protected void onDestroy() {
+        removeComponentInstantiationListener(m_componentInstanciationListener);
+
         if (m_mounterTracker != null) {
             m_mounterTracker.close();
             m_mounterTracker = null;

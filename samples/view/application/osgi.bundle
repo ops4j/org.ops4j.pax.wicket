@@ -11,3 +11,4 @@ Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
                   net.sf.cglib.reflect;version="${cglib.range}"
 
 Export-Package:   org.ops4j.pax.wicket.samples.departmentstore.view;version=${project.version}
+

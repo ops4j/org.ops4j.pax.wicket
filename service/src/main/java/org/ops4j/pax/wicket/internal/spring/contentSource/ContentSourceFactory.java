@@ -3,13 +3,15 @@ package org.ops4j.pax.wicket.internal.spring.contentSource;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.Application;
+import net.sf.cglib.proxy.Enhancer;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.Model;
 import org.ops4j.pax.wicket.api.ComponentContentSource;
 import org.ops4j.pax.wicket.api.TabContentSource;
-import org.ops4j.pax.wicket.internal.spring.util.ComponentInstantiationListener;
+import org.ops4j.pax.wicket.internal.BundleAnalysingComponentInstantiationListener;
+import org.ops4j.pax.wicket.internal.ComponentProxy;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
 
@@ -17,19 +19,23 @@ public class ContentSourceFactory extends AbstractContentSource implements TabCo
         ComponentContentSource<Component> {
 
     private Class<?> contentSourceClass;
-    private Map<String, String> overwrite;
     private List<String> destinations;
     private BundleContext bundleContext;
+    private Map<String, String> overwrites;
 
-    public ContentSourceFactory(BundleContext bundleContext, String wicketId, String applicationName)
+    public ContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites, String wicketId,
+            String applicationName)
         throws IllegalArgumentException {
-        this(bundleContext, wicketId, applicationName, null);
+        this(bundleContext, overwrites, wicketId, applicationName, null);
         this.bundleContext = bundleContext;
+        this.overwrites = overwrites;
     }
 
-    public ContentSourceFactory(BundleContext bundleContext, String wicketId, String applicationName,
+    public ContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites, String wicketId,
+            String applicationName,
             Class<?> contentSourceClass) throws IllegalArgumentException {
         super(bundleContext, wicketId, applicationName);
+        this.overwrites = overwrites;
         this.contentSourceClass = contentSourceClass;
         this.bundleContext = bundleContext;
     }
@@ -45,50 +51,75 @@ public class ContentSourceFactory extends AbstractContentSource implements TabCo
         super.dispose();
     }
 
-    public void setOverwrite(Map<String, String> overwrite) {
-        this.overwrite = overwrite;
-    }
-
     public void setDestinations(List<String> destinations) {
         this.destinations = destinations;
     }
 
     public Component createSourceComponent(String wicketId) {
-        ComponentInstantiationListener componentInstantiationListener =
-            new ComponentInstantiationListener(overwrite, contentSourceClass, bundleContext);
+        ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
         try {
-            Application.get().addComponentInstantiationListener(componentInstantiationListener);
+            Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
+            if (overwrites != null && overwrites.size() != 0) {
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(overwrites));
+                return (Component) e.create(new Class[]{ String.class }, new Object[]{ wicketId });
+            }
             return (Component) contentSourceClass.getConstructor(String.class).newInstance(wicketId);
         } catch (Exception e) {
             throw new RuntimeException("bumm", e);
         } finally {
-            Application.get().removeComponentInstantiationListener(componentInstantiationListener);
+            Thread.currentThread().setContextClassLoader(originalClassloader);
         }
     }
 
     public ITab createSourceTab() {
-        ComponentInstantiationListener componentInstantiationListener =
-            new ComponentInstantiationListener(overwrite, contentSourceClass, bundleContext);
+        BundleAnalysingComponentInstantiationListener componentInstantiationListener =
+            new BundleAnalysingComponentInstantiationListener(bundleContext, getApplicationName());
+        ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
         try {
-            ITab tab = (ITab) contentSourceClass.newInstance();
-            componentInstantiationListener.internalInstanciation(tab);
+            Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
+            ITab tab = null;
+            if (overwrites != null && overwrites.size() != 0) {
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(overwrites));
+                tab = (ITab) e.create();
+            } else {
+                tab = (ITab) contentSourceClass.newInstance();
+            }
+            componentInstantiationListener.inject(tab);
             return tab;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("bumm");
+        } finally {
+            Thread.currentThread().setContextClassLoader(originalClassloader);
         }
     }
 
     public ITab createSourceTab(String title) {
-        ComponentInstantiationListener componentInstantiationListener =
-            new ComponentInstantiationListener(overwrite, contentSourceClass, bundleContext);
+        BundleAnalysingComponentInstantiationListener componentInstantiationListener =
+            new BundleAnalysingComponentInstantiationListener(bundleContext, getApplicationName());
+        ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
         try {
-            ITab tab = (ITab) contentSourceClass.getConstructor(Model.class).newInstance(new Model<String>(title));
-            componentInstantiationListener.internalInstanciation(tab);
+            Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
+            ITab tab = null;
+            if (overwrites != null && overwrites.size() != 0) {
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(overwrites));
+                tab = (ITab) e.create(new Class[]{ Model.class }, new Object[]{ new Model<String>(title) });
+            } else {
+                tab = (ITab) contentSourceClass.getConstructor(Model.class).newInstance(new Model<String>(title));
+            }
+            componentInstantiationListener.inject(tab);
             return tab;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("bumm");
+        } finally {
+            Thread.currentThread().setContextClassLoader(originalClassloader);
         }
     }
 

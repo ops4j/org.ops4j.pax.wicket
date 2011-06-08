@@ -1,6 +1,7 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.franchisee.internal;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.ops4j.pax.wicket.api.ContentSourceFactory;
 import org.ops4j.pax.wicket.api.ContentSourceModelMapping;
@@ -21,7 +22,7 @@ public class FranchiseeModelFactory implements ContentSourceFactory<DepartmentSt
             List<Franchisee> franchisees = floor.getFranchisees();
             for (Franchisee franchisee : franchisees) {
                 String destinationId = floor.getName() + ".franchisee";
-                String modelId = floor.getName() + franchisee.getName();
+                String modelId = floor.getName() + franchisee.getName() + UUID.randomUUID();
 
                 mapping.addModelObject(modelId, franchisee);
 

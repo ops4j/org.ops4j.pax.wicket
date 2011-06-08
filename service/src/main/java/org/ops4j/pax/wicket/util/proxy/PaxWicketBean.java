@@ -36,4 +36,28 @@ public @interface PaxWicketBean {
      * of the field with the annotation.
      */
     String name() default "";
+
+    /**
+     * Optional attribute for specifying which resolver you prefer. Per default the
+     * {@link BeanResolverType#UNCONFIGURED} is used which means that we try to find the bean in first blueprint and
+     * then spring and use the one we found first.
+     */
+    BeanResolverType beanResolverType() default BeanResolverType.UNCONFIGURED;
+
+    public static enum BeanResolverType {
+            /**
+             * In {@link #UNCONFIGURED} mode we try to find the bean in first blueprint and then spring and use the one
+             * we find first.
+             */
+            UNCONFIGURED,
+            /**
+             * We look only in the spring context for the bean to resolve
+             */
+            SPRING,
+            /**
+             * We look only in the blueprint context for the bean to resolve
+             */
+            BLUEPRINT
+    }
+
 }

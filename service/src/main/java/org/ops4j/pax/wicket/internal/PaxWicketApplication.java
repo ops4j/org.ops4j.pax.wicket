@@ -29,6 +29,7 @@ import java.util.Properties;
 
 import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
+import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IApplicationSettings;
 import org.apache.wicket.settings.IDebugSettings;
@@ -56,6 +57,7 @@ public final class PaxWicketApplication extends WebApplication {
     protected final Class<? extends Page> homepageClass;
     private PageMounterTracker mounterTracker;
     private final List<IInitializer> initializers;
+    private IComponentInstantiationListener instanciationListener;
 
     public PaxWicketApplication(
             BundleContext context,
@@ -64,7 +66,8 @@ public final class PaxWicketApplication extends WebApplication {
             Class<? extends Page> homepageClass,
             PaxWicketPageFactory pageFactory,
             DelegatingClassResolver delegatingClassResolver,
-            List<IInitializer> initializers)
+            List<IInitializer> initializers,
+            IComponentInstantiationListener instanciationListener)
         throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotEmpty(applicationName, "applicationName");
@@ -72,6 +75,7 @@ public final class PaxWicketApplication extends WebApplication {
         validateNotNull(pageFactory, "pageFactory");
         validateNotNull(delegatingClassResolver, "delegatingClassResolver");
         validateNotNull(initializers, "initializers");
+        validateNotNull(instanciationListener, "instanciationListener");
         bundleContext = context;
         this.applicationName = applicationName;
         this.pageMounter = pageMounter;
@@ -81,6 +85,7 @@ public final class PaxWicketApplication extends WebApplication {
         serviceRegistrations = new ArrayList<ServiceRegistration>();
         this.initializers = new ArrayList<IInitializer>();
         this.initializers.addAll(initializers);
+        this.instanciationListener = instanciationListener;
     }
 
     @Override
@@ -91,6 +96,8 @@ public final class PaxWicketApplication extends WebApplication {
     @Override
     protected final void init() {
         super.init();
+
+        addComponentInstantiationListener(instanciationListener);
 
         IApplicationSettings applicationSettings = getApplicationSettings();
         applicationSettings.setClassResolver(delegatingClassResolver);
@@ -142,6 +149,8 @@ public final class PaxWicketApplication extends WebApplication {
 
     @Override
     protected void onDestroy() {
+        removeComponentInstantiationListener(instanciationListener);
+
         if (mounterTracker != null) {
             mounterTracker.close();
             mounterTracker = null;

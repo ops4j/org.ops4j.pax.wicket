@@ -1,5 +1,7 @@
 package org.ops4j.pax.wicket.samples.departmentstore.view.floor.internal;
 
+import java.util.UUID;
+
 import org.ops4j.pax.wicket.api.ContentSourceFactory;
 import org.ops4j.pax.wicket.api.ContentSourceModelMapping;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
@@ -25,10 +27,10 @@ public class XmlBasedModelMappingFactory implements ContentSourceFactory<Departm
     public ContentSourceModelMapping createContentSourceMappings(DepartmentStore departmentStore) {
         DefaultContentSourceModelMapping mapping = new DefaultContentSourceModelMapping(true);
         for (Floor floor : departmentStore.getFloors()) {
-            String aggregationPointBeanId = AGGREGATION_POINT_PREFIX + floor.getName();
-            String floorPanelBeanId = PANEL_PREFIX + floor.getName();
+            String aggregationPointBeanId = AGGREGATION_POINT_PREFIX + floor.getName() + UUID.randomUUID();
+            String floorPanelBeanId = PANEL_PREFIX + floor.getName() + UUID.randomUUID();
             String floorTabBeanId = TAB_PREFIX + floor.getName();
-            String modelId = floor.getName();
+            String modelId = floor.getName() + UUID.randomUUID();
 
             mapping.addModelObject(modelId, floor);
 

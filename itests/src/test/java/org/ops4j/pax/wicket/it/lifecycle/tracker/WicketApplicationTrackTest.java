@@ -52,7 +52,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
         assertNotNull(simpleAppBundle);
         assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
         ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();
-        assertEquals(14, beforeStopServices.length);
+        assertEquals(15, beforeStopServices.length);
 
         Bundle bundle = getPaxWicketServiceBundle(bundleContext);
         bundle.stop();

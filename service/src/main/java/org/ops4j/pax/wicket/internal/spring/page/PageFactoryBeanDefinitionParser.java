@@ -36,6 +36,7 @@ public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitio
         setConstructor("applicationName", element, bean);
         setConstructor("pageName", element, bean);
         setConstructor("pageClass", element, bean);
+        bean.addConstructorArgValue(null);
         bean.setLazyInit(false);
         bean.setInitMethodName("register");
         bean.setDestroyMethodName("dispose");

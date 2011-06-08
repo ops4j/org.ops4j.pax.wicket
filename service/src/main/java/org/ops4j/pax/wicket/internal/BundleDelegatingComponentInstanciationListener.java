@@ -20,16 +20,13 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Iterator;
 
-import org.apache.wicket.application.IClassResolver;
+import org.apache.wicket.Component;
+import org.apache.wicket.application.IComponentInstantiationListener;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
@@ -43,12 +40,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * We assume that all bundles exporting a service implementing at least one of the following interfaces should also be
- * able to be searched for classes: {@link ContentSource}, {@link ContentAggregator}, {@link PageFactory} and
+ * able to be searched for beans: {@link ContentSource}, {@link ContentAggregator}, {@link PageFactory} and
  * {@link PaxWicketApplicationFactory}.
  */
-public class BundleDelegatingClassResolver extends ServiceTracker implements IClassResolver {
+public class BundleDelegatingComponentInstanciationListener extends ServiceTracker implements
+        IComponentInstantiationListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingClassResolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingComponentInstanciationListener.class);
 
     private static final String FILTER = "(|" +
             "(objectClass=" + ContentSource.class.getName() + ")" +
@@ -57,56 +55,31 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             "(objectClass=" + PaxWicketApplicationFactory.class.getName() + ")" +
             ")";
 
-    private HashSet<Bundle> bundles;
+    private HashSet<BundleAnalysingComponentInstantiationListener> listeners;
     private final String applicationName;
     private final Bundle paxWicketBundle;
 
-    public BundleDelegatingClassResolver(BundleContext context, String applicationName, Bundle paxWicketBundle) {
+    public BundleDelegatingComponentInstanciationListener(BundleContext context, String applicationName,
+            Bundle paxWicketBundle) {
         super(context, createFilter(context), null);
 
         this.applicationName = applicationName;
         this.paxWicketBundle = paxWicketBundle;
-        bundles = new HashSet<Bundle>();
-        bundles.add(paxWicketBundle);
+        listeners = new HashSet<BundleAnalysingComponentInstantiationListener>();
+        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
+            applicationName));
 
         open(true);
     }
 
-    public Class<?> resolveClass(String classname) throws ClassNotFoundException {
-        LOGGER.trace("Trying to resolve class {} from BundleDelegatingClassResolver", classname);
-        for (Bundle bundle : bundles) {
-            try {
-                LOGGER.trace("Trying to load class {} from bundle {}", classname, bundle.getSymbolicName());
-                Class<?> loadedClass = bundle.loadClass(classname);
-                LOGGER.debug("Loaded class {} from bundle {}", classname, bundle.getSymbolicName());
-                return loadedClass;
-            } catch (ClassNotFoundException e) {
-                LOGGER.trace("Could not load class {} from bundle {} because bundle does not contain the class",
-                    classname, bundle.getSymbolicName());
-            } catch (IllegalStateException e) {
-                LOGGER.trace("Could not load class {} from bundle {} because bundle had been uninstalled", classname,
-                    bundle.getSymbolicName());
+    public void onInstantiation(Component component) {
+        for (BundleAnalysingComponentInstantiationListener analyser : listeners) {
+            if (analyser.injectionPossible(component.getClass())) {
+                analyser.inject(component);
+                return;
             }
         }
-        throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
-    }
-
-    /**
-     * Untested!! Currently, tests are broken in pax-wicket.
-     */
-    @SuppressWarnings("unchecked")
-    public Iterator<URL> getResources(String name) {
-        try {
-            for (Bundle bundle : bundles) {
-                final Enumeration<URL> enumeration = bundle.getResources(name);
-                if (null != enumeration && enumeration.hasMoreElements()) {
-                    return new EnumerationAdapter<URL>(enumeration);
-                }
-            }
-        } catch (IOException e) {
-            return Collections.<URL> emptyList().iterator();
-        }
-        return Collections.<URL> emptyList().iterator();
+        throw new NoBeanAvailableForInjectionException();
     }
 
     @Override
@@ -120,9 +93,10 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
         LOGGER.info("Adding bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
         synchronized (this) {
             Bundle bundle = serviceReference.getBundle();
-            HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
-            clone.add(bundle);
-            bundles = clone;
+            HashSet<BundleAnalysingComponentInstantiationListener> clone =
+                (HashSet<BundleAnalysingComponentInstantiationListener>) listeners.clone();
+            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), applicationName));
+            listeners = clone;
         }
         return super.addingService(serviceReference);
     }
@@ -134,16 +108,19 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return;
         }
-        HashSet<Bundle> revisedSet = new HashSet<Bundle>();
-        revisedSet.add(paxWicketBundle);
+        HashSet<BundleAnalysingComponentInstantiationListener> revisedSet =
+            new HashSet<BundleAnalysingComponentInstantiationListener>();
+        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
+            applicationName));
         try {
             LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
             synchronized (this) {
                 ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
                 for (ServiceReference ref : serviceReferences) {
-                    revisedSet.add(ref.getBundle());
+                    revisedSet.add(new BundleAnalysingComponentInstantiationListener(
+                        ref.getBundle().getBundleContext(), applicationName));
                 }
-                bundles = revisedSet;
+                listeners = revisedSet;
             }
         } catch (InvalidSyntaxException e) {
             throw new IllegalStateException(String.format("Filter %s have to be accepted", FILTER), e);
@@ -159,4 +136,5 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
                 String.format("Unexpected behavior! The filter %s should not fail", FILTER), e);
         }
     }
+
 }

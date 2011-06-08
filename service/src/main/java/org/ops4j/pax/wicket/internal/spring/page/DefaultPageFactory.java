@@ -18,14 +18,14 @@
 
 package org.ops4j.pax.wicket.internal.spring.page;
 
-import java.lang.reflect.Constructor;
 import java.util.Map;
 
-import org.apache.wicket.Application;
+import net.sf.cglib.proxy.Enhancer;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
-import org.ops4j.pax.wicket.internal.spring.util.ComponentInstantiationListener;
+import org.ops4j.pax.wicket.internal.ComponentProxy;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
 
@@ -33,41 +33,42 @@ import org.osgi.framework.BundleContext;
 public class DefaultPageFactory extends AbstractPageFactory {
 
     private Class<? extends Page> pageClass;
-    private Map<String, String> overwrite;
+    private Map<String, String> overwrites;
     private BundleContext bundleContext;
 
-    public void setOverwrite(Map<String, String> overwrite) {
-        this.overwrite = overwrite;
-    }
-
     public DefaultPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName,
-            Class<? extends WebPage> pageClass)
+            Class<? extends WebPage> pageClass, Map<String, String> overwrites)
         throws IllegalArgumentException {
         super(bundleContext, pageId, applicationName, pageName, pageClass);
         this.pageClass = pageClass;
         this.bundleContext = bundleContext;
+        this.overwrites = overwrites;
     }
 
     public Page createPage(PageParameters params) {
-        ComponentInstantiationListener componentInstantiationListener =
-            new ComponentInstantiationListener(overwrite, pageClass, bundleContext);
-        try {
-            Application.get().addComponentInstantiationListener(componentInstantiationListener);
-            if (params != null && !params.isEmpty()) {
-                try {
-                    Constructor<? extends Page> constructor = pageClass.getConstructor(PageParameters.class);
-                    return constructor.newInstance(params);
-                } catch (Exception e) {
-                    throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
-                }
-            }
+        if (params != null && !params.isEmpty()) {
             try {
-                return pageClass.newInstance();
+                if (overwrites != null && overwrites.size() != 0) {
+                    Enhancer e = new Enhancer();
+                    e.setSuperclass(pageClass);
+                    e.setCallback(new ComponentProxy(overwrites));
+                    return (Page) e.create(new Class[]{ PageParameters.class }, new Object[]{ params });
+                }
+                return pageClass.getConstructor(PageParameters.class).newInstance(params);
             } catch (Exception e) {
                 throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
             }
-        } finally {
-            Application.get().removeComponentInstantiationListener(componentInstantiationListener);
+        }
+        try {
+            if (overwrites != null && overwrites.size() != 0) {
+                Enhancer e = new Enhancer();
+                e.setSuperclass(pageClass);
+                e.setCallback(new ComponentProxy(overwrites));
+                return (Page) e.create();
+            }
+            return pageClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
         }
     }
 

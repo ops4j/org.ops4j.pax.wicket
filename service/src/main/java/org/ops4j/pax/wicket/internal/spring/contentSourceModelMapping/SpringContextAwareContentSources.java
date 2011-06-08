@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.ops4j.pax.wicket.api.ContentSourceDescriptor;
+import org.ops4j.pax.wicket.internal.spring.SpringBeanHelper;
 import org.ops4j.pax.wicket.internal.spring.contentSource.ContentSourceFactory;
-import org.ops4j.pax.wicket.internal.spring.util.SpringBeanHelper;
 import org.osgi.framework.BundleContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -19,10 +19,10 @@ public class SpringContextAwareContentSources extends ContentSourceFactory imple
     public SpringContextAwareContentSources(BundleContext bundleContext, ContentSourceDescriptor descriptor,
             String applicationName, ConfigurableApplicationContext applicationContext)
         throws IllegalArgumentException {
-        super(bundleContext, descriptor.getWicketId(), applicationName, descriptor.getComponentClass());
+        super(bundleContext, descriptor.getOverwrites(), descriptor.getWicketId(), applicationName, descriptor
+            .getComponentClass());
         this.descriptor = descriptor;
         this.applicationContext = applicationContext;
-        setOverwrite(descriptor.getOverwrites());
     }
 
     @Override

@@ -51,7 +51,9 @@ import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
 import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
+import org.ops4j.pax.wicket.internal.BundleDelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
+import org.ops4j.pax.wicket.internal.DelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.internal.PageMounterTracker;
 import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketApplication;
@@ -62,8 +64,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
-public final class PaxWicketApplicationFactory
-        implements IWebApplicationFactory, ManagedService {
+public final class PaxWicketApplicationFactory implements IWebApplicationFactory, ManagedService {
 
     private static final String[] APPLICATION_FACTORY_SERVICE_NAMES = {
         PaxWicketApplicationFactory.class.getName(), ManagedService.class.getName()
@@ -75,6 +76,7 @@ public final class PaxWicketApplicationFactory
 
     private PaxWicketPageFactory m_pageFactory;
     private DelegatingClassResolver m_delegatingClassResolver;
+    private DelegatingComponentInstanciationListener m_delegatingComponentInstanciationListener;
 
     private ServiceRegistration m_registration;
 
@@ -95,6 +97,8 @@ public final class PaxWicketApplicationFactory
 
     private ServiceRegistration m_bdcrRegistration;
     private BundleDelegatingClassResolver m_bdcr;
+    private ServiceRegistration m_bdciRegistration;
+    private BundleDelegatingComponentInstanciationListener m_bdci;
 
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
@@ -194,6 +198,7 @@ public final class PaxWicketApplicationFactory
         synchronized (this) {
             m_pageFactory.dispose();
             m_delegatingClassResolver.dispose();
+            m_delegatingComponentInstanciationListener.dispose();
 
             if (m_bdcrRegistration != null) {
                 m_bdcrRegistration.unregister();
@@ -289,9 +294,16 @@ public final class PaxWicketApplicationFactory
             if (m_delegatingClassResolver != null) {
                 m_delegatingClassResolver.dispose();
             }
+            if (m_delegatingComponentInstanciationListener != null) {
+                m_delegatingComponentInstanciationListener.dispose();
+            }
 
             m_delegatingClassResolver = new DelegatingClassResolver(m_bundleContext, applicationName);
             m_delegatingClassResolver.intialize();
+
+            m_delegatingComponentInstanciationListener =
+                new DelegatingComponentInstanciationListener(m_bundleContext, applicationName);
+            m_delegatingComponentInstanciationListener.intialize();
 
             m_pageFactory = new PaxWicketPageFactory(m_bundleContext, applicationName);
             m_pageFactory.initialize();
@@ -328,10 +340,13 @@ public final class PaxWicketApplicationFactory
         if (m_bdcrRegistration != null) {
             m_bdcrRegistration.unregister();
             m_bdcrRegistration = null;
+            m_bdciRegistration.unregister();
+            m_bdciRegistration = null;
         }
 
         if (m_bdcr != null) {
             m_bdcr.close();
+            m_bdci.close();
         }
 
         if (bundle != null) {
@@ -341,6 +356,10 @@ public final class PaxWicketApplicationFactory
 
             m_bdcr = new BundleDelegatingClassResolver(m_bundleContext, applicationName, bundle);
             m_bdcrRegistration = m_bundleContext.registerService(IClassResolver.class.getName(), m_bdcr, config);
+
+            m_bdci = new BundleDelegatingComponentInstanciationListener(m_bundleContext, applicationName, bundle);
+            m_bdciRegistration =
+                m_bundleContext.registerService(IComponentInstantiationListener.class.getName(), m_bdci, config);
         }
     }
 
@@ -418,6 +437,8 @@ public final class PaxWicketApplicationFactory
             private PageMounterTracker m_mounterTracker;
 
             public void onInit(WebApplication wicketApplication) {
+                wicketApplication.addComponentInstantiationListener(m_delegatingComponentInstanciationListener);
+
                 IApplicationSettings applicationSettings = wicketApplication.getApplicationSettings();
                 applicationSettings.setClassResolver(m_delegatingClassResolver);
                 addWicketService(IApplicationSettings.class, applicationSettings);
@@ -435,73 +456,66 @@ public final class PaxWicketApplicationFactory
                 addWicketService(IResourceSettings.class, wicketApplication.getResourceSettings());
                 addWicketService(ISecuritySettings.class, wicketApplication.getSecuritySettings());
 
-                if (m_pageMounter != null)
-            {
-                for (MountPointInfo bookmark : m_pageMounter.getMountPoints())
-                {
-                    wicketApplication.mount(bookmark.getCodingStrategy());
+                if (m_pageMounter != null) {
+                    for (MountPointInfo bookmark : m_pageMounter.getMountPoints()) {
+                        wicketApplication.mount(bookmark.getCodingStrategy());
+                    }
+                }
+
+                // Now add a tracker so we can still mount pages later
+                m_mounterTracker = new PageMounterTracker(m_bundleContext, wicketApplication, getApplicationName());
+                m_mounterTracker.open();
+
+                for (final IInitializer initializer : m_initializers) {
+                    initializer.init(wicketApplication);
                 }
             }
 
-            // Now add a tracker so we can still mount pages later
-            m_mounterTracker = new PageMounterTracker(m_bundleContext, wicketApplication, getApplicationName());
-            m_mounterTracker.open();
+            private <T> void addWicketService(Class<T> service, T serviceImplementation) {
+                Properties props = new Properties();
 
-            for (final IInitializer initializer : m_initializers)
-            {
-                initializer.init(wicketApplication);
+                // Note: This is kept for legacy
+                props.setProperty("applicationId", getApplicationName());
+                props.setProperty(APPLICATION_NAME, getApplicationName());
+
+                String serviceName = service.getName();
+                ServiceRegistration registration =
+                    m_bundleContext.registerService(serviceName, serviceImplementation, props);
+                m_serviceRegistrations.add(registration);
             }
-        }
-
-            private <T> void addWicketService(Class<T> service, T serviceImplementation)
-        {
-            Properties props = new Properties();
-
-            // Note: This is kept for legacy
-            props.setProperty("applicationId", getApplicationName());
-            props.setProperty(APPLICATION_NAME, getApplicationName());
-
-            String serviceName = service.getName();
-            ServiceRegistration registration =
-                m_bundleContext.registerService(serviceName, serviceImplementation, props);
-            m_serviceRegistrations.add(registration);
-        }
 
             public void onDestroy(WebApplication wicketApplication) {
-                if (m_mounterTracker != null)
-            {
-                m_mounterTracker.close();
-                m_mounterTracker = null;
-            }
+                wicketApplication.removeComponentInstantiationListener(m_delegatingComponentInstanciationListener);
 
-            for (ServiceRegistration reg : m_serviceRegistrations)
-            {
-                reg.unregister();
+                if (m_mounterTracker != null) {
+                    m_mounterTracker.close();
+                    m_mounterTracker = null;
+                }
+
+                for (ServiceRegistration reg : m_serviceRegistrations) {
+                    reg.unregister();
+                }
+                m_serviceRegistrations.clear();
             }
-            m_serviceRegistrations.clear();
-        }
         });
         return paxWicketApplication;
     }
 
     private WebApplication createPredefinedPaxWicketApplication(String applicationName) {
         WebApplication paxWicketApplication;
-        paxWicketApplication = new PaxWicketApplication(
-            m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-            m_delegatingClassResolver, m_initializers
-            );
+        paxWicketApplication =
+            new PaxWicketApplication(m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
+                m_delegatingClassResolver, m_initializers, m_delegatingComponentInstanciationListener);
         return paxWicketApplication;
     }
 
     private WebApplication createPredefinedPaxAuthenticatedWicketApplication(String applicationName) {
         WebApplication paxWicketApplication;
         paxWicketApplication =
-            new PaxAuthenticatedWicketApplication(
-                m_bundleContext, applicationName, m_pageMounter, m_homepageClass, m_pageFactory,
-                m_requestCycleFactory, m_requestCycleProcessorFactory, m_sessionStoreFactory,
-                m_delegatingClassResolver,
-                m_authenticator, m_signinPage, m_initializers
-            );
+            new PaxAuthenticatedWicketApplication(m_bundleContext, applicationName, m_pageMounter, m_homepageClass,
+                m_pageFactory, m_requestCycleFactory, m_requestCycleProcessorFactory, m_sessionStoreFactory,
+                m_delegatingClassResolver, m_authenticator, m_signinPage, m_initializers,
+                m_delegatingComponentInstanciationListener);
         return paxWicketApplication;
     }
 
