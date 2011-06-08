@@ -92,6 +92,14 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.9.0</version>
+        <configuration>
+          <header>https://raw.github.com/ops4j/org.ops4j.pax.wicket/master/etc/header/asf.txt</header>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.jasig.maven</groupId>
         <artifactId>maven-notice-plugin</artifactId>
         <configuration>
