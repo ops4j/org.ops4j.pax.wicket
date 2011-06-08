@@ -5,6 +5,7 @@ import org.ops4j.pax.wicket.internal.spring.classResolver.ClassResolverDefinitio
 import org.ops4j.pax.wicket.internal.spring.contentAggregator.RootContentAggregatorBeanDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.contentSource.ContentSourceFactoryBeanDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.contentSourceModelMapping.ContentSourceModelMappingFactoryBeanDefinitionParser;
+import org.ops4j.pax.wicket.internal.spring.filter.FilterFactoryBeanDefinitionParser;
 import org.ops4j.pax.wicket.internal.spring.page.PageFactoryBeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
@@ -18,6 +19,7 @@ public class PaxWicketNamespaceHandler extends NamespaceHandlerSupport {
             new ContentSourceModelMappingFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("contentAggregator", new RootContentAggregatorBeanDefinitionParser());
         registerBeanDefinitionParser("classResolver", new ClassResolverDefinitionParser());
+        registerBeanDefinitionParser("filter", new FilterFactoryBeanDefinitionParser());
     }
 
 }
