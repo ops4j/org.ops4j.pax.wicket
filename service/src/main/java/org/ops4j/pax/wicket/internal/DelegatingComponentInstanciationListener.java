@@ -92,7 +92,7 @@ public final class DelegatingComponentInstanciationListener implements IComponen
                 if (object instanceof Component) {
                     listener.onInstantiation((Component) object);
                 } else if (listener instanceof Injector) {
-                    ((Injector) listener).inject(listener);
+                    ((Injector) listener).inject(object);
                 }
                 // if we reach here the bean had been injected correctly and we're happy...
                 return;
