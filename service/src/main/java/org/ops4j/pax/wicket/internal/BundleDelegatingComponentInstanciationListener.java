@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * {@link PaxWicketApplicationFactory}.
  */
 public class BundleDelegatingComponentInstanciationListener extends ServiceTracker implements
-        IComponentInstantiationListener {
+        IComponentInstantiationListener, Injector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingComponentInstanciationListener.class);
 
@@ -68,18 +68,22 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         listeners = new HashSet<BundleAnalysingComponentInstantiationListener>();
         listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
             applicationName));
-
+        
         open(true);
     }
 
-    public void onInstantiation(Component component) {
+    public void inject(Object object) {
         for (BundleAnalysingComponentInstantiationListener analyser : listeners) {
-            if (analyser.injectionPossible(component.getClass())) {
-                analyser.inject(component);
+            if (analyser.injectionPossible(object.getClass())) {
+                analyser.inject(object);
                 return;
             }
         }
         throw new NoBeanAvailableForInjectionException();
+    }
+    
+    public void onInstantiation(Component component) {
+        inject(component);
     }
 
     @Override
