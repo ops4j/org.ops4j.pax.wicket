@@ -19,13 +19,12 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
 import java.util.HashSet;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.application.IComponentInstantiationListener;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -41,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * {@link PaxWicketApplicationFactory}.
  */
 public class BundleDelegatingComponentInstanciationListener extends ServiceTracker implements
-        IComponentInstantiationListener {
+        PaxWicketInjector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingComponentInstanciationListener.class);
 
@@ -69,10 +68,10 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         open(true);
     }
 
-    public void onInstantiation(Component component) {
+    public void inject(Object toInject) {
         for (BundleAnalysingComponentInstantiationListener analyser : listeners) {
-            if (analyser.injectionPossible(component.getClass())) {
-                analyser.inject(component);
+            if (analyser.injectionPossible(toInject.getClass())) {
+                analyser.inject(toInject);
                 return;
             }
         }

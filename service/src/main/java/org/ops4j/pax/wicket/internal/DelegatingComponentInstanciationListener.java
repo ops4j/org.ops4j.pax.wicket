@@ -25,9 +25,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.sf.cglib.proxy.Factory;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.application.IComponentInstantiationListener;
+import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
+import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -37,13 +38,13 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DelegatingComponentInstanciationListener implements IComponentInstantiationListener {
+public final class DelegatingComponentInstanciationListener implements PaxWicketInjector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingComponentInstanciationListener.class);
 
     private final BundleContext context;
     private final String applicationName;
-    private final ConcurrentLinkedQueue<IComponentInstantiationListener> resolvers;
+    private final ConcurrentLinkedQueue<PaxWicketInjector> resolvers;
 
     private ComponentInstanciationListenerTracker tracker;
 
@@ -53,7 +54,9 @@ public final class DelegatingComponentInstanciationListener implements IComponen
         validateNotEmpty(applicationName, "applicationName");
         this.context = context;
         this.applicationName = applicationName;
-        resolvers = new ConcurrentLinkedQueue<IComponentInstantiationListener>();
+        resolvers = new ConcurrentLinkedQueue<PaxWicketInjector>();
+
+        InjectorHolder.setInjector(applicationName, this);
     }
 
     public final void intialize() throws IllegalStateException {
@@ -78,16 +81,16 @@ public final class DelegatingComponentInstanciationListener implements IComponen
         }
     }
 
-    public void onInstantiation(Component component) {
-        boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(component);
+    public void inject(Object toInject) {
+        boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(toInject);
         if (!foundAnnotation) {
-            LOGGER.trace("Component {} doesn ot contain any PaxWicketBean fields. Therefore ignore", component
+            LOGGER.trace("Component {} doesn ot contain any PaxWicketBean fields. Therefore ignore", toInject
                 .getClass().getName());
             return;
         }
-        for (IComponentInstantiationListener listener : resolvers) {
+        for (PaxWicketInjector listener : resolvers) {
             try {
-                listener.onInstantiation(component);
+                listener.inject(toInject);
                 // if we reach here the bean had been injected correctly and we're happy...
                 return;
             } catch (NoBeanAvailableForInjectionException e) {
@@ -95,10 +98,10 @@ public final class DelegatingComponentInstanciationListener implements IComponen
             }
         }
         throw new NoBeanAvailableForInjectionException(String.format(
-            "Component %s has fields to inject but noone provides the beans for them", component.getClass().getName()));
+            "Component %s has fields to inject but noone provides the beans for them", toInject.getClass().getName()));
     }
 
-    private boolean doesComponentContainPaxWicketBeanAnnotatedFields(Component component) {
+    private boolean doesComponentContainPaxWicketBeanAnnotatedFields(Object component) {
         Class<?> realClass = component.getClass();
         if (Factory.class.isInstance(component)) {
             realClass = realClass.getSuperclass();
@@ -125,7 +128,7 @@ public final class DelegatingComponentInstanciationListener implements IComponen
 
         @Override
         public final Object addingService(ServiceReference reference) {
-            IComponentInstantiationListener resolver = (IComponentInstantiationListener) super.addingService(reference);
+            PaxWicketInjector resolver = (PaxWicketInjector) super.addingService(reference);
             synchronized (DelegatingComponentInstanciationListener.this) {
                 resolvers.add(resolver);
             }
@@ -168,7 +171,7 @@ public final class DelegatingComponentInstanciationListener implements IComponen
 
     private static Filter createFilter(BundleContext context, String applicationName) {
         String filterStr =
-            "(&(" + OBJECTCLASS + "=" + IComponentInstantiationListener.class.getName() + ")(" + APPLICATION_NAME + "="
+            "(&(" + OBJECTCLASS + "=" + PaxWicketInjector.class.getName() + ")(" + APPLICATION_NAME + "="
                            + applicationName + "))";
         try {
             return context.createFilter(filterStr);
