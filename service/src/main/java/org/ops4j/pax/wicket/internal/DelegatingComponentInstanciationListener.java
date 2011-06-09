@@ -37,7 +37,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DelegatingComponentInstanciationListener implements IComponentInstantiationListener {
+public final class DelegatingComponentInstanciationListener implements IComponentInstantiationListener, Injector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingComponentInstanciationListener.class);
 
@@ -54,6 +54,8 @@ public final class DelegatingComponentInstanciationListener implements IComponen
         this.context = context;
         this.applicationName = applicationName;
         resolvers = new ConcurrentLinkedQueue<IComponentInstantiationListener>();
+        
+        InjectorHolder.setInjector(applicationName, this);
     }
 
     public final void intialize() throws IllegalStateException {
@@ -78,16 +80,20 @@ public final class DelegatingComponentInstanciationListener implements IComponen
         }
     }
 
-    public void onInstantiation(Component component) {
-        boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(component);
+    public void inject(Object object) {
+        boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(object);
         if (!foundAnnotation) {
-            LOGGER.trace("Component {} doesn ot contain any PaxWicketBean fields. Therefore ignore", component
+            LOGGER.trace("Component {} doesn ot contain any PaxWicketBean fields. Therefore ignore", object
                 .getClass().getName());
             return;
         }
         for (IComponentInstantiationListener listener : resolvers) {
             try {
-                listener.onInstantiation(component);
+                if (object instanceof Component) {
+                    listener.onInstantiation((Component) object);
+                } else if (listener instanceof Injector) {
+                    ((Injector) listener).inject(object);
+                }
                 // if we reach here the bean had been injected correctly and we're happy...
                 return;
             } catch (NoBeanAvailableForInjectionException e) {
@@ -95,10 +101,14 @@ public final class DelegatingComponentInstanciationListener implements IComponen
             }
         }
         throw new NoBeanAvailableForInjectionException(String.format(
-            "Component %s has fields to inject but noone provides the beans for them", component.getClass().getName()));
+            "Component %s has fields to inject but noone provides the beans for them", object.getClass().getName()));
     }
-
-    private boolean doesComponentContainPaxWicketBeanAnnotatedFields(Component component) {
+    
+    public void onInstantiation(Component component) {
+        inject(component);
+    }
+    
+    private boolean doesComponentContainPaxWicketBeanAnnotatedFields(Object component) {
         Class<?> realClass = component.getClass();
         if (Factory.class.isInstance(component)) {
             realClass = realClass.getSuperclass();
