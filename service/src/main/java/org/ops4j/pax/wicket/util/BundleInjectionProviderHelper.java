@@ -15,23 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util.classResolver;
+package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
 import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.wicket.application.IClassResolver;
-import org.ops4j.pax.wicket.internal.EnumerationAdapter;
-import org.osgi.framework.Bundle;
+import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
+import org.ops4j.pax.wicket.api.PaxWicketInjector;
+import org.ops4j.pax.wicket.internal.BundleAnalysingComponentInstantiationListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
@@ -40,16 +35,17 @@ import org.osgi.service.cm.ManagedService;
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
  */
-public final class BundleClassResolverHelper {
+public final class BundleInjectionProviderHelper {
 
     private static final String[] SERVICE_NAMES =
         {
-            IClassResolver.class.getName(),
+            PaxWicketInjector.class.getName(),
             ManagedService.class.getName()
         };
 
     private final BundleContext bundleContext;
     private final Properties serviceProperties;
+    private BundleAnalysingComponentInstantiationListener bundleAnalysingComponentInstantiationListener;
 
     private final Object lock = new Object();
     private ServiceRegistration serviceRegistration;
@@ -57,9 +53,11 @@ public final class BundleClassResolverHelper {
     /**
      * Construct an instance of {@code BundleClassResolver}.
      */
-    public BundleClassResolverHelper(BundleContext bundleContext) throws IllegalArgumentException {
+    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName)
+        throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
+        setApplicationName(applicationName);
         serviceProperties = new Properties();
     }
 
@@ -93,12 +91,15 @@ public final class BundleClassResolverHelper {
     /**
      * Sets the application nane.
      */
-    public final void setApplicationName(String... applicationNames) {
+    public final void setApplicationName(String applicationName) {
         synchronized (lock) {
-            if (applicationNames == null) {
+            if (applicationName == null) {
                 serviceProperties.remove(APPLICATION_NAME);
+                bundleAnalysingComponentInstantiationListener = null;
             } else {
-                serviceProperties.put(APPLICATION_NAME, applicationNames);
+                serviceProperties.put(APPLICATION_NAME, applicationName);
+                bundleAnalysingComponentInstantiationListener =
+                    new BundleAnalysingComponentInstantiationListener(bundleContext, applicationName);
             }
 
             if (serviceRegistration != null) {
@@ -113,7 +114,7 @@ public final class BundleClassResolverHelper {
     public final void register() {
         synchronized (lock) {
             if (serviceRegistration == null) {
-                BundleClassResolver resolver = new BundleClassResolver();
+                BundleInjectionResolver resolver = new BundleInjectionResolver();
                 serviceRegistration = bundleContext.registerService(SERVICE_NAMES, resolver, serviceProperties);
             }
         }
@@ -131,25 +132,16 @@ public final class BundleClassResolverHelper {
         }
     }
 
-    private final class BundleClassResolver implements IClassResolver, ManagedService {
+    private final class BundleInjectionResolver implements PaxWicketInjector, ManagedService {
 
-        public final Class<?> resolveClass(String classname) throws ClassNotFoundException {
-            Bundle bundle = bundleContext.getBundle();
-            return bundle.loadClass(classname);
-        }
-
-        @SuppressWarnings("unchecked")
-        public Iterator<URL> getResources(String name) {
-            try {
-                final Bundle bundle = bundleContext.getBundle();
-                final Enumeration<URL> enumeration = bundle.getResources(name);
-                if (null == enumeration) {
-                    return null;
-                }
-                return new EnumerationAdapter<URL>(enumeration);
-            } catch (IOException e) {
-                return Collections.<URL> emptyList().iterator();
+        public void inject(Object toInject) {
+            validateNotNull(bundleAnalysingComponentInstantiationListener,
+                "bundleAnalysingComponentInstantiationListener");
+            if (bundleAnalysingComponentInstantiationListener.injectionPossible(toInject.getClass())) {
+                bundleAnalysingComponentInstantiationListener.inject(toInject);
+                return;
             }
+            throw new NoBeanAvailableForInjectionException();
         }
 
         @SuppressWarnings("rawtypes")
@@ -167,5 +159,6 @@ public final class BundleClassResolverHelper {
                 serviceRegistration.setProperties(serviceProperties);
             }
         }
+
     }
 }

@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.spring.classResolver;
 
-import org.ops4j.pax.wicket.util.classResolver.BundleClassResolverHelper;
+import org.ops4j.pax.wicket.util.BundleClassResolverHelper;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
