@@ -419,11 +419,13 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
         paxWicketApplication = applicationFactory.createWebApplication(new ApplicationLifecycleListener() {
             private final List<ServiceRegistration> m_serviceRegistrations =
                 new ArrayList<ServiceRegistration>();
-            private PageMounterTracker m_mounterTracker;
+            private PageMounterTracker mounterTracker;
+            private ComponentInstantiationListenerFacade componentInstanciationListener;
 
             public void onInit(WebApplication wicketApplication) {
-                wicketApplication.addComponentInstantiationListener(new ComponentInstantiationListenerFacade(
-                    m_delegatingComponentInstanciationListener));
+                componentInstanciationListener = new ComponentInstantiationListenerFacade(
+                    delegatingComponentInstanciationListener);
+                wicketApplication.addComponentInstantiationListener(componentInstanciationListener);
 
                 IApplicationSettings applicationSettings = wicketApplication.getApplicationSettings();
                 applicationSettings.setClassResolver(delegatingClassResolver);
@@ -471,8 +473,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             }
 
             public void onDestroy(WebApplication wicketApplication) {
-                wicketApplication.removeComponentInstantiationListener(new ComponentInstantiationListenerFacade(
-                    m_delegatingComponentInstanciationListener));
+                wicketApplication.removeComponentInstantiationListener(componentInstanciationListener);
 
                 if (mounterTracker != null) {
                     mounterTracker.close();
