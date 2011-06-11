@@ -102,6 +102,7 @@
       <plugin>
         <groupId>org.jasig.maven</groupId>
         <artifactId>maven-notice-plugin</artifactId>
+        <version>1.0.4</version>
         <configuration>
           <noticeTemplate>etc/notice/NOTICE.template</noticeTemplate>
           <licenseMapping>
@@ -126,6 +127,16 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-eclipse-plugin</artifactId>
           <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.servicemix.tooling</groupId>
+          <artifactId>depends-maven-plugin</artifactId>
+          <version>1.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.8.1</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -173,6 +184,12 @@
       <dependency>
         <groupId>org.ops4j.pax.wicket</groupId>
         <artifactId>pax-wicket-test</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+        <artifactId>pax-wicket-samples-view-application</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
       </dependency>
@@ -316,11 +333,6 @@
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-servlet</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-xml</artifactId>
         <version>${jetty.version}</version>
       </dependency>
       <dependency>

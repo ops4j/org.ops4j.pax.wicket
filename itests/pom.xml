@@ -25,7 +25,6 @@
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>depends-maven-plugin</artifactId>
-        <version>1.1</version>
         <executions>
           <execution>
             <id>generate-depends-file</id>
@@ -65,13 +64,11 @@
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.view</groupId>
       <artifactId>pax-wicket-samples-view-application</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -181,7 +178,6 @@
     <dependency>
       <groupId>org.ops4j.pax.web</groupId>
       <artifactId>pax-web-api</artifactId>
-      <version>${pax.web.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -209,12 +205,6 @@
     <dependency>
       <groupId>org.ops4j.pax.web</groupId>
       <artifactId>pax-web-jetty</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
