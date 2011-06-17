@@ -16,4 +16,4 @@
 #  limitations under the License.
 #
 
-http\://www.ops4j.org/schema/wicket=org.ops4j.pax.wicket.internal.spring.PaxWicketNamespaceHandler
+http\://www.ops4j.org/schema/wicket=org.ops4j.pax.wicket.internal.injection.spring.PaxWicketNamespaceHandler

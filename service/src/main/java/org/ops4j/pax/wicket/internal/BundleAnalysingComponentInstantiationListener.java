@@ -22,7 +22,7 @@ import java.util.Map;
 
 import net.sf.cglib.proxy.Factory;
 
-import org.ops4j.pax.wicket.internal.spring.SpringBeanProxyTargetLocator;
+import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
