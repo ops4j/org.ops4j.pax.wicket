@@ -39,20 +39,13 @@ public class ContentSourceFactory extends AbstractContentSource implements TabCo
     private Map<String, String> overwrites;
 
     public ContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites, String wicketId,
-            String applicationName)
+            String applicationName, Class<?> contentSourceClass, List<String> destinations)
         throws IllegalArgumentException {
-        this(bundleContext, overwrites, wicketId, applicationName, null);
-        this.bundleContext = bundleContext;
-        this.overwrites = overwrites;
-    }
-
-    public ContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites, String wicketId,
-            String applicationName,
-            Class<?> contentSourceClass) throws IllegalArgumentException {
         super(bundleContext, wicketId, applicationName);
         this.overwrites = overwrites;
         this.contentSourceClass = contentSourceClass;
         this.bundleContext = bundleContext;
+        this.destinations = destinations;
     }
 
     public void start() {

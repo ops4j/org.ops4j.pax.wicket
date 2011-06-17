@@ -35,7 +35,7 @@ public class SpringContextAwareContentSources extends ContentSourceFactory imple
             String applicationName, ConfigurableApplicationContext applicationContext)
         throws IllegalArgumentException {
         super(bundleContext, descriptor.getOverwrites(), descriptor.getWicketId(), applicationName, descriptor
-            .getComponentClass());
+            .getComponentClass(), descriptor.getDestinations());
         this.descriptor = descriptor;
         this.applicationContext = applicationContext;
     }

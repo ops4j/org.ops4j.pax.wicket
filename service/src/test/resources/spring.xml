@@ -16,7 +16,6 @@
     limitations under the License.
 
 -->
-
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:osgi="http://www.springframework.org/schema/osgi"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
   xmlns:osgix="http://www.springframework.org/schema/osgi-compendium" xmlns:wicket="http://www.ops4j.org/schema/wicket"
@@ -28,5 +27,24 @@
 
   <wicket:componentContentSourceFactory id="testBean" applicationName="applicationName"
     componentContentSourceFactory="someBeanReference" />
+
+  <wicket:contentSource id="timetableMainMenuPanel" contentSourceId="someId" applicationName="applicationName"
+    contentSourceClass="this.is.some.class.Yes">
+    <wicket:overwrites>
+      <wicket:overwrite originalBeanId="old1" newBeanId="new1" />
+      <wicket:overwrite originalBeanId="old2" newBeanId="new2" />
+    </wicket:overwrites>
+    <wicket:destinations>
+      <wicket:destination>infrastructure.mainmenu</wicket:destination>
+      <wicket:destination>infrastructure.mainmenu2</wicket:destination>
+    </wicket:destinations>
+  </wicket:contentSource>
+
+  <wicket:page id="newPage" pageId="pageId" applicationName="applicationName" pageName="pageName" pageClass="pageClass">
+    <wicket:overwrites>
+      <wicket:overwrite originalBeanId="old1" newBeanId="new1" />
+      <wicket:overwrite originalBeanId="old2" newBeanId="new2" />
+    </wicket:overwrites>
+  </wicket:page>
 
 </beans>

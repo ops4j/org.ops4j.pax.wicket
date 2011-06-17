@@ -28,14 +28,15 @@ import org.xml.sax.SAXException;
 public class SpringTestUtil {
     public static Document loadSpringXml() throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse("src/test/resources/spring.xml");
         return doc;
     }
 
-    public static Element loadFirstElementThatMatches(String string) throws ParserConfigurationException, SAXException,
-        IOException {
+    public static Element loadFirstElementThatMatches(String element) throws ParserConfigurationException,
+        SAXException, IOException {
         Document doc = loadSpringXml();
-        return (Element) doc.getElementsByTagName("wicket:componentContentSourceFactory").item(0);
+        return (Element) doc.getElementsByTagName(element).item(0);
     }
 }

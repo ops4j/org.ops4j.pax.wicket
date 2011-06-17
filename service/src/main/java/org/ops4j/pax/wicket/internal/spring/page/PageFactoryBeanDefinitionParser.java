@@ -18,25 +18,29 @@
 
 package org.ops4j.pax.wicket.internal.spring.page;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class<?> getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return DefaultPageFactory.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder bean) {
+    public void doParse(Element element, BeanDefinitionBuilder bean) {
         bean.addConstructorArgReference("bundleContext");
         setConstructor("pageId", element, bean);
         setConstructor("applicationName", element, bean);
         setConstructor("pageName", element, bean);
         setConstructor("pageClass", element, bean);
-        bean.addConstructorArgValue(null);
+        bean.addConstructorArgValue(retrieveOverwriteElements(element));
         bean.setLazyInit(false);
         bean.setInitMethodName("register");
         bean.setDestroyMethodName("dispose");
@@ -45,6 +49,18 @@ public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitio
     private void setConstructor(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addConstructorArgValue(beanElement);
+    }
+
+    private Map<String, String> retrieveOverwriteElements(Element element) {
+        Map<String, String> overwrites = new HashMap<String, String>();
+        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "overwrite");
+        for (int i = 0; i < elementsByTagName.getLength(); i++) {
+            Element overwrite = (Element) elementsByTagName.item(i);
+            String originalBeanId = overwrite.getAttribute("originalBeanId");
+            String newBeanId = overwrite.getAttribute("newBeanId");
+            overwrites.put(originalBeanId, newBeanId);
+        }
+        return overwrites;
     }
 
 }
