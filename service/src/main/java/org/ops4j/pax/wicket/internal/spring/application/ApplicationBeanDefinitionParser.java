@@ -25,12 +25,12 @@ import org.w3c.dom.Element;
 public class ApplicationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class<?> getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return ApplicationBuilder.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder bean) {
+    public void doParse(Element element, BeanDefinitionBuilder bean) {
         setElement("homepageClass", element, bean);
         setElement("mountPoint", element, bean);
         setElement("applicationName", element, bean);

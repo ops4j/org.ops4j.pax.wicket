@@ -22,12 +22,12 @@ import org.w3c.dom.Element;
 public class ContentSourceModelMappingFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class<?> getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return ContentSourceModelMappingFactory.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder builder) {
+    public void doParse(Element element, BeanDefinitionBuilder builder) {
         builder.addConstructorArgReference("bundleContext");
         String attribute = element.getAttribute("contentSourceFactoryImpl");
         builder.addConstructorArgReference(attribute);

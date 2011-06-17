@@ -26,12 +26,12 @@ import org.w3c.dom.Element;
 public class RootContentAggregatorBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class<?> getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return RootContentAggregator.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder bean) {
+    public void doParse(Element element, BeanDefinitionBuilder bean) {
         bean.addConstructorArgReference("bundleContext");
         setConstructorElement("applicationName", element, bean);
         setConstructorElement("aggregationPointName", element, bean);

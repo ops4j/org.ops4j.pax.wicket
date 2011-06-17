@@ -23,12 +23,12 @@ import org.w3c.dom.Element;
 public class InjectionResolverDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    protected Class getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return BundleInjectionProviderHelper.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder bean) {
+    public void doParse(Element element, BeanDefinitionBuilder bean) {
         bean.addConstructorArgReference("bundleContext");
         String attribute = element.getAttribute("applicationName");
         bean.addConstructorArgValue(attribute);

@@ -47,4 +47,19 @@
     </wicket:overwrites>
   </wicket:page>
 
+  <wicket:application id="application" homepageClass="homepageClass" mountPoint="mountPoint"
+    applicationName="applicationName" applicationFactory="applicationFactory" />
+
+  <wicket:contentSourceModelMapping id="contentSourceModelMapping" applicationName="applicationName"
+    serviceClass="serviceClass" contentSourceFactoryImpl="contentSourceFactoryImpl" />
+
+  <wicket:contentAggregator id="contentAggregator" applicationName="applicationName"
+    aggregationPointName="aggregationPointName" />
+
+  <wicket:classResolver id="classResolver" applicationName="applicationName" />
+
+  <wicket:injectionProvider id="injectionProvider" applicationName="applicationName" />
+
+  <wicket:filter id="filter" filterClass="filterClass" priority="priority" applicationName="applicationName" />
+
 </beans>

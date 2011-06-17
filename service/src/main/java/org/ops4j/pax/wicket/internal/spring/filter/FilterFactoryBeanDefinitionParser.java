@@ -20,13 +20,14 @@ import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
 
 public class FilterFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+
     @Override
-    protected Class<?> getBeanClass(Element element) {
+    public Class<?> getBeanClass(Element element) {
         return DefaultFilterFactory.class;
     }
 
     @Override
-    protected void doParse(Element element, BeanDefinitionBuilder builder) {
+    public void doParse(Element element, BeanDefinitionBuilder builder) {
         builder.addConstructorArgReference("bundleContext");
         setConstructorElement("filterClass", element, builder);
         setConstructorElement("priority", element, builder);
