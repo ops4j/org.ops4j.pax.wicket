@@ -69,6 +69,15 @@
 
   <wicket:injectionProvider id="injectionProvider" applicationName="applicationName" />
 
-  <wicket:filter id="filter" filterClass="filterClass" priority="priority" applicationName="applicationName" />
+  <wicket:filter id="filter" filterClass="filterClass" priority="priority" applicationName="applicationName">
+    <wicket:init-param>
+      <wicket:param-name>name1</wicket:param-name>
+      <wicket:param-value>value1</wicket:param-value>
+    </wicket:init-param>
+    <wicket:init-param>
+      <wicket:param-name>name2</wicket:param-name>
+      <wicket:param-value>value2</wicket:param-value>
+    </wicket:init-param>
+  </wicket:filter>
 
 </beans>

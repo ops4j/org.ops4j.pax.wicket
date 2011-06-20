@@ -28,6 +28,6 @@ public interface FilterFactory extends Comparable<FilterFactory> {
 
     String getApplicationName();
 
-    Filter createFilter();
+    Filter createFilter(ConfigurableFilterConfig filterConfig);
 
 }

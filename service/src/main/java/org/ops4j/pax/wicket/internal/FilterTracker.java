@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.Filter;
+import javax.servlet.Servlet;
 
 import org.ops4j.pax.wicket.api.FilterFactory;
 import org.osgi.framework.BundleContext;
@@ -41,6 +42,7 @@ public final class FilterTracker extends ServiceTracker {
 
     private Map<ServiceReference, FilterFactory> filterFactories = new HashMap<ServiceReference, FilterFactory>();
     private String applicationName;
+    private Servlet servlet;
 
     public FilterTracker(BundleContext bundleContext, String applicationName) {
         super(bundleContext, createOsgiFilter(bundleContext, applicationName), null);
@@ -90,10 +92,15 @@ public final class FilterTracker extends ServiceTracker {
             LOGGER.debug("Retrieved {} factories to create filters to apply", factories.size());
             Collections.sort(factories);
             for (FilterFactory filterFactory : factories) {
-                filters.add(filterFactory.createFilter());
+                filters
+                    .add(filterFactory.createFilter(new DefaultConfigurableFilterConfig(servlet.getServletConfig())));
             }
             return filters;
         }
+    }
+
+    public void setServlet(Servlet servlet) {
+        this.servlet = servlet;
     }
 
 }

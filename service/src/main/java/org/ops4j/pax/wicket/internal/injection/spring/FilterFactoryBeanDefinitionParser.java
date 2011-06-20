@@ -15,9 +15,13 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class FilterFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
@@ -32,10 +36,27 @@ public class FilterFactoryBeanDefinitionParser extends AbstractSingleBeanDefinit
         setConstructorElement("filterClass", element, builder);
         setConstructorElement("priority", element, builder);
         setConstructorElement("applicationName", element, builder);
+        builder.addConstructorArgValue(retrieveInitParam(element));
         builder.setInitMethodName("start");
         builder.setDestroyMethodName("stop");
         builder.setLazyInit(false);
         super.doParse(element, builder);
+    }
+
+    private Map<String, String> retrieveInitParam(Element element) {
+        Map<String, String> contextParams = new HashMap<String, String>();
+        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "init-param");
+        for (int i = 0; i < elementsByTagName.getLength(); i++) {
+            Element subElement = (Element) elementsByTagName.item(i);
+            contextParams.put(retrieveNodeValude(subElement, "param-name"),
+                retrieveNodeValude(subElement, "param-value"));
+        }
+        return contextParams;
+    }
+
+    private String retrieveNodeValude(Element element, String name) {
+        NodeList elementsByTagName = element.getElementsByTagNameNS("*", name);
+        return elementsByTagName.item(0).getChildNodes().item(0).getNodeValue();
     }
 
     private void setConstructorElement(String id, Element element, BeanDefinitionBuilder builder) {

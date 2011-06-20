@@ -15,8 +15,11 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import java.util.Map;
+
 import javax.servlet.Filter;
 
+import org.ops4j.pax.wicket.api.ConfigurableFilterConfig;
 import org.ops4j.pax.wicket.util.AbstractFilterFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -33,12 +36,14 @@ public class DefaultFilterFactory extends AbstractFilterFactory implements Appli
     private Class<? extends Filter> filterClass;
     private String applicationName;
     private ApplicationContext applicationContext;
+    private Map<String, String> filterConfiguration;
 
     public DefaultFilterFactory(BundleContext bundleContext, Class<? extends Filter> filterClass, Integer priority,
-            String applicationName) {
+            String applicationName, Map<String, String> filterConfiguration) {
         super(bundleContext, applicationName, priority);
         this.applicationName = applicationName;
         this.filterClass = filterClass;
+        this.filterConfiguration = filterConfiguration;
     }
 
     public void start() {
@@ -49,13 +54,15 @@ public class DefaultFilterFactory extends AbstractFilterFactory implements Appli
         dispose();
     }
 
-    public Filter createFilter() {
+    public Filter createFilter(ConfigurableFilterConfig filterConfig) {
         ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(filterClass.getClassLoader());
             LOGGER.info("Creating new instance of {} for application {}", filterClass.getName(), applicationName);
             Filter filter = filterClass.newInstance();
             initFilter(filter);
+            filterConfig.putAllInitParameter(filterConfiguration);
+            filter.init(filterConfig);
             return filter;
         } catch (Exception e) {
             throw new IllegalStateException(String.format("Filter %s could not be created for application {}",

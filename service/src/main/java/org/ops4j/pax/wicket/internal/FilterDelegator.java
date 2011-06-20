@@ -74,6 +74,7 @@ public final class FilterDelegator {
     public void setServlet(Servlet servlet) {
         validateNotNull(servlet, "servlet");
         this.servlet = servlet;
+        filterTracker.setServlet(servlet);
     }
 
 }

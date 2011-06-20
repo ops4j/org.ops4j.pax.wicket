@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util;
+package org.ops4j.pax.wicket.api;
 
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
+import java.util.Map;
 
-public final class PageFilterFactory {
+import javax.servlet.FilterConfig;
 
-    public static String createPageFilter(String pagename, String applicationName) {
-        validateNotEmpty(pagename, "pagename");
-        validateNotEmpty(applicationName, "applicationName");
+public interface ConfigurableFilterConfig extends FilterConfig {
 
-        return String.format("(&(%s=%s)(%s=%s))", PAGE_NAME, pagename, APPLICATION_NAME, applicationName);
-    }
+    void setFilterName(String name);
+
+    void putInitParameter(String name, String parameter);
+
+    void putAllInitParameter(Map<String, String> parameterMap);
 }
