@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.sf.cglib.proxy.Factory;
 
-import org.apache.wicket.application.IComponentInstantiationListener;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
@@ -161,7 +160,7 @@ public final class DelegatingComponentInstanciationListener implements PaxWicket
 
         @Override
         public final void removedService(ServiceReference reference, Object service) {
-            IComponentInstantiationListener resolver = (IComponentInstantiationListener) service;
+            PaxWicketInjector resolver = (PaxWicketInjector) service;
             synchronized (DelegatingComponentInstanciationListener.this) {
                 resolvers.remove(resolver);
             }
