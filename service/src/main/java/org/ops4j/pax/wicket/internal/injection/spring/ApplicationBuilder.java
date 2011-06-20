@@ -18,6 +18,8 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import java.util.Map;
+
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.ApplicationFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
@@ -41,6 +43,7 @@ public class ApplicationBuilder implements ApplicationContextAware, BundleContex
     private String mountPoint;
     private String applicationName;
     private String applicationFactory;
+    private Map<String, String> contextParams;
 
     private PaxWicketApplicationFactory paxWicketApplicationService;
     private ServiceRegistration serviceRegistration;
@@ -59,7 +62,8 @@ public class ApplicationBuilder implements ApplicationContextAware, BundleContex
             ApplicationFactory realFactory = applicationContext.getBean(applicationFactory, ApplicationFactory.class);
             LOGGER.debug("Created bean; creating paxwicket applicaiton");
             paxWicketApplicationService =
-                new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName, realFactory);
+                new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName, realFactory,
+                    contextParams);
         } else {
             LOGGER.debug("No own application factory found; falling back to old method");
             paxWicketApplicationService =
@@ -104,6 +108,10 @@ public class ApplicationBuilder implements ApplicationContextAware, BundleContex
 
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
+    }
+
+    public void setContextParams(Map<String, String> contextParams) {
+        this.contextParams = contextParams;
     }
 
 }

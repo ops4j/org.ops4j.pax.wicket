@@ -73,7 +73,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
             new FilterDelegator(reference.getBundle().getBundleContext(),
                 (String) reference.getProperty(APPLICATION_NAME));
         servlet = ServletProxy.newServletProxy(factory, tmpDir, mountPoint, filterDelegator);
-        addServlet(mountPoint, servlet, reference);
+        addServlet(mountPoint, servlet, factory.getContextParams(), reference);
 
         synchronized (factories) {
             factories.put(factory, mountPoint);
@@ -97,7 +97,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
         Servlet servlet = httpTracker.getServlet(oldMountPoint);
         removedService(reference, service);
-        addServlet(newMountPoint, servlet, reference);
+        addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
     }
 
     @Override
@@ -118,14 +118,15 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
         factory.setPaxWicketBundle(null);
     }
 
-    private void addServlet(String mountPoint, Servlet servlet, ServiceReference appFactoryReference) {
+    private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
+            ServiceReference appFactoryReference) {
         validateNotEmpty(mountPoint, "mountPoint");
         validateNotNull(servlet, "servlet");
         validateNotNull(appFactoryReference, "appFactoryReference");
 
         Bundle bundle = appFactoryReference.getBundle();
         try {
-            httpTracker.addServlet(mountPoint, servlet, bundle);
+            httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
         } catch (NamespaceException e) {
             throw new IllegalArgumentException(
                 "Unable to mount [" + appFactoryReference + "] on mount point '" + mountPoint + "'.");

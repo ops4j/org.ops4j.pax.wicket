@@ -48,7 +48,16 @@
   </wicket:page>
 
   <wicket:application id="application" homepageClass="homepageClass" mountPoint="mountPoint"
-    applicationName="applicationName" applicationFactory="applicationFactory" />
+    applicationName="applicationName" applicationFactory="applicationFactory">
+    <wicket:context-param>
+      <wicket:param-name>name1</wicket:param-name>
+      <wicket:param-value>value1</wicket:param-value>
+    </wicket:context-param>
+    <wicket:context-param>
+      <wicket:param-name>name2</wicket:param-name>
+      <wicket:param-value>value2</wicket:param-value>
+    </wicket:context-param>
+  </wicket:application>
 
   <wicket:contentSourceModelMapping id="contentSourceModelMapping" applicationName="applicationName"
     serviceClass="serviceClass" contentSourceFactoryImpl="contentSourceFactoryImpl" />

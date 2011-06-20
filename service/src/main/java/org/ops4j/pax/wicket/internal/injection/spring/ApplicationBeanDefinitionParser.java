@@ -18,9 +18,13 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class ApplicationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
@@ -35,6 +39,7 @@ public class ApplicationBeanDefinitionParser extends AbstractSingleBeanDefinitio
         setElement("mountPoint", element, bean);
         setElement("applicationName", element, bean);
         setElement("applicationFactory", element, bean);
+        bean.addPropertyValue("contextParams", retrieveContextParam(element));
         bean.setLazyInit(false);
         bean.setInitMethodName("register");
         bean.setDestroyMethodName("unregister");
@@ -43,6 +48,22 @@ public class ApplicationBeanDefinitionParser extends AbstractSingleBeanDefinitio
     private void setElement(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addPropertyValue(id, beanElement);
+    }
+
+    private Map<String, String> retrieveContextParam(Element element) {
+        Map<String, String> contextParams = new HashMap<String, String>();
+        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "context-param");
+        for (int i = 0; i < elementsByTagName.getLength(); i++) {
+            Element subElement = (Element) elementsByTagName.item(i);
+            contextParams.put(retrieveNodeValude(subElement, "param-name"),
+                retrieveNodeValude(subElement, "param-value"));
+        }
+        return contextParams;
+    }
+
+    private String retrieveNodeValude(Element element, String name) {
+        NodeList elementsByTagName = element.getElementsByTagNameNS("*", name);
+        return elementsByTagName.item(0).getChildNodes().item(0).getNodeValue();
     }
 
 }

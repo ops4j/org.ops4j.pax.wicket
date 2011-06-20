@@ -15,14 +15,15 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.spring.ApplicationBeanDefinitionParser;
-import org.ops4j.pax.wicket.internal.injection.spring.ApplicationBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -49,6 +50,8 @@ public class ApplicationBeanDefinitionParserTest {
         verify(beanDefinitionBuilderMock).addPropertyValue("mountPoint", "mountPoint");
         verify(beanDefinitionBuilderMock).addPropertyValue("applicationName", "applicationName");
         verify(beanDefinitionBuilderMock).addPropertyValue("applicationFactory", "applicationFactory");
+        verify(beanDefinitionBuilderMock).addPropertyValue(argThat(is("contextParams")),
+            argThat(hasEntry("name2", "value2")));
         verify(beanDefinitionBuilderMock).setInitMethodName("register");
         verify(beanDefinitionBuilderMock).setDestroyMethodName("unregister");
         verify(beanDefinitionBuilderMock).setLazyInit(false);

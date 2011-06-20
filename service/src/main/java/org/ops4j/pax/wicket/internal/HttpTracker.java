@@ -23,6 +23,7 @@ import java.util.Set;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.ops4j.pax.wicket.internal.util.MapAsDictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -78,14 +79,15 @@ final class HttpTracker extends ServiceTracker {
         super.removedService(serviceReference, httpService);
     }
 
-    final void addServlet(String mountPoint, Servlet servlet, Bundle paxWicketBundle)
+    final void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParams, Bundle paxWicketBundle)
         throws NamespaceException, ServletException {
         mountPoint = normalizeMountPoint(mountPoint);
         HttpContext httpContext = new GenericContext(paxWicketBundle, mountPoint);
         ServletDescriptor descriptor = new ServletDescriptor(servlet, httpContext);
         servlets.put(mountPoint, descriptor);
         if (httpService != null) {
-            httpService.registerServlet(mountPoint, servlet, null, httpContext);
+            httpService.registerServlet(mountPoint, servlet,
+                contextParams == null ? null : MapAsDictionary.wrap(contextParams), httpContext);
         }
     }
 

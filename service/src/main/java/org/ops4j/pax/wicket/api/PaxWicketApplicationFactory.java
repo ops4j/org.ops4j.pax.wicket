@@ -24,6 +24,7 @@ import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.wicket.IInitializer;
@@ -78,6 +79,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
 
     private PaxWicketAuthenticator authenticator;
     private Class<? extends WebPage> signinPage;
+    private Map<?, ?> contextParams;
 
     private PageMounter pageMounter;
     private RequestCycleFactory requestCycleFactory;
@@ -112,7 +114,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             String mountPoint,
             String applicationName)
         throws IllegalArgumentException {
-        this(context, homepageClass, mountPoint, applicationName, null);
+        this(context, homepageClass, mountPoint, applicationName, null, null);
     }
 
     /**
@@ -134,6 +136,29 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             String mountPoint,
             String applicationName, ApplicationFactory applicationFactory)
         throws IllegalArgumentException {
+        this(context, homepageClass, mountPoint, applicationName, applicationFactory, null);
+    }
+
+    /**
+     * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
+     * 
+     * @param context The bundle context. This argument must not be {@code null}.
+     * @param homepageClass The homepage class. This argument must not be {@code null}.
+     * @param mountPoint The mount point. This argument must not be be {@code null}.
+     * @param applicationName The application name. This argument must not be {@code null}.
+     * @param applicationFactory An alternative method to create an application service and maintain almost full control
+     *        about the application
+     * @param contextParams allows to define inital contextParams as in web.xml
+     * 
+     * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
+     * @since 1.0.0
+     */
+    public PaxWicketApplicationFactory(
+            BundleContext context,
+            Class<? extends Page> homepageClass,
+            String mountPoint,
+            String applicationName, ApplicationFactory applicationFactory, Map<?, ?> contextParams)
+        throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotNull(homepageClass, "homepageClass");
         validateNotNull(mountPoint, "mountPoint");
@@ -154,6 +179,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
         componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
         componentOnAfterRenderListeners = new ArrayList<IComponentOnAfterRenderListener>();
         initializers = new ArrayList<IInitializer>();
+        this.contextParams = contextParams;
     }
 
     /**
@@ -310,6 +336,14 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
         synchronized (this) {
             properties.put(MOUNTPOINT, mountPoint);
         }
+    }
+
+    /**
+     * Returns the context params defined for this application. This is what you typically do in your web.xml using the
+     * context-param tag.
+     */
+    public Map<?, ?> getContextParams() {
+        return contextParams;
     }
 
     public final void setPageMounter(PageMounter pageMounter) {

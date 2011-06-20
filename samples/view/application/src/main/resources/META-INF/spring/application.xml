@@ -26,7 +26,12 @@
         http://www.ops4j.org/schema/wicket http://www.ops4j.org/schema/wicket/wicket.xsd">
 
   <wicket:application id="springDeptStore" homepageClass="org.ops4j.pax.wicket.samples.departmentstore.view.internal.OverviewPage"
-    mountPoint="springDeptStore" applicationName="springDeptStore" applicationFactory="springDeptStoreApplicationFactory" />
+    mountPoint="springDeptStore" applicationName="springDeptStore" applicationFactory="springDeptStoreApplicationFactory">
+    <wicket:context-param>
+      <wicket:param-name>configuration</wicket:param-name>
+      <wicket:param-value>deployment</wicket:param-value>
+    </wicket:context-param>
+  </wicket:application>
 
   <bean id="springDeptStoreApplicationFactory" class="org.ops4j.pax.wicket.samples.departmentstore.view.internal.DeptStoreApplicationFactory" />
 

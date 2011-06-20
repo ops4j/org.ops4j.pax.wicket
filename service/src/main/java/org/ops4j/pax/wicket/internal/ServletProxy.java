@@ -120,8 +120,7 @@ public class ServletProxy {
             private final IWebApplicationFactory appFactory;
             private final File tmpDir;
 
-            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir)
-                throws IllegalArgumentException {
+            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir) throws IllegalArgumentException {
                 validateNotNull(applicationFactory, "applicationFactory");
                 validateNotNull(tempDir, "tempDir");
 
@@ -136,7 +135,6 @@ public class ServletProxy {
                 if (servletContext.getAttribute(WICKET_REQUIRED_ATTRIBUTE) == null) {
                     servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, tmpDir);
                 }
-
                 return new PaxWicketFilter(appFactory);
             }
 
