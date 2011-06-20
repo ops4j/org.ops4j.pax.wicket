@@ -73,8 +73,6 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.cglib")
                 .versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
-                .versionAsInProject()),
             systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"));
     }
 

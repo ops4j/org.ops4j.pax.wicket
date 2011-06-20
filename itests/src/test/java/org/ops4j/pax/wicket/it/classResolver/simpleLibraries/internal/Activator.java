@@ -22,8 +22,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author edward.yakop@gmail.com
  */
-public final class Activator
-        implements BundleActivator {
+public final class Activator implements BundleActivator {
 
     private BundleClassResolverHelper helper;
 

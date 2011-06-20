@@ -187,6 +187,43 @@
         <version>${project.version}</version>
         <scope>test</scope>
       </dependency>
+      <!-- Samples -->
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.model</groupId>
+        <artifactId>pax-wicket-samples-model-core</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.service</groupId>
+        <artifactId>pax-wicket-samples-service-alternative</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.service</groupId>
+        <artifactId>pax-wicket-samples-service-basic</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+        <artifactId>pax-wicket-samples-view-floor</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+        <artifactId>pax-wicket-samples-view-franchisee</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.wicket.samples.view</groupId>
+        <artifactId>pax-wicket-samples-view-about</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+      </dependency>
       <dependency>
         <groupId>org.ops4j.pax.wicket.samples.view</groupId>
         <artifactId>pax-wicket-samples-view-application</artifactId>
@@ -413,6 +450,16 @@
         <version>${spring.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-asm</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.springframework.osgi</groupId>
         <artifactId>spring-osgi-core</artifactId>
         <version>${spring.osgi.version}</version>
@@ -514,6 +561,12 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
         <version>1.8.5</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openengsb.wrapped</groupId>
+        <artifactId>net.sourceforge.htmlunit-all</artifactId>
+        <version>2.8.w1</version>
         <scope>test</scope>
       </dependency>
     </dependencies>

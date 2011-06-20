@@ -20,7 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
@@ -30,7 +32,6 @@ import java.util.Properties;
 
 import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
-import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.swissbox.tinybundles.core.TinyBundles;
@@ -54,7 +55,10 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
 
     @org.ops4j.pax.exam.junit.Configuration
     public final Option[] provisionSimpleLibraries() {
-        return options(CoreOptions.provision(TinyBundles
+        return options(
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+                .versionAsInProject()),
+            provision(TinyBundles
                 .newBundle()
                 .add(PublicClass.class)
                 .add(PublicThatAccessPrivateClass.class)

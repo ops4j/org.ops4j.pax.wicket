@@ -17,11 +17,16 @@ package org.ops4j.pax.wicket.it.lifecycle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.osgi.framework.Bundle.ACTIVE;
 import static org.osgi.framework.Bundle.RESOLVED;
 
 import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -36,6 +41,12 @@ import org.osgi.framework.BundleException;
 public final class LifecycleTest extends PaxWicketIntegrationTest {
     @Inject
     private BundleContext bundleContext;
+
+    @Configuration
+    public final Option[] configureAdditionalProvision() {
+        return options(provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+            .versionAsInProject()));
+    }
 
     /**
      * Tests stopping pax-wicket service bundle.
