@@ -27,8 +27,8 @@ import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.border.BoxBorder;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.samples.departmentstore.model.DepartmentStore;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 

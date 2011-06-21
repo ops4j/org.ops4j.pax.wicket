@@ -22,11 +22,11 @@ import java.util.Map;
 
 import net.sf.cglib.proxy.Factory;
 
+import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBean.BeanResolverType;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean.BeanResolverType;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

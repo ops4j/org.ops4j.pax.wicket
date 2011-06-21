@@ -16,7 +16,6 @@
 package org.ops4j.pax.wicket.api;
 
 import org.apache.wicket.Component;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 
 /**
  * General PaxWicket injection abstraction. This interface takes any object and tries to inject all

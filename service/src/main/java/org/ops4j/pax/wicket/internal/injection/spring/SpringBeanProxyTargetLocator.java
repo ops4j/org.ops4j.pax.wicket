@@ -17,8 +17,8 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import java.util.Map;
 
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;

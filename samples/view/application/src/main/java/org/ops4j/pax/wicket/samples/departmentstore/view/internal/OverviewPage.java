@@ -31,8 +31,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
 import org.ops4j.pax.wicket.api.PageFactory;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.TabContentSource;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 
 @AuthorizeInstantiation("user")
 public class OverviewPage extends WebPage {

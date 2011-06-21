@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.ops4j.pax.wicket.util.proxy;
+package org.ops4j.pax.wicket.api;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
