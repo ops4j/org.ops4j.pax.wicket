@@ -21,7 +21,6 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.ops4j.pax.wicket.samples.departmentstore.model.Franchisee;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
 
 /**
  * {@code FranchiseePanel}
@@ -34,14 +33,6 @@ public class FranchiseePanel extends Panel implements Serializable {
 
     private static final String WICKET_ID_NAME_LABEL = "name";
     private static final String WICKET_ID_DESC_LABEL = "description";
-
-    @PaxWicketBean(name = FranchiseeModelFactory.REFERENCE_MODEL)
-    private Franchisee model;
-
-    public FranchiseePanel(String wicketId) {
-        super(wicketId);
-        createPage(model);
-    }
 
     public FranchiseePanel(String wicketId, Franchisee franchisee) {
         super(wicketId);

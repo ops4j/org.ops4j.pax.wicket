@@ -33,10 +33,12 @@ import org.osgi.util.tracker.ServiceTracker;
 public class FloorDepartmentStoreModelTracker extends ServiceTracker {
     private final BundleContext bundleContext;
     private final Map<ServiceReference, List<ContentAggregator>> registrations;
+    private final String applicationName;
 
-    public FloorDepartmentStoreModelTracker(BundleContext bundleContext) {
+    public FloorDepartmentStoreModelTracker(BundleContext bundleContext, String applicationName) {
         super(bundleContext, DepartmentStore.class.getName(), null);
         this.bundleContext = bundleContext;
+        this.applicationName = applicationName;
         registrations = new HashMap<ServiceReference, List<ContentAggregator>>();
     }
 
@@ -60,7 +62,7 @@ public class FloorDepartmentStoreModelTracker extends ServiceTracker {
         for (Floor floor : floors) {
             String floorName = floor.getName();
             FloorAggregatedSource aggregatedSource = new FloorAggregatedSource(floor, floorName, destinationId,
-                bundleContext, "departmentstore");
+                bundleContext, applicationName);
             aggregatedSource.setDestination(destinationId);
             aggregatedSource.setAggregationPointName(floor.getName());
             aggregatedSource.register();

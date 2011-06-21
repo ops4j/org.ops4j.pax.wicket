@@ -59,9 +59,6 @@
     </wicket:context-param>
   </wicket:application>
 
-  <wicket:contentSourceModelMapping id="contentSourceModelMapping" applicationName="applicationName"
-    serviceClass="serviceClass" contentSourceFactoryImpl="contentSourceFactoryImpl" />
-
   <wicket:contentAggregator id="contentAggregator" applicationName="applicationName"
     aggregationPointName="aggregationPointName" />
 

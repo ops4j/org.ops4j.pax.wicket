@@ -34,10 +34,12 @@ public class FranchiseeDepartmentStoreModelTracker extends ServiceTracker {
 
     private final BundleContext bundleContext;
     private final Map<ServiceReference, List<FranchiseeContentSource>> registrations;
+    private final String applicationName;
 
-    public FranchiseeDepartmentStoreModelTracker(BundleContext bundleContext) {
+    public FranchiseeDepartmentStoreModelTracker(BundleContext bundleContext, String applicationName) {
         super(bundleContext, DepartmentStore.class.getName(), null);
         this.bundleContext = bundleContext;
+        this.applicationName = applicationName;
         registrations = new HashMap<ServiceReference, List<FranchiseeContentSource>>();
     }
 
@@ -61,9 +63,8 @@ public class FranchiseeDepartmentStoreModelTracker extends ServiceTracker {
             List<Franchisee> franchisees = floor.getFranchisees();
             for (Franchisee franchisee : franchisees) {
                 String destinationId = floor.getName() + ".franchisee";
-                FranchiseeContentSource source = new FranchiseeContentSource(bundleContext, franchisee,
-                                                                              "departmentstore"
-                    );
+                FranchiseeContentSource source =
+                    new FranchiseeContentSource(bundleContext, franchisee, applicationName);
                 source.setDestination(destinationId);
                 source.register();
                 content.add(source);

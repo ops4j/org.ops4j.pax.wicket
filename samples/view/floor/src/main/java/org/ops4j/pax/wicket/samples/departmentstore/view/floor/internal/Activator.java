@@ -20,14 +20,18 @@ import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
-    private FloorDepartmentStoreModelTracker storeTracker;
+    private FloorDepartmentStoreModelTracker regularStoreTracker;
+    private FloorDepartmentStoreModelTracker springStoreTracker;
 
     public void start(BundleContext context) throws Exception {
-        storeTracker = new FloorDepartmentStoreModelTracker(context);
-        storeTracker.open();
+        regularStoreTracker = new FloorDepartmentStoreModelTracker(context, "departmentstore");
+        regularStoreTracker.open();
+        springStoreTracker = new FloorDepartmentStoreModelTracker(context, "springDeptStore");
+        springStoreTracker.open();
     }
 
     public void stop(BundleContext context) throws Exception {
-        storeTracker.close();
+        regularStoreTracker.close();
+        springStoreTracker.close();
     }
 }

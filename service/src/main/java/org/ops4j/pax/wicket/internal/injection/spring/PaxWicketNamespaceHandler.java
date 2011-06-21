@@ -23,8 +23,6 @@ public class PaxWicketNamespaceHandler extends NamespaceHandlerSupport {
         registerBeanDefinitionParser("application", new ApplicationBeanDefinitionParser());
         registerBeanDefinitionParser("page", new PageFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("contentSource", new ContentSourceFactoryBeanDefinitionParser());
-        registerBeanDefinitionParser("contentSourceModelMapping",
-            new ContentSourceModelMappingFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("contentAggregator", new RootContentAggregatorBeanDefinitionParser());
         registerBeanDefinitionParser("classResolver", new ClassResolverDefinitionParser());
         registerBeanDefinitionParser("injectionProvider", new InjectionResolverDefinitionParser());
