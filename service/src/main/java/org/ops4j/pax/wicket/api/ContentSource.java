@@ -15,6 +15,8 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import java.util.List;
+
 /**
  * This is the model interface of ContentSource. ContentSource is categorized as the model of a Wicket component
  * hierarchy, which can be unloaded, replaced and moved in runtime, without needing to shut the application down.
@@ -113,6 +115,6 @@ public interface ContentSource {
      * 
      * @since 1.0.0
      */
-    String[] getDestinations();
+    List<String> getDestinations();
 
 }
