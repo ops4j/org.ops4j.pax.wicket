@@ -20,6 +20,7 @@ import java.util.Map;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -33,12 +34,10 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
     private Class<?> beanType;
     private Class<?> parent;
     private BundleContext bundleContext;
-    private String applicationName;
     private Map<String, String> overwrites;
 
-    public SpringBeanProxyTargetLocator(String applicationName, BundleContext bundleContext, PaxWicketBean annotation,
-            Class<?> beanType, Class<?> parent, Map<String, String> overwrites) {
-        this.applicationName = applicationName;
+    public SpringBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+            Class<?> parent, Map<String, String> overwrites) {
         this.bundleContext = bundleContext;
         this.annotation = annotation;
         this.beanType = beanType;
@@ -51,7 +50,7 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
             throw new IllegalStateException("Bundle context is not allowed to be null");
         }
         ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
-        String filter = SpringBeanHelper.getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
+        String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
         ServiceReference[] references = null;
         try {
             references = bundleContext.getServiceReferences(ApplicationContext.class.getName(), filter);
@@ -128,6 +127,11 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
         boolean containsBean(ApplicationContext applicationContext);
 
         Object createBean(ApplicationContext applicationContext);
+    }
+
+    private String getApplicationContextFilter(String symbolicBundleName) {
+        return String.format("(&(%s=%s)(%s=%s))", Constants.BUNDLE_SYMBOLICNAME, symbolicBundleName,
+            Constants.OBJECTCLASS, ApplicationContext.class.getName());
     }
 
 }

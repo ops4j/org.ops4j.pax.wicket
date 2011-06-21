@@ -119,8 +119,7 @@ public class BundleAnalysingComponentInstantiationListener {
 
     private IProxyTargetLocator resolveSpringBeanTargetLocator(Field field, Class<?> page,
             PaxWicketBean annotation, Map<String, String> overwrites) {
-        return new SpringBeanProxyTargetLocator(applicationName, bundleContext, annotation, getBeanType(field), page,
-            overwrites);
+        return new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
     }
 
     private IProxyTargetLocator resolveBlueprintBeanTargetLocator(Field field, Class<?> page, PaxWicketBean annotation,

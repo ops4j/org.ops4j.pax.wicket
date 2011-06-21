@@ -18,6 +18,7 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ops4j.pax.wicket.internal.injection.DefaultFilterFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;

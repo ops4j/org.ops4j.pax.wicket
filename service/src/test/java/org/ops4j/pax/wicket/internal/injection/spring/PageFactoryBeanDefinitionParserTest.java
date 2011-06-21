@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.spring.DefaultPageFactory;
+import org.ops4j.pax.wicket.internal.injection.DefaultPageFactory;
 import org.ops4j.pax.wicket.internal.injection.spring.PageFactoryBeanDefinitionParser;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;

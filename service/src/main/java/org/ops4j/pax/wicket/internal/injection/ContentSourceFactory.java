@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection.spring;
+package org.ops4j.pax.wicket.internal.injection;
 
 import java.util.List;
 import java.util.Map;
