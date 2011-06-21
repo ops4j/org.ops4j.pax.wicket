@@ -78,7 +78,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     @Test
     public void testSpringSampleApplication_shouldAllowBaseFunctions() throws Exception {
         WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:8080/deptStore/");
+        HtmlPage page = webclient.getPage("http://localhost:8080/springDeptStore/");
         assertThatAllTabsExist(page.asText());
     }
 
