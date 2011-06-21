@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
-public class PaxWicketNamespaceHandler extends NamespaceHandlerSupport {
+public class SpringNamespaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
         registerBeanDefinitionParser("application", new ApplicationBeanDefinitionParser());
