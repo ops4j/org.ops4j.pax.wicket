@@ -15,61 +15,25 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.ops4j.pax.wicket.internal.injection.ContentSourceFactory;
+import org.ops4j.pax.wicket.internal.injection.ContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
-public class ContentSourceFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class ContentSourceFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return ContentSourceFactory.class;
+        return ContentSourceFactoryDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder builder) {
-        builder.addConstructorArgReference("bundleContext");
-        builder.addConstructorArgValue(retrieveOverwriteElements(element));
-        setConstructorElement("contentSourceId", element, builder);
-        setConstructorElement("applicationName", element, builder);
-        setConstructorElement("contentSourceClass", element, builder);
-        builder.addConstructorArgValue(retrieveDestinationElements(element));
-        builder.setInitMethodName("start");
-        builder.setDestroyMethodName("stop");
-        builder.setLazyInit(false);
-        super.doParse(element, builder);
+    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("contentSourceId", element, bean);
+        addPropertyValueFromElement("applicationName", element, bean);
+        addPropertyValueFromElement("contentSourceClass", element, bean);
+        bean.addPropertyValue("destinations", InjectionParserUtil.retrieveDestinationElements(element));
+        bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
     }
 
-    private Map<String, String> retrieveOverwriteElements(Element element) {
-        Map<String, String> overwrites = new HashMap<String, String>();
-        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "overwrite");
-        for (int i = 0; i < elementsByTagName.getLength(); i++) {
-            Element overwrite = (Element) elementsByTagName.item(i);
-            String originalBeanId = overwrite.getAttribute("originalBeanId");
-            String newBeanId = overwrite.getAttribute("newBeanId");
-            overwrites.put(originalBeanId, newBeanId);
-        }
-        return overwrites;
-    }
-
-    private List<String> retrieveDestinationElements(Element element) {
-        List<String> destinations = new ArrayList<String>();
-        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "destination");
-        for (int i = 0; i < elementsByTagName.getLength(); i++) {
-            destinations.add(elementsByTagName.item(i).getChildNodes().item(0).getNodeValue());
-        }
-        return destinations;
-    }
-
-    private void setConstructorElement(String id, Element element, BeanDefinitionBuilder builder) {
-        String beanAttribute = element.getAttribute(id);
-        builder.addConstructorArgValue(beanAttribute);
-    }
 }

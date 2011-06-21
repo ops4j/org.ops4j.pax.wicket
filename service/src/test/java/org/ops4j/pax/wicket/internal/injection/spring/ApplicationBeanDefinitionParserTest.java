@@ -15,16 +15,13 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.typeCompatibleWith;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.ApplicationBuilder;
+import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -36,7 +33,7 @@ public class ApplicationBeanDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(ApplicationBuilder.class));
+        assertThat(beanClass, typeCompatibleWith(ApplicationDecorator.class));
     }
 
     @Test
@@ -47,14 +44,12 @@ public class ApplicationBeanDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addPropertyValue("homepageClass", "homepageClass");
-        verify(beanDefinitionBuilderMock).addPropertyValue("mountPoint", "mountPoint");
-        verify(beanDefinitionBuilderMock).addPropertyValue("applicationName", "applicationName");
-        verify(beanDefinitionBuilderMock).addPropertyValue("applicationFactory", "applicationFactory");
-        verify(beanDefinitionBuilderMock).addPropertyValue(argThat(is("contextParams")),
-            argThat(hasEntry("name2", "value2")));
-        verify(beanDefinitionBuilderMock).setInitMethodName("register");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("unregister");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("homepageClass");
+        parserTestUtil.verifyPropertyValue("mountPoint");
+        parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyPropertyReference("applicationFactory");
+        parserTestUtil.verifyMapValue("contextParams", "name2", "value2");
     }
 }

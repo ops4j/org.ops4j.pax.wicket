@@ -18,11 +18,10 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.spring.ComponentContentSourceFactoryBeanDefinitionParser;
-import org.ops4j.pax.wicket.util.DefaultContentSourceFactory;
+import org.ops4j.pax.wicket.internal.injection.ComponentContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -35,7 +34,7 @@ public class ComponentContentSourceFactoryBeanDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(DefaultContentSourceFactory.class));
+        assertThat(beanClass, typeCompatibleWith(ComponentContentSourceFactoryDecorator.class));
     }
 
     @Test
@@ -47,11 +46,9 @@ public class ComponentContentSourceFactoryBeanDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("bundleContext");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("applicationName");
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("someBeanReference");
-        verify(beanDefinitionBuilderMock).setInitMethodName("register");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("dispose");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyPropertyValue("componentContentSourceFactory", "someBeanReference");
     }
 }

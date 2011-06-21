@@ -189,7 +189,7 @@ public final class DefaultContentTracker extends ServiceTracker {
         }
 
         ContentSource content = (ContentSource) object;
-        String[] destionationIds = content.getDestinations();
+        List<String> destionationIds = content.getDestinations();
         if (destionationIds != null) {
             for (String destinationId : destionationIds) {
                 int pos = destinationId.lastIndexOf('.');

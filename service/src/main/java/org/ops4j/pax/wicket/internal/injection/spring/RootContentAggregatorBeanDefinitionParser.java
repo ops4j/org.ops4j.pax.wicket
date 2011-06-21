@@ -18,31 +18,21 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.util.RootContentAggregator;
+import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
 
-public class RootContentAggregatorBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class RootContentAggregatorBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return RootContentAggregator.class;
+        return RootContentAggregatorDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder bean) {
-        bean.addConstructorArgReference("bundleContext");
-        setConstructorElement("applicationName", element, bean);
-        setConstructorElement("aggregationPointName", element, bean);
-        bean.setLazyInit(false);
-        bean.setInitMethodName("register");
-        bean.setDestroyMethodName("dispose");
-    }
-
-    private void setConstructorElement(String id, Element element, BeanDefinitionBuilder bean) {
-        String beanElement = element.getAttribute(id);
-        bean.addConstructorArgValue(beanElement);
+    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("applicationName", element, bean);
+        addPropertyValueFromElement("aggregationPointName", element, bean);
     }
 
 }

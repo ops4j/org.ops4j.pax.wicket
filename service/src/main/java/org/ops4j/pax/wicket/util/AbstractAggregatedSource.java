@@ -18,6 +18,9 @@ package org.ops4j.pax.wicket.util;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -152,8 +155,8 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * 
      * @since 1.0.0
      */
-    public final String[] getDestinations() {
-        return getStringArrayProperty(ContentSource.DESTINATIONS);
+    public final List<String> getDestinations() {
+        return Arrays.asList(getStringArrayProperty(ContentSource.DESTINATIONS));
     }
 
     /**

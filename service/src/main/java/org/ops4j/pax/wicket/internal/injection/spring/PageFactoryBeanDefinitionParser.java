@@ -18,50 +18,25 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.ops4j.pax.wicket.internal.injection.DefaultPageFactory;
+import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
+import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
-public class PageFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class PageFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return DefaultPageFactory.class;
+        return PageFactoryDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder bean) {
-        bean.addConstructorArgReference("bundleContext");
-        setConstructor("pageId", element, bean);
-        setConstructor("applicationName", element, bean);
-        setConstructor("pageName", element, bean);
-        setConstructor("pageClass", element, bean);
-        bean.addConstructorArgValue(retrieveOverwriteElements(element));
-        bean.setLazyInit(false);
-        bean.setInitMethodName("register");
-        bean.setDestroyMethodName("dispose");
-    }
-
-    private void setConstructor(String id, Element element, BeanDefinitionBuilder bean) {
-        String beanElement = element.getAttribute(id);
-        bean.addConstructorArgValue(beanElement);
-    }
-
-    private Map<String, String> retrieveOverwriteElements(Element element) {
-        Map<String, String> overwrites = new HashMap<String, String>();
-        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "overwrite");
-        for (int i = 0; i < elementsByTagName.getLength(); i++) {
-            Element overwrite = (Element) elementsByTagName.item(i);
-            String originalBeanId = overwrite.getAttribute("originalBeanId");
-            String newBeanId = overwrite.getAttribute("newBeanId");
-            overwrites.put(originalBeanId, newBeanId);
-        }
-        return overwrites;
+    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("pageId", element, bean);
+        addPropertyValueFromElement("applicationName", element, bean);
+        addPropertyValueFromElement("pageName", element, bean);
+        addPropertyValueFromElement("pageClass", element, bean);
+        bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
     }
 
 }

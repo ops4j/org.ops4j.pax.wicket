@@ -18,11 +18,10 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.spring.ClassResolverDefinitionParser;
-import org.ops4j.pax.wicket.util.BundleClassResolverHelper;
+import org.ops4j.pax.wicket.internal.injection.BundleClassResolverHelperDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -34,7 +33,7 @@ public class ClassResolverDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(BundleClassResolverHelper.class));
+        assertThat(beanClass, typeCompatibleWith(BundleClassResolverHelperDecorator.class));
     }
 
     @Test
@@ -45,10 +44,8 @@ public class ClassResolverDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("bundleContext");
-        verify(beanDefinitionBuilderMock).addPropertyValue("applicationName", "applicationName");
-        verify(beanDefinitionBuilderMock).setInitMethodName("register");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("dispose");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("applicationName");
     }
 }

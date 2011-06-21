@@ -16,16 +16,12 @@
 package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.ContentSourceFactory;
-import org.ops4j.pax.wicket.internal.injection.spring.ContentSourceFactoryBeanDefinitionParser;
+import org.ops4j.pax.wicket.internal.injection.ContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -37,7 +33,7 @@ public class ContentSourceFactoryBeanDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(ContentSourceFactory.class));
+        assertThat(beanClass, typeCompatibleWith(ContentSourceFactoryDecorator.class));
     }
 
     @Test
@@ -48,16 +44,12 @@ public class ContentSourceFactoryBeanDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("bundleContext");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue(argThat(hasEntry("old1", "new1")));
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("someId");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("applicationName");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("this.is.some.class.Yes");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue(
-            argThat(hasItems("infrastructure.mainmenu", "infrastructure.mainmenu2")));
-        verify(beanDefinitionBuilderMock).setInitMethodName("start");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("stop");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyMapValue("overwrites", "old2", "new2");
+        parserTestUtil.verifyPropertyValue("contentSourceId", "someId");
+        parserTestUtil.verifyPropertyValue("contentSourceClass", "this.is.some.class.Yes");
+        parserTestUtil.verifyListValue("destinations", "infrastructure.mainmenu", "infrastructure.mainmenu2");
     }
-
 }

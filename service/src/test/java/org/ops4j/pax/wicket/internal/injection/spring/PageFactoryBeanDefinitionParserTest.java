@@ -16,15 +16,12 @@
 package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.DefaultPageFactory;
-import org.ops4j.pax.wicket.internal.injection.spring.PageFactoryBeanDefinitionParser;
+import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -35,7 +32,7 @@ public class PageFactoryBeanDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(DefaultPageFactory.class));
+        assertThat(beanClass, typeCompatibleWith(PageFactoryDecorator.class));
     }
 
     @Test
@@ -46,14 +43,12 @@ public class PageFactoryBeanDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("bundleContext");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("pageId");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("applicationName");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("pageName");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("pageClass");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue(argThat(hasEntry("old1", "new1")));
-        verify(beanDefinitionBuilderMock).setInitMethodName("register");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("dispose");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("pageId");
+        parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyPropertyValue("pageName");
+        parserTestUtil.verifyPropertyValue("pageClass");
+        parserTestUtil.verifyMapValue("overwrites", "old2", "new2");
     }
 }

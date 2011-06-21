@@ -18,8 +18,10 @@ package org.ops4j.pax.wicket.util;
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.authorization.strategies.role.Roles;
@@ -83,8 +85,8 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
      * 
      * @since 1.0.0
      */
-    public final String[] getDestinations() {
-        return getStringArrayProperty(DESTINATIONS);
+    public final List<String> getDestinations() {
+        return Arrays.asList(getStringArrayProperty(DESTINATIONS));
     }
 
     /**
@@ -95,11 +97,22 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
      * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
      * @since 1.0.0
      */
-    public final void setDestination(String... destinationIds)
-        throws IllegalArgumentException {
+    public final void setDestination(String... destinationIds) throws IllegalArgumentException {
         validateNotNull(destinationIds, "destinationIds");
 
         properties.put(DESTINATIONS, destinationIds);
+    }
+
+    /**
+     * Sets the destination id.
+     * 
+     * @param destinationIds The destination ids. This argument must not be {@code null}.
+     * 
+     * @throws IllegalArgumentException Thrown if the {@code destinationId} argument is not {@code null}.
+     * @since 1.0.0
+     */
+    public final void setDestination(List<String> destinationIds) throws IllegalArgumentException {
+        setDestination(destinationIds.toArray(new String[]{}));
     }
 
     // public final E createSourceComponent(String wicketId)

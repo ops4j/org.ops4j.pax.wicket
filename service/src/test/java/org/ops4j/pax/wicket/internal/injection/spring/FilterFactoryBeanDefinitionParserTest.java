@@ -16,14 +16,12 @@
 package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.DefaultFilterFactory;
+import org.ops4j.pax.wicket.internal.injection.FilterFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
@@ -35,7 +33,7 @@ public class FilterFactoryBeanDefinitionParserTest {
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(DefaultFilterFactory.class));
+        assertThat(beanClass, typeCompatibleWith(FilterFactoryDecorator.class));
     }
 
     @Test
@@ -46,13 +44,11 @@ public class FilterFactoryBeanDefinitionParserTest {
 
         parserToTest.doParse(springElement, beanDefinitionBuilderMock);
 
-        verify(beanDefinitionBuilderMock).addConstructorArgReference("bundleContext");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("filterClass");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("priority");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue("applicationName");
-        verify(beanDefinitionBuilderMock).addConstructorArgValue(argThat(hasEntry("name2", "value2")));
-        verify(beanDefinitionBuilderMock).setInitMethodName("start");
-        verify(beanDefinitionBuilderMock).setDestroyMethodName("stop");
-        verify(beanDefinitionBuilderMock).setLazyInit(false);
+        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
+        parserTestUtil.verifyDefaultParserBeanBehaviour();
+        parserTestUtil.verifyPropertyValue("filterClass");
+        parserTestUtil.verifyPropertyValue("priority");
+        parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyMapValue("initParams", "name2", "value2");
     }
 }

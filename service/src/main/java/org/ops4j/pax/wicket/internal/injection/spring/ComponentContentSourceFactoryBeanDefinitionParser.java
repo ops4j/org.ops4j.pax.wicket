@@ -15,37 +15,21 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.util.DefaultContentSourceFactory;
+import org.ops4j.pax.wicket.internal.injection.ComponentContentSourceFactoryDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
 
-public class ComponentContentSourceFactoryBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class ComponentContentSourceFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return DefaultContentSourceFactory.class;
+        return ComponentContentSourceFactoryDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder builder) {
-        builder.addConstructorArgReference("bundleContext");
-        setConstructorElement("applicationName", element, builder);
-        setConstructorReference("componentContentSourceFactory", element, builder);
-        builder.setInitMethodName("register");
-        builder.setDestroyMethodName("dispose");
-        builder.setLazyInit(false);
-        super.doParse(element, builder);
-    }
-
-    private void setConstructorElement(String id, Element element, BeanDefinitionBuilder builder) {
-        String beanAttribute = element.getAttribute(id);
-        builder.addConstructorArgValue(beanAttribute);
-    }
-
-    private void setConstructorReference(String id, Element element, BeanDefinitionBuilder builder) {
-        String beanAttribute = element.getAttribute(id);
-        builder.addConstructorArgReference(beanAttribute);
+    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("applicationName", element, bean);
+        addPropertyValueFromElement("componentContentSourceFactory", element, bean);
     }
 
 }

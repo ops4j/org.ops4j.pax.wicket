@@ -18,53 +18,25 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.ops4j.pax.wicket.internal.injection.ApplicationBuilder;
+import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
+import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
-public class ApplicationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class ApplicationBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return ApplicationBuilder.class;
+        return ApplicationDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder bean) {
-        setElement("homepageClass", element, bean);
-        setElement("mountPoint", element, bean);
-        setElement("applicationName", element, bean);
-        setElement("applicationFactory", element, bean);
-        bean.addPropertyValue("contextParams", retrieveContextParam(element));
-        bean.setLazyInit(false);
-        bean.setInitMethodName("register");
-        bean.setDestroyMethodName("unregister");
-    }
-
-    private void setElement(String id, Element element, BeanDefinitionBuilder bean) {
-        String beanElement = element.getAttribute(id);
-        bean.addPropertyValue(id, beanElement);
-    }
-
-    private Map<String, String> retrieveContextParam(Element element) {
-        Map<String, String> contextParams = new HashMap<String, String>();
-        NodeList elementsByTagName = element.getElementsByTagNameNS("*", "context-param");
-        for (int i = 0; i < elementsByTagName.getLength(); i++) {
-            Element subElement = (Element) elementsByTagName.item(i);
-            contextParams.put(retrieveNodeValude(subElement, "param-name"),
-                retrieveNodeValude(subElement, "param-value"));
-        }
-        return contextParams;
-    }
-
-    private String retrieveNodeValude(Element element, String name) {
-        NodeList elementsByTagName = element.getElementsByTagNameNS("*", name);
-        return elementsByTagName.item(0).getChildNodes().item(0).getNodeValue();
+    public void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("homepageClass", element, bean);
+        addPropertyValueFromElement("mountPoint", element, bean);
+        addPropertyValueFromElement("applicationName", element, bean);
+        addPropertyReferenceFromElement("applicationFactory", element, bean);
+        bean.addPropertyValue("contextParams", InjectionParserUtil.retrieveContextParam(element));
     }
 
 }

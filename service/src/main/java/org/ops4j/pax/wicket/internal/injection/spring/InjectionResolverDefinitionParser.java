@@ -15,26 +15,20 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.util.BundleInjectionProviderHelper;
+import org.ops4j.pax.wicket.internal.injection.BundleInjectionProviderHelperDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
 
-public class InjectionResolverDefinitionParser extends AbstractSingleBeanDefinitionParser {
+public class InjectionResolverDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return BundleInjectionProviderHelper.class;
+        return BundleInjectionProviderHelperDecorator.class;
     }
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder bean) {
-        bean.addConstructorArgReference("bundleContext");
-        String attribute = element.getAttribute("applicationName");
-        bean.addConstructorArgValue(attribute);
-        bean.setLazyInit(false);
-        bean.setInitMethodName("register");
-        bean.setDestroyMethodName("dispose");
+    protected void prepareInjection(Element element, BeanDefinitionBuilder builder) {
+        addPropertyValueFromElement("applicationName", element, builder);
     }
 
 }

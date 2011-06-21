@@ -19,12 +19,12 @@ import org.apache.wicket.Component;
 import org.ops4j.pax.wicket.api.ComponentContentSource;
 import org.osgi.framework.BundleContext;
 
-public class DefaultContentSourceFactory extends AbstractContentSource implements
+public class DefaultComponentContentSourceFactory extends AbstractContentSource implements
         ComponentContentSource<Component> {
 
     private final ComponentContentSource<? extends Component> componentContentSourceFactory;
 
-    public DefaultContentSourceFactory(BundleContext bundleContext, String applicationName,
+    public DefaultComponentContentSourceFactory(BundleContext bundleContext, String applicationName,
             ComponentContentSource<? extends Component> componentContentSourceFactory)
         throws IllegalArgumentException {
         super(bundleContext, componentContentSourceFactory.getSourceId(), applicationName);
