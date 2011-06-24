@@ -17,13 +17,9 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
 import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.w3c.dom.Element;
 
 public class RootContentAggregatorBeanDefinitionParserTest {
 
@@ -38,14 +34,9 @@ public class RootContentAggregatorBeanDefinitionParserTest {
 
     @Test
     public void testParse() throws Exception {
-        Element springElement = SpringTestUtil.loadFirstElementThatMatches("wicket:contentAggregator");
-        BeanDefinitionBuilder beanDefinitionBuilderMock = mock(BeanDefinitionBuilder.class);
-        RootContentAggregatorBeanDefinitionParser parserToTest = new RootContentAggregatorBeanDefinitionParser();
+        SpringParserTestUtil parserTestUtil =
+            new SpringParserTestUtil("wicket:contentAggregator", new RootContentAggregatorBeanDefinitionParser());
 
-        parserToTest.doParse(springElement, beanDefinitionBuilderMock);
-
-        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
-        parserTestUtil.verifyDefaultParserBeanBehaviour();
         parserTestUtil.verifyPropertyValue("applicationName");
         parserTestUtil.verifyPropertyValue("aggregationPointName");
     }

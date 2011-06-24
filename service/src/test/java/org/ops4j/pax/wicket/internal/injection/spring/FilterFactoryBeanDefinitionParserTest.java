@@ -17,13 +17,9 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.FilterFactoryDecorator;
-import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.w3c.dom.Element;
 
 public class FilterFactoryBeanDefinitionParserTest {
 
@@ -38,14 +34,9 @@ public class FilterFactoryBeanDefinitionParserTest {
 
     @Test
     public void testParse() throws Exception {
-        Element springElement = SpringTestUtil.loadFirstElementThatMatches("wicket:filter");
-        BeanDefinitionBuilder beanDefinitionBuilderMock = mock(BeanDefinitionBuilder.class);
-        FilterFactoryBeanDefinitionParser parserToTest = new FilterFactoryBeanDefinitionParser();
+        SpringParserTestUtil parserTestUtil =
+            new SpringParserTestUtil("wicket:filter", new FilterFactoryBeanDefinitionParser());
 
-        parserToTest.doParse(springElement, beanDefinitionBuilderMock);
-
-        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
-        parserTestUtil.verifyDefaultParserBeanBehaviour();
         parserTestUtil.verifyPropertyValue("filterClass");
         parserTestUtil.verifyPropertyValue("priority");
         parserTestUtil.verifyPropertyValue("applicationName");

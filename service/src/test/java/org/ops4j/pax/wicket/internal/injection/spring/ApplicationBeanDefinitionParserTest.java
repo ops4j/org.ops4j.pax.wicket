@@ -17,13 +17,9 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
-import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.w3c.dom.Element;
 
 public class ApplicationBeanDefinitionParserTest {
 
@@ -38,14 +34,9 @@ public class ApplicationBeanDefinitionParserTest {
 
     @Test
     public void testParse() throws Exception {
-        Element springElement = SpringTestUtil.loadFirstElementThatMatches("wicket:application");
-        BeanDefinitionBuilder beanDefinitionBuilderMock = mock(BeanDefinitionBuilder.class);
-        ApplicationBeanDefinitionParser parserToTest = new ApplicationBeanDefinitionParser();
+        SpringParserTestUtil parserTestUtil =
+            new SpringParserTestUtil("wicket:application", new ApplicationBeanDefinitionParser());
 
-        parserToTest.doParse(springElement, beanDefinitionBuilderMock);
-
-        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
-        parserTestUtil.verifyDefaultParserBeanBehaviour();
         parserTestUtil.verifyPropertyValue("homepageClass");
         parserTestUtil.verifyPropertyValue("mountPoint");
         parserTestUtil.verifyPropertyValue("applicationName");

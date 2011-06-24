@@ -17,13 +17,9 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.BundleClassResolverHelperDecorator;
-import org.ops4j.pax.wicket.internal.injection.ParserTestUtil;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.w3c.dom.Element;
 
 public class ClassResolverDefinitionParserTest {
 
@@ -38,14 +34,9 @@ public class ClassResolverDefinitionParserTest {
 
     @Test
     public void testParse() throws Exception {
-        Element springElement = SpringTestUtil.loadFirstElementThatMatches("wicket:classResolver");
-        BeanDefinitionBuilder beanDefinitionBuilderMock = mock(BeanDefinitionBuilder.class);
-        ClassResolverDefinitionParser parserToTest = new ClassResolverDefinitionParser();
+        SpringParserTestUtil parserTestUtil =
+            new SpringParserTestUtil("wicket:classResolver", new ClassResolverDefinitionParser());
 
-        parserToTest.doParse(springElement, beanDefinitionBuilderMock);
-
-        ParserTestUtil parserTestUtil = new ParserTestUtil(beanDefinitionBuilderMock);
-        parserTestUtil.verifyDefaultParserBeanBehaviour();
         parserTestUtil.verifyPropertyValue("applicationName");
     }
 }
