@@ -73,6 +73,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:8080/deptStore/");
         assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Activator"));
     }
 
     @Test
@@ -80,6 +81,9 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:8080/springDeptStore/");
         assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Spring"));
+    }
+
     }
 
     private void assertThatAllTabsExist(String pageContent) {
