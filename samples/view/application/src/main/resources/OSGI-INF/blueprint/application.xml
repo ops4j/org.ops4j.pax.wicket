@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:wicket="http://www.ops4j.org/schema/wicket">
+
+  <wicket:application id="blueprintDeptStore" homepageClass="org.ops4j.pax.wicket.samples.departmentstore.view.internal.OverviewPage"
+    mountPoint="blueprintDeptStore" applicationName="blueprintDeptStore" applicationFactory="blueprintDeptStoreApplicationFactory">
+    <wicket:context-param>
+      <wicket:param-name>configuration</wicket:param-name>
+      <wicket:param-value>deployment</wicket:param-value>
+    </wicket:context-param>
+  </wicket:application>
+
+  <bean id="blueprintDeptStoreApplicationFactory" class="org.ops4j.pax.wicket.samples.departmentstore.view.internal.DeptStoreApplicationFactory" />
+
+  <wicket:page id="overviewPage" pageId="overview" applicationName="blueprintDeptStore" pageName="overview"
+    pageClass="org.ops4j.pax.wicket.samples.departmentstore.view.internal.OverviewPage" />
+
+  <wicket:contentAggregator id="rootContentAggregator" applicationName="blueprintDeptStore"
+    aggregationPointName="swp" />
+
+  <bean id="storeDescription" class="org.ops4j.pax.wicket.samples.departmentstore.view.internal.StoreDescription">
+    <property name="storeName" value="Sungei Wang Plaza (Blueprint-Powered)" />
+  </bean>
+
+  <reference-list id="about" interface="org.ops4j.pax.wicket.api.PageFactory"
+    filter="(&amp;(pax.wicket.applicationname=blueprintDeptStore)(pax.wicket.pagename=about))" availability="optional" />
+
+</blueprint>

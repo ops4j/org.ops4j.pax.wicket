@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+  <service interface="org.apache.aries.blueprint.NamespaceHandler">
+    <service-properties>
+      <entry key="osgi.service.blueprint.namespace" value="http://www.ops4j.org/schema/wicket" />
+    </service-properties>
+    <bean class="org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintNamespaceHandler " />
+  </service>
+
+</blueprint>

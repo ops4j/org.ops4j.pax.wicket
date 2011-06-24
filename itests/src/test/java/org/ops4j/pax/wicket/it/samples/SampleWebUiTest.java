@@ -84,6 +84,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("Spring"));
     }
 
+    @Test
+    public void testBlueprintSampleApplication_shouldAllowBaseFunctions() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:8080/blueprintDeptStore/");
+        assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Blueprint"));
     }
 
     private void assertThatAllTabsExist(String pageContent) {
