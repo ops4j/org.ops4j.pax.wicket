@@ -35,7 +35,7 @@ import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
-import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.springframework.context.ApplicationContext;
 
 /**
