@@ -17,16 +17,25 @@ package org.ops4j.pax.wicket.internal;
 
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.cglib.proxy.Factory;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.api.PaxWicketBean.BeanResolverType;
-import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.Session;
+import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.protocol.http.WebSession;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
+import org.ops4j.pax.wicket.util.proxy.PaxWicketBean;
+import org.ops4j.pax.wicket.util.proxy.PaxWicketBean.BeanResolverType;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,11 +85,7 @@ public class BundleAnalysingComponentInstantiationListener {
             }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
 
-            Field[] fields = realClass.getDeclaredFields();
-            for (Field field : fields) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
-                    continue;
-                }
+            for (Field field : getFields(realClass)) {
                 Object proxy = createProxy(field, realClass, overwrites);
                 setField(component, field, proxy);
             }
@@ -130,5 +135,30 @@ public class BundleAnalysingComponentInstantiationListener {
     private Class<?> getBeanType(Field field) {
         Class<?> beanType = field.getType();
         return beanType;
+    }
+    
+    private List<Field> getFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<Field>();
+
+        while (clazz != null && !isBoundaryClass(clazz)) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                    continue;
+                }
+                fields.add(field);
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return fields;
+    }
+    
+    private boolean isBoundaryClass(Class<?> clazz) {
+        if (clazz.equals(WebPage.class) || clazz.equals(Page.class) || clazz.equals(Panel.class)
+                || clazz.equals(MarkupContainer.class) || clazz.equals(Component.class)
+                || clazz.equals(AuthenticatedWebSession.class) || clazz.equals(WebSession.class)
+                || clazz.equals(Session.class) || clazz.equals(Object.class)) {
+            return true;
+        }
+        return false;
     }
 }

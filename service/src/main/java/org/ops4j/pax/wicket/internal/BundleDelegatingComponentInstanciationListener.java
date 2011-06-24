@@ -112,9 +112,11 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
             synchronized (this) {
                 ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
-                for (ServiceReference ref : serviceReferences) {
-                    revisedSet.add(new BundleAnalysingComponentInstantiationListener(
-                        ref.getBundle().getBundleContext(), applicationName));
+                if (serviceReferences != null) {
+                    for (ServiceReference ref : serviceReferences) {
+                        revisedSet.add(new BundleAnalysingComponentInstantiationListener(
+                            ref.getBundle().getBundleContext(), applicationName));
+                    }
                 }
                 listeners = revisedSet;
             }
