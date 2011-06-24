@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection.spring;
+package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.internal.NotImplementedException;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.osgi.service.blueprint.container.BlueprintContainer;
+import org.osgi.service.blueprint.container.NoSuchComponentException;
 import org.springframework.context.ApplicationContext;
 
-public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
+public class BlueprintBeanProxyTargetLocator implements IProxyTargetLocator {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +38,7 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
     private BundleContext bundleContext;
     private Map<String, String> overwrites;
 
-    public SpringBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+    public BlueprintBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         this.bundleContext = bundleContext;
         this.annotation = annotation;
@@ -65,7 +67,7 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
         try {
             Thread.currentThread().setContextClassLoader(parent.getClassLoader());
             for (ServiceReference serviceReference : references) {
-                ApplicationContext service = (ApplicationContext) bundleContext.getService(serviceReference);
+                BlueprintContainer service = (BlueprintContainer) bundleContext.getService(serviceReference);
                 try {
                     if (!strategy.containsBean(service)) {
                         continue;
@@ -86,52 +88,49 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
 
     private BeanReactor createStrategy() {
         if (annotation.name().equals("")) {
+            throw new NotImplementedException("For blueprint the name of the bean to retrieve have to be defined.");
+        }
+        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
             return new BeanReactor() {
-                public boolean containsBean(ApplicationContext applicationContext) {
+                public boolean containsBean(BlueprintContainer applicationContext) {
                     try {
-                        applicationContext.getBean(beanType);
-                    } catch (NoSuchBeanDefinitionException e) {
+                        applicationContext.getComponentInstance(annotation.name());
+                    } catch (NoSuchComponentException e) {
                         return false;
                     }
                     return true;
                 }
 
-                public Object createBean(ApplicationContext applicationContext) {
-                    return applicationContext.getBean(beanType);
-                }
-            };
-        }
-        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
-            return new BeanReactor() {
-                public boolean containsBean(ApplicationContext applicationContext) {
-                    return applicationContext.containsBean(annotation.name());
-                }
-
-                public Object createBean(ApplicationContext applicationContext) {
-                    return applicationContext.getBean(annotation.name(), beanType);
+                public Object createBean(BlueprintContainer applicationContext) {
+                    return applicationContext.getComponentInstance(annotation.name());
                 }
             };
         }
         return new BeanReactor() {
-            public boolean containsBean(ApplicationContext applicationContext) {
-                return applicationContext.containsBean(overwrites.get(annotation.name()));
+            public boolean containsBean(BlueprintContainer applicationContext) {
+                try {
+                    applicationContext.getComponentInstance(overwrites.get(annotation.name()));
+                } catch (NoSuchComponentException e) {
+                    return false;
+                }
+                return true;
             }
 
-            public Object createBean(ApplicationContext applicationContext) {
-                return applicationContext.getBean(overwrites.get(annotation.name()), beanType);
+            public Object createBean(BlueprintContainer applicationContext) {
+                return applicationContext.getComponentInstance(overwrites.get(annotation.name()));
             }
         };
     }
 
     private static interface BeanReactor {
-        boolean containsBean(ApplicationContext applicationContext);
+        boolean containsBean(BlueprintContainer applicationContext);
 
-        Object createBean(ApplicationContext applicationContext);
+        Object createBean(BlueprintContainer applicationContext);
     }
 
     private String getApplicationContextFilter(String symbolicBundleName) {
-        return String.format("(&(%s=%s)(%s=%s))", Constants.BUNDLE_SYMBOLICNAME, symbolicBundleName,
-            Constants.OBJECTCLASS, ApplicationContext.class.getName());
+        return String.format("(&(%s=%s)(%s=%s))", "osgi.blueprint.container.symbolicname", symbolicBundleName,
+            Constants.OBJECTCLASS, BlueprintContainer.class.getName());
     }
 
 }

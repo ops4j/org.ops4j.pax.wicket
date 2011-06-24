@@ -24,6 +24,7 @@ import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketBean.BeanResolverType;
+import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
@@ -124,7 +125,7 @@ public class BundleAnalysingComponentInstantiationListener {
 
     private IProxyTargetLocator resolveBlueprintBeanTargetLocator(Field field, Class<?> page, PaxWicketBean annotation,
             Map<String, String> overwrites) {
-        throw new NotImplementedException();
+        return new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
     }
 
     private Class<?> getBeanType(Field field) {
