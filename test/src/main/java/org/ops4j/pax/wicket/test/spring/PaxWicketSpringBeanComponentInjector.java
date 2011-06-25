@@ -16,26 +16,17 @@
 package org.ops4j.pax.wicket.test.spring;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
 import org.apache.wicket.application.IComponentInstantiationListener;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebSession;
 import org.ops4j.pax.wicket.api.InjectorHolder;
-import org.ops4j.pax.wicket.api.PaxWicketInjector;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.internal.AbstractPaxWicketInjector;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -76,7 +67,7 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
         beanInjector.inject(component);
     }
     
-    private class PaxWicketTestBeanInjector implements PaxWicketInjector {
+    private class PaxWicketTestBeanInjector extends AbstractPaxWicketInjector {
 
         public void inject(Object toInject) {
             for (Field field : getFields(toInject.getClass())) {
@@ -84,43 +75,11 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
                 Object proxy =
                     LazyInitProxyFactory.createProxy(field.getType(), new SpringTestProxyTargetLocator(annotation.name(),
                         field.getType()));
-                if (!field.isAccessible()) {
-                    field.setAccessible(true);
-                }
-                try {
-                    field.set(toInject, proxy);
-                } catch (Exception e) {
-                    throw new IllegalStateException("Should not happen");
-                }
+                setField(toInject, field, proxy);
             }
         }
     }
     
-    private List<Field> getFields(Class<?> clazz) {
-        List<Field> fields = new ArrayList<Field>();
-
-        while (clazz != null && !isBoundaryClass(clazz)) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
-                    continue;
-                }
-                fields.add(field);
-            }
-            clazz = clazz.getSuperclass();
-        }
-        return fields;
-    }
-    
-    private boolean isBoundaryClass(Class<?> clazz) {
-        if (clazz.equals(WebPage.class) || clazz.equals(Page.class) || clazz.equals(Panel.class)
-                || clazz.equals(MarkupContainer.class) || clazz.equals(Component.class)
-                || clazz.equals(AuthenticatedWebSession.class) || clazz.equals(WebSession.class)
-                || clazz.equals(Session.class) || clazz.equals(Object.class)) {
-            return true;
-        }
-        return false;
-    }
-
     private static class SpringTestProxyTargetLocator implements IProxyTargetLocator {
 
         private static final long serialVersionUID = -4804663390878149597L;
