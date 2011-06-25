@@ -57,8 +57,8 @@ public final class BundleInjectionProviderHelper {
         throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
-        setApplicationName(applicationName);
         serviceProperties = new Properties();
+        setApplicationName(applicationName);
     }
 
     /**
