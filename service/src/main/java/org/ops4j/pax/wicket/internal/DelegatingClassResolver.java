@@ -75,7 +75,7 @@ public final class DelegatingClassResolver implements IClassResolver {
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {
-        LOGGER.trace("Try to resolve %s from %s resolvers", classname, resolvers.size());
+        LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
         for (IClassResolver resolver : resolvers) {
             try {
                 Class<?> candidate = resolver.resolveClass(classname);
@@ -83,9 +83,9 @@ public final class DelegatingClassResolver implements IClassResolver {
                     return candidate;
                 }
             } catch (ClassNotFoundException e) {
-                LOGGER.info("ClassResolver %s could not find class: %s", resolver, classname);
+                LOGGER.info("ClassResolver {} could not find class: {}", resolver, classname);
             } catch (RuntimeException e) {
-                LOGGER.warn(String.format("ClassResolver %s threw an unexpected exception.", resolver), e);
+                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
             }
         }
         throw new ClassNotFoundException(String.format("Class [%s] can't be resolved.", classname));
@@ -99,7 +99,7 @@ public final class DelegatingClassResolver implements IClassResolver {
                     return iterator;
                 }
             } catch (RuntimeException e) {
-                LOGGER.warn("ClassResolver " + resolver + " threw an unexpected exception.", e);
+                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
                 return Collections.<URL> emptyList().iterator();
             }
         }

@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BundleAnalysingComponentInstantiationListener {
+public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWicketInjector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleAnalysingComponentInstantiationListener.class);
 
@@ -76,31 +76,12 @@ public class BundleAnalysingComponentInstantiationListener {
             }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
 
-            Field[] fields = realClass.getDeclaredFields();
-            for (Field field : fields) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
-                    continue;
-                }
+            for (Field field : getFields(realClass)) {
                 Object proxy = createProxy(field, realClass, overwrites);
                 setField(component, field, proxy);
             }
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
-        }
-    }
-
-    private void setField(Object component, Field field, Object proxy) {
-        try {
-            checkAccessabilityOfField(field);
-            field.set(component, proxy);
-        } catch (Exception e) {
-            throw new RuntimeException("Bumm", e);
-        }
-    }
-
-    private void checkAccessabilityOfField(Field field) {
-        if (!field.isAccessible()) {
-            field.setAccessible(true);
         }
     }
 
@@ -127,8 +108,4 @@ public class BundleAnalysingComponentInstantiationListener {
         throw new NotImplementedException();
     }
 
-    private Class<?> getBeanType(Field field) {
-        Class<?> beanType = field.getType();
-        return beanType;
-    }
 }
