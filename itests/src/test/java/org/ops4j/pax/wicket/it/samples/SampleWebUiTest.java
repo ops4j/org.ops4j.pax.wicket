@@ -51,6 +51,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
                 .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.proxy").artifactId("org.apache.aries.proxy")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
+                .versionAsInProject()),
             provision(mavenBundle()
                 .groupId("org.ops4j.pax.wicket.samples.model")
                 .artifactId("pax-wicket-samples-model-core").versionAsInProject()),

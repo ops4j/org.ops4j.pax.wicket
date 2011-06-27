@@ -23,4 +23,6 @@ public interface OverwriteProxy extends MethodInterceptor {
 
     Map<String, String> getOverwrites();
 
+    String getInjectionSource();
+
 }

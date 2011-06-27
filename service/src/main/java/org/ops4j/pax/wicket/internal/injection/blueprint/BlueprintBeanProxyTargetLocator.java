@@ -18,119 +18,68 @@ package org.ops4j.pax.wicket.internal.injection.blueprint;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.internal.NotImplementedException;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.internal.injection.AbstractProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.NoSuchComponentException;
-import org.springframework.context.ApplicationContext;
 
-public class BlueprintBeanProxyTargetLocator implements IProxyTargetLocator {
+public class BlueprintBeanProxyTargetLocator extends AbstractProxyTargetLocator<BlueprintContainer> {
 
-    private static final long serialVersionUID = 1L;
-
-    private PaxWicketBean annotation;
-    private Class<?> beanType;
-    private Class<?> parent;
-    private BundleContext bundleContext;
-    private Map<String, String> overwrites;
+    private static final long serialVersionUID = 7855320656221559137L;
 
     public BlueprintBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
-        this.bundleContext = bundleContext;
-        this.annotation = annotation;
-        this.beanType = beanType;
-        this.parent = parent;
-        this.overwrites = overwrites;
+        super(bundleContext, annotation, beanType, parent, overwrites);
     }
 
-    public Object locateProxyTarget() {
-        if (bundleContext == null) {
-            throw new IllegalStateException("Bundle context is not allowed to be null");
-        }
-        ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
-        String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
-        ServiceReference[] references = null;
-        try {
-            references = bundleContext.getServiceReferences(ApplicationContext.class.getName(), filter);
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException("not possible", e);
-        }
-        if (references == null || references.length == 0) {
-            throw new IllegalStateException(String.format("Found %s service references for %s; this is not OK...",
-                references.length, bundleContext.getBundle().getSymbolicName()));
-        }
-        BeanReactor strategy = createStrategy();
-        try {
-            Thread.currentThread().setContextClassLoader(parent.getClassLoader());
-            for (ServiceReference serviceReference : references) {
-                BlueprintContainer service = (BlueprintContainer) bundleContext.getService(serviceReference);
-                try {
-                    if (!strategy.containsBean(service)) {
-                        continue;
-                    }
-                    return strategy.createBean(service);
-                } finally {
-                    bundleContext.ungetService(serviceReference);
-                }
-            }
-        } finally {
-            Thread.currentThread().setContextClassLoader(oldClassloader);
-        }
-        throw new IllegalStateException(String.format(
-            "Bundle %s can no longer attach bean %s with ID %s, class %s and type %s to page %s", bundleContext
-                .getBundle().getSymbolicName(), beanType.getName(), annotation.name(), beanType.getName(),
-            annotation.beanResolverType(), parent.getName()));
-    }
-
-    private BeanReactor createStrategy() {
+    @Override
+    protected BeanReactor<BlueprintContainer> createStrategy() {
         if (annotation.name().equals("")) {
-            throw new NotImplementedException("For blueprint the name of the bean to retrieve have to be defined.");
+            throw new IllegalStateException("Blueprint requires annotation name");
         }
         if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
-            return new BeanReactor() {
-                public boolean containsBean(BlueprintContainer applicationContext) {
-                    try {
-                        applicationContext.getComponentInstance(annotation.name());
-                    } catch (NoSuchComponentException e) {
-                        return false;
-                    }
-                    return true;
-                }
-
-                public Object createBean(BlueprintContainer applicationContext) {
-                    return applicationContext.getComponentInstance(annotation.name());
-                }
-            };
+            return new BlueprintBeanReactor(annotation.name());
         }
-        return new BeanReactor() {
-            public boolean containsBean(BlueprintContainer applicationContext) {
-                try {
-                    applicationContext.getComponentInstance(overwrites.get(annotation.name()));
-                } catch (NoSuchComponentException e) {
-                    return false;
-                }
-                return true;
-            }
-
-            public Object createBean(BlueprintContainer applicationContext) {
-                return applicationContext.getComponentInstance(overwrites.get(annotation.name()));
-            }
-        };
+        return new BlueprintBeanReactor(overwrites.get(annotation.name()));
     }
 
-    private static interface BeanReactor {
-        boolean containsBean(BlueprintContainer applicationContext);
-
-        Object createBean(BlueprintContainer applicationContext);
-    }
-
-    private String getApplicationContextFilter(String symbolicBundleName) {
+    @Override
+    protected String getApplicationContextFilter(String symbolicBundleName) {
         return String.format("(&(%s=%s)(%s=%s))", "osgi.blueprint.container.symbolicname", symbolicBundleName,
             Constants.OBJECTCLASS, BlueprintContainer.class.getName());
     }
 
+    private static class BlueprintBeanReactor implements BeanReactor<BlueprintContainer> {
+
+        private String beanName;
+        private Object bean;
+
+        public BlueprintBeanReactor(String beanName) {
+            this.beanName = beanName;
+        }
+
+        public boolean containsBean(BlueprintContainer blueprintContainer) {
+            try {
+                bean = blueprintContainer.getComponentInstance(beanName);
+            } catch (NoSuchComponentException e) {
+                return false;
+            }
+            return true;
+        }
+
+        public Object createBean(BlueprintContainer blueprintContainer) {
+            if (bean == null) {
+                throw new IllegalStateException("Contains bean method must be called successfully first");
+            }
+            return bean;
+        }
+
+    }
+
+    @Override
+    protected Class<? extends BlueprintContainer> getContainerClass() {
+        return BlueprintContainer.class;
+    }
 }
+

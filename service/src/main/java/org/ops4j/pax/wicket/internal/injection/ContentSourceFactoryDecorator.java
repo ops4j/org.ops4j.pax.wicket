@@ -34,6 +34,7 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
         InjectionAwareDecorator {
 
     private Map<String, String> overwrites;
+    private String injectionSource;
     private String contentSourceId;
     private String applicationName;
     private Class<?> contentSourceClass;
@@ -64,11 +65,14 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
         return baseFullContentSourceFactory.createSourceTab(title);
     }
 
+    public void setInjectionSource(String injectionSource) {
+        this.injectionSource = injectionSource;
+    }
+
     public void start() throws Exception {
         baseFullContentSourceFactory =
-            new FullContentSourceFactory(bundleContext, overwrites, contentSourceId, applicationName,
-                contentSourceClass,
-                destinations);
+            new FullContentSourceFactory(bundleContext, overwrites, injectionSource, contentSourceId, applicationName,
+                contentSourceClass, destinations);
         baseFullContentSourceFactory.register();
     }
 
@@ -106,12 +110,15 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
         private Class<?> contentSourceClass;
         private BundleContext bundleContext;
         private Map<String, String> overwrites;
+        private String injectionSource;
 
-        public FullContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites, String wicketId,
+        public FullContentSourceFactory(BundleContext bundleContext, Map<String, String> overwrites,
+                String injectionSource, String wicketId,
                 String applicationName, Class<?> contentSourceClass, List<String> destinations)
             throws IllegalArgumentException {
             super(bundleContext, wicketId, applicationName);
             this.overwrites = overwrites;
+            this.injectionSource = injectionSource;
             this.contentSourceClass = contentSourceClass;
             this.bundleContext = bundleContext;
             if (destinations != null && destinations.size() != 0) {
@@ -123,13 +130,10 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
             ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
-                if (overwrites != null && overwrites.size() != 0) {
-                    Enhancer e = new Enhancer();
-                    e.setSuperclass(contentSourceClass);
-                    e.setCallback(new ComponentProxy(overwrites));
-                    return (Component) e.create(new Class[]{ String.class }, new Object[]{ wicketId });
-                }
-                return (Component) contentSourceClass.getConstructor(String.class).newInstance(wicketId);
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                return (Component) e.create(new Class[]{ String.class }, new Object[]{ wicketId });
             } catch (Exception e) {
                 throw new RuntimeException("bumm", e);
             } finally {
@@ -144,14 +148,10 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
                 ITab tab = null;
-                if (overwrites != null && overwrites.size() != 0) {
-                    Enhancer e = new Enhancer();
-                    e.setSuperclass(contentSourceClass);
-                    e.setCallback(new ComponentProxy(overwrites));
-                    tab = (ITab) e.create();
-                } else {
-                    tab = (ITab) contentSourceClass.newInstance();
-                }
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                tab = (ITab) e.create();
                 componentInstantiationListener.inject(tab);
                 return tab;
             } catch (Exception e) {
@@ -169,14 +169,10 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
                 ITab tab = null;
-                if (overwrites != null && overwrites.size() != 0) {
-                    Enhancer e = new Enhancer();
-                    e.setSuperclass(contentSourceClass);
-                    e.setCallback(new ComponentProxy(overwrites));
-                    tab = (ITab) e.create(new Class[]{ Model.class }, new Object[]{ new Model<String>(title) });
-                } else {
-                    tab = (ITab) contentSourceClass.getConstructor(Model.class).newInstance(new Model<String>(title));
-                }
+                Enhancer e = new Enhancer();
+                e.setSuperclass(contentSourceClass);
+                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                tab = (ITab) e.create(new Class[]{ Model.class }, new Object[]{ new Model<String>(title) });
                 componentInstantiationListener.inject(tab);
                 return tab;
             } catch (Exception e) {

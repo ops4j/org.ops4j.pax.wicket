@@ -31,33 +31,14 @@ import java.lang.annotation.Target;
 @Target({/* ElementType.METHOD, */ElementType.FIELD })
 @Documented
 public @interface PaxWicketBean {
+
+    public static final String INJECTION_SOURCE_SPRING = "spring";
+    public static final String INJECTION_SOURCE_BLUEPRINT = "blueprint";
+
     /**
      * Optional attribute for specifying the name of the bean. If not specified, the bean will be looked up by the type
      * of the field with the annotation.
      */
     String name() default "";
-
-    /**
-     * Optional attribute for specifying which resolver you prefer. Per default the
-     * {@link BeanResolverType#UNCONFIGURED} is used which means that we try to find the bean in first blueprint and
-     * then spring and use the one we found first.
-     */
-    BeanResolverType beanResolverType() default BeanResolverType.UNCONFIGURED;
-
-    public static enum BeanResolverType {
-            /**
-             * In {@link #UNCONFIGURED} mode we try to find the bean in first blueprint and then spring and use the one
-             * we find first.
-             */
-            UNCONFIGURED,
-            /**
-             * We look only in the spring context for the bean to resolve
-             */
-            SPRING,
-            /**
-             * We look only in the blueprint context for the bean to resolve
-             */
-            BLUEPRINT
-    }
 
 }

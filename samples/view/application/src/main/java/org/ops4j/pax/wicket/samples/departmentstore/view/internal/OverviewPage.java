@@ -37,9 +37,9 @@ import org.ops4j.pax.wicket.api.TabContentSource;
 @AuthorizeInstantiation("user")
 public class OverviewPage extends WebPage {
 
-    @PaxWicketBean
+    @PaxWicketBean(name = "rootContentAggregator")
     private ContentAggregator container;
-    @PaxWicketBean
+    @PaxWicketBean(name = "storeDescription")
     private StoreDescription storeDescription;
     @PaxWicketBean(name = "about")
     private List<PageFactory<Page>> aboutPageClass;

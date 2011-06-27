@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.ContentSourceFactoryDecorator;
 import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -34,6 +35,7 @@ public class ContentSourceFactoryBeanDefinitionParser extends AbstractSpringBean
         addPropertyValueFromElement("contentSourceClass", element, bean);
         bean.addPropertyValue("destinations", InjectionParserUtil.retrieveDestinationElements(element));
         bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
+        bean.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
     }
 
 }

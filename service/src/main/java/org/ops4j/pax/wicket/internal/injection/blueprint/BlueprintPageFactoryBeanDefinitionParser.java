@@ -20,6 +20,7 @@ package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
 import org.w3c.dom.Element;
@@ -40,6 +41,8 @@ public class BlueprintPageFactoryBeanDefinitionParser extends AbstractBlueprintB
         addPropertyValueFromElement("pageClass", element, context, beanMetadata);
         addPropertyReferenceForMap("overwrites", context, beanMetadata,
             InjectionParserUtil.retrieveOverwriteElements(element));
+        beanMetadata.addProperty("injectionSource",
+            createStringValue(context, PaxWicketBean.INJECTION_SOURCE_BLUEPRINT));
     }
 
 }

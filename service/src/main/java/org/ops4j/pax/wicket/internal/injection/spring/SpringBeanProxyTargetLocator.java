@@ -18,75 +18,25 @@ package org.ops4j.pax.wicket.internal.injection.spring;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.internal.injection.AbstractProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
-public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
+public class SpringBeanProxyTargetLocator extends AbstractProxyTargetLocator<ApplicationContext> {
 
-    private static final long serialVersionUID = 1L;
-
-    private PaxWicketBean annotation;
-    private Class<?> beanType;
-    private Class<?> parent;
-    private BundleContext bundleContext;
-    private Map<String, String> overwrites;
+    private static final long serialVersionUID = 3688782411985692696L;
 
     public SpringBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
-        this.bundleContext = bundleContext;
-        this.annotation = annotation;
-        this.beanType = beanType;
-        this.parent = parent;
-        this.overwrites = overwrites;
+        super(bundleContext, annotation, beanType, parent, overwrites);
     }
 
-    public Object locateProxyTarget() {
-        if (bundleContext == null) {
-            throw new IllegalStateException("Bundle context is not allowed to be null");
-        }
-        ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
-        String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
-        ServiceReference[] references = null;
-        try {
-            references = bundleContext.getServiceReferences(ApplicationContext.class.getName(), filter);
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException("not possible", e);
-        }
-        if (references == null || references.length == 0) {
-            throw new IllegalStateException(String.format("Found %s service references for %s; this is not OK...",
-                references.length, bundleContext.getBundle().getSymbolicName()));
-        }
-        BeanReactor strategy = createStrategy();
-        try {
-            Thread.currentThread().setContextClassLoader(parent.getClassLoader());
-            for (ServiceReference serviceReference : references) {
-                ApplicationContext service = (ApplicationContext) bundleContext.getService(serviceReference);
-                try {
-                    if (!strategy.containsBean(service)) {
-                        continue;
-                    }
-                    return strategy.createBean(service);
-                } finally {
-                    bundleContext.ungetService(serviceReference);
-                }
-            }
-        } finally {
-            Thread.currentThread().setContextClassLoader(oldClassloader);
-        }
-        throw new IllegalStateException(String.format(
-            "Bundle %s can no longer attach bean %s with ID %s, class %s and type %s to page %s", bundleContext
-                .getBundle().getSymbolicName(), beanType.getName(), annotation.name(), beanType.getName(),
-            annotation.beanResolverType(), parent.getName()));
-    }
-
-    private BeanReactor createStrategy() {
+    @Override
+    protected BeanReactor<ApplicationContext> createStrategy() {
         if (annotation.name().equals("")) {
-            return new BeanReactor() {
+            return new BeanReactor<ApplicationContext>() {
                 public boolean containsBean(ApplicationContext applicationContext) {
                     try {
                         applicationContext.getBean(beanType);
@@ -102,7 +52,7 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
             };
         }
         if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
-            return new BeanReactor() {
+            return new BeanReactor<ApplicationContext>() {
                 public boolean containsBean(ApplicationContext applicationContext) {
                     return applicationContext.containsBean(annotation.name());
                 }
@@ -112,7 +62,7 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
                 }
             };
         }
-        return new BeanReactor() {
+        return new BeanReactor<ApplicationContext>() {
             public boolean containsBean(ApplicationContext applicationContext) {
                 return applicationContext.containsBean(overwrites.get(annotation.name()));
             }
@@ -123,15 +73,16 @@ public class SpringBeanProxyTargetLocator implements IProxyTargetLocator {
         };
     }
 
-    private static interface BeanReactor {
-        boolean containsBean(ApplicationContext applicationContext);
-
-        Object createBean(ApplicationContext applicationContext);
-    }
-
-    private String getApplicationContextFilter(String symbolicBundleName) {
+    @Override
+    protected String getApplicationContextFilter(String symbolicBundleName) {
         return String.format("(&(%s=%s)(%s=%s))", Constants.BUNDLE_SYMBOLICNAME, symbolicBundleName,
             Constants.OBJECTCLASS, ApplicationContext.class.getName());
     }
 
+    @Override
+    protected Class<? extends ApplicationContext> getContainerClass() {
+        return ApplicationContext.class;
+    }
+
 }
+

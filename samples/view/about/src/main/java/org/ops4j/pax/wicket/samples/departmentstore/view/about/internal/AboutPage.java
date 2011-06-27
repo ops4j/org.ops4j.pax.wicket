@@ -38,7 +38,7 @@ public class AboutPage extends WebPage {
 
     @PaxWicketBean(name = "bundleContext")
     private BundleContext bundleContext;
-    @PaxWicketBean
+    @PaxWicketBean(name = "departmentStoreService")
     private DepartmentStore departmentStore;
 
     public AboutPage() {
@@ -70,11 +70,11 @@ public class AboutPage extends WebPage {
         container.add(new BundlesRepeatingView("bundles", bundleViewModel, context));
 
         add(new DisplayBundleList(
-                "displayAllBundles", container, bundleViewModel, null, "All bundles", labelModel));
+            "displayAllBundles", container, bundleViewModel, null, "All bundles", labelModel));
         add(new DisplayBundleList(
-                "displayActiveBundles", container, bundleViewModel, ACTIVE, "Active bundles", labelModel));
+            "displayActiveBundles", container, bundleViewModel, ACTIVE, "Active bundles", labelModel));
         add(new DisplayBundleList(
-                "displayResolvedBundles", container, bundleViewModel, RESOLVED, "Resolved bundles", labelModel));
+            "displayResolvedBundles", container, bundleViewModel, RESOLVED, "Resolved bundles", labelModel));
     }
 
     private static class BundlesRepeatingView

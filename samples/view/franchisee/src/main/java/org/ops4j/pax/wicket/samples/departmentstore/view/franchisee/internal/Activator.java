@@ -27,17 +27,20 @@ public class Activator implements BundleActivator {
 
     private FranchiseeDepartmentStoreModelTracker regularStoreTracker;
     private FranchiseeDepartmentStoreModelTracker springStoreTracker;
+    private FranchiseeDepartmentStoreModelTracker blueprintStoreTracker;
 
     public void start(BundleContext context) throws Exception {
         regularStoreTracker = new FranchiseeDepartmentStoreModelTracker(context, "departmentstore");
         regularStoreTracker.open();
-
         springStoreTracker = new FranchiseeDepartmentStoreModelTracker(context, "springDeptStore");
         springStoreTracker.open();
+        blueprintStoreTracker = new FranchiseeDepartmentStoreModelTracker(context, "blueprintDeptStore");
+        blueprintStoreTracker.open();
     }
 
     public void stop(BundleContext context) throws Exception {
         regularStoreTracker.close();
         springStoreTracker.close();
+        blueprintStoreTracker.close();
     }
 }
