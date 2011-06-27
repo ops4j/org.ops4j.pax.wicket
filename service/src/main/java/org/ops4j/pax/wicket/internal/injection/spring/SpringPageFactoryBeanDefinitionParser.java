@@ -18,21 +18,27 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
+import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
-public class RootContentAggregatorBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
+public class SpringPageFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return RootContentAggregatorDecorator.class;
+        return PageFactoryDecorator.class;
     }
 
     @Override
     protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
+        addPropertyValueFromElement("pageId", element, bean);
         addPropertyValueFromElement("applicationName", element, bean);
-        addPropertyValueFromElement("aggregationPointName", element, bean);
+        addPropertyValueFromElement("pageName", element, bean);
+        addPropertyValueFromElement("pageClass", element, bean);
+        bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
+        bean.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
     }
 
 }

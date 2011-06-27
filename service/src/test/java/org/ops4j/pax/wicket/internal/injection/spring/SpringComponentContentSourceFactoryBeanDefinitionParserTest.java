@@ -21,12 +21,12 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.ComponentContentSourceFactoryDecorator;
 
-public class ComponentContentSourceFactoryBeanDefinitionParserTest {
+public class SpringComponentContentSourceFactoryBeanDefinitionParserTest {
 
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        ComponentContentSourceFactoryBeanDefinitionParser parserToTest =
-            new ComponentContentSourceFactoryBeanDefinitionParser();
+        SpringComponentContentSourceFactoryBeanDefinitionParser parserToTest =
+            new SpringComponentContentSourceFactoryBeanDefinitionParser();
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
@@ -37,7 +37,7 @@ public class ComponentContentSourceFactoryBeanDefinitionParserTest {
     public void testParse() throws Exception {
         SpringParserTestUtil parserTestUtil =
             new SpringParserTestUtil("wicket:componentContentSourceFactory",
-                new ComponentContentSourceFactoryBeanDefinitionParser());
+                new SpringComponentContentSourceFactoryBeanDefinitionParser());
 
         parserTestUtil.verifyPropertyValue("applicationName");
         parserTestUtil.verifyPropertyValue("componentContentSourceFactory", "someBeanReference");

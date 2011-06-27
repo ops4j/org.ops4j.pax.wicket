@@ -20,15 +20,15 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class SpringNamespaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
-        registerBeanDefinitionParser("application", new ApplicationBeanDefinitionParser());
-        registerBeanDefinitionParser("page", new PageFactoryBeanDefinitionParser());
-        registerBeanDefinitionParser("contentSource", new ContentSourceFactoryBeanDefinitionParser());
-        registerBeanDefinitionParser("contentAggregator", new RootContentAggregatorBeanDefinitionParser());
-        registerBeanDefinitionParser("classResolver", new ClassResolverDefinitionParser());
-        registerBeanDefinitionParser("injectionProvider", new InjectionResolverDefinitionParser());
-        registerBeanDefinitionParser("filter", new FilterFactoryBeanDefinitionParser());
+        registerBeanDefinitionParser("application", new SpringApplicationBeanDefinitionParser());
+        registerBeanDefinitionParser("page", new SpringPageFactoryBeanDefinitionParser());
+        registerBeanDefinitionParser("contentSource", new SpringContentSourceFactoryBeanDefinitionParser());
+        registerBeanDefinitionParser("contentAggregator", new SpringContentAggregatorBeanDefinitionParser());
+        registerBeanDefinitionParser("classResolver", new SpringClassResolverDefinitionParser());
+        registerBeanDefinitionParser("injectionProvider", new SpringInjectionResolverDefinitionParser());
+        registerBeanDefinitionParser("filter", new SpringFilterFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("componentContentSourceFactory",
-            new ComponentContentSourceFactoryBeanDefinitionParser());
+            new SpringComponentContentSourceFactoryBeanDefinitionParser());
     }
 
 }

@@ -19,7 +19,7 @@ import org.ops4j.pax.wicket.internal.injection.BundleInjectionProviderHelperDeco
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
-public class InjectionResolverDefinitionParser extends AbstractSpringBeanDefinitionParser {
+public class SpringInjectionResolverDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {

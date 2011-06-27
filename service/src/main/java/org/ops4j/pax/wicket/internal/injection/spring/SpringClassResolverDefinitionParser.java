@@ -15,21 +15,19 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.internal.injection.ComponentContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.BundleClassResolverHelperDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
-public class ComponentContentSourceFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
+public class SpringClassResolverDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return ComponentContentSourceFactoryDecorator.class;
+        return BundleClassResolverHelperDecorator.class;
     }
 
     @Override
     protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
         addPropertyValueFromElement("applicationName", element, bean);
-        addPropertyValueFromElement("componentContentSourceFactory", element, bean);
     }
-
 }

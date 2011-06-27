@@ -15,27 +15,24 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.internal.injection.ContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.FilterFactoryDecorator;
 import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
-public class ContentSourceFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
+public class SpringFilterFactoryBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return ContentSourceFactoryDecorator.class;
+        return FilterFactoryDecorator.class;
     }
 
     @Override
-    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
-        addPropertyValueFromElement("contentSourceId", element, bean);
-        addPropertyValueFromElement("applicationName", element, bean);
-        addPropertyValueFromElement("contentSourceClass", element, bean);
-        bean.addPropertyValue("destinations", InjectionParserUtil.retrieveDestinationElements(element));
-        bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
-        bean.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
+    protected void prepareInjection(Element element, BeanDefinitionBuilder builder) {
+        addPropertyValueFromElement("filterClass", element, builder);
+        addPropertyValueFromElement("priority", element, builder);
+        addPropertyValueFromElement("applicationName", element, builder);
+        builder.addPropertyValue("initParams", InjectionParserUtil.retrieveInitParam(element));
     }
 
 }

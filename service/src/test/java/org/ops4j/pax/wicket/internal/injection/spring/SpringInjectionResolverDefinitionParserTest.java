@@ -19,28 +19,23 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.ContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.BundleInjectionProviderHelperDecorator;
 
-public class ContentSourceFactoryBeanDefinitionParserTest {
-
+public class SpringInjectionResolverDefinitionParserTest {
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        ContentSourceFactoryBeanDefinitionParser parserToTest = new ContentSourceFactoryBeanDefinitionParser();
+        SpringInjectionResolverDefinitionParser parserToTest = new SpringInjectionResolverDefinitionParser();
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(ContentSourceFactoryDecorator.class));
+        assertThat(beanClass, typeCompatibleWith(BundleInjectionProviderHelperDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
         SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:contentSource", new ContentSourceFactoryBeanDefinitionParser());
+            new SpringParserTestUtil("wicket:injectionProvider", new SpringInjectionResolverDefinitionParser());
 
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyMapValue("overwrites", "old2", "new2");
-        parserTestUtil.verifyPropertyValue("contentSourceId", "someId");
-        parserTestUtil.verifyPropertyValue("contentSourceClass", "this.is.some.class.Yes");
-        parserTestUtil.verifyListValue("destinations", "infrastructure.mainmenu", "infrastructure.mainmenu2");
     }
 }

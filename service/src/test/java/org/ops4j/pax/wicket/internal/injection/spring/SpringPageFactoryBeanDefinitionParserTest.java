@@ -19,27 +19,27 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.FilterFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
 
-public class FilterFactoryBeanDefinitionParserTest {
-
+public class SpringPageFactoryBeanDefinitionParserTest {
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        FilterFactoryBeanDefinitionParser parserToTest = new FilterFactoryBeanDefinitionParser();
+        SpringPageFactoryBeanDefinitionParser parserToTest = new SpringPageFactoryBeanDefinitionParser();
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(FilterFactoryDecorator.class));
+        assertThat(beanClass, typeCompatibleWith(PageFactoryDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
         SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:filter", new FilterFactoryBeanDefinitionParser());
+            new SpringParserTestUtil("wicket:page", new SpringPageFactoryBeanDefinitionParser());
 
-        parserTestUtil.verifyPropertyValue("filterClass");
-        parserTestUtil.verifyPropertyValue("priority");
+        parserTestUtil.verifyPropertyValue("pageId");
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyMapValue("initParams", "name2", "value2");
+        parserTestUtil.verifyPropertyValue("pageName");
+        parserTestUtil.verifyPropertyValue("pageClass");
+        parserTestUtil.verifyMapValue("overwrites", "old2", "new2");
     }
 }

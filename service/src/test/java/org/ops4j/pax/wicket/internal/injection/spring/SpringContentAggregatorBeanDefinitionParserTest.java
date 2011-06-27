@@ -19,24 +19,25 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.BundleClassResolverHelperDecorator;
+import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
 
-public class ClassResolverDefinitionParserTest {
+public class SpringContentAggregatorBeanDefinitionParserTest {
 
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        ClassResolverDefinitionParser parserToTest = new ClassResolverDefinitionParser();
+        SpringContentAggregatorBeanDefinitionParser parserToTest = new SpringContentAggregatorBeanDefinitionParser();
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
-        assertThat(beanClass, typeCompatibleWith(BundleClassResolverHelperDecorator.class));
+        assertThat(beanClass, typeCompatibleWith(RootContentAggregatorDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
         SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:classResolver", new ClassResolverDefinitionParser());
+            new SpringParserTestUtil("wicket:contentAggregator", new SpringContentAggregatorBeanDefinitionParser());
 
         parserTestUtil.verifyPropertyValue("applicationName");
+        parserTestUtil.verifyPropertyValue("aggregationPointName");
     }
 }

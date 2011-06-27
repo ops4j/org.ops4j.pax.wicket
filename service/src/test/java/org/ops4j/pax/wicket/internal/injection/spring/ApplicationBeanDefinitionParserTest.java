@@ -25,7 +25,7 @@ public class ApplicationBeanDefinitionParserTest {
 
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        ApplicationBeanDefinitionParser parserToTest = new ApplicationBeanDefinitionParser();
+        SpringApplicationBeanDefinitionParser parserToTest = new SpringApplicationBeanDefinitionParser();
 
         Class<?> beanClass = parserToTest.getBeanClass(null);
 
@@ -35,7 +35,7 @@ public class ApplicationBeanDefinitionParserTest {
     @Test
     public void testParse() throws Exception {
         SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:application", new ApplicationBeanDefinitionParser());
+            new SpringParserTestUtil("wicket:application", new SpringApplicationBeanDefinitionParser());
 
         parserTestUtil.verifyPropertyValue("homepageClass");
         parserTestUtil.verifyPropertyValue("mountPoint");

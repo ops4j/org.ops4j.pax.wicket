@@ -18,25 +18,21 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
-import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
+import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
-public class ApplicationBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
+public class SpringContentAggregatorBeanDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
     @Override
     public Class<?> getBeanClass(Element element) {
-        return ApplicationDecorator.class;
+        return RootContentAggregatorDecorator.class;
     }
 
     @Override
-    public void prepareInjection(Element element, BeanDefinitionBuilder bean) {
-        addPropertyValueFromElement("homepageClass", element, bean);
-        addPropertyValueFromElement("mountPoint", element, bean);
+    protected void prepareInjection(Element element, BeanDefinitionBuilder bean) {
         addPropertyValueFromElement("applicationName", element, bean);
-        addPropertyReferenceFromElement("applicationFactory", element, bean);
-        bean.addPropertyValue("contextParams", InjectionParserUtil.retrieveContextParam(element));
+        addPropertyValueFromElement("aggregationPointName", element, bean);
     }
 
 }
