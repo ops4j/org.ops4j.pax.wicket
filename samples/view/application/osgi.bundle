@@ -5,10 +5,16 @@ Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.view.internal.Act
 Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
                   org.osgi.*;version="[1.0.0,2.0.0)", \
                   org.apache.wicket.*;version="${wicket.dependency.version}", \
+                  org.apache.wicket.behavior;version="${wicket.dependency.version}",\
+                  org.apache.wicket.markup.html.internal;version="${wicket.dependency.version}",\
+                  org.apache.wicket.markup.html;version="${wicket.dependency.version}",\
+                  org.apache.wicket.markup;version="${wicket.dependency.version}",\
+                  org.apache.wicket.session.pagemap;version="${wicket.dependency.version}",\
+                  org.apache.wicket.util.convert;version="${wicket.dependency.version}",\
+                  org.apache.wicket.model;version="${wicket.dependency.version}",\
                   org.ops4j.pax.wicket.util.proxy;version="${project.version}", \
                   net.sf.cglib.core;version="${cglib.range}", \
                   net.sf.cglib.proxy;version="${cglib.range}", \
                   net.sf.cglib.reflect;version="${cglib.range}"
 
 Export-Package:   org.ops4j.pax.wicket.samples.departmentstore.view;version=${project.version}
-

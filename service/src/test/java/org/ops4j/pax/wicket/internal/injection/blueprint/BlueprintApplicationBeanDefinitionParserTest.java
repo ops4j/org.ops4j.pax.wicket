@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection.spring;
+package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
@@ -21,26 +21,27 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
 
-public class ApplicationBeanDefinitionParserTest {
+public class BlueprintApplicationBeanDefinitionParserTest {
 
     @Test
-    public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        ApplicationBeanDefinitionParser parserToTest = new ApplicationBeanDefinitionParser();
+    public void testRequestRuntimeClass_shouldReturnApplicationDecorator() throws Exception {
+        BlueprintApplicationBeanDefinitionParser parserToTest = new BlueprintApplicationBeanDefinitionParser();
 
-        Class<?> beanClass = parserToTest.getBeanClass(null);
+        Class<?> runtimeClass = parserToTest.getRuntimeClass();
 
-        assertThat(beanClass, typeCompatibleWith(ApplicationDecorator.class));
+        assertThat(runtimeClass, typeCompatibleWith(ApplicationDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
-        SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:application", new ApplicationBeanDefinitionParser());
+        BlueprintParserTestUtil parserTestUtil =
+            new BlueprintParserTestUtil("wicket:application", new BlueprintApplicationBeanDefinitionParser());
 
+        parserTestUtil.verifyId("application");
         parserTestUtil.verifyPropertyValue("homepageClass");
         parserTestUtil.verifyPropertyValue("mountPoint");
         parserTestUtil.verifyPropertyValue("applicationName");
         parserTestUtil.verifyPropertyReference("applicationFactory");
-        parserTestUtil.verifyMapValue("contextParams", "name2", "value2");
+        parserTestUtil.verifyMapValue("contextParams", "name1", "value1", "name2", "value2");
     }
 }

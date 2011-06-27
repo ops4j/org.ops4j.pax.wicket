@@ -90,6 +90,10 @@
               net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
               org.xml.sax,
               org.w3c.dom,
+              org.apache.aries.blueprint.*;version="${aries.blueprint.range}";resolution:=optional,
+              org.osgi.service.blueprint;resolution:=optional,
+              org.osgi.service.blueprint.container;resolution:=optional,
+              org.osgi.service.blueprint.reflect;resolution:=optional,
               org.springframework.beans;version="[3.0,4)";resolution:=optional,
               org.springframework.beans.factory.config;version="[3.0,4)";resolution:=optional,
               org.springframework.beans.factory.support;version="[3.0,4)";resolution:=optional,
@@ -168,6 +172,10 @@
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-servlet_2.5_spec</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.aries.blueprint</groupId>
+      <artifactId>org.apache.aries.blueprint</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>

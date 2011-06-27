@@ -13,31 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection.spring;
+package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
+import org.ops4j.pax.wicket.internal.injection.PageFactoryDecorator;
 
-public class RootContentAggregatorBeanDefinitionParserTest {
+public class BlueprintPageFactoryBeanDefinitionParserTest {
 
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        RootContentAggregatorBeanDefinitionParser parserToTest = new RootContentAggregatorBeanDefinitionParser();
+        BlueprintPageFactoryBeanDefinitionParser parserToTest = new BlueprintPageFactoryBeanDefinitionParser();
 
-        Class<?> beanClass = parserToTest.getBeanClass(null);
+        Class<?> beanClass = parserToTest.getRuntimeClass();
 
-        assertThat(beanClass, typeCompatibleWith(RootContentAggregatorDecorator.class));
+        assertThat(beanClass, typeCompatibleWith(PageFactoryDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
-        SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:contentAggregator", new RootContentAggregatorBeanDefinitionParser());
+        BlueprintParserTestUtil parserTestUtil =
+            new BlueprintParserTestUtil("wicket:page", new BlueprintPageFactoryBeanDefinitionParser());
 
+        parserTestUtil.verifyPropertyValue("pageId");
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyPropertyValue("aggregationPointName");
+        parserTestUtil.verifyPropertyValue("pageName");
+        parserTestUtil.verifyPropertyValue("pageClass");
+        parserTestUtil.verifyMapValue("overwrites", "old1", "new1", "old2", "new2");
     }
 }

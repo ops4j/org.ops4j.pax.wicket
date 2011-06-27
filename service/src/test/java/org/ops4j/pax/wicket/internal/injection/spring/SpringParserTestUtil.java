@@ -13,25 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection;
+package org.ops4j.pax.wicket.internal.injection.spring;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.w3c.dom.Element;
 
-public class ParserTestUtil {
+public class SpringParserTestUtil {
 
-    private final BeanDefinitionBuilder beanDefinitionBuilderMock;
+    private BeanDefinitionBuilder beanDefinitionBuilderMock;
 
-    public ParserTestUtil(BeanDefinitionBuilder beanDefinitionBuilderMock) {
-        this.beanDefinitionBuilderMock = beanDefinitionBuilderMock;
+    public SpringParserTestUtil(String element, AbstractSpringBeanDefinitionParser parserImplementation)
+        throws Exception {
+        Element springElement = SpringTestUtil.loadFirstElementThatMatches(element);
+        beanDefinitionBuilderMock = mock(BeanDefinitionBuilder.class);
+        parserImplementation.doParse(springElement, beanDefinitionBuilderMock);
+        verifyDefaultParserBeanBehaviour();
     }
 
-    public void verifyDefaultParserBeanBehaviour() {
+    private void verifyDefaultParserBeanBehaviour() {
         verify(beanDefinitionBuilderMock).addPropertyReference("bundleContext", "bundleContext");
         verify(beanDefinitionBuilderMock).setInitMethodName("start");
         verify(beanDefinitionBuilderMock).setDestroyMethodName("stop");

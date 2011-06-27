@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.injection.blueprint;
 
-import java.util.Map;
+import org.ops4j.pax.wicket.internal.injection.XmlFileTestUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import net.sf.cglib.proxy.MethodInterceptor;
+public class BlueprintTestUtil {
 
-public interface OverwriteProxy extends MethodInterceptor {
+    public static Document loadSpringXml() throws Exception {
+        return XmlFileTestUtil.loadXml("src/test/resources/blueprint.xml");
+    }
 
-    Map<String, String> getOverwrites();
-
-    String getInjectionSource();
+    public static Element loadFirstElementThatMatches(String element) throws Exception {
+        return XmlFileTestUtil.loadFirstElementThatMatches(element, "src/test/resources/blueprint.xml");
+    }
 
 }

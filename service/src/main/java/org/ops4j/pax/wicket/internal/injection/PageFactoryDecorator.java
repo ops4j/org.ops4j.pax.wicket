@@ -33,6 +33,7 @@ public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwar
     private String pageName;
     private Class<WebPage> pageClass;
     private Map<String, String> overwrites;
+    private String injectionSource;
     private BundleContext bundleContext;
     private InternalPageFactory internalPageFactory;
 
@@ -49,7 +50,8 @@ public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwar
 
     public void start() throws Exception {
         internalPageFactory =
-            new InternalPageFactory(bundleContext, pageId, applicationName, pageName, pageClass, overwrites);
+            new InternalPageFactory(bundleContext, pageId, applicationName, pageName, pageClass, overwrites,
+                injectionSource);
         internalPageFactory.register();
     }
 
@@ -81,41 +83,41 @@ public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwar
         this.overwrites = overwrites;
     }
 
+    public void setInjectionSource(String injectionSource) {
+        this.injectionSource = injectionSource;
+    }
+
     private static class InternalPageFactory extends AbstractPageFactory<WebPage> {
 
         private Class<WebPage> pageClass;
         private Map<String, String> overwrites;
+        private String injectionSource;
 
         public InternalPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName,
-                Class<WebPage> pageClass, Map<String, String> overwrites)
+                Class<WebPage> pageClass, Map<String, String> overwrites, String injectionSource)
             throws IllegalArgumentException {
             super(bundleContext, pageId, applicationName, pageName, pageClass);
             this.pageClass = pageClass;
             this.overwrites = overwrites;
+            this.injectionSource = injectionSource;
         }
 
         public WebPage createPage(PageParameters params) {
             if (params != null && !params.isEmpty()) {
                 try {
-                    if (overwrites != null && overwrites.size() != 0) {
-                        Enhancer e = new Enhancer();
-                        e.setSuperclass(pageClass);
-                        e.setCallback(new ComponentProxy(overwrites));
-                        return (WebPage) e.create(new Class[]{ PageParameters.class }, new Object[]{ params });
-                    }
-                    return pageClass.getConstructor(PageParameters.class).newInstance(params);
+                    Enhancer e = new Enhancer();
+                    e.setSuperclass(pageClass);
+                    e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                    return (WebPage) e.create(new Class[]{ PageParameters.class }, new Object[]{ params });
                 } catch (Exception e) {
                     throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
                 }
             }
             try {
-                if (overwrites != null && overwrites.size() != 0) {
-                    Enhancer e = new Enhancer();
-                    e.setSuperclass(pageClass);
-                    e.setCallback(new ComponentProxy(overwrites));
-                    return (WebPage) e.create();
-                }
-                return pageClass.newInstance();
+                Enhancer e = new Enhancer();
+                e.setSuperclass(pageClass);
+                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                return (WebPage) e.create();
             } catch (Exception e) {
                 throw new RuntimeException(String.format("Creation of %s not possible", pageClass.getName()), e);
             }

@@ -18,12 +18,13 @@ package org.ops4j.pax.wicket.internal;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.api.PaxWicketBean.BeanResolverType;
+import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
@@ -70,14 +71,20 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         try {
             Class<?> realClass = component.getClass();
             Map<String, String> overwrites = null;
+            String injectionSource = null;
             if (Factory.class.isInstance(component)) {
                 overwrites = ((OverwriteProxy) ((Factory) component).getCallback(0)).getOverwrites();
+                injectionSource = ((OverwriteProxy) ((Factory) component).getCallback(0)).getInjectionSource();
                 realClass = realClass.getSuperclass();
             }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
 
-            for (Field field : getFields(realClass)) {
-                Object proxy = createProxy(field, realClass, overwrites);
+            List<Field> fields = getFields(realClass);
+            for (Field field : fields) {
+                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                    continue;
+                }
+                Object proxy = createProxy(field, realClass, overwrites, injectionSource);
                 setField(component, field, proxy);
             }
         } finally {
@@ -85,17 +92,22 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         }
     }
 
-    private Object createProxy(Field field, Class<?> page, Map<String, String> overwrites) {
-        return LazyInitProxyFactory.createProxy(getBeanType(field), createProxyTargetLocator(field, page, overwrites));
+    private Object createProxy(Field field, Class<?> page, Map<String, String> overwrites, String injectionSource) {
+        return LazyInitProxyFactory.createProxy(getBeanType(field),
+            createProxyTargetLocator(field, page, overwrites, injectionSource));
     }
 
-    private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites) {
+    private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
+            String injectionSource) {
         PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-        if (annotation.beanResolverType().equals(BeanResolverType.UNCONFIGURED)
-                || annotation.beanResolverType().equals(BeanResolverType.SPRING)) {
+        if (PaxWicketBean.INJECTION_SOURCE_SPRING.equals(injectionSource)) {
             return resolveSpringBeanTargetLocator(field, page, annotation, overwrites);
         }
-        return resolveBlueprintBeanTargetLocator(field, page, annotation, overwrites);
+        if (PaxWicketBean.INJECTION_SOURCE_BLUEPRINT.equals(injectionSource)) {
+            return resolveBlueprintBeanTargetLocator(field, page, annotation, overwrites);
+        }
+        LOGGER.warn("No injection source found for field [{}] in class [{}]", field.getName(), page.getName());
+        return null;
     }
 
     private IProxyTargetLocator resolveSpringBeanTargetLocator(Field field, Class<?> page,
@@ -105,7 +117,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
 
     private IProxyTargetLocator resolveBlueprintBeanTargetLocator(Field field, Class<?> page, PaxWicketBean annotation,
             Map<String, String> overwrites) {
-        throw new NotImplementedException();
+        return new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
     }
 
 }

@@ -51,6 +51,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
                 .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.proxy").artifactId("org.apache.aries.proxy")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
+                .versionAsInProject()),
             provision(mavenBundle()
                 .groupId("org.ops4j.pax.wicket.samples.model")
                 .artifactId("pax-wicket-samples-model-core").versionAsInProject()),
@@ -73,6 +79,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:8080/deptStore/");
         assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Activator"));
     }
 
     @Test
@@ -80,6 +87,15 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:8080/springDeptStore/");
         assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Spring"));
+    }
+
+    @Test
+    public void testBlueprintSampleApplication_shouldAllowBaseFunctions() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:8080/blueprintDeptStore/");
+        assertThatAllTabsExist(page.asText());
+        assertTrue(page.asText().contains("Blueprint"));
     }
 
     private void assertThatAllTabsExist(String pageContent) {

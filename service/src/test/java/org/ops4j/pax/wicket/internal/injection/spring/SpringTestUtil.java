@@ -15,28 +15,18 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.ops4j.pax.wicket.internal.injection.XmlFileTestUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 public class SpringTestUtil {
-    public static Document loadSpringXml() throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setNamespaceAware(true);
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse("src/test/resources/spring.xml");
-        return doc;
+
+    public static Document loadSpringXml() throws Exception {
+        return XmlFileTestUtil.loadXml("src/test/resources/spring.xml");
     }
 
-    public static Element loadFirstElementThatMatches(String element) throws ParserConfigurationException,
-        SAXException, IOException {
-        Document doc = loadSpringXml();
-        return (Element) doc.getElementsByTagName(element).item(0);
+    public static Element loadFirstElementThatMatches(String element) throws Exception {
+        return XmlFileTestUtil.loadFirstElementThatMatches(element, "src/test/resources/spring.xml");
     }
+
 }

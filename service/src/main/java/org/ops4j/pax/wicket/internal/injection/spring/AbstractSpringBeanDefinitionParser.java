@@ -22,12 +22,13 @@ import org.w3c.dom.Element;
 public abstract class AbstractSpringBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
     @Override
-    public void doParse(Element element, BeanDefinitionBuilder bean) {
-        bean.addPropertyReference("bundleContext", "bundleContext");
-        prepareInjection(element, bean);
-        bean.setLazyInit(false);
-        bean.setInitMethodName("start");
-        bean.setDestroyMethodName("stop");
+    public void doParse(Element element, BeanDefinitionBuilder builder) {
+        builder.addPropertyReference("bundleContext", "bundleContext");
+        prepareInjection(element, builder);
+        builder.setLazyInit(false);
+        builder.setInitMethodName("start");
+        builder.setDestroyMethodName("stop");
+        super.doParse(element, builder);
     }
 
     protected abstract void prepareInjection(Element element, BeanDefinitionBuilder bean);

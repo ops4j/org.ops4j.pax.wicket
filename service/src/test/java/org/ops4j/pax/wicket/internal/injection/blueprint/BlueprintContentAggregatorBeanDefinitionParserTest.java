@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal.injection.spring;
+package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
@@ -21,23 +21,27 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.RootContentAggregatorDecorator;
 
-public class RootContentAggregatorBeanDefinitionParserTest {
+public class BlueprintContentAggregatorBeanDefinitionParserTest {
 
     @Test
-    public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
-        RootContentAggregatorBeanDefinitionParser parserToTest = new RootContentAggregatorBeanDefinitionParser();
+    public void testRequestRuntimeClass_shouldReturnRootContentAggregatorDecorator() throws Exception {
+        BlueprintContentAggregatorBeanDefinitionParser parserToTest =
+            new BlueprintContentAggregatorBeanDefinitionParser();
 
-        Class<?> beanClass = parserToTest.getBeanClass(null);
+        Class<?> runtimeClass = parserToTest.getRuntimeClass();
 
-        assertThat(beanClass, typeCompatibleWith(RootContentAggregatorDecorator.class));
+        assertThat(runtimeClass, typeCompatibleWith(RootContentAggregatorDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
-        SpringParserTestUtil parserTestUtil =
-            new SpringParserTestUtil("wicket:contentAggregator", new RootContentAggregatorBeanDefinitionParser());
+        BlueprintParserTestUtil parserTestUtil =
+            new BlueprintParserTestUtil("wicket:contentAggregator",
+                new BlueprintContentAggregatorBeanDefinitionParser());
 
+        parserTestUtil.verifyId("contentAggregator");
         parserTestUtil.verifyPropertyValue("applicationName");
         parserTestUtil.verifyPropertyValue("aggregationPointName");
     }
+
 }

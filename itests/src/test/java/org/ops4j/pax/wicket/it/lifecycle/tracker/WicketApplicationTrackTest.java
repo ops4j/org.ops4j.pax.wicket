@@ -38,13 +38,20 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return options(provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
-            .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
-            .artifactId("pax-wicket-samples-view-application").versionAsInProject()));
+        return options(
+            provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.proxy").artifactId("org.apache.aries.proxy")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
+                .versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
+                .artifactId("pax-wicket-samples-view-application").versionAsInProject()));
     }
 
     @Test
-    public final void testApplicationTracker() throws Exception {
+    public final void testAppicationTraker() throws Exception {
         sleep(2000);
         Bundle simpleAppBundle =
             getBundleBySymbolicName(bundleContext,
@@ -52,13 +59,13 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
         assertNotNull(simpleAppBundle);
         assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
         ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();
-        assertEquals(15, beforeStopServices.length);
+        assertEquals(31, beforeStopServices.length);
 
         Bundle bundle = getPaxWicketServiceBundle(bundleContext);
         bundle.stop();
 
         ServiceReference[] services = simpleAppBundle.getRegisteredServices();
         assertNotNull(services);
-        assertEquals(3, services.length);
+        assertEquals(4, services.length);
     }
 }

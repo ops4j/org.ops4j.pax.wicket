@@ -26,8 +26,10 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
     private static final long serialVersionUID = 1848500647893384991L;
 
     private Map<String, String> overwrites;
+    private String injectionSource;
 
-    public ComponentProxy(Map<String, String> overwrites) {
+    public ComponentProxy(String injectionSource, Map<String, String> overwrites) {
+        this.injectionSource = injectionSource;
         this.overwrites = overwrites;
     }
 
@@ -43,6 +45,8 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
             return toString();
         } else if (isGetOverwritesMethod(method)) {
             return getOverwrites();
+        } else if (isGetInjectionSourceMethod(method)) {
+            return getInjectionSource();
         }
 
         return proxy.invokeSuper(object, args);
@@ -52,9 +56,18 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
         return overwrites;
     }
 
+    public String getInjectionSource() {
+        return injectionSource;
+    }
+
     protected static boolean isGetOverwritesMethod(Method method) {
         return method.getReturnType() == Map.class && method.getParameterTypes().length == 0 &&
                 method.getName().equals("getOverwrites");
+    }
+
+    protected static boolean isGetInjectionSourceMethod(Method method) {
+        return method.getReturnType() == Map.class && method.getParameterTypes().length == 0 &&
+                method.getName().equals("getInjectionSource");
     }
 
     /**
