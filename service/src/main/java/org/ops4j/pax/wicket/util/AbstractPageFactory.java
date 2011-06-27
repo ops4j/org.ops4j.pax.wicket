@@ -149,6 +149,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public void updated(Dictionary config)
         throws ConfigurationException {
         if (config == null) {

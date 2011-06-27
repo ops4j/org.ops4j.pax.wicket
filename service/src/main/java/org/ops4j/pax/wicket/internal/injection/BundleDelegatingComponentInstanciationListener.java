@@ -62,8 +62,7 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         this.applicationName = applicationName;
         this.paxWicketBundle = paxWicketBundle;
         listeners = new HashSet<BundleAnalysingComponentInstantiationListener>();
-        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
-            applicationName));
+        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext()));
 
         open(true);
     }
@@ -91,7 +90,7 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             Bundle bundle = serviceReference.getBundle();
             HashSet<BundleAnalysingComponentInstantiationListener> clone =
                 (HashSet<BundleAnalysingComponentInstantiationListener>) listeners.clone();
-            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), applicationName));
+            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext()));
             listeners = clone;
         }
         return super.addingService(serviceReference);
@@ -106,16 +105,15 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         }
         HashSet<BundleAnalysingComponentInstantiationListener> revisedSet =
             new HashSet<BundleAnalysingComponentInstantiationListener>();
-        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
-            applicationName));
+        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext()));
         try {
             LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
             synchronized (this) {
                 ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
                 if (serviceReferences != null) {
                     for (ServiceReference ref : serviceReferences) {
-                        revisedSet.add(new BundleAnalysingComponentInstantiationListener(
-                            ref.getBundle().getBundleContext(), applicationName));
+                        revisedSet.add(new BundleAnalysingComponentInstantiationListener(ref.getBundle()
+                            .getBundleContext()));
                     }
                 }
                 listeners = revisedSet;

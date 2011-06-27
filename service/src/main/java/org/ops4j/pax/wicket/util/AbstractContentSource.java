@@ -139,30 +139,30 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
     // return null;
     // }
 
-    /**
-     * Returns {@code true} if the user roles is authorized to create this content source component, {@code false}
-     * otherwise.
-     * 
-     * @return A {@code boolean} indicator whether the user roles can create this content source component.
-     * 
-     * @since 1.0.0
-     */
-    private boolean isRolesAuthorized() {
-        PaxWicketAuthentication authentication = getAuthentication();
-        Roles userRoles = authentication.getRoles();
-
-        boolean isRequiredRolesAuthorized = true;
-        if (requiredRoles != null) {
-            isRequiredRolesAuthorized = requiredRoles.hasAllRoles(userRoles);
-        }
-
-        boolean isBasicRolesAuthorized = true;
-        if (basicRoles != null && !basicRoles.isEmpty()) {
-            isBasicRolesAuthorized = userRoles.hasAnyRole(basicRoles);
-        }
-
-        return isRequiredRolesAuthorized && isBasicRolesAuthorized;
-    }
+    // /**
+    // * Returns {@code true} if the user roles is authorized to create this content source component, {@code false}
+    // * otherwise.
+    // *
+    // * @return A {@code boolean} indicator whether the user roles can create this content source component.
+    // *
+    // * @since 1.0.0
+    // */
+    // private boolean isRolesAuthorized() {
+    // PaxWicketAuthentication authentication = getAuthentication();
+    // Roles userRoles = authentication.getRoles();
+    //
+    // boolean isRequiredRolesAuthorized = true;
+    // if (requiredRoles != null) {
+    // isRequiredRolesAuthorized = requiredRoles.hasAllRoles(userRoles);
+    // }
+    //
+    // boolean isBasicRolesAuthorized = true;
+    // if (basicRoles != null && !basicRoles.isEmpty()) {
+    // isBasicRolesAuthorized = userRoles.hasAnyRole(basicRoles);
+    // }
+    //
+    // return isRequiredRolesAuthorized && isBasicRolesAuthorized;
+    // }
 
     private String[] getStringArrayProperty(String key)
         throws IllegalArgumentException {
@@ -250,7 +250,7 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         properties.put(APPLICATION_NAME, applicationName);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void updated(Dictionary config) {
         synchronized (this) {
             if (config != null) {
@@ -282,9 +282,9 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
     public void register() {
         synchronized (this) {
             String[] serviceNames =
-                {
-                    ContentSource.class.getName(), ManagedService.class.getName()
-                };
+            {
+                ContentSource.class.getName(), ManagedService.class.getName()
+            };
             registration = bundleContext.registerService(serviceNames, this, properties);
         }
     }

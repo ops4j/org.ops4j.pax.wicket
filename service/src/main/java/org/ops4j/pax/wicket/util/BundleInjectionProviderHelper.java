@@ -38,10 +38,10 @@ import org.osgi.service.cm.ManagedService;
 public final class BundleInjectionProviderHelper {
 
     private static final String[] SERVICE_NAMES =
-        {
-            PaxWicketInjector.class.getName(),
-            ManagedService.class.getName()
-        };
+    {
+        PaxWicketInjector.class.getName(),
+        ManagedService.class.getName()
+    };
 
     private final BundleContext bundleContext;
     private final Properties serviceProperties;
@@ -99,7 +99,7 @@ public final class BundleInjectionProviderHelper {
             } else {
                 serviceProperties.put(APPLICATION_NAME, applicationName);
                 bundleAnalysingComponentInstantiationListener =
-                    new BundleAnalysingComponentInstantiationListener(bundleContext, applicationName);
+                    new BundleAnalysingComponentInstantiationListener(bundleContext);
             }
 
             if (serviceRegistration != null) {

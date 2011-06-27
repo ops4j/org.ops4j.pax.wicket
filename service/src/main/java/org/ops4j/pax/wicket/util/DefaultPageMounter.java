@@ -85,6 +85,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public void updated(Dictionary properties) throws ConfigurationException {
         if (properties != null) {
             setApplicationName((String) properties.get(APPLICATION_NAME));

@@ -40,12 +40,9 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     private final BundleContext bundleContext;
     private String bundleResources = "";
 
-    private final String applicationName;
-
     @SuppressWarnings("unchecked")
-    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String applicationName) {
+    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
-        this.applicationName = applicationName;
         Enumeration<URL> entries = bundleContext.getBundle().findEntries("/", "*.class", true);
         while (entries.hasMoreElements()) {
             String urlRepresentation =

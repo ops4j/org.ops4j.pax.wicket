@@ -141,7 +141,7 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
 
         public ITab createSourceTab() {
             BundleAnalysingComponentInstantiationListener componentInstantiationListener =
-                new BundleAnalysingComponentInstantiationListener(bundleContext, getApplicationName());
+                new BundleAnalysingComponentInstantiationListener(bundleContext);
             ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
@@ -162,7 +162,7 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
 
         public ITab createSourceTab(String title) {
             BundleAnalysingComponentInstantiationListener componentInstantiationListener =
-                new BundleAnalysingComponentInstantiationListener(bundleContext, getApplicationName());
+                new BundleAnalysingComponentInstantiationListener(bundleContext);
             ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
