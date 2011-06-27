@@ -39,13 +39,17 @@ final class HttpTracker extends ServiceTracker {
 
     HttpTracker(BundleContext context) {
         super(context, HttpService.class.getName(), null);
-        servlets = new HashMap<String, ServletDescriptor>();
+        servlets = new HashMap<String, HttpTracker.ServletDescriptor>();
     }
 
     @Override
     public final Object addingService(ServiceReference serviceReference) {
         httpService = (HttpService) super.addingService(serviceReference);
-        for (Map.Entry<String, ServletDescriptor> entry : servlets.entrySet()) {
+        HashMap<String, ServletDescriptor> servletsClone = new HashMap<String, HttpTracker.ServletDescriptor>();
+        synchronized (this) {
+            servletsClone.putAll(servlets);
+        }
+        for (Map.Entry<String, ServletDescriptor> entry : servletsClone.entrySet()) {
             ServletDescriptor descriptor = entry.getValue();
             Servlet servlet = descriptor.servlet;
             HttpContext context = descriptor.httpContext;
@@ -57,7 +61,7 @@ final class HttpTracker extends ServiceTracker {
                     "Unable to mount [" + servlet + "] on mount point '" + mountpoint + "'.");
             } catch (ServletException e) {
                 String message = "Wicket Servlet [" + servlet + "] is unable to initialize. "
-                                 + "This servlet was tried to be mounted on '" + mountpoint + "'.";
+                        + "This servlet was tried to be mounted on '" + mountpoint + "'.";
                 throw new IllegalArgumentException(message, e);
             }
         }
@@ -84,14 +88,16 @@ final class HttpTracker extends ServiceTracker {
         mountPoint = normalizeMountPoint(mountPoint);
         HttpContext httpContext = new GenericContext(paxWicketBundle, mountPoint);
         ServletDescriptor descriptor = new ServletDescriptor(servlet, httpContext);
-        servlets.put(mountPoint, descriptor);
+        synchronized (this) {
+            servlets.put(mountPoint, descriptor);
+        }
         if (httpService != null) {
             httpService.registerServlet(mountPoint, servlet,
                 contextParams == null ? null : MapAsDictionary.wrap(contextParams), httpContext);
         }
     }
 
-    final void removeServlet(String mountPoint) {
+    final synchronized void removeServlet(String mountPoint) {
         mountPoint = normalizeMountPoint(mountPoint);
         if (servlets.remove(mountPoint) != null) {
             if (httpService != null) {
@@ -107,7 +113,7 @@ final class HttpTracker extends ServiceTracker {
         return mountPoint;
     }
 
-    final Servlet getServlet(String mountPoint) {
+    final synchronized Servlet getServlet(String mountPoint) {
         mountPoint = normalizeMountPoint(mountPoint);
         ServletDescriptor descriptor = servlets.get(mountPoint);
         return descriptor.servlet;
