@@ -19,27 +19,28 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.internal.injection.ComponentContentSourceFactoryDecorator;
+import org.ops4j.pax.wicket.internal.injection.FilterFactoryDecorator;
 
-public class BlueprintComponentContentSourceFactoryBeanDefinitionParserTest {
+public class BlueprintFilterFactoryBeanDefinitionParserTest {
+
     @Test
     public void testRequestRuntimeClass_shouldReturnApplicationDecorator() throws Exception {
-        BlueprintComponentContentSourceFactoryBeanDefinitionParser parserToTest =
-            new BlueprintComponentContentSourceFactoryBeanDefinitionParser();
+        BlueprintFilterFactoryBeanDefinitionParser parserToTest = new BlueprintFilterFactoryBeanDefinitionParser();
 
         Class<?> runtimeClass = parserToTest.getRuntimeClass();
 
-        assertThat(runtimeClass, typeCompatibleWith(ComponentContentSourceFactoryDecorator.class));
+        assertThat(runtimeClass, typeCompatibleWith(FilterFactoryDecorator.class));
     }
 
     @Test
     public void testParse() throws Exception {
         BlueprintParserTestUtil parserTestUtil =
-            new BlueprintParserTestUtil("wicket:componentContentSourceFactory",
-                new BlueprintComponentContentSourceFactoryBeanDefinitionParser());
+            new BlueprintParserTestUtil("wicket:filter", new BlueprintFilterFactoryBeanDefinitionParser());
 
-        parserTestUtil.verifyId("testBean");
+        parserTestUtil.verifyPropertyValue("filterClass");
+        parserTestUtil.verifyPropertyValue("priority");
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyPropertyReference("componentContentSourceFactory");
+        parserTestUtil.verifyMapValue("initParams", "name1", "value1", "name2", "value2");
     }
+
 }
