@@ -21,8 +21,8 @@
   <wicket:componentContentSourceFactory id="testBean" applicationName="applicationName"
     componentContentSourceFactory="componentContentSourceFactory" />
 
-  <wicket:contentSource id="timetableMainMenuPanel" contentSourceId="someId" applicationName="applicationName"
-    contentSourceClass="this.is.some.class.Yes">
+  <wicket:contentSource id="timetableMainMenuPanel" contentSourceId="contentSourceId" applicationName="applicationName"
+    contentSourceClass="contentSourceClass">
     <wicket:overwrites>
       <wicket:overwrite originalBeanId="old1" newBeanId="new1" />
       <wicket:overwrite originalBeanId="old2" newBeanId="new2" />
