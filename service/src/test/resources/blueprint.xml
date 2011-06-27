@@ -19,7 +19,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:wicket="http://www.ops4j.org/schema/wicket">
 
   <wicket:componentContentSourceFactory id="testBean" applicationName="applicationName"
-    componentContentSourceFactory="someBeanReference" />
+    componentContentSourceFactory="componentContentSourceFactory" />
 
   <wicket:contentSource id="timetableMainMenuPanel" contentSourceId="someId" applicationName="applicationName"
     contentSourceClass="this.is.some.class.Yes">
