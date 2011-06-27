@@ -26,7 +26,7 @@ import java.util.Properties;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
-import org.ops4j.pax.wicket.internal.BundleAnalysingComponentInstantiationListener;
+import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;

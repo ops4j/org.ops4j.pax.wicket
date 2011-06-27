@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.injection;
 
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -24,6 +24,7 @@ import java.util.Map;
 import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.internal.OverwriteProxy;
 import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.injection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -28,6 +28,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.internal.injection.AbstractPaxWicketInjector;
 
 public class AbstractPaxWicketInjectorTest {
 

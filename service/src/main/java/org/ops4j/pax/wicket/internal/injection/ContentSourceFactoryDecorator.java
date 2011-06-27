@@ -25,8 +25,6 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.Model;
 import org.ops4j.pax.wicket.api.ComponentContentSource;
 import org.ops4j.pax.wicket.api.TabContentSource;
-import org.ops4j.pax.wicket.internal.BundleAnalysingComponentInstantiationListener;
-import org.ops4j.pax.wicket.internal.ComponentProxy;
 import org.ops4j.pax.wicket.util.AbstractContentSource;
 import org.osgi.framework.BundleContext;
 

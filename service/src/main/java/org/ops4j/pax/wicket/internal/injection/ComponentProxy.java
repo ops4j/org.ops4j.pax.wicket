@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.injection;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
+
+import org.ops4j.pax.wicket.internal.OverwriteProxy;
 
 import net.sf.cglib.proxy.MethodProxy;
 

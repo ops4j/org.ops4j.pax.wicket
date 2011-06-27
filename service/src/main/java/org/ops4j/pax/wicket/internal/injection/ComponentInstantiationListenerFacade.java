@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.injection;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.application.IComponentInstantiationListener;

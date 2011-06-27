@@ -22,7 +22,6 @@ import net.sf.cglib.proxy.Enhancer;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.internal.ComponentProxy;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
 
