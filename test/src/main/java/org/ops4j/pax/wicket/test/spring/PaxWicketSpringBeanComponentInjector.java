@@ -47,6 +47,10 @@ import org.springframework.context.ApplicationContext;
  *     
  * 4. run the test
  * </code>
+ * 
+ * For simplicity we do not provide an own mocking class for blueprint. Simply reuse the spring
+ * {@link ApplicationContextMock}. Though, make sure that you set the {@link #simulateBlueprint} flag to true. That way
+ * you make sure that the test case simulates the special behavior for blueprint injection.
  */
 public class PaxWicketSpringBeanComponentInjector implements IComponentInstantiationListener {
 
@@ -54,32 +58,44 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
     {
         private static final long serialVersionUID = 1L;
     };
-    
+
     private PaxWicketTestBeanInjector beanInjector;
+    private boolean simulateBlueprint;
 
     public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext) {
         webApp.setMetaData(CONTEXT_KEY, appContext);
         beanInjector = new PaxWicketTestBeanInjector();
         InjectorHolder.setInjector(webApp.getApplicationKey(), beanInjector);
     }
-    
+
+    public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext,
+            boolean simulateBlueprint) {
+        webApp.setMetaData(CONTEXT_KEY, appContext);
+        beanInjector = new PaxWicketTestBeanInjector();
+        InjectorHolder.setInjector(webApp.getApplicationKey(), beanInjector);
+        this.simulateBlueprint = simulateBlueprint;
+    }
+
     public void onInstantiation(Component component) {
         beanInjector.inject(component);
     }
-    
+
     private class PaxWicketTestBeanInjector extends AbstractPaxWicketInjector {
 
         public void inject(Object toInject) {
             for (Field field : getFields(toInject.getClass())) {
                 PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
+                if (simulateBlueprint && annotation.name().equals("")) {
+                    throw new IllegalStateException("Blueprint mode does not allow annotations without name");
+                }
                 Object proxy =
-                    LazyInitProxyFactory.createProxy(field.getType(), new SpringTestProxyTargetLocator(annotation.name(),
-                        field.getType()));
+                    LazyInitProxyFactory.createProxy(field.getType(),
+                        new SpringTestProxyTargetLocator(annotation.name(), field.getType()));
                 setField(toInject, field, proxy);
             }
         }
     }
-    
+
     private static class SpringTestProxyTargetLocator implements IProxyTargetLocator {
 
         private static final long serialVersionUID = -4804663390878149597L;
