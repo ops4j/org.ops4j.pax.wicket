@@ -39,10 +39,12 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
 
     private final BundleContext bundleContext;
     private String bundleResources = "";
+    private final String defaultInjectionSource;
 
     @SuppressWarnings("unchecked")
-    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext) {
+    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String defaultInjectionSource) {
         this.bundleContext = bundleContext;
+        this.defaultInjectionSource = defaultInjectionSource;
         Enumeration<URL> entries = bundleContext.getBundle().findEntries("/", "*.class", true);
         while (entries.hasMoreElements()) {
             String urlRepresentation =
@@ -75,12 +77,19 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 injectionSource = ((OverwriteProxy) ((Factory) component).getCallback(0)).getInjectionSource();
                 realClass = realClass.getSuperclass();
             }
+            if (injectionSource == null || injectionSource.equals("")) {
+                injectionSource = defaultInjectionSource;
+            }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
 
             List<Field> fields = getFields(realClass);
             for (Field field : fields) {
                 if (!field.isAnnotationPresent(PaxWicketBean.class)) {
                     continue;
+                }
+                PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
+                if (!annotation.injectionSource().equals(PaxWicketBean.INJECTION_SOURCE_UNDEFINED)) {
+                    injectionSource = annotation.injectionSource();
                 }
                 Object proxy = createProxy(field, realClass, overwrites, injectionSource);
                 setField(component, field, proxy);
@@ -97,23 +106,51 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
 
     private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
             String injectionSource) {
+        if (PaxWicketBean.INJECTION_SOURCE_NULL.equals(injectionSource)
+                || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {
+            return null;
+        }
         PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
+        AbstractProxyTargetLocator<?> springBeanTargetLocator =
+            resolveSpringBeanTargetLocator(field, page, annotation, overwrites);
+        AbstractProxyTargetLocator<?> blueprintBeanTargetLocator =
+            resolveBlueprintBeanTargetLocator(field, page, annotation, overwrites);
         if (PaxWicketBean.INJECTION_SOURCE_SPRING.equals(injectionSource)) {
-            return resolveSpringBeanTargetLocator(field, page, annotation, overwrites);
+            return springBeanTargetLocator;
         }
         if (PaxWicketBean.INJECTION_SOURCE_BLUEPRINT.equals(injectionSource)) {
-            return resolveBlueprintBeanTargetLocator(field, page, annotation, overwrites);
+            return blueprintBeanTargetLocator;
         }
-        LOGGER.warn("No injection source found for field [{}] in class [{}]", field.getName(), page.getName());
-        return null;
+        if (PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
+            boolean springBeanTargetLocatorHasApplicationContext = springBeanTargetLocator.hasApplicationContext();
+            boolean blueprintBeanTargetLocatorHasApplicationContext =
+                blueprintBeanTargetLocator.hasApplicationContext();
+            if (springBeanTargetLocatorHasApplicationContext && blueprintBeanTargetLocatorHasApplicationContext) {
+                throw new IllegalStateException(
+                    "INJECTION_SOURCE_SCAN cannot be used if spring & blueprint context exist.");
+            }
+            if (!springBeanTargetLocatorHasApplicationContext && !blueprintBeanTargetLocatorHasApplicationContext) {
+                throw new IllegalStateException(
+                    "INJECTION_SOURCE_SCAN cannot be used with neither blueprint nor spring context");
+            }
+            if (springBeanTargetLocatorHasApplicationContext) {
+                return springBeanTargetLocator;
+            }
+            if (blueprintBeanTargetLocatorHasApplicationContext) {
+                return blueprintBeanTargetLocator;
+            }
+        }
+        throw new IllegalStateException(String.format("No injection source found for field [%s] in class [%s]",
+            field.getName(), page.getName()));
     }
 
-    private IProxyTargetLocator resolveSpringBeanTargetLocator(Field field, Class<?> page,
+    private AbstractProxyTargetLocator<?> resolveSpringBeanTargetLocator(Field field, Class<?> page,
             PaxWicketBean annotation, Map<String, String> overwrites) {
         return new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
     }
 
-    private IProxyTargetLocator resolveBlueprintBeanTargetLocator(Field field, Class<?> page, PaxWicketBean annotation,
+    private AbstractProxyTargetLocator<?> resolveBlueprintBeanTargetLocator(Field field, Class<?> page,
+            PaxWicketBean annotation,
             Map<String, String> overwrites) {
         return new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
     }

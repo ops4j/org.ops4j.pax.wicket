@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.ApplicationFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     private Map<String, String> contextParams;
     private PaxWicketApplicationFactory paxWicketApplicationService;
     private ServiceRegistration serviceRegistration;
+    private String injectionSource = PaxWicketBean.INJECTION_SOURCE_UNDEFINED;
 
     public ApplicationDecorator() {
     }
@@ -68,6 +70,10 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
         this.contextParams = contextParams;
     }
 
+    public void setInjectionSource(String injectionSource) {
+        this.injectionSource = injectionSource;
+    }
+
     public void start() throws Exception {
         LOGGER.info("Trying to register pax-wicket application with the following settings: bundleContext: {}, "
                 + "homepageClass: {}, mountPoint: {}, applicationName: {}, applicationFactory: {}",
@@ -78,7 +84,7 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
             LOGGER.debug("ApplicationFactory is provided; creating paxwicket applicaiton");
             paxWicketApplicationService =
                 new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName,
-                    applicationFactory, contextParams);
+                    applicationFactory, contextParams, injectionSource);
         } else {
             LOGGER.debug("No own application factory found; falling back to old method");
             paxWicketApplicationService =

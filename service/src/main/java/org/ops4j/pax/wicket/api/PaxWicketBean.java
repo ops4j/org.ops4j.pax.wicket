@@ -32,13 +32,36 @@ import java.lang.annotation.Target;
 @Documented
 public @interface PaxWicketBean {
 
+    /**
+     * Will always (and only) search for a spring application context
+     */
     public static final String INJECTION_SOURCE_SPRING = "spring";
+    /**
+     * Will always (and only) search for a blueprint application context
+     */
     public static final String INJECTION_SOURCE_BLUEPRINT = "blueprint";
+    /**
+     * Will scan for blueprint and spring context; if none or both are found INJECTION_SOURCE_NULL is used.
+     */
+    public static final String INJECTION_SOURCE_SCAN = "scan";
+    /**
+     * Will simply inject null instead of a proxy
+     */
+    public static final String INJECTION_SOURCE_NULL = "null";
+    /**
+     * Uses other, general default values
+     */
+    public static final String INJECTION_SOURCE_UNDEFINED = "null";
 
     /**
      * Optional attribute for specifying the name of the bean. If not specified, the bean will be looked up by the type
      * of the field with the annotation.
      */
     String name() default "";
+
+    /**
+     * Allows to override the source of the injection directly in the source code
+     */
+    String injectionSource() default INJECTION_SOURCE_UNDEFINED;
 
 }

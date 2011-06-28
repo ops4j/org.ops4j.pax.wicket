@@ -97,6 +97,8 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
     private ServiceRegistration bdciRegistration;
     private BundleDelegatingComponentInstanciationListener bdci;
 
+    private final String defaultInjectionSource;
+
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
      * 
@@ -114,7 +116,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             String mountPoint,
             String applicationName)
         throws IllegalArgumentException {
-        this(context, homepageClass, mountPoint, applicationName, null, null);
+        this(context, homepageClass, mountPoint, applicationName, null, null, null);
     }
 
     /**
@@ -136,7 +138,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             String mountPoint,
             String applicationName, ApplicationFactory applicationFactory)
         throws IllegalArgumentException {
-        this(context, homepageClass, mountPoint, applicationName, applicationFactory, null);
+        this(context, homepageClass, mountPoint, applicationName, applicationFactory, null, null);
     }
 
     /**
@@ -157,8 +159,11 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             BundleContext context,
             Class<? extends Page> homepageClass,
             String mountPoint,
-            String applicationName, ApplicationFactory applicationFactory, Map<?, ?> contextParams)
+            String applicationName, ApplicationFactory applicationFactory, Map<?, ?> contextParams,
+            String defaultInjectionSource)
         throws IllegalArgumentException {
+        this.defaultInjectionSource =
+            defaultInjectionSource == null ? PaxWicketBean.INJECTION_SOURCE_UNDEFINED : defaultInjectionSource;
         validateNotNull(context, "context");
         validateNotNull(homepageClass, "homepageClass");
         validateNotNull(mountPoint, "mountPoint");
@@ -384,7 +389,9 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             bdcr = new BundleDelegatingClassResolver(bundleContext, applicationName, bundle);
             bdcrRegistration = bundleContext.registerService(IClassResolver.class.getName(), bdcr, config);
 
-            bdci = new BundleDelegatingComponentInstanciationListener(bundleContext, applicationName, bundle);
+            bdci =
+                new BundleDelegatingComponentInstanciationListener(bundleContext, applicationName, bundle,
+                    defaultInjectionSource);
             bdciRegistration =
                 bundleContext.registerService(PaxWicketInjector.class.getName(), bdci, config);
         }

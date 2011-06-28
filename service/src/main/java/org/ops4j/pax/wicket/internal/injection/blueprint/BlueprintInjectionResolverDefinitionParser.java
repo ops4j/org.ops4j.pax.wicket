@@ -17,6 +17,7 @@ package org.ops4j.pax.wicket.internal.injection.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.BundleInjectionProviderHelperDecorator;
 import org.w3c.dom.Element;
 
@@ -31,6 +32,8 @@ public class BlueprintInjectionResolverDefinitionParser extends AbstractBlueprin
     protected void extractRemainingMetaData(Element element, ParserContext context, MutableBeanMetadata beanMetadata)
         throws Exception {
         addPropertyValueFromElement("applicationName", element, context, beanMetadata);
+        beanMetadata.addProperty("injectionSource",
+            createStringValue(context, PaxWicketBean.INJECTION_SOURCE_BLUEPRINT));
     }
 
 }

@@ -43,6 +43,17 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         this.overwrites = overwrites;
     }
 
+    public boolean hasApplicationContext() {
+        String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
+        ServiceReference[] references = null;
+        try {
+            references = bundleContext.getServiceReferences(getContainerClass().getName(), filter);
+        } catch (InvalidSyntaxException e) {
+            throw new IllegalStateException("not possible", e);
+        }
+        return references != null && references.length != 0;
+    }
+
     public Object locateProxyTarget() {
         if (bundleContext == null) {
             throw new IllegalStateException("Bundle context is not allowed to be null");

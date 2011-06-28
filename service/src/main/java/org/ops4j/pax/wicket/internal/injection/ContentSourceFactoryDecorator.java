@@ -141,14 +141,14 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
 
         public ITab createSourceTab() {
             BundleAnalysingComponentInstantiationListener componentInstantiationListener =
-                new BundleAnalysingComponentInstantiationListener(bundleContext);
+                new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource);
             ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
                 ITab tab = null;
                 Enhancer e = new Enhancer();
                 e.setSuperclass(contentSourceClass);
-                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                e.setCallback(new ComponentProxy(null, overwrites));
                 tab = (ITab) e.create();
                 componentInstantiationListener.inject(tab);
                 return tab;
@@ -162,14 +162,14 @@ public class ContentSourceFactoryDecorator implements TabContentSource<ITab>, Co
 
         public ITab createSourceTab(String title) {
             BundleAnalysingComponentInstantiationListener componentInstantiationListener =
-                new BundleAnalysingComponentInstantiationListener(bundleContext);
+                new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource);
             ClassLoader originalClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 Thread.currentThread().setContextClassLoader(contentSourceClass.getClassLoader());
                 ITab tab = null;
                 Enhancer e = new Enhancer();
                 e.setSuperclass(contentSourceClass);
-                e.setCallback(new ComponentProxy(injectionSource, overwrites));
+                e.setCallback(new ComponentProxy(null, overwrites));
                 tab = (ITab) e.create(new Class[]{ Model.class }, new Object[]{ new Model<String>(title) });
                 componentInstantiationListener.inject(tab);
                 return tab;

@@ -18,6 +18,7 @@
 
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
 import org.ops4j.pax.wicket.internal.injection.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -37,6 +38,12 @@ public class SpringApplicationBeanDefinitionParser extends AbstractSpringBeanDef
         addPropertyValueFromElement("applicationName", element, bean);
         addPropertyReferenceFromElement("applicationFactory", element, bean);
         bean.addPropertyValue("contextParams", InjectionParserUtil.retrieveContextParam(element));
+        String injectionSource = element.getAttribute("injectionSource");
+        if (injectionSource == null || injectionSource.isEmpty()) {
+            bean.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
+        } else {
+            bean.addPropertyValue("injectionSource", injectionSource);
+        }
     }
 
 }

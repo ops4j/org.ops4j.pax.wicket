@@ -55,14 +55,19 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
     private final String applicationName;
     private final Bundle paxWicketBundle;
 
+    private final String injectionSource;
+
     public BundleDelegatingComponentInstanciationListener(BundleContext context, String applicationName,
-            Bundle paxWicketBundle) {
+            Bundle paxWicketBundle, String injectionSource) {
         super(context, createFilter(context), null);
 
         this.applicationName = applicationName;
         this.paxWicketBundle = paxWicketBundle;
+        this.injectionSource = injectionSource;
+
         listeners = new HashSet<BundleAnalysingComponentInstantiationListener>();
-        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext()));
+        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
+            injectionSource));
 
         open(true);
     }
@@ -85,13 +90,13 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return null;
         }
-        LOGGER.info("Adding bundle {} to DelegatingComponentInstanciationListener", 
+        LOGGER.info("Adding bundle {} to DelegatingComponentInstanciationListener",
             serviceReference.getBundle().getSymbolicName());
         synchronized (this) {
             Bundle bundle = serviceReference.getBundle();
             HashSet<BundleAnalysingComponentInstantiationListener> clone =
                 (HashSet<BundleAnalysingComponentInstantiationListener>) listeners.clone();
-            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext()));
+            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), injectionSource));
             listeners = clone;
         }
         return super.addingService(serviceReference);
@@ -106,7 +111,8 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         }
         HashSet<BundleAnalysingComponentInstantiationListener> revisedSet =
             new HashSet<BundleAnalysingComponentInstantiationListener>();
-        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext()));
+        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
+            injectionSource));
         try {
             LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
             synchronized (this) {
@@ -114,7 +120,7 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
                 if (serviceReferences != null) {
                     for (ServiceReference ref : serviceReferences) {
                         revisedSet.add(new BundleAnalysingComponentInstantiationListener(ref.getBundle()
-                            .getBundleContext()));
+                            .getBundleContext(), injectionSource));
                     }
                 }
                 listeners = revisedSet;

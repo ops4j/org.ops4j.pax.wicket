@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.injection.spring;
 
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.BundleInjectionProviderHelperDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
@@ -29,6 +30,7 @@ public class SpringInjectionResolverDefinitionParser extends AbstractSpringBeanD
     @Override
     protected void prepareInjection(Element element, BeanDefinitionBuilder builder) {
         addPropertyValueFromElement("applicationName", element, builder);
+        builder.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
     }
 
 }

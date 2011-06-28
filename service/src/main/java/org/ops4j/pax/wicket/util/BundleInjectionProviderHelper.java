@@ -25,6 +25,7 @@ import java.util.Dictionary;
 import java.util.Properties;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
 import org.osgi.framework.BundleContext;
@@ -48,13 +49,16 @@ public final class BundleInjectionProviderHelper {
     private BundleAnalysingComponentInstantiationListener bundleAnalysingComponentInstantiationListener;
 
     private final Object lock = new Object();
+    private final String injectionSource;
     private ServiceRegistration serviceRegistration;
 
     /**
-     * Construct an instance of {@code BundleClassResolver}.
+     * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
+     * {@link PaxWicketBean}.
      */
-    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName)
+    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource)
         throws IllegalArgumentException {
+        this.injectionSource = injectionSource;
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
         serviceProperties = new Properties();
@@ -99,7 +103,7 @@ public final class BundleInjectionProviderHelper {
             } else {
                 serviceProperties.put(APPLICATION_NAME, applicationName);
                 bundleAnalysingComponentInstantiationListener =
-                    new BundleAnalysingComponentInstantiationListener(bundleContext);
+                    new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource);
             }
 
             if (serviceRegistration != null) {

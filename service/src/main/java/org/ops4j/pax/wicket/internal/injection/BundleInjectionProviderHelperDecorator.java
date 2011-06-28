@@ -23,12 +23,14 @@ public class BundleInjectionProviderHelperDecorator implements InjectionAwareDec
     private String applicationName;
     private BundleContext bundleContext;
     private BundleInjectionProviderHelper bundleInjectionProviderHelper;
+    private String injectionSource;
 
     public BundleInjectionProviderHelperDecorator() {
     }
 
     public void start() throws Exception {
-        bundleInjectionProviderHelper = new BundleInjectionProviderHelper(bundleContext, applicationName);
+        bundleInjectionProviderHelper =
+            new BundleInjectionProviderHelper(bundleContext, applicationName, injectionSource);
         bundleInjectionProviderHelper.register();
     }
 
@@ -42,6 +44,10 @@ public class BundleInjectionProviderHelperDecorator implements InjectionAwareDec
 
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
+    }
+
+    public void setInjectionSource(String injectionSource) {
+        this.injectionSource = injectionSource;
     }
 
 }
