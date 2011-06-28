@@ -103,8 +103,6 @@ public final class PaxWicketApplication extends WebApplication {
         sessionSettings.setPageFactory(pageFactory);
         addWicketService(ISessionSettings.class, sessionSettings);
 
-        setApplicationKey(applicationName);
-
         // addWicketService( IAjaxSettings.class, getAjaxSettings() );
         addWicketService(IDebugSettings.class, getDebugSettings());
         addWicketService(IExceptionSettings.class, getExceptionSettings());

@@ -155,8 +155,6 @@ public final class PaxAuthenticatedWicketApplication extends AuthenticatedWebApp
         sessionSettings.setPageFactory(m_pageFactory);
         addWicketService(ISessionSettings.class, sessionSettings);
 
-        setApplicationKey(m_applicationName);
-
         // addWicketService( IAjaxSettings.class, getAjaxSettings() );
         addWicketService(IDebugSettings.class, getDebugSettings());
         addWicketService(IExceptionSettings.class, getExceptionSettings());

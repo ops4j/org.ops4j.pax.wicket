@@ -40,11 +40,11 @@ public class ServletProxy {
     private static final Class<?>[] SERVLET_INTERFACES = new Class[]{
         Servlet.class
     };
-
+    
     static Servlet newServletProxy(IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
-            FilterDelegator filterDelegator) {
+            FilterDelegator filterDelegator, String applicationName) {
         ServletInvocationHandler ih =
-            new ServletInvocationHandler(applicationFactory, tempDir, mountPoint, filterDelegator);
+            new ServletInvocationHandler(applicationFactory, tempDir, mountPoint, filterDelegator, applicationName);
         return newServletProxy(ih);
     }
 
@@ -65,9 +65,9 @@ public class ServletProxy {
 
         public ServletInvocationHandler(
                 IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
-                FilterDelegator filterDelegator) {
+                FilterDelegator filterDelegator, String applicationName) {
             this.mountPoint = mountPoint;
-            delegator = new ServletDelegator(applicationFactory, tempDir);
+            delegator = new ServletDelegator(applicationFactory, tempDir, applicationName);
             this.filterDelegator = filterDelegator;
             this.filterDelegator.setServlet(delegator);
         }
@@ -119,11 +119,12 @@ public class ServletProxy {
 
             private final IWebApplicationFactory appFactory;
             private final File tmpDir;
+            private String applicationName;
 
-            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir) throws IllegalArgumentException {
+            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir, String applicationName) throws IllegalArgumentException {
                 validateNotNull(applicationFactory, "applicationFactory");
                 validateNotNull(tempDir, "tempDir");
-
+                this.applicationName = applicationName;
                 appFactory = applicationFactory;
                 tmpDir = tempDir;
                 tmpDir.mkdirs();
@@ -136,6 +137,11 @@ public class ServletProxy {
                     servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, tmpDir);
                 }
                 return new PaxWicketFilter(appFactory);
+            }
+
+            @Override
+            public String getServletName() {
+                return applicationName;
             }
 
             @Override
