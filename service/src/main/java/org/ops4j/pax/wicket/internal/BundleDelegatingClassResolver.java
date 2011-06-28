@@ -137,8 +137,10 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
             synchronized (this) {
                 ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
-                for (ServiceReference ref : serviceReferences) {
-                    revisedSet.add(ref.getBundle());
+                if (serviceReferences != null) {
+                    for (ServiceReference ref : serviceReferences) {
+                        revisedSet.add(ref.getBundle());
+                    }
                 }
                 bundles = revisedSet;
             }

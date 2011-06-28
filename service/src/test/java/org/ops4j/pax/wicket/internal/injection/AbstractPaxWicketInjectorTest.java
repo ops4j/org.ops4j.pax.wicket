@@ -28,7 +28,6 @@ import org.apache.wicket.markup.MarkupStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.internal.injection.AbstractPaxWicketInjector;
 
 public class AbstractPaxWicketInjectorTest {
 
@@ -59,6 +58,13 @@ public class AbstractPaxWicketInjectorTest {
         private Object noBean;
 
         public TestComponentExtender() {
+            super("foo");
+        }
+    }
+    
+    @SuppressWarnings("serial")
+    private static class TestComponentBase extends TestComponent {
+        public TestComponentBase() {
             super("foo");
         }
     }
@@ -107,5 +113,10 @@ public class AbstractPaxWicketInjectorTest {
         List<Field> fields = injector.getFields(TestObject.class);
 
         assertThat(injector.getBeanType(fields.get(0)).getName(), is(TestService.class.getName()));
+    }
+    
+    @Test
+    public void testdoesComponentContainPaxWicketBeanAnnotatedFields_shouldReturnTrue() {
+        assertThat(injector.doesComponentContainPaxWicketBeanAnnotatedFields(mock(TestComponentBase.class)), is(true));
     }
 }

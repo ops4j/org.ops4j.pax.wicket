@@ -19,6 +19,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.cglib.proxy.Factory;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -75,5 +77,21 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
     protected Class<?> getBeanType(Field field) {
         Class<?> beanType = field.getType();
         return beanType;
+    }
+
+    protected boolean doesComponentContainPaxWicketBeanAnnotatedFields(Object component) {
+        Class<?> clazz = component.getClass();
+        if (Factory.class.isInstance(component)) {
+            clazz = clazz.getSuperclass();
+        }
+        while (clazz != null && !isBoundaryClass(clazz)) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(PaxWicketBean.class)) {
+                    return true;
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return false;
     }
 }
