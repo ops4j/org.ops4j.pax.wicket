@@ -20,14 +20,10 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -37,7 +33,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DelegatingComponentInstanciationListener implements PaxWicketInjector {
+public final class DelegatingComponentInstanciationListener extends AbstractPaxWicketInjector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingComponentInstanciationListener.class);
 
@@ -83,7 +79,7 @@ public final class DelegatingComponentInstanciationListener implements PaxWicket
     public void inject(Object toInject) {
         boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(toInject);
         if (!foundAnnotation) {
-            LOGGER.trace("Component {} doesn ot contain any PaxWicketBean fields. Therefore ignore", toInject
+            LOGGER.trace("Component {} doesn't contain any PaxWicketBean fields. Therefore ignore", toInject
                 .getClass().getName());
             return;
         }
@@ -98,22 +94,6 @@ public final class DelegatingComponentInstanciationListener implements PaxWicket
         }
         throw new NoBeanAvailableForInjectionException(String.format(
             "Component %s has fields to inject but noone provides the beans for them", toInject.getClass().getName()));
-    }
-
-    private boolean doesComponentContainPaxWicketBeanAnnotatedFields(Object component) {
-        Class<?> realClass = component.getClass();
-        if (Factory.class.isInstance(component)) {
-            realClass = realClass.getSuperclass();
-        }
-        Field[] declaredFields = realClass.getDeclaredFields();
-        boolean found = false;
-        for (Field field : declaredFields) {
-            if (field.isAnnotationPresent(PaxWicketBean.class)) {
-                found = true;
-                break;
-            }
-        }
-        return found;
     }
 
     private final class ComponentInstanciationListenerTracker extends ServiceTracker {

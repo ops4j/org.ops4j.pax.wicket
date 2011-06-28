@@ -25,10 +25,6 @@ import org.ops4j.pax.wicket.util.AbstractFilterFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.osgi.context.BundleContextAware;
 
 public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDecorator {
 
@@ -87,13 +83,12 @@ public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDeco
         this.initParams = initParams;
     }
 
-    private static class DefaultFilterFactory extends AbstractFilterFactory implements ApplicationContextAware {
+    private static class DefaultFilterFactory extends AbstractFilterFactory {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFilterFactory.class);
 
         private Class<? extends Filter> filterClass;
         private String applicationName;
-        private ApplicationContext applicationContext;
         private Map<String, String> filterConfiguration;
 
         public DefaultFilterFactory(BundleContext bundleContext, Class<? extends Filter> filterClass, Integer priority,
@@ -110,7 +105,6 @@ public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDeco
                 Thread.currentThread().setContextClassLoader(filterClass.getClassLoader());
                 LOGGER.info("Creating new instance of {} for application {}", filterClass.getName(), applicationName);
                 Filter filter = filterClass.newInstance();
-                initFilter(filter);
                 filterConfig.putAllInitParameter(filterConfiguration);
                 filter.init(filterConfig);
                 return filter;
@@ -120,19 +114,6 @@ public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDeco
             } finally {
                 Thread.currentThread().setContextClassLoader(oldClassloader);
             }
-        }
-
-        private void initFilter(Filter filter) {
-            if (filter instanceof ApplicationContextAware) {
-                ((ApplicationContextAware) filter).setApplicationContext(applicationContext);
-            }
-            if (filter instanceof BundleContextAware) {
-                ((BundleContextAware) filter).setBundleContext(getBundleContext());
-            }
-        }
-
-        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-            this.applicationContext = applicationContext;
         }
 
     }

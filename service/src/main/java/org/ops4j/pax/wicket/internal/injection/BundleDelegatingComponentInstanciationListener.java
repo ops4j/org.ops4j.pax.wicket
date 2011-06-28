@@ -85,7 +85,8 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return null;
         }
-        LOGGER.info("Adding bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
+        LOGGER.info("Adding bundle {} to DelegatingComponentInstanciationListener", 
+            serviceReference.getBundle().getSymbolicName());
         synchronized (this) {
             Bundle bundle = serviceReference.getBundle();
             HashSet<BundleAnalysingComponentInstantiationListener> clone =

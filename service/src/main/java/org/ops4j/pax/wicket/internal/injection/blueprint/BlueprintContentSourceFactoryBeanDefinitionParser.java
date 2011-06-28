@@ -39,7 +39,7 @@ public class BlueprintContentSourceFactoryBeanDefinitionParser extends AbstractB
             InjectionParserUtil.retrieveDestinationElements(element));
         addPropertyReferenceForMap("overwrites", context, beanMetadata,
             InjectionParserUtil.retrieveOverwriteElements(element));
-        beanMetadata.addProperty("injectionSource", createStringValue(context, PaxWicketBean.INJECTION_SOURCE_SPRING));
+        beanMetadata.addProperty("injectionSource", createStringValue(context, PaxWicketBean.INJECTION_SOURCE_BLUEPRINT));
     }
 
 }
