@@ -68,11 +68,10 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
         File tmpDir = context.getDataFile("tmp-dir");
         String mountPoint = factory.getMountPoint();
-        Servlet servlet = null;
+        String applicationName = (String) reference.getProperty(APPLICATION_NAME);
         FilterDelegator filterDelegator =
-            new FilterDelegator(reference.getBundle().getBundleContext(),
-                (String) reference.getProperty(APPLICATION_NAME));
-        servlet = ServletProxy.newServletProxy(factory, tmpDir, mountPoint, filterDelegator);
+            new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
+        Servlet servlet = ServletProxy.newServletProxy(factory, tmpDir, mountPoint, filterDelegator, applicationName);
         addServlet(mountPoint, servlet, factory.getContextParams(), reference);
 
         synchronized (factories) {
