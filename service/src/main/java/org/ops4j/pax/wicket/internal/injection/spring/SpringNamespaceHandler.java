@@ -29,6 +29,7 @@ public class SpringNamespaceHandler extends NamespaceHandlerSupport {
         registerBeanDefinitionParser("filter", new SpringFilterFactoryBeanDefinitionParser());
         registerBeanDefinitionParser("componentContentSourceFactory",
             new SpringComponentContentSourceFactoryBeanDefinitionParser());
+        registerBeanDefinitionParser("autoPageMounter", new SpringAutoPageMounterDefinitionParser());
     }
 
 }

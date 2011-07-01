@@ -56,6 +56,8 @@
     aggregationPointName="aggregationPointName" />
 
   <wicket:classResolver id="classResolver" applicationName="applicationName" />
+  
+  <wicket:autoPageMounter id="autoPageMounter" applicationName="applicationName" />
 
   <wicket:injectionProvider id="injectionProvider" applicationName="applicationName" />
 
