@@ -10,7 +10,7 @@ into the [OSGi](http://www.osgi.org) component framework. PAX-WICKET provides th
 * A delegating classloader and injection model.
 
 For a full list of features and a more detailed documentation see the 
-[PAX-WICKET wiki](http://http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
+[PAX-WICKET wiki](http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
 
 ## Get in contact
 
@@ -21,7 +21,7 @@ or [IRC channels](https://ops4j1.jira.com/wiki/display/ops4j/ircinfo) and ask yo
 ## Quickstart
 
 This is a VERY short summary for developer how to build PAX-WICKET and howto run the samples. For
-a full documentation see the [PAX-WICKET wiki](http://http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
+a full documentation see the [PAX-WICKET wiki](http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
 
 ### Build PAX-WICKET
 
@@ -44,5 +44,5 @@ Basically it is as easy as:
 [http://localhost:8080/springDeptStore](http://localhost:8080/springDeptStore) or 
 [http://localhost:8080/blueprintDeptStore](http://localhost:8080/blueprintDeptStore).
 
-For more detailed examples and descriptions plesae visit the [PAX-WICKET wiki](http://http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
+For more detailed examples and descriptions plesae visit the [PAX-WICKET wiki](http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
 
