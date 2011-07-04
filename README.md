@@ -40,7 +40,9 @@ Basically it is as easy as:
 * mvn clean install -Dmaven.test.skip=true
 * cd samples
 * mvn pax:provision
-* point the browser to localhost:8080/deptStore or localhost:8080/springDeptStore or localhost:blueprintDeptStore
+* point the browser to [http://localhost:8080/deptStore](http://localhost:8080/deptStore) or 
+[http://localhost:8080/springDeptStore](http://localhost:8080/springDeptStore) or 
+[http://localhost:blueprintDeptStore](http://localhost:blueprintDeptStore).
 
 For more detailed examples and descriptions plesae visit the [PAX-WICKET wiki](http://http://ops4j1.jira.com/wiki/display/paxwicket/Pax+Wicket).
 
