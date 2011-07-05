@@ -21,14 +21,14 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.service</groupId>
     <artifactId>pax-wicket-samples-service-parent</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.0</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.service</groupId>
   <artifactId>pax-wicket-samples-service-alternative</artifactId>
-  <version>0.7.0-SNAPSHOT</version>
+  <version>0.7.0</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Service :: Alternative</name>
 
