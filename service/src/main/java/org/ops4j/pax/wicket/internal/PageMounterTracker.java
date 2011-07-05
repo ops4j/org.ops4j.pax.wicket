@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static java.lang.String.format;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
@@ -30,8 +31,12 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PageMounterTracker extends ServiceTracker {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PageMounterTracker.class);
 
     private final WebApplication application;
 
@@ -54,10 +59,8 @@ public final class PageMounterTracker extends ServiceTracker {
         try {
             return context.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
-            // TODO: Shouldn't happened
-            e.printStackTrace();
+            throw new IllegalStateException(format("Application", applicationName), e);
         }
-        return null;
     }
 
     @Override
@@ -66,8 +69,10 @@ public final class PageMounterTracker extends ServiceTracker {
 
         List<MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
+            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
             IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
             application.mount(strategy);
+            LOGGER.info("Mounted {} with {}", info.getPath(), info.getCodingStrategy().toString());
         }
 
         return mounter;
@@ -77,9 +82,11 @@ public final class PageMounterTracker extends ServiceTracker {
     public final void removedService(ServiceReference reference, Object mounter) {
         PageMounter pageMounter = (PageMounter) mounter;
         List<MountPointInfo> infos = pageMounter.getMountPoints();
-        for (MountPointInfo bookmark : infos) {
-            String path = bookmark.getPath();
+        for (MountPointInfo info : infos) {
+            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
+            String path = info.getPath();
             application.unmount(path);
+            LOGGER.info("Unmounted {} with {}", info.getPath(), info.getCodingStrategy().toString());
         }
 
         super.removedService(reference, pageMounter);

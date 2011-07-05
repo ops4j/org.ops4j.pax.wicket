@@ -115,11 +115,12 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
      * @param pageClass the class to mount on this mount point using the default strategy
      */
     public void addMountPoint(String path, Class<? extends Page> pageClass) {
+        LOGGER.debug("Adding mount point for path {}", path);
         addMountPoint(path, new BookmarkablePageRequestTargetUrlCodingStrategy(path, pageClass, null));
     }
 
     public void addMountPoint(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
-        LOGGER.info("Adding mount point for {} with path {}", path, codingStrategy.getMountPath());
+        LOGGER.debug("Adding mount point for path {}", path);
         MountPointInfo info = new DefaultMountPointInfo(path, codingStrategy);
         mountPoints.add(info);
     }
