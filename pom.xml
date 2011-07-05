@@ -351,7 +351,7 @@
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.asm</artifactId>
-        <version>3.3_1</version>
+        <version>3.3_2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
