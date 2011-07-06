@@ -70,8 +70,10 @@ public final class PageMounterTracker extends ServiceTracker {
 
         List<MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
-            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
             IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
+            LOGGER.trace("Make sure that path {} is clear before trying to remount", info.getPath());
+            application.unmount(info.getPath());
+            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
             application.mount(strategy);
             LOGGER.info("Mounted {} with {}", info.getPath(), info.getCodingStrategy().toString());
         }
