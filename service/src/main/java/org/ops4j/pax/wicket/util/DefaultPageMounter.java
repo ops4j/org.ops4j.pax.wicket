@@ -76,7 +76,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
      */
     public void dispose() {
         synchronized (this) {
-            if (serviceRegistration != null) {
+            if (serviceRegistration == null) {
                 throw new IllegalStateException(String.format("%s [%s] had not been registered.", getClass()
                     .getSimpleName(), this));
             }
