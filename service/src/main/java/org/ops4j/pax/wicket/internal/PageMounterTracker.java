@@ -59,7 +59,8 @@ public final class PageMounterTracker extends ServiceTracker {
         try {
             return context.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException(format("Application", applicationName), e);
+            throw new IllegalStateException(format(
+                "Applicationname [%s] is not allowed to contain spaces or special chars", applicationName), e);
         }
     }
 
