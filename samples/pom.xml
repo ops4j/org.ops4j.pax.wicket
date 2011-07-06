@@ -21,6 +21,11 @@
     <module>features</module>
   </modules>
 
+  <properties>
+    <org.ops4j.pax.logging.DefaultServiceLog.level>WARN</org.ops4j.pax.logging.DefaultServiceLog.level>
+    <felix.log.level>1</felix.log.level>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
