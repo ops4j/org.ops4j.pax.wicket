@@ -77,7 +77,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     @Test
     public void testNonSpringSampleApplication_shouldAllowBaseFunctions() throws Exception {
         WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:8080/deptStore/");
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/deptStore/");
         assertThatAllTabsExist(page.asText());
         assertTrue(page.asText().contains("Activator"));
     }
@@ -85,7 +85,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     @Test
     public void testSpringSampleApplication_shouldAllowBaseFunctions() throws Exception {
         WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:8080/springDeptStore/");
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springDeptStore/");
         assertThatAllTabsExist(page.asText());
         assertTrue(page.asText().contains("Spring"));
     }
@@ -93,7 +93,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     @Test
     public void testBlueprintSampleApplication_shouldAllowBaseFunctions() throws Exception {
         WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:8080/blueprintDeptStore/");
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprintDeptStore/");
         assertThatAllTabsExist(page.asText());
         assertTrue(page.asText().contains("Blueprint"));
     }
