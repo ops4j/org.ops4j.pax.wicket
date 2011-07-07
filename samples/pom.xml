@@ -37,6 +37,7 @@
             <param>--platform=felix</param>
             <param>--workingDirectory=target/runner</param>
           </provision>
+          <noDependencies>true</noDependencies>
         </configuration>
       </plugin>
     </plugins>
