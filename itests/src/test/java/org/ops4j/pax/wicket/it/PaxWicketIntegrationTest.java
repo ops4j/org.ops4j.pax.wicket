@@ -20,6 +20,8 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
+import static org.ops4j.pax.exam.CoreOptions.waitForFrameworkStartup;
+import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.vmOption;
 
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -31,6 +33,7 @@ import org.osgi.framework.BundleContext;
 @RunWith(JUnit4TestRunner.class)
 public abstract class PaxWicketIntegrationTest {
 
+    protected static final String WEBUI_PORT = "9081";
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
     @Configuration
@@ -44,11 +47,11 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-activation_1.1_spec")
-                    .versionAsInProject()),
+                .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-servlet_2.5_spec")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-jta_1.1_spec")
-                    .versionAsInProject()),
+                .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.javax.mail").versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
@@ -73,7 +76,8 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.cglib")
                 .versionAsInProject()),
-            systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"));
+            systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
+            vmOption("-Dorg.osgi.service.http.port=" + WEBUI_PORT), waitForFrameworkStartup());
     }
 
     /**
