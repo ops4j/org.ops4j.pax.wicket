@@ -20,8 +20,6 @@
 
   <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
   <feature name="wicket" version="${project.version}">
-    <feature>jetty</feature>
-    <feature>jetty-jaas</feature>
     <feature>http</feature>
     <feature>eventadmin</feature>
     <bundle>mvn:org.ops4j.pax.wicket/pax-wicket-service/${project.version}</bundle>
