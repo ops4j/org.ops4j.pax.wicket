@@ -21,9 +21,10 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
 
 import org.apache.wicket.application.IClassResolver;
 import org.osgi.framework.BundleContext;
@@ -40,7 +41,7 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     private final BundleContext context;
     private final String applicationName;
-    private final ConcurrentLinkedQueue<IClassResolver> resolvers;
+    private final List<IClassResolver> resolvers;
 
     private ClassResolverTracker tracker;
 
@@ -49,7 +50,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         validateNotEmpty(applicationName, "applicationName");
         this.context = context;
         this.applicationName = applicationName;
-        resolvers = new ConcurrentLinkedQueue<IClassResolver>();
+        resolvers = new ArrayList<IClassResolver>();
     }
 
     public final void intialize() throws IllegalStateException {
@@ -75,35 +76,39 @@ public final class DelegatingClassResolver implements IClassResolver {
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {
-        LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
-        for (IClassResolver resolver : resolvers) {
-            try {
-                Class<?> candidate = resolver.resolveClass(classname);
-                if (candidate != null) {
-                    return candidate;
+        synchronized (resolvers) {
+            LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
+            for (IClassResolver resolver : resolvers) {
+                try {
+                    Class<?> candidate = resolver.resolveClass(classname);
+                    if (candidate != null) {
+                        return candidate;
+                    }
+                } catch (ClassNotFoundException e) {
+                    LOGGER.info("ClassResolver {} could not find class: {}", resolver, classname);
+                } catch (RuntimeException e) {
+                    LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
                 }
-            } catch (ClassNotFoundException e) {
-                LOGGER.info("ClassResolver {} could not find class: {}", resolver, classname);
-            } catch (RuntimeException e) {
-                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
             }
         }
         throw new ClassNotFoundException(String.format("Class [%s] can't be resolved.", classname));
     }
 
     public Iterator<URL> getResources(String name) {
-        for (IClassResolver resolver : resolvers) {
-            try {
-                Iterator<URL> iterator = resolver.getResources(name);
-                if (iterator != null && iterator.hasNext()) {
-                    return iterator;
+        synchronized (resolvers) {
+            for (IClassResolver resolver : resolvers) {
+                try {
+                    Iterator<URL> iterator = resolver.getResources(name);
+                    if (iterator != null && iterator.hasNext()) {
+                        return iterator;
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
+                    return Collections.<URL> emptyList().iterator();
                 }
-            } catch (RuntimeException e) {
-                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
-                return Collections.<URL> emptyList().iterator();
             }
+            return Collections.<URL> emptyList().iterator();
         }
-        return Collections.<URL> emptyList().iterator();
     }
 
     private final class ClassResolverTracker extends ServiceTracker {
@@ -118,7 +123,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         @Override
         public final Object addingService(ServiceReference reference) {
             IClassResolver resolver = (IClassResolver) super.addingService(reference);
-            synchronized (DelegatingClassResolver.this) {
+            synchronized (resolvers) {
                 resolvers.add(resolver);
             }
             return resolver;
@@ -151,7 +156,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         @Override
         public final void removedService(ServiceReference reference, Object service) {
             IClassResolver resolver = (IClassResolver) service;
-            synchronized (DelegatingClassResolver.this) {
+            synchronized (resolvers) {
                 resolvers.remove(resolver);
             }
             super.removedService(reference, service);
@@ -160,7 +165,7 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     private static Filter createFilter(BundleContext context, String applicationName) {
         String filterStr = "(&(" + OBJECTCLASS + "=" + IClassResolver.class.getName() + ")(" + APPLICATION_NAME + "="
-                           + applicationName + "))";
+                + applicationName + "))";
         try {
             return context.createFilter(filterStr);
         } catch (InvalidSyntaxException e) {
