@@ -19,10 +19,12 @@ import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.ContentAggregator;
@@ -54,35 +56,35 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             "(objectClass=" + PaxWicketApplicationFactory.class.getName() + ")" +
             ")";
 
-    private HashSet<Bundle> bundles;
+    private Map<ServiceReference, Bundle> bundles;
     private final String applicationName;
-    private final Bundle paxWicketBundle;
 
     public BundleDelegatingClassResolver(BundleContext context, String applicationName, Bundle paxWicketBundle) {
         super(context, createFilter(context), null);
-
         this.applicationName = applicationName;
-        this.paxWicketBundle = paxWicketBundle;
-        bundles = new HashSet<Bundle>();
-        bundles.add(paxWicketBundle);
-
+        bundles = new HashMap<ServiceReference, Bundle>();
+        bundles.put(new DummyServiceReference(), paxWicketBundle);
         open(true);
     }
 
     public Class<?> resolveClass(String classname) throws ClassNotFoundException {
         LOGGER.trace("Trying to resolve class {} from BundleDelegatingClassResolver", classname);
-        for (Bundle bundle : bundles) {
-            try {
-                LOGGER.trace("Trying to load class {} from bundle {}", classname, bundle.getSymbolicName());
-                Class<?> loadedClass = bundle.loadClass(classname);
-                LOGGER.debug("Loaded class {} from bundle {}", classname, bundle.getSymbolicName());
-                return loadedClass;
-            } catch (ClassNotFoundException e) {
-                LOGGER.trace("Could not load class {} from bundle {} because bundle does not contain the class",
-                    classname, bundle.getSymbolicName());
-            } catch (IllegalStateException e) {
-                LOGGER.trace("Could not load class {} from bundle {} because bundle had been uninstalled", classname,
-                    bundle.getSymbolicName());
+        synchronized (bundles) {
+            Collection<Bundle> values = bundles.values();
+            for (Bundle bundle : values) {
+                try {
+                    LOGGER.trace("Trying to load class {} from bundle {}", classname, bundle.getSymbolicName());
+                    Class<?> loadedClass = bundle.loadClass(classname);
+                    LOGGER.debug("Loaded class {} from bundle {}", classname, bundle.getSymbolicName());
+                    return loadedClass;
+                } catch (ClassNotFoundException e) {
+                    LOGGER.trace("Could not load class {} from bundle {} because bundle does not contain the class",
+                        classname, bundle.getSymbolicName());
+                } catch (IllegalStateException e) {
+                    LOGGER.trace("Could not load class {} from bundle {} because bundle had been uninstalled",
+                        classname,
+                        bundle.getSymbolicName());
+                }
             }
         }
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
@@ -94,10 +96,13 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
     @SuppressWarnings("unchecked")
     public Iterator<URL> getResources(String name) {
         try {
-            for (Bundle bundle : bundles) {
-                final Enumeration<URL> enumeration = bundle.getResources(name);
-                if (null != enumeration && enumeration.hasMoreElements()) {
-                    return new EnumerationAdapter<URL>(enumeration);
+            synchronized (bundles) {
+                Collection<Bundle> values = bundles.values();
+                for (Bundle bundle : values) {
+                    final Enumeration<URL> enumeration = bundle.getResources(name);
+                    if (null != enumeration && enumeration.hasMoreElements()) {
+                        return new EnumerationAdapter<URL>(enumeration);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -107,7 +112,6 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Object addingService(ServiceReference serviceReference) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
         if (!applicationName.equals(appName)) {
@@ -115,11 +119,9 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             return null;
         }
         LOGGER.info("Adding bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
-        synchronized (this) {
-            Bundle bundle = serviceReference.getBundle();
-            HashSet<Bundle> clone = (HashSet<Bundle>) bundles.clone();
-            clone.add(bundle);
-            bundles = clone;
+        Bundle bundle = serviceReference.getBundle();
+        synchronized (bundles) {
+            bundles.put(serviceReference, bundle);
         }
         return super.addingService(serviceReference);
     }
@@ -131,21 +133,9 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
             LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return;
         }
-        HashSet<Bundle> revisedSet = new HashSet<Bundle>();
-        revisedSet.add(paxWicketBundle);
-        try {
-            LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
-            synchronized (this) {
-                ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
-                if (serviceReferences != null) {
-                    for (ServiceReference ref : serviceReferences) {
-                        revisedSet.add(ref.getBundle());
-                    }
-                }
-                bundles = revisedSet;
-            }
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException(String.format("Filter %s have to be accepted", FILTER), e);
+        LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
+        synchronized (bundles) {
+            bundles.remove(serviceReference);
         }
         super.removedService(serviceReference, o);
     }

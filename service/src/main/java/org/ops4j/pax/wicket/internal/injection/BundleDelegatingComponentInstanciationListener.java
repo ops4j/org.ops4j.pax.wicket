@@ -17,7 +17,9 @@ package org.ops4j.pax.wicket.internal.injection;
 
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -25,6 +27,7 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
+import org.ops4j.pax.wicket.internal.DummyServiceReference;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -51,9 +54,8 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             "(objectClass=" + PaxWicketApplicationFactory.class.getName() + ")" +
             ")";
 
-    private HashSet<BundleAnalysingComponentInstantiationListener> listeners;
+    private Map<ServiceReference, BundleAnalysingComponentInstantiationListener> listeners;
     private final String applicationName;
-    private final Bundle paxWicketBundle;
 
     private final String injectionSource;
 
@@ -62,28 +64,29 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         super(context, createFilter(context), null);
 
         this.applicationName = applicationName;
-        this.paxWicketBundle = paxWicketBundle;
         this.injectionSource = injectionSource;
 
-        listeners = new HashSet<BundleAnalysingComponentInstantiationListener>();
-        listeners.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
-            injectionSource));
+        listeners = new HashMap<ServiceReference, BundleAnalysingComponentInstantiationListener>();
+        listeners.put(new DummyServiceReference(),
+            new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(), injectionSource));
 
         open(true);
     }
 
     public void inject(Object toInject) {
-        for (BundleAnalysingComponentInstantiationListener analyser : listeners) {
-            if (analyser.injectionPossible(toInject.getClass())) {
-                analyser.inject(toInject);
-                return;
+        synchronized (listeners) {
+            Collection<BundleAnalysingComponentInstantiationListener> values = listeners.values();
+            for (BundleAnalysingComponentInstantiationListener analyser : values) {
+                if (analyser.injectionPossible(toInject.getClass())) {
+                    analyser.inject(toInject);
+                    return;
+                }
             }
         }
         throw new NoBeanAvailableForInjectionException();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Object addingService(ServiceReference serviceReference) {
         String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
         if (!applicationName.equals(appName)) {
@@ -92,12 +95,10 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
         }
         LOGGER.info("Adding bundle {} to DelegatingComponentInstanciationListener",
             serviceReference.getBundle().getSymbolicName());
-        synchronized (this) {
-            Bundle bundle = serviceReference.getBundle();
-            HashSet<BundleAnalysingComponentInstantiationListener> clone =
-                (HashSet<BundleAnalysingComponentInstantiationListener>) listeners.clone();
-            clone.add(new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), injectionSource));
-            listeners = clone;
+        Bundle bundle = serviceReference.getBundle();
+        synchronized (listeners) {
+            listeners.put(serviceReference, new BundleAnalysingComponentInstantiationListener(
+                bundle.getBundleContext(), injectionSource));
         }
         return super.addingService(serviceReference);
     }
@@ -109,24 +110,9 @@ public class BundleDelegatingComponentInstanciationListener extends ServiceTrack
             LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
             return;
         }
-        HashSet<BundleAnalysingComponentInstantiationListener> revisedSet =
-            new HashSet<BundleAnalysingComponentInstantiationListener>();
-        revisedSet.add(new BundleAnalysingComponentInstantiationListener(paxWicketBundle.getBundleContext(),
-            injectionSource));
-        try {
-            LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
-            synchronized (this) {
-                ServiceReference[] serviceReferences = context.getAllServiceReferences(null, FILTER);
-                if (serviceReferences != null) {
-                    for (ServiceReference ref : serviceReferences) {
-                        revisedSet.add(new BundleAnalysingComponentInstantiationListener(ref.getBundle()
-                            .getBundleContext(), injectionSource));
-                    }
-                }
-                listeners = revisedSet;
-            }
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException(String.format("Filter %s have to be accepted", FILTER), e);
+        LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
+        synchronized (listeners) {
+            listeners.remove(serviceReference);
         }
         super.removedService(serviceReference, o);
     }

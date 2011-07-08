@@ -20,7 +20,8 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
@@ -39,7 +40,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
 
     private final BundleContext context;
     private final String applicationName;
-    private final ConcurrentLinkedQueue<PaxWicketInjector> resolvers;
+    private final List<PaxWicketInjector> resolvers;
 
     private ComponentInstanciationListenerTracker tracker;
 
@@ -49,7 +50,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         validateNotEmpty(applicationName, "applicationName");
         this.context = context;
         this.applicationName = applicationName;
-        resolvers = new ConcurrentLinkedQueue<PaxWicketInjector>();
+        resolvers = new ArrayList<PaxWicketInjector>();
 
         InjectorHolder.setInjector(applicationName, this);
     }
@@ -83,13 +84,15 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
                 .getClass().getName());
             return;
         }
-        for (PaxWicketInjector listener : resolvers) {
-            try {
-                listener.inject(toInject);
-                // if we reach here the bean had been injected correctly and we're happy...
-                return;
-            } catch (NoBeanAvailableForInjectionException e) {
-                // well, not found... retry with the next listener
+        synchronized (resolvers) {
+            for (PaxWicketInjector listener : resolvers) {
+                try {
+                    listener.inject(toInject);
+                    // if we reach here the bean had been injected correctly and we're happy...
+                    return;
+                } catch (NoBeanAvailableForInjectionException e) {
+                    // well, not found... retry with the next listener
+                }
             }
         }
         throw new NoBeanAvailableForInjectionException(String.format(
@@ -108,7 +111,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         @Override
         public final Object addingService(ServiceReference reference) {
             PaxWicketInjector resolver = (PaxWicketInjector) super.addingService(reference);
-            synchronized (DelegatingComponentInstanciationListener.this) {
+            synchronized (resolvers) {
                 resolvers.add(resolver);
             }
             return resolver;
@@ -141,7 +144,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         @Override
         public final void removedService(ServiceReference reference, Object service) {
             PaxWicketInjector resolver = (PaxWicketInjector) service;
-            synchronized (DelegatingComponentInstanciationListener.this) {
+            synchronized (resolvers) {
                 resolvers.remove(resolver);
             }
             super.removedService(reference, service);
@@ -151,7 +154,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
     private static Filter createFilter(BundleContext context, String applicationName) {
         String filterStr =
             "(&(" + OBJECTCLASS + "=" + PaxWicketInjector.class.getName() + ")(" + APPLICATION_NAME + "="
-                           + applicationName + "))";
+                    + applicationName + "))";
         try {
             return context.createFilter(filterStr);
         } catch (InvalidSyntaxException e) {
