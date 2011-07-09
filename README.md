@@ -15,7 +15,7 @@ For a full list of features and a more detailed documentation see the
 ## Get in contact
 
 Since the code is always moving faster than the documentation it is well possible that your use-case is
-possible with PAX-WICKET although not documented by know. Feel free to jump on to our [mailing-lists](http://ops4j1.jira.com/wiki/display/ops4j/listinfo)
+possible with PAX-WICKET although not documented by now. Feel free to jump on to our [mailing-lists](http://ops4j1.jira.com/wiki/display/ops4j/listinfo)
 or [IRC channels](https://ops4j1.jira.com/wiki/display/ops4j/ircinfo) and ask your questions there.
 
 ## Quickstart
