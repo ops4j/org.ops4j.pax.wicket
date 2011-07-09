@@ -1,9 +1,0 @@
-Bundle-Activator: org.ops4j.pax.wicket.samples.wicketauth.example.internal.Activator
-
-Private-Package:  org.ops4j.pax.wicket.samples.wicketauth.example.internal
-
-Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
-                  org.osgi.*;version="[1.0.0,2.0.0)", \
-                  org.apache.wicket.*;version="${wicket.dependency.version}"
-
-Export-Package:   org.ops4j.pax.wicket.samples.wicketauth.example;version=${project.version}
