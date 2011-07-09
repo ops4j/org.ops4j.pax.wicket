@@ -19,14 +19,10 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 import java.io.Serializable;
 
-import org.ops4j.pax.wicket.internal.serialization.SerializationActivator;
+import org.ops4j.pax.wicket.internal.Activator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-/**
- * @author edward.yakop@gmail.com
- * @since 0.5.4
- */
 final class ReplaceBundleContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +52,7 @@ final class ReplaceBundleContext implements Serializable {
      * @since 0.5.4
      */
     final BundleContext getBundleContext() {
-        return SerializationActivator.getBundleContextByBundleId(bundleId);
+        return Activator.getBundleContextByBundleId(bundleId);
     }
 
 }
