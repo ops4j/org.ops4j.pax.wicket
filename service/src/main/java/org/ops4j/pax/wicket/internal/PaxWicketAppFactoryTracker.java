@@ -42,7 +42,8 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
     private static final String SERVICE_NAME = PaxWicketApplicationFactory.class.getName();
 
     private final HttpTracker httpTracker;
-    private final Map<PaxWicketApplicationFactory, String> factories;
+    private final Map<ServiceReference, String> factories = new HashMap<ServiceReference, String>();
+    private Map<ServiceReference, FilterDelegator> filterDelegators = new HashMap<ServiceReference, FilterDelegator>();
 
     PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker)
         throws IllegalArgumentException {
@@ -50,7 +51,6 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
         validateNotNull(httpTracker, "httpTracker");
         this.httpTracker = httpTracker;
-        factories = new HashMap<PaxWicketApplicationFactory, String>();
     }
 
     @Override
@@ -64,8 +64,6 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
             LOGGER.debug(message);
         }
 
-        factory.setPaxWicketBundle(context.getBundle());
-
         File tmpDir = context.getDataFile("tmp-dir");
         String mountPoint = factory.getMountPoint();
         String applicationName = (String) reference.getProperty(APPLICATION_NAME);
@@ -75,7 +73,8 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
         addServlet(mountPoint, servlet, factory.getContextParams(), reference);
 
         synchronized (factories) {
-            factories.put(factory, mountPoint);
+            factories.put(reference, mountPoint);
+            filterDelegators.put(reference, filterDelegator);
         }
 
         return factory;
@@ -85,36 +84,51 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
     public final void modifiedService(ServiceReference reference, Object service) {
         PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) service;
         String oldMountPoint;
+        String oldApplicationName;
         synchronized (factories) {
             oldMountPoint = factories.get(factory);
+            oldApplicationName = filterDelegators.get(reference).getApplicationName();
         }
 
         String newMountPoint = factory.getMountPoint();
-        if (oldMountPoint.equals(newMountPoint)) {
-            return;
+        if (!oldMountPoint.equals(newMountPoint)) {
+            Servlet servlet = httpTracker.getServlet(oldMountPoint);
+            FilterDelegator delegator = filterDelegators.get(reference);
+            removedService(reference, service);
+            addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
+            synchronized (factories) {
+                factories.put(reference, newMountPoint);
+                filterDelegators.put(reference, delegator);
+            }
         }
 
-        Servlet servlet = httpTracker.getServlet(oldMountPoint);
-        removedService(reference, service);
-        addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
+        String newApplicationName = (String) reference.getProperty(APPLICATION_NAME);
+        if (!oldApplicationName.equals(newApplicationName)) {
+            File tmpDir = context.getDataFile("tmp-dir");
+            FilterDelegator filterDelegator =
+                new FilterDelegator(reference.getBundle().getBundleContext(), newApplicationName);
+            Servlet servlet =
+                ServletProxy.newServletProxy(factory, tmpDir, newMountPoint, filterDelegator, newApplicationName);
+            addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
+
+            synchronized (factories) {
+                factories.put(reference, newMountPoint);
+                filterDelegators.put(reference, filterDelegator);
+            }
+        }
+
     }
 
     @Override
     public final void removedService(ServiceReference reference, Object service) {
-        PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) service;
-        if (LOGGER.isDebugEnabled()) {
-            int factoryHash = identityHashCode(factory);
-            String message = "Service removed [" + reference + "], Application hash [" + factoryHash + "]";
-            LOGGER.debug(message);
-        }
-
         String mountPoint;
         synchronized (factories) {
-            mountPoint = factories.remove(factory);
+            mountPoint = factories.remove(reference);
+            filterDelegators.get(reference).dispose();
+            filterDelegators.remove(reference);
         }
 
         httpTracker.removeServlet(mountPoint);
-        factory.setPaxWicketBundle(null);
     }
 
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
@@ -131,7 +145,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
                 "Unable to mount [" + appFactoryReference + "] on mount point '" + mountPoint + "'.");
         } catch (ServletException e) {
             String message = "Wicket Servlet for [" + appFactoryReference + "] is unable to initialize. "
-                             + "This servlet was tried to be mounted on '" + mountPoint + "'.";
+                    + "This servlet was tried to be mounted on '" + mountPoint + "'.";
             throw new IllegalArgumentException(message, e);
         }
     }
