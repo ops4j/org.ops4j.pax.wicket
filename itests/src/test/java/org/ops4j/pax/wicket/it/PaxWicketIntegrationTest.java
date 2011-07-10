@@ -34,6 +34,7 @@ import org.osgi.framework.BundleContext;
 public abstract class PaxWicketIntegrationTest {
 
     protected static final String WEBUI_PORT = "9081";
+    protected static final String LOG_LEVEL = "WARN";
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
 
     @Configuration
@@ -76,7 +77,7 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.cglib")
                 .versionAsInProject()),
-            systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
+            systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("LOG_LEVEL"),
             vmOption("-Dorg.osgi.service.http.port=" + WEBUI_PORT), waitForFrameworkStartup());
     }
 
