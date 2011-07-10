@@ -37,12 +37,22 @@ public final class FilterDelegator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
     private FilterTracker filterTracker;
+    private String applicationName;
 
     private Servlet servlet;
 
     public FilterDelegator(BundleContext context, String applicationName) {
         filterTracker = new FilterTracker(context, applicationName);
         filterTracker.open();
+        this.applicationName = applicationName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void dispose() {
+        filterTracker.close();
     }
 
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)

@@ -16,6 +16,8 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.apache.wicket.util.lang.Objects;
+import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
+import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -26,12 +28,18 @@ import org.slf4j.LoggerFactory;
 
 public final class Activator implements BundleActivator {
 
+    public static final String SYMBOLIC_NAME = "org.ops4j.pax.wicket.pax-wicket-service";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
     private HttpTracker httpTracker;
     private ServiceTracker applicationFactoryTracker;
 
     private static BundleContext bundleContext;
+
+    private PaxWicketBundleListener paxWicketBundleListener;
+
+    private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
     public final void start(BundleContext context) throws Exception {
         if (LOGGER.isDebugEnabled()) {
@@ -50,7 +58,13 @@ public final class Activator implements BundleActivator {
         httpTracker.open();
 
         applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
-        applicationFactoryTracker.open();
+        applicationFactoryTracker.open(true);
+
+        bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context);
+        bundleDelegatingExtensionTracker.open(true);
+
+        paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
+        context.addBundleListener(paxWicketBundleListener);
     }
 
     public static BundleContext getBundleContext() {
@@ -67,11 +81,14 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
+        context.removeBundleListener(paxWicketBundleListener);
         httpTracker.close();
         applicationFactoryTracker.close();
+        bundleDelegatingExtensionTracker.close();
 
         httpTracker = null;
         applicationFactoryTracker = null;
+        bundleDelegatingExtensionTracker = null;
         bundleContext = null;
 
         if (LOGGER.isDebugEnabled()) {

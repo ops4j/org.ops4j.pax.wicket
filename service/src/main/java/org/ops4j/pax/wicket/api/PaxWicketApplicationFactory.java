@@ -29,7 +29,6 @@ import java.util.Properties;
 
 import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
-import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.application.IComponentOnAfterRenderListener;
 import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.markup.html.WebPage;
@@ -46,13 +45,11 @@ import org.apache.wicket.settings.IRequestCycleSettings;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
-import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.PageMounterTracker;
 import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketPageFactory;
-import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
 import org.osgi.framework.Bundle;
@@ -91,13 +88,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
     private final List<IInitializer> initializers;
 
     private final ApplicationFactory applicationFactory;
-
-    private ServiceRegistration bdcrRegistration;
-    private BundleDelegatingClassResolver bdcr;
-    private ServiceRegistration bdciRegistration;
-    private BundleDelegatingComponentInstanciationListener bdci;
-
-    private final String defaultInjectionSource;
 
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
@@ -162,8 +152,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             String applicationName, ApplicationFactory applicationFactory, Map<?, ?> contextParams,
             String defaultInjectionSource)
         throws IllegalArgumentException {
-        this.defaultInjectionSource =
-            defaultInjectionSource == null ? PaxWicketBean.INJECTION_SOURCE_UNDEFINED : defaultInjectionSource;
         validateNotNull(context, "context");
         validateNotNull(homepageClass, "homepageClass");
         validateNotNull(mountPoint, "mountPoint");
@@ -224,10 +212,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
             pageFactory.dispose();
             delegatingClassResolver.dispose();
             delegatingComponentInstanciationListener.dispose();
-
-            if (bdcrRegistration != null) {
-                bdcrRegistration.unregister();
-            }
         }
     }
 
@@ -366,35 +350,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
 
     public void setSessionStoreFactory(SessionStoreFactory sessionStoreFactory) {
         this.sessionStoreFactory = sessionStoreFactory;
-    }
-
-    public final void setPaxWicketBundle(Bundle bundle) {
-        if (bdcrRegistration != null) {
-            bdcrRegistration.unregister();
-            bdcrRegistration = null;
-            bdciRegistration.unregister();
-            bdciRegistration = null;
-        }
-
-        if (bdcr != null) {
-            bdcr.close();
-            bdci.close();
-        }
-
-        if (bundle != null) {
-            Properties config = new Properties();
-            String applicationName = getApplicationName();
-            config.setProperty(APPLICATION_NAME, applicationName);
-
-            bdcr = new BundleDelegatingClassResolver(bundleContext, applicationName, bundle);
-            bdcrRegistration = bundleContext.registerService(IClassResolver.class.getName(), bdcr, config);
-
-            bdci =
-                new BundleDelegatingComponentInstanciationListener(bundleContext, applicationName, bundle,
-                    defaultInjectionSource);
-            bdciRegistration =
-                bundleContext.registerService(PaxWicketInjector.class.getName(), bdci, config);
-        }
     }
 
     /**

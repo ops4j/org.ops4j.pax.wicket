@@ -15,56 +15,76 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.wicket.application.IClassResolver;
-import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * We assume that all bundles exporting a service implementing at least one of the following interfaces should also be
- * able to be searched for classes: {@link ContentSource}, {@link ContentAggregator}, {@link PageFactory} and
- * {@link PaxWicketApplicationFactory}.
+ * This class represents an extended class loader automatically trying to load from all bundles added to it.
  */
-public class BundleDelegatingClassResolver extends ServiceTracker implements IClassResolver {
+public class BundleDelegatingClassResolver implements IClassResolver, InternalBundleDelegationProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingClassResolver.class);
 
-    private static final String FILTER = "(|" +
-            "(objectClass=" + ContentSource.class.getName() + ")" +
-            "(objectClass=" + ContentAggregator.class.getName() + ")" +
-            "(objectClass=" + PageFactory.class.getName() + ")" +
-            "(objectClass=" + PaxWicketApplicationFactory.class.getName() + ")" +
-            ")";
-
-    private Map<ServiceReference, Bundle> bundles;
     private final String applicationName;
+    private final BundleContext paxWicketBundleContext;
+    private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
+    private ServiceRegistration classResolverRegistration;
 
-    public BundleDelegatingClassResolver(BundleContext context, String applicationName, Bundle paxWicketBundle) {
-        super(context, createFilter(context), null);
+    public BundleDelegatingClassResolver(BundleContext paxWicketBundleContext, String applicationName) {
+        this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
-        bundles = new HashMap<ServiceReference, Bundle>();
-        bundles.put(new DummyServiceReference(), paxWicketBundle);
-        open(true);
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void start() {
+        if (classResolverRegistration != null) {
+            throw new IllegalStateException("Service is already registered");
+        }
+        Dictionary<String, String> properties = new Hashtable<String, String>();
+        properties.put(ContentSource.APPLICATION_NAME, applicationName);
+        classResolverRegistration =
+            paxWicketBundleContext.registerService(IClassResolver.class.getName(), this, properties);
+    }
+
+    public void stop() {
+        if (classResolverRegistration == null) {
+            LOGGER.warn("Trying to unregister service although not registered");
+            return;
+        }
+        classResolverRegistration.unregister();
+    }
+
+    public void addBundle(Bundle bundle) {
+        if (classResolverRegistration == null) {
+            throw new IllegalStateException("The service is stoped and no more bundles could be added");
+        }
+        bundles.put(bundle.getSymbolicName(), bundle);
+    }
+
+    public void removeBundle(Bundle bundle) {
+        if (classResolverRegistration == null) {
+            throw new IllegalStateException("The service is stoped and no more bundles could be removed");
+        }
+        bundles.remove(bundle.getSymbolicName());
     }
 
     public Class<?> resolveClass(String classname) throws ClassNotFoundException {
@@ -90,9 +110,6 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
     }
 
-    /**
-     * Untested!! Currently, tests are broken in pax-wicket.
-     */
     @SuppressWarnings("unchecked")
     public Iterator<URL> getResources(String name) {
         try {
@@ -111,41 +128,4 @@ public class BundleDelegatingClassResolver extends ServiceTracker implements ICl
         return Collections.<URL> emptyList().iterator();
     }
 
-    @Override
-    public Object addingService(ServiceReference serviceReference) {
-        String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
-        if (!applicationName.equals(appName)) {
-            LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
-            return null;
-        }
-        LOGGER.info("Adding bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
-        Bundle bundle = serviceReference.getBundle();
-        synchronized (bundles) {
-            bundles.put(serviceReference, bundle);
-        }
-        return super.addingService(serviceReference);
-    }
-
-    @Override
-    public void removedService(ServiceReference serviceReference, Object o) {
-        String appName = (String) serviceReference.getProperty(APPLICATION_NAME);
-        if (!applicationName.equals(appName)) {
-            LOGGER.debug("Applicationname {} does not match service application name {}", appName, applicationName);
-            return;
-        }
-        LOGGER.info("Removing bundle {} to DelegatingClassLoader", serviceReference.getBundle().getSymbolicName());
-        synchronized (bundles) {
-            bundles.remove(serviceReference);
-        }
-        super.removedService(serviceReference, o);
-    }
-
-    private static Filter createFilter(BundleContext context) {
-        try {
-            return context.createFilter(FILTER);
-        } catch (InvalidSyntaxException e) {
-            throw new IllegalStateException(
-                String.format("Unexpected behavior! The filter %s should not fail", FILTER), e);
-        }
-    }
 }
