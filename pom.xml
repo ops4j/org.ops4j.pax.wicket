@@ -27,7 +27,7 @@
 
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>pax-wicket</artifactId>
-  <version>0.7.2</version>
+  <version>0.7.3-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
