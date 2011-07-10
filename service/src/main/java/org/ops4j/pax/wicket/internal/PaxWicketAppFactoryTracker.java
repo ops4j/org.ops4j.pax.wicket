@@ -43,14 +43,15 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
     private final HttpTracker httpTracker;
     private final Map<ServiceReference, String> factories = new HashMap<ServiceReference, String>();
+    private final BundleContext context;
     private Map<ServiceReference, FilterDelegator> filterDelegators = new HashMap<ServiceReference, FilterDelegator>();
 
     PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker)
         throws IllegalArgumentException {
         super(context, SERVICE_NAME, null);
-
         validateNotNull(httpTracker, "httpTracker");
         this.httpTracker = httpTracker;
+        this.context = context;
     }
 
     @Override
@@ -63,6 +64,8 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
             String message = "Service Added [" + reference + "], Factory hash [" + factoryHash + "]";
             LOGGER.debug(message);
         }
+
+        factory.setPaxWicketBundle(context.getBundle());
 
         File tmpDir = context.getDataFile("tmp-dir");
         String mountPoint = factory.getMountPoint();
@@ -127,8 +130,8 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
             filterDelegators.get(reference).dispose();
             filterDelegators.remove(reference);
         }
-
         httpTracker.removeServlet(mountPoint);
+        ((PaxWicketApplicationFactory) service).setPaxWicketBundle(null);
     }
 
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,

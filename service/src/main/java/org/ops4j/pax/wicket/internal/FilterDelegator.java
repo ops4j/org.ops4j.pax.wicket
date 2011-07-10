@@ -36,13 +36,19 @@ import org.slf4j.LoggerFactory;
 public final class FilterDelegator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
-    private FilterTracker filterTracker;
+    private final FilterTracker filterTracker;
+    private final String applicationName;
 
     private Servlet servlet;
 
     public FilterDelegator(BundleContext context, String applicationName) {
+        this.applicationName = applicationName;
         filterTracker = new FilterTracker(context, applicationName);
         filterTracker.open();
+    }
+
+    public String getApplicationName() {
+        return applicationName;
     }
 
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
@@ -75,6 +81,10 @@ public final class FilterDelegator {
         validateNotNull(servlet, "servlet");
         this.servlet = servlet;
         filterTracker.setServlet(servlet);
+    }
+
+    public void dispose() {
+        filterTracker.close();
     }
 
 }
