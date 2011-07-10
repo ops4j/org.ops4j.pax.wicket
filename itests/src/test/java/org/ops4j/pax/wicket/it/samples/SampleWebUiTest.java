@@ -25,9 +25,6 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Configuration
@@ -58,56 +55,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
                 .versionAsInProject()),
             provision(mavenBundle()
-                .groupId("org.ops4j.pax.wicket.samples.model")
-                .artifactId("pax-wicket-samples-model-core").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.service")
-                .artifactId("pax-wicket-samples-service-alternative").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.service")
-                .artifactId("pax-wicket-samples-service-basic").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
-                .artifactId("pax-wicket-samples-view-floor").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
-                .artifactId("pax-wicket-samples-view-franchisee").versionAsInProject()), provision(mavenBundle()
-                .groupId("org.ops4j.pax.wicket.samples.view").artifactId("pax-wicket-samples-view-about")
-                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
-                .artifactId("pax-wicket-samples-view-application").versionAsInProject()), provision(mavenBundle()
                 .groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all").versionAsInProject()));
     }
 
     @Test
-    public void testNonSpringSampleApplication_shouldAllowBaseFunctions() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/deptStore/");
-        assertThatAllTabsExist(page.asText());
-        assertTrue(page.asText().contains("Activator"));
-    }
-
-    @Test
-    public void testSpringSampleApplication_shouldAllowBaseFunctions() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springDeptStore/");
-        assertThatAllTabsExist(page.asText());
-        assertTrue(page.asText().contains("Spring"));
-    }
-
-    @Test
-    public void testBlueprintSampleApplication_shouldAllowBaseFunctions() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprintDeptStore/");
-        assertThatAllTabsExist(page.asText());
-        assertTrue(page.asText().contains("Blueprint"));
-    }
-
-    private void assertThatAllTabsExist(String pageContent) {
-        assertTrue(pageContent.contains("4th"));
-        assertTrue(pageContent.contains("RoofTop"));
-        assertTrue(pageContent.contains("G"));
-        assertTrue(pageContent.contains("1st"));
-        assertTrue(pageContent.contains("2nd"));
-        assertTrue(pageContent.contains("Basement"));
-        assertTrue(pageContent.contains("C"));
-        assertTrue(pageContent.contains("3rd"));
-        assertTrue(pageContent.contains("LG"));
+    public void dummyTest() throws Exception {
+        assertTrue(true);
     }
 
 }

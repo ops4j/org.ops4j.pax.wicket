@@ -57,50 +57,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.model</groupId>
-      <artifactId>pax-wicket-samples-model-core</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.service</groupId>
-      <artifactId>pax-wicket-samples-service-alternative</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.service</groupId>
-      <artifactId>pax-wicket-samples-service-basic</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
-      <artifactId>pax-wicket-samples-view-floor</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
-      <artifactId>pax-wicket-samples-view-franchisee</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
-      <artifactId>pax-wicket-samples-view-about</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.ops4j.pax.wicket.samples.view</groupId>
-      <artifactId>pax-wicket-samples-view-application</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>pax-wicket-service</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.navigation</groupId>
+      <artifactId>pax-wicket-samples-navigation</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

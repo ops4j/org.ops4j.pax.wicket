@@ -39,33 +39,29 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     @Configuration
     public final Option[] configureAdditionalProvision() {
         return options(
-            provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
-                .versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.aries.proxy").artifactId("org.apache.aries.proxy")
-                .versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
-                .versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
-                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.view")
-                .artifactId("pax-wicket-samples-view-application").versionAsInProject()));
+                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.navigation")
+                .artifactId("pax-wicket-samples-navigation").versionAsInProject()));
     }
 
     @Test
     public final void testAppicationTraker() throws Exception {
         sleep(2000);
+        Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle =
             getBundleBySymbolicName(bundleContext,
-                "org.ops4j.pax.wicket.samples.view.pax-wicket-samples-view-application");
+                "org.ops4j.pax.wicket.samples.navigation.pax-wicket-samples-navigation");
         assertNotNull(simpleAppBundle);
         assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
-        ServiceReference[] beforeStopServices = simpleAppBundle.getRegisteredServices();
-        assertEquals(31, beforeStopServices.length);
+        ServiceReference[] beforeStopServices = paxWicketBundle.getRegisteredServices();
+        assertNotNull(beforeStopServices);
+        assertEquals(3, beforeStopServices.length);
 
-        Bundle bundle = getPaxWicketServiceBundle(bundleContext);
-        bundle.stop();
+        simpleAppBundle.stop();
 
-        ServiceReference[] services = simpleAppBundle.getRegisteredServices();
+        ServiceReference[] services = paxWicketBundle.getRegisteredServices();
         assertNotNull(services);
-        assertEquals(4, services.length);
+        // TODO: [PAXWICKET-218]: This should be zero asap pax-web had been fixed.
+        assertEquals(1, services.length);
     }
 }

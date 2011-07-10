@@ -1,8 +1,0 @@
-Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
-                  org.osgi.*;version="[1.0.0,2.0.0)", \
-                  org.ops4j.pax.wicket.util.proxy;version="${project.version}", \
-                  net.sf.cglib.core;version="${cglib.range}", \
-                  net.sf.cglib.proxy;version="${cglib.range}", \
-                  net.sf.cglib.reflect;version="${cglib.range}"
-
-Export-Package:   org.ops4j.pax.wicket.samples.departmentstore.model;version=${project.version}

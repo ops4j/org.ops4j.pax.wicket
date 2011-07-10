@@ -1,7 +1,0 @@
-Private-Package:  org.ops4j.pax.wicket.samples.departmentstore.service.basic.internal
-
-Bundle-Activator: org.ops4j.pax.wicket.samples.departmentstore.service.basic.internal.Activator
-
-Import-Package:   org.ops4j.pax.wicket.*;version="${project.version}", \
-                  org.osgi.*;version="[1.0.0,2.0.0)"
-

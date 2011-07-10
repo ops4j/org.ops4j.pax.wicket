@@ -15,9 +15,10 @@
 
   <modules>
     <module>provision</module>
-    <module>model</module>
-    <module>service</module>
-    <module>view</module>
+    <module>plain</module>
+    <module>blueprint</module>
+    <module>springdm</module>
+    <module>navigation</module>
     <module>features</module>
   </modules>
 
