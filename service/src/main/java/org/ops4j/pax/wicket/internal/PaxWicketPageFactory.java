@@ -98,8 +98,8 @@ public final class PaxWicketPageFactory implements IPageFactory {
             content = contents.get(pageClass);
         }
         if (content == null) {
-            LOGGER.warn("No factory available for page {}. Please be aware that this is required if you like"
-                    + " to use @PaxWicketMountPoint annotations!", pageClass.getName());
+            LOGGER.debug("No factory available for page {}. Using default one from delegating classloader!",
+                pageClass.getName());
             try {
                 if (parameters == null) {
                     return pageClass.newInstance();
