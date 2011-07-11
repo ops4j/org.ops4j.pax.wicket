@@ -27,10 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.wicket.IInitializer;
 import org.apache.wicket.Page;
-import org.apache.wicket.application.IComponentOnAfterRenderListener;
-import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -47,8 +44,6 @@ import org.apache.wicket.settings.ISecuritySettings;
 import org.apache.wicket.settings.ISessionSettings;
 import org.ops4j.pax.wicket.internal.DelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.PageMounterTracker;
-import org.ops4j.pax.wicket.internal.PaxAuthenticatedWicketApplication;
-import org.ops4j.pax.wicket.internal.PaxWicketApplication;
 import org.ops4j.pax.wicket.internal.PaxWicketPageFactory;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
@@ -74,40 +69,10 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
 
     private ServiceRegistration registration;
 
-    private PaxWicketAuthenticator authenticator;
     private Class<? extends WebPage> signinPage;
     private Map<?, ?> contextParams;
-
     private PageMounter pageMounter;
-    private RequestCycleFactory requestCycleFactory;
-    private RequestCycleProcessorFactory requestCycleProcessorFactory;
-    private SessionStoreFactory sessionStoreFactory;
-
-    private final List<IComponentOnBeforeRenderListener> componentOnBeforeRenderListeners;
-    private final List<IComponentOnAfterRenderListener> componentOnAfterRenderListeners;
-    private final List<IInitializer> initializers;
-
     private final ApplicationFactory applicationFactory;
-
-    /**
-     * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
-     * 
-     * @param context The bundle context. This argument must not be {@code null}.
-     * @param homepageClass The homepage class. This argument must not be {@code null}.
-     * @param mountPoint The mount point. This argument must not be be {@code null}.
-     * @param applicationName The application name. This argument must not be {@code null}.
-     * 
-     * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
-     * @since 1.0.0
-     */
-    public PaxWicketApplicationFactory(
-            BundleContext context,
-            Class<? extends Page> homepageClass,
-            String mountPoint,
-            String applicationName)
-        throws IllegalArgumentException {
-        this(context, homepageClass, mountPoint, applicationName, null, null, null);
-    }
 
     /**
      * Construct an instance of {@code PaxWicketApplicationFactory} with the specified arguments.
@@ -169,34 +134,7 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
         String homepageClassName = homepageClass.getName();
         properties.setProperty(HOMEPAGE_CLASSNAME, homepageClassName);
 
-        componentOnBeforeRenderListeners = new ArrayList<IComponentOnBeforeRenderListener>();
-        componentOnAfterRenderListeners = new ArrayList<IComponentOnAfterRenderListener>();
-        initializers = new ArrayList<IInitializer>();
         this.contextParams = contextParams;
-    }
-
-    /**
-     * Sets the authenticator of this pax application factory.
-     * <p>
-     * Note: Value changed will only affect wicket application created after this method invocation.
-     * </p>
-     * 
-     * @param authenticator The authenticator.
-     * @param signInPage The sign in page.
-     * 
-     * @throws IllegalArgumentException Thrown if one of the arguments are {@code null}.
-     * @see #register()
-     * @since 1.0.0
-     */
-    public final void setAuthenticator(PaxWicketAuthenticator authenticator, Class<? extends WebPage> signInPage)
-        throws IllegalArgumentException {
-        if (authenticator != null && signInPage == null || authenticator == null && signInPage != null) {
-            String message = "Both [authenticator] and [signInPage] argument must not be [null].";
-            throw new IllegalArgumentException(message);
-        }
-
-        this.authenticator = authenticator;
-        signinPage = signInPage;
     }
 
     /**
@@ -340,39 +278,8 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
         this.pageMounter = pageMounter;
     }
 
-    public void setRequestCycleFactory(RequestCycleFactory factory) {
-        requestCycleFactory = factory;
-    }
-
-    public void setRequestCycleProcessorFactory(RequestCycleProcessorFactory factory) {
-        requestCycleProcessorFactory = factory;
-    }
-
-    public void setSessionStoreFactory(SessionStoreFactory sessionStoreFactory) {
-        this.sessionStoreFactory = sessionStoreFactory;
-    }
-
-    /**
-     * Returns the application name.
-     * 
-     * @return The application name.
-     * 
-     * @since 0.5.4
-     */
     private String getApplicationName() {
         return properties.getProperty(APPLICATION_NAME);
-    }
-
-    public void addComponentOnBeforeRenderListener(IComponentOnBeforeRenderListener listener) {
-        componentOnBeforeRenderListeners.add(listener);
-    }
-
-    public void addComponentOnAfterRenderListener(IComponentOnAfterRenderListener listener) {
-        componentOnAfterRenderListeners.add(listener);
-    }
-
-    public void addInitializer(IInitializer initializer) {
-        initializers.add(initializer);
     }
 
     /**
@@ -383,30 +290,8 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
      * @return The new web application.
      */
     public final WebApplication createApplication(WicketFilter filter) {
-        WebApplication paxWicketApplication;
-
         synchronized (this) {
-            String applicationName = getApplicationName();
-
-            if (applicationFactory == null) {
-                if (authenticator != null && signinPage != null) {
-                    paxWicketApplication = createPredefinedPaxAuthenticatedWicketApplication(applicationName);
-                } else {
-                    paxWicketApplication = createPredefinedPaxWicketApplication(applicationName);
-                }
-            } else {
-                paxWicketApplication = createWicketApplicationViaCustomFactory();
-            }
-
-            for (IComponentOnBeforeRenderListener listener : componentOnBeforeRenderListeners) {
-                paxWicketApplication.addPostComponentOnBeforeRenderListener(listener);
-            }
-
-            for (IComponentOnAfterRenderListener listener : componentOnAfterRenderListeners) {
-                paxWicketApplication.addComponentOnAfterRenderListener(listener);
-            }
-
-            return paxWicketApplication;
+            return createWicketApplicationViaCustomFactory();
         }
     }
 
@@ -450,9 +335,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
                 mounterTracker = new PageMounterTracker(bundleContext, wicketApplication, getApplicationName());
                 mounterTracker.open();
 
-                for (final IInitializer initializer : initializers) {
-                    initializer.init(wicketApplication);
-                }
             }
 
             private <T> void addWicketService(Class<T> service, T serviceImplementation) {
@@ -482,25 +364,6 @@ public final class PaxWicketApplicationFactory implements IWebApplicationFactory
                 m_serviceRegistrations.clear();
             }
         });
-        return paxWicketApplication;
-    }
-
-    private WebApplication createPredefinedPaxWicketApplication(String applicationName) {
-        WebApplication paxWicketApplication;
-        paxWicketApplication =
-            new PaxWicketApplication(bundleContext, applicationName, pageMounter, homepageClass, pageFactory,
-                delegatingClassResolver, initializers, new ComponentInstantiationListenerFacade(
-                    delegatingComponentInstanciationListener));
-        return paxWicketApplication;
-    }
-
-    private WebApplication createPredefinedPaxAuthenticatedWicketApplication(String applicationName) {
-        WebApplication paxWicketApplication;
-        paxWicketApplication =
-            new PaxAuthenticatedWicketApplication(bundleContext, applicationName, pageMounter, homepageClass,
-                pageFactory, requestCycleFactory, requestCycleProcessorFactory, sessionStoreFactory,
-                delegatingClassResolver, authenticator, signinPage, initializers,
-                new ComponentInstantiationListenerFacade(delegatingComponentInstanciationListener));
         return paxWicketApplication;
     }
 

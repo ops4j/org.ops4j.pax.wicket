@@ -79,17 +79,9 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
                 + "homepageClass: {}, mountPoint: {}, applicationName: {}, applicationFactory: {}",
             new Object[]{ bundleContext.toString(), homepageClass.toString(), mountPoint, applicationName,
                 applicationFactory.toString() });
-        LOGGER.trace("Check if applicationFactory exists");
-        if (applicationFactory != null) {
-            LOGGER.debug("ApplicationFactory is provided; creating paxwicket applicaiton");
-            paxWicketApplicationService =
-                new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName,
-                    applicationFactory, contextParams, injectionSource);
-        } else {
-            LOGGER.debug("No own application factory found; falling back to old method");
-            paxWicketApplicationService =
-                new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName);
-        }
+        paxWicketApplicationService =
+            new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName,
+                applicationFactory, contextParams, injectionSource);
         serviceRegistration = paxWicketApplicationService.register();
         LOGGER.info("Successfully registered application factory");
     }

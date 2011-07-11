@@ -30,10 +30,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.wicket.Session;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.ops4j.pax.wicket.internal.DefaultContentTracker;
 import org.osgi.framework.BundleContext;
@@ -377,23 +375,6 @@ abstract class BaseAggregator implements ContentAggregator, ManagedService, Cont
             throw new IllegalArgumentException(message);
         }
         return (ContentSourceType) source;
-    }
-
-    /**
-     * Returns the Authentication of the current request.
-     * 
-     * It is possible to obtain the Username of the logged in user as well as which roles that this user has assigned to
-     * it.
-     * 
-     * @return the Authentication of the current request.
-     */
-    protected PaxWicketAuthentication getAuthentication() {
-        Session session = Session.get();
-        if (session instanceof PaxWicketAuthentication) {
-            return (PaxWicketAuthentication) session;
-        }
-
-        return null;
     }
 
     @Override

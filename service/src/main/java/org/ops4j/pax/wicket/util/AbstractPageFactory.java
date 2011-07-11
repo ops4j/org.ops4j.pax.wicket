@@ -28,10 +28,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -122,18 +120,6 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         synchronized (this) {
             return properties.get(APPLICATION_NAME);
         }
-    }
-
-    /**
-     * Returns the Authentication of the current request.
-     * 
-     * It is possible to obtain the Username of the logged in user as well as which roles that this user has assigned to
-     * it.
-     * 
-     * @return the Authentication of the current request.
-     */
-    protected PaxWicketAuthentication getAuthentication() {
-        return (PaxWicketAuthentication) AuthenticatedWebSession.get();
     }
 
     /**
