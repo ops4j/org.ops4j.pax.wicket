@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public final class FilterTracker extends ServiceTracker {
         org.osgi.framework.Filter filter;
         try {
             String filterString = String.format("(&(%s=%s)(%s=%s))", APPLICATION_NAME, applicationName,
-                                  OBJECTCLASS, FilterFactory.class.getName());
+                OBJECTCLASS, FilterFactory.class.getName());
             LOGGER.debug("apply FilterTracker with OsgiFilter={} for application {}", filterString, applicationName);
             filter = bundleContext.createFilter(filterString);
         } catch (InvalidSyntaxException e) {

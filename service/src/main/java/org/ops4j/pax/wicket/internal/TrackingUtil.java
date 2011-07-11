@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import org.ops4j.pax.wicket.api.ContentSource;
@@ -56,7 +56,7 @@ final class TrackingUtil {
         Filter filter;
         try {
             String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")(" +
-                                  OBJECTCLASS + "=" + ContentSource.class.getName() + "))";
+                    OBJECTCLASS + "=" + ContentSource.class.getName() + "))";
             filter = bundleContext.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
             throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);
@@ -73,7 +73,7 @@ final class TrackingUtil {
         Filter filter;
         try {
             String filterString = "(&(" + APPLICATION_NAME + "=" + applicationName + ")"
-                                  + "(" + OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
+                    + "(" + OBJECTCLASS + "=" + PageFactory.class.getName() + "))";
             filter = bundleContext.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
             throw new IllegalArgumentException("applicationName can not contain '*', '(' or ')' : " + applicationName);

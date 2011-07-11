@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.wicket.application.IClassResolver;
-import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.Constants;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -60,7 +60,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
             throw new IllegalStateException("Service is already registered");
         }
         Dictionary<String, String> properties = new Hashtable<String, String>();
-        properties.put(ContentSource.APPLICATION_NAME, applicationName);
+        properties.put(Constants.APPLICATION_NAME, applicationName);
         classResolverRegistration =
             paxWicketBundleContext.registerService(IClassResolver.class.getName(), this, properties);
     }

@@ -18,7 +18,7 @@
 package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
 import java.io.IOException;
@@ -43,10 +43,10 @@ import org.osgi.service.cm.ManagedService;
 public final class BundleClassResolverHelper {
 
     private static final String[] SERVICE_NAMES =
-        {
-            IClassResolver.class.getName(),
-            ManagedService.class.getName()
-        };
+    {
+        IClassResolver.class.getName(),
+        ManagedService.class.getName()
+    };
 
     private final BundleContext bundleContext;
     private final Properties serviceProperties;

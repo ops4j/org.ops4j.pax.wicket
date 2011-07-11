@@ -20,9 +20,9 @@ package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.PAGE_ID;
-import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.PAGE_ID;
+import static org.ops4j.pax.wicket.api.Constants.PAGE_NAME;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

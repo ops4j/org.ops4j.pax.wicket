@@ -18,7 +18,7 @@
 package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
 import java.util.Dictionary;

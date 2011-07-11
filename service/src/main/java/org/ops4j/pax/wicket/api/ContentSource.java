@@ -24,16 +24,6 @@ import java.util.List;
 public interface ContentSource {
 
     /**
-     * Service property name for the configuration of the <i>MountPoint</i>.
-     */
-    String MOUNTPOINT = "pax.wicket.mountpoint";
-
-    /**
-     * Service property name for the configuration of the <i>ApplicationName</i>.
-     */
-    String APPLICATION_NAME = "pax.wicket.applicationname";
-
-    /**
      * Service property name for the configuration of the <i>Destination</i> of a <i>ContentSource</i>.
      */
     String DESTINATIONS = "pax.wicket.destination";
@@ -45,16 +35,6 @@ public interface ContentSource {
     String DESTINATION_UNKNOWN = "";
 
     /**
-     * Service property name for the configuration of the <i>PageName</i>.
-     */
-    String PAGE_NAME = "pax.wicket.pagename";
-
-    /**
-     * Service property name for the configuration of the <i>PageId</i>.
-     */
-    String PAGE_ID = "pax.wicket.pageid";
-
-    /**
      * Prefix used in the Constants.SERVICE_PID to uniquely identify Pax Wicket ContentSource instances for the
      * Configuration Admin service.
      */
@@ -64,11 +44,6 @@ public interface ContentSource {
      * Service property name for the configuration of the <i>AggregationPoint</i>.
      */
     String AGGREGATION_POINT = "pax.wicket.aggregation.point";
-
-    /**
-     * Service property name for the configuration of the classname of the <i>HomePage</i>.
-     */
-    String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
 
     /**
      * Basic Roles are used for ContentSource authorization.

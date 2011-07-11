@@ -17,8 +17,8 @@ package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.PAGE_NAME;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.PAGE_NAME;
 
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -68,7 +68,7 @@ public class PageFinder {
             return pageSources;
         } catch (InvalidSyntaxException e) {
             LOGGER.warn("Invalid syntax [" + filter + "]. This should not happen unless if both application name " +
-                         "and page name contains ldap filters.", e
+                    "and page name contains ldap filters.", e
                 );
 
             // can not happen, RIGHT!

@@ -17,9 +17,9 @@ package org.ops4j.pax.wicket.api;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.ContentSource.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.ContentSource.HOMEPAGE_CLASSNAME;
-import static org.ops4j.pax.wicket.api.ContentSource.MOUNTPOINT;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.HOMEPAGE_CLASSNAME;
+import static org.ops4j.pax.wicket.api.Constants.MOUNTPOINT;
 
 import java.util.ArrayList;
 import java.util.Dictionary;

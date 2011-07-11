@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.ContentSource;
+import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
@@ -56,7 +56,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
 
     public void start() {
         Dictionary<String, String> props = new Hashtable<String, String>();
-        props.put(ContentSource.APPLICATION_NAME, applicationName);
+        props.put(Constants.APPLICATION_NAME, applicationName);
         serviceRegistration = paxWicketBundleContext.registerService(PaxWicketInjector.class.getName(), this, props);
     }
 
