@@ -24,10 +24,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.apache.wicket.Session;
-import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -35,25 +32,9 @@ import org.osgi.service.cm.ManagedService;
 
 public abstract class AbstractContentSource implements ContentSource, ManagedService {
 
-    private static final String[] ROLES_TYPE = new String[0];
-    private static final PaxWicketAuthentication DUMMY_AUTHENTICATION = new PaxWicketAuthentication()
-    {
-        public String getLoggedInUser()
-        {
-            return null;
-        }
-
-        public Roles getRoles()
-        {
-            return new Roles();
-        }
-    };
-
     private BundleContext bundleContext;
     private Dictionary<String, Object> properties;
     private ServiceRegistration registration;
-    private Roles requiredRoles;
-    private Roles basicRoles;
 
     /**
      * Construct an instance with {@code AbstractContentSource}.
@@ -220,23 +201,6 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
     }
 
     /**
-     * Returns the Authentication of the current request.
-     * 
-     * It is possible to obtain the Username of the logged in user as well as which roles that this user has assigned to
-     * it.
-     * 
-     * @return the Authentication of the current request.
-     */
-    protected PaxWicketAuthentication getAuthentication() {
-        Session session = Session.get();
-        if (session instanceof PaxWicketAuthentication) {
-            return (PaxWicketAuthentication) session;
-        }
-
-        return DUMMY_AUTHENTICATION;
-    }
-
-    /**
      * Sets the application name.
      * 
      * @param applicationName The application name. This argument must not be {@code null}.
@@ -256,18 +220,6 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
         synchronized (this) {
             if (config != null) {
                 properties = config;
-                String[] required = (String[]) properties.get(REQUIRED_ROLES);
-                if (required != null) {
-                    requiredRoles = new Roles(required);
-                } else {
-                    requiredRoles = new Roles();
-                }
-                String[] basic = (String[]) properties.get(BASIC_ROLES);
-                if (basic != null) {
-                    basicRoles = new Roles(basic);
-                } else {
-                    basicRoles = new Roles();
-                }
                 registration.setProperties(properties);
             }
         }
@@ -292,33 +244,6 @@ public abstract class AbstractContentSource implements ContentSource, ManagedSer
 
     public void dispose() {
         registration.unregister();
-    }
-
-    public Roles getRequiredRoles() {
-        return requiredRoles;
-    }
-
-    public Roles getBasicRoles() {
-        return basicRoles;
-    }
-
-    public final void setRoles(Roles requiredRoles, Roles basicRoles) {
-        boolean changed = false;
-        if (requiredRoles != null) {
-            changed = true;
-            this.requiredRoles = requiredRoles;
-            properties.put(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
-        }
-
-        if (basicRoles != null) {
-            this.basicRoles = basicRoles;
-            properties.put(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
-            changed = true;
-        }
-
-        if (changed && registration != null) {
-            registration.setProperties(properties);
-        }
     }
 
 }

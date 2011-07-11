@@ -46,30 +46,6 @@ public interface ContentSource {
     String AGGREGATION_POINT = "pax.wicket.aggregation.point";
 
     /**
-     * Basic Roles are used for ContentSource authorization.
-     * <p>
-     * The current user must have one or more of the roles that are listed in the BASIC_ROLES property of a
-     * ContentSource. Otherwise the component(s) of that ContentSource will not be created.
-     * </p>
-     * <p>
-     * This service property is an array of Strings.
-     * </p>
-     */
-    String BASIC_ROLES = "pax.wicket.auth.roles.basic";
-
-    /**
-     * Required Roles are used for ContentSource authorization.
-     * <p>
-     * The current user must have all the roles that are listed in the REQUIRED_ROLES property of a ContentSource.
-     * Otherwise the component(s) of that ContentSource will not be created.
-     * </p>
-     * <p>
-     * This service property is an array of Strings.
-     * </p>
-     */
-    String REQUIRED_ROLES = "pax.wicket.auth.roles.required";
-
-    /**
      * Returns the content source id.
      * 
      * @return The content source id.

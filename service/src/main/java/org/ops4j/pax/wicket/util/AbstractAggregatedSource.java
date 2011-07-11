@@ -23,10 +23,8 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.authorization.strategies.role.Roles;
 import org.ops4j.pax.wicket.api.ContentAggregator;
 import org.ops4j.pax.wicket.api.ContentSource;
-import org.ops4j.pax.wicket.api.PaxWicketAuthentication;
 import org.ops4j.pax.wicket.internal.ContentTrackingCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ManagedService;
@@ -115,11 +113,6 @@ import org.osgi.service.cm.ManagedService;
 public abstract class AbstractAggregatedSource<E extends Component> extends BaseAggregator implements
         ContentAggregator, ContentSource, ContentTrackingCallback, ManagedService {
 
-    private static final String[] ROLES_TYPE = new String[0];
-
-    private Roles requiredRoles;
-    private Roles basicRoles;
-
     /**
      * Construct an instance of {@code AbstractContentAggregator} with the specified arguments.
      * 
@@ -182,7 +175,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     @Override
     protected String[] getServiceNames() {
         return new String[]{
-                ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName() };
+            ContentSource.class.getName(), ContentAggregator.class.getName(), ManagedService.class.getName() };
     }
 
     /**
@@ -205,12 +198,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      * @since 1.0.0
      */
     public final E createSourceComponent(String wicketId) throws IllegalArgumentException {
-        boolean isRolesApproved = isRolesAuthorized();
-        if (isRolesApproved) {
-            return createComponent(wicketId);
-        } else {
-            return null;
-        }
+        return createComponent(wicketId);
     }
 
     /**
@@ -234,53 +222,7 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
      */
     public <T extends MarkupContainer> E createSourceComponent(String wicketId, T parent)
         throws IllegalArgumentException {
-        boolean isRolesApproved = isRolesAuthorized();
-        if (isRolesApproved) {
-            return createComponent(wicketId, parent);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns {@code true} if the user roles is approved to create this content source component, {@code false}
-     * otherwise.
-     * 
-     * @return A {@code boolean} indicator whether user roles is approved to create this content source component.
-     * 
-     * @since 1.0.0
-     */
-    private boolean isRolesAuthorized() {
-        PaxWicketAuthentication paxWicketAuthentication = getAuthentication();
-        Roles userRoles;
-        if (paxWicketAuthentication != null) {
-            userRoles = paxWicketAuthentication.getRoles();
-        } else {
-            userRoles = newRoles(null);
-        }
-
-        Roles requiredRoles = newRoles(getStringProperty(REQUIRED_ROLES, null));
-        Roles basicRoles = newRoles(getStringProperty(BASIC_ROLES, null));
-
-        boolean isRequiredRolesAuthorized = true;
-        if (!requiredRoles.isEmpty()) {
-            isRequiredRolesAuthorized = userRoles.hasAllRoles(requiredRoles);
-        }
-
-        boolean isBasicRolesAuthorized = true;
-        if (!basicRoles.isEmpty()) {
-            isBasicRolesAuthorized = userRoles.hasAnyRole(basicRoles);
-        }
-
-        return isRequiredRolesAuthorized && isBasicRolesAuthorized;
-    }
-
-    private Roles newRoles(String rolesAsString) {
-        if (rolesAsString == null || rolesAsString.trim().length() == 0) {
-            return new Roles();
-        }
-
-        return new Roles(rolesAsString);
+        return createComponent(wicketId, parent);
     }
 
     /**
@@ -320,30 +262,4 @@ public abstract class AbstractAggregatedSource<E extends Component> extends Base
     protected <T extends MarkupContainer> E createComponent(String wicketId, T parent) {
         return createComponent(wicketId);
     }
-
-    public final Roles getRequiredRoles() {
-        return requiredRoles;
-    }
-
-    public final Roles getBasicRoles() {
-        return basicRoles;
-    }
-
-    public final void setRoles(Roles requiredRoles, Roles basicRoles) {
-        boolean changed = false;
-        if (requiredRoles != null) {
-            changed = true;
-            this.requiredRoles = requiredRoles;
-            setProperty(REQUIRED_ROLES, requiredRoles.toArray(ROLES_TYPE));
-        }
-        if (basicRoles != null) {
-            this.basicRoles = basicRoles;
-            setProperty(REQUIRED_ROLES, basicRoles.toArray(ROLES_TYPE));
-            changed = true;
-        }
-        if (changed) {
-            updateRegistration();
-        }
-    }
-
 }
