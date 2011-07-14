@@ -59,6 +59,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.navigation")
                 .artifactId("pax-wicket-samples-navigation").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain.simple")
+                .artifactId("pax-wicket-samples-plain-simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -68,6 +70,13 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
         assertTrue(page.asText().contains("Homepage linking all OPS4J samples"));
+    }
+
+    @Test
+    public void testSamplePlainSimple_shouldRenderPage() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
     }
 
 }

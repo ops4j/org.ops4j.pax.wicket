@@ -15,6 +15,7 @@
   <name>OPS4J Pax Wicket :: Samples :: Plain :: Parent</name>
 
   <modules>
-    <module>pax-wicket-samples-plain-original</module>
+    <module>simple</module>
   </modules>
 </project>
+
