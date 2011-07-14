@@ -19,7 +19,6 @@ import static java.lang.reflect.Proxy.isProxyClass;
 import static java.lang.reflect.Proxy.newProxyInstance;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
-import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
@@ -28,7 +27,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.protocol.http.WicketServlet;
 
@@ -40,11 +38,9 @@ public class ServletProxy {
     private static final Class<?>[] SERVLET_INTERFACES = new Class[]{
         Servlet.class
     };
-    
-    static Servlet newServletProxy(IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
-            FilterDelegator filterDelegator, String applicationName) {
-        ServletInvocationHandler ih =
-            new ServletInvocationHandler(applicationFactory, tempDir, mountPoint, filterDelegator, applicationName);
+
+    static Servlet newServletProxy(PaxWicketApplicationFactory applicationFactory) {
+        ServletInvocationHandler ih = new ServletInvocationHandler(applicationFactory);
         return newServletProxy(ih);
     }
 
@@ -59,25 +55,22 @@ public class ServletProxy {
             HttpServletRequest.class
         };
 
-        private final String mountPoint;
         private final ServletDelegator delegator;
-        private FilterDelegator filterDelegator;
+        private final PaxWicketApplicationFactory internalFactory;
 
-        public ServletInvocationHandler(
-                IWebApplicationFactory applicationFactory, File tempDir, String mountPoint,
-                FilterDelegator filterDelegator, String applicationName) {
-            this.mountPoint = mountPoint;
-            delegator = new ServletDelegator(applicationFactory, tempDir, applicationName);
-            this.filterDelegator = filterDelegator;
-            this.filterDelegator.setServlet(delegator);
+        public ServletInvocationHandler(PaxWicketApplicationFactory internalFactory) {
+            this.internalFactory = internalFactory;
+            delegator = new ServletDelegator(internalFactory);
+            internalFactory.getFilterDelegator().setServlet(delegator);
         }
 
         public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable {
             replaceHttpRequestArgument(args);
-            if (filterDelegator != null) {
+            if (internalFactory.getFilterDelegator() != null) {
                 if (method.getName().equals("service")) {
-                    filterDelegator.doFilter((HttpServletRequest) args[0], (HttpServletResponse) args[1]);
+                    internalFactory.getFilterDelegator().doFilter((HttpServletRequest) args[0],
+                        (HttpServletResponse) args[1]);
                     return null;
                 }
             }
@@ -107,7 +100,8 @@ public class ServletProxy {
 
         private HttpServletRequest newProxyRequest(HttpServletRequest request) {
             ClassLoader loader = ServletProxy.class.getClassLoader();
-            ServletRequestInvocationHandler ih = new ServletRequestInvocationHandler(request, mountPoint);
+            ServletRequestInvocationHandler ih =
+                new ServletRequestInvocationHandler(request, internalFactory.getMountPoint());
             return (HttpServletRequest) newProxyInstance(loader, REQUEST_INTERFACES, ih);
         }
 
@@ -117,31 +111,24 @@ public class ServletProxy {
 
             private static final String WICKET_REQUIRED_ATTRIBUTE = "javax.servlet.context.tempdir";
 
-            private final IWebApplicationFactory appFactory;
-            private final File tmpDir;
-            private String applicationName;
+            private final PaxWicketApplicationFactory appFactory;
 
-            ServletDelegator(IWebApplicationFactory applicationFactory, File tempDir, String applicationName) throws IllegalArgumentException {
-                validateNotNull(applicationFactory, "applicationFactory");
-                validateNotNull(tempDir, "tempDir");
-                this.applicationName = applicationName;
+            ServletDelegator(PaxWicketApplicationFactory applicationFactory) throws IllegalArgumentException {
                 appFactory = applicationFactory;
-                tmpDir = tempDir;
-                tmpDir.mkdirs();
             }
 
             @Override
             protected WicketFilter newWicketFilter() {
                 ServletContext servletContext = getServletContext();
                 if (servletContext.getAttribute(WICKET_REQUIRED_ATTRIBUTE) == null) {
-                    servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, tmpDir);
+                    servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, appFactory.getTmpDir());
                 }
                 return new PaxWicketFilter(appFactory);
             }
 
             @Override
             public String getServletName() {
-                return applicationName;
+                return appFactory.getApplicationName();
             }
 
             @Override

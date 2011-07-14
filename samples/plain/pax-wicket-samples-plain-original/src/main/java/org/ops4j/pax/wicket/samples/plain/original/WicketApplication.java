@@ -13,14 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.navigation.internal;
+package org.ops4j.pax.wicket.samples.plain.original;
 
 import org.apache.wicket.protocol.http.WebApplication;
-import org.ops4j.pax.wicket.api.ApplicationFactory;
-import org.ops4j.pax.wicket.api.ApplicationLifecycleListener;
 
-public class NavigationApplicationFactory implements ApplicationFactory {
-    public WebApplication createWebApplication(ApplicationLifecycleListener lifecycleListener) {
-        return new NavigationApplication(lifecycleListener);
-    }
+/**
+ * Application object for your web application. If you want to run this application without deploying, run the Start class.
+ * 
+ * @see org.ops4j.pax.wicket.samples.plain.Start#main(String[])
+ */
+public class WicketApplication extends WebApplication
+{    
+    /**
+     * Constructor
+     */
+	public WicketApplication()
+	{
+	}
+	
+	/**
+	 * @see org.apache.wicket.Application#getHomePage()
+	 */
+	public Class<HomePage> getHomePage()
+	{
+		return HomePage.class;
+	}
+
 }

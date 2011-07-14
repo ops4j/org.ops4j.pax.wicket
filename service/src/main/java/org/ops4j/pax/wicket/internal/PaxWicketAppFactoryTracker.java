@@ -16,18 +16,15 @@
 package org.ops4j.pax.wicket.internal;
 
 import static java.lang.System.identityHashCode;
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -36,14 +33,19 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class PaxWicketAppFactoryTracker extends ServiceTracker {
+/**
+ * The factory tracker waits for every new {@link IWebApplicationFactory} class registered as OSGi service. If the
+ * services does also contain properties for an application name and a mount point is is registered for a Servlet.
+ * Otherwise the problem is logged as a warning and the service is simply ignored.
+ */
+public class PaxWicketAppFactoryTracker extends ServiceTracker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketAppFactoryTracker.class);
-    private static final String SERVICE_NAME = PaxWicketApplicationFactory.class.getName();
+    private static final String SERVICE_NAME = IWebApplicationFactory.class.getName();
 
     private final HttpTracker httpTracker;
-    private final Map<ServiceReference, String> factories = new HashMap<ServiceReference, String>();
-    private Map<ServiceReference, FilterDelegator> filterDelegators = new HashMap<ServiceReference, FilterDelegator>();
+    private final Map<ServiceReference, PaxWicketApplicationFactory> factories =
+        new HashMap<ServiceReference, PaxWicketApplicationFactory>();
 
     PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker)
         throws IllegalArgumentException {
@@ -55,88 +57,57 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
     @Override
     public final Object addingService(ServiceReference reference) {
-        final PaxWicketApplicationFactory factory =
-            (PaxWicketApplicationFactory) super.addingService(reference);
-
-        if (LOGGER.isDebugEnabled()) {
-            int factoryHash = identityHashCode(factory);
-            String message = "Service Added [" + reference + "], Factory hash [" + factoryHash + "]";
-            LOGGER.debug(message);
-        }
-
-        File tmpDir = context.getDataFile("tmp-dir");
-        String mountPoint = factory.getMountPoint();
-        String applicationName = (String) reference.getProperty(APPLICATION_NAME);
-        FilterDelegator filterDelegator =
-            new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
-        Servlet servlet = ServletProxy.newServletProxy(factory, tmpDir, mountPoint, filterDelegator, applicationName);
-        addServlet(mountPoint, servlet, factory.getContextParams(), reference);
-
-        synchronized (factories) {
-            factories.put(reference, mountPoint);
-            filterDelegators.put(reference, filterDelegator);
-        }
-
+        final IWebApplicationFactory factory = (IWebApplicationFactory) super.addingService(reference);
+        PaxWicketApplicationFactory internalFactory =
+            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, factory, reference);
+        addApplication(reference, internalFactory);
         return factory;
     }
 
     @Override
     public final void modifiedService(ServiceReference reference, Object service) {
-        PaxWicketApplicationFactory factory = (PaxWicketApplicationFactory) service;
-        String oldMountPoint;
-        String oldApplicationName;
-        synchronized (factories) {
-            oldMountPoint = factories.get(factory);
-            oldApplicationName = filterDelegators.get(reference).getApplicationName();
-        }
-
-        String newMountPoint = factory.getMountPoint();
-        if (!oldMountPoint.equals(newMountPoint)) {
-            Servlet servlet = httpTracker.getServlet(oldMountPoint);
-            FilterDelegator delegator = filterDelegators.get(reference);
-            removedService(reference, service);
-            addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
-            synchronized (factories) {
-                factories.put(reference, newMountPoint);
-                filterDelegators.put(reference, delegator);
-            }
-        }
-
-        String newApplicationName = (String) reference.getProperty(APPLICATION_NAME);
-        if (!oldApplicationName.equals(newApplicationName)) {
-            File tmpDir = context.getDataFile("tmp-dir");
-            FilterDelegator filterDelegator =
-                new FilterDelegator(reference.getBundle().getBundleContext(), newApplicationName);
-            Servlet servlet =
-                ServletProxy.newServletProxy(factory, tmpDir, newMountPoint, filterDelegator, newApplicationName);
-            addServlet(newMountPoint, servlet, factory.getContextParams(), reference);
-
-            synchronized (factories) {
-                factories.put(reference, newMountPoint);
-                filterDelegators.put(reference, filterDelegator);
-            }
-        }
-
+        removeApplication(reference);
+        PaxWicketApplicationFactory internalFactory =
+            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, (IWebApplicationFactory) service,
+                reference);
+        addApplication(reference, internalFactory);
     }
 
     @Override
     public final void removedService(ServiceReference reference, Object service) {
-        String mountPoint;
-        synchronized (factories) {
-            mountPoint = factories.remove(reference);
-            filterDelegators.get(reference).dispose();
-            filterDelegators.remove(reference);
-        }
+        removeApplication(reference);
+    }
 
-        httpTracker.removeServlet(mountPoint);
+    private void addApplication(ServiceReference reference, PaxWicketApplicationFactory internalFactory) {
+        if (!internalFactory.isValidFactory()) {
+            LOGGER
+                .warn("Trying to register ApplicationFactory without application name or mount point is not possible");
+            return;
+        }
+        LOGGER.debug("Service Added [{}], Factory hash [{}]", reference, identityHashCode(internalFactory));
+        Servlet servlet = ServletProxy.newServletProxy(internalFactory);
+        addServlet(internalFactory.getMountPoint(), servlet, internalFactory.getContextParams(), reference);
+        synchronized (factories) {
+            factories.put(reference, internalFactory);
+        }
+    }
+
+    private void removeApplication(ServiceReference reference) {
+        PaxWicketApplicationFactory factory;
+        synchronized (factories) {
+            if (!factories.containsKey(reference)) {
+                LOGGER
+                    .warn("Trying to unregister ApplicationFactory without application name or mount point is not possible");
+                return;
+            }
+            factory = factories.remove(reference);
+        }
+        LOGGER.debug("Service Removed [{}], Factory hash [{}]", reference, identityHashCode(factory));
+        httpTracker.removeServlet(factory.getMountPoint());
     }
 
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
             ServiceReference appFactoryReference) {
-        validateNotEmpty(mountPoint, "mountPoint");
-        validateNotNull(servlet, "servlet");
-        validateNotNull(appFactoryReference, "appFactoryReference");
-
         Bundle bundle = appFactoryReference.getBundle();
         try {
             httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);

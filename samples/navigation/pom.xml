@@ -52,7 +52,18 @@
               org.apache.wicket.markup.html,
               org.apache.wicket.protocol.http,
               org.ops4j.pax.wicket.api,
-              org.osgi.framework
+              org.ops4j.pax.wicket.util,
+              org.osgi.framework,
+              net.sf.cglib.proxy,
+              net.sf.cglib.core,
+              net.sf.cglib.reflect,
+              javax.servlet,
+              org.apache.wicket.settings,
+              org.apache.wicket.session,
+              org.apache.wicket.util.file,
+              org.apache.wicket.request,
+              javax.servlet.http,
+              org.apache.wicket.ajax
             </Import-Package>
           </instructions>
         </configuration>

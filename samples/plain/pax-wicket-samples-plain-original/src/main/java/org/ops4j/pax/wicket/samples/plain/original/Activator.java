@@ -13,18 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.navigation.internal;
+package org.ops4j.pax.wicket.samples.plain.original;
 
-import org.apache.wicket.protocol.http.WebApplication;
-
-public class NavigationApplication extends WebApplication
-{
-    public NavigationApplication() {
-    }
-
-    @Override
-    public Class<NavigationPage> getHomePage() {
-        return NavigationPage.class;
-    }
+public class Activator {
 
 }

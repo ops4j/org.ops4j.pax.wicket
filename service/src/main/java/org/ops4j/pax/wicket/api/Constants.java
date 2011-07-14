@@ -28,6 +28,12 @@ public interface Constants {
     String APPLICATION_NAME = "pax.wicket.applicationname";
 
     /**
+     * Service property name for the configuration of the <i>Servlet Context Params</i> which are typically defined in
+     * the web.xml.
+     */
+    String CONTEXT_PARAMS = "pax.wicket.contextparams";
+
+    /**
      * Service property name for the configuration of the <i>PageName</i>.
      */
     String PAGE_NAME = "pax.wicket.pagename";

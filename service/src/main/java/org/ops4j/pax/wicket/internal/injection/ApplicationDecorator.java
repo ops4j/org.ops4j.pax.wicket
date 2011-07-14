@@ -20,34 +20,30 @@ package org.ops4j.pax.wicket.internal.injection;
 
 import java.util.Map;
 
-import org.apache.wicket.Page;
-import org.ops4j.pax.wicket.api.ApplicationFactory;
-import org.ops4j.pax.wicket.api.PaxWicketApplicationFactory;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.util.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ApplicationDecorator implements InjectionAwareDecorator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationDecorator.class);
 
     private BundleContext bundleContext;
-    private Class<? extends Page> homepageClass;
     private String mountPoint;
     private String applicationName;
-    private ApplicationFactory applicationFactory;
+    private Class<? extends WebApplication> applicationClass;
     private Map<String, String> contextParams;
-    private PaxWicketApplicationFactory paxWicketApplicationService;
-    private ServiceRegistration serviceRegistration;
+    private DefaultWebApplicationFactory factory;
     private String injectionSource = PaxWicketBean.INJECTION_SOURCE_UNDEFINED;
 
     public ApplicationDecorator() {
     }
 
-    public void setHomepageClass(Class<? extends Page> homepageClass) {
-        this.homepageClass = homepageClass;
+    public void setBundleContext(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
     }
 
     public void setMountPoint(String mountPoint) {
@@ -58,12 +54,8 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
         this.applicationName = applicationName;
     }
 
-    public void setApplicationFactory(ApplicationFactory applicationFactory) {
-        this.applicationFactory = applicationFactory;
-    }
-
-    public void setBundleContext(BundleContext bundleContext) {
-        this.bundleContext = bundleContext;
+    public void setApplicationClass(Class<? extends WebApplication> applicationClass) {
+        this.applicationClass = applicationClass;
     }
 
     public void setContextParams(Map<String, String> contextParams) {
@@ -75,25 +67,14 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     }
 
     public void start() throws Exception {
-        LOGGER.info("Trying to register pax-wicket application with the following settings: bundleContext: {}, "
-                + "homepageClass: {}, mountPoint: {}, applicationName: {}, applicationFactory: {}",
-            new Object[]{ bundleContext.toString(), homepageClass.toString(), mountPoint, applicationName,
-                applicationFactory.toString() });
-        paxWicketApplicationService =
-            new PaxWicketApplicationFactory(bundleContext, homepageClass, mountPoint, applicationName,
-                applicationFactory, contextParams, injectionSource);
-        serviceRegistration = paxWicketApplicationService.register();
+        factory = new DefaultWebApplicationFactory(bundleContext, applicationClass, applicationName, mountPoint);
+        factory.register();
         LOGGER.info("Successfully registered application factory");
     }
 
     public void stop() throws Exception {
-        LOGGER
-            .info("Removing pax-wicket application with the following settings: bundleContext: {}, homepageClass: {}, "
-                    + "mountPoint: {}, applicationName: {}, applicationFactory: {}",
-                new Object[]{ bundleContext.toString(), homepageClass.toString(), mountPoint, applicationName,
-                    applicationFactory.toString() });
-        serviceRegistration.unregister();
-        paxWicketApplicationService.dispose();
+        factory.dispose();
+        LOGGER.info("Successfully unregistered application factory");
     }
 
 }

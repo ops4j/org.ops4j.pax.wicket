@@ -25,6 +25,9 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Configuration
@@ -54,13 +57,17 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
                 .versionAsInProject()),
-            provision(mavenBundle()
-                .groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all").versionAsInProject()));
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.navigation")
+                .artifactId("pax-wicket-samples-navigation").versionAsInProject()),
+            provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
+                .versionAsInProject()));
     }
 
     @Test
-    public void dummyTest() throws Exception {
-        assertTrue(true);
+    public void testNavigationApplication_shouldRender() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
+        assertTrue(page.asText().contains("Homepage linking all OPS4J samples"));
     }
 
 }

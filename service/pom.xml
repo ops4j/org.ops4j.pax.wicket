@@ -88,6 +88,7 @@
               org.osgi.util.*;version="1",
               net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,
               net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
+              net.sf.cglib.reflect;version="${cglib.range}";resolution:=optional,
               org.xml.sax,
               org.w3c.dom,
               org.apache.aries.blueprint.*;version="${aries.blueprint.range}";resolution:=optional,
