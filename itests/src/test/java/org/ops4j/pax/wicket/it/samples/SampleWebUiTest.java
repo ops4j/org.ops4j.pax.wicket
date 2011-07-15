@@ -61,6 +61,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("pax-wicket-samples-navigation").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain.simple")
                 .artifactId("pax-wicket-samples-plain-simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.simple")
+                .artifactId("pax-wicket-samples-blueprint-simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -76,6 +78,20 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     public void testSamplePlainSimple_shouldRenderPage() throws Exception {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+    }
+
+    @Test
+    public void testSampleBlueprintSimpleDefault_shouldRenderPage() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+    }
+
+    @Test
+    public void testSampleBlueprintSimplePaxwicket_shouldRenderPage() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
     }
 

@@ -13,5 +13,9 @@
   <packaging>pom</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Parent</name>
 
+  <modules>
+    <module>simple</module>
+  </modules>
+
 </project>
 
