@@ -38,6 +38,12 @@ public abstract class AbstractSpringBeanDefinitionParser extends AbstractSingleB
         bean.addPropertyValue(id, beanElement);
     }
 
+    protected void addPropertyValueFromElement(String id, String injectionId, Element element,
+            BeanDefinitionBuilder bean) {
+        String beanElement = element.getAttribute(id);
+        bean.addPropertyValue(injectionId, beanElement);
+    }
+
     protected void addPropertyReferenceFromElement(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addPropertyReference(id, beanElement);

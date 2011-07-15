@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.ops4j.pax.wicket.internal.injection.ApplicationDecorator;
 
-public class ApplicationBeanDefinitionParserTest {
+public class SpringApplicationBeanDefinitionParserTest {
 
     @Test
     public void testRequestBeanType_shouldReturnDefaultContentSourceFactory() throws Exception {
@@ -37,10 +37,9 @@ public class ApplicationBeanDefinitionParserTest {
         SpringParserTestUtil parserTestUtil =
             new SpringParserTestUtil("wicket:application", new SpringApplicationBeanDefinitionParser());
 
-        parserTestUtil.verifyPropertyValue("homepageClass");
+        parserTestUtil.verifyPropertyValue("applicationClass", "class");
         parserTestUtil.verifyPropertyValue("mountPoint");
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyPropertyReference("applicationFactory");
         parserTestUtil.verifyMapValue("contextParams", "name2", "value2");
     }
 }

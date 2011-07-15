@@ -38,10 +38,9 @@ public class BlueprintApplicationBeanDefinitionParserTest {
             new BlueprintParserTestUtil("wicket:application", new BlueprintApplicationBeanDefinitionParser());
 
         parserTestUtil.verifyId("application");
-        parserTestUtil.verifyPropertyValue("homepageClass");
+        parserTestUtil.verifyPropertyValue("applicationName", "class");
         parserTestUtil.verifyPropertyValue("mountPoint");
         parserTestUtil.verifyPropertyValue("applicationName");
-        parserTestUtil.verifyPropertyReference("applicationFactory");
         parserTestUtil.verifyMapValue("contextParams", "name1", "value1", "name2", "value2");
     }
 }

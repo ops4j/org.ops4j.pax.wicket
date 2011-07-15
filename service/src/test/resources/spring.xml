@@ -47,8 +47,7 @@
     </wicket:overwrites>
   </wicket:page>
 
-  <wicket:application id="application" homepageClass="homepageClass" mountPoint="mountPoint"
-    applicationName="applicationName" applicationFactory="applicationFactory">
+  <wicket:application id="application" class="class" mountPoint="mountPoint" applicationName="applicationName" >
     <wicket:context-param>
       <wicket:param-name>name1</wicket:param-name>
       <wicket:param-value>value1</wicket:param-value>

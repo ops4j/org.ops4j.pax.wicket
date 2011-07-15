@@ -64,6 +64,12 @@ public abstract class AbstractBlueprintBeanDefinitionParser {
         beanMetadata.addProperty(id, createStringValue(context, attribute));
     }
 
+    protected void addPropertyValueFromElement(String id, String injectionId, Element node, ParserContext context,
+            MutableBeanMetadata beanMetadata) {
+        String attribute = node.getAttribute(id);
+        beanMetadata.addProperty(injectionId, createStringValue(context, attribute));
+    }
+
     protected void addPropertyReferenceFromElement(String id, Element node, ParserContext context,
             MutableBeanMetadata beanMetadata) {
         String attribute = node.getAttribute(id);

@@ -32,10 +32,9 @@ public class BlueprintApplicationBeanDefinitionParser extends AbstractBlueprintB
     @Override
     protected void extractRemainingMetaData(Element element, ParserContext context, MutableBeanMetadata beanMetadata)
         throws Exception {
-        addPropertyValueFromElement("homepageClass", element, context, beanMetadata);
+        addPropertyValueFromElement("class", "applicationClass", element, context, beanMetadata);
         addPropertyValueFromElement("mountPoint", element, context, beanMetadata);
         addPropertyValueFromElement("applicationName", element, context, beanMetadata);
-        addPropertyReferenceFromElement("applicationFactory", element, context, beanMetadata);
         addPropertyReferenceForMap("contextParams", context, beanMetadata,
             InjectionParserUtil.retrieveContextParam(element));
         String injectionSource = element.getAttribute("injectionSource");

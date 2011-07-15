@@ -33,10 +33,9 @@ public class SpringApplicationBeanDefinitionParser extends AbstractSpringBeanDef
 
     @Override
     public void prepareInjection(Element element, BeanDefinitionBuilder bean) {
-        addPropertyValueFromElement("homepageClass", element, bean);
+        addPropertyValueFromElement("class", "applicationClass", element, bean);
         addPropertyValueFromElement("mountPoint", element, bean);
         addPropertyValueFromElement("applicationName", element, bean);
-        addPropertyReferenceFromElement("applicationFactory", element, bean);
         bean.addPropertyValue("contextParams", InjectionParserUtil.retrieveContextParam(element));
         String injectionSource = element.getAttribute("injectionSource");
         if (injectionSource == null || injectionSource.isEmpty()) {
