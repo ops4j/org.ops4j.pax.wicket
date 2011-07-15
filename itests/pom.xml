@@ -79,6 +79,12 @@
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
+     <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.springdm.simple</groupId>
+      <artifactId>pax-wicket-samples-springdm-simple</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

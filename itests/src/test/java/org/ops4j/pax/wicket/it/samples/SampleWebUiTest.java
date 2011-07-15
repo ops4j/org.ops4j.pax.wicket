@@ -63,6 +63,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("pax-wicket-samples-plain-simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.simple")
                 .artifactId("pax-wicket-samples-blueprint-simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm.simple")
+                .artifactId("pax-wicket-samples-springdm-simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -85,14 +87,28 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     public void testSampleBlueprintSimpleDefault_shouldRenderPage() throws Exception {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
-        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on blueprint"));
     }
 
     @Test
     public void testSampleBlueprintSimplePaxwicket_shouldRenderPage() throws Exception {
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
-        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on blueprint"));
+    }
+
+    @Test
+    public void testSampleSpringdmSimpleDefault_shouldRenderPage() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
+    }
+
+    @Test
+    public void testSampleSpringdmSimplePaxwicket_shouldRenderPage() throws Exception {
+        WebClient webclient = new WebClient();
+        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
     }
 
 }
