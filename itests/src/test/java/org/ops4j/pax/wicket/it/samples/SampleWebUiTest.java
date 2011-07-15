@@ -70,45 +70,37 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     }
 
     @Test
-    public void testNavigationApplication_shouldRender() throws Exception {
+    public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
+        // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
         assertTrue(page.asText().contains("Homepage linking all OPS4J samples"));
-    }
-
-    @Test
-    public void testSamplePlainSimple_shouldRenderPage() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
+        webclient.closeAllWindows();
+        // testSamplePlainSimple_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
-    }
-
-    @Test
-    public void testSampleBlueprintSimpleDefault_shouldRenderPage() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
+        webclient.closeAllWindows();
+        // testSampleBlueprintSimpleDefault_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on blueprint"));
-    }
-
-    @Test
-    public void testSampleBlueprintSimplePaxwicket_shouldRenderPage() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
+        webclient.closeAllWindows();
+        // testSampleBlueprintSimplePaxwicket_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on blueprint"));
-    }
-
-    @Test
-    public void testSampleSpringdmSimpleDefault_shouldRenderPage() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
+        webclient.closeAllWindows();
+        // testSampleSpringdmSimpleDefault_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
-    }
-
-    @Test
-    public void testSampleSpringdmSimplePaxwicket_shouldRenderPage() throws Exception {
-        WebClient webclient = new WebClient();
-        HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
+        webclient.closeAllWindows();
+        // testSampleSpringdmSimplePaxwicket_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
+        webclient.closeAllWindows();
     }
 
 }
