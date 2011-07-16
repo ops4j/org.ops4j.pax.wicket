@@ -35,7 +35,7 @@ public abstract class PaxWicketIntegrationTest {
 
     protected static final String WEBUI_PORT = "9081";
     protected static final String LOG_LEVEL = "WARN";
-    protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.pax-wicket-service";
+    protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.service";
 
     @Configuration
     public final Option[] configureProvisions() {

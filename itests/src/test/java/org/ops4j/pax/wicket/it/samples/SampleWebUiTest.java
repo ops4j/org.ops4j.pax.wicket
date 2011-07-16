@@ -49,7 +49,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.springframework.osgi").artifactId("spring-osgi-annotation")
                 .versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
                 .versionAsInProject()),
@@ -57,14 +57,14 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.aries.blueprint").artifactId("org.apache.aries.blueprint")
                 .versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.navigation")
-                .artifactId("pax-wicket-samples-navigation").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain.simple")
-                .artifactId("pax-wicket-samples-plain-simple").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.simple")
-                .artifactId("pax-wicket-samples-blueprint-simple").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm.simple")
-                .artifactId("pax-wicket-samples-springdm-simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples")
+                .artifactId("org.ops4j.pax.wicket.samples.navigation").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
+                .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
+                .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm")
+                .artifactId("org.ops4j.pax.wicket.samples.springdm.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }

@@ -39,18 +39,16 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     @Configuration
     public final Option[] configureAdditionalProvision() {
         return options(
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
-                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.navigation")
-                .artifactId("pax-wicket-samples-navigation").versionAsInProject()));
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
+                .versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples")
+                .artifactId("org.ops4j.pax.wicket.samples.navigation").versionAsInProject()));
     }
 
     @Test
     public final void testAppicationTraker() throws Exception {
         sleep(2000);
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
-        Bundle simpleAppBundle =
-            getBundleBySymbolicName(bundleContext,
-                "org.ops4j.pax.wicket.samples.navigation.pax-wicket-samples-navigation");
+        Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
         assertNotNull(simpleAppBundle);
         assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
         ServiceReference[] beforeStopServices = paxWicketBundle.getRegisteredServices();

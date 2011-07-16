@@ -26,8 +26,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.ops4j.pax.wicket</groupId>
-  <artifactId>pax-wicket-service</artifactId>
+  <artifactId>org.ops4j.pax.wicket.service</artifactId>
   <version>0.8.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Service</name>
@@ -60,6 +59,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Private-Package>
               com.sun.activation.registries,
               javax.activation,

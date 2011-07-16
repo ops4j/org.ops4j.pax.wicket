@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Activator implements BundleActivator {
 
-    public static final String SYMBOLIC_NAME = "org.ops4j.pax.wicket.pax-wicket-service";
+    public static final String SYMBOLIC_NAME = "org.ops4j.pax.wicket.service";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 

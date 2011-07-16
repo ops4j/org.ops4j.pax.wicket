@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright 2011 OPS4J
- 
+
   Licensed  under the  Apache License,  Version 2.0  (the "License");
   you may not use  this file  except in  compliance with the License.
   You may obtain a copy of the License at
- 
+
     http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed  under the  License is distributed on an "AS IS" BASIS,
   WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
   implied.
- 
+
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
@@ -20,14 +20,13 @@
 
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.springdm</groupId>
-    <artifactId>pax-wicket-samples-springdm-parent</artifactId>
+    <artifactId>springdm</artifactId>
     <version>0.8.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.ops4j.pax.wicket.samples.springdm.simple</groupId>
-  <artifactId>pax-wicket-samples-springdm-simple</artifactId>
+  <artifactId>org.ops4j.pax.wicket.samples.springdm.simple</artifactId>
   <version>0.8.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Simple</name>
@@ -44,6 +43,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <!-- The bundle activator is only required if we do the things by hand. -->
             <Import-Package>
               org.apache.wicket,
@@ -80,7 +80,7 @@
     <!-- We need wicket and pax-wicket references for this sample; simply add the core wicket bundle. -->
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
+      <artifactId>org.ops4j.pax.wicket.service</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

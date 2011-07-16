@@ -20,14 +20,13 @@
 
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
-    <artifactId>pax-wicket-samples-blueprint-parent</artifactId>
+    <artifactId>blueprint</artifactId>
     <version>0.8.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.ops4j.pax.wicket.samples.blueprint.simple</groupId>
-  <artifactId>pax-wicket-samples-blueprint-simple</artifactId>
+  <artifactId>org.ops4j.pax.wicket.samples.blueprint.simple</artifactId>
   <version>0.8.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Simple</name>
@@ -44,6 +43,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <!-- The bundle activator is only required if we do the things by hand. -->
             <Import-Package>
               org.apache.wicket,
@@ -81,7 +81,7 @@
     <!-- We need wicket and pax-wicket references for this sample; simply add the core wicket bundle. -->
     <dependency>
       <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>pax-wicket-service</artifactId>
+      <artifactId>org.ops4j.pax.wicket.service</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

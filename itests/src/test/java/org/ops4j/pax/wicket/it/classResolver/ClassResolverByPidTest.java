@@ -56,7 +56,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
     @org.ops4j.pax.exam.junit.Configuration
     public final Option[] provisionSimpleLibraries() {
         return options(
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
                 .versionAsInProject()),
             provision(TinyBundles
                 .newBundle()

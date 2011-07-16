@@ -44,8 +44,8 @@ public final class LifecycleTest extends PaxWicketIntegrationTest {
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return options(provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("pax-wicket-service")
-            .versionAsInProject()));
+        return options(provision(mavenBundle().groupId("org.ops4j.pax.wicket")
+            .artifactId("org.ops4j.pax.wicket.service").versionAsInProject()));
     }
 
     /**
