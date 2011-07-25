@@ -59,7 +59,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
         ServiceReference[] services = paxWicketBundle.getRegisteredServices();
         assertNotNull(services);
-        // TODO: [PAXWICKET-218]: This should be zero asap pax-web had been fixed.
         assertEquals(0, services.length);
     }
 }
+
