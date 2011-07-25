@@ -18,7 +18,6 @@ package org.ops4j.pax.wicket.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.wicket.internal.TrackingUtil.createAllPageFactoryFilter;
-import static org.ops4j.pax.wicket.internal.TrackingUtil.createContentFilter;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -37,59 +36,6 @@ public final class TrackingUtilTestCase {
     @Before
     public final void setup() {
         mockery = new Mockery();
-    }
-
-    @Test
-    public final void testCreateContentFilter() throws InvalidSyntaxException {
-        BundleContext context = mockery.mock(BundleContext.class);
-        Object[][] arguments =
-            {
-                { null, null },
-                { null, "appName" },
-                { context, null }
-            };
-
-        String msg = "Invoking with [null] argument must fail.";
-        for (Object[] argument : arguments) {
-            BundleContext ctx = (BundleContext) argument[0];
-            String appName = (String) argument[1];
-
-            try {
-                createContentFilter(ctx, appName);
-                fail(msg);
-            } catch (IllegalArgumentException e) {
-                // expected
-            } catch (Throwable e) {
-                fail(msg);
-            }
-        }
-
-        Expectations exp1 = new Expectations();
-        exp1.one(context).createFilter(
-            "(&(pax.wicket.applicationname=appName)(objectClass=org.ops4j.pax.wicket.api.ContentSource))"
-            );
-        Filter expFilter = mockery.mock(Filter.class);
-        exp1.will(exp1.returnValue(expFilter));
-
-        mockery.checking(exp1);
-        Filter filter = createContentFilter(context, "appName");
-        assertEquals(expFilter, filter);
-
-        Expectations exp2 = new Expectations();
-        exp2.one(context).createFilter(exp2.with(exp2.any(String.class)));
-        exp2.will(exp2.throwException(new InvalidSyntaxException("msg", "filter")));
-
-        mockery.checking(exp2);
-
-        try {
-            createContentFilter(context, "appName");
-            fail("Must throw [IllegalArgumentException].");
-        } catch (IllegalArgumentException e) {
-            // Expected
-        } catch (Throwable e) {
-            e.printStackTrace();
-            fail("Must throw [IllegalArgumentException].");
-        }
     }
 
     @Test

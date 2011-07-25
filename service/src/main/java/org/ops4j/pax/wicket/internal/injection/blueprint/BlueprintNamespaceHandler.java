@@ -38,13 +38,9 @@ public class BlueprintNamespaceHandler implements NamespaceHandler {
         namespaceRegistrations = new HashMap<String, AbstractBlueprintBeanDefinitionParser>();
         namespaceRegistrations.put("application", new BlueprintApplicationBeanDefinitionParser());
         namespaceRegistrations.put("page", new BlueprintPageFactoryBeanDefinitionParser());
-        namespaceRegistrations.put("contentSource", new BlueprintContentSourceFactoryBeanDefinitionParser());
-        namespaceRegistrations.put("contentAggregator", new BlueprintContentAggregatorBeanDefinitionParser());
         namespaceRegistrations.put("classResolver", new BlueprintClassResolverDefinitionParser());
         namespaceRegistrations.put("injectionProvider", new BlueprintInjectionResolverDefinitionParser());
         namespaceRegistrations.put("filter", new BlueprintFilterFactoryBeanDefinitionParser());
-        namespaceRegistrations.put("componentContentSourceFactory",
-            new BlueprintComponentContentSourceFactoryBeanDefinitionParser());
         namespaceRegistrations.put("autoPageMounter", new BlueprintAutoPageMounterDefinitionParser());
     }
 
