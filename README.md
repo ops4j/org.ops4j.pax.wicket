@@ -27,6 +27,7 @@ If you prefer to read code instead of manuals there are various samples availabl
 
 * mvn clean install (if you're using an Oracle JDK you need a version >1.6.24)
 * cd samples
+* mvn pax:provision
 * point the browser to [http://localhost:8080/navigation/](http://localhost:8080/navigation/). From here on you'll find links and (short) explanations to the available examples.
 
 ## Build PAX-WICKET
