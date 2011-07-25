@@ -25,14 +25,15 @@ The easiest way to get in contact with PaxWicket is to read the quickstart docum
 
 If you prefer to read code instead of manuals there are various samples available.
 
-* mvn clean install
+* mvn clean install (if you're using an Oracle JDK you need a version >1.6.24)
 * cd samples
-* point the browser to [http://localhost:8080/samples](http://localhost:8080/samples).
+* point the browser to [http://localhost:8080/navigation/](http://localhost:8080/navigation/). From here on you'll find links and (short) explanations to the available examples.
 
 ## Build PAX-WICKET
 
 PAX-WICKET uses [Apache Maven](http://maven.apache.org) as it's build system. Simply checkout the sources and run
-"mvn clean install". This will build PAX-WICKET, the samples and run all integration tests.
+"mvn clean install" (if you're using an Oracle JDK you need a version >1.6.24). This will build PAX-WICKET, the 
+samples and run all integration tests.
 
 ## Code on PAX-WICKET
 
