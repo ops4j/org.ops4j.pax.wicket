@@ -18,32 +18,32 @@
 -->
 <features name="pax-wicket-samples-features-${project.version}">
   <!-- This features are dependend on the pax-wicket features -->
-  <repository>mvn:org.ops4j.pax.wicket/pax-wicket-features/${project.version}/xml/features</repository>
+  <repository>mvn:org.ops4j.pax.wicket/features/${project.version}/xml/features</repository>
 
   <!-- This is the base entry-point for all sample applications showing the pages and providing base documentation about them. -->
   <feature name="wicket-samples-base" version="${project.version}">
     <feature version="${project.version}">wicket-spring</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.navigation/pax-wicket-samples-navigation/${project.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.navigation/${project.version}</bundle>
   </feature>
 
   <feature name="wicket-samples-plain-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.plain.simple/pax-wicket-samples-plain-simple/${project.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.simple/${project.version}</bundle>
   </feature>
 
   <feature name="wicket-samples-blueprint-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.simple/pax-wicket-samples-blueprint-simple/${project.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.simple/${project.version}</bundle>
   </feature>
 
   <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.simple/pax-wicket-samples-blueprint-injection-simple/${project.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.injection/org.ops4j.pax.wicket.samples.blueprint.injection.simple/${project.version}</bundle>
   </feature>
 
   <feature name="wicket-samples-spring-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.springdm.simple/pax-wicket-samples-springdm-simple/${project.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.springdm/org.ops4j.pax.wicket.samples.springdm.simple/${project.version}</bundle>
   </feature>
 
 </features>
