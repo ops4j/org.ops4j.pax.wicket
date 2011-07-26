@@ -16,7 +16,7 @@
 
 -->
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
-    <head>  
+    <head>
         <title>OPS4J PAX Wicket Samples</title>
     </head>
     <body>
@@ -38,6 +38,10 @@
         The simple examples for springDM consist of two parts. The one which could be found at <a href="../springdm/simple/default">here</a>. This
         example does not require to use the pax-wicket specific namespace. The other example, which is based on the pax-wicket spring namespace is
         available here <a href="../springdm/simple/paxwicket">here</a>.
+        <h4>Injection</h4>
+        The SpringDM injection model is quite simple. Any bean in the local Spring context (which is automatically generated from all 
+        .xml files in your META-INF/spring directory) can be injected by using it's name or type only. 
+        Please point your browser <a href="../springdm/injection/simple">here</a> for the example.
     </body>
 </html>
 

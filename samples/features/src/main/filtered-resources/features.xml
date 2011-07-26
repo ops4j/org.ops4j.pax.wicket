@@ -46,5 +46,10 @@
     <bundle>mvn:org.ops4j.pax.wicket.samples.springdm/org.ops4j.pax.wicket.samples.springdm.simple/${project.version}</bundle>
   </feature>
 
+  <feature name="wicket-samples-spring-injection-simple" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.springdm.injection/org.ops4j.pax.wicket.samples.springdm.injection.simple/${project.version}</bundle>
+  </feature>
+
 </features>
 

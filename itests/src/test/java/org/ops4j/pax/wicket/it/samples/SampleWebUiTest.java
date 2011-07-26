@@ -67,6 +67,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.injection.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm")
                 .artifactId("org.ops4j.pax.wicket.samples.springdm.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm.injection")
+                .artifactId("org.ops4j.pax.wicket.samples.springdm.injection.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -103,6 +105,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
+        webclient.closeAllWindows();
+        // testSampleSpringdmInjectionSimple_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/injection/simple");
+        assertTrue(page.asText().contains(
+            "Welcome to the most simple pax-wicket injection application based on springdm."));
         webclient.closeAllWindows();
         // testSampleSpringdmSimplePaxwicket_shouldRenderPage
         webclient = new WebClient();

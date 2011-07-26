@@ -91,6 +91,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.springdm.injection</groupId>
+      <artifactId>org.ops4j.pax.wicket.samples.springdm.injection.simple</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

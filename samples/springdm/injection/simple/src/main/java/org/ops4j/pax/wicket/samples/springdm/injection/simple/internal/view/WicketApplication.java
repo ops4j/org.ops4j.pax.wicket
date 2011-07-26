@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.blueprint.injection.simple.internal.service;
+package org.ops4j.pax.wicket.samples.springdm.injection.simple.internal.view;
 
-/**
- * Most trivial implementation of the service. This implementation could also be located in a different bundle and be
- * imported as OSGi service.
- */
-public class DefaultMyService implements MyService {
+import org.apache.wicket.protocol.http.WebApplication;
 
-    public String someEchoMethod(String toEcho) {
-        return toEcho;
+public class WicketApplication extends WebApplication
+{
+    public WicketApplication() {
+    }
+
+    @Override
+    public Class<Homepage> getHomePage() {
+        return Homepage.class;
     }
 
 }
