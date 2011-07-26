@@ -36,6 +36,11 @@
     <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.simple/pax-wicket-samples-blueprint-simple/${project.version}</bundle>
   </feature>
 
+  <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.simple/pax-wicket-samples-blueprint-injection-simple/${project.version}</bundle>
+  </feature>
+
   <feature name="wicket-samples-spring-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.springdm.simple/pax-wicket-samples-springdm-simple/${project.version}</bundle>
