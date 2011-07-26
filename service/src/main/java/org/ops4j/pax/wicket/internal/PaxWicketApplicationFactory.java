@@ -165,12 +165,12 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         }
 
         private boolean isInitMethod(Method method) {
-            return method.getReturnType() == Void.class && method.getParameterTypes().length == 0 &&
+            return method.getReturnType() == void.class && method.getParameterTypes().length == 0 &&
                     method.getName().equals("init");
         }
 
         private boolean isOnDestoryMethod(Method method) {
-            return method.getReturnType() == Void.class && method.getParameterTypes().length == 0 &&
+            return method.getReturnType() == void.class && method.getParameterTypes().length == 0 &&
                     method.getName().equals("onDestroy");
         }
 
