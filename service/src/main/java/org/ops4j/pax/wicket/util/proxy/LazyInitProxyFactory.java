@@ -40,9 +40,9 @@ import org.apache.wicket.settings.IApplicationSettings;
 public class LazyInitProxyFactory {
 
     private static final List<?> PRIMITIVES = Arrays.asList(new Class[]{ String.class, byte.class,
-            Byte.class, short.class, Short.class, int.class, Integer.class, long.class, Long.class,
-            float.class, Float.class, double.class, Double.class, char.class, Character.class,
-            boolean.class, Boolean.class });
+        Byte.class, short.class, Short.class, int.class, Integer.class, long.class, Long.class,
+        float.class, Float.class, double.class, Double.class, char.class, Character.class,
+        boolean.class, Boolean.class });
 
     public static Object createProxy(final Class<?> type, final IProxyTargetLocator locator) {
         if (PRIMITIVES.contains(type) || Enum.class.isAssignableFrom(type)) {
@@ -55,16 +55,15 @@ public class LazyInitProxyFactory {
             try {
                 return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                     new Class[]{ type, Serializable.class, ILazyInitProxy.class,
-                            IWriteReplace.class }, handler);
+                        IWriteReplace.class }, handler);
             } catch (IllegalArgumentException e) {
-                /*
-                 * STW: In some clustering environments it appears the context classloader fails to load the proxied
-                 * interface (currently seen in BEA WLS 9.x clusters). If this happens, we can try and fall back to the
-                 * classloader (current) that actually loaded this class.
-                 */
-                return Proxy.newProxyInstance(LazyInitProxyFactory.class.getClassLoader(),
-                    new Class[]{ type, Serializable.class, ILazyInitProxy.class,
-                            IWriteReplace.class }, handler);
+                // While in the original Wicket Environment this is a failure of the context-classloader in PAX-WICKET
+                // this is always an error of missing imports into the classloader. Right now we can do nothing here but
+                // inform the user about the problem and throw an IllegalStateException instead wrapping up and
+                // presenting the real problem.
+                // TODO: [PAXWICKET-126] It's the same import problem here
+                throw new IllegalStateException("The real problem is that the used wrapper classes are not imported " +
+                        "by the bundle using injection", e);
             }
 
         } else {
@@ -72,7 +71,7 @@ public class LazyInitProxyFactory {
 
             Enhancer e = new Enhancer();
             e.setInterfaces(new Class[]{ Serializable.class, ILazyInitProxy.class,
-                    IWriteReplace.class });
+                IWriteReplace.class });
             e.setSuperclass(type);
             e.setCallback(handler);
             e.setNamingPolicy(new DefaultNamingPolicy()
