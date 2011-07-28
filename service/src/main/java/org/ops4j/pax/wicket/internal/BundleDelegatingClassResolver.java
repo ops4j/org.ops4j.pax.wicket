@@ -77,14 +77,18 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be added");
         }
-        bundles.put(bundle.getSymbolicName(), bundle);
+        synchronized (bundles) {
+            bundles.put(bundle.getSymbolicName(), bundle);
+        }
     }
 
     public void removeBundle(Bundle bundle) {
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be removed");
         }
-        bundles.remove(bundle.getSymbolicName());
+        synchronized (bundles) {
+            bundles.remove(bundle.getSymbolicName());
+        }
     }
 
     public Class<?> resolveClass(String classname) throws ClassNotFoundException {
