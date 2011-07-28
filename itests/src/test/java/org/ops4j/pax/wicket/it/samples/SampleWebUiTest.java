@@ -69,6 +69,14 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.springdm.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm.injection")
                 .artifactId("org.ops4j.pax.wicket.samples.springdm.injection.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.mixed")
+                .artifactId("org.ops4j.pax.wicket.samples.mixed.api").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.mixed")
+                .artifactId("org.ops4j.pax.wicket.samples.mixed.main").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.mixed")
+                .artifactId("org.ops4j.pax.wicket.samples.mixed.page").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.mixed")
+                .artifactId("org.ops4j.pax.wicket.samples.mixed.component").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -116,6 +124,13 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on springdm"));
+        webclient.closeAllWindows();
+        // testSampleMixed_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/mixed");
+        assertTrue(page.asText().contains("Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
+        assertTrue(page.asText().contains("This is a link"));
+        assertTrue(page.asText().contains("This is a panel from a separate component"));
         webclient.closeAllWindows();
     }
 

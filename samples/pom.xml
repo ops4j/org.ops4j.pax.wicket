@@ -18,6 +18,7 @@
     <module>plain</module>
     <module>blueprint</module>
     <module>springdm</module>
+    <module>mixed</module>
     <module>navigation</module>
     <module>features</module>
   </modules>

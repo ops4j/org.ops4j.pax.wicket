@@ -42,6 +42,12 @@
         The SpringDM injection model is quite simple. Any bean in the local Spring context (which is automatically generated from all 
         .xml files in your META-INF/spring directory) can be injected by using it's name or type only. 
         Please point your browser <a href="../springdm/injection/simple">here</a> for the example.
+        <h3>Mixed Example</h3>
+        This example avoids to show all features of PAX Wicket to reduce the complexity. Still it shows one of the most attractive features
+        for most people. It has one API package and three other packages. The main package starts a wicket application and imports
+        on factory service for page-links and one for components. Both are shown in ListViews on the page. This example shows how
+        blueprint, springdm and plain osgi services could be combined. To see the the example point your browser 
+        <a href="../mixed">here</a>.
     </body>
 </html>
 
