@@ -23,6 +23,10 @@ import org.apache.wicket.Component;
  */
 public interface PaxWicketInjector {
 
-    public void inject(Object toInject);
+    /**
+     * The object to inject can contain a dept of abstractions from various bundles. Each of the levels may be required
+     * to be injected from a different bundle. Therefore it have to be possible to look at each level independent.
+     */
+    public void inject(Object toInject, Class<?> toHandle);
 
 }

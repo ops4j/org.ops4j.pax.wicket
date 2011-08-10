@@ -77,12 +77,12 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
     }
 
     public void onInstantiation(Component component) {
-        beanInjector.inject(component);
+        beanInjector.inject(component, component.getClass());
     }
 
     private class PaxWicketTestBeanInjector extends AbstractPaxWicketInjector {
 
-        public void inject(Object toInject) {
+        public void inject(Object toInject, Class<?> toHandle) {
             for (Field field : getFields(toInject.getClass())) {
                 PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
                 if (simulateBlueprint && annotation.name().equals("")) {

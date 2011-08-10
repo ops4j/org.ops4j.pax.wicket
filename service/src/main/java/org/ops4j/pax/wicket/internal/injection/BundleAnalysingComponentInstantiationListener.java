@@ -66,12 +66,13 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         return false;
     }
 
-    public void inject(Object component) {
+    public void inject(Object component, Class<?> toHandle) {
         ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            Class<?> realClass = component.getClass();
+            Class<?> realClass = toHandle;
             Map<String, String> overwrites = null;
             String injectionSource = null;
+            // TODO: [PAXWICKET-265] This have to look differently
             if (Factory.class.isInstance(component)) {
                 overwrites = ((OverwriteProxy) ((Factory) component).getCallback(0)).getOverwrites();
                 injectionSource = ((OverwriteProxy) ((Factory) component).getCallback(0)).getInjectionSource();
@@ -82,7 +83,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
             }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
 
-            List<Field> fields = getFields(realClass);
+            List<Field> fields = getSingleLevelOfFields(realClass);
             for (Field field : fields) {
                 if (!field.isAnnotationPresent(PaxWicketBean.class)) {
                     continue;

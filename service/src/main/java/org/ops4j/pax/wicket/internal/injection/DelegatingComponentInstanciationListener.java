@@ -23,6 +23,8 @@ import static org.osgi.framework.Constants.OBJECTCLASS;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.cglib.proxy.Factory;
+
 import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
@@ -77,26 +79,52 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
     }
 
-    public void inject(Object toInject) {
-        boolean foundAnnotation = doesComponentContainPaxWicketBeanAnnotatedFields(toInject);
-        if (!foundAnnotation) {
+    public void inject(Object toInject, Class<?> toHandle) {
+        // TODO: [PAXWICKET-265] With a new approach we can remove the
+        int foundAnnotation = countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(toHandle);
+        if (foundAnnotation == 0) {
             LOGGER.trace("Component {} doesn't contain any PaxWicketBean fields. Therefore ignore", toInject
                 .getClass().getName());
             return;
         }
+        int handledAnnotations = 0;
         synchronized (resolvers) {
-            for (PaxWicketInjector listener : resolvers) {
-                try {
-                    listener.inject(toInject);
-                    // if we reach here the bean had been injected correctly and we're happy...
-                    return;
-                } catch (NoBeanAvailableForInjectionException e) {
-                    // well, not found... retry with the next listener
+            Class<?> currentAnalysingClass = toHandle;
+            boolean handledFactory = false;
+            if (Factory.class.isInstance(toInject)) {
+                handledFactory = true;
+            }
+            while (!isBoundaryClass(currentAnalysingClass)) {
+                for (PaxWicketInjector listener : resolvers) {
+                    try {
+                        listener.inject(toInject, currentAnalysingClass);
+                        // if we reach here the bean had been injected correctly
+                        if (handledFactory) {
+                            handledAnnotations +=
+                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass
+                                    .getSuperclass());
+                        } else {
+                            handledAnnotations +=
+                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass);
+                        }
+                        // once we've found it we could take the next level
+                        break;
+                    } catch (NoBeanAvailableForInjectionException e) {
+                        // well, not found... retry with the next listener
+                    }
+                }
+                currentAnalysingClass = currentAnalysingClass.getSuperclass();
+                if (handledFactory) {
+                    currentAnalysingClass = currentAnalysingClass.getSuperclass();
+                    handledFactory = false;
                 }
             }
         }
-        throw new NoBeanAvailableForInjectionException(String.format(
-            "Component %s has fields to inject but noone provides the beans for them", toInject.getClass().getName()));
+        if (handledAnnotations != foundAnnotation) {
+            throw new NoBeanAvailableForInjectionException(String.format(
+                "For Component %s %s could be injected but only %s had been injected.", toInject.getClass().getName(),
+                foundAnnotation, handledAnnotations));
+        }
     }
 
     private final class ComponentInstanciationListenerTracker extends ServiceTracker {

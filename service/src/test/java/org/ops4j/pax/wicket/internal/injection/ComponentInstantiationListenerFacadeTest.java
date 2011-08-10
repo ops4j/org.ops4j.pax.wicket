@@ -21,7 +21,6 @@ import static org.mockito.Mockito.verify;
 import org.apache.wicket.Component;
 import org.junit.Test;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
-import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 
 public class ComponentInstantiationListenerFacadeTest {
 
@@ -30,7 +29,7 @@ public class ComponentInstantiationListenerFacadeTest {
         Component component = mock(Component.class);
         PaxWicketInjector injector = mock(PaxWicketInjector.class);
         new ComponentInstantiationListenerFacade(injector).onInstantiation(component);
-        verify(injector).inject(component);
+        verify(injector).inject(component, component.getClass());
     }
 
 }

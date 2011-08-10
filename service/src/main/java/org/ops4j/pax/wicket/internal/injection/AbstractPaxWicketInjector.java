@@ -19,8 +19,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.cglib.proxy.Factory;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -33,6 +31,17 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 
 public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
+
+    protected List<Field> getSingleLevelOfFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<Field>();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                continue;
+            }
+            fields.add(field);
+        }
+        return fields;
+    }
 
     protected List<Field> getFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<Field>();
@@ -79,19 +88,28 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return beanType;
     }
 
-    protected boolean doesComponentContainPaxWicketBeanAnnotatedFields(Object component) {
-        Class<?> clazz = component.getClass();
-        if (Factory.class.isInstance(component)) {
-            clazz = clazz.getSuperclass();
-        }
+    protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
+        Class<?> clazz = component;
+        int numberOfInjectionFields = 0;
         while (clazz != null && !isBoundaryClass(clazz)) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(PaxWicketBean.class)) {
-                    return true;
+                    numberOfInjectionFields++;
                 }
             }
             clazz = clazz.getSuperclass();
         }
-        return false;
+        return numberOfInjectionFields;
+    }
+
+    protected int countComponentContainPaxWicketBeanAnnotatedOneLevel(Class<?> component) {
+        Class<?> clazz = component;
+        int numberOfInjectionFields = 0;
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(PaxWicketBean.class)) {
+                numberOfInjectionFields++;
+            }
+        }
+        return numberOfInjectionFields;
     }
 }

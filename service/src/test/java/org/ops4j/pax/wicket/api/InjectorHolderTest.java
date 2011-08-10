@@ -33,7 +33,7 @@ public class InjectorHolderTest {
     @Test
     public void testRetrieveInjectorAfterSettingIt_shouldSucceed() throws Exception {
         PaxWicketInjector paxWicketInjector = new PaxWicketInjector() {
-            public void inject(Object toInject) {
+            public void inject(Object toInject, Class<?> toHandle) {
                 // not required for this test
             }
         };

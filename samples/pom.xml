@@ -19,6 +19,7 @@
     <module>blueprint</module>
     <module>springdm</module>
     <module>mixed</module>
+    <module>edge</module>
     <module>navigation</module>
     <module>features</module>
   </modules>

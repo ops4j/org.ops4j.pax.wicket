@@ -83,12 +83,12 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         listeners.remove(bundle.getSymbolicName());
     }
 
-    public void inject(Object toInject) {
+    public void inject(Object toInject, Class<?> toHandle) {
         synchronized (listeners) {
             Collection<BundleAnalysingComponentInstantiationListener> values = listeners.values();
             for (BundleAnalysingComponentInstantiationListener analyser : values) {
-                if (analyser.injectionPossible(toInject.getClass())) {
-                    analyser.inject(toInject);
+                if (analyser.injectionPossible(toHandle)) {
+                    analyser.inject(toInject, toHandle);
                     return;
                 }
             }

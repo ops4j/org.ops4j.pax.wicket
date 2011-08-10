@@ -31,7 +31,7 @@ public class ComponentInstantiationListenerFacade implements IComponentInstantia
     }
 
     public void onInstantiation(Component component) {
-        toWrap.inject(component);
+        toWrap.inject(component, component.getClass());
     }
 
 }

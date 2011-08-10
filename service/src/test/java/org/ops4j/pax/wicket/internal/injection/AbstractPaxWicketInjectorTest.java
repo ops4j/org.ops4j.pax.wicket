@@ -32,7 +32,7 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 public class AbstractPaxWicketInjectorTest {
 
     private static class PaxWicketTestInjector extends AbstractPaxWicketInjector {
-        public void inject(Object toInject) {
+        public void inject(Object toInject, Class<?> toHandle) {
         }
     }
 
@@ -61,7 +61,7 @@ public class AbstractPaxWicketInjectorTest {
             super("foo");
         }
     }
-    
+
     @SuppressWarnings("serial")
     private static class TestComponentBase extends TestComponent {
         public TestComponentBase() {
@@ -114,9 +114,10 @@ public class AbstractPaxWicketInjectorTest {
 
         assertThat(injector.getBeanType(fields.get(0)).getName(), is(TestService.class.getName()));
     }
-    
+
     @Test
     public void testdoesComponentContainPaxWicketBeanAnnotatedFields_shouldReturnTrue() {
-        assertThat(injector.doesComponentContainPaxWicketBeanAnnotatedFields(mock(TestComponentBase.class)), is(true));
+        assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestComponentBase.class),
+            is(1));
     }
 }

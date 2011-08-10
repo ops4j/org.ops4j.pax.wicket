@@ -138,11 +138,11 @@ public final class BundleInjectionProviderHelper {
 
     private final class BundleInjectionResolver implements PaxWicketInjector, ManagedService {
 
-        public void inject(Object toInject) {
+        public void inject(Object toInject, Class<?> toHandle) {
             validateNotNull(bundleAnalysingComponentInstantiationListener,
                 "bundleAnalysingComponentInstantiationListener");
-            if (bundleAnalysingComponentInstantiationListener.injectionPossible(toInject.getClass())) {
-                bundleAnalysingComponentInstantiationListener.inject(toInject);
+            if (bundleAnalysingComponentInstantiationListener.injectionPossible(toHandle)) {
+                bundleAnalysingComponentInstantiationListener.inject(toInject, toHandle);
                 return;
             }
             throw new NoBeanAvailableForInjectionException();

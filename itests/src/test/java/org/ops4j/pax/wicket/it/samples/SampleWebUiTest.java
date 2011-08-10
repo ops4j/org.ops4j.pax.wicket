@@ -77,6 +77,10 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.mixed.page").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.mixed")
                 .artifactId("org.ops4j.pax.wicket.samples.mixed.component").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
+                .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.parent").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
+                .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -128,9 +132,16 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         // testSampleMixed_shouldRenderPage
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/mixed");
-        assertTrue(page.asText().contains("Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
+        assertTrue(page.asText().contains(
+            "Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
         assertTrue(page.asText().contains("This is a link"));
         assertTrue(page.asText().contains("This is a panel from a separate component"));
+        webclient.closeAllWindows();
+        // testSampleEdgeInheritInjection_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection");
+        assertTrue(page.asText().contains("Back to parent"));
+        assertTrue(page.asText().contains("This is a link"));
         webclient.closeAllWindows();
     }
 

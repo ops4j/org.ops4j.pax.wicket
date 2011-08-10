@@ -48,6 +48,14 @@
         on factory service for page-links and one for components. Both are shown in ListViews on the page. This example shows how
         blueprint, springdm and plain osgi services could be combined. To see the the example point your browser 
         <a href="../mixed">here</a>.
+        <h3>Edge Cases</h3>
+        There are various situations where PAX WICKET has to deal with edge cases. To be able to analyse and have regression testss
+        for those edge cases this sample suite had been created. If you're interested in the most extreme things you can do with
+        PAX WICKET this section is definitely woth a try.
+        <h4>Inherited Injection</h4>
+        While direct injection from a local bundle is quite trivial it's something complete different if the parent requires injection
+        from its own bundle and the page inheriting does also need this. It's becoming even more extreme if one bundle is Spring and one
+        Blueprint. You'll be surprised but as you can see <a href="../edge/inheritinjection/">here</a> this really works.
     </body>
 </html>
 
