@@ -55,7 +55,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     }
 
     public boolean injectionPossible(Class<?> component) {
-        String name = component.getCanonicalName();
+        String name = component.getName();
         LOGGER.debug("Try to find class {} in bundle {}", name, bundleContext.getBundle().getSymbolicName());
         String searchString = name.replaceAll("\\$\\$.*", "");
         if (bundleResources.matches(".*" + searchString + ".*")) {
