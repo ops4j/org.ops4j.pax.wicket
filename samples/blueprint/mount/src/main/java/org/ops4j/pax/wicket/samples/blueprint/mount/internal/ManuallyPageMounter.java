@@ -1,0 +1,56 @@
+/**
+ * Copyright OPS4J
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.ops4j.pax.wicket.samples.blueprint.mount.internal;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.Page;
+import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.ops4j.pax.wicket.api.MountPointInfo;
+import org.ops4j.pax.wicket.api.PageMounter;
+
+/**
+ * This class is exported as a service via blueprint and automatically recognized by pax-wicket mounting a page manually
+ * in the system.
+ */
+public class ManuallyPageMounter implements PageMounter {
+
+    public void addMountPoint(String path, Class<? extends Page> pageClass) {
+        // this method is typically though only for internal use
+    }
+
+    public void addMountPoint(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
+        // this method is typically though only for internal use
+    }
+
+    public List<MountPointInfo> getMountPoints() {
+        List<MountPointInfo> mountPoints = new ArrayList<MountPointInfo>();
+        mountPoints.add(new MountPointInfo() {
+
+            public String getPath() {
+                return "manuallymounted";
+            }
+
+            public IRequestTargetUrlCodingStrategy getCodingStrategy() {
+                return new BookmarkablePageRequestTargetUrlCodingStrategy("manuallymounted", ManuallyMountedPage.class,
+                    null);
+            }
+        });
+        return mountPoints;
+    }
+}

@@ -63,6 +63,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
+                .artifactId("org.ops4j.pax.wicket.samples.blueprint.mount").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.injection")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.injection.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm")
@@ -113,6 +115,15 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains(
             "Welcome to the most simple pax-wicket injection application based on blueprint."));
         webclient.closeAllWindows();
+        // testSampleBlueprintMountPoint_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/manuallymounted");
+        assertTrue(page.asText().contains("This page is mounted manually."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/automounted");
+        assertTrue(page.asText().contains("This page is automatically mounted."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount");
+        assertTrue(page.asText().contains("Mountpoint blueprint based sample."));
+        webclient.closeAllWindows();
         // testSampleSpringdmSimpleDefault_shouldRenderPage
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
@@ -144,5 +155,4 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("This is a link"));
         webclient.closeAllWindows();
     }
-
 }

@@ -16,6 +16,7 @@
   <modules>
     <module>simple</module>
     <module>injection</module>
+    <module>mount</module>
   </modules>
 
 </project>
