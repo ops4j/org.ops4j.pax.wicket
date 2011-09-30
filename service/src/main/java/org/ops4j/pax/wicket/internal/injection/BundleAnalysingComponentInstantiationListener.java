@@ -58,6 +58,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         String name = component.getName();
         LOGGER.debug("Try to find class {} in bundle {}", name, bundleContext.getBundle().getSymbolicName());
         String searchString = name.replaceAll("\\$\\$.*", "");
+        searchString = searchString.replaceAll("\\$", "\\\\\\$"); // for nested and anonymous classes
         if (bundleResources.matches(".*" + searchString + ".*")) {
             LOGGER.trace("Found class {} in bundle {}", name, bundleContext.getBundle().getSymbolicName());
             return true;
