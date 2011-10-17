@@ -3,14 +3,14 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>pax-wicket-samples-parent</artifactId>
-    <version>0.7.5-SNAPSHOT</version>
+    <version>0.7.5</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.service</groupId>
   <artifactId>pax-wicket-samples-service-parent</artifactId>
-  <version>0.7.5-SNAPSHOT</version>
+  <version>0.7.5</version>
   <packaging>pom</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Service :: Parent</name>
 
