@@ -21,7 +21,7 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.view</groupId>
     <artifactId>pax-wicket-samples-view-parent</artifactId>
-    <version>0.7.5</version>
+    <version>0.7.6-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -29,7 +29,7 @@
   <groupId>org.ops4j.pax.wicket.samples.view</groupId>
   <artifactId>pax-wicket-samples-view-franchisee</artifactId>
   <packaging>bundle</packaging>
-  <version>0.7.5</version>
+  <version>0.7.6-SNAPSHOT</version>
   <name>OPS4J Pax Wicket :: Samples :: View :: Franchisee</name>
 
   <description>Pax Department Store Franchisee View.</description>
