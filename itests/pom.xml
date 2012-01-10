@@ -72,9 +72,15 @@
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
       <artifactId>org.ops4j.pax.wicket.samples.blueprint.simple</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
+      <artifactId>org.ops4j.pax.wicket.samples.blueprint.filter</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright OPS4J
+
+    Licensed under the Apache License, Version 2.0 (the "License"); you may
+    not use this file except in compliance with the License. You may obtain
+    a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" >
+
+  <service interface="org.apache.wicket.protocol.http.IWebApplicationFactory" >
+    <service-properties>
+      <entry key="pax.wicket.applicationname" value="blueprint.filter.default" />
+      <entry key="pax.wicket.mountpoint" value="blueprint/filter/default" />
+    </service-properties>
+    <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory" >
+      <property name="wicketApplication" value="org.ops4j.pax.wicket.samples.blueprint.filter.internal.WicketApplication" />
+    </bean>
+  </service>
+  
+  <service interface="org.ops4j.pax.wicket.api.FilterFactory">
+    <service-properties>
+        <entry key="pax.wicket.applicationname" value="blueprint.filter.default" />
+    </service-properties>
+    <bean class="org.ops4j.pax.wicket.samples.blueprint.filter.internal.SampleFilterFactory" />
+  </service>
+ 
+</blueprint>
