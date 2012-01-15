@@ -57,8 +57,8 @@
     <wicket.dependency.version>1.4.19</wicket.dependency.version>
     <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jetty.version>7.3.1.v20110307</jetty.version>
-    <pax.web.version>1.0.5</pax.web.version>
+    <jetty.version>7.5.4.v20111024</jetty.version>
+    <pax.web.version>1.0.8</pax.web.version>
     <spring.osgi.version>1.2.1</spring.osgi.version>
     <spring.version>3.0.5.RELEASE</spring.version>
     <cglib.version>2.2_2</cglib.version>
