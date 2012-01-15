@@ -64,11 +64,11 @@ public final class PaxWicketPageFactory implements IPageFactory {
 
     /**
      * Creates a new page using a page class.
-     * 
+     *
      * @param pageClass The page class to instantiate
-     * 
+     *
      * @return The page
-     * 
+     *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final <C extends Page> Page newPage(Class<C> pageClass) throws IllegalArgumentException {
@@ -81,12 +81,12 @@ public final class PaxWicketPageFactory implements IPageFactory {
      * Creates a new Page, passing PageParameters to the Page constructor if such a constructor exists. If no such
      * constructor exists and the parameters argument is null or empty, then any available default constructor will be
      * used.
-     * 
+     *
      * @param pageClass The class of Page to create
      * @param parameters Any parameters to pass to the Page's constructor
-     * 
+     *
      * @return The new page
-     * 
+     *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final <C extends Page> Page newPage(Class<C> pageClass, PageParameters parameters)
@@ -101,22 +101,18 @@ public final class PaxWicketPageFactory implements IPageFactory {
             LOGGER.debug("No factory available for page {}. Using default one from delegating classloader!",
                 pageClass.getName());
             try {
-                if (parameters == null) {
+                try {
+                    final Constructor<?> ctr = pageClass.getConstructor(PageParameters.class);
+                    return (Page) ctr.newInstance(parameters == null ? PageParameters.NULL : parameters);
+                } catch (NoSuchMethodException e) {
                     return pageClass.newInstance();
                 }
-
-                final Constructor<?> ctr = pageClass.getConstructor(PageParameters.class);
-                return (Page) ctr.newInstance(parameters);
             } catch (InstantiationException e) {
                 String message = "An abstract class or an interface was requested to be a Page: " + pageClass;
                 LOGGER.error(message, e);
                 throw new WicketRuntimeException(message, e);
             } catch (IllegalAccessException e) {
                 String message = "The constructor in " + pageClass + " is not public and without parameters.";
-                LOGGER.error(message, e);
-                throw new WicketRuntimeException(message, e);
-            } catch (NoSuchMethodException e) {
-                String message = "The constructor Page( PageParameters ) could not be found for " + pageClass;
                 LOGGER.error(message, e);
                 throw new WicketRuntimeException(message, e);
             } catch (InvocationTargetException e) {
