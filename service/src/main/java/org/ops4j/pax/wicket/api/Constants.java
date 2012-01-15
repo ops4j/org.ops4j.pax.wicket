@@ -43,9 +43,4 @@ public interface Constants {
      */
     String PAGE_ID = "pax.wicket.pageid";
 
-    /**
-     * Service property name for the configuration of the classname of the <i>HomePage</i>.
-     */
-    String HOMEPAGE_CLASSNAME = "pax.wicket.homepage.classname";
-
 }
