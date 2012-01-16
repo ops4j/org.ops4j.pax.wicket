@@ -34,7 +34,7 @@ import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
 import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.swissbox.tinybundles.core.TinyBundles;
+import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.PublicClass;
 import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.PublicThatAccessPrivateClass;
@@ -59,7 +59,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
                 .versionAsInProject()),
             provision(TinyBundles
-                .newBundle()
+                .bundle()
                 .add(PublicClass.class)
                 .add(PublicThatAccessPrivateClass.class)
                 .add(PrivateClass.class)
