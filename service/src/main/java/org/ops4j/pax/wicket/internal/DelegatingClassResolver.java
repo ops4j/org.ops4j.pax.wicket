@@ -22,7 +22,6 @@ import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -96,18 +95,22 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     public Iterator<URL> getResources(String name) {
         synchronized (resolvers) {
+            ArrayList<URL> collectedResources = new ArrayList<URL>();
             for (IClassResolver resolver : resolvers) {
                 try {
                     Iterator<URL> iterator = resolver.getResources(name);
-                    if (iterator != null && iterator.hasNext()) {
-                        return iterator;
+                    if (iterator == null) {
+                        continue;
+                    }
+                    while (iterator.hasNext()) {
+                        collectedResources.add(iterator.next());
                     }
                 } catch (RuntimeException e) {
                     LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
-                    return Collections.<URL> emptyList().iterator();
+                    return collectedResources.iterator();
                 }
             }
-            return Collections.<URL> emptyList().iterator();
+            return collectedResources.iterator();
         }
     }
 

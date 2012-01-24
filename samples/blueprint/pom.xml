@@ -18,6 +18,7 @@
     <module>injection</module>
     <module>mount</module>
     <module>filter</module>
+    <module>wicketproperties</module>
   </modules>
 
 </project>

@@ -17,8 +17,8 @@ package org.ops4j.pax.wicket.internal;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -116,20 +116,25 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
 
     @SuppressWarnings("unchecked")
     public Iterator<URL> getResources(String name) {
+        ArrayList<URL> collectedResources = new ArrayList<URL>();
         try {
             synchronized (bundles) {
                 Collection<Bundle> values = bundles.values();
                 for (Bundle bundle : values) {
                     final Enumeration<URL> enumeration = bundle.getResources(name);
-                    if (null != enumeration && enumeration.hasMoreElements()) {
-                        return new EnumerationAdapter<URL>(enumeration);
+                    if (enumeration == null) {
+                        continue;
+                    }
+                    while (enumeration.hasMoreElements()) {
+                        collectedResources.add(enumeration.nextElement());
                     }
                 }
             }
         } catch (IOException e) {
-            return Collections.<URL> emptyList().iterator();
+            LOGGER.warn("IO exception during reading resources from bundle; returning current state.");
+            collectedResources.iterator();
         }
-        return Collections.<URL> emptyList().iterator();
+        return collectedResources.iterator();
     }
 
 }

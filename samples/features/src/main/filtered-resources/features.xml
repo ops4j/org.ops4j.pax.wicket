@@ -36,6 +36,24 @@
     <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.simple/${project.version}</bundle>
   </feature>
 
+  <feature name="wicket-samples-blueprint-wicketproperties" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.codehaus.jackson/jackson-core-asl/${jackson.version}</bundle>
+    <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/${jackson.version}</bundle>
+    <bundle>mvn:org.odlabs.wiquery/wiquery/${wiquery.version}</bundle>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.wicketproperties/${project.version}</bundle>
+  </feature>
+
+  <feature name="wicket-samples-blueprint-mount" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.mount/${project.version}</bundle>
+  </feature>
+
+  <feature name="wicket-samples-blueprint-filter" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.filter/${project.version}</bundle>
+  </feature>
+
   <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.injection/org.ops4j.pax.wicket.samples.blueprint.injection.simple/${project.version}</bundle>
