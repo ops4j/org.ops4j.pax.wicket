@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.util;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.IInitializer;
@@ -21,9 +21,11 @@ import org.apache.wicket.IInitializer;
 /**
  * {@code Initializer} is invoked by {@link Application} to initialize wicket application.
  * <p>
- * This is done to get around PAXCONSTRUCT-7, and being able to use pax-wicket-service in eclipse target platform.
+ * The problem here is that there are various activators currently hidden inside pax-wicket (.e.g extension and the base
+ * initializer). Even if those initializer are externalized there's still the problem that wicket is only looking for
+ * one inizializer per level in 1.4. For wicket 1.5 we've to think of a different approach here.
  * </p>
- * 
+ *
  * @author Edward Yakop
  * @since 0.5.0
  */
@@ -39,9 +41,9 @@ public final class Initializer implements IInitializer {
 
     /**
      * Initialize the application.
-     * 
+     *
      * @param application The application loading the component
-     * 
+     *
      * @since 0.5.0
      */
     public final void init(Application application) {
