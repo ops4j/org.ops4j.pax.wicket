@@ -17,6 +17,7 @@ package org.ops4j.pax.wicket.internal;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -121,14 +122,29 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         }
 
         /**
+         * A helper method to verify method signatures.
+         * 
+         * @param method Method to check.
+         * @param name Expected name.
+         * @param returnType Expected return type.
+         * @param parameterTypes Parameters for method.
+         * @return True if all criteria matched.
+         */
+        private boolean checkSignature(Method method, String name, Class<?> returnType, Class<?> ... parameterTypes) {
+            if (method.getName().equals(name) && method.getReturnType() == returnType) {
+                return Arrays.equals(method.getParameterTypes(), parameterTypes);
+            }
+            return false;
+        }
+
+        /**
          * Checks if the method is derived from Object.equals()
          *
          * @param method method being tested
          * @return true if the method is derived from Object.equals(), false otherwise
          */
         private boolean isEqualsMethod(Method method) {
-            return method.getReturnType() == boolean.class && method.getParameterTypes().length == 1 &&
-                    method.getParameterTypes()[0] == Object.class && method.getName().equals("equals");
+            return checkSignature(method, "equals", boolean.class, Object.class);
         }
 
         /**
@@ -138,8 +154,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
          * @return true if the method is defined from Object.hashCode(), false otherwise
          */
         private boolean isHashCodeMethod(Method method) {
-            return method.getReturnType() == int.class && method.getParameterTypes().length == 0 &&
-                    method.getName().equals("hashCode");
+            return checkSignature(method, "hashCode", int.class);
         }
 
         /**
@@ -149,8 +164,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
          * @return true if the method is defined from Object.toString(), false otherwise
          */
         private boolean isToStringMethod(Method method) {
-            return method.getReturnType() == String.class && method.getParameterTypes().length == 0 &&
-                    method.getName().equals("toString");
+            return checkSignature(method, "toString", String.class);
         }
 
         /**
@@ -160,18 +174,15 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
          * @return true if the method is defined from Object.finalize(), false otherwise
          */
         private boolean isFinalizeMethod(Method method) {
-            return method.getReturnType() == void.class && method.getParameterTypes().length == 0 &&
-                    method.getName().equals("finalize");
+            return checkSignature(method, "finalize", void.class);
         }
 
         private boolean isInitMethod(Method method) {
-            return method.getReturnType() == void.class && method.getParameterTypes().length == 0 &&
-                    method.getName().equals("init");
+            return checkSignature(method, "init", void.class);
         }
 
         private boolean isOnDestoryMethod(Method method) {
-            return method.getReturnType() == void.class && method.getParameterTypes().length == 0 &&
-                    method.getName().equals("onDestroy");
+            return checkSignature(method, "onDestroy", void.class);
         }
 
         private void handleInit(WebApplication application) {
