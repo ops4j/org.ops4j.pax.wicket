@@ -205,7 +205,11 @@
     </dependency>
     <dependency>
       <groupId>org.odlabs.wiquery</groupId>
-      <artifactId>wiquery</artifactId>
+      <artifactId>wiquery-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.odlabs.wiquery</groupId>
+      <artifactId>wiquery-jquery-ui</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
