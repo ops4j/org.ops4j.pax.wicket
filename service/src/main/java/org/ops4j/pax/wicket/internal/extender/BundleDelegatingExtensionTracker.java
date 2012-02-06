@@ -29,6 +29,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Right now it listens on all pax-wicket applications. In addition it is "feeded" by a bundleListeners with all bundles
@@ -46,6 +48,8 @@ import org.osgi.util.tracker.ServiceTracker;
  * Everytime a bundle is removed it is simply removed from all applications from all services.
  */
 public class BundleDelegatingExtensionTracker extends ServiceTracker {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingExtensionTracker.class);
 
     private BundleContext paxWicketBundleContext;
     private Map<String, Bundle> relvantBundles = new HashMap<String, Bundle>();
@@ -126,9 +130,13 @@ public class BundleDelegatingExtensionTracker extends ServiceTracker {
     }
 
     private void addBundleToServicesReference(Bundle bundle, ServiceReference reference) {
-        classResolvers.get(reference).addBundle(bundle);
-        componentInstanciationListener.get(reference).addBundle(bundle);
-        pageMounter.get(reference).addBundle(bundle);
+        try {
+            classResolvers.get(reference).addBundle(bundle);
+            componentInstanciationListener.get(reference).addBundle(bundle);
+            pageMounter.get(reference).addBundle(bundle);
+        } catch (Throwable e) {
+            LOGGER.warn("A specific reference could not be added; might not be too bad", e);
+        }
     }
 
     public void removeRelevantBundle(Bundle bundle) {
