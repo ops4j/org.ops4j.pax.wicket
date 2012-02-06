@@ -17,20 +17,22 @@ package org.ops4j.pax.wicket.internal;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
-import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.session.DefaultPageFactory;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Wrapper around the original wicket {@link DefaultPageFactory} adding lookup possiblities for own page loaders. In
+ * case non are provided the original wicket algorithm for loading of pages is used.
+ */
 public final class PaxWicketPageFactory implements IPageFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketPageFactory.class);
@@ -72,9 +74,14 @@ public final class PaxWicketPageFactory implements IPageFactory {
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final <C extends Page> Page newPage(Class<C> pageClass) throws IllegalArgumentException {
-        validateNotNull(pageClass, "pageClass");
-
-        return newPage(pageClass, null);
+        PageFactory<?> content;
+        synchronized (this) {
+            content = contents.get(pageClass);
+        }
+        if (content != null) {
+            return content.createPage(new PageParameters());
+        }
+        return new DefaultPageFactory().newPage(pageClass);
     }
 
     /**
@@ -91,39 +98,14 @@ public final class PaxWicketPageFactory implements IPageFactory {
      */
     public final <C extends Page> Page newPage(Class<C> pageClass, PageParameters parameters)
         throws IllegalArgumentException {
-        validateNotNull(pageClass, "pageClass");
-
         PageFactory<?> content;
         synchronized (this) {
             content = contents.get(pageClass);
         }
-        if (content == null) {
-            LOGGER.debug("No factory available for page {}. Using default one from delegating classloader!",
-                pageClass.getName());
-            try {
-                try {
-                    final Constructor<?> ctr = pageClass.getConstructor(PageParameters.class);
-                    return (Page) ctr.newInstance(parameters == null ? PageParameters.NULL : parameters);
-                } catch (NoSuchMethodException e) {
-                    return pageClass.newInstance();
-                }
-            } catch (InstantiationException e) {
-                String message = "An abstract class or an interface was requested to be a Page: " + pageClass;
-                LOGGER.error(message, e);
-                throw new WicketRuntimeException(message, e);
-            } catch (IllegalAccessException e) {
-                String message = "The constructor in " + pageClass + " is not public and without parameters.";
-                LOGGER.error(message, e);
-                throw new WicketRuntimeException(message, e);
-            } catch (InvocationTargetException e) {
-                String message =
-                    "Could not construct page using the constructor: Page( PageParameters ) for " + pageClass;
-                LOGGER.error(message, e.getCause());
-                throw new WicketRuntimeException(message, e.getCause());
-            }
+        if (content != null) {
+            return content.createPage(parameters);
         }
-
-        return content.createPage(parameters);
+        return new DefaultPageFactory().newPage(pageClass, parameters);
     }
 
     public void add(Class<?> pageClass, PageFactory<?> pageSource) throws IllegalArgumentException {
