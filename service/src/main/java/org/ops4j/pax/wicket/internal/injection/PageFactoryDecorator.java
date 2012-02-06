@@ -19,8 +19,8 @@ import java.util.Map;
 
 import net.sf.cglib.proxy.Enhancer;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.ops4j.pax.wicket.util.AbstractPageFactory;
 import org.osgi.framework.BundleContext;

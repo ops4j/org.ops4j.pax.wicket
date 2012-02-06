@@ -21,8 +21,10 @@ import java.util.HashMap;
 
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.session.DefaultPageFactory;
+import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -73,7 +75,7 @@ public final class PaxWicketPageFactory implements IPageFactory {
      *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public final <C extends Page> Page newPage(Class<C> pageClass) throws IllegalArgumentException {
+    public final <C extends IRequestablePage> IRequestablePage newPage(Class<C> pageClass) throws IllegalArgumentException { 
         PageFactory<?> content;
         synchronized (this) {
             content = contents.get(pageClass);
@@ -96,7 +98,7 @@ public final class PaxWicketPageFactory implements IPageFactory {
      *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public final <C extends Page> Page newPage(Class<C> pageClass, PageParameters parameters)
+    public final <C extends IRequestablePage> IRequestablePage newPage(Class<C> pageClass, PageParameters parameters)
         throws IllegalArgumentException {
         PageFactory<?> content;
         synchronized (this) {
@@ -106,6 +108,10 @@ public final class PaxWicketPageFactory implements IPageFactory {
             return content.createPage(parameters);
         }
         return new DefaultPageFactory().newPage(pageClass, parameters);
+    }
+
+    public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass) {
+        return new DefaultPageFactory().isBookmarkable(pageClass);
     }
 
     public void add(Class<?> pageClass, PageFactory<?> pageSource) throws IllegalArgumentException {
@@ -124,4 +130,6 @@ public final class PaxWicketPageFactory implements IPageFactory {
             contents.remove(pageClass);
         }
     }
+
 }
+

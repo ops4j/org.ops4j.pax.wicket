@@ -27,8 +27,8 @@ public class PaxWicketBeanInjectionTest {
         ApplicationContextMock appContext = new ApplicationContextMock();
         appContext.putBean("testBean", new TestInjectionBean("testContent"));
         WicketTester tester = new WicketTester();
-        tester.getApplication().addComponentInstantiationListener(
-            new PaxWicketSpringBeanComponentInjector(tester.getApplication(), appContext));
+        tester.getApplication().getComponentInstantiationListeners()
+            .add(new PaxWicketSpringBeanComponentInjector(tester.getApplication(), appContext));
 
         tester.startPage(ExamplePage.class);
 

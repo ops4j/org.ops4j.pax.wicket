@@ -18,7 +18,7 @@ package org.ops4j.pax.wicket.util;
 import java.lang.reflect.UndeclaredThrowableException;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.osgi.framework.BundleContext;
 
 public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T> {

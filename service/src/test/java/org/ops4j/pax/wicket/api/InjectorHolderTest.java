@@ -42,7 +42,7 @@ public class InjectorHolderTest {
             @Override
             protected void init() {
                 super.init();
-                setApplicationKey("applicationKey");
+                // setApplicationKey("applicationKey");
             }
 
             @Override

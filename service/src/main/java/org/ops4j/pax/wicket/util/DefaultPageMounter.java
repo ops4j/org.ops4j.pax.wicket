@@ -26,8 +26,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
@@ -115,14 +113,8 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
      * @param pageClass the class to mount on this mount point using the default strategy
      */
     public void addMountPoint(String path, Class<? extends Page> pageClass) {
-        LOGGER.debug("Adding mount point for path {}", path);
-        addMountPoint(path, new BookmarkablePageRequestTargetUrlCodingStrategy(path, pageClass, null));
-    }
-
-    public void addMountPoint(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
-        LOGGER.debug("Adding mount point for path {}", path);
-        MountPointInfo info = new DefaultMountPointInfo(path, codingStrategy);
-        mountPoints.add(info);
+        LOGGER.debug("Adding mount point for path {} = {}", path, pageClass.getName());
+        mountPoints.add(new DefaultMountPointInfo(path, pageClass));
     }
 
     public final List<MountPointInfo> getMountPoints() {
@@ -131,21 +123,21 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
 
     private static class DefaultMountPointInfo implements MountPointInfo {
         private final String path;
-        private final IRequestTargetUrlCodingStrategy codingStrategy;
+        private final Class<? extends Page> pageClass;
 
-        private DefaultMountPointInfo(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
+        private DefaultMountPointInfo(String path, Class<? extends Page> pageClass) {
             validateNotEmpty(path, "path");
-            validateNotNull(codingStrategy, "codingStrategy");
+            validateNotNull(pageClass, "pageClass");
             this.path = path;
-            this.codingStrategy = codingStrategy;
+            this.pageClass = pageClass;
         }
 
         public final String getPath() {
             return path;
         }
 
-        public final IRequestTargetUrlCodingStrategy getCodingStrategy() {
-            return codingStrategy;
+        public final Class<? extends Page> getPage() {
+            return pageClass;
         }
     }
 

@@ -18,6 +18,7 @@ package org.ops4j.pax.wicket.internal;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -56,6 +57,14 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         String mountPoint = (String) reference.getProperty(Constants.MOUNTPOINT);
         String applicationName = (String) reference.getProperty(Constants.APPLICATION_NAME);
         Map<String, String> contextParams = (Map<String, String>) reference.getProperty(Constants.CONTEXT_PARAMS);
+
+        if (contextParams == null) {
+            contextParams = new HashMap<String, String>();
+        }
+        if (!contextParams.containsKey(WicketFilter.FILTER_MAPPING_PARAM)) {
+            contextParams.put(WicketFilter.FILTER_MAPPING_PARAM, "/" + mountPoint + "/*");
+        }
+
         FilterDelegator filterDelegator =
             new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
         return new PaxWicketApplicationFactory(bundleContext, webApplicationFactory, applicationName, mountPoint,
@@ -196,7 +205,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
             pageFactory.initialize();
 
-            application.addComponentInstantiationListener(new ComponentInstantiationListenerFacade(
+            application.getComponentInstantiationListeners().add(new ComponentInstantiationListenerFacade(
                 delegatingComponentInstanciationListener));
             application.getApplicationSettings().setClassResolver(delegatingClassResolver);
             application.getSessionSettings().setPageFactory(pageFactory);
@@ -241,6 +250,9 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     public FilterDelegator getFilterDelegator() {
         return filterDelegator;
+    }
+
+    public void destroy(WicketFilter filter) {
     }
 
 }

@@ -72,17 +72,19 @@
               org.ops4j.pax.wicket.internal.Activator
             </Bundle-Activator>
             <Import-Package>
-              org.osgi.service.useradmin; resolution:=optional,
-              junit.*; resolution:=optional,
-              javax.portlet.*; resolution:=optional,
-              org.apache.portals.*; resolution:=optional,
-              org.slf4j.*; version="[1,2)",
+              org.osgi.service.useradmin;resolution:=optional,
+              org.junit.*;resolution:=optional,
+              junit.framework.*;resolution:=optional,
+              javax.portlet.*;resolution:=optional,
+              org.apache.portals.*;resolution:=optional,
+              org.slf4j.*;version="[1,2)",
               javax.crypto.*,
               javax.imageio.*,
               javax.servlet.*,
               javax.swing.*,
               javax.xml.*,
               org.apache.wicket.*;version="${wicket.dependency.version}",
+              org.codehaus.jackson.*;resolution:=optional,
               org.osgi.framework;version="1.4",
               org.osgi.service.*;version="1",
               org.osgi.util.*;version="1",
@@ -218,7 +220,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket</artifactId>
+      <artifactId>wicket-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
@@ -234,7 +236,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket</artifactId>
+      <artifactId>wicket-core</artifactId>
       <scope>provided</scope>
       <classifier>sources</classifier>
       <version>${wicket.dependency.version}</version>

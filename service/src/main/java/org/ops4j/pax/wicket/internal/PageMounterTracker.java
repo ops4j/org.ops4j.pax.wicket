@@ -22,8 +22,9 @@ import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.util.List;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
@@ -70,12 +71,14 @@ public final class PageMounterTracker extends ServiceTracker {
 
         List<MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
-            IRequestTargetUrlCodingStrategy strategy = info.getCodingStrategy();
             LOGGER.trace("Make sure that path {} is clear before trying to remount", info.getPath());
+            Application oldApp = ThreadContext.getApplication();
+            ThreadContext.setApplication(application);
             application.unmount(info.getPath());
-            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
-            application.mount(strategy);
-            LOGGER.info("Mounted {} with {}", info.getPath(), info.getCodingStrategy().toString());
+            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());
+            application.mountPage(info.getPath(), info.getPage());
+            ThreadContext.setApplication(oldApp);
+            LOGGER.info("Mounted {} with {}", info.getPath(), info.getPage().getName());
         }
 
         return mounter;
@@ -86,10 +89,12 @@ public final class PageMounterTracker extends ServiceTracker {
         PageMounter pageMounter = (PageMounter) mounter;
         List<MountPointInfo> infos = pageMounter.getMountPoints();
         for (MountPointInfo info : infos) {
-            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getCodingStrategy().toString());
-            String path = info.getPath();
-            application.unmount(path);
-            LOGGER.info("Unmounted {} with {}", info.getPath(), info.getCodingStrategy().toString());
+            LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());
+            Application oldApp = ThreadContext.getApplication();
+            ThreadContext.setApplication(application);
+            application.unmount(info.getPath());
+            ThreadContext.setApplication(oldApp);
+            LOGGER.info("Unmounted {} with {}", info.getPath(), info.getPage().getName());
         }
 
         super.removedService(reference, pageMounter);

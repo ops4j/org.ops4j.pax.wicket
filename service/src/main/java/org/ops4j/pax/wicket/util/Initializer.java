@@ -50,4 +50,10 @@ public final class Initializer implements IInitializer {
         wicketInitializer.init(application);
         wicketExtensionInitializer.init(application);
     }
+
+    public void destroy(Application application) {
+        wicketExtensionInitializer.destroy(application);
+        wicketInitializer.destroy(application);
+    }
+
 }

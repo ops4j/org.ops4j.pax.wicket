@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.request.target.coding.BookmarkablePageRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 
@@ -34,10 +32,6 @@ public class ManuallyPageMounter implements PageMounter {
         // this method is typically though only for internal use
     }
 
-    public void addMountPoint(String path, IRequestTargetUrlCodingStrategy codingStrategy) {
-        // this method is typically though only for internal use
-    }
-
     public List<MountPointInfo> getMountPoints() {
         List<MountPointInfo> mountPoints = new ArrayList<MountPointInfo>();
         mountPoints.add(new MountPointInfo() {
@@ -46,9 +40,8 @@ public class ManuallyPageMounter implements PageMounter {
                 return "manuallymounted";
             }
 
-            public IRequestTargetUrlCodingStrategy getCodingStrategy() {
-                return new BookmarkablePageRequestTargetUrlCodingStrategy("manuallymounted", ManuallyMountedPage.class,
-                    null);
+            public Class<? extends Page> getPage() {
+                return ManuallyMountedPage.class;
             }
         });
         return mountPoints;

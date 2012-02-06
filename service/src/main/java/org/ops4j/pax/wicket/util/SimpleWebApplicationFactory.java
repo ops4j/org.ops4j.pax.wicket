@@ -57,4 +57,7 @@ public class SimpleWebApplicationFactory implements IWebApplicationFactory {
         this.wicketApplication = wicketApplication;
     }
 
+    public void destroy(WicketFilter filter) {
+    }
+
 }

@@ -25,7 +25,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IApplicationSettings;
-import org.apache.wicket.util.io.IObjectStreamFactory;
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectInputStream;
 import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectOutputStream;
 
@@ -33,7 +32,7 @@ import org.ops4j.pax.wicket.util.serialization.deployment.PaxWicketObjectOutputS
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-public final class PaxWicketObjectStreamFactory implements IObjectStreamFactory {
+public final class PaxWicketObjectStreamFactory /*implements IObjectStreamFactory*/ {
 
     private boolean m_developmentMode;
 

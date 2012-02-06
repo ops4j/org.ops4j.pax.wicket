@@ -52,7 +52,7 @@ public final class Activator implements BundleActivator {
         bundleContext = context;
 
         LOGGER.debug("Set object stream factory");
-        Objects.setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
+        //Objects.setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
 
         httpTracker = new HttpTracker(context);
         httpTracker.open();

@@ -15,11 +15,12 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.Page;
 
 public interface MountPointInfo {
 
     String getPath();
 
-    IRequestTargetUrlCodingStrategy getCodingStrategy();
+    Class<? extends Page> getPage();
+
 }
