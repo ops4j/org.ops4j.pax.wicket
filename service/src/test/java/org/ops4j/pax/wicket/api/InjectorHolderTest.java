@@ -37,12 +37,10 @@ public class InjectorHolderTest {
                 // not required for this test
             }
         };
-        InjectorHolder.setInjector("applicationKey", paxWicketInjector);
-        new WicketTester(new WebApplication() {
+        WicketTester wicketTester = new WicketTester(new WebApplication() {
             @Override
             protected void init() {
                 super.init();
-                // setApplicationKey("applicationKey");
             }
 
             @Override
@@ -51,6 +49,7 @@ public class InjectorHolderTest {
                 return null;
             }
         });
+        InjectorHolder.setInjector(wicketTester.getApplication().getApplicationKey(), paxWicketInjector);
         assertSame(paxWicketInjector, InjectorHolder.getInjector());
     }
 
