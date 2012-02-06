@@ -17,12 +17,12 @@ package org.ops4j.pax.wicket.internal.extender;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
+import org.osgi.framework.SynchronousBundleListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaxWicketBundleListener implements BundleListener {
+public class PaxWicketBundleListener implements SynchronousBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
