@@ -47,9 +47,17 @@
             <!-- The bundle activator is only required if we do the things by hand. -->
             <Import-Package>
               org.apache.wicket,
+              org.apache.wicket.util,
+              org.apache.wicket.event,
+              org.apache.wicket.page,
+              org.apache.wicket.request.resource,
+              org.apache.wicket.request.mapper,
+              org.apache.wicket.page,
+              org.apache.wicket.request.cycle,
               org.apache.wicket.markup.html,
               org.apache.wicket.markup.html.basic,
               org.apache.wicket.protocol.http,
+              org.apache.wicket.request.http,
               org.ops4j.pax.wicket.api,
               org.ops4j.pax.wicket.util,
               org.ops4j.pax.wicket.util.proxy,
