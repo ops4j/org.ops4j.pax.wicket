@@ -1,11 +1,114 @@
-pax-wicket-0.8.0 ????-??-??
+pax-wicket-0.9.0 ????-??-??
 --------------------------------------------
 
-Short Verbal Description
+TBW
 
 ### Details
-Bugs, tasks, ...
+...
 
 ### Known Issues
-Issues known but not fixed by now
+* [PAXWICKET-299] - Nasty reload problems
 
+
+pax-wicket-0.8.0 2012-02-06
+--------------------------------------------
+
+The 0.8.0 release is last (and final) feature release of the wicket 1.4.x series. All 
+further bug-fixes and micro releases are done in micro release of the 0.8.x branch. 
+The release fixes tons of bugs; upgrade to the latest wicket 1.4.x micro release (1.4.19);
+upgrades the related dependencies (pax-web 1.0.8, karaf 2.2.5, slf4j 1.6.3, spring 3.0.7,
+mockito 1.9.0, wiquery 1.2.4, ...); The most important features for the 0.8.x series are
+a bundle-listener which decides automatically which bundles are to be included into an 
+application making the registration of injection, mounting and class loading services no 
+longer required; in addition the handling of injection handlers had been abstracted to be 
+extendable now. Besides those direct API changes the entire documentation had been updated 
+and completed. For almost every case an example had been added.
+
+### Details
+** Bug
+    * [PAXWICKET-164] - Compiliation error in RootContentAggregatorDecorator
+    * [PAXWICKET-182] - Integration tests on hudson fail because of already used 8080 port
+    * [PAXWICKET-190] - Running the samples via pax-provision needs way too long to shut down
+    * [PAXWICKET-191] - PageMounterTracker does not include %s in logging statement
+    * [PAXWICKET-193] - DefaultPageMounter#dispose does compare for the wrong value
+    * [PAXWICKET-195] - Running mvn pax:provision installs two not defined and required bundles
+    * [PAXWICKET-197] - Karaf's features.xml no longer need references to jetty & jetty-jaas
+    * [PAXWICKET-218] - ServletContext services dont get removed after the servlet had been removed
+    * [PAXWICKET-220] - FilterDelgator is not closed correctly in PaxWicketAppFactoryTracker
+    * [PAXWICKET-221] - Servlet will never be deregistered as PaxWicketAppFactoryTracker currently stores its map
+    * [PAXWICKET-222] - PaxWicketAppFactoryTracker modifiedService does not handle changes correctly
+    * [PAXWICKET-249] - The init and destroy method for applications is never called
+    * [PAXWICKET-251] - Serialisation exception in BundleDelegatingClassResolver
+    * [PAXWICKET-275] - injectionPossible-check for anonymous classes does not work
+    * [PAXWICKET-277] - injection-possible check always fails for Nested classes
+    * [PAXWICKET-291] - Initializer as the one in wi-query is not respected
+    * [PAXWICKET-292] - "Classical" wicket application, via pax-web does not work
+    * [PAXWICKET-293] - Race conditions between bundle analysing and application startup
+    * [PAXWICKET-294] - Pax-Wicket not guarded for Throwables
+    * [PAXWICKET-295] - Behavior of pax-wicket page factory is different from wicket page factory
+
+** Dependency upgrade
+    * [PAXWICKET-244] - Upgrade to pax-web 1.0.5
+    * [PAXWICKET-264] - Upgrade to wicket 1.4.18
+    * [PAXWICKET-267] - Upgrade to wicket 1.4.18
+    * [PAXWICKET-281] - Upgrade to wicket-1.4.19
+    * [PAXWICKET-282] - Upgrade slf4j to 1.6.4
+    * [PAXWICKET-283] - Upgrade to pax-logging 1.6.4
+    * [PAXWICKET-284] - Upgrade to karaf 2.2.5
+    * [PAXWICKET-285] - Upgrade to eventadmin 1.2.14
+    * [PAXWICKET-286] - Upgrade to jetty 7.5.4.v2011024
+    * [PAXWICKET-287] - Upgrade to pax-web 1.0.8
+    * [PAXWICKET-288] - Upgrade to spring 3.0.7.RELEASE
+    * [PAXWICKET-289] - Upgrade to mockito 1.9.0
+    * [PAXWICKET-290] - Upgrade to standalone swissbox bundle for integration tests
+    * [PAXWICKET-296] - Upgrade to wiquery 1.2.4
+
+** Improvement
+    * [PAXWICKET-118] - Cleanup service properties
+    * [PAXWICKET-192] - Unmount pages before attempting to mount them
+    * [PAXWICKET-194] - Allow easy configuration of log-level in samples
+    * [PAXWICKET-203] - Provide examples where content is in various packages
+    * [PAXWICKET-212] - It shouldn't be required to register a full PaxWicketApplicationFactory
+    * [PAXWICKET-213] - Create an additional example based on the default wicket example
+    * [PAXWICKET-214] - Merge SerializationActivator with Activator
+    * [PAXWICKET-215] - Aggregate all constants in an org.ops4j.pax.wicket.api.Constants class
+    * [PAXWICKET-219] - Extract logging level for itests from code
+    * [PAXWICKET-223] - LogMessage in PaxWicketPageFactory is no longer correct
+    * [PAXWICKET-227] - Move creation logic from PaxWicketApplicationFactory to an internal class
+    * [PAXWICKET-237] - Provide samples for simple injection
+    * [PAXWICKET-238] - Provide samples for Filters
+    * [PAXWICKET-239] - Provide samples for pax-mounting
+    * [PAXWICKET-240] - Provide slightly more complex application samples replacing web.xml
+    * [PAXWICKET-250] - Double loading in LazyInitProxyFactory does not make sense for pax-wicket
+    * [PAXWICKET-260] - PW should also create pages only having a constructor taking PageParameters
+    * [PAXWICKET-268] - Repack sources into pax-wicket
+
+** New Feature
+    * [PAXWICKET-166] - Make the autoPageMounter register itself similar to the class and injection loader
+    * [PAXWICKET-180] - Provide an (configurable) extender automatically registering pax-wicket (base) services to bundles importing wicket classes
+    * [PAXWICKET-208] - Provide easy option to register pax-wicket ApplicationFactory
+    * [PAXWICKET-210] - Add a changelog file to pax-wicket
+    * [PAXWICKET-258] - Retrieve injection handler via SPI
+    * [PAXWICKET-259] - Injection should be set via SPI to application
+    * [PAXWICKET-266] - Handle edge case of injection over multible bundles because of inheritance
+
+** Task
+    * [PAXWICKET-64] - wicket-auth example is completely autdated; remove it
+    * [PAXWICKET-112] - Merge osgi.bundles with pom.xml
+    * [PAXWICKET-157] - Release pax-wicket 0.8.0
+    * [PAXWICKET-183] - Recheck each class for javadoc
+    * [PAXWICKET-189] - Completely restructure documentation
+    * [PAXWICKET-200] - Typo in readme page
+    * [PAXWICKET-201] - Restructure README on github
+    * [PAXWICKET-205] - Remove Content- Source and Aggregator
+    * [PAXWICKET-206] - Build a new sample-infrastructure
+    * [PAXWICKET-207] - Remove pre-defined application factories
+    * [PAXWICKET-216] - ArtifactId should equal symbolicName
+    * [PAXWICKET-229] - Remove default exported configuration services
+    * [PAXWICKET-232] - Adapt spring & blueprint namespaces according to new Application structure
+    * [PAXWICKET-243] - Add build documentation to Developer Guide
+    * [PAXWICKET-245] - Add the bin folder to the ignores
+    * [PAXWICKET-262] - Cleanup root pom
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
