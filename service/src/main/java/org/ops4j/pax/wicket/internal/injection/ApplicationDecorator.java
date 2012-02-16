@@ -67,7 +67,9 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     }
 
     public void start() throws Exception {
-        factory = new DefaultWebApplicationFactory(bundleContext, applicationClass, applicationName, mountPoint);
+        factory =
+            new DefaultWebApplicationFactory(bundleContext, applicationClass, applicationName, mountPoint,
+                contextParams);
         factory.register();
         LOGGER.info("Successfully registered application factory");
     }
