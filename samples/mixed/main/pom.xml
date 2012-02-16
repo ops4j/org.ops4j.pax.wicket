@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.mixed</groupId>
     <artifactId>mixed</artifactId>
-    <version>0.8.1-SNAPSHOT</version>
+    <version>0.8.1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.mixed.main</artifactId>
-  <version>0.8.1-SNAPSHOT</version>
+  <version>0.8.1</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Mixed :: Main Aggretator</name>
 
