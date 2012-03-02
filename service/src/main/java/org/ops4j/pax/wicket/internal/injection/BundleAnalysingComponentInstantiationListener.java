@@ -46,6 +46,10 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         this.bundleContext = bundleContext;
         this.defaultInjectionSource = defaultInjectionSource;
         Enumeration<URL> entries = bundleContext.getBundle().findEntries("/", "*.class", true);
+        if (entries == null) {
+            // bundle with no .class files (see PAXWICKET-305)
+            return;
+        }
         while (entries.hasMoreElements()) {
             String urlRepresentation =
                 entries.nextElement().toExternalForm().replace("bundle://.+?/", "").replace('/', '.');
