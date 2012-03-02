@@ -67,8 +67,8 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
             throw new IllegalStateException("not possible", e);
         }
         if (references == null || references.length == 0) {
-            throw new IllegalStateException(String.format("Found %s service references for %s; this is not OK...",
-                references.length, bundleContext.getBundle().getSymbolicName()));
+            throw new IllegalStateException(String.format("Found zero service references for %s; this is not OK...",
+                bundleContext.getBundle().getSymbolicName()));
         }
         try {
             Thread.currentThread().setContextClassLoader(parent.getClassLoader());
