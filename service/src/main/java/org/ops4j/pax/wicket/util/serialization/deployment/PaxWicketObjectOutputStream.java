@@ -23,7 +23,6 @@ import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import org.apache.wicket.util.io.SerializableChecker;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -50,8 +49,24 @@ public class PaxWicketObjectOutputStream extends ObjectOutputStream {
         } catch (IOException e) {
             if (isAvailable()) {
                 // trigger serialization again, but this time gather some more info
-                new SerializableChecker((NotSerializableException) e).writeObject(object);
+                new PaxWicketSerializableChecker((NotSerializableException) e) {
+                    @Override
+                    protected boolean validateAdditionalSerializableConditions(Object obj) {
+                        return !(obj instanceof BundleContext) && !(obj instanceof Bundle);
+                    }
 
+                    @Override
+                    protected Object additionalObjectReplacements(Object streamObj) {
+                        if (streamObj instanceof BundleContext) {
+                            BundleContext context = (BundleContext) streamObj;
+                            streamObj = new ReplaceBundleContext(context);
+                        } else if (streamObj instanceof Bundle) {
+                            Bundle bundle = (Bundle) streamObj;
+                            streamObj = new ReplaceBundle(bundle);
+                        }
+                        return streamObj;
+                    }
+                }.writeObject(object);
                 // if we get here, we didn't fail, while we should;
                 throw e;
             }
