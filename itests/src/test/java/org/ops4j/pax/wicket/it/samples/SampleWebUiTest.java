@@ -22,21 +22,16 @@ import static org.ops4j.pax.exam.OptionUtils.combine;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-import org.osgi.framework.BundleContext;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 @RunWith(JUnit4TestRunner.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
-
-    @Inject
-    private BundleContext bundleContext;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
@@ -95,8 +90,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
                 .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit").versionAsInProject()),
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
-                .versionAsInProject())
-        );
+                .versionAsInProject()));
     }
 
     @Test

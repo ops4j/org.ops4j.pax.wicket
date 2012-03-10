@@ -30,10 +30,11 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Inject;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.tinybundles.core.TinyBundles;

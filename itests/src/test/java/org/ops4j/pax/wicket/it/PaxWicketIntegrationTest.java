@@ -16,12 +16,12 @@
 package org.ops4j.pax.wicket.it;
 
 import static org.junit.Assert.assertNotNull;
+import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import static org.ops4j.pax.exam.CoreOptions.waitForFrameworkStartup;
-import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.vmOption;
+import static org.ops4j.pax.exam.CoreOptions.vmOption;
 
 import org.ops4j.pax.exam.Option;
 import org.osgi.framework.Bundle;
@@ -72,8 +72,9 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.cglib")
                 .versionAsInProject()),
+            junitBundles(),
             systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("LOG_LEVEL"),
-            vmOption("-Dorg.osgi.service.http.port=" + WEBUI_PORT), waitForFrameworkStartup());
+            vmOption("-Dorg.osgi.service.http.port=" + WEBUI_PORT));
     }
 
     /**
@@ -94,7 +95,6 @@ public abstract class PaxWicketIntegrationTest {
                 return bundle;
             }
         }
-
         return null;
     }
 

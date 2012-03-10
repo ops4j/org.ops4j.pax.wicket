@@ -48,7 +48,8 @@
   </scm>
 
   <properties>
-    <pax.exam.version>1.2.4</pax.exam.version>
+    <pax.exam.version>2.4.0.RC1</pax.exam.version>
+    <pax.runner.version>1.7.6</pax.runner.version>
     <slf4j.version>1.6.4</slf4j.version>
     <pax.logging.version>1.6.5</pax.logging.version> 
     <karaf.version>2.2.5</karaf.version>
@@ -241,13 +242,33 @@
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>pax-exam-junit</artifactId>
+        <artifactId>pax-exam-junit4</artifactId>
         <version>${pax.exam.version}</version>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>pax-exam-container-default</artifactId>
+        <artifactId>pax-exam-container-paxrunner</artifactId>
         <version>${pax.exam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-inject</artifactId>
+        <version>${pax.exam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.exam</groupId>
+        <artifactId>pax-exam-link-assembly</artifactId>
+        <version>${pax.exam.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.geronimo.specs</groupId>
+        <artifactId>geronimo-atinject_1.0_spec</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ops4j.pax.runner</groupId>
+        <artifactId>pax-runner-no-jcl</artifactId>
+        <version>${pax.runner.version}</version>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.tinybundles</groupId>
