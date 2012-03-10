@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:wicket="http://www.ops4j.org/schema/wicket">
+
+  <wicket:application id="applicationId"
+    class="org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal.WicketApplication" applicationName="edge.inheritinjection"
+    mountPoint="edge/inheritinjection" />
 
   <service interface="org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.LinkProvider">
     <bean class="org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal.DefaultLinkProvider" />

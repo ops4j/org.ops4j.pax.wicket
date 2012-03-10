@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.internal;
+package org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.Parent;

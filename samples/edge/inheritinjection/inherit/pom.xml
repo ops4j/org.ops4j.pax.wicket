@@ -52,7 +52,6 @@
               org.apache.wicket.page,
               org.apache.wicket.request.resource,
               org.apache.wicket.request.mapper,
-              org.apache.wicket.page,
               org.apache.wicket.request.cycle,
               org.apache.wicket.markup.html,
               org.apache.wicket.markup.html.basic,

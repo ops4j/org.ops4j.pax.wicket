@@ -23,21 +23,16 @@ import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import static org.ops4j.pax.exam.CoreOptions.waitForFrameworkStartup;
 import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.vmOption;
 
-import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-@RunWith(JUnit4TestRunner.class)
 public abstract class PaxWicketIntegrationTest {
 
     protected static final String WEBUI_PORT = "9081";
     protected static final String LOG_LEVEL = "WARN";
     protected static final String SYMBOLIC_NAME_PAX_WICKET_SERVICE = "org.ops4j.pax.wicket.service";
 
-    @Configuration
     public final Option[] configureProvisions() {
         return options(
             provision(mavenBundle().groupId("org.ops4j.pax.logging").artifactId("pax-logging-api").versionAsInProject()),
@@ -83,12 +78,12 @@ public abstract class PaxWicketIntegrationTest {
 
     /**
      * Return bundle given the symbolic name. Returns {@code null} if not found.
-     * 
+     *
      * @param bundleContext Bundle context. This argument must not be {@code null}.
      * @param symbolicName Bundle symbolic name. This argument must not be {@code null}.
-     * 
+     *
      * @return The bundle given the symbolic name.
-     * 
+     *
      * @since 0.5.5
      */
     protected final Bundle getBundleBySymbolicName(BundleContext bundleContext, String symbolicName) {
@@ -105,11 +100,11 @@ public abstract class PaxWicketIntegrationTest {
 
     /**
      * Returns the pax wicket service bundle.
-     * 
+     *
      * @param bundleContext Bundle context. This argument must not be {@code null}.
-     * 
+     *
      * @return The pax wicket service bundle.
-     * 
+     *
      * @since 0.5.5
      */
     protected final Bundle getPaxWicketServiceBundle(BundleContext bundleContext) {

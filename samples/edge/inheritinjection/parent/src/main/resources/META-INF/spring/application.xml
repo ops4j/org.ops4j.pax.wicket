@@ -25,9 +25,6 @@
         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
         http://www.ops4j.org/schema/wicket http://www.ops4j.org/schema/wicket/wicket.xsd">
 
-  <wicket:application id="applicationId" class="org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.internal.WicketApplication"
-    applicationName="edge.inheritinjection" mountPoint="edge/inheritinjection" />
-
   <osgi:list cardinality="0..N" id="links" interface="org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.LinkProvider" />
     
 </beans>
