@@ -1,0 +1,5 @@
+language: java
+notifications:
+  email:
+      - ops4j-notify@googlegroups.com
+
