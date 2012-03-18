@@ -76,6 +76,13 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
         this.simulateBlueprint = simulateBlueprint;
     }
 
+    /**
+     * This method is required in a case where you need to add the same injector to an additional application.
+     */
+    public void registerForAdditionalName(String applicationKey) {
+        InjectorHolder.setInjector(applicationKey, beanInjector);
+    }
+
     public void onInstantiation(Component component) {
         beanInjector.inject(component, component.getClass());
     }
