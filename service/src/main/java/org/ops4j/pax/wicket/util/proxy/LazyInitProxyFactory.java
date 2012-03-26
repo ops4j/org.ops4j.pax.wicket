@@ -117,7 +117,10 @@ public class LazyInitProxyFactory {
             }
             ClassLoader currentClassloader = Thread.currentThread().getContextClassLoader();
             try {
-                Thread.currentThread().setContextClassLoader(clazz.getClassLoader());
+                ClassLoader classLoader = clazz.getClassLoader();
+                if (classLoader != null) {
+                    Thread.currentThread().setContextClassLoader(classLoader);
+                }
                 return LazyInitProxyFactory.createProxy(clazz, locator);
             } finally {
                 Thread.currentThread().setContextClassLoader(currentClassloader);
