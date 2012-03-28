@@ -68,5 +68,20 @@
         <artifactId>log4j</artifactId>
         <license>Apache License, Version 2.0</license>
     </artifact>
+    <artifact>
+        <groupId>asm</groupId>
+        <artifactId>asm</artifactId>
+        <license>BSD License</license>
+    </artifact>
+    <artifact>
+        <groupId>org.odlabs.wiquery</groupId>
+        <artifactId>wiquery-core</artifactId>
+        <license>MIT License</license>
+    </artifact>
+    <artifact>
+        <groupId>org.odlabs.wiquery</groupId>
+        <artifactId>wiquery-jquery-ui</artifactId>
+        <license>MIT License</license>
+    </artifact>
 </license-lookup>
 
