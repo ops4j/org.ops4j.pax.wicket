@@ -1,3 +1,61 @@
+pax-wicket-0.8.4 2012-03-28
+--------------------------------------------
+
+The 0.8.4 release of pax-wicket fixes one really nasty class-loading bug which could occur
+at rare situations during serialization restoring at various places in the code.
+
+### Details
+** Bug
+    * [PAXWICKET-318] - Exception because ClassLoader is null in LazyInitProxyFactory
+
+** Task
+    * [PAXWICKET-316] - Release pax-wicket 0.8.4
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
+
+
+pax-wicket-0.8.3 2012-03-18
+--------------------------------------------
+
+The 0.8.3 release of pax-wicket contains only the upgrade to the latest 1.4.x release of
+wicket including all their bug-fixes.
+
+### Details
+** Dependency upgrade
+    * [PAXWICKET-312] - Upgrade to wicket 1.4.20
+
+** Task
+    * [PAXWICKET-309] - Release pax-wicket 0.8.3
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
+
+
+pax-wicket-0.8.2 2012-03-03
+--------------------------------------------
+
+The 0.8.2 release contains 3 relevant bug fixes. First of all bundles without any .class
+resources playing in the pax-wicket injection cycle does no longer fail to load. Secondly
+a minor NPE had been fixed which occurred in case no service could be retrieved from
+you bundle context during injection (only in the reporting). The final fix is the most
+important since it corrects the reporting of the NotSerializableExceptions in the pax-wicket
+structure and no longer points out BundleContext/Bundle as not serializable (since they are
+serializable for pax-wicket). Therefore the real error is no longer hidden.
+
+### Details
+** Bug
+    * [PAXWICKET-305] - java.lang.NullPointerException when defining a Wicket application in a bundle without any .class resource
+    * [PAXWICKET-306] - java.lang.NullPointerException when bean cannot be resolved
+    * [PAXWICKET-307] - Error reporting from wicket SerializableChecker is unusable
+
+** Task
+    * [PAXWICKET-303] - Release pax-wicket 0.8.2
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
+
+
 pax-wicket-0.8.1 2012-02-16
 --------------------------------------------
 
