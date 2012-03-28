@@ -1,10 +1,38 @@
-pax-wicket-0.9.0 ????-??-??
+pax-wicket-1.0.0 2012-03-28
 --------------------------------------------
 
-TBW
+The 1.0.0 release is the first release with Wicket 5 (aka 1.5.x) support. It contains 5
+bug-fixes identified during the 0.8.x line and some small improvements. Besides the
+Wicket upgrade the 1.0.0 release also contains a Pax Exam (2.4.0) and Pax Logging (1.6.5)
+upgrade. A small feature had been added to the test framework to workaround some of the
+harder validation rules of Wicket 5. Besides of that the only things which require an
+upgrade are related to the Wicket changes between Wicket 4 (aka 1.4.x) and Wicket 5
+and not between Pax Wicket 0.8.x and 1.0.0.
 
 ### Details
-...
+** Bug
+    * [PAXWICKET-301] - init-params are no longer given correctly to the application
+    * [PAXWICKET-305] - java.lang.NullPointerException when defining a Wicket application in a bundle without any .class resource
+    * [PAXWICKET-306] - java.lang.NullPointerException when bean cannot be resolved
+    * [PAXWICKET-307] - Error reporting from wicket SerializableChecker is unusable
+    * [PAXWICKET-318] - Exception because ClassLoader is null in LazyInitProxyFactory
+
+** Dependency upgrade
+    * [PAXWICKET-241] - Upgrade to pax-exam 2.4.0(.RC1)
+    * [PAXWICKET-300] - Upgrade wiquery to 1.5.3
+    * [PAXWICKET-313] - Upgrade to wicket 1.5.5
+    * [PAXWICKET-314] - Upgrade to pax-logging 1.6.5
+    * [PAXWICKET-323] - Upgrade to wiquery 1.5.4
+
+** Improvement
+    * [PAXWICKET-298] - Optimise calls in cglib wrapping of applications
+
+** New Feature
+    * [PAXWICKET-165] - Add support for wicket 1.5.x
+    * [PAXWICKET-317] - Add possibility to registerAdditionalApplicationName in PaxWicketSpringBeanComponentInjector
+
+** Task
+    * [PAXWICKET-158] - Release pax-wicket 1.0.0
 
 ### Known Issues
 * [PAXWICKET-299] - Nasty reload problems
