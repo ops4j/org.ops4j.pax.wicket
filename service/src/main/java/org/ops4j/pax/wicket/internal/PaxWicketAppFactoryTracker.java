@@ -25,11 +25,11 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.NamespaceException;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,43 +38,36 @@ import org.slf4j.LoggerFactory;
  * services does also contain properties for an application name and a mount point is is registered for a Servlet.
  * Otherwise the problem is logged as a warning and the service is simply ignored.
  */
-public class PaxWicketAppFactoryTracker extends ServiceTracker {
+public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<IWebApplicationFactory> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketAppFactoryTracker.class);
-    private static final String SERVICE_NAME = IWebApplicationFactory.class.getName();
 
     private final HttpTracker httpTracker;
     private final Map<ServiceReference, PaxWicketApplicationFactory> factories =
         new HashMap<ServiceReference, PaxWicketApplicationFactory>();
+    private final BundleContext context;
 
-    PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker)
-        throws IllegalArgumentException {
-        super(context, SERVICE_NAME, null);
-
+    PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker) throws IllegalArgumentException {
+        this.context = context;
         validateNotNull(httpTracker, "httpTracker");
         this.httpTracker = httpTracker;
     }
 
-    @Override
-    public final Object addingService(ServiceReference reference) {
-        final IWebApplicationFactory factory = (IWebApplicationFactory) super.addingService(reference);
+    public void addingService(ServiceReference reference, IWebApplicationFactory service) {
         PaxWicketApplicationFactory internalFactory =
-            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, factory, reference);
+            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
         addApplication(reference, internalFactory);
-        return factory;
     }
 
-    @Override
-    public final void modifiedService(ServiceReference reference, Object service) {
+    public void modifiedService(ServiceReference reference, IWebApplicationFactory service) {
         removeApplication(reference);
         PaxWicketApplicationFactory internalFactory =
-            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, (IWebApplicationFactory) service,
+            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service,
                 reference);
         addApplication(reference, internalFactory);
     }
 
-    @Override
-    public final void removedService(ServiceReference reference, Object service) {
+    public void removedService(ServiceReference reference, IWebApplicationFactory service) {
         removeApplication(reference);
     }
 

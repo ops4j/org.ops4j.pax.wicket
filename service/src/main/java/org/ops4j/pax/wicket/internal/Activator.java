@@ -15,14 +15,13 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.wicket.util.lang.Objects;
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
 import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
-import org.ops4j.pax.wicket.util.serialization.PaxWicketObjectStreamFactory;
+import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ public final class Activator implements BundleActivator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
     private HttpTracker httpTracker;
-    private ServiceTracker applicationFactoryTracker;
+    private PaxWicketAppFactoryTracker applicationFactoryTracker;
 
     private static BundleContext bundleContext;
 
@@ -41,6 +40,9 @@ public final class Activator implements BundleActivator {
 
     private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
+    private BundleTrackerAggregator<IWebApplicationFactory> bundleTrackerAggregator;
+
+    @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
         if (LOGGER.isDebugEnabled()) {
             Bundle bundle = context.getBundle();
@@ -52,19 +54,20 @@ public final class Activator implements BundleActivator {
         bundleContext = context;
 
         LOGGER.debug("Set object stream factory");
-        //Objects.setObjectStreamFactory(new PaxWicketObjectStreamFactory(true));
 
         httpTracker = new HttpTracker(context);
         httpTracker.open();
 
-        applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
-        applicationFactoryTracker.open(true);
-
         bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context);
-        bundleDelegatingExtensionTracker.open(true);
+        applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
 
         paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
         context.addBundleListener(paxWicketBundleListener);
+
+        bundleTrackerAggregator =
+            new BundleTrackerAggregator<IWebApplicationFactory>(context, IWebApplicationFactory.class.getName(), null,
+                bundleDelegatingExtensionTracker, applicationFactoryTracker);
+        bundleTrackerAggregator.open(true);
     }
 
     public static BundleContext getBundleContext() {
@@ -83,12 +86,12 @@ public final class Activator implements BundleActivator {
     public final void stop(BundleContext context) throws Exception {
         context.removeBundleListener(paxWicketBundleListener);
         httpTracker.close();
-        applicationFactoryTracker.close();
-        bundleDelegatingExtensionTracker.close();
+        bundleTrackerAggregator.close();
 
         httpTracker = null;
         applicationFactoryTracker = null;
         bundleDelegatingExtensionTracker = null;
+        bundleTrackerAggregator = null;
         bundleContext = null;
 
         if (LOGGER.isDebugEnabled()) {
