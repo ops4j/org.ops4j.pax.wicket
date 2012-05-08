@@ -74,7 +74,12 @@ public final class PageMounterTracker extends ServiceTracker {
             LOGGER.trace("Make sure that path {} is clear before trying to remount", info.getPath());
             Application oldApp = ThreadContext.getApplication();
             ThreadContext.setApplication(application);
-            application.unmount(info.getPath());
+            try {
+                application.unmount(info.getPath());
+            } catch (IllegalArgumentException e) {
+                LOGGER.trace("Unmounting not possible since nothing here by now.");
+                // this could happen if wicket had not been started at all by now --> simply ignore
+            }
             LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());
             application.mountPage(info.getPath(), info.getPage());
             ThreadContext.setApplication(oldApp);
