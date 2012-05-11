@@ -61,8 +61,8 @@ public final class Activator implements BundleActivator {
         bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context);
         applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
 
-        paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
-        context.addBundleListener(paxWicketBundleListener);
+        paxWicketBundleListener = new PaxWicketBundleListener(bundleContext, bundleDelegatingExtensionTracker);
+        paxWicketBundleListener.open();
 
         bundleTrackerAggregator =
             new BundleTrackerAggregator<IWebApplicationFactory>(context, IWebApplicationFactory.class.getName(), null,
@@ -84,7 +84,7 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
-        context.removeBundleListener(paxWicketBundleListener);
+        paxWicketBundleListener.close();
         httpTracker.close();
         bundleTrackerAggregator.close();
 
