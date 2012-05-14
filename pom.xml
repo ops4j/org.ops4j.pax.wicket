@@ -67,9 +67,9 @@
     <aries.blueprint.version>0.3.1</aries.blueprint.version>
     <aries.proxy.version>0.3</aries.proxy.version>
     <aries.util.version>0.3</aries.util.version>
-    <aries.blueprint.range>[0.3,1.0)</aries.blueprint.range>
     <wiquery.version>1.5.4</wiquery.version>
     <jackson.version>1.8.6</jackson.version>
+    <aries.blueprint.range>[0.3,2.0)</aries.blueprint.range>
   </properties>
 
   <build>
