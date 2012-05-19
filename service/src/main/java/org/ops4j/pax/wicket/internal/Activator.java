@@ -85,9 +85,9 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
+        bundleTrackerAggregator.close();
         context.removeBundleListener(paxWicketBundleListener);
         httpTracker.close();
-        bundleTrackerAggregator.close();
 
         httpTracker = null;
         applicationFactoryTracker = null;
