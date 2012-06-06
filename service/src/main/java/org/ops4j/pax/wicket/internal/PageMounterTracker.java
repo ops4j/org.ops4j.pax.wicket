@@ -23,8 +23,13 @@ import static org.osgi.framework.Constants.OBJECTCLASS;
 import java.util.List;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Session;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.mock.MockWebRequest;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Url;
 import org.ops4j.pax.wicket.api.MountPointInfo;
 import org.ops4j.pax.wicket.api.PageMounter;
 import org.osgi.framework.BundleContext;
@@ -97,6 +102,10 @@ public final class PageMounterTracker extends ServiceTracker {
             LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());
             Application oldApp = ThreadContext.getApplication();
             ThreadContext.setApplication(application);
+            if (!Session.exists()) {
+                Request request = new MockWebRequest(Url.parse(info.getPath()));
+                ThreadContext.setSession(new WebSession(request));
+            }
             application.unmount(info.getPath());
             ThreadContext.setApplication(oldApp);
             LOGGER.info("Unmounted {} with {}", info.getPath(), info.getPage().getName());
