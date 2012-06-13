@@ -1,3 +1,34 @@
+pax-wicket-1.0.1 2012-06-13
+--------------------------------------------
+
+This release fixes a bunch of various errors in the 1.0.0 pax-wicket release. Various of those
+issues affected the restart behavior of pax wicket in Karaf and various other compatibility
+issues with jetty and blueprint. All in all this release should be ways more stable than
+the initial 1.0.0 release.
+
+### Details
+** Bug
+    * [PAXWICKET-273] - Pax wicket shutdown issues - INJECTION_SOURCE_SCAN cannot be used with neither blueprint nor spring context
+    * [PAXWICKET-327] - Pax Wicket breaks when starting wicket and wicket-app at once: IllegalStateException: Filter path was not configured (Http Error 500)
+    * [PAXWICKET-330] - Thx to the VERY STRANGE versioning of the jetty guys pax-wicket is not compatible to pax-web 2.0 (karaf 3.0)
+    * [PAXWICKET-331] - Initial unmounting in PageMounterTracker fails in wicket 1.5
+    * [PAXWICKET-332] - There are situations where it's possible that the two IWebApplicationFactory trackers in pax-wicket overrun each other
+    * [PAXWICKET-333] - Blueprint range from 0.3 to 1.0 is too short
+    * [PAXWICKET-334] - Argument 'requestCycle' may not be null Exceptions when removing a PageMounter
+
+** Dependency upgrade
+    * [PAXWICKET-329] - Upgrade to wicket 1.5.7
+
+** Improvement
+    * [PAXWICKET-326] - Give a better exception if a bundle has a BundleScanningMountPointProvider registered without any classes
+
+** Task
+    * [PAXWICKET-322] - Release pax-wicket 1.0.1
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
+
+
 pax-wicket-1.0.0 2012-03-28
 --------------------------------------------
 
