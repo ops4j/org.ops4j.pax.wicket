@@ -18,6 +18,7 @@ the initial 1.0.0 release.
 
 ** Dependency upgrade
     * [PAXWICKET-329] - Upgrade to wicket 1.5.7
+    * [PAXWICKET-338] - Upgrade to ops4j parent 3.0.1
 
 ** Improvement
     * [PAXWICKET-326] - Give a better exception if a bundle has a BundleScanningMountPointProvider registered without any classes
