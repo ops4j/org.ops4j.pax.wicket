@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This project includes:
+  activation under Apache License, Version 2.0
   Activation 1.1 under The Apache Software License, Version 2.0
   AOP alliance under Public Domain
   Apache Aries Blueprint Bundle under The Apache Software License, Version 2.0
@@ -47,7 +48,6 @@ This project includes:
   HttpClient under Apache License
   HttpCore under Apache License
   HttpMime under Apache License
-  JavaBeans Activation Framework (JAF) under Common Development and Distribution License (CDDL) v1.0
   JavaMail API under Common Development and Distribution License (CDDL) v1.0
   Jetty :: Continuation under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
   Jetty :: Http Utility under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
