@@ -72,6 +72,11 @@
         <groupId>org.odlabs.wiquery</groupId>
         <artifactId>wiquery</artifactId>
         <license>MIT License</license>
+      </artifact>
+      <artifact>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <license>Apache License, Version 2.0</license>
     </artifact>
 </license-lookup>
 
