@@ -8,3 +8,5 @@ wicket.iws
 *build.properties
 *.tmp_*.html*
 *runner
+*bin
+*.idea
