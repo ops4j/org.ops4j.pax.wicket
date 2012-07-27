@@ -9,4 +9,4 @@ wicket.iws
 *.tmp_*.html*
 *runner
 *bin
-
+*.idea
