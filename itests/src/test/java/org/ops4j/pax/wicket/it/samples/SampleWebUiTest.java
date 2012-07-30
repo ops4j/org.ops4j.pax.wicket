@@ -115,12 +115,6 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application based on blueprint"));
         webclient.closeAllWindows();
-        // testSampleBlueprintInjectionSimple_shouldRenderPage
-        webclient = new WebClient();
-        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/injection/simple");
-        assertTrue(page.asText().contains(
-            "Welcome to the most simple pax-wicket injection application based on blueprint."));
-        webclient.closeAllWindows();
         // testSampleBlueprintMountPoint_shouldRenderPage
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/manuallymounted");
