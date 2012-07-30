@@ -105,6 +105,29 @@
         <version>1.9.0</version>
         <configuration>
           <header>https://raw.github.com/ops4j/org.ops4j.pax.wicket/master/etc/header/asf.txt</header>
+          <failIfMissing>true</failIfMissing>
+          <aggregate>true</aggregate>
+          <strictCheck>true</strictCheck>
+          <excludes>
+            <exclude>.idea/**</exclude>
+            <exclude>atlassian-ide-plugin.xml</exclude>
+            <exclude>.gitignore/**</exclude>
+            <exclude>etc/header/asf.txt</exclude>
+          </excludes>
+          <mapping>
+            <bnd>SCRIPT_STYLE</bnd>
+            <drl>SCRIPT_STYLE</drl>
+            <index>SCRIPT_STYLE</index>
+            <gitignore>SCRIPT_STYLE</gitignore>
+            <cfg>SCRIPT_STYLE</cfg>
+            <wsdl>XML_STYLE</wsdl>
+            <csproj>XML_STYLE</csproj>
+            <rf>XML_STYLE</rf>
+            <composite>SCRIPT_STYLE</composite>
+            <config>XML_STYLE</config>
+            <script>DOUBLESLASH_STYLE</script>
+            <rule>SCRIPT_STYLE</rule>
+          </mapping>
         </configuration>
       </plugin>
       <plugin>
