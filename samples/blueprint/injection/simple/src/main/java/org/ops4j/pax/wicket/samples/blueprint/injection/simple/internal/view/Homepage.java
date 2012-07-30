@@ -15,10 +15,15 @@
  */
 package org.ops4j.pax.wicket.samples.blueprint.injection.simple.internal.view;
 
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.util.time.Duration;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.samples.blueprint.injection.simple.internal.service.MyService;
+
+import static org.apache.wicket.util.time.Duration.seconds;
 
 /**
  * Very simple page providing entry points into various other examples.
@@ -27,7 +32,7 @@ public class Homepage extends WebPage {
 
     private static final long serialVersionUID = 1L;
     private static final String HOMEPAGE_TEXT =
-        "Welcome to the most simple pax-wicket injection application based on blueprint.";
+            "Welcome to the most simple pax-wicket injection application based on blueprint.";
 
     /**
      * If you're using SpringDM it is also possible to reference the bean only by name. For blueprint you have to add
@@ -36,11 +41,19 @@ public class Homepage extends WebPage {
      * context is created automatically from all .xml files in the OSGI-INF/blueprint/ folder. You can inject named
      * beans, osgi service or any other named entity such as other pax-wicket components.
      */
+
     @PaxWicketBean(name = "defaultMyServiceBean")
     private MyService serviceBean;
 
+
     public Homepage() {
-        String serviceText = serviceBean.someEchoMethod(HOMEPAGE_TEXT);
-        add(new Label("oneComponent", serviceText));
+        //String serviceText = serviceBean.someEchoMethod(HOMEPAGE_TEXT);
+        add(new Label("oneComponent", "blub"));
+        add(new AbstractAjaxTimerBehavior(seconds(1)) {
+            @Override
+            protected void onTimer(AjaxRequestTarget target) {
+                System.out.println(getPageId());
+            }
+        });
     }
 }
