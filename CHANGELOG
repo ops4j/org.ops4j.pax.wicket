@@ -1,3 +1,26 @@
+pax-wicket-1.0.2 2012-07-30
+--------------------------------------------
+
+All in all this release contains only one critical change for a user; the serialisation had finally
+been straighten out again which will fix A LOT of different problems noticed at various places
+but which couldn't be led by now to any specific source. So, this release is definitely worth a
+shot!
+
+### Deatils
+** Bug
+    * [PAXWICKET-343] - Pages are not correctly serialized
+    * [PAXWICKET-345] - License check does not define any ignores in root pom
+
+** Dependency upgrade
+    * [PAXWICKET-339] - Pax Wicket uses version 1.5.4 of wiquery which is not in Maven repo1. Upgrade to version 1.5.7.
+
+** Task
+    * [PAXWICKET-337] - Release pax-wicket 1.0.2
+
+### Known Issues
+* [PAXWICKET-299] - Nasty reload problems
+
+
 pax-wicket-1.0.1 2012-06-13
 --------------------------------------------
 
