@@ -31,6 +31,7 @@ import org.apache.wicket.protocol.http.WicketFilter;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
+import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -51,7 +52,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory createPaxWicketApplicationFactory(BundleContext bundleContext,
-            IWebApplicationFactory webApplicationFactory, ServiceReference reference) {
+                                                                                IWebApplicationFactory webApplicationFactory, ServiceReference reference) {
         File tmpDir = retrieveTmpFile(bundleContext);
         tmpDir.mkdirs();
         String mountPoint = (String) reference.getProperty(Constants.MOUNTPOINT);
@@ -66,9 +67,9 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         }
 
         FilterDelegator filterDelegator =
-            new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
+                new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
         return new PaxWicketApplicationFactory(bundleContext, webApplicationFactory, applicationName, mountPoint,
-            contextParams, tmpDir, filterDelegator);
+                contextParams, tmpDir, filterDelegator);
     }
 
     private static File retrieveTmpFile(BundleContext bundleContext) {
@@ -80,8 +81,8 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     private PaxWicketApplicationFactory(BundleContext bundleContext, IWebApplicationFactory webApplicationFactory,
-            String applicationName, String mountPoint, Map<String, String> contextParams, File tmpDir,
-            FilterDelegator filterDelegator) {
+                                        String applicationName, String mountPoint, Map<String, String> contextParams, File tmpDir,
+                                        FilterDelegator filterDelegator) {
         this.bundleContext = bundleContext;
         this.webApplicationFactory = webApplicationFactory;
         this.applicationName = applicationName;
@@ -132,14 +133,14 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
         /**
          * A helper method to verify method signatures.
-         * 
-         * @param method Method to check.
-         * @param name Expected name.
-         * @param returnType Expected return type.
+         *
+         * @param method         Method to check.
+         * @param name           Expected name.
+         * @param returnType     Expected return type.
          * @param parameterTypes Parameters for method.
          * @return True if all criteria matched.
          */
-        private boolean checkSignature(Method method, String name, Class<?> returnType, Class<?> ... parameterTypes) {
+        private boolean checkSignature(Method method, String name, Class<?> returnType, Class<?>... parameterTypes) {
             if (method.getName().equals(name) && method.getReturnType() == returnType) {
                 return Arrays.equals(method.getParameterTypes(), parameterTypes);
             }
@@ -199,14 +200,15 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             delegatingClassResolver.intialize();
 
             delegatingComponentInstanciationListener =
-                new DelegatingComponentInstanciationListener(bundleContext, applicationName);
+                    new DelegatingComponentInstanciationListener(bundleContext, applicationName);
             delegatingComponentInstanciationListener.intialize();
 
             pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
             pageFactory.initialize();
 
+            application.getFrameworkSettings().setSerializer(new PaxWicketSerializer(getApplicationName()));
             application.getComponentInstantiationListeners().add(new ComponentInstantiationListenerFacade(
-                delegatingComponentInstanciationListener));
+                    delegatingComponentInstanciationListener));
             application.getApplicationSettings().setClassResolver(delegatingClassResolver);
             application.getSessionSettings().setPageFactory(pageFactory);
             // TODO [PAXWICKET-228] What should happen if two are created?

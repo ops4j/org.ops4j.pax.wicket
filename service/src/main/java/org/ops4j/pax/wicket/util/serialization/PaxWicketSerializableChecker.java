@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util.serialization.deployment;
+package org.ops4j.pax.wicket.util.serialization;
 
 import java.io.Externalizable;
 import java.io.IOException;

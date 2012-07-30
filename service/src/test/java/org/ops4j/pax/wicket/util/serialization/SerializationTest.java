@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util.serialization.development;
+package org.ops4j.pax.wicket.util.serialization;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -84,7 +84,7 @@ public final class SerializationTest {
     private void testSerializeObject(Object objectToSerialize, IClassResolver resolver) throws IOException,
         ClassNotFoundException {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-        DevModeObjectOutputStream devModeOS = new DevModeObjectOutputStream(byteArrayOS);
+        PaxWicketObjectOutputStream devModeOS = new PaxWicketObjectOutputStream(byteArrayOS);
 
         devModeOS.writeObject(objectToSerialize);
         devModeOS.flush();
@@ -93,7 +93,7 @@ public final class SerializationTest {
         assertNotNull(serializedBA);
 
         ByteArrayInputStream roBAIS = new ByteArrayInputStream(serializedBA);
-        DevModeObjectInputStream roOIS = new DevModeObjectInputStream(roBAIS, resolver);
+        PaxWicketObjectInputStream roOIS = new PaxWicketObjectInputStream(roBAIS, resolver);
         Object object = roOIS.readObject();
         assertNotNull(object);
         assertEquals(objectToSerialize, object);
