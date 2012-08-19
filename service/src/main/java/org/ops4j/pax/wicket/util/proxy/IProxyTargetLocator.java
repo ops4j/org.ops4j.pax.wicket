@@ -16,6 +16,7 @@
 package org.ops4j.pax.wicket.util.proxy;
 
 import org.apache.wicket.IClusterable;
+import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 
 /**
  * Represents a service locator for lazy init proxies. When the first method invocation occurs on the lazy init proxy
@@ -47,7 +48,29 @@ public interface IProxyTargetLocator extends IClusterable {
     /**
      * Returns the object that will be used as target object for a lazy init proxy.
      * 
-     * @return retrieved object
+     * @return retrieved object, or instance of {@link ReleasableProxyTarget}
      */
     Object locateProxyTarget();
+
+    /**
+     * Interface for return values of {@link IProxyTargetLocator#locateProxyTarget()}.
+     * 
+     * @author Christoph Läubrich
+     * 
+     */
+    public interface ReleasableProxyTarget {
+
+        /**
+         * @return the final target
+         */
+        public Object getTarget() throws NoBeanAvailableForInjectionException;
+
+        /**
+         * invoked when the target is released. <b>Implementation note:</b> This Method should never throw an
+         * RuntimeException!
+         * 
+         * @return the new target (might be a this pointer) or null if the target is no longer usable
+         */
+        public Object releaseTarget();
+    }
 }

@@ -41,6 +41,10 @@ public @interface PaxWicketBean {
      */
     public static final String INJECTION_SOURCE_BLUEPRINT = "blueprint";
     /**
+     * Will always (and only) query the service registry for services to inject
+     */
+    public static final String INJECTION_SOURCE_SERVICE_REGISTRY = "service-registry";
+    /**
      * Will scan for blueprint and spring context; if none or both are found INJECTION_SOURCE_NULL is used.
      */
     public static final String INJECTION_SOURCE_SCAN = "scan";

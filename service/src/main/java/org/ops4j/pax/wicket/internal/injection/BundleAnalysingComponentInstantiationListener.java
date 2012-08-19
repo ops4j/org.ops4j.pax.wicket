@@ -26,6 +26,7 @@ import net.sf.cglib.proxy.Factory;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.OverwriteProxy;
 import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
+import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
@@ -35,11 +36,11 @@ import org.slf4j.LoggerFactory;
 
 public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWicketInjector {
 
-    private static final Logger LOGGER          = LoggerFactory.getLogger(BundleAnalysingComponentInstantiationListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BundleAnalysingComponentInstantiationListener.class);
 
     private final BundleContext bundleContext;
-    private String              bundleResources = "";
-    private final String        defaultInjectionSource;
+    private String bundleResources = "";
+    private final String defaultInjectionSource;
 
     @SuppressWarnings("unchecked")
     public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String defaultInjectionSource) {
@@ -51,7 +52,8 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
             return;
         }
         while (entries.hasMoreElements()) {
-            String urlRepresentation = entries.nextElement().toExternalForm().replace("bundle://.+?/", "").replace('/', '.');
+            String urlRepresentation =
+                entries.nextElement().toExternalForm().replace("bundle://.+?/", "").replace('/', '.');
             LOGGER.trace("Found entry {} in bundle {}", urlRepresentation, bundleContext.getBundle().getSymbolicName());
             bundleResources += urlRepresentation;
         }
@@ -105,30 +107,42 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     }
 
     private Object createProxy(Field field, Class<?> page, Map<String, String> overwrites, String injectionSource) {
-        return LazyInitProxyFactory.createProxy(getBeanType(field), createProxyTargetLocator(field, page, overwrites, injectionSource));
+        return LazyInitProxyFactory.createProxy(getBeanType(field),
+            createProxyTargetLocator(field, page, overwrites, injectionSource));
     }
 
-    private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites, String injectionSource) {
-        if (PaxWicketBean.INJECTION_SOURCE_NULL.equals(injectionSource) || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {
+    private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
+            String injectionSource) {
+        if (PaxWicketBean.INJECTION_SOURCE_NULL.equals(injectionSource)
+                || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {
             return null;
         }
         PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-        AbstractProxyTargetLocator<?> springBeanTargetLocator = new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
+        AbstractProxyTargetLocator<?> springBeanTargetLocator =
+            new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
         if (PaxWicketBean.INJECTION_SOURCE_SPRING.equals(injectionSource)) {
             return springBeanTargetLocator;
         }
-        AbstractProxyTargetLocator<?> blueprintBeanTargetLocator = new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
+        AbstractProxyTargetLocator<?> blueprintBeanTargetLocator =
+            new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
         if (PaxWicketBean.INJECTION_SOURCE_BLUEPRINT.equals(injectionSource)) {
             return blueprintBeanTargetLocator;
         }
+        if (PaxWicketBean.INJECTION_SOURCE_SERVICE_REGISTRY.equals(injectionSource)) {
+            return new OSGiServiceRegistryProxyTargetLocator(bundleContext, annotation, getBeanType(field), page);
+        }
         if (PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
-            boolean springBeanTargetLocatorHasApplicationContext = hasApplicationContextDelegation(springBeanTargetLocator);
-            boolean blueprintBeanTargetLocatorHasApplicationContext = hasApplicationContextDelegation(blueprintBeanTargetLocator);
+            boolean springBeanTargetLocatorHasApplicationContext =
+                hasApplicationContextDelegation(springBeanTargetLocator);
+            boolean blueprintBeanTargetLocatorHasApplicationContext =
+                hasApplicationContextDelegation(blueprintBeanTargetLocator);
             if (springBeanTargetLocatorHasApplicationContext && blueprintBeanTargetLocatorHasApplicationContext) {
-                throw new IllegalStateException("INJECTION_SOURCE_SCAN cannot be used if spring & blueprint context exist.");
+                throw new IllegalStateException(
+                    "INJECTION_SOURCE_SCAN cannot be used if spring & blueprint context exist.");
             }
             if (!springBeanTargetLocatorHasApplicationContext && !blueprintBeanTargetLocatorHasApplicationContext) {
-                throw new IllegalStateException("INJECTION_SOURCE_SCAN cannot be used with neither blueprint nor spring context");
+                throw new IllegalStateException(
+                    "INJECTION_SOURCE_SCAN cannot be used with neither blueprint nor spring context");
             }
             if (springBeanTargetLocatorHasApplicationContext) {
                 return springBeanTargetLocator;
@@ -137,24 +151,31 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 return blueprintBeanTargetLocator;
             }
         }
-        throw new IllegalStateException(String.format("No injection source found for field [%s] in class [%s]", field.getName(), page.getName()));
+        throw new IllegalStateException(String.format("No injection source found for field [%s] in class [%s]",
+            field.getName(), page.getName()));
     }
 
     /**
      * @param locator
-     * @return <code>locator.hasApplicationContext()</code> if locator is not
-     *         <code>null</code>, otherwhise <code>false</code>. If the call
-     *         throws any exception <code>false</code> is returned also
+     * @return <code>locator.hasApplicationContext()</code> if locator is not <code>null</code>, otherwhise
+     *         <code>false</code>. If the call throws any exception <code>false</code> is returned also
      */
     private boolean hasApplicationContextDelegation(AbstractProxyTargetLocator<?> locator) {
         if (locator != null) {
             try {
                 return locator.hasApplicationContext();
             } catch (Exception e) {
-                LOGGER.debug("Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false", locator.getClass().getName(), e);
+                LOGGER
+                    .debug(
+                        "Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false",
+                        locator.getClass().getName(), e);
             } catch (NoClassDefFoundError e) {
-                //This is really nasty, but if wen don't catch this we can not catch java.lang.ClassNotFoundException wich are the root of the cause!
-                LOGGER.debug("Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false", locator.getClass().getName(), e);
+                // This is really nasty, but if wen don't catch this we can not catch java.lang.ClassNotFoundException
+                // wich are the root of the cause!
+                LOGGER
+                    .debug(
+                        "Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false",
+                        locator.getClass().getName(), e);
             }
         }
         return false;

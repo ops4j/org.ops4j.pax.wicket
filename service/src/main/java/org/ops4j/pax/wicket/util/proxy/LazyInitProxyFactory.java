@@ -36,6 +36,7 @@ import org.apache.wicket.IClusterable;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.settings.IApplicationSettings;
+import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator.ReleasableProxyTarget;
 
 public class LazyInitProxyFactory {
 
@@ -48,7 +49,13 @@ public class LazyInitProxyFactory {
         if (PRIMITIVES.contains(type) || Enum.class.isAssignableFrom(type)) {
             // We special-case primitives as sometimes people use these as
             // SpringBeans (WICKET-603, WICKET-906). Go figure.
-            return locator.locateProxyTarget();
+            Object proxy = locator.locateProxyTarget();
+            Object realTarget = getRealTarget(proxy);
+            if (proxy instanceof IProxyTargetLocator.ReleasableProxyTarget) {
+                // This is not so nice... but with a primitive this should'nt matter at all...
+                ((IProxyTargetLocator.ReleasableProxyTarget) proxy).releaseTarget();
+            }
+            return realTarget;
         } else if (type.isInterface()) {
             JdkHandler handler = new JdkHandler(type, locator);
 
@@ -164,11 +171,18 @@ public class LazyInitProxyFactory {
             } else if (method.getDeclaringClass().equals(ILazyInitProxy.class)) {
                 return getObjectLocator();
             }
-
             if (target == null) {
                 target = locator.locateProxyTarget();
             }
-            return proxy.invoke(target, args);
+            Object invoke;
+            try {
+                invoke = proxy.invoke(getRealTarget(target), args);
+            } finally {
+                if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
+                    target = ((IProxyTargetLocator.ReleasableProxyTarget) target).releaseTarget();
+                }
+            }
+            return invoke;
         }
 
         public IProxyTargetLocator getObjectLocator() {
@@ -231,11 +245,18 @@ public class LazyInitProxyFactory {
             }
 
             if (target == null) {
-
                 target = locator.locateProxyTarget();
             }
             try {
-                return method.invoke(target, args);
+                Object invoke;
+                try {
+                    invoke = method.invoke(getRealTarget(target), args);
+                } finally {
+                    if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
+                        target = ((IProxyTargetLocator.ReleasableProxyTarget) target).releaseTarget();
+                    }
+                }
+                return invoke;
             } catch (InvocationTargetException e) {
                 throw e.getTargetException();
             }
@@ -259,6 +280,19 @@ public class LazyInitProxyFactory {
     protected static boolean isEqualsMethod(Method method) {
         return method.getReturnType() == boolean.class && method.getParameterTypes().length == 1 &&
                 method.getParameterTypes()[0] == Object.class && method.getName().equals("equals");
+    }
+
+    /**
+     * Check if the object is of the special type {@link ReleasableProxyTarget} and return the target of this interface
+     * 
+     * @param target
+     * @return the parameter target or the target of the {@link ReleasableProxyTarget} if present
+     */
+    public static Object getRealTarget(Object target) {
+        if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
+            return ((IProxyTargetLocator.ReleasableProxyTarget) target).getTarget();
+        }
+        return target;
     }
 
     /**
