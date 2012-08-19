@@ -26,7 +26,7 @@ public class PaxWicketBundleListener implements SynchronousBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
-    private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
+    private final BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
     public PaxWicketBundleListener(BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker) {
         this.bundleDelegatingExtensionTracker = bundleDelegatingExtensionTracker;
@@ -53,7 +53,7 @@ public class PaxWicketBundleListener implements SynchronousBundleListener {
         String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
         LOGGER.trace("Checking {} for import of org.apache.wicket.*", bundle.getSymbolicName());
         if (importedPackages == null) {
-            LOGGER.info("Bundle {} does not contain any imported packages --> ignore");
+            LOGGER.debug("Bundle {} does not contain any imported packages --> ignore", bundle.getSymbolicName());
             return false;
         }
         if (importedPackages.contains("org.apache.wicket")) {
