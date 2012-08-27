@@ -84,7 +84,7 @@ public final class DelegatingClassResolver implements IClassResolver {
                         return candidate;
                     }
                 } catch (ClassNotFoundException e) {
-                    LOGGER.info("ClassResolver {} could not find class: {}", resolver, classname);
+                    LOGGER.trace("ClassResolver {} could not find class: {}", resolver, classname);
                 } catch (RuntimeException e) {
                     LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
                 }
