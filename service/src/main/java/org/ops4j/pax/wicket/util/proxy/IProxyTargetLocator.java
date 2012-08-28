@@ -21,15 +21,15 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 /**
  * Represents a service locator for lazy init proxies. When the first method invocation occurs on the lazy init proxy
  * this locator will be used to retrieve the proxy target object that will receive the method invocation.
- * <p>
+ * <p/>
  * Generally implementations should be small when serialized because the main purpose of lazy init proxies is to be
  * stored in session when the wicket pages are serialized, and when deserialized to be able to lookup the dependency
  * again. The smaller the implementation of IProxyTargetLocator the less the drain on session size.
- * <p>
+ * <p/>
  * A small implementation may use a static lookup to retrieve the target object.
- * <p>
+ * <p/>
  * Example:
- * 
+ * <p/>
  * <pre>
  * class UserServiceLocator implements IProxyTargetLocator {
  *     Object locateProxyObject() {
@@ -38,11 +38,9 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
  *     }
  * }
  * </pre>
- * 
- * @see LazyInitProxyFactory#createProxy(Class, IProxyTargetLocator)
- * 
+ *
  * @author Igor Vaynberg (ivaynberg)
- * 
+ * @see LazyInitProxyFactory#createProxy(Class, IProxyTargetLocator)
  */
 public interface IProxyTargetLocator extends IClusterable {
     /**
@@ -73,4 +71,9 @@ public interface IProxyTargetLocator extends IClusterable {
          */
         public Object releaseTarget();
     }
+
+    /*
+     * Returns the parent holding the responsibility for the serialisation.
+     */
+    Class getParent();
 }

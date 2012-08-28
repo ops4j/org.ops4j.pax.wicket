@@ -125,6 +125,9 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
             }
         }
 
+        public Class getParent() {
+            return null;
+        }
     }
 
 }
