@@ -63,9 +63,6 @@ public class ApplicationContextMock implements ApplicationContext, Serializable 
 
     public Object getBean(String name) throws BeansException {
         Object bean = beans.get(name);
-        if (bean == null) {
-            throw new NoSuchBeanDefinitionException(name);
-        }
         return bean;
     }
 
