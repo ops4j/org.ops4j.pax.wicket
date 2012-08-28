@@ -20,14 +20,14 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.model</groupId>
     <artifactId>pax-wicket-samples-model-parent</artifactId>
-    <version>0.7.10-SNAPSHOT</version>
+    <version>0.7.10</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.ops4j.pax.wicket.samples.model</groupId>
   <artifactId>pax-wicket-samples-model-core</artifactId>
-  <version>0.7.10-SNAPSHOT</version>
+  <version>0.7.10</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Model :: Core</name>
 
