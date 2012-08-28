@@ -14,12 +14,11 @@ public class SimplifiedPaxWicketInjector {
     }
 
     private SimplifiedPaxWicketInjector(WicketTester tester) {
-        tester.getApplication().addComponentInstantiationListener(
+        tester.getApplication().getComponentInstantiationListeners().add(
                 new PaxWicketSpringBeanComponentInjector(tester.getApplication(), applicationContext));
     }
 
     public void registerBean(String name, Object bean) {
         applicationContext.putBean(name, bean);
     }
-
 }
