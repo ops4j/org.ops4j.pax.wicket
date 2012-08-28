@@ -54,10 +54,6 @@ public class ApplicationContextMock implements ApplicationContext, Serializable 
     private final Map<String, Object> beans = new HashMap<String, Object>();
 
     public void putBean(String name, Object bean) {
-        if (beans.containsKey(name)) {
-            throw new IllegalArgumentException("a bean with name [" + name +
-                    "] has already been added to the context");
-        }
         beans.put(name, bean);
     }
 
