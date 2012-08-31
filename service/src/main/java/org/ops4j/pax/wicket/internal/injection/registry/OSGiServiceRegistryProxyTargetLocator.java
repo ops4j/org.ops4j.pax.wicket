@@ -47,6 +47,8 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
 
     private final String serviceInterface;
 
+    private final Class<?> parent;
+
     /**
      * @param pageClass
      * @param serviceClass
@@ -54,6 +56,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
      */
     public OSGiServiceRegistryProxyTargetLocator(BundleContext paxBundleContext, PaxWicketBean annotation,
             Class<?> serviceClass, Class<?> pageClass) {
+        this.parent = pageClass;
         if (pageClass.getClassLoader() instanceof BundleReference) {
             // Fetch the Bundlecontext of the page class to locate the service
             BundleReference reference = (BundleReference) pageClass.getClassLoader();
@@ -170,5 +173,14 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
                 return this;
             }
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator#getParent()
+     */
+    public Class<?> getParent() {
+        return parent;
     }
 }
