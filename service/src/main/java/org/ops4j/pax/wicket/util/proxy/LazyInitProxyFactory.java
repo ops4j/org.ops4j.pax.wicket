@@ -40,10 +40,10 @@ import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator.ReleasableProxyTarget
 
 public class LazyInitProxyFactory {
 
-    private static final List<?> PRIMITIVES = Arrays.asList(new Class[]{ String.class, byte.class,
-        Byte.class, short.class, Short.class, int.class, Integer.class, long.class, Long.class,
-        float.class, Float.class, double.class, Double.class, char.class, Character.class,
-        boolean.class, Boolean.class });
+    private static final List<?> PRIMITIVES = Arrays.asList(new Class[]{String.class, byte.class,
+            Byte.class, short.class, Short.class, int.class, Integer.class, long.class, Long.class,
+            float.class, Float.class, double.class, Double.class, char.class, Character.class,
+            boolean.class, Boolean.class});
 
     public static Object createProxy(final Class<?> type, final IProxyTargetLocator locator) {
         if (PRIMITIVES.contains(type) || Enum.class.isAssignableFrom(type)) {
@@ -61,8 +61,8 @@ public class LazyInitProxyFactory {
 
             try {
                 return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                    new Class[]{ type, Serializable.class, ILazyInitProxy.class,
-                        IWriteReplace.class }, handler);
+                        new Class[]{type, Serializable.class, ILazyInitProxy.class,
+                                IWriteReplace.class}, handler);
             } catch (IllegalArgumentException e) {
                 // While in the original Wicket Environment this is a failure of the context-classloader in PAX-WICKET
                 // this is always an error of missing imports into the classloader. Right now we can do nothing here but
@@ -77,16 +77,14 @@ public class LazyInitProxyFactory {
             CGLibInterceptor handler = new CGLibInterceptor(type, locator);
 
             Enhancer e = new Enhancer();
-            e.setInterfaces(new Class[]{ Serializable.class, ILazyInitProxy.class,
-                IWriteReplace.class });
+            e.setInterfaces(new Class[]{Serializable.class, ILazyInitProxy.class,
+                    IWriteReplace.class});
             e.setSuperclass(type);
             e.setCallback(handler);
-            e.setNamingPolicy(new DefaultNamingPolicy()
-            {
+            e.setNamingPolicy(new DefaultNamingPolicy() {
                 @Override
                 public String getClassName(final String prefix, final String source,
-                        final Object key, final Predicate names)
-                {
+                                           final Object key, final Predicate names) {
                     return super.getClassName("WICKET_" + prefix, source, key, names);
                 }
             });
@@ -125,6 +123,9 @@ public class LazyInitProxyFactory {
             ClassLoader currentClassloader = Thread.currentThread().getContextClassLoader();
             try {
                 ClassLoader classLoader = clazz.getClassLoader();
+                if (locator != null && locator.getParent() != null) {
+                    classLoader = locator.getParent().getClassLoader();
+                }
                 if (classLoader != null) {
                     Thread.currentThread().setContextClassLoader(classLoader);
                 }
@@ -156,7 +157,7 @@ public class LazyInitProxyFactory {
         }
 
         public Object intercept(Object object, Method method, Object[] args, MethodProxy proxy)
-            throws Throwable {
+                throws Throwable {
             if (isFinalizeMethod(method)) {
                 // swallow finalize call
                 return null;
@@ -197,9 +198,8 @@ public class LazyInitProxyFactory {
     /**
      * Invocation handler for proxies representing interface based object. For interface backed objects dynamic jdk
      * proxies are used.
-     * 
+     *
      * @author Igor Vaynberg (ivaynberg)
-     * 
      */
     private static class JdkHandler
             implements
@@ -217,9 +217,8 @@ public class LazyInitProxyFactory {
 
         /**
          * Constructor
-         * 
-         * @param type class of object this handler will represent
-         * 
+         *
+         * @param type    class of object this handler will represent
          * @param locator object locator used to locate the object this proxy represents
          */
         public JdkHandler(Class<?> type, IProxyTargetLocator locator) {
@@ -273,7 +272,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.equals()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is derived from Object.equals(), false otherwise
      */
@@ -297,7 +296,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.hashCode()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.hashCode(), false otherwise
      */
@@ -308,7 +307,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.toString()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.toString(), false otherwise
      */
@@ -319,7 +318,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.finalize()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.finalize(), false otherwise
      */
@@ -330,7 +329,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is the writeReplace method
-     * 
+     *
      * @param method method being tested
      * @return true if the method is the writeReplace method, false otherwise
      */

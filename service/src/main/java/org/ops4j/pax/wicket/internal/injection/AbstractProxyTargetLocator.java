@@ -94,6 +94,10 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
             parent.getName()));
     }
 
+    public Class getParent() {
+        return parent;
+    }
+
     protected abstract BeanReactor<Container> createStrategy();
 
     protected abstract String getApplicationContextFilter(String symbolicBundleName);
