@@ -16,6 +16,7 @@
 package org.ops4j.pax.wicket.api;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletException;
 
 public interface FilterFactory extends Comparable<FilterFactory> {
 
@@ -28,6 +29,6 @@ public interface FilterFactory extends Comparable<FilterFactory> {
 
     String getApplicationName();
 
-    Filter createFilter(ConfigurableFilterConfig filterConfig);
+    Filter createFilter(ConfigurableFilterConfig filterConfig) throws ServletException;
 
 }

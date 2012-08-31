@@ -21,13 +21,14 @@ import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
+import javax.servlet.ServletException;
 
 import org.ops4j.pax.wicket.api.FilterFactory;
 import org.osgi.framework.BundleContext;
@@ -40,8 +41,8 @@ import org.slf4j.LoggerFactory;
 public final class FilterTracker extends ServiceTracker {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterTracker.class);
 
-    private Map<ServiceReference, FilterFactory> filterFactories = new HashMap<ServiceReference, FilterFactory>();
-    private String applicationName;
+    private final Map<ServiceReference, FilterFactory> filterFactories = new HashMap<ServiceReference, FilterFactory>();
+    private final String applicationName;
     private Servlet servlet;
 
     public FilterTracker(BundleContext bundleContext, String applicationName) {
@@ -86,17 +87,22 @@ public final class FilterTracker extends ServiceTracker {
     }
 
     public List<Filter> getFiltersSortedWithHighestPriorityAsFirstFilter() {
+        FilterFactory[] factories;
         synchronized (this) {
-            List<Filter> filters = new ArrayList<Filter>();
-            List<FilterFactory> factories = new ArrayList<FilterFactory>(filterFactories.values());
-            LOGGER.debug("Retrieved {} factories to create filters to apply", factories.size());
-            Collections.sort(factories);
-            for (FilterFactory filterFactory : factories) {
+            factories = filterFactories.values().toArray(new FilterFactory[0]);
+        }
+        List<Filter> filters = new ArrayList<Filter>();
+        LOGGER.debug("Retrieved {} factories to create filters to apply", factories.length);
+        Arrays.sort(factories);
+        for (FilterFactory filterFactory : factories) {
+            try {
                 filters
                     .add(filterFactory.createFilter(new DefaultConfigurableFilterConfig(servlet.getServletConfig())));
+            } catch (ServletException e) {
+                LOGGER.error("Problem while adding filter: {}", e.getMessage(), e);
             }
-            return filters;
         }
+        return filters;
     }
 
     public void setServlet(Servlet servlet) {
