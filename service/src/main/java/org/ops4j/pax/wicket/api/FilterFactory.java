@@ -21,9 +21,15 @@ import javax.servlet.ServletException;
 public interface FilterFactory extends Comparable<FilterFactory> {
 
     /**
-     * Service property name for the configuration of the priority of a <i>Filter</i>
+     * Service property name for the configuration of the priority of a {@link Filter}
      */
     String FILTER_PRIORITY = "pax.wicket.filter.priority";
+
+    /**
+     * Service property name for the configuration wheather or not the lifecycle of a {@link Filter} is maintained by
+     * PAX Wicket or not (defaults to <code>true</code>)
+     */
+    String MAINTAIN_LIFECYCLE = "pax.wicket.filter.maintainlifecycle";
 
     Integer getPriority();
 
