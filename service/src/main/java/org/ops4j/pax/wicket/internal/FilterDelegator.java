@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
 public final class FilterDelegator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
-    private FilterTracker filterTracker;
-    private String applicationName;
+    private final FilterTracker filterTracker;
+    private final String applicationName;
 
     private Servlet servlet;
 
@@ -57,13 +57,14 @@ public final class FilterDelegator {
 
     public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
         throws ServletException, IOException {
-        FilterChain chain = new Chain(filterTracker.getFiltersSortedWithHighestPriorityAsFirstFilter());
+        FilterChain chain =
+            new Chain(filterTracker.getFiltersSortedWithHighestPriorityAsFirstFilter(servlet.getServletConfig()));
         chain.doFilter(servletRequest, servletResponse);
     }
 
     private class Chain implements FilterChain {
         private int filterIndex = 0;
-        private List<Filter> filters;
+        private final List<Filter> filters;
 
         public Chain(List<Filter> filter) {
             filters = filter;
@@ -84,7 +85,6 @@ public final class FilterDelegator {
     public void setServlet(Servlet servlet) {
         validateNotNull(servlet, "servlet");
         this.servlet = servlet;
-        filterTracker.setServlet(servlet);
     }
 
 }
