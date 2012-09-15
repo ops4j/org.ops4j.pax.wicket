@@ -70,7 +70,8 @@
               org.apache.wicket.util.file,
               org.apache.wicket.request,
               javax.servlet.http,
-              org.apache.wicket.ajax
+              org.apache.wicket.core.request.mapper,
+              org.apache.wicket.ajax,
             </Import-Package>
           </instructions>
         </configuration>

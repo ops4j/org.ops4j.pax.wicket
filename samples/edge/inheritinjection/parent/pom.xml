@@ -73,7 +73,8 @@
               org.ops4j.pax.wicket.samples.mixed.api,
               org.apache.wicket.markup.html.link,
               org.apache.wicket.markup.html.list,
-              org.ops4j.pax.wicket.util.proxy
+              org.ops4j.pax.wicket.util.proxy,
+              org.apache.wicket.core.request.mapper
             </Import-Package>
           </instructions>
         </configuration>

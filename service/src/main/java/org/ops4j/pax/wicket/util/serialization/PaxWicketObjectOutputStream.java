@@ -15,18 +15,18 @@
  */
 package org.ops4j.pax.wicket.util.serialization;
 
-import static org.apache.wicket.util.io.SerializableChecker.isAvailable;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.apache.wicket.core.util.io.SerializableChecker.isAvailable;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 /**
  * @author edward.yakop@gmail.com

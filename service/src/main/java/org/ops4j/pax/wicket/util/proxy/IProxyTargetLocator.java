@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.util.proxy;
 
-import org.apache.wicket.IClusterable;
+import org.apache.wicket.util.io.IClusterable;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 
 /**

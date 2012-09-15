@@ -64,7 +64,8 @@
               org.apache.wicket.markup.html.form, 
               org.odlabs.wiquery.core.events, 
               org.odlabs.wiquery.core.javascript,
-              org.odlabs.wiquery.ui.dialog
+              org.odlabs.wiquery.ui.dialog,
+              org.apache.wicket.core.request.mapper
             </Import-Package>
           </instructions>
         </configuration>

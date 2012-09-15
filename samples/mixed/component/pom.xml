@@ -73,7 +73,8 @@
               javax.servlet.http,
               org.apache.wicket.ajax,
               org.ops4j.pax.wicket.samples.mixed.api,
-              org.apache.wicket.markup.html.panel
+              org.apache.wicket.markup.html.panel,
+              org.apache.wicket.core.request.mapper
             </Import-Package>
           </instructions>
         </configuration>
