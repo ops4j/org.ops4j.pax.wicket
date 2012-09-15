@@ -24,7 +24,7 @@ import java.util.Map;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-
+import org.apache.wicket.IPageFactory;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
@@ -124,6 +124,8 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
                 return toString();
             } else if (isInitMethod(method)) {
                 handleInit((WebApplication) object);
+            } else if (isNewPageFactory(method)) {
+                return handleNewPageFactory();
             } else if (isOnDestoryMethod(method)) {
                 handleOnDestroy();
             }
@@ -191,6 +193,10 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             return checkSignature(method, "init", void.class);
         }
 
+        private boolean isNewPageFactory(Method method) {
+            return checkSignature(method, "newPageFactory", IPageFactory.class);
+        }
+
         private boolean isOnDestoryMethod(Method method) {
             return checkSignature(method, "onDestroy", void.class);
         }
@@ -203,9 +209,6 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
                     new DelegatingComponentInstanciationListener(bundleContext, applicationName);
             delegatingComponentInstanciationListener.intialize();
 
-            pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
-            pageFactory.initialize();
-
             application.getFrameworkSettings().setSerializer(new PaxWicketSerializer(getApplicationName()));
             application.getComponentInstantiationListeners().add(new ComponentInstantiationListenerFacade(
                     delegatingComponentInstanciationListener));
@@ -214,6 +217,14 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             // TODO [PAXWICKET-228] What should happen if two are created?
             mounterTracker = new PageMounterTracker(bundleContext, application, getApplicationName());
             mounterTracker.open();
+        }
+
+        private IPageFactory handleNewPageFactory() {
+            if (pageFactory == null) {
+                pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
+                pageFactory.initialize();
+            }
+            return pageFactory;
         }
 
         private void handleOnDestroy() {

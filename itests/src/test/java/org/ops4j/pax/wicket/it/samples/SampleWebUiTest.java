@@ -15,11 +15,10 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
-import static org.junit.Assert.assertTrue;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.exam.OptionUtils.combine;
-
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -27,8 +26,10 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.exam.OptionUtils.combine;
 
 @RunWith(JUnit4TestRunner.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
@@ -65,6 +66,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.navigation").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
                 .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
+                .artifactId("org.ops4j.pax.wicket.samples.plain.pagefactory").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
@@ -102,7 +105,15 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient.closeAllWindows();
         // testSamplePlainSimple_shouldRenderPage
         webclient = new WebClient();
-        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple/");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        webclient.closeAllWindows();
+        // testSamplePlainPageFactoryShouldAllowLink
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        HtmlAnchor link = page.getAnchorByText("link");
+        Page backPage = link.click();
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
         webclient.closeAllWindows();
         // testSampleBlueprintSimpleDefault_shouldRenderPage

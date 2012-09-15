@@ -16,6 +16,7 @@
 
   <modules>
     <module>simple</module>
+    <module>pageFactory</module>
   </modules>
 </project>
 
