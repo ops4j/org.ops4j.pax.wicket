@@ -18,15 +18,6 @@
 
 package org.ops4j.pax.wicket.util;
 
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
-import static org.ops4j.pax.wicket.api.Constants.PAGE_ID;
-import static org.ops4j.pax.wicket.api.Constants.PAGE_NAME;
-
-import java.util.Dictionary;
-import java.util.Hashtable;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -36,6 +27,13 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.Constants.*;
 
 public abstract class AbstractPageFactory<T extends Page> implements PageFactory<T>, ManagedService {
 
