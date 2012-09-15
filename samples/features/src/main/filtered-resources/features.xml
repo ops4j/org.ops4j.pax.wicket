@@ -31,6 +31,11 @@
     <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.simple/${project.version}</bundle>
   </feature>
 
+  <feature name="wicket-samples-plain-pagefactory" version="${project.version}">
+    <feature version="${project.version}">wicket-samples-base</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.pagefactory/${project.version}</bundle>
+  </feature>
+
   <feature name="wicket-samples-blueprint-simple" version="${project.version}">
     <feature version="${project.version}">wicket-samples-base</feature>
     <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.simple/${project.version}</bundle>
