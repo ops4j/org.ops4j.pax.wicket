@@ -116,12 +116,6 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             if (isFinalizeMethod(method)) {
                 // swallow finalize call
                 return null;
-            } else if (isEqualsMethod(method)) {
-                return equals(args[0]) ? Boolean.TRUE : Boolean.FALSE;
-            } else if (isHashCodeMethod(method)) {
-                return new Integer(hashCode());
-            } else if (isToStringMethod(method)) {
-                return toString();
             } else if (isInitMethod(method)) {
                 handleInit((WebApplication) object);
             } else if (isNewPageFactory(method)) {
@@ -147,36 +141,6 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
                 return Arrays.equals(method.getParameterTypes(), parameterTypes);
             }
             return false;
-        }
-
-        /**
-         * Checks if the method is derived from Object.equals()
-         *
-         * @param method method being tested
-         * @return true if the method is derived from Object.equals(), false otherwise
-         */
-        private boolean isEqualsMethod(Method method) {
-            return checkSignature(method, "equals", boolean.class, Object.class);
-        }
-
-        /**
-         * Checks if the method is derived from Object.hashCode()
-         *
-         * @param method method being tested
-         * @return true if the method is defined from Object.hashCode(), false otherwise
-         */
-        private boolean isHashCodeMethod(Method method) {
-            return checkSignature(method, "hashCode", int.class);
-        }
-
-        /**
-         * Checks if the method is derived from Object.toString()
-         *
-         * @param method method being tested
-         * @return true if the method is defined from Object.toString(), false otherwise
-         */
-        private boolean isToStringMethod(Method method) {
-            return checkSignature(method, "toString", String.class);
         }
 
         /**
