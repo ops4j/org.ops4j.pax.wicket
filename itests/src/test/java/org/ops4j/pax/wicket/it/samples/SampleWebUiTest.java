@@ -129,6 +129,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("This page is mounted manually."));
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/automounted");
         assertTrue(page.asText().contains("This page is automatically mounted."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/initiallymounted");
+        assertTrue(page.asText().contains("This page is mounted initially."));
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount");
         assertTrue(page.asText().contains("Mountpoint blueprint based sample."));
         webclient.closeAllWindows();
