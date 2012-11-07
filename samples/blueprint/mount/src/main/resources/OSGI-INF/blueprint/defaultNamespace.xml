@@ -19,7 +19,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
   <!-- Registers a PaxWicket Web Application -->
-  <service interface="org.apache.wicket.protocol.http.IWebApplicationFactory">
+  <service interface="org.ops4j.pax.wicket.api.WebApplicationFactory">
     <service-properties>
       <entry key="pax.wicket.applicationname" value="blueprint.mount" />
       <entry key="pax.wicket.mountpoint" value="blueprint/mount" />
