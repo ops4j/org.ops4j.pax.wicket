@@ -72,6 +72,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.mount").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.filter").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
+               .artifactId("org.ops4j.pax.wicket.samples.blueprint.applicationfactory").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.injection")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.injection.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm")
@@ -129,6 +131,13 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("This page is automatically mounted."));
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount");
         assertTrue(page.asText().contains("Mountpoint blueprint based sample."));
+        webclient.closeAllWindows();
+        // testSampleBlueprintMountPoint_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/first");
+        assertTrue(page.asText().contains("This is the 'The first' application home page."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/second");
+        assertTrue(page.asText().contains("This is the 'The second' application home page."));
         webclient.closeAllWindows();
         // testSampleSpringdmSimpleDefault_shouldRenderPage
         webclient = new WebClient();
