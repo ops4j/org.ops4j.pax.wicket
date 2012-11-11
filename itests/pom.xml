@@ -127,6 +127,12 @@
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
+      <artifactId>org.ops4j.pax.wicket.samples.blueprint.applicationfactory</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
       <artifactId>org.ops4j.pax.wicket.samples.blueprint.mount</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

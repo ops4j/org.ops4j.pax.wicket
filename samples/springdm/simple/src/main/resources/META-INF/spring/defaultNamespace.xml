@@ -24,7 +24,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
-  <osgi:service interface="org.apache.wicket.protocol.http.IWebApplicationFactory">
+  <osgi:service interface="org.ops4j.pax.wicket.api.WebApplicationFactory">
     <osgi:service-properties>
       <entry key="pax.wicket.applicationname" value="springdm.simple.default" />
       <entry key="pax.wicket.mountpoint" value="springdm/simple/default" />
