@@ -19,6 +19,7 @@
     <module>mount</module>
     <module>filter</module>
     <module>wicketproperties</module>
+    <module>applicationFactory</module>
   </modules>
 
 </project>
