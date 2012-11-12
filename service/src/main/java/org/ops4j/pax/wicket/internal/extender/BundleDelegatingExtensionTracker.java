@@ -15,13 +15,8 @@
  */
 package org.ops4j.pax.wicket.internal.extender;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.ops4j.pax.wicket.api.Constants;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.BundleDelegatingPageMounter;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
@@ -31,6 +26,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Right now it listens on all pax-wicket applications. In addition it is "feeded" by a bundleListeners with all bundles
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  *
  * Everytime a bundle is removed it is simply removed from all applications from all services.
  */
-public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregatorReadyChildren<IWebApplicationFactory> {
+public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregatorReadyChildren<WebApplicationFactory> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingExtensionTracker.class);
 
@@ -64,14 +64,14 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
         paxWicketBundleContext = context;
     }
 
-    public void addingService(ServiceReference reference, IWebApplicationFactory service) {
+    public void addingService(ServiceReference reference, WebApplicationFactory service) {
         synchronized (this) {
             addServicesForServiceReference(reference);
             reevaluateAllBundles(reference);
         }
     }
 
-    public void modifiedService(ServiceReference reference, IWebApplicationFactory service) {
+    public void modifiedService(ServiceReference reference, WebApplicationFactory service) {
         synchronized (this) {
             removeServicesForServiceReference(reference);
             addServicesForServiceReference(reference);
@@ -79,7 +79,7 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
         }
     }
 
-    public void removedService(ServiceReference reference, IWebApplicationFactory service) {
+    public void removedService(ServiceReference reference, WebApplicationFactory service) {
         synchronized (this) {
             removeServicesForServiceReference(reference);
         }

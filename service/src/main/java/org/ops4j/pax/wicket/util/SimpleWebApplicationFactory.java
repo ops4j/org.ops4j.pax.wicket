@@ -15,22 +15,20 @@
  */
 package org.ops4j.pax.wicket.util;
 
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketFilter;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 
 /**
- * Most simple {@link IWebApplicationFactory} which is expected to be used by blueprint or spring to register an wicket
+ * Most simple {@link WebApplicationFactory} which is expected to be used by blueprint or spring to register an wicket
  * webapplication for pax wicket. You only have to set a {@link WebApplication} via the setter or the constructur and
  * register it as a service. Please keep in mind that you have to set at least the the "pax.wicket.mountpoint" and
  * "pax.wicket.applicationname" properties to your service to be started in pax-wicket.
  * 
- * This application does simply create a new class of your {@link WebApplication} each time requested. Please be aware
- * that the {@link WebApplication}, as well as your homepage class both have to be reachable via the same classloader
- * you expose this class!
+ * Please be aware that the {@link WebApplication}, as well as your homepage class both have to be reachable via the
+ * same classloader you expose this class!
  * 
  */
-public class SimpleWebApplicationFactory implements IWebApplicationFactory {
+public class SimpleWebApplicationFactory implements WebApplicationFactory {
 
     private Class<? extends WebApplication> wicketApplication;
 
@@ -41,23 +39,14 @@ public class SimpleWebApplicationFactory implements IWebApplicationFactory {
         this.wicketApplication = wicketApplication;
     }
 
-    public WebApplication createApplication(WicketFilter filter) {
-        try {
-            return wicketApplication.newInstance();
-        } catch (InstantiationException e) {
-            throw new IllegalStateException(
-                "Wicket WebApplication has to have a default constructure to be used in the SimpleWebApplicationFactory");
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException(
-                "WicketWebApplication has to be accessible by the SimpleWebApplicationFactory to be used in the SimpleWebApplicationFactory");
-        }
-    }
-
     public void setWicketApplication(Class<? extends WebApplication> wicketApplication) {
         this.wicketApplication = wicketApplication;
     }
 
-    public void destroy(WicketFilter filter) {
+    public Class getWebApplicationClass() {
+        return wicketApplication;
     }
 
+    public void onInstantiation(WebApplication application) {
+    }
 }

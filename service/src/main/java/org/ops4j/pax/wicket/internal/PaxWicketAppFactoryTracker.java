@@ -15,16 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import static java.lang.System.identityHashCode;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -33,12 +24,20 @@ import org.osgi.service.http.NamespaceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.System.identityHashCode;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
 /**
- * The factory tracker waits for every new {@link IWebApplicationFactory} class registered as OSGi service. If the
+ * The factory tracker waits for every new {@link WebApplicationFactory} class registered as OSGi service. If the
  * services does also contain properties for an application name and a mount point is is registered for a Servlet.
  * Otherwise the problem is logged as a warning and the service is simply ignored.
  */
-public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<IWebApplicationFactory> {
+public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<WebApplicationFactory> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketAppFactoryTracker.class);
 
@@ -53,13 +52,13 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         this.httpTracker = httpTracker;
     }
 
-    public void addingService(ServiceReference reference, IWebApplicationFactory service) {
+    public void addingService(ServiceReference reference, WebApplicationFactory service) {
         PaxWicketApplicationFactory internalFactory =
             PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
         addApplication(reference, internalFactory);
     }
 
-    public void modifiedService(ServiceReference reference, IWebApplicationFactory service) {
+    public void modifiedService(ServiceReference reference, WebApplicationFactory service) {
         removeApplication(reference);
         PaxWicketApplicationFactory internalFactory =
             PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service,
@@ -67,7 +66,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         addApplication(reference, internalFactory);
     }
 
-    public void removedService(ServiceReference reference, IWebApplicationFactory service) {
+    public void removedService(ServiceReference reference, WebApplicationFactory service) {
         removeApplication(reference);
     }
 
