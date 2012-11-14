@@ -15,16 +15,6 @@
  */
 package org.ops4j.pax.wicket.it.lifecycle;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.exam.OptionUtils.combine;
-import static org.osgi.framework.Bundle.ACTIVE;
-import static org.osgi.framework.Bundle.RESOLVED;
-
-import javax.inject.Inject;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -34,6 +24,16 @@ import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+
+import javax.inject.Inject;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.exam.OptionUtils.combine;
+import static org.osgi.framework.Bundle.ACTIVE;
+import static org.osgi.framework.Bundle.RESOLVED;
 
 /**
  * {@code LifecycleTest} tests pax wicket service lifecycle.
@@ -48,8 +48,15 @@ public final class LifecycleTest extends PaxWicketIntegrationTest {
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return combine(configureProvisions(), provision(mavenBundle().groupId("org.ops4j.pax.wicket")
-            .artifactId("org.ops4j.pax.wicket.service").versionAsInProject()));
+        return combine(configureProvisions(),
+                provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-util").versionAsInProject()),
+                provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-request").versionAsInProject()),
+                provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()),
+                provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()),
+                provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()),
+                provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()),
+                provision(mavenBundle().groupId("org.ops4j.pax.wicket")
+                        .artifactId("org.ops4j.pax.wicket.service").versionAsInProject()));
     }
 
     /**
