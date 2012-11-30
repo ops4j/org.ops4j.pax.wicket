@@ -79,8 +79,8 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
      */
     public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
         if (isBundleRelavantForPaxWicket(bundle)) {
-            LOGGER.debug("{} is removed as a relevant bundle for pax wicket", event.getBundle().getSymbolicName());
-            bundleDelegatingExtensionTracker.removeRelevantBundle(event.getBundle());
+            bundleDelegatingExtensionTracker.removeRelevantBundle(bundle);
+            LOGGER.debug("{} is removed as a relevant bundle for pax wicket", bundle.getSymbolicName());
         }
     }
 
