@@ -42,6 +42,11 @@ import org.slf4j.LoggerFactory;
  */
 public class BundleDelegatingPageMounter implements InternalBundleDelegationProvider {
 
+    /**
+     * 
+     */
+    private static final String APACHE_WICKET_NAMESPACE = "org.apache.wicket.";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingPageMounter.class);
 
     private final String applicationName;
@@ -74,15 +79,21 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
     }
 
     public void addBundle(Bundle bundleToScan) {
-        if (bundleToScan.getSymbolicName().equals(Activator.SYMBOLIC_NAME)) {
+        String symbolicName = bundleToScan.getSymbolicName();
+        if (symbolicName.equals(Activator.SYMBOLIC_NAME)
+                || symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
             LOGGER.debug("Ignore the pax-wicket service package for PageMounting.");
             return;
         }
-        LOGGER.trace("Scanning bundle {} for PaxWicketMountPoint annotations", bundleToScan.getSymbolicName());
-        if (mountPointRegistrations.containsKey(bundleToScan.getSymbolicName())) {
+        if (symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
+            LOGGER.debug("Ignore apache-wicket bundle " + symbolicName + " for PageMounting.");
+            return;
+        }
+        LOGGER.trace("Scanning bundle {} for PaxWicketMountPoint annotations", symbolicName);
+        if (mountPointRegistrations.containsKey(symbolicName)) {
             removeBundle(bundleToScan);
         }
-        mountPointRegistrations.put(bundleToScan.getSymbolicName(), new ArrayList<DefaultPageMounter>());
+        mountPointRegistrations.put(symbolicName, new ArrayList<DefaultPageMounter>());
         Enumeration<?> findEntries = bundleToScan.findEntries("", "*.class", true);
         while (findEntries.hasMoreElements()) {
             URL object = (URL) findEntries.nextElement();
@@ -111,7 +122,9 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
                     throw new IllegalStateException(
                         "Class '"
                                 + className
-                                + "' found via bundle but classloader complains about NoClassDefFoundError although existing in bundle (is the jar file corrupted?)",
+                                + "' found via bundle but classloader complains about NoClassDefFoundError although existing in bundle "
+                                + symbolicName
+                                + " (is the jar file corrupted or a dependant optional dependencies not resolved?)",
                         e);
                 }
             }
@@ -126,7 +139,7 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
                 DefaultPageMounter mountPointRegistration = new DefaultPageMounter(applicationName, paxWicketContext);
                 mountPointRegistration.addMountPoint(mountPoint.mountPoint(), pageClass);
                 mountPointRegistration.register();
-                mountPointRegistrations.get(bundleToScan.getSymbolicName()).add(mountPointRegistration);
+                mountPointRegistrations.get(symbolicName).add(mountPointRegistration);
                 LOGGER.debug("Mounting page {} at {}", pageClass.getName(), mountPoint.mountPoint());
             }
         }
@@ -142,7 +155,7 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
             return bundleToScan.loadClass(className);
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Class '" + className
-                    + "' not found via bundle although existing in bundle",
+                    + "' not found via bundle " + bundleToScan.getSymbolicName() + "although existing in bundle",
                 e);
         }
     }
