@@ -15,11 +15,8 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
-import static org.junit.Assert.assertTrue;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.exam.OptionUtils.combine;
-
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -27,8 +24,10 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.exam.OptionUtils.combine;
 
 @RunWith(JUnit4TestRunner.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
@@ -53,6 +52,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.springframework.osgi").artifactId("spring-osgi-annotation")
                 .versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-util").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-request").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
@@ -65,12 +70,16 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.navigation").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
                 .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
+                .artifactId("org.ops4j.pax.wicket.samples.plain.pagefactory").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.mount").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.filter").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
+               .artifactId("org.ops4j.pax.wicket.samples.blueprint.applicationfactory").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint.injection")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.injection.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.springdm")
@@ -102,7 +111,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient.closeAllWindows();
         // testSamplePlainSimple_shouldRenderPage
         webclient = new WebClient();
-        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple");
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple/");
+        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        webclient.closeAllWindows();
+        // testSamplePlainPageFactoryShouldAllowLink
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
         webclient.closeAllWindows();
         // testSampleBlueprintSimpleDefault_shouldRenderPage
@@ -121,8 +135,17 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("This page is mounted manually."));
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/automounted");
         assertTrue(page.asText().contains("This page is automatically mounted."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount/initiallymounted");
+        assertTrue(page.asText().contains("This page is mounted initially."));
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/mount");
         assertTrue(page.asText().contains("Mountpoint blueprint based sample."));
+        webclient.closeAllWindows();
+        // testSampleBlueprintMountPoint_shouldRenderPage
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/first");
+        assertTrue(page.asText().contains("This is the 'The first' application home page."));
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/second");
+        assertTrue(page.asText().contains("This is the 'The second' application home page."));
         webclient.closeAllWindows();
         // testSampleSpringdmSimpleDefault_shouldRenderPage
         webclient = new WebClient();

@@ -15,6 +15,18 @@
  */
 package org.ops4j.pax.wicket.util.proxy;
 
+import net.sf.cglib.core.DefaultNamingPolicy;
+import net.sf.cglib.core.Predicate;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+import org.apache.wicket.Application;
+import org.apache.wicket.application.IClassResolver;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.util.io.IClusterable;
+import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator.ReleasableProxyTarget;
+
 import java.io.InvalidClassException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -24,19 +36,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
-
-import net.sf.cglib.core.DefaultNamingPolicy;
-import net.sf.cglib.core.Predicate;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.IClusterable;
-import org.apache.wicket.application.IClassResolver;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.settings.IApplicationSettings;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator.ReleasableProxyTarget;
 
 public class LazyInitProxyFactory {
 

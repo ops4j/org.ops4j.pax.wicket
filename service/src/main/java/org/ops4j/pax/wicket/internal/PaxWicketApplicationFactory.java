@@ -15,35 +15,36 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-
+import org.apache.wicket.IPageFactory;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.ops4j.pax.wicket.api.Constants;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * An internal wrapper for the {@link IWebApplicationFactory} exported by clients who want to register an application.
+ * An internal wrapper for the {@link WebApplicationFactory} exported by clients who want to register an application.
  * This class adds all the logic to extract the required properties from the osgi service and wrapping the created
  * application factory with the classloading, injection and other tricks required to run the application.
  */
 public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     private final BundleContext bundleContext;
-    private final IWebApplicationFactory webApplicationFactory;
+    private final WebApplicationFactory webApplicationFactory;
     private final String applicationName;
     private final String mountPoint;
     private final Map<String, String> contextParams;
@@ -52,7 +53,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory createPaxWicketApplicationFactory(BundleContext bundleContext,
-                                                                                IWebApplicationFactory webApplicationFactory, ServiceReference reference) {
+                                                                                WebApplicationFactory webApplicationFactory, ServiceReference reference) {
         File tmpDir = retrieveTmpFile(bundleContext);
         tmpDir.mkdirs();
         String mountPoint = (String) reference.getProperty(Constants.MOUNTPOINT);
@@ -80,7 +81,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return tmpDir;
     }
 
-    private PaxWicketApplicationFactory(BundleContext bundleContext, IWebApplicationFactory webApplicationFactory,
+    private PaxWicketApplicationFactory(BundleContext bundleContext, WebApplicationFactory webApplicationFactory,
                                         String applicationName, String mountPoint, Map<String, String> contextParams, File tmpDir,
                                         FilterDelegator filterDelegator) {
         this.bundleContext = bundleContext;
@@ -97,12 +98,16 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     public WebApplication createApplication(WicketFilter filter) {
-        WebApplication application = webApplicationFactory.createApplication(filter);
-        // TODO: [PAXWICKET-230] find a better solution here than using only the class of the real factory...
+
+        Class applicationClass = webApplicationFactory.getWebApplicationClass();
         Enhancer e = new Enhancer();
-        e.setSuperclass(application.getClass());
+        e.setSuperclass(applicationClass);
         e.setCallback(new WebApplicationWrapper());
-        return (WebApplication) e.create();
+
+        WebApplication application = (WebApplication) e.create();
+        webApplicationFactory.onInstantiation(application);
+
+        return application;
     }
 
     private class WebApplicationWrapper implements MethodInterceptor {
@@ -116,14 +121,10 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             if (isFinalizeMethod(method)) {
                 // swallow finalize call
                 return null;
-            } else if (isEqualsMethod(method)) {
-                return equals(args[0]) ? Boolean.TRUE : Boolean.FALSE;
-            } else if (isHashCodeMethod(method)) {
-                return new Integer(hashCode());
-            } else if (isToStringMethod(method)) {
-                return toString();
             } else if (isInitMethod(method)) {
                 handleInit((WebApplication) object);
+            } else if (isNewPageFactory(method)) {
+                return handleNewPageFactory();
             } else if (isOnDestoryMethod(method)) {
                 handleOnDestroy();
             }
@@ -148,36 +149,6 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         }
 
         /**
-         * Checks if the method is derived from Object.equals()
-         *
-         * @param method method being tested
-         * @return true if the method is derived from Object.equals(), false otherwise
-         */
-        private boolean isEqualsMethod(Method method) {
-            return checkSignature(method, "equals", boolean.class, Object.class);
-        }
-
-        /**
-         * Checks if the method is derived from Object.hashCode()
-         *
-         * @param method method being tested
-         * @return true if the method is defined from Object.hashCode(), false otherwise
-         */
-        private boolean isHashCodeMethod(Method method) {
-            return checkSignature(method, "hashCode", int.class);
-        }
-
-        /**
-         * Checks if the method is derived from Object.toString()
-         *
-         * @param method method being tested
-         * @return true if the method is defined from Object.toString(), false otherwise
-         */
-        private boolean isToStringMethod(Method method) {
-            return checkSignature(method, "toString", String.class);
-        }
-
-        /**
          * Checks if the method is derived from Object.finalize()
          *
          * @param method method being tested
@@ -191,11 +162,16 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             return checkSignature(method, "init", void.class);
         }
 
+        private boolean isNewPageFactory(Method method) {
+            return checkSignature(method, "newPageFactory", IPageFactory.class);
+        }
+
         private boolean isOnDestoryMethod(Method method) {
             return checkSignature(method, "onDestroy", void.class);
         }
 
         private void handleInit(WebApplication application) {
+            // application.initApplication();
             delegatingClassResolver = new DelegatingClassResolver(bundleContext, applicationName);
             delegatingClassResolver.intialize();
 
@@ -203,17 +179,22 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
                     new DelegatingComponentInstanciationListener(bundleContext, applicationName);
             delegatingComponentInstanciationListener.intialize();
 
-            pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
-            pageFactory.initialize();
-
             application.getFrameworkSettings().setSerializer(new PaxWicketSerializer(getApplicationName()));
             application.getComponentInstantiationListeners().add(new ComponentInstantiationListenerFacade(
                     delegatingComponentInstanciationListener));
             application.getApplicationSettings().setClassResolver(delegatingClassResolver);
-            application.getSessionSettings().setPageFactory(pageFactory);
+            // application.getSessionSettings().setPageFactory(pageFactory);
             // TODO [PAXWICKET-228] What should happen if two are created?
             mounterTracker = new PageMounterTracker(bundleContext, application, getApplicationName());
             mounterTracker.open();
+        }
+
+        private IPageFactory handleNewPageFactory() {
+            if (pageFactory == null) {
+                pageFactory = new PaxWicketPageFactory(bundleContext, applicationName);
+                pageFactory.initialize();
+            }
+            return pageFactory;
         }
 
         private void handleOnDestroy() {
@@ -230,7 +211,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return bundleContext;
     }
 
-    public IWebApplicationFactory getWebApplicationFactory() {
+    public WebApplicationFactory getWebApplicationFactory() {
         return webApplicationFactory;
     }
 

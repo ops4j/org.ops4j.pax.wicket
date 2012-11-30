@@ -15,21 +15,19 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-
-import java.util.HashMap;
-
 import org.apache.wicket.IPageFactory;
-import org.apache.wicket.Page;
-import org.apache.wicket.session.DefaultPageFactory;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.session.DefaultPageFactory;
 import org.ops4j.pax.wicket.api.PageFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 /**
  * Wrapper around the original wicket {@link DefaultPageFactory} adding lookup possiblities for own page loaders. In
@@ -41,7 +39,7 @@ public final class PaxWicketPageFactory implements IPageFactory {
 
     private final BundleContext bundleContext;
     private final String applicationName;
-    private final HashMap<Class<?>, PageFactory<?>> contents;
+    private final HashMap<Class<?>, PageFactory<? extends IRequestablePage>> contents;
 
     private ServiceTracker m_pageTracker;
 
@@ -49,7 +47,7 @@ public final class PaxWicketPageFactory implements IPageFactory {
         validateNotNull(context, "context");
         validateNotNull(applicationName, "applicationName");
 
-        contents = new HashMap<Class<?>, PageFactory<?>>();
+        contents = new HashMap<Class<?>, PageFactory<? extends IRequestablePage>>();
         bundleContext = context;
         this.applicationName = applicationName;
     }
@@ -75,13 +73,13 @@ public final class PaxWicketPageFactory implements IPageFactory {
      *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public final <C extends IRequestablePage> IRequestablePage newPage(Class<C> pageClass) throws IllegalArgumentException { 
-        PageFactory<?> content;
+    public final <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
+        PageFactory<? extends IRequestablePage> content;
         synchronized (this) {
             content = contents.get(pageClass);
         }
         if (content != null) {
-            return content.createPage(new PageParameters());
+            return (C) content.createPage(new PageParameters());
         }
         return new DefaultPageFactory().newPage(pageClass);
     }
@@ -98,14 +96,13 @@ public final class PaxWicketPageFactory implements IPageFactory {
      *
      * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
-    public final <C extends IRequestablePage> IRequestablePage newPage(Class<C> pageClass, PageParameters parameters)
-        throws IllegalArgumentException {
-        PageFactory<?> content;
+    public final <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
+        PageFactory<? extends IRequestablePage> content;
         synchronized (this) {
             content = contents.get(pageClass);
         }
         if (content != null) {
-            return content.createPage(parameters);
+            return (C) content.createPage(parameters);
         }
         return new DefaultPageFactory().newPage(pageClass, parameters);
     }

@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
     <artifactId>blueprint</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.blueprint.mount</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Mount</name>
 
@@ -70,7 +70,8 @@
               org.apache.wicket.request,
               javax.servlet.http,
               org.apache.wicket.ajax,
-              org.osgi.service.blueprint
+              org.osgi.service.blueprint,
+              org.apache.wicket.core.request.mapper
             </Import-Package>
           </instructions>
         </configuration>

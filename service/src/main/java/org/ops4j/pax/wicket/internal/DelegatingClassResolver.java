@@ -15,16 +15,6 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
-import static org.osgi.framework.Constants.OBJECTCLASS;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.wicket.application.IClassResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -33,6 +23,16 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.osgi.framework.Constants.OBJECTCLASS;
 
 public final class DelegatingClassResolver implements IClassResolver {
 
@@ -72,6 +72,16 @@ public final class DelegatingClassResolver implements IClassResolver {
             tracker.close();
             tracker = null;
         }
+    }
+
+    /**
+     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT
+     * replaced and in some IOC stuff also not used by pax wicket. Therefore this method
+     * should never ever be called. If it is though we want to be informed about the
+     * problem as soon as possible.
+     */
+    public ClassLoader getClassLoader() {
+        throw new NotImplementedException("This method should NOT BE CALLED!");
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {

@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.apache.wicket.protocol.http.IWebApplicationFactory;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
 import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
@@ -39,7 +39,7 @@ public final class Activator implements BundleActivator {
 
     private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
-    private BundleTrackerAggregator<IWebApplicationFactory> bundleTrackerAggregator;
+    private BundleTrackerAggregator<WebApplicationFactory> bundleTrackerAggregator;
 
     private BundleTracker bundleTracker;
 
@@ -68,7 +68,7 @@ public final class Activator implements BundleActivator {
         bundleTracker.open();
 
         bundleTrackerAggregator =
-            new BundleTrackerAggregator<IWebApplicationFactory>(context, IWebApplicationFactory.class.getName(), null,
+            new BundleTrackerAggregator<WebApplicationFactory>(context, WebApplicationFactory.class.getName(), null,
                 bundleDelegatingExtensionTracker, applicationFactoryTracker);
         bundleTrackerAggregator.open(true);
     }

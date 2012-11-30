@@ -15,31 +15,28 @@
  */
 package org.ops4j.pax.wicket.api;
 
-import org.apache.wicket.Page;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
  */
-public interface PageFactory<T extends Page> {
+public interface PageFactory<C extends IRequestablePage> {
 
     /**
      * Returns the page class instance represented by this {@code PageFactory}.
-     * 
+     *
      * @return The page class represented by this {@code PageFactory}.
-     * 
      * @since 1.0.0
      */
-    Class<T> getPageClass();
+    Class<C> getPageClass();
 
     /**
      * Creates a page with the specified {@code params}.
-     * 
+     *
      * @param params The page parameters.
-     * 
      * @return An instance of page.
-     * 
      * @since 1.0.0
      */
-    T createPage(PageParameters params);
+    C createPage(PageParameters params);
 }

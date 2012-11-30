@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>pax-wicket</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.service</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Service</name>
 
@@ -65,13 +65,13 @@
               javax.activation,
               org.apache.geronimo.osgi.locator,
               org.apache.geronimo.osgi.registry.api,
-              org.ops4j.lang,
               org.ops4j.pax.wicket.internal.*
             </Private-Package>
             <Bundle-Activator>
               org.ops4j.pax.wicket.internal.Activator
             </Bundle-Activator>
             <Import-Package>
+              org.ops4j.lang,
               org.osgi.service.useradmin;resolution:=optional,
               org.junit.*;resolution:=optional,
               junit.framework.*;resolution:=optional,
@@ -111,8 +111,10 @@
             <Export-Package>
               org.ops4j.pax.wicket.api;version="${project.version}",
               org.ops4j.pax.wicket.util.*;version="${project.version}",
-              org.apache.wicket.*;version="${wicket.dependency.version}"
             </Export-Package>
+            <DynamicImport-Package>
+              org.apache.wicket.*
+            </DynamicImport-Package>
             <Bundle-ClassPath>
               .
             </Bundle-ClassPath>
@@ -233,34 +235,6 @@
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-devutils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-core</artifactId>
-      <scope>provided</scope>
-      <classifier>sources</classifier>
-      <version>${wicket.dependency.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-auth-roles</artifactId>
-      <scope>provided</scope>
-      <classifier>sources</classifier>
-      <version>${wicket.dependency.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-extensions</artifactId>
-      <scope>provided</scope>
-      <classifier>sources</classifier>
-      <version>${wicket.dependency.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket-devutils</artifactId>
-      <scope>provided</scope>
-      <classifier>sources</classifier>
-      <version>${wicket.dependency.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

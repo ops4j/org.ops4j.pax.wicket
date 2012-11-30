@@ -20,8 +20,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 /**
  * Plain wicket web-application
  */
-public class WicketApplication extends WebApplication
-{
+public class WicketApplication extends WebApplication {
     public WicketApplication() {
     }
 
@@ -30,4 +29,9 @@ public class WicketApplication extends WebApplication
         return Homepage.class;
     }
 
+    @Override
+    protected void init() {
+        super.init();
+        mountPage("initiallymounted", InitiallyMountedPage.class);
+    }
 }
