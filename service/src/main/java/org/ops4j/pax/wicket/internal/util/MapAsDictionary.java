@@ -141,4 +141,14 @@ public class MapAsDictionary<K, V> extends Dictionary<K, V> {
             return iter.next();
         }
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return map.toString();
+    }
 }
