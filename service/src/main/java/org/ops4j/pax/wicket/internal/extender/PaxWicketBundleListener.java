@@ -18,11 +18,11 @@ package org.ops4j.pax.wicket.internal.extender;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Constants;
-import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaxWicketBundleListener implements SynchronousBundleListener {
+public class PaxWicketBundleListener implements BundleTrackerCustomizer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
@@ -32,24 +32,7 @@ public class PaxWicketBundleListener implements SynchronousBundleListener {
         this.bundleDelegatingExtensionTracker = bundleDelegatingExtensionTracker;
     }
 
-    public void bundleChanged(BundleEvent event) {
-        if (!isBundleRelavantForPaxWicket(event.getBundle())) {
-            return;
-        }
-        if (BundleEvent.STARTED == event.getType()) {
-            LOGGER.info("{} is STARTED and relevant for pax wicket", event.getBundle().getSymbolicName());
-            bundleDelegatingExtensionTracker.addRelevantBundle(event.getBundle());
-            return;
-        } else if (BundleEvent.STOPPED == event.getType()) {
-            LOGGER.debug("{} is STOPPING relevant for pax wicket", event.getBundle().getSymbolicName());
-            bundleDelegatingExtensionTracker.removeRelevantBundle(event.getBundle());
-            return;
-        }
-        LOGGER.debug("{} is in no relevant state for pax wicket", event.getBundle().getSymbolicName());
-        return;
-    }
-
-    private boolean isBundleRelavantForPaxWicket(Bundle bundle) {
+    private static boolean isBundleRelavantForPaxWicket(Bundle bundle) {
         String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
         LOGGER.trace("Checking {} for import of org.apache.wicket.*", bundle.getSymbolicName());
         if (importedPackages == null) {
@@ -62,6 +45,43 @@ public class PaxWicketBundleListener implements SynchronousBundleListener {
         }
         LOGGER.debug("Bundle {} does NOT contain imports of org.apache.wicket", bundle.getSymbolicName());
         return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.osgi.util.tracker.BundleTrackerCustomizer#addingBundle(org.osgi.framework.Bundle,
+     * org.osgi.framework.BundleEvent)
+     */
+    public Object addingBundle(Bundle bundle, BundleEvent event) {
+        if (isBundleRelavantForPaxWicket(bundle)) {
+            LOGGER.info("{} is added as a relevant bundle for pax wicket", bundle.getSymbolicName());
+            bundleDelegatingExtensionTracker.addRelevantBundle(bundle);
+        }
+        return bundle;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.osgi.util.tracker.BundleTrackerCustomizer#modifiedBundle(org.osgi.framework.Bundle,
+     * org.osgi.framework.BundleEvent, java.lang.Object)
+     */
+    public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+        // we don't care about state changes (for now)
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.osgi.util.tracker.BundleTrackerCustomizer#removedBundle(org.osgi.framework.Bundle,
+     * org.osgi.framework.BundleEvent, java.lang.Object)
+     */
+    public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+        if (isBundleRelavantForPaxWicket(bundle)) {
+            LOGGER.debug("{} is removed as a relevant bundle for pax wicket", event.getBundle().getSymbolicName());
+            bundleDelegatingExtensionTracker.removeRelevantBundle(event.getBundle());
+        }
     }
 
 }
