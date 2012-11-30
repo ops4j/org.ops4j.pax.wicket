@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,8 +32,12 @@ import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class HttpTracker extends ServiceTracker {
+
+    private static final Logger LOG = LoggerFactory.getLogger(HttpTracker.class);
 
     private HttpService httpService;
     private final HashMap<String, ServletDescriptor> servlets;
@@ -51,21 +56,18 @@ final class HttpTracker extends ServiceTracker {
         }
         for (Map.Entry<String, ServletDescriptor> entry : servletsClone.entrySet()) {
             ServletDescriptor descriptor = entry.getValue();
-            Servlet servlet = descriptor.servlet;
-            HttpContext context = descriptor.httpContext;
             String mountpoint = entry.getKey();
             try {
-                httpService.registerServlet(mountpoint, servlet, null, context);
+                registerServletDescriptor(httpService, mountpoint, descriptor);
             } catch (NamespaceException e) {
                 throw new IllegalArgumentException(
-                    "Unable to mount [" + servlet + "] on mount point '" + mountpoint + "'.");
+                    "Unable to mount [" + descriptor.servlet + "] on mount point '" + mountpoint + "'.");
             } catch (ServletException e) {
-                String message = "Wicket Servlet [" + servlet + "] is unable to initialize. "
+                String message = "Wicket Servlet [" + descriptor.servlet + "] is unable to initialize. "
                         + "This servlet was tried to be mounted on '" + mountpoint + "'.";
                 throw new IllegalArgumentException(message, e);
             }
         }
-
         return httpService;
     }
 
@@ -87,14 +89,14 @@ final class HttpTracker extends ServiceTracker {
         throws NamespaceException, ServletException {
         mountPoint = normalizeMountPoint(mountPoint);
         HttpContext httpContext = new GenericContext(paxWicketBundle, mountPoint);
-        ServletDescriptor descriptor = new ServletDescriptor(servlet, httpContext);
+        ServletDescriptor descriptor =
+            new ServletDescriptor(servlet, httpContext, contextParams == null ? null
+                    : MapAsDictionary.wrap(contextParams));
         synchronized (this) {
             servlets.put(mountPoint, descriptor);
         }
-        if (httpService != null) {
-            httpService.registerServlet(mountPoint, servlet,
-                contextParams == null ? null : MapAsDictionary.wrap(contextParams), httpContext);
-        }
+        registerServletDescriptor(httpService, mountPoint, descriptor);
+
     }
 
     final synchronized void removeServlet(String mountPoint) {
@@ -103,6 +105,23 @@ final class HttpTracker extends ServiceTracker {
             if (httpService != null) {
                 httpService.unregister(mountPoint);
             }
+        }
+    }
+
+    /**
+     * Register a servlet descriptor with an {@link HttpService} using a {@link ServletDescriptor}
+     * 
+     * @param service
+     * @param descriptor
+     * @throws NamespaceException
+     * @throws ServletException
+     */
+    private static void registerServletDescriptor(HttpService service, String mountpoint, ServletDescriptor descriptor)
+        throws ServletException, NamespaceException {
+        if (service != null) {
+            LOG.info("register new servlet on mountpoint {} with contextParams {}", mountpoint,
+                descriptor.contextParams);
+            service.registerServlet(mountpoint, descriptor.servlet, descriptor.contextParams, descriptor.httpContext);
         }
     }
 
@@ -121,12 +140,14 @@ final class HttpTracker extends ServiceTracker {
 
     private static final class ServletDescriptor {
 
-        private Servlet servlet;
-        private HttpContext httpContext;
+        private final Servlet servlet;
+        private final HttpContext httpContext;
+        private final Dictionary<?, ?> contextParams;
 
-        public ServletDescriptor(Servlet aServlet, HttpContext aContext) {
+        public ServletDescriptor(Servlet aServlet, HttpContext aContext, Dictionary<?, ?> contextParams) {
             servlet = aServlet;
             httpContext = aContext;
+            this.contextParams = contextParams;
         }
     }
 }
