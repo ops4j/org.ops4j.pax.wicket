@@ -22,6 +22,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
@@ -85,11 +87,33 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
         while (findEntries.hasMoreElements()) {
             URL object = (URL) findEntries.nextElement();
             String className = object.getFile().substring(1, object.getFile().length() - 6).replaceAll("/", ".");
-            Class<?> candidateClass;
+            Class<?> candidateClass = null;
             try {
-                candidateClass = bundleToScan.loadClass(className);
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Class not found via bundle although existing in bundle", e);
+                candidateClass = loadCandidate(className, bundleToScan);
+            } catch (NoClassDefFoundError e) {
+                // Its not nice to catch errors, but otherwhise we can't give a nice feedback!
+                String message = e.getMessage();
+                if (message != null) {
+                    // In eclipse, the entry for a class is prepend by the "bin-output-folder" (e.g.
+                    // bin/my/package/MyClass.class
+                    // If we detect this, try to load the real classname that is mentiened in the message
+                    Pattern pattern = Pattern.compile("\\(wrong name: (.+)\\)");
+                    Matcher matcher = pattern.matcher(message);
+                    if (matcher.find()) {
+                        String realname = matcher.group(1);
+                        LOGGER.debug("It seems the entry has a misleading name for class {}, retry with name {}",
+                            className, realname);
+                        candidateClass = loadCandidate(realname.replace('/', '.'), bundleToScan);
+                    }
+                }
+                if (candidateClass == null) {
+                    // If still null our fallback does not work...
+                    throw new IllegalStateException(
+                        "Class '"
+                                + className
+                                + "' found via bundle but classloader complains about NoClassDefFoundError although existing in bundle (is the jar file corrupted?)",
+                        e);
+                }
             }
             if (!Page.class.isAssignableFrom(candidateClass)) {
                 LOGGER.debug("Candidate {} not found, this can happen if the class has optional dependencies...");
@@ -105,6 +129,21 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
                 mountPointRegistrations.get(bundleToScan.getSymbolicName()).add(mountPointRegistration);
                 LOGGER.debug("Mounting page {} at {}", pageClass.getName(), mountPoint.mountPoint());
             }
+        }
+    }
+
+    /**
+     * @param className
+     * @param bundleToScan
+     * @return
+     */
+    private Class<?> loadCandidate(String className, Bundle bundleToScan) {
+        try {
+            return bundleToScan.loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("Class '" + className
+                    + "' not found via bundle although existing in bundle",
+                e);
         }
     }
 
