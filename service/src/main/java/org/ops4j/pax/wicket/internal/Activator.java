@@ -22,6 +22,7 @@ import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,11 +37,11 @@ public final class Activator implements BundleActivator {
 
     private static BundleContext bundleContext;
 
-    private PaxWicketBundleListener paxWicketBundleListener;
-
     private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
     private BundleTrackerAggregator<IWebApplicationFactory> bundleTrackerAggregator;
+
+    private BundleTracker bundleTracker;
 
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
@@ -61,8 +62,10 @@ public final class Activator implements BundleActivator {
         bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context);
         applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
 
-        paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
-        context.addBundleListener(paxWicketBundleListener);
+        PaxWicketBundleListener paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
+
+        bundleTracker = new BundleTracker(context, Bundle.ACTIVE, paxWicketBundleListener);
+        bundleTracker.open();
 
         bundleTrackerAggregator =
             new BundleTrackerAggregator<IWebApplicationFactory>(context, IWebApplicationFactory.class.getName(), null,
@@ -84,8 +87,8 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
+        bundleTracker.close();
         bundleTrackerAggregator.close();
-        context.removeBundleListener(paxWicketBundleListener);
         httpTracker.close();
 
         httpTracker = null;
