@@ -83,5 +83,10 @@
         <artifactId>wiquery-jquery-ui</artifactId>
         <license>MIT License</license>
     </artifact>
+    <artifact>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <license>Common Development and Distribution License, Version 1.0</license>
+    </artifact>
 </license-lookup>
 
