@@ -536,6 +536,28 @@
       </dependency>
       <dependency>
         <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket-util</artifactId>
+        <version>${wicket.dependency.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
+        <artifactId>wicket-request</artifactId>
+        <version>${wicket.dependency.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.wicket</groupId>
         <artifactId>wicket-auth-roles</artifactId>
         <version>${wicket.dependency.version}</version>
         <exclusions>
