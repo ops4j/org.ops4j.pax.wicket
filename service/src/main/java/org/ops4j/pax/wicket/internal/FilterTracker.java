@@ -64,11 +64,30 @@ public final class FilterTracker extends ServiceTracker {
                 maintainLifeCycle = false;
             }
             synchronized (this) {
-                filterFactories.put(reference, new FilterFactoryReference(filterFactory, maintainLifeCycle));
+                FilterFactoryReference factoryReference = new FilterFactoryReference(filterFactory);
+                filterFactories.put(reference, factoryReference);
+                factoryReference.setProperties(reference);
             }
             LOGGER.debug("added filterFactory for application {}", applicationName);
         }
         return filterFactory;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.osgi.util.tracker.ServiceTracker#modifiedService(org.osgi.framework.ServiceReference, java.lang.Object)
+     */
+    @Override
+    public void modifiedService(ServiceReference reference, Object service) {
+        LOGGER.debug("updated filterFactory for application {}", applicationName);
+        synchronized (this) {
+            FilterFactoryReference factoryReference = filterFactories.get(reference);
+            if (factoryReference != null) {
+                factoryReference.setProperties(reference);
+            }
+        }
+        super.modifiedService(reference, service);
     }
 
     @Override
@@ -128,7 +147,7 @@ public final class FilterTracker extends ServiceTracker {
      * @author Christoph Läubrich
      * 
      */
-    private static class FilterFactoryReference {
+    private static class FilterFactoryReference implements Comparable<FilterFactoryReference> {
         private final FilterFactory factory;
 
         // TODO: Is there a way PAX Wicket can inform us when it no longer uses a ServletConfig? Maybe in the destroy
@@ -139,15 +158,29 @@ public final class FilterTracker extends ServiceTracker {
          */
         private final Map<ServletConfig, Filter> filterCache = new WeakHashMap<ServletConfig, Filter>(1);
 
-        private final boolean maintainLifeCycle;
+        private boolean maintainLifeCycle;
 
         /**
-         * @param maintainLifeCycle
-         * 
+         * @param factory
          */
-        public FilterFactoryReference(FilterFactory factory, boolean maintainLifeCycle) {
+        public FilterFactoryReference(FilterFactory factory) {
             this.factory = factory;
-            this.maintainLifeCycle = maintainLifeCycle;
+        }
+
+        /**
+         * set the properties for this reference from the given {@link ServiceReference}
+         * 
+         * @param reference
+         */
+        public void setProperties(ServiceReference reference) {
+            { // set the lifecycle property
+                Object property = reference.getProperty(FilterFactory.MAINTAIN_LIFECYCLE);
+                if (property != null) {
+                    maintainLifeCycle = Boolean.parseBoolean(property.toString());
+                } else {
+                    maintainLifeCycle = true;
+                }
+            }
         }
 
         /**
@@ -185,6 +218,15 @@ public final class FilterTracker extends ServiceTracker {
                 return f;
             }
 
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see java.lang.Comparable#compareTo(java.lang.Object)
+         */
+        public int compareTo(FilterFactoryReference o) {
+            return factory.compareTo(o.factory);
         }
     }
 
