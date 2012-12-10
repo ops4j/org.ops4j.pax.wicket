@@ -15,22 +15,21 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static java.lang.System.identityHashCode;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.Servlet;
+
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.http.NamespaceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.lang.System.identityHashCode;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 /**
  * The factory tracker waits for every new {@link WebApplicationFactory} class registered as OSGi service. If the
@@ -101,15 +100,6 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
             ServiceReference appFactoryReference) {
         Bundle bundle = appFactoryReference.getBundle();
-        try {
-            httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
-        } catch (NamespaceException e) {
-            throw new IllegalArgumentException(
-                "Unable to mount [" + appFactoryReference + "] on mount point '" + mountPoint + "'.");
-        } catch (ServletException e) {
-            String message = "Wicket Servlet for [" + appFactoryReference + "] is unable to initialize. "
-                    + "This servlet was tried to be mounted on '" + mountPoint + "'.";
-            throw new IllegalArgumentException(message, e);
-        }
+        httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
     }
 }
