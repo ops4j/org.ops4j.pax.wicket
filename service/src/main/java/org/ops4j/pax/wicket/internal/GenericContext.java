@@ -33,19 +33,16 @@ public class GenericContext implements HttpContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericContext.class);
 
-    private String mountPoint;
-    private MimetypesFileTypeMap typeMap;
-    private Bundle bundle;
+    private final String mountPoint;
+    private final MimetypesFileTypeMap typeMap;
+    private final Bundle bundle;
 
     public GenericContext(Bundle bundle, String mountPoint) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("GenericContext(" + mountPoint + " )");
         }
         this.bundle = bundle;
-        if (!mountPoint.startsWith("/")) {
-            mountPoint = "/" + mountPoint;
-        }
-        this.mountPoint = mountPoint;
+        this.mountPoint = normalizeMountPoint(mountPoint);
         typeMap = (MimetypesFileTypeMap) getDefaultFileTypeMap();
         typeMap.addMimeTypes("text/css css");
     }
@@ -87,5 +84,12 @@ public class GenericContext implements HttpContext {
             LOGGER.debug(" ContentType: " + contentType);
         }
         return contentType;
+    }
+
+    public static String normalizeMountPoint(String mountPoint) {
+        if (!mountPoint.startsWith("/")) {
+            mountPoint = "/" + mountPoint;
+        }
+        return mountPoint;
     }
 }

@@ -44,7 +44,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
 
     private final HttpTracker httpTracker;
     private final Map<ServiceReference, PaxWicketApplicationFactory> factories =
-        new HashMap<ServiceReference, PaxWicketApplicationFactory>();
+            new HashMap<ServiceReference, PaxWicketApplicationFactory>();
     private final BundleContext context;
 
     PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker) throws IllegalArgumentException {
@@ -55,15 +55,15 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
 
     public void addingService(ServiceReference reference, IWebApplicationFactory service) {
         PaxWicketApplicationFactory internalFactory =
-            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
+                PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
         addApplication(reference, internalFactory);
     }
 
     public void modifiedService(ServiceReference reference, IWebApplicationFactory service) {
         removeApplication(reference);
         PaxWicketApplicationFactory internalFactory =
-            PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service,
-                reference);
+                PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service,
+                        reference);
         addApplication(reference, internalFactory);
     }
 
@@ -74,7 +74,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
     private void addApplication(ServiceReference reference, PaxWicketApplicationFactory internalFactory) {
         if (!internalFactory.isValidFactory()) {
             LOGGER
-                .warn("Trying to register ApplicationFactory without application name or mount point is not possible");
+                    .warn("Trying to register ApplicationFactory without application name or mount point is not possible");
             return;
         }
         LOGGER.debug("Service Added [{}], Factory hash [{}]", reference, identityHashCode(internalFactory));
@@ -90,7 +90,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         synchronized (factories) {
             if (!factories.containsKey(reference)) {
                 LOGGER
-                    .warn("Trying to unregister ApplicationFactory without application name or mount point is not possible");
+                        .warn("Trying to unregister ApplicationFactory without application name or mount point is not possible");
                 return;
             }
             factory = factories.remove(reference);
@@ -100,17 +100,8 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
     }
 
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
-            ServiceReference appFactoryReference) {
+                            ServiceReference appFactoryReference) {
         Bundle bundle = appFactoryReference.getBundle();
-        try {
-            httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
-        } catch (NamespaceException e) {
-            throw new IllegalArgumentException(
-                "Unable to mount [" + appFactoryReference + "] on mount point '" + mountPoint + "'.");
-        } catch (ServletException e) {
-            String message = "Wicket Servlet for [" + appFactoryReference + "] is unable to initialize. "
-                    + "This servlet was tried to be mounted on '" + mountPoint + "'.";
-            throw new IllegalArgumentException(message, e);
-        }
+        httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
     }
 }

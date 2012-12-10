@@ -15,57 +15,46 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import org.ops4j.pax.wicket.internal.util.MapAsDictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class tracks the HTTPService and provide methods to add/remove a servlet under a given mount-point. Servlets are
+ * added/removed whenever a http service is registered
+ * 
+ * @author Christoph Läubrich
+ * 
+ */
 final class HttpTracker extends ServiceTracker {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpTracker.class);
 
     private HttpService httpService;
-    private final HashMap<String, ServletDescriptor> servlets;
+    private final HashMap<String, ServletDescriptor> servlets = new HashMap<String, ServletDescriptor>();
 
     HttpTracker(BundleContext context) {
         super(context, HttpService.class.getName(), null);
-        servlets = new HashMap<String, HttpTracker.ServletDescriptor>();
     }
 
     @Override
     public final Object addingService(ServiceReference serviceReference) {
+        // TODO This does not work well with multiple http services!
         httpService = (HttpService) super.addingService(serviceReference);
-        HashMap<String, ServletDescriptor> servletsClone = new HashMap<String, HttpTracker.ServletDescriptor>();
-        synchronized (this) {
-            servletsClone.putAll(servlets);
-        }
-        for (Map.Entry<String, ServletDescriptor> entry : servletsClone.entrySet()) {
-            ServletDescriptor descriptor = entry.getValue();
-            String mountpoint = entry.getKey();
-            try {
-                registerServletDescriptor(httpService, mountpoint, descriptor);
-            } catch (NamespaceException e) {
-                throw new IllegalArgumentException(
-                    "Unable to mount [" + descriptor.servlet + "] on mount point '" + mountpoint + "'.");
-            } catch (ServletException e) {
-                String message = "Wicket Servlet [" + descriptor.servlet + "] is unable to initialize. "
-                        + "This servlet was tried to be mounted on '" + mountpoint + "'.";
-                throw new IllegalArgumentException(message, e);
+        synchronized (servlets) {
+            for (ServletDescriptor servletDescriptor : servlets.values()) {
+                registerServletDescriptor(servletDescriptor);
             }
         }
         return httpService;
@@ -73,81 +62,76 @@ final class HttpTracker extends ServiceTracker {
 
     @Override
     public final void removedService(ServiceReference serviceReference, Object httpService) {
-        Set<String> mountPoints;
-        synchronized (this) {
-            mountPoints = new HashSet<String>(servlets.keySet());
+        // TODO This does not work well with multiple http services!
+        synchronized (servlets) {
+            for (ServletDescriptor servletDescriptor : servlets.values()) {
+                unregisterServletDescriptor(servletDescriptor);
+            }
         }
-
-        for (String mountpoint : mountPoints) {
-            this.httpService.unregister(mountpoint);
-        }
-
         super.removedService(serviceReference, httpService);
     }
 
-    final void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParams, Bundle paxWicketBundle)
-        throws NamespaceException, ServletException {
-        mountPoint = normalizeMountPoint(mountPoint);
-        HttpContext httpContext = new GenericContext(paxWicketBundle, mountPoint);
-        ServletDescriptor descriptor =
-            new ServletDescriptor(servlet, httpContext, contextParams == null ? null
-                    : MapAsDictionary.wrap(contextParams));
-        synchronized (this) {
-            servlets.put(mountPoint, descriptor);
-        }
-        registerServletDescriptor(httpService, mountPoint, descriptor);
-
-    }
-
-    final synchronized void removeServlet(String mountPoint) {
-        mountPoint = normalizeMountPoint(mountPoint);
-        if (servlets.remove(mountPoint) != null) {
-            if (httpService != null) {
-                httpService.unregister(mountPoint);
-            }
+    /**
+     * Unregister a servlet descriptor handling runtime exceptions
+     * 
+     */
+    private void unregisterServletDescriptor(ServletDescriptor servletDescriptor) {
+        try {
+            servletDescriptor.unregister();
+        } catch (RuntimeException e) {
+            LOG.error(
+                "Unregistration of ServletDescriptor under mountpoint {} fails with unexpected RuntimeException!",
+                servletDescriptor.getAlias(), e);
         }
     }
 
     /**
      * Register a servlet descriptor with an {@link HttpService} using a {@link ServletDescriptor}
      * 
-     * @param service
-     * @param descriptor
-     * @throws NamespaceException
-     * @throws ServletException
      */
-    private static void registerServletDescriptor(HttpService service, String mountpoint, ServletDescriptor descriptor)
-        throws ServletException, NamespaceException {
-        if (service != null) {
-            LOG.info("register new servlet on mountpoint {} with contextParams {}", mountpoint,
-                descriptor.contextParams);
-            service.registerServlet(mountpoint, descriptor.servlet, descriptor.contextParams, descriptor.httpContext);
+    private void registerServletDescriptor(ServletDescriptor servletDescriptor) {
+        try {
+            servletDescriptor.register(httpService);
+        } catch (RuntimeException e) {
+            LOG.error(
+                "Registration of ServletDescriptor under mountpoint {} fails with unexpected RuntimeException!",
+                servletDescriptor.getAlias(), e);
+        } catch (ServletException e) {
+            LOG.error(
+                "Unable to mount servlet on mount point '{}', either it was already registered under the same alias or the init method throws an exception",
+                servletDescriptor.getAlias(), e);
+        } catch (NamespaceException e) {
+            LOG.error(
+                "Unable to mount servlet on mount point '{}', another resource is already bound to this alias",
+                servletDescriptor.getAlias(), e);
         }
     }
 
-    private String normalizeMountPoint(String mountPoint) {
-        if (!mountPoint.startsWith("/")) {
-            mountPoint = "/" + mountPoint;
-        }
-        return mountPoint;
-    }
-
-    final synchronized Servlet getServlet(String mountPoint) {
-        mountPoint = normalizeMountPoint(mountPoint);
-        ServletDescriptor descriptor = servlets.get(mountPoint);
-        return descriptor.servlet;
-    }
-
-    private static final class ServletDescriptor {
-
-        private final Servlet servlet;
-        private final HttpContext httpContext;
-        private final Dictionary<?, ?> contextParams;
-
-        public ServletDescriptor(Servlet aServlet, HttpContext aContext, Dictionary<?, ?> contextParams) {
-            servlet = aServlet;
-            httpContext = aContext;
-            this.contextParams = contextParams;
+    public final void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParams, Bundle paxWicketBundle) {
+        mountPoint = GenericContext.normalizeMountPoint(mountPoint);
+        ServletDescriptor descriptor =
+            new ServletDescriptor(servlet, mountPoint, paxWicketBundle, contextParams);
+        synchronized (servlets) {
+            ServletDescriptor put = servlets.put(mountPoint, descriptor);
+            if (put != null) {
+                LOG.warn(
+                    "Two servlets are registered under the same mountpoint '{}' the first of them is overwritten by the second call",
+                    mountPoint);
+                unregisterServletDescriptor(put);
+            }
+            registerServletDescriptor(descriptor);
         }
     }
+
+    public final void removeServlet(String mountPoint) {
+        mountPoint = GenericContext.normalizeMountPoint(mountPoint);
+        synchronized (servlets) {
+            ServletDescriptor remove = servlets.remove(mountPoint);
+            if (remove != null) {
+                unregisterServletDescriptor(remove);
+            }
+        }
+
+    }
+
 }
