@@ -18,10 +18,11 @@ package org.ops4j.pax.wicket.api;
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
 
-public interface FilterFactory extends Comparable<FilterFactory> {
+public interface FilterFactory {
 
     /**
-     * Service property name for the configuration of the priority of a {@link Filter}
+     * Service property name for the configuration of the priority of a {@link Filter}, it is used if two factories have
+     * the same service rank as defined by the OSGi Service Layer
      */
     String FILTER_PRIORITY = "pax.wicket.filter.priority";
 
@@ -31,9 +32,10 @@ public interface FilterFactory extends Comparable<FilterFactory> {
      */
     String MAINTAIN_LIFECYCLE = "pax.wicket.filter.maintainlifecycle";
 
-    Integer getPriority();
-
-    String getApplicationName();
+    /**
+     * Service property name for the configuration to which {@link WebApplicationFactory} this filter belongs to
+     */
+    String APPLICATION_NAME = Constants.APPLICATION_NAME;
 
     Filter createFilter(ConfigurableFilterConfig filterConfig) throws ServletException;
 

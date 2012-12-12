@@ -38,10 +38,6 @@ public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDeco
     public FilterFactoryDecorator() {
     }
 
-    public int compareTo(FilterFactory o) {
-        return baseFilterFactory.compareTo(o);
-    }
-
     public Integer getPriority() {
         return baseFilterFactory.getPriority();
     }
@@ -87,9 +83,9 @@ public class FilterFactoryDecorator implements FilterFactory, InjectionAwareDeco
 
         private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFilterFactory.class);
 
-        private Class<? extends Filter> filterClass;
-        private String applicationName;
-        private Map<String, String> filterConfiguration;
+        private final Class<? extends Filter> filterClass;
+        private final String applicationName;
+        private final Map<String, String> filterConfiguration;
 
         public DefaultFilterFactory(BundleContext bundleContext, Class<? extends Filter> filterClass, Integer priority,
                 String applicationName, Map<String, String> filterConfiguration) {
