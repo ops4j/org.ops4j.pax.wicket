@@ -18,10 +18,15 @@ package org.ops4j.pax.wicket.api;
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
 
+/**
+ * @deprecated While the filter factory itself is not deprecated the comparable interface will be removed.
+ */
+@Deprecated
 public interface FilterFactory extends Comparable<FilterFactory> {
 
     /**
-     * Service property name for the configuration of the priority of a {@link Filter}
+     * Service property name for the configuration of the priority of a {@link Filter}, it is used if two factories have
+     * the same service rank as defined by the OSGi Service Layer
      */
     String FILTER_PRIORITY = "pax.wicket.filter.priority";
 
@@ -31,10 +36,29 @@ public interface FilterFactory extends Comparable<FilterFactory> {
      */
     String MAINTAIN_LIFECYCLE = "pax.wicket.filter.maintainlifecycle";
 
+    /**
+     * Service property name for the configuration to which {@link WebApplicationFactory} this filter belongs to
+     */
+    String APPLICATION_NAME = Constants.APPLICATION_NAME;
+
+    /**
+     *
+     * @deprecated this method is no longer used in the next version but only the priority. We wont change this
+     * interface in the 2.x.y line but will do so on the 3.x line
+     */
+    @Deprecated
     Integer getPriority();
 
+    /**
+     * @deprecated the application name is done via an osgi property instead of this method. We wont change this
+     * interface in the 2.x.y line but will do so on the 3.x line
+     */
+    @Deprecated
     String getApplicationName();
 
+    /**
+     * Creates a filter based on the filter configuration.
+     */
     Filter createFilter(ConfigurableFilterConfig filterConfig) throws ServletException;
 
 }

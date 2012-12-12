@@ -34,6 +34,7 @@ import javax.servlet.ServletException;
 
 import org.ops4j.pax.wicket.api.FilterFactory;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -153,6 +154,12 @@ public final class FilterTracker extends ServiceTracker {
 
         private boolean maintainLifeCycle;
 
+        private long serviceRanking;
+
+        private long priority;
+
+        private long serviceID;
+
         /**
          * @param factory
          */
@@ -173,7 +180,30 @@ public final class FilterTracker extends ServiceTracker {
                 } else {
                     maintainLifeCycle = true;
                 }
+                serviceRanking = getInteger(reference.getProperty(Constants.SERVICE_RANKING), 0);
+                priority = getInteger(reference.getProperty(FilterFactory.FILTER_PRIORITY), 0);
+                serviceID = getInteger(reference.getProperty(Constants.SERVICE_ID), 0);
             }
+        }
+
+        /**
+         * @param property
+         * @param defaultValue
+         * @return
+         */
+        private long getInteger(Object property, int defaultValue) {
+            if (property instanceof Number) {
+                return ((Number) property).longValue();
+            }
+            if (property instanceof String) {
+                try {
+                    return Long.parseLong((String) property);
+                } catch (NumberFormatException nfe) {
+                    // We don't care then...
+                    LOGGER.debug("can't parse property as integer: {}", property, nfe);
+                }
+            }
+            return defaultValue;
         }
 
         /**
@@ -219,7 +249,22 @@ public final class FilterTracker extends ServiceTracker {
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
         public int compareTo(FilterFactoryReference o) {
-            return factory.compareTo(o.factory);
+            long cmp = serviceRanking - o.serviceRanking;
+            if (cmp == 0) {
+                cmp = priority - o.priority;
+                if (cmp == 0) {
+                    // We use the service id here, to archive consistent/stable ordering of filters
+                    cmp = serviceID - o.serviceID;
+                }
+            }
+            // "convert" the long to the integer contract of compareTo
+            if (cmp > 0) {
+                return 1;
+            }
+            if (cmp < 0) {
+                return -1;
+            }
+            return 0;
         }
     }
 

@@ -17,7 +17,6 @@ package org.ops4j.pax.wicket.util;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -39,8 +38,8 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         ManagedService.class.getName(),
     };
 
-    private BundleContext bundleContext;
-    private Dictionary<String, Object> properties = new Hashtable<String, Object>();
+    private final BundleContext bundleContext;
+    private final Dictionary<String, Object> properties = new Hashtable<String, Object>();
 
     private ServiceRegistration filterFactoryServiceRegistration;
 
