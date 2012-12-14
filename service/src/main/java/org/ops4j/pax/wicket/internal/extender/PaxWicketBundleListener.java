@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.extender;
 
+import org.ops4j.pax.wicket.internal.Activator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.Constants;
@@ -23,6 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PaxWicketBundleListener implements BundleTrackerCustomizer {
+
+    /**
+     * 
+     */
+    private static final String APACHE_WICKET_NAMESPACE = "org.apache.wicket";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
@@ -33,17 +39,47 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
     }
 
     private static boolean isBundleRelavantForPaxWicket(Bundle bundle) {
-        String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
         LOGGER.trace("Checking {} for import of org.apache.wicket.*", bundle.getSymbolicName());
-        if (importedPackages == null) {
-            LOGGER.debug("Bundle {} does not contain any imported packages --> ignore", bundle.getSymbolicName());
+        if (hasImportPackage(bundle) || hasRequireBundle(bundle)) {
+            return true;
+        } else {
+            LOGGER.debug("Bundle {} does NOT contain imports of org.apache.wicket", bundle.getSymbolicName());
             return false;
         }
-        if (importedPackages.contains("org.apache.wicket")) {
-            LOGGER.debug("Bundle {} contains imports of org.apache.wicket", bundle.getSymbolicName());
+    }
+
+    private static boolean hasRequireBundle(Bundle bundle) {
+        String requireBundle = (String) bundle.getHeaders().get(Constants.REQUIRE_BUNDLE);
+        if (requireBundle != null
+                && (requireBundle.contains(APACHE_WICKET_NAMESPACE) || requireBundle.contains(Activator.SYMBOLIC_NAME))) {
+            // TODO: We better should parse this (see comments in hasImportPackage)
+            LOGGER.debug("Bundle {} contains require-bundle of org.apache.wicket", bundle.getSymbolicName());
+            LOGGER
+                .info(
+                    "Bundle {} uses require-bundle to import wicket, this style is discouraged see http://wiki.osgi.org/wiki/Require-Bundle",
+                    bundle.getSymbolicName());
             return true;
         }
-        LOGGER.debug("Bundle {} does NOT contain imports of org.apache.wicket", bundle.getSymbolicName());
+        return false;
+    }
+
+    private static boolean hasImportPackage(Bundle bundle) {
+        String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
+        if (importedPackages != null && importedPackages.contains(APACHE_WICKET_NAMESPACE)) {
+            // TODO: We better should parse the String, this could be confused by use clause or similar!
+            // Is there any OSGi Util for this? Maybe use the PackageAdmin instead!
+            LOGGER.debug("Bundle {} contains package-imports of org.apache.wicket", bundle.getSymbolicName());
+            return true;
+        }
+        // we can consider dynamic imports here...
+        String dynamicImport = (String) bundle.getHeaders().get(Constants.DYNAMICIMPORT_PACKAGE);
+        if (dynamicImport != null && dynamicImport.contains(APACHE_WICKET_NAMESPACE)) {
+            // TODO: in fact we have to check for *, org.* and org.apache.* ...
+            // TODO: We better should parse the String, this could be confused by use clause or similar!
+            // Is there any OSGi Util for this? Maybe use the PackageAdmin instead!
+            LOGGER.debug("Bundle {} contains package-imports of org.apache.wicket", bundle.getSymbolicName());
+            return true;
+        }
         return false;
     }
 
