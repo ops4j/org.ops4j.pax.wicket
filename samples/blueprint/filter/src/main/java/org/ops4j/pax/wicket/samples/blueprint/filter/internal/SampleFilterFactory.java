@@ -22,16 +22,6 @@ import org.ops4j.pax.wicket.api.FilterFactory;
 
 public class SampleFilterFactory implements FilterFactory {
 
-    public int compareTo(FilterFactory o) {
-        if (o.getPriority() < 1) {
-            return 1;
-        }
-        if (o.getPriority() > 1) {
-            return -1;
-        }
-        return 0;
-    }
-
     public Integer getPriority() {
         return 1;
     }
