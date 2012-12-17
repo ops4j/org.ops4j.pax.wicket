@@ -2,4 +2,12 @@ language: java
 notifications:
   email:
       - ops4j-notify@googlegroups.com
+env:
+  global:
+    - SONATYPE_USERNAME=pieber
+    - secure: "S08iKDH+iLW9WO464tuuhfyccvfmzxsMv2alQle1JAhLzf8Rdn+w09p+w1+Q\nqoBPrZ6/w3VLIoEzd31zIC8kIgKCamlMXeWO2nOOyUGxD9IYiXcWLvvsJfP5\nuv76ISZsSRBgSYINMbiwQXolAOTCIIpbZzWZbrZPK6+84gPS1uE="
+
+after_script:
+  - python etc/travis/addServer.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml
 
