@@ -30,7 +30,9 @@ import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxy
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,8 +100,18 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 if (!annotation.injectionSource().equals(PaxWicketBean.INJECTION_SOURCE_UNDEFINED)) {
                     injectionSource = annotation.injectionSource();
                 }
-                Object proxy = createProxy(field, realClass, overwrites, injectionSource);
-                setField(component, field, proxy);
+                if (field.getType().equals(BundleContext.class)) {
+                    // Is this the special BundleContext type?
+                    ClassLoader classLoader = realClass.getClassLoader();
+                    if (classLoader instanceof BundleReference) {
+                        BundleReference bundleReference = (BundleReference) classLoader;
+                        Bundle bundle = bundleReference.getBundle();
+                        setField(component, field, bundle.getBundleContext());
+                    }
+                } else {
+                    Object proxy = createProxy(field, realClass, overwrites, injectionSource);
+                    setField(component, field, proxy);
+                }
             }
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
