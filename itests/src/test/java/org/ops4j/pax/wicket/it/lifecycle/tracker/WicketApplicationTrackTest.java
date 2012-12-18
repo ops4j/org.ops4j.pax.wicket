@@ -17,6 +17,7 @@ package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
@@ -68,7 +69,6 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
         simpleAppBundle.stop();
 
         ServiceReference[] services = paxWicketBundle.getRegisteredServices();
-        assertNotNull(services);
-        assertEquals(0, services.length);
+        assertNull(services);
     }
 }

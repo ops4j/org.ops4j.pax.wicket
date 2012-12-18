@@ -57,7 +57,6 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util")
@@ -104,6 +103,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Test
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
+        Thread.sleep(5000);
         // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
