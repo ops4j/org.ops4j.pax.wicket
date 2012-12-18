@@ -98,8 +98,6 @@ public final class FilterTracker extends ServiceTracker {
             try {
                 filters
                     .add(filterFactory.createFilter(new DefaultConfigurableFilterConfig(servlet.getServletConfig())));
-            } catch (ServletException e) {
-                LOGGER.error("Problem while creating filter: {}", e.getMessage(), e);
             } catch (RuntimeException e) {
                 LOGGER.error("Problem while creating filter: {}", e.getMessage(), e);
             }
