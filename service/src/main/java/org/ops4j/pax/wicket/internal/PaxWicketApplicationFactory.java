@@ -183,8 +183,6 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             application.getComponentInstantiationListeners().add(new ComponentInstantiationListenerFacade(
                     delegatingComponentInstanciationListener));
             application.getApplicationSettings().setClassResolver(delegatingClassResolver);
-            // application.getSessionSettings().setPageFactory(pageFactory);
-            // TODO [PAXWICKET-228] What should happen if two are created?
             mounterTracker = new PageMounterTracker(bundleContext, application, getApplicationName());
             mounterTracker.open();
         }
