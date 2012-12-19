@@ -36,13 +36,13 @@ import org.slf4j.LoggerFactory;
  * services does also contain properties for an application name and a mount point is is registered for a Servlet.
  * Otherwise the problem is logged as a warning and the service is simply ignored.
  */
-public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<WebApplicationFactory> {
+public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<WebApplicationFactory<?>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketAppFactoryTracker.class);
 
     private final HttpTracker httpTracker;
-    private final Map<ServiceReference, PaxWicketApplicationFactory> factories =
-        new HashMap<ServiceReference, PaxWicketApplicationFactory>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, PaxWicketApplicationFactory> factories =
+        new HashMap<ServiceReference<WebApplicationFactory<?>>, PaxWicketApplicationFactory>();
     private final BundleContext context;
 
     PaxWicketAppFactoryTracker(BundleContext context, HttpTracker httpTracker) throws IllegalArgumentException {
@@ -51,13 +51,14 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         this.httpTracker = httpTracker;
     }
 
-    public void addingService(ServiceReference reference, WebApplicationFactory service) {
+    public void addingService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
         PaxWicketApplicationFactory internalFactory =
             PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
         addApplication(reference, internalFactory);
     }
 
-    public void modifiedService(ServiceReference reference, WebApplicationFactory service) {
+    public void modifiedService(ServiceReference<WebApplicationFactory<?>> reference,
+            WebApplicationFactory<?> service) {
         removeApplication(reference);
         PaxWicketApplicationFactory internalFactory =
             PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service,
@@ -65,11 +66,12 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         addApplication(reference, internalFactory);
     }
 
-    public void removedService(ServiceReference reference, WebApplicationFactory service) {
+    public void removedService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
         removeApplication(reference);
     }
 
-    private void addApplication(ServiceReference reference, PaxWicketApplicationFactory internalFactory) {
+    private void addApplication(ServiceReference<WebApplicationFactory<?>> reference,
+            PaxWicketApplicationFactory internalFactory) {
         if (!internalFactory.isValidFactory()) {
             LOGGER
                 .warn("Trying to register ApplicationFactory without application name or mount point is not possible");
@@ -83,7 +85,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         }
     }
 
-    private void removeApplication(ServiceReference reference) {
+    private void removeApplication(ServiceReference<WebApplicationFactory<?>> reference) {
         PaxWicketApplicationFactory factory;
         synchronized (factories) {
             if (!factories.containsKey(reference)) {
@@ -98,7 +100,7 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
     }
 
     private void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParam,
-            ServiceReference appFactoryReference) {
+            ServiceReference<WebApplicationFactory<?>> appFactoryReference) {
         Bundle bundle = appFactoryReference.getBundle();
         httpTracker.addServlet(mountPoint, servlet, contextParam, bundle);
     }

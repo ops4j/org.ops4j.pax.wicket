@@ -39,9 +39,9 @@ public final class Activator implements BundleActivator {
 
     private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
 
-    private BundleTrackerAggregator<WebApplicationFactory> bundleTrackerAggregator;
+    private BundleTrackerAggregator<WebApplicationFactory<?>> bundleTrackerAggregator;
 
-    private BundleTracker bundleTracker;
+    private BundleTracker<Bundle> bundleTracker;
 
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
@@ -64,11 +64,11 @@ public final class Activator implements BundleActivator {
 
         PaxWicketBundleListener paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
 
-        bundleTracker = new BundleTracker(context, Bundle.ACTIVE, paxWicketBundleListener);
+        bundleTracker = new BundleTracker<Bundle>(context, Bundle.ACTIVE, paxWicketBundleListener);
         bundleTracker.open();
 
         bundleTrackerAggregator =
-            new BundleTrackerAggregator<WebApplicationFactory>(context, WebApplicationFactory.class.getName(), null,
+            new BundleTrackerAggregator<WebApplicationFactory<?>>(context, WebApplicationFactory.class.getName(), null,
                 bundleDelegatingExtensionTracker, applicationFactoryTracker);
         bundleTrackerAggregator.open(true);
     }

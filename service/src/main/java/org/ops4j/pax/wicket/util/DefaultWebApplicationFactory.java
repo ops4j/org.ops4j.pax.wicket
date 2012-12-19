@@ -15,6 +15,12 @@
  */
 package org.ops4j.pax.wicket.util;
 
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
@@ -23,43 +29,38 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-
 /**
  * This page is a little bit more complex (compared to the {@link SimpleWebApplicationFactory}). But it is not required
  * to register the OSGi service yourself.
- *
+ * 
  * In the easiest version
  */
-public class DefaultWebApplicationFactory extends SimpleWebApplicationFactory {
+public class DefaultWebApplicationFactory<T extends WebApplication> extends SimpleWebApplicationFactory<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultWebApplicationFactory.class);
 
     private BundleContext bundleContext;
     private String applicationName;
     private String mountPoint;
-    private ServiceRegistration registration;
+    @SuppressWarnings("rawtypes")
+    private ServiceRegistration<WebApplicationFactory> registration;
     private Map<String, String> contextParam = new HashMap<String, String>();
 
     public DefaultWebApplicationFactory() {
         super();
     }
 
-    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<? extends WebApplication> wicketApplication,
+    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName) {
         this(bundleContext, wicketApplication, applicationName, applicationName, null);
     }
 
-    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<? extends WebApplication> wicketApplication,
+    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName, String mountPoint) {
         this(bundleContext, wicketApplication, applicationName, mountPoint, null);
     }
 
-    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<? extends WebApplication> wicketApplication,
+    public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName, String mountPoint, Map<String, String> contextParam) {
         super(wicketApplication);
         this.bundleContext = bundleContext;
@@ -74,11 +75,11 @@ public class DefaultWebApplicationFactory extends SimpleWebApplicationFactory {
         }
         validateNotNull(applicationName, "applicationName");
         validateNotNull(mountPoint, "mountPoint");
-        Properties props = new Properties();
+        Hashtable<String, Object> props = new Hashtable<String, Object>();
         props.put(Constants.APPLICATION_NAME, applicationName);
         props.put(Constants.MOUNTPOINT, mountPoint);
         props.put(Constants.CONTEXT_PARAMS, contextParam);
-        registration = bundleContext.registerService(WebApplicationFactory.class.getName(), this, props);
+        registration = bundleContext.registerService(WebApplicationFactory.class, this, props);
     }
 
     public void dispose() {

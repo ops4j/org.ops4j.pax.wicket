@@ -11,52 +11,52 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * specific order. Therefore add the child {@link ServiceTrackerAggregatorReadyChildren}s in the order you would like to
  * have them called! As another remark
  */
-public class BundleTrackerAggregator<ServiceType> extends ServiceTracker {
+public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<ServiceType, ServiceType> {
 
     private final ServiceTrackerAggregatorReadyChildren<ServiceType>[] children;
 
-    public BundleTrackerAggregator(BundleContext context, Filter filter, ServiceTrackerCustomizer customizer,
+    public BundleTrackerAggregator(BundleContext context, Filter filter,
+            ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
             ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
         super(context, filter, customizer);
         this.children = children;
     }
 
-    public BundleTrackerAggregator(BundleContext context, ServiceReference reference,
-            ServiceTrackerCustomizer customizer, ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
+    public BundleTrackerAggregator(BundleContext context, ServiceReference<ServiceType> reference,
+            ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
+            ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
         super(context, reference, customizer);
         this.children = children;
     }
 
-    public BundleTrackerAggregator(BundleContext context, String clazz, ServiceTrackerCustomizer customizer,
+    public BundleTrackerAggregator(BundleContext context, String clazz,
+            ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
             ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
         super(context, clazz, customizer);
         this.children = children;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Object addingService(ServiceReference reference) {
-        Object service = super.addingService(reference);
+    public ServiceType addingService(ServiceReference<ServiceType> reference) {
+        ServiceType service = super.addingService(reference);
         for (ServiceTrackerAggregatorReadyChildren<ServiceType> child : children) {
-            child.addingService(reference, (ServiceType) service);
+            child.addingService(reference, service);
         }
         return service;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void modifiedService(ServiceReference reference, Object service) {
+    public void modifiedService(ServiceReference<ServiceType> reference, ServiceType service) {
         for (ServiceTrackerAggregatorReadyChildren<ServiceType> child : children) {
-            child.addingService(reference, (ServiceType) service);
+            child.addingService(reference, service);
         }
         super.modifiedService(reference, service);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void removedService(ServiceReference reference, Object service) {
+    public void removedService(ServiceReference<ServiceType> reference, ServiceType service) {
         for (int i = children.length - 1; i >= 0; i--) {
-            children[i].removedService(reference, (ServiceType) service);
+            children[i].removedService(reference, service);
         }
         super.removedService(reference, service);
     }

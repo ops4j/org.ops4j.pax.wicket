@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * @author Christoph Läubrich
  * 
  */
-final class HttpTracker extends ServiceTracker {
+final class HttpTracker extends ServiceTracker<HttpService, HttpService> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpTracker.class);
 
@@ -49,9 +49,9 @@ final class HttpTracker extends ServiceTracker {
     }
 
     @Override
-    public final Object addingService(ServiceReference serviceReference) {
+    public final HttpService addingService(ServiceReference<HttpService> serviceReference) {
         // TODO This does not work well with multiple http services!
-        httpService = (HttpService) super.addingService(serviceReference);
+        httpService = super.addingService(serviceReference);
         synchronized (servlets) {
             for (ServletDescriptor servletDescriptor : servlets.values()) {
                 registerServletDescriptor(servletDescriptor);
@@ -61,7 +61,7 @@ final class HttpTracker extends ServiceTracker {
     }
 
     @Override
-    public final void removedService(ServiceReference serviceReference, Object httpService) {
+    public final void removedService(ServiceReference<HttpService> serviceReference, HttpService httpService) {
         // TODO This does not work well with multiple http services!
         synchronized (servlets) {
             for (ServletDescriptor servletDescriptor : servlets.values()) {

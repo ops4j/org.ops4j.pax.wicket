@@ -13,17 +13,17 @@ public interface ServiceTrackerAggregatorReadyChildren<ServiceType> {
      * Almost like the addingService method of the ServiceTracker but already including the service and without a return
      * value.
      */
-    void addingService(ServiceReference reference, ServiceType service);
+    void addingService(ServiceReference<ServiceType> reference, ServiceType service);
 
     /**
      * Almost the same like the {@link #modifiedService(ServiceReference, Object)} method of the {@link ServiceTracker}
      * without a super mehtod.
      */
-    public void modifiedService(ServiceReference reference, ServiceType service);
+    public void modifiedService(ServiceReference<ServiceType> reference, ServiceType service);
 
     /**
      * Almost the same like the {@link #removedService(ServiceReference, Object)} method of the {@link ServiceTracker}
      * without a super mehtod.
      */
-    public void removedService(ServiceReference reference, ServiceType service);
+    public void removedService(ServiceReference<ServiceType> reference, ServiceType service);
 }

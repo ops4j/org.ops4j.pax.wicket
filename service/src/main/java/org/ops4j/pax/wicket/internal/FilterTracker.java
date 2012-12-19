@@ -41,11 +41,11 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class FilterTracker extends ServiceTracker {
+public final class FilterTracker extends ServiceTracker<FilterFactory, FilterFactory> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterTracker.class);
 
-    private final Map<ServiceReference, FilterFactoryReference> filterFactories =
-        new HashMap<ServiceReference, FilterFactoryReference>();
+    private final Map<ServiceReference<FilterFactory>, FilterFactoryReference> filterFactories =
+        new HashMap<ServiceReference<FilterFactory>, FilterFactoryReference>();
     private final String applicationName;
 
     public FilterTracker(BundleContext bundleContext, String applicationName) {
@@ -54,8 +54,8 @@ public final class FilterTracker extends ServiceTracker {
     }
 
     @Override
-    public final Object addingService(ServiceReference reference) {
-        FilterFactory filterFactory = (FilterFactory) super.addingService(reference);
+    public final FilterFactory addingService(ServiceReference<FilterFactory> reference) {
+        FilterFactory filterFactory = super.addingService(reference);
         if (filterFactory != null) {
             synchronized (this) {
                 FilterFactoryReference factoryReference = new FilterFactoryReference(filterFactory);
@@ -73,7 +73,7 @@ public final class FilterTracker extends ServiceTracker {
      * @see org.osgi.util.tracker.ServiceTracker#modifiedService(org.osgi.framework.ServiceReference, java.lang.Object)
      */
     @Override
-    public void modifiedService(ServiceReference reference, Object service) {
+    public void modifiedService(ServiceReference<FilterFactory> reference, FilterFactory service) {
         LOGGER.debug("updated filterFactory for application {}", applicationName);
         synchronized (this) {
             FilterFactoryReference factoryReference = filterFactories.get(reference);
@@ -85,7 +85,7 @@ public final class FilterTracker extends ServiceTracker {
     }
 
     @Override
-    public void removedService(ServiceReference reference, Object service) {
+    public void removedService(ServiceReference<FilterFactory> reference, FilterFactory service) {
         synchronized (this) {
             FilterFactoryReference removed = filterFactories.remove(reference);
             if (removed != null) {
@@ -172,7 +172,7 @@ public final class FilterTracker extends ServiceTracker {
          * 
          * @param reference
          */
-        public void setProperties(ServiceReference reference) {
+        public void setProperties(ServiceReference<FilterFactory> reference) {
             { // set the lifecycle property
                 Object property = reference.getProperty(FilterFactory.MAINTAIN_LIFECYCLE);
                 if (property != null) {

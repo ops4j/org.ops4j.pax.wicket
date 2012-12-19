@@ -36,7 +36,8 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     private String applicationName;
     private Class<? extends WebApplication> applicationClass;
     private Map<String, String> contextParams;
-    private DefaultWebApplicationFactory factory;
+    private DefaultWebApplicationFactory<?> factory;
+    // FIXME: Why is this never used?
     private String injectionSource = PaxWicketBean.INJECTION_SOURCE_UNDEFINED;
 
     public ApplicationDecorator() {
@@ -66,6 +67,7 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
         this.injectionSource = injectionSource;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void start() throws Exception {
         factory =
             new DefaultWebApplicationFactory(bundleContext, applicationClass, applicationName, mountPoint,

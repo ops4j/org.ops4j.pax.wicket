@@ -15,6 +15,17 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.Constants;
 import org.osgi.framework.Bundle;
@@ -22,10 +33,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
 
 /**
  * This class represents an extended class loader automatically trying to load from all bundles added to it.
@@ -36,8 +43,8 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
 
     private final String applicationName;
     private final BundleContext paxWicketBundleContext;
-    private Map<String, Bundle> bundles = new HashMap<String, Bundle>();
-    private ServiceRegistration classResolverRegistration;
+    private final Map<String, Bundle> bundles = new HashMap<String, Bundle>();
+    private ServiceRegistration<IClassResolver> classResolverRegistration;
 
     public BundleDelegatingClassResolver(BundleContext paxWicketBundleContext, String applicationName) {
         this.paxWicketBundleContext = paxWicketBundleContext;
@@ -55,7 +62,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         Dictionary<String, String> properties = new Hashtable<String, String>();
         properties.put(Constants.APPLICATION_NAME, applicationName);
         classResolverRegistration =
-            paxWicketBundleContext.registerService(IClassResolver.class.getName(), this, properties);
+            paxWicketBundleContext.registerService(IClassResolver.class, this, properties);
     }
 
     public void stop() {
@@ -107,7 +114,6 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
     }
 
-    @SuppressWarnings("unchecked")
     public Iterator<URL> getResources(String name) {
         ArrayList<URL> collectedResources = new ArrayList<URL>();
         try {
@@ -131,10 +137,9 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
     }
 
     /**
-     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT
-     * replaced and in some IOC stuff also not used by pax wicket. Therefore this method
-     * should never ever be called. If it is though we want to be informed about the
-     * problem as soon as possible.
+     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
+     * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want to
+     * be informed about the problem as soon as possible.
      */
     public ClassLoader getClassLoader() {
         throw new NotImplementedException("This method should NOT BE CALLED!");

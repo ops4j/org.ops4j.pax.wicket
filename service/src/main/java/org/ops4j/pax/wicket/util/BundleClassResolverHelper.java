@@ -17,6 +17,18 @@
  */
 package org.ops4j.pax.wicket.util;
 
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.osgi.framework.Constants.SERVICE_PID;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 import org.ops4j.pax.wicket.internal.NotImplementedException;
@@ -25,14 +37,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
-import static org.osgi.framework.Constants.SERVICE_PID;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
@@ -46,10 +50,10 @@ public final class BundleClassResolverHelper {
     };
 
     private final BundleContext bundleContext;
-    private final Properties serviceProperties;
+    private final Hashtable<String, Object> serviceProperties;
 
     private final Object lock = new Object();
-    private ServiceRegistration serviceRegistration;
+    private ServiceRegistration<?> serviceRegistration;
 
     /**
      * Construct an instance of {@code BundleClassResolver}.
@@ -57,7 +61,7 @@ public final class BundleClassResolverHelper {
     public BundleClassResolverHelper(BundleContext bundleContext) throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
-        serviceProperties = new Properties();
+        serviceProperties = new Hashtable<String, Object>();
     }
 
     /**
@@ -69,7 +73,7 @@ public final class BundleClassResolverHelper {
             if (servicePid == null) {
                 serviceProperties.remove(SERVICE_PID);
             } else {
-                serviceProperties.setProperty(SERVICE_PID, servicePid);
+                serviceProperties.put(SERVICE_PID, servicePid);
             }
 
             if (serviceRegistration != null) {
@@ -83,7 +87,7 @@ public final class BundleClassResolverHelper {
      */
     public final String getServicePid() {
         synchronized (lock) {
-            return serviceProperties.getProperty(SERVICE_PID);
+            return (String) serviceProperties.get(SERVICE_PID);
         }
     }
 
@@ -135,7 +139,6 @@ public final class BundleClassResolverHelper {
             return bundle.loadClass(classname);
         }
 
-        @SuppressWarnings("unchecked")
         public Iterator<URL> getResources(String name) {
             try {
                 final Bundle bundle = bundleContext.getBundle();
@@ -166,10 +169,9 @@ public final class BundleClassResolverHelper {
         }
 
         /**
-         * This method is uses only for some internal wicket stuff if the IClassResolver is NOT
-         * replaced and in some IOC stuff also not used by pax wicket. Therefore this method
-         * should never ever be called. If it is though we want to be informed about the
-         * problem as soon as possible.
+         * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
+         * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want
+         * to be informed about the problem as soon as possible.
          */
         public ClassLoader getClassLoader() {
             throw new NotImplementedException("This method should NOT BE CALLED!");

@@ -40,7 +40,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class PageMounterTracker extends ServiceTracker {
+public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMounter> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageMounterTracker.class);
 
@@ -57,11 +57,9 @@ public final class PageMounterTracker extends ServiceTracker {
         throws IllegalArgumentException {
         validateNotNull(context, "Context");
         validateNotNull(applicationName, "applicationName");
-
         String filterString =
             "(&(" + OBJECTCLASS + "=" + PageMounter.class.getName() + ")"
                     + "(" + APPLICATION_NAME + "=" + applicationName + "))";
-
         try {
             return context.createFilter(filterString);
         } catch (InvalidSyntaxException e) {
@@ -71,9 +69,8 @@ public final class PageMounterTracker extends ServiceTracker {
     }
 
     @Override
-    public final Object addingService(ServiceReference reference) {
-        PageMounter mounter = (PageMounter) super.addingService(reference);
-
+    public final PageMounter addingService(ServiceReference<PageMounter> reference) {
+        PageMounter mounter = super.addingService(reference);
         List<MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
             LOGGER.trace("Make sure that path {} is clear before trying to remount", info.getPath());
@@ -90,13 +87,12 @@ public final class PageMounterTracker extends ServiceTracker {
             ThreadContext.setApplication(oldApp);
             LOGGER.info("Mounted {} with {}", info.getPath(), info.getPage().getName());
         }
-
         return mounter;
     }
 
     @Override
-    public final void removedService(ServiceReference reference, Object mounter) {
-        PageMounter pageMounter = (PageMounter) mounter;
+    public final void removedService(ServiceReference<PageMounter> reference, PageMounter mounter) {
+        PageMounter pageMounter = mounter;
         List<MountPointInfo> infos = pageMounter.getMountPoints();
         for (MountPointInfo info : infos) {
             LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());

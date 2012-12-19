@@ -22,7 +22,7 @@ import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
 import java.util.Dictionary;
-import java.util.Properties;
+import java.util.Hashtable;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
@@ -45,12 +45,12 @@ public final class BundleInjectionProviderHelper {
     };
 
     private final BundleContext bundleContext;
-    private final Properties serviceProperties;
+    private final Hashtable<String, Object> serviceProperties;
     private BundleAnalysingComponentInstantiationListener bundleAnalysingComponentInstantiationListener;
 
     private final Object lock = new Object();
     private final String injectionSource;
-    private ServiceRegistration serviceRegistration;
+    private ServiceRegistration<?> serviceRegistration;
 
     /**
      * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
@@ -61,7 +61,7 @@ public final class BundleInjectionProviderHelper {
         this.injectionSource = injectionSource;
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
-        serviceProperties = new Properties();
+        serviceProperties = new Hashtable<String, Object>();
         setApplicationName(applicationName);
     }
 
@@ -74,7 +74,7 @@ public final class BundleInjectionProviderHelper {
             if (servicePid == null) {
                 serviceProperties.remove(SERVICE_PID);
             } else {
-                serviceProperties.setProperty(SERVICE_PID, servicePid);
+                serviceProperties.put(SERVICE_PID, servicePid);
             }
 
             if (serviceRegistration != null) {
@@ -88,7 +88,7 @@ public final class BundleInjectionProviderHelper {
      */
     public final String getServicePid() {
         synchronized (lock) {
-            return serviceProperties.getProperty(SERVICE_PID);
+            return (String) serviceProperties.get(SERVICE_PID);
         }
     }
 

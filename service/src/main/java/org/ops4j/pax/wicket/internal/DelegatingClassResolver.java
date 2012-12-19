@@ -15,6 +15,16 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.osgi.framework.Constants.OBJECTCLASS;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.wicket.application.IClassResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -23,16 +33,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
-import static org.osgi.framework.Constants.OBJECTCLASS;
 
 public final class DelegatingClassResolver implements IClassResolver {
 
@@ -75,10 +75,9 @@ public final class DelegatingClassResolver implements IClassResolver {
     }
 
     /**
-     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT
-     * replaced and in some IOC stuff also not used by pax wicket. Therefore this method
-     * should never ever be called. If it is though we want to be informed about the
-     * problem as soon as possible.
+     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
+     * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want to
+     * be informed about the problem as soon as possible.
      */
     public ClassLoader getClassLoader() {
         throw new NotImplementedException("This method should NOT BE CALLED!");
@@ -124,7 +123,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         }
     }
 
-    private final class ClassResolverTracker extends ServiceTracker {
+    private final class ClassResolverTracker extends ServiceTracker<IClassResolver, IClassResolver> {
 
         private final String m_applicationName;
 
@@ -134,8 +133,8 @@ public final class DelegatingClassResolver implements IClassResolver {
         }
 
         @Override
-        public final Object addingService(ServiceReference reference) {
-            IClassResolver resolver = (IClassResolver) super.addingService(reference);
+        public final IClassResolver addingService(ServiceReference<IClassResolver> reference) {
+            IClassResolver resolver = super.addingService(reference);
             synchronized (resolvers) {
                 resolvers.add(resolver);
             }
@@ -143,7 +142,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         }
 
         @Override
-        public final void modifiedService(ServiceReference reference, Object service) {
+        public final void modifiedService(ServiceReference<IClassResolver> reference, IClassResolver service) {
             Object objAppName = reference.getProperty(APPLICATION_NAME);
             if (objAppName != null) {
                 Class<?> nameClass = objAppName.getClass();
@@ -167,8 +166,8 @@ public final class DelegatingClassResolver implements IClassResolver {
         }
 
         @Override
-        public final void removedService(ServiceReference reference, Object service) {
-            IClassResolver resolver = (IClassResolver) service;
+        public final void removedService(ServiceReference<IClassResolver> reference, IClassResolver service) {
+            IClassResolver resolver = service;
             synchronized (resolvers) {
                 resolvers.remove(resolver);
             }

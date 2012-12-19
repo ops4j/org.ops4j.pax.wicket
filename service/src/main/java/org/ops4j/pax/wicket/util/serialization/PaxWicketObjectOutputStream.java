@@ -15,18 +15,18 @@
  */
 package org.ops4j.pax.wicket.util.serialization;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import static org.apache.wicket.core.util.io.SerializableChecker.isAvailable;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import org.apache.wicket.core.util.objects.checker.CheckingObjectOutputStream;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author edward.yakop@gmail.com
@@ -47,7 +47,7 @@ public class PaxWicketObjectOutputStream extends ObjectOutputStream {
         try {
             outputStream.writeObject(object);
         } catch (IOException e) {
-            if (isAvailable()) {
+            if (CheckingObjectOutputStream.isAvailable()) {
                 // trigger serialization again, but this time gather some more info
                 new PaxWicketSerializableChecker((NotSerializableException) e) {
                     @Override

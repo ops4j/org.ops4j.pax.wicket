@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
  * 
  * @author David Leangen
  */
-public final class SessionDestroyedListenerTracker extends ServiceTracker {
+public final class SessionDestroyedListenerTracker extends
+        ServiceTracker<SessionDestroyedListener, SessionDestroyedListener> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionDestroyedListenerTracker.class);
 
@@ -58,12 +59,12 @@ public final class SessionDestroyedListenerTracker extends ServiceTracker {
      * @see ServiceTracker#addingService(ServiceReference)
      */
     @Override
-    public final Object addingService(ServiceReference serviceReference) {
+    public final SessionDestroyedListener addingService(ServiceReference<SessionDestroyedListener> serviceReference) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Listener [" + serviceReference + "] has been added.");
         }
 
-        final SessionDestroyedListener listener = (SessionDestroyedListener) context.getService(serviceReference);
+        final SessionDestroyedListener listener = context.getService(serviceReference);
         handler.addListener(listener);
 
         return listener;
@@ -75,12 +76,13 @@ public final class SessionDestroyedListenerTracker extends ServiceTracker {
      * @see ServiceTracker#removedService(ServiceReference,Object)
      */
     @Override
-    public void removedService(ServiceReference serviceReference, Object object) {
+    public void removedService(ServiceReference<SessionDestroyedListener> serviceReference,
+            SessionDestroyedListener object) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Listener [" + serviceReference + "] has been removed.");
         }
 
-        final SessionDestroyedListener listener = (SessionDestroyedListener) context.getService(serviceReference);
+        final SessionDestroyedListener listener = context.getService(serviceReference);
         handler.removeListener(listener);
     }
 }

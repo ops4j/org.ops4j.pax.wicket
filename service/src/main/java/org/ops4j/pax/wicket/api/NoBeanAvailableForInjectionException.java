@@ -16,9 +16,9 @@
 package org.ops4j.pax.wicket.api;
 
 /**
- * Since the {@link PaxWicketInjector#onInstantiation(org.apache.wicket.Component)} method does not have a return value
- * we couldn't ask a service simply if it could find a bean to inject for a component to inject at all. Therefore we add
- * the notation to pax-wicket that every {@link PaxWicketInjector#inject(Object)} method call can throw this
+ * Since the {@link PaxWicketInjector#inject(Object, Class)} method does not have a return value we couldn't ask a
+ * service simply if it could find a bean to inject for a component to inject at all. Therefore we add the notation to
+ * pax-wicket that every {@link PaxWicketInjector#inject(Object, Class)} method call can throw this
  * {@link NoBeanAvailableForInjectionException}. Using this exception we can iterate over multible provider checking if
  * a bean is available.
  */

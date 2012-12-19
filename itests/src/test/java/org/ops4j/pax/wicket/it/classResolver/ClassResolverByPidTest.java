@@ -28,7 +28,6 @@ import static org.osgi.framework.Constants.SERVICE_PID;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -59,27 +58,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
 
     @org.ops4j.pax.exam.junit.Configuration
     public final Option[] provisionSimpleLibraries() {
-        return combine(configureProvisions(),
-            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-util").versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-request").versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service")
-                .versionAsInProject()),
-            provision(TinyBundles
-                .bundle()
-                .add(PublicClass.class)
-                .add(PublicThatAccessPrivateClass.class)
-                .add(PrivateClass.class)
-                .add(Activator.class)
-                .set(Constants.EXPORT_PACKAGE, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries")
-                .set(Constants.BUNDLE_ACTIVATOR,
-                    "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator")
-                .set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries")
-                .set(Constants.IMPORT_PACKAGE, " org.ops4j.pax.wicket.*,org.apache.wicket.*,org.osgi.*;")
-                .build(TinyBundles.withBnd())));
+        return combine(configureProvisions(), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-util").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-request").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service").versionAsInProject()), provision(TinyBundles.bundle().add(PublicClass.class).add(PublicThatAccessPrivateClass.class).add(PrivateClass.class).add(Activator.class).set(Constants.EXPORT_PACKAGE, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries").set(Constants.BUNDLE_ACTIVATOR, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator").set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries").set(Constants.IMPORT_PACKAGE, " org.ops4j.pax.wicket.*,org.apache.wicket.*,org.osgi.*;").build(TinyBundles.withBnd())));
     }
 
     @Test
@@ -88,10 +67,10 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
         assertFalse(isApplicationNameKeyExists(classResolverReference));
 
         ManagedService managedService = (ManagedService) bundleContext.getService(classResolverReference);
-        Properties dictionary = new Properties();
+        Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 
         // Lets update configuration to expose our sample library to abc, def application
-        dictionary.put(APPLICATION_NAME, new String[]{ "abc", "def" });
+        dictionary.put(APPLICATION_NAME, new String[] { "abc", "def" });
         managedService.updated(dictionary);
 
         assertTrue(isApplicationNameKeyExists(classResolverReference));
@@ -101,9 +80,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
     }
 
     private void validateThatClassResolverIsExposedToAbcAndDef() throws Throwable {
-        ServiceReference[] references = bundleContext.getServiceReferences(
-            IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)"
-            );
+        ServiceReference[] references = bundleContext.getServiceReferences(IClassResolver.class.getName(), "(" + APPLICATION_NAME + "=abc)");
         assertNotNull(references);
         assertEquals(references.length, 1);
         ServiceReference reference = references[0];
@@ -115,7 +92,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
         // Verify that this is the simple libraries class resolver
         IClassResolver classResolver = (IClassResolver) bundleContext.getService(reference);
         String className = "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.PrivateClass";
-        Class clazz = classResolver.resolveClass(className);
+        Class<?> clazz = classResolver.resolveClass(className);
         assertNotNull(clazz);
         assertEquals(clazz.getName(), className);
 
@@ -149,12 +126,12 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
 
         String classResolverBundleLocation = classResolverReference.getBundle().getLocation();
         Configuration configuration = configAdmin.getConfiguration("libraryPid", classResolverBundleLocation);
-        Dictionary properties = configuration.getProperties();
+        Dictionary<String, Object> properties = configuration.getProperties();
         if (properties == null) {
-            properties = new Hashtable();
+            properties = new Hashtable<String, Object>();
             properties.put(SERVICE_PID, "libraryPid");
         }
-        properties.put(APPLICATION_NAME, new String[]{ "abc", "def" });
+        properties.put(APPLICATION_NAME, new String[] { "abc", "def" });
         configuration.update(properties);
 
         // Wait for 1 secs
@@ -173,9 +150,7 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
     }
 
     private ServiceReference getLibraryClassResolverReference() throws InvalidSyntaxException {
-        ServiceReference[] references = bundleContext.getServiceReferences(
-            IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)"
-            );
+        ServiceReference[] references = bundleContext.getServiceReferences(IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)");
         assertNotNull(references);
         assertEquals(references.length, 1);
         return references[0];

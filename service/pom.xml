@@ -85,7 +85,7 @@
               javax.xml.*,
               org.apache.wicket.*;version="${wicket.dependency.version}",
               org.codehaus.jackson.*;resolution:=optional,
-              org.osgi.framework;version="1.4",
+              org.osgi.framework;version="[1.6.0,2.0.0)",
               org.osgi.service.*;version="1",
               org.osgi.util.*;version="1",
               net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,

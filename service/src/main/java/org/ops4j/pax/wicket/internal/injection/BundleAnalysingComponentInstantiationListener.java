@@ -44,7 +44,6 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     private String bundleResources = "";
     private final String defaultInjectionSource;
 
-    @SuppressWarnings("unchecked")
     public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String defaultInjectionSource) {
         this.bundleContext = bundleContext;
         this.defaultInjectionSource = defaultInjectionSource;

@@ -41,9 +41,9 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
     private final BundleContext paxWicketBundleContext;
     private final String injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
 
-    private Map<String, BundleAnalysingComponentInstantiationListener> listeners =
+    private final Map<String, BundleAnalysingComponentInstantiationListener> listeners =
         new HashMap<String, BundleAnalysingComponentInstantiationListener>();
-    private ServiceRegistration serviceRegistration;
+    private ServiceRegistration<PaxWicketInjector> serviceRegistration;
 
     public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName) {
         this.paxWicketBundleContext = paxWicketBundleContext;
@@ -57,7 +57,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
     public void start() {
         Dictionary<String, String> props = new Hashtable<String, String>();
         props.put(Constants.APPLICATION_NAME, applicationName);
-        serviceRegistration = paxWicketBundleContext.registerService(PaxWicketInjector.class.getName(), this, props);
+        serviceRegistration = paxWicketBundleContext.registerService(PaxWicketInjector.class, this, props);
     }
 
     public void stop() {

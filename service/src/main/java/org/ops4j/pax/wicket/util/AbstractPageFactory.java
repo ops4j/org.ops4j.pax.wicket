@@ -18,6 +18,15 @@
 
 package org.ops4j.pax.wicket.util;
 
+import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
+import static org.ops4j.lang.NullArgumentException.validateNotNull;
+import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
+import static org.ops4j.pax.wicket.api.Constants.PAGE_ID;
+import static org.ops4j.pax.wicket.api.Constants.PAGE_NAME;
+
+import java.util.Dictionary;
+import java.util.Hashtable;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.ops4j.pax.wicket.api.PageFactory;
@@ -28,20 +37,15 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-
-import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
-import static org.ops4j.lang.NullArgumentException.validateNotNull;
-import static org.ops4j.pax.wicket.api.Constants.*;
-
 public abstract class AbstractPageFactory<T extends Page> implements PageFactory<T>, ManagedService {
 
     private BundleContext bundleContext;
-    private Hashtable<String, String> properties = new Hashtable<String, String>();
+    private final Hashtable<String, String> properties = new Hashtable<String, String>();
     private Class<? extends WebPage> pageClass;
 
-    private ServiceRegistration pageServiceRegistration;
+    private static final String[] SERVICE_CLASSES = { PageFactory.class.getName(), ManagedService.class.getName() };
+
+    private ServiceRegistration<?> pageServiceRegistration;
     private DefaultPageMounter mountPointRegistration;
 
     /**
@@ -74,7 +78,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     public final void register() throws IllegalStateException {
         validateNotNull(bundleContext, "bundleContext");
-        String[] classes = { PageFactory.class.getName(), ManagedService.class.getName() };
+
         synchronized (this) {
             if (pageServiceRegistration != null) {
                 throw new IllegalStateException(String.format("%s [%s] has been registered.", getClass()
@@ -88,7 +92,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
                     mountPointRegistration.register();
                 }
             }
-            pageServiceRegistration = bundleContext.registerService(classes, this, properties);
+            pageServiceRegistration = bundleContext.registerService(SERVICE_CLASSES, this, properties);
         }
     }
 
@@ -133,8 +137,7 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public void updated(Dictionary config)
+    public void updated(Dictionary<String, ?> config)
         throws ConfigurationException {
         if (config == null) {
             synchronized (this) {

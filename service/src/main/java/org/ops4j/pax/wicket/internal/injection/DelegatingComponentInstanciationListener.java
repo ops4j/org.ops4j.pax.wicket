@@ -127,7 +127,8 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
     }
 
-    private final class ComponentInstanciationListenerTracker extends ServiceTracker {
+    private final class ComponentInstanciationListenerTracker extends
+            ServiceTracker<PaxWicketInjector, PaxWicketInjector> {
 
         private final String m_applicationName;
 
@@ -137,8 +138,8 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
 
         @Override
-        public final Object addingService(ServiceReference reference) {
-            PaxWicketInjector resolver = (PaxWicketInjector) super.addingService(reference);
+        public final PaxWicketInjector addingService(ServiceReference<PaxWicketInjector> reference) {
+            PaxWicketInjector resolver = super.addingService(reference);
             synchronized (resolvers) {
                 resolvers.add(resolver);
             }
@@ -146,7 +147,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
 
         @Override
-        public final void modifiedService(ServiceReference reference, Object service) {
+        public final void modifiedService(ServiceReference<PaxWicketInjector> reference, PaxWicketInjector service) {
             Object objAppName = reference.getProperty(APPLICATION_NAME);
             if (objAppName != null) {
                 Class<?> nameClass = objAppName.getClass();
@@ -170,8 +171,8 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
 
         @Override
-        public final void removedService(ServiceReference reference, Object service) {
-            PaxWicketInjector resolver = (PaxWicketInjector) service;
+        public final void removedService(ServiceReference<PaxWicketInjector> reference, PaxWicketInjector service) {
+            PaxWicketInjector resolver = service;
             synchronized (resolvers) {
                 resolvers.remove(resolver);
             }

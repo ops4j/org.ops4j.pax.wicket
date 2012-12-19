@@ -28,22 +28,22 @@ import org.ops4j.pax.wicket.api.WebApplicationFactory;
  * same classloader you expose this class!
  * 
  */
-public class SimpleWebApplicationFactory implements WebApplicationFactory {
+public class SimpleWebApplicationFactory<T extends WebApplication> implements WebApplicationFactory<T> {
 
-    private Class<? extends WebApplication> wicketApplication;
+    private Class<T> wicketApplication;
 
     public SimpleWebApplicationFactory() {
     }
 
-    public SimpleWebApplicationFactory(Class<? extends WebApplication> wicketApplication) {
+    public SimpleWebApplicationFactory(Class<T> wicketApplication) {
         this.wicketApplication = wicketApplication;
     }
 
-    public void setWicketApplication(Class<? extends WebApplication> wicketApplication) {
+    public void setWicketApplication(Class<T> wicketApplication) {
         this.wicketApplication = wicketApplication;
     }
 
-    public Class getWebApplicationClass() {
+    public Class<T> getWebApplicationClass() {
         return wicketApplication;
     }
 

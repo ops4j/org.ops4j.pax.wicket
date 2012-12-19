@@ -86,12 +86,12 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
         try {
             LOGGER.debug("Try to locate a suitable service for objectClass = "
                     + serviceInterface + " and filter = " + filter);
-            ServiceReference[] references = bundleContext.getAllServiceReferences(serviceInterface, filter);
+            ServiceReference<?>[] references = bundleContext.getAllServiceReferences(serviceInterface, filter);
             if (references != null) {
                 // Sort the references...
                 Arrays.sort(references);
                 // Fetch the first (if any)...
-                for (final ServiceReference reference : references) {
+                for (final ServiceReference<?> reference : references) {
                     final Object service = bundleContext.getService(reference);
                     if (service == null) {
                         // The service is gone while we where iterating over the service references...
@@ -122,14 +122,14 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
         /**
          * the reference which produced it
          */
-        private final ServiceReference reference;
+        private final ServiceReference<?> reference;
         private ReleasableProxyTarget delegatingProxy;
 
         /**
          * @param service
          * @param reference
          */
-        private ReleasableProxyTargetImplementation(Object service, ServiceReference reference) {
+        private ReleasableProxyTargetImplementation(Object service, ServiceReference<?> reference) {
             this.service = service;
             this.reference = reference;
         }

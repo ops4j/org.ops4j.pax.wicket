@@ -33,7 +33,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFilterFactory.class);
 
-    private static final String[] classes = {
+    private static final String[] SERVICE_CLASSES = {
         FilterFactory.class.getName(),
         ManagedService.class.getName(),
     };
@@ -41,7 +41,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
     private final BundleContext bundleContext;
     private final Dictionary<String, Object> properties = new Hashtable<String, Object>();
 
-    private ServiceRegistration filterFactoryServiceRegistration;
+    private ServiceRegistration<?> filterFactoryServiceRegistration;
 
     public AbstractFilterFactory(BundleContext bundleContext, String applicationName, Integer priority) {
         validateNotNull(bundleContext, "bundleContext");
@@ -84,7 +84,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
                 throw new IllegalStateException(String.format("%s [%s] has been registered.", getClass()
                     .getSimpleName(), this));
             }
-            filterFactoryServiceRegistration = bundleContext.registerService(classes, this, properties);
+            filterFactoryServiceRegistration = bundleContext.registerService(SERVICE_CLASSES, this, properties);
             LOGGER.info("Registered filterFactory for application {} with priority {}", getApplicationName(),
                 getPriority());
         }
@@ -101,8 +101,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
             getPriority());
     }
 
-    @SuppressWarnings("rawtypes")
-    public void updated(Dictionary config) throws ConfigurationException {
+    public void updated(Dictionary<String, ?> config) throws ConfigurationException {
         if (config != null) {
             Integer filterPriority = (Integer) config.get(FILTER_PRIORITY);
             String applicationName = (String) config.get(APPLICATION_NAME);

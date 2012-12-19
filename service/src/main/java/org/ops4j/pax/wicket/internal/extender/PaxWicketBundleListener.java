@@ -23,7 +23,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaxWicketBundleListener implements BundleTrackerCustomizer {
+public class PaxWicketBundleListener implements BundleTrackerCustomizer<Bundle> {
 
     /**
      * 
@@ -49,7 +49,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
     }
 
     private static boolean hasRequireBundle(Bundle bundle) {
-        String requireBundle = (String) bundle.getHeaders().get(Constants.REQUIRE_BUNDLE);
+        String requireBundle = bundle.getHeaders().get(Constants.REQUIRE_BUNDLE);
         if (requireBundle != null
                 && (requireBundle.contains(APACHE_WICKET_NAMESPACE) || requireBundle.contains(Activator.SYMBOLIC_NAME))) {
             // TODO: We better should parse this (see comments in hasImportPackage)
@@ -64,7 +64,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
     }
 
     private static boolean hasImportPackage(Bundle bundle) {
-        String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
+        String importedPackages = bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
         if (importedPackages != null && importedPackages.contains(APACHE_WICKET_NAMESPACE)) {
             // TODO: We better should parse the String, this could be confused by use clause or similar!
             // Is there any OSGi Util for this? Maybe use the PackageAdmin instead!
@@ -72,7 +72,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
             return true;
         }
         // we can consider dynamic imports here...
-        String dynamicImport = (String) bundle.getHeaders().get(Constants.DYNAMICIMPORT_PACKAGE);
+        String dynamicImport = bundle.getHeaders().get(Constants.DYNAMICIMPORT_PACKAGE);
         if (dynamicImport != null && dynamicImport.contains(APACHE_WICKET_NAMESPACE)) {
             // TODO: in fact we have to check for *, org.* and org.apache.* ...
             // TODO: We better should parse the String, this could be confused by use clause or similar!
@@ -89,7 +89,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
      * @see org.osgi.util.tracker.BundleTrackerCustomizer#addingBundle(org.osgi.framework.Bundle,
      * org.osgi.framework.BundleEvent)
      */
-    public Object addingBundle(Bundle bundle, BundleEvent event) {
+    public Bundle addingBundle(Bundle bundle, BundleEvent event) {
         if (isBundleRelavantForPaxWicket(bundle)) {
             LOGGER.info("{} is added as a relevant bundle for pax wicket", bundle.getSymbolicName());
             bundleDelegatingExtensionTracker.addRelevantBundle(bundle);
@@ -103,7 +103,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
      * @see org.osgi.util.tracker.BundleTrackerCustomizer#modifiedBundle(org.osgi.framework.Bundle,
      * org.osgi.framework.BundleEvent, java.lang.Object)
      */
-    public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+    public void modifiedBundle(Bundle bundle, BundleEvent event, Bundle object) {
         // we don't care about state changes (for now)
     }
 
@@ -113,7 +113,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
      * @see org.osgi.util.tracker.BundleTrackerCustomizer#removedBundle(org.osgi.framework.Bundle,
      * org.osgi.framework.BundleEvent, java.lang.Object)
      */
-    public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+    public void removedBundle(Bundle bundle, BundleEvent event, Bundle object) {
         if (isBundleRelavantForPaxWicket(bundle)) {
             bundleDelegatingExtensionTracker.removeRelevantBundle(bundle);
             LOGGER.debug("{} is removed as a relevant bundle for pax wicket", bundle.getSymbolicName());

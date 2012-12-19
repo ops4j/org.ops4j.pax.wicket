@@ -30,6 +30,7 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
  * <p/>
  * Example:
  * <p/>
+ * 
  * <pre>
  * class UserServiceLocator implements IProxyTargetLocator {
  *     Object locateProxyObject() {
@@ -38,7 +39,7 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
  *     }
  * }
  * </pre>
- *
+ * 
  * @author Igor Vaynberg (ivaynberg)
  * @see LazyInitProxyFactory#createProxy(Class, IProxyTargetLocator)
  */
@@ -75,5 +76,5 @@ public interface IProxyTargetLocator extends IClusterable {
     /*
      * Returns the parent holding the responsibility for the serialisation.
      */
-    Class getParent();
+    Class<?> getParent();
 }

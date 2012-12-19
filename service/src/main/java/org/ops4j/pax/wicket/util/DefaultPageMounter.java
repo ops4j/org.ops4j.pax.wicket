@@ -43,7 +43,10 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
     private final Dictionary<String, String> properties;
     private final BundleContext bundleContext;
 
-    private ServiceRegistration serviceRegistration;
+    private ServiceRegistration<?> serviceRegistration;
+
+    private static final String[] SERVICE_CLASSES = new String[]{ PageMounter.class.getName(),
+        ManagedService.class.getName() };
 
     public DefaultPageMounter(String applicationName, BundleContext bundleContext) {
         validateNotNull(bundleContext, "bundleContext");
@@ -59,13 +62,13 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
      */
     public void register() {
         LOGGER.debug("Register mount tracker as OSGi service");
-        String[] classes = { PageMounter.class.getName(), ManagedService.class.getName() };
+
         synchronized (this) {
             if (serviceRegistration != null) {
                 throw new IllegalStateException(String.format("%s [%s] had been already registered.", getClass()
                     .getSimpleName(), this));
             }
-            serviceRegistration = bundleContext.registerService(classes, this, properties);
+            serviceRegistration = bundleContext.registerService(SERVICE_CLASSES, this, properties);
         }
     }
 
@@ -83,8 +86,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public void updated(Dictionary properties) throws ConfigurationException {
+    public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
         if (properties != null) {
             setApplicationName((String) properties.get(APPLICATION_NAME));
         }

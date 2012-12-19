@@ -31,8 +31,8 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
     protected Class<?> beanType;
     protected Map<String, String> overwrites;
 
-    private Class<?> parent;
-    private BundleContext bundleContext;
+    private final Class<?> parent;
+    private final BundleContext bundleContext;
 
     public AbstractProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
@@ -45,7 +45,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
 
     public boolean hasApplicationContext() {
         String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
-        ServiceReference[] references = null;
+        ServiceReference<?>[] references = null;
         try {
             references = bundleContext.getServiceReferences(getContainerClass().getName(), filter);
         } catch (InvalidSyntaxException e) {
@@ -60,7 +60,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         }
         ClassLoader oldClassloader = Thread.currentThread().getContextClassLoader();
         String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
-        ServiceReference[] references = null;
+        ServiceReference<?>[] references = null;
         try {
             references = bundleContext.getServiceReferences(getContainerClass().getName(), filter);
         } catch (InvalidSyntaxException e) {
@@ -73,7 +73,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         try {
             Thread.currentThread().setContextClassLoader(parent.getClassLoader());
             BeanReactor<Container> strategy = createStrategy();
-            for (ServiceReference serviceReference : references) {
+            for (ServiceReference<?> serviceReference : references) {
                 @SuppressWarnings("unchecked")
                 Container service = (Container) bundleContext.getService(serviceReference);
                 try {
@@ -94,7 +94,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
             parent.getName()));
     }
 
-    public Class getParent() {
+    public Class<?> getParent() {
         return parent;
     }
 

@@ -15,9 +15,16 @@
  */
 package org.ops4j.pax.wicket.internal;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -30,12 +37,6 @@ import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * An internal wrapper for the {@link WebApplicationFactory} exported by clients who want to register an application.
  * This class adds all the logic to extract the required properties from the osgi service and wrapping the created
@@ -44,7 +45,7 @@ import java.util.Map;
 public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     private final BundleContext bundleContext;
-    private final WebApplicationFactory webApplicationFactory;
+    private final WebApplicationFactory<? extends WebApplication> webApplicationFactory;
     private final String applicationName;
     private final String mountPoint;
     private final Map<String, String> contextParams;
@@ -52,8 +53,11 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     private final FilterDelegator filterDelegator;
 
     @SuppressWarnings("unchecked")
-    public static PaxWicketApplicationFactory createPaxWicketApplicationFactory(BundleContext bundleContext,
-                                                                                WebApplicationFactory webApplicationFactory, ServiceReference reference) {
+    public static PaxWicketApplicationFactory
+        createPaxWicketApplicationFactory(
+                BundleContext bundleContext,
+                WebApplicationFactory<?> webApplicationFactory,
+                ServiceReference<WebApplicationFactory<?>> reference) {
         File tmpDir = retrieveTmpFile(bundleContext);
         tmpDir.mkdirs();
         String mountPoint = (String) reference.getProperty(Constants.MOUNTPOINT);
@@ -81,8 +85,10 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return tmpDir;
     }
 
-    private PaxWicketApplicationFactory(BundleContext bundleContext, WebApplicationFactory webApplicationFactory,
-                                        String applicationName, String mountPoint, Map<String, String> contextParams, File tmpDir,
+    private PaxWicketApplicationFactory(BundleContext bundleContext,
+            WebApplicationFactory<? extends WebApplication> webApplicationFactory,
+                                        String applicationName, String mountPoint, Map<String, String> contextParams,
+            File tmpDir,
                                         FilterDelegator filterDelegator) {
         this.bundleContext = bundleContext;
         this.webApplicationFactory = webApplicationFactory;
@@ -98,16 +104,18 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     public WebApplication createApplication(WicketFilter filter) {
+        return createFromFactory(webApplicationFactory);
+    }
 
-        Class applicationClass = webApplicationFactory.getWebApplicationClass();
+    private <T extends WebApplication> T createFromFactory(WebApplicationFactory<T> factory) {
+        Class<T> applicationClass = factory.getWebApplicationClass();
         Enhancer e = new Enhancer();
         e.setSuperclass(applicationClass);
         e.setCallback(new WebApplicationWrapper());
-
-        WebApplication application = (WebApplication) e.create();
-        webApplicationFactory.onInstantiation(application);
-
-        return application;
+        @SuppressWarnings("unchecked")
+        T instance = (T) e.create();
+        factory.onInstantiation(instance);
+        return instance;
     }
 
     private class WebApplicationWrapper implements MethodInterceptor {
@@ -134,10 +142,10 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
         /**
          * A helper method to verify method signatures.
-         *
-         * @param method         Method to check.
-         * @param name           Expected name.
-         * @param returnType     Expected return type.
+         * 
+         * @param method Method to check.
+         * @param name Expected name.
+         * @param returnType Expected return type.
          * @param parameterTypes Parameters for method.
          * @return True if all criteria matched.
          */
@@ -150,7 +158,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
         /**
          * Checks if the method is derived from Object.finalize()
-         *
+         * 
          * @param method method being tested
          * @return true if the method is defined from Object.finalize(), false otherwise
          */
@@ -209,7 +217,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return bundleContext;
     }
 
-    public WebApplicationFactory getWebApplicationFactory() {
+    public WebApplicationFactory<? extends WebApplication> getWebApplicationFactory() {
         return webApplicationFactory;
     }
 

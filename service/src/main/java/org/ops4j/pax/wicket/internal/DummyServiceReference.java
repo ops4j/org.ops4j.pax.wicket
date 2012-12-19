@@ -24,7 +24,7 @@ import org.osgi.framework.ServiceReference;
  * service reference not coming from OSGi but still uniquely identifiable. The typical use case for this class is
  * available in the {@link BundleDelegatingClassResolver} or {@link BundleDelegatingComponentInstanciationListener}.
  */
-public class DummyServiceReference implements ServiceReference {
+public class DummyServiceReference<T> implements ServiceReference<T> {
 
     public Object getProperty(String key) {
         return null;
