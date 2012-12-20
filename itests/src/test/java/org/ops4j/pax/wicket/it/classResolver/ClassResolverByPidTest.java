@@ -35,7 +35,7 @@ import org.apache.wicket.application.IClassResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
+import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.tinybundles.core.TinyBundles;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.ops4j.pax.wicket.it.classResolver.simpleLibraries.PublicClass;
@@ -50,13 +50,13 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
 
     @Inject
     private BundleContext bundleContext;
 
-    @org.ops4j.pax.exam.junit.Configuration
+    @org.ops4j.pax.exam.Configuration
     public final Option[] provisionSimpleLibraries() {
         return combine(configureProvisions(), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-util").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-request").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-core").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-auth-roles").versionAsInProject()), provision(mavenBundle().groupId("org.apache.wicket").artifactId("wicket-extensions").versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.base").artifactId("ops4j-base").versionAsInProject()), provision(mavenBundle().groupId("org.ops4j.pax.wicket").artifactId("org.ops4j.pax.wicket.service").versionAsInProject()), provision(TinyBundles.bundle().add(PublicClass.class).add(PublicThatAccessPrivateClass.class).add(PrivateClass.class).add(Activator.class).set(Constants.EXPORT_PACKAGE, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries").set(Constants.BUNDLE_ACTIVATOR, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal.Activator").set(Constants.BUNDLE_SYMBOLICNAME, "org.ops4j.pax.wicket.it.classResolver.simpleLibraries").set(Constants.IMPORT_PACKAGE, " org.ops4j.pax.wicket.*,org.apache.wicket.*,org.osgi.*;").build(TinyBundles.withBnd())));
     }

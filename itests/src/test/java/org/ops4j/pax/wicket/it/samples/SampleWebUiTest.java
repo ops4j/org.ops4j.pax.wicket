@@ -20,8 +20,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 
 import static org.junit.Assert.assertTrue;
@@ -29,7 +29,7 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.OptionUtils.combine;
 
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Configuration

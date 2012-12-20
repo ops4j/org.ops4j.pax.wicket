@@ -19,8 +19,8 @@ import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
@@ -29,7 +29,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Christoph Läubrich
  */
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public class InjectSpecialBeanTest extends PaxWicketIntegrationTest {
 
     @Inject

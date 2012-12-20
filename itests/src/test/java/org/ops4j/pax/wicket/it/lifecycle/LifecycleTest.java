@@ -18,8 +18,8 @@ package org.ops4j.pax.wicket.it.lifecycle;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,7 +41,7 @@ import static org.osgi.framework.Bundle.RESOLVED;
  * @author edward.yakop@gmail.com
  * @since 0.5.4
  */
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public final class LifecycleTest extends PaxWicketIntegrationTest {
     @Inject
     private BundleContext bundleContext;
