@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="example.ds.webapplicationfactory">
+   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.PAXWicketFilterFactory"/>
+   <property name="pax.wicket.applicationname" type="String" value="sample.ds.factory"/>
+   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.WicketWebApplication
+   <service>
+      <provide interface="org.ops4j.pax.wicket.api.WebApplicationFactory"/>
+   </service>Factory"/>
+</scr:component>
