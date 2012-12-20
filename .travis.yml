@@ -1,7 +1,10 @@
 language: java
+
 notifications:
   email:
+    recipients:
       - ops4j-notify@googlegroups.com
+
 env:
   global:
     - SONATYPE_USERNAME=pieber
