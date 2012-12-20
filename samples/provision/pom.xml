@@ -254,10 +254,6 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.servicemix.bundles</groupId>
-        <artifactId>org.apache.servicemix.bundles.cglib</artifactId>
-      </dependency>
-      <dependency>
         <groupId>org.apache.wicket</groupId>
         <artifactId>wicket-devutils</artifactId>
         <exclusions>
