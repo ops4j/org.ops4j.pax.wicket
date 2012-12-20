@@ -57,7 +57,8 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Test
     public final void testAppicationTraker() throws Exception {
-        sleep(5000);
+        // FIXME long timeout for Hudson. Use @Inject and @Filter with timeout instead.
+        sleep(30000);
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
         assertNotNull(simpleAppBundle);

@@ -103,7 +103,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Test
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
-        Thread.sleep(5000);
+        // FIXME long timeout for Hudson. Use @Inject and @Filter with timeout instead.
+        Thread.sleep(120000);
         // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
