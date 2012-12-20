@@ -57,11 +57,11 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Test
     public final void testAppicationTraker() throws Exception {
-        sleep(2000);
+        sleep(5000);
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
         assertNotNull(simpleAppBundle);
-        assertEquals(simpleAppBundle.getState(), Bundle.ACTIVE);
+        assertEquals(Bundle.ACTIVE, simpleAppBundle.getState());
         ServiceReference[] beforeStopServices = paxWicketBundle.getRegisteredServices();
         assertNotNull(beforeStopServices);
         assertEquals(3, beforeStopServices.length);
