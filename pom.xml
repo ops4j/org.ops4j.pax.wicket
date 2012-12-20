@@ -72,6 +72,7 @@
     <jackson.version>1.8.6</jackson.version>
     <aries.blueprint.range>[0.3,2.0)</aries.blueprint.range>
     <ops4j.base.version>1.4.0</ops4j.base.version>
+    <osgi.framework.version>4.3.1</osgi.framework.version>
   </properties>
 
   <build>
@@ -302,13 +303,13 @@
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.compendium</artifactId>
-        <version>4.3.0</version>
+        <version>${osgi.framework.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
-        <version>4.3.0</version>
+        <version>${osgi.framework.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
