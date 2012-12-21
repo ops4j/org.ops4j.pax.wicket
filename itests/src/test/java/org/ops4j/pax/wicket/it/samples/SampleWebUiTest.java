@@ -15,22 +15,36 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.OptionUtils.combine;
 
+import javax.inject.Inject;
+
+import org.apache.wicket.protocol.http.WebApplication;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.util.Filter;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
+import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 @RunWith(PaxExam.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
+
+    /**
+     * WebApplicationFactory of the last application we started. We don't use this member,
+     * except for synchronizing the test. Injecting it guarantees that the service is available 
+     * before our test runs.
+     */
+    @Inject @Filter("(pax.wicket.applicationname=edge.inheritinjection)")
+    private WebApplicationFactory<WebApplication> factory;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
@@ -103,8 +117,6 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Test
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
-        // FIXME long timeout for Hudson. Use @Inject and @Filter with timeout instead.
-        Thread.sleep(120000);
         // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
