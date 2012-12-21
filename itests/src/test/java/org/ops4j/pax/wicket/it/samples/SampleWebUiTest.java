@@ -31,12 +31,17 @@ import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
+import org.osgi.framework.BundleContext;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 @RunWith(PaxExam.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
+    
+    @Inject
+    private BundleContext bundleContext;
 
     /**
      * WebApplicationFactory of the last application we started. We don't use this member,
@@ -119,6 +124,9 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Test
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
+        //Register a service here for later injection
+        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
+
         // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
@@ -197,5 +205,16 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("Back to parent"));
         assertTrue(page.asText().contains("This is a link"));
         webclient.closeAllWindows();
-    }    
+    }
+    
+    /**
+     * Simple Echo Implementation for itest...
+     */
+    private final class EchoServiceImplementation implements EchoService {
+        private static final long serialVersionUID = 6447679249771482700L;
+
+        public String someEchoMethod(String toEcho) {
+            return "Echo: "+toEcho;
+        }
+    }
 }
