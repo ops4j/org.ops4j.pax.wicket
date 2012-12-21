@@ -23,6 +23,7 @@ import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.OptionUtils.combine;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.util.Filter;
+import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
@@ -41,11 +43,18 @@ import org.osgi.framework.ServiceReference;
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     /**
-     * We don't use this member, except for synchronizing the test. 
-     * Injecting it guarantees that the service is available before our test runs.
+     * We don't use these members, except for synchronizing the test. 
+     * Injecting them guarantees that the services are available before our test runs.
+     * The timeouts are rather high for the benefit of our CI server.
      */
-    @Inject @Filter("(pax.wicket.applicationname=navigation)")
+    @Inject @Filter(value = "(pax.wicket.applicationname=navigation)", timeout = 30000)
     private WebApplicationFactory<WebApplication> factory;
+    
+    @Inject @Filter(value = "(pax.wicket.applicationname=navigation)", timeout = 30000)
+    private PaxWicketInjector injector;
+    
+    @Inject @Filter(value = "(osgi.web.symbolicname=org.ops4j.pax.wicket.service)", timeout = 30000)
+    private ServletContext servletContext;
     
     @Inject
     private BundleContext bundleContext;
@@ -65,9 +74,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     }
 
     @Test
-    public final void testAppicationTraker() throws Exception {
-        // FIXME long timeout for Hudson. Use @Inject and @Filter with timeout instead.
-        //sleep(30000);
+    public final void testApplicationTracker() throws Exception {
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
         assertNotNull(simpleAppBundle);
@@ -75,7 +82,6 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
         ServiceReference[] beforeStopServices = paxWicketBundle.getRegisteredServices();
         assertNotNull(beforeStopServices);
         assertEquals(3, beforeStopServices.length);
-
         simpleAppBundle.stop();
 
         ServiceReference[] services = paxWicketBundle.getRegisteredServices();

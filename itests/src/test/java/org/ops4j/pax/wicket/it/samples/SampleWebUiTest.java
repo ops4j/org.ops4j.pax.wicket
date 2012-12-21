@@ -44,12 +44,16 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     private BundleContext bundleContext;
 
     /**
-     * WebApplicationFactory of the last application we started. We don't use this member,
-     * except for synchronizing the test. Injecting it guarantees that the service is available 
+     * WebApplicationFactory of the some of the applications we started. We don't use these members,
+     * except for synchronizing the test. Injecting them guarantees that the services are available 
      * before our test runs.
+     * The timeouts are rather high for the benefit of our CI server.
      */
-    @Inject @Filter("(pax.wicket.applicationname=edge.inheritinjection)")
-    private WebApplicationFactory<WebApplication> factory;
+    @Inject @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = 120000)
+    private WebApplicationFactory<WebApplication> factoryEdgeInheritInjection;
+
+    @Inject @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = 120000)
+    private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
