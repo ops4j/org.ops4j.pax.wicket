@@ -31,6 +31,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
+import org.ops4j.pax.wicket.internal.filter.FilterDelegator;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
 import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
@@ -193,6 +194,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             application.getApplicationSettings().setClassResolver(delegatingClassResolver);
             mounterTracker = new PageMounterTracker(bundleContext, application, getApplicationName());
             mounterTracker.open();
+            filterDelegator.start();
         }
 
         private IPageFactory handleNewPageFactory() {
@@ -204,11 +206,13 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         }
 
         private void handleOnDestroy() {
-            pageFactory.dispose();
+            PaxWicketPageFactory old = pageFactory;
+            pageFactory = null;
+            old.dispose();
             delegatingClassResolver.dispose();
             delegatingComponentInstanciationListener.dispose();
             mounterTracker.close();
-            filterDelegator.dispose();
+            filterDelegator.stop();
         }
 
     }
