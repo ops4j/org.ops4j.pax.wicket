@@ -48,8 +48,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return combine(
-            configureProvisions(),
+        return combine( //
+            configureProvisions(), //
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.aopalliance").versionAsInProject()),
             provision(mavenBundle().groupId("org.springframework").artifactId("spring-aop").versionAsInProject()),
@@ -85,6 +85,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
                 .artifactId("org.ops4j.pax.wicket.samples.plain.pagefactory").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
+                .artifactId("org.ops4j.pax.wicket.samples.plain.inject").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
@@ -131,6 +133,11 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        webclient.closeAllWindows();
+        //Check injected page
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/inject/");
+        assertTrue("/plain/inject/ failed to start properly", page.asText().contains("Echo: Welcome to the most simple pax-wicket application"));
         webclient.closeAllWindows();
         // testSampleBlueprintSimpleDefault_shouldRenderPage
         webclient = new WebClient();
@@ -190,5 +197,5 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("Back to parent"));
         assertTrue(page.asText().contains("This is a link"));
         webclient.closeAllWindows();
-    }
+    }    
 }
