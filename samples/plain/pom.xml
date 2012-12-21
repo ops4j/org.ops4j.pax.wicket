@@ -17,6 +17,7 @@
   <modules>
     <module>simple</module>
     <module>pageFactory</module>
+    <module>inject</module>
   </modules>
 </project>
 

@@ -15,27 +15,35 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
-
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.OptionUtils.combine;
 
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
+import org.osgi.framework.BundleContext;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 @RunWith(PaxExam.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
+    
+    @Inject
+    private BundleContext bundleContext;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
-        return combine(
-            configureProvisions(),
+        return combine( //
+            configureProvisions(), //
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.aopalliance").versionAsInProject()),
             provision(mavenBundle().groupId("org.springframework").artifactId("spring-aop").versionAsInProject()),
@@ -71,6 +79,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.plain.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
                 .artifactId("org.ops4j.pax.wicket.samples.plain.pagefactory").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.plain")
+                .artifactId("org.ops4j.pax.wicket.samples.plain.inject").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
                 .artifactId("org.ops4j.pax.wicket.samples.blueprint.simple").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.blueprint")
@@ -105,6 +115,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
         // FIXME long timeout for Hudson. Use @Inject and @Filter with timeout instead.
         Thread.sleep(120000);
+        //Register a service here for later injection
+        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         // testNavigationApplication_shouldRender
         WebClient webclient = new WebClient();
         HtmlPage page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/navigation/");
@@ -119,6 +131,11 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
+        webclient.closeAllWindows();
+        //Check injected page
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/inject/");
+        assertTrue("/plain/inject/ failed to start properly", page.asText().contains("Echo: Welcome to the most simple pax-wicket application"));
         webclient.closeAllWindows();
         // testSampleBlueprintSimpleDefault_shouldRenderPage
         webclient = new WebClient();
@@ -178,5 +195,16 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("Back to parent"));
         assertTrue(page.asText().contains("This is a link"));
         webclient.closeAllWindows();
+    }
+    
+    /**
+     * Simple Echo Implementation for itest...
+     */
+    private final class EchoServiceImplementation implements EchoService {
+        private static final long serialVersionUID = 6447679249771482700L;
+
+        public String someEchoMethod(String toEcho) {
+            return "Echo: "+toEcho;
+        }
     }
 }
