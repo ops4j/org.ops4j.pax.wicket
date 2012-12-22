@@ -38,11 +38,6 @@ import org.slf4j.LoggerFactory;
  */
 public class BundleDelegatingPageMounter implements InternalBundleDelegationProvider {
 
-    /**
-     * 
-     */
-    private static final String APACHE_WICKET_NAMESPACE = "org.apache.wicket.";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingPageMounter.class);
 
     private final String applicationName;
@@ -79,44 +74,39 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
 
     public void addBundle(ExtendedBundle bundle) {
         String symbolicName = bundle.getBundle().getSymbolicName();
-        if (symbolicName.equals(Activator.SYMBOLIC_NAME)
-                || symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
-            LOGGER.debug("Ignore the pax-wicket service package for PageMounting.");
-            return;
-        }
-        if (symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
-            LOGGER.debug("Ignore apache-wicket bundle " + symbolicName + " for PageMounting.");
-            return;
-        }
-        LOGGER.trace("Scanning bundle {} for PaxWicketMountPoint annotations", symbolicName);
-        ArrayList<DefaultPageMounter> pageMounter = new ArrayList<DefaultPageMounter>();
-        Collection<Class<?>> allClasses = bundle.getAllClasses();
-        for (Class<?> clazz : allClasses) {
-            PaxWicketMountPoint mountPoint = clazz.getAnnotation(PaxWicketMountPoint.class);
-            if (mountPoint != null) {
-                if (!Page.class.isAssignableFrom(clazz)) {
-                    LOGGER
-                        .warn(
-                            "ignore PaxWicketMountPoint annotated class {} since it is no page class or has unresolved optional dependencies...",
-                            clazz.getName());
-                    continue;
+        if (bundle.isRelevantForMountPointAnnotations()) {
+            LOGGER.trace("Scanning bundle {} for PaxWicketMountPoint annotations", symbolicName);
+            ArrayList<DefaultPageMounter> pageMounter = new ArrayList<DefaultPageMounter>();
+            Collection<Class<?>> allClasses = bundle.getAllClasses();
+            for (Class<?> clazz : allClasses) {
+                PaxWicketMountPoint mountPoint = clazz.getAnnotation(PaxWicketMountPoint.class);
+                if (mountPoint != null) {
+                    if (!Page.class.isAssignableFrom(clazz)) {
+                        LOGGER
+                            .warn(
+                                "ignore PaxWicketMountPoint annotated class {} since it is no page class or has unresolved optional dependencies...",
+                                clazz.getName());
+                        continue;
+                    }
+                    DefaultPageMounter mountPointRegistration =
+                        new DefaultPageMounter(applicationName, paxWicketContext);
+                    // We have checked this before...
+                    @SuppressWarnings("unchecked")
+                    Class<? extends Page> pageClass = (Class<? extends Page>) clazz;
+                    mountPointRegistration.addMountPoint(mountPoint.mountPoint(), pageClass);
+                    mountPointRegistration.register();
+                    pageMounter.add(mountPointRegistration);
+                    LOGGER.info("Mounting page {} at {}", clazz.getName(), mountPoint.mountPoint());
                 }
-                DefaultPageMounter mountPointRegistration =
-                    new DefaultPageMounter(applicationName, paxWicketContext);
-                // We have checked this before...
-                @SuppressWarnings("unchecked")
-                Class<? extends Page> pageClass = (Class<? extends Page>) clazz;
-                mountPointRegistration.addMountPoint(mountPoint.mountPoint(), pageClass);
-                mountPointRegistration.register();
-                pageMounter.add(mountPointRegistration);
-                LOGGER.info("Mounting page {} at {}", clazz.getName(), mountPoint.mountPoint());
             }
-        }
-        synchronized (mountPointRegistrations) {
-            if (mountPointRegistrations.containsKey(symbolicName)) {
-                removeBundle(bundle);
+            synchronized (mountPointRegistrations) {
+                if (mountPointRegistrations.containsKey(symbolicName)) {
+                    removeBundle(bundle);
+                }
+                mountPointRegistrations.put(bundle.getID(), pageMounter);
             }
-            mountPointRegistrations.put(bundle.getID(), pageMounter);
+        } else {
+            LOGGER.debug("Ignore bundle " + symbolicName + " for PageMounting.");
         }
 
     }

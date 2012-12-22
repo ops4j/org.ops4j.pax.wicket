@@ -17,12 +17,15 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
+import org.ops4j.pax.wicket.internal.extender.BundleImportExtender;
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.util.tracker.BundleTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,18 +47,18 @@ public final class Activator implements BundleActivator {
 
     private BundleTracker<ExtendedBundle> bundleExtensionTracker;
 
+    private BundleImportExtender bundleImportExtender;
+
+    private ServiceRegistration<WeavingHook> weavingHockRegistration;
+
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            Bundle bundle = context.getBundle();
-            String bundleSymbolicName = bundle.getSymbolicName();
-
-            LOGGER.debug("Initializing [" + bundleSymbolicName + "] bundle.");
-        }
-
+        LOGGER.debug("Initializing [{}] bundle.", context.getBundle().getSymbolicName());
         bundleContext = context;
 
-        LOGGER.debug("Set object stream factory");
+        bundleImportExtender = new BundleImportExtender(context);
+        context.addBundleListener(bundleImportExtender);
+        weavingHockRegistration = context.registerService(WeavingHook.class, bundleImportExtender, null);
 
         httpTracker = new HttpTracker(context);
         httpTracker.open();
@@ -89,22 +92,13 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
+        weavingHockRegistration.unregister();
+        context.removeBundleListener(bundleImportExtender);
         bundleExtensionTracker.close();
         bundleTrackerAggregator.close();
         httpTracker.close();
-
-        httpTracker = null;
-        applicationFactoryTracker = null;
-        bundleDelegatingExtensionTracker = null;
-        bundleTrackerAggregator = null;
         bundleContext = null;
-
-        if (LOGGER.isDebugEnabled()) {
-            Bundle bundle = context.getBundle();
-            String bundleSymbolicName = bundle.getSymbolicName();
-
-            LOGGER.debug("Bundle [" + bundleSymbolicName + "] stopped.");
-        }
+        LOGGER.debug("Stopped [{}] bundle.", context.getBundle().getSymbolicName());
     }
 
 }

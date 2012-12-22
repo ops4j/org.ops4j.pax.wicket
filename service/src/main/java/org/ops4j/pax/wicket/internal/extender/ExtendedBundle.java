@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
+import org.ops4j.pax.wicket.internal.Activator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -88,12 +89,43 @@ public class ExtendedBundle {
     }
 
     /**
-     * 
      * @return <code>true</code> if this bundle is relevant for {@link PaxWicketMountPoint} annotations
      *         <code>false</code> otherwhise
      */
     public boolean isRelevantForMountPointAnnotations() {
+        if (isWicket() || isPAXWicket()) {
+            return false;
+        }
         return isImportingPAXWicketAPI();
+    }
+
+    public boolean isRelevantForImportEnhancements() {
+        if (isWicket() || isPAXWicket()) {
+            return false;
+        }
+        return isImportingPAXWicketAPI() || isImportingWicket();
+    }
+
+    /**
+     * @return <code>true</code> if the underlying bundle is one of the wicket bundles <code>false</code> otherwhise
+     */
+    public boolean isWicket() {
+        String symbolicName = getBundle().getSymbolicName();
+        if (symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return <code>true</code> if the underlying bundle is the PAXWicket bundle
+     */
+    public boolean isPAXWicket() {
+        String symbolicName = getBundle().getSymbolicName();
+        if (symbolicName.equals(Activator.getBundleContext().getBundle().getSymbolicName())) {
+            return true;
+        }
+        return false;
     }
 
     /**

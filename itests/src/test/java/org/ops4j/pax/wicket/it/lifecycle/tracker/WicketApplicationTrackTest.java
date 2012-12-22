@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.OptionUtils.combine;
@@ -37,7 +37,9 @@ import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.hooks.weaving.WeavingHook;
 
 @RunWith(PaxExam.class)
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
@@ -56,6 +58,9 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     @Inject @Filter(value = "(osgi.web.symbolicname=org.ops4j.pax.wicket.service)", timeout = 30000)
     private ServletContext servletContext;
     
+    private static final int EXPECTED_SERVICE_COUNT_WITH_APPLICATION = 4;
+    private static final int EXPECTED_SERVICE_COUNT_WITHOUT_APPLICATION = 1;
+
     @Inject
     private BundleContext bundleContext;
 
@@ -74,17 +79,22 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     }
 
     @Test
-    public final void testApplicationTracker() throws Exception {
+    public final void testAppicationTracker() throws InterruptedException, BundleException {
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
-        assertNotNull(simpleAppBundle);
-        //assertEquals(Bundle.ACTIVE, simpleAppBundle.getState());
+        assertNotNull("Simple Bundle was null",simpleAppBundle);
+        assertEquals("Simple Bundle is not active", Bundle.ACTIVE, simpleAppBundle.getState());
         ServiceReference[] beforeStopServices = paxWicketBundle.getRegisteredServices();
-        assertNotNull(beforeStopServices);
-        assertEquals(3, beforeStopServices.length);
+        assertNotNull("No services at all", beforeStopServices);
+        String failMessage = "Not enought services, the following are registered " + buildServiceGraph(beforeStopServices) + ", expected count is " + EXPECTED_SERVICE_COUNT_WITH_APPLICATION;
+        assertEquals(failMessage, EXPECTED_SERVICE_COUNT_WITH_APPLICATION, beforeStopServices.length);
         simpleAppBundle.stop();
-
-        ServiceReference[] services = paxWicketBundle.getRegisteredServices();
-        assertNull(services);
+        ServiceReference[] afterStopServices = paxWicketBundle.getRegisteredServices();
+        assertNotNull("No services at all anymore", afterStopServices);
+        assertEquals("Not all services are unregistered, registered ones are: "+buildServiceGraph(afterStopServices), EXPECTED_SERVICE_COUNT_WITHOUT_APPLICATION, afterStopServices.length);
+        //Check if the remaining service is the WeavingHook
+        assertTrue("remaining service does not contain the WeavingHook", containsService(afterStopServices, WeavingHook.class));
     }
+
+
 }

@@ -26,6 +26,8 @@ import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.Option;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 
 public abstract class PaxWicketIntegrationTest {
 
@@ -108,5 +110,55 @@ public abstract class PaxWicketIntegrationTest {
         Bundle paxWicketBundle = getBundleBySymbolicName(bundleContext, SYMBOLIC_NAME_PAX_WICKET_SERVICE);
         assertNotNull(paxWicketBundle);
         return paxWicketBundle;
+    }
+    
+    /**
+     * @param services
+     * @return returns a String representation of the given service references printing there {@link Constants#OBJECTCLASS} property
+     */
+    protected String buildServiceGraph(ServiceReference[] services) {
+        if (services == null) {
+            return "(no services)";
+        }
+        StringBuilder sb = new StringBuilder("PAX Wicket Bundle services: ");
+        for (ServiceReference serviceReference : services) {
+            sb.append(" ");
+            Object property = serviceReference.getProperty(Constants.OBJECTCLASS);
+            if (property instanceof String[]) {
+                String[] strings = (String[]) property;
+                sb.append("[");
+                for (int i = 0; i < strings.length; i++) {
+                    if (i > 0) {
+                        sb.append(", ");
+                    }
+                    sb.append(strings[i]);    
+                }
+                sb.append("]");
+            }
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * @param services
+     * @param serviceClass
+     * @return <code>true</code> if the {@link ServiceReference}s contain a
+     *         service with the given Objectclass
+     */
+    protected boolean containsService(ServiceReference[] services, Class<?> serviceClass) {
+        if (services != null) {
+            for (ServiceReference serviceReference : services) {
+                Object property = serviceReference.getProperty(Constants.OBJECTCLASS);
+                if (property instanceof String[]) {
+                    String[] strings = (String[]) property;
+                    for (String string : strings) {
+                        if (string.equals(serviceClass.getName())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
