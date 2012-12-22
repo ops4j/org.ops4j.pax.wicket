@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import org.osgi.framework.Bundle;
+import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 
 /**
  * This is quite a simple interface marking all BundleDelegating loaders used by the BundleDelegatingExtensionTracker
@@ -34,15 +34,16 @@ public interface InternalBundleDelegationProvider {
 
     /**
      * In this method the component has to start itself. It can either register a service or do any other operations.
-     * Please keep in mind that {@link #addBundle(Bundle)} and {@link #removeBundle(Bundle)} couldn't be called before
-     * this method is called and are likely to throw an {@link IllegalStateException} otherwise.
+     * Please keep in mind that {@link #addBundle(ExtendedBundle)} and {@link #removeBundle(ExtendedBundle)} couldn't be
+     * called before this method is called and are likely to throw an {@link IllegalStateException} otherwise.
      */
     void start();
 
     /**
      * In this method the component has to stop itself. It can unregister services or do any other operations for tear
-     * down. Please keep in mind that neither the {@link #addBundle(Bundle)} nor the {@link #removeBundle(Bundle)} are
-     * likely to work after this method is called and will throw an {@link IllegalStateException}.
+     * down. Please keep in mind that neither the {@link #addBundle(ExtendedBundle)} nor the
+     * {@link #removeBundle(ExtendedBundle)} are likely to work after this method is called and will throw an
+     * {@link IllegalStateException}.
      */
     void stop();
 
@@ -50,13 +51,13 @@ public interface InternalBundleDelegationProvider {
      * Adds a bundle which should be used for delegation. This will thrown an {@link IllegalStateException} in case the
      * {@link #start()} method had not been called.
      */
-    void addBundle(Bundle bundle);
+    void addBundle(ExtendedBundle bundle);
 
     /**
      * Removes a bundle which shouldn't be used any longer for delegation. This will throw an
      * {@link IllegalStateException} in case the {@link #start()} method had not been called already. If you try to
      * remove a bundle not added by now nothing happens.
      */
-    void removeBundle(Bundle bundle);
+    void removeBundle(ExtendedBundle bundle);
 
 }

@@ -26,7 +26,7 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.InternalBundleDelegationProvider;
-import org.osgi.framework.Bundle;
+import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
@@ -68,19 +68,19 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         serviceRegistration.unregister();
     }
 
-    public void addBundle(Bundle bundle) {
+    public void addBundle(ExtendedBundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.put(bundle.getSymbolicName(),
-            new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), injectionSource));
+        listeners.put(bundle.getBundle().getSymbolicName(),
+            new BundleAnalysingComponentInstantiationListener(bundle.getBundle().getBundleContext(), injectionSource));
     }
 
-    public void removeBundle(Bundle bundle) {
+    public void removeBundle(ExtendedBundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.remove(bundle.getSymbolicName());
+        listeners.remove(bundle.getBundle().getSymbolicName());
     }
 
     public void inject(Object toInject, Class<?> toHandle) {

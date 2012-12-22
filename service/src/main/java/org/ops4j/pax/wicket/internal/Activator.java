@@ -17,6 +17,7 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
+import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
 import org.osgi.framework.Bundle;
@@ -41,7 +42,7 @@ public final class Activator implements BundleActivator {
 
     private BundleTrackerAggregator<WebApplicationFactory<?>> bundleTrackerAggregator;
 
-    private BundleTracker<Bundle> bundleTracker;
+    private BundleTracker<ExtendedBundle> bundleExtensionTracker;
 
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
@@ -62,10 +63,11 @@ public final class Activator implements BundleActivator {
         bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context);
         applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
 
-        PaxWicketBundleListener paxWicketBundleListener = new PaxWicketBundleListener(bundleDelegatingExtensionTracker);
+        PaxWicketBundleListener paxWicketBundleListener =
+            new PaxWicketBundleListener(context, bundleDelegatingExtensionTracker);
 
-        bundleTracker = new BundleTracker<Bundle>(context, Bundle.ACTIVE, paxWicketBundleListener);
-        bundleTracker.open();
+        bundleExtensionTracker = new BundleTracker<ExtendedBundle>(context, Bundle.ACTIVE, paxWicketBundleListener);
+        bundleExtensionTracker.open();
 
         bundleTrackerAggregator =
             new BundleTrackerAggregator<WebApplicationFactory<?>>(context, WebApplicationFactory.class.getName(), null,
@@ -87,7 +89,7 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
-        bundleTracker.close();
+        bundleExtensionTracker.close();
         bundleTrackerAggregator.close();
         httpTracker.close();
 

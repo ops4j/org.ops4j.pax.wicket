@@ -15,21 +15,17 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
+import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.util.DefaultPageMounter;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +48,7 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
     private final String applicationName;
     private final BundleContext paxWicketContext;
 
-    private Map<String, List<DefaultPageMounter>> mountPointRegistrations =
+    private final Map<String, List<DefaultPageMounter>> mountPointRegistrations =
         new HashMap<String, List<DefaultPageMounter>>();
 
     public BundleDelegatingPageMounter(String applicationName, BundleContext paxWicketContext) {
@@ -69,17 +65,20 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
     }
 
     public void stop() {
-        Collection<List<DefaultPageMounter>> values = mountPointRegistrations.values();
+        Collection<List<DefaultPageMounter>> values;
+        synchronized (mountPointRegistrations) {
+            values = new ArrayList<List<DefaultPageMounter>>(mountPointRegistrations.values());
+            mountPointRegistrations.clear();
+        }
         for (List<DefaultPageMounter> bundleMounters : values) {
             for (DefaultPageMounter pageMounter : bundleMounters) {
                 pageMounter.dispose();
             }
         }
-        mountPointRegistrations = new HashMap<String, List<DefaultPageMounter>>();
     }
 
-    public void addBundle(Bundle bundleToScan) {
-        String symbolicName = bundleToScan.getSymbolicName();
+    public void addBundle(ExtendedBundle bundle) {
+        String symbolicName = bundle.getBundle().getSymbolicName();
         if (symbolicName.equals(Activator.SYMBOLIC_NAME)
                 || symbolicName.startsWith(APACHE_WICKET_NAMESPACE)) {
             LOGGER.debug("Ignore the pax-wicket service package for PageMounting.");
@@ -90,85 +89,50 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
             return;
         }
         LOGGER.trace("Scanning bundle {} for PaxWicketMountPoint annotations", symbolicName);
-        if (mountPointRegistrations.containsKey(symbolicName)) {
-            removeBundle(bundleToScan);
-        }
-        mountPointRegistrations.put(symbolicName, new ArrayList<DefaultPageMounter>());
-        Enumeration<?> findEntries = bundleToScan.findEntries("", "*.class", true);
-        while (findEntries.hasMoreElements()) {
-            URL object = (URL) findEntries.nextElement();
-            String className = object.getFile().substring(1, object.getFile().length() - 6).replaceAll("/", ".");
-            Class<?> candidateClass = null;
-            try {
-                candidateClass = loadCandidate(className, bundleToScan);
-            } catch (NoClassDefFoundError e) {
-                // Its not nice to catch errors, but otherwhise we can't give a nice feedback!
-                String message = e.getMessage();
-                if (message != null) {
-                    // In eclipse, the entry for a class is prepend by the "bin-output-folder" (e.g.
-                    // bin/my/package/MyClass.class
-                    // If we detect this, try to load the real classname that is mentiened in the message
-                    Pattern pattern = Pattern.compile("\\(wrong name: (.+)\\)");
-                    Matcher matcher = pattern.matcher(message);
-                    if (matcher.find()) {
-                        String realname = matcher.group(1);
-                        LOGGER.debug("It seems the entry has a misleading name for class {}, retry with name {}",
-                            className, realname);
-                        candidateClass = loadCandidate(realname.replace('/', '.'), bundleToScan);
-                    }
-                }
-                if (candidateClass == null) {
-                    // If still null our fallback does not work...
-                    throw new IllegalStateException(
-                        "Class '"
-                                + className
-                                + "' found via bundle but classloader complains about NoClassDefFoundError although existing in bundle "
-                                + symbolicName
-                                + " (is the jar file corrupted or a dependant optional dependencies not resolved?)",
-                        e);
-                }
-            }
-            if (!Page.class.isAssignableFrom(candidateClass)) {
-                LOGGER.debug("Candidate {} not found, this can happen if the class has optional dependencies...");
-                continue;
-            }
-            @SuppressWarnings("unchecked")
-            Class<? extends Page> pageClass = (Class<? extends Page>) candidateClass;
-            PaxWicketMountPoint mountPoint = pageClass.getAnnotation(PaxWicketMountPoint.class);
+        ArrayList<DefaultPageMounter> pageMounter = new ArrayList<DefaultPageMounter>();
+        Collection<Class<?>> allClasses = bundle.getAllClasses();
+        for (Class<?> clazz : allClasses) {
+            PaxWicketMountPoint mountPoint = clazz.getAnnotation(PaxWicketMountPoint.class);
             if (mountPoint != null) {
-                DefaultPageMounter mountPointRegistration = new DefaultPageMounter(applicationName, paxWicketContext);
+                if (!Page.class.isAssignableFrom(clazz)) {
+                    LOGGER
+                        .warn(
+                            "ignore PaxWicketMountPoint annotated class {} since it is no page class or has unresolved optional dependencies...",
+                            clazz.getName());
+                    continue;
+                }
+                DefaultPageMounter mountPointRegistration =
+                    new DefaultPageMounter(applicationName, paxWicketContext);
+                // We have checked this before...
+                @SuppressWarnings("unchecked")
+                Class<? extends Page> pageClass = (Class<? extends Page>) clazz;
                 mountPointRegistration.addMountPoint(mountPoint.mountPoint(), pageClass);
                 mountPointRegistration.register();
-                mountPointRegistrations.get(symbolicName).add(mountPointRegistration);
-                LOGGER.debug("Mounting page {} at {}", pageClass.getName(), mountPoint.mountPoint());
+                pageMounter.add(mountPointRegistration);
+                LOGGER.info("Mounting page {} at {}", clazz.getName(), mountPoint.mountPoint());
             }
         }
-    }
-
-    /**
-     * @param className
-     * @param bundleToScan
-     * @return
-     */
-    private Class<?> loadCandidate(String className, Bundle bundleToScan) {
-        try {
-            return bundleToScan.loadClass(className);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Class '" + className
-                    + "' not found via bundle " + bundleToScan.getSymbolicName() + "although existing in bundle",
-                e);
+        synchronized (mountPointRegistrations) {
+            if (mountPointRegistrations.containsKey(symbolicName)) {
+                removeBundle(bundle);
+            }
+            mountPointRegistrations.put(bundle.getID(), pageMounter);
         }
+
     }
 
-    public void removeBundle(Bundle bundle) {
-        List<DefaultPageMounter> registrations = mountPointRegistrations.get(bundle.getSymbolicName());
+    public void removeBundle(ExtendedBundle bundle) {
+        List<DefaultPageMounter> registrations;
+        synchronized (mountPointRegistrations) {
+            registrations = mountPointRegistrations.remove(bundle.getID());
+        }
         if (registrations == null) {
             return;
         }
         for (DefaultPageMounter pageMounter : registrations) {
             pageMounter.dispose();
         }
-        mountPointRegistrations.remove(bundle.getSymbolicName());
+
     }
 
 }

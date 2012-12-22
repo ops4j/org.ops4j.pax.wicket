@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.api.Constants;
+import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -73,21 +74,21 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         classResolverRegistration.unregister();
     }
 
-    public void addBundle(Bundle bundle) {
+    public void addBundle(ExtendedBundle bundle) {
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be added");
         }
         synchronized (bundles) {
-            bundles.put(bundle.getSymbolicName(), bundle);
+            bundles.put(bundle.getBundle().getSymbolicName(), bundle.getBundle());
         }
     }
 
-    public void removeBundle(Bundle bundle) {
+    public void removeBundle(ExtendedBundle bundle) {
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be removed");
         }
         synchronized (bundles) {
-            bundles.remove(bundle.getSymbolicName());
+            bundles.remove(bundle.getBundle().getSymbolicName());
         }
     }
 

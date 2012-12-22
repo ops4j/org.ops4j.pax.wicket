@@ -26,7 +26,6 @@ import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.BundleDelegatingPageMounter;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
@@ -53,7 +52,7 @@ public class BundleDelegatingExtensionTracker implements
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingExtensionTracker.class);
 
     private final BundleContext paxWicketBundleContext;
-    private final Map<String, Bundle> relvantBundles = new HashMap<String, Bundle>();
+    private final Map<String, ExtendedBundle> relvantBundles = new HashMap<String, ExtendedBundle>();
     private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver> classResolvers =
         new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver>();
     private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener> componentInstanciationListener =
@@ -107,15 +106,15 @@ public class BundleDelegatingExtensionTracker implements
     }
 
     private void reevaluateAllBundles(ServiceReference<WebApplicationFactory<?>> reference) {
-        Collection<Bundle> bundles = relvantBundles.values();
-        for (Bundle bundle : bundles) {
+        Collection<ExtendedBundle> bundles = relvantBundles.values();
+        for (ExtendedBundle bundle : bundles) {
             addBundleToServicesReference(bundle, reference);
         }
     }
 
-    public void addRelevantBundle(Bundle bundle) {
+    public void addRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
-            relvantBundles.put(bundle.getSymbolicName(), bundle);
+            relvantBundles.put(bundle.getID(), bundle);
             Set<ServiceReference<WebApplicationFactory<?>>> services = classResolvers.keySet();
             for (ServiceReference<WebApplicationFactory<?>> serviceReference : services) {
                 addBundleToServicesReference(bundle, serviceReference);
@@ -123,24 +122,35 @@ public class BundleDelegatingExtensionTracker implements
         }
     }
 
-    private void addBundleToServicesReference(Bundle bundle, ServiceReference<WebApplicationFactory<?>> reference) {
+    private void addBundleToServicesReference(ExtendedBundle bundle,
+            ServiceReference<WebApplicationFactory<?>> reference) {
         try {
             classResolvers.get(reference).addBundle(bundle);
+        } catch (Throwable e) {
+            LOGGER.warn("A specific reference could not be added to the classResolvers; might not be too bad", e);
+        }
+        try {
             componentInstanciationListener.get(reference).addBundle(bundle);
+        } catch (Throwable e) {
+            LOGGER.warn(
+                "A specific reference could not be added to the componentInstanciationListener; might not be too bad",
+                e);
+        }
+        try {
             pageMounter.get(reference).addBundle(bundle);
         } catch (Throwable e) {
-            LOGGER.warn("A specific reference could not be added; might not be too bad", e);
+            LOGGER.warn("A specific reference could not be added to pageMounter; might not be too bad", e);
         }
     }
 
-    public void removeRelevantBundle(Bundle bundle) {
+    public void removeRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
-            relvantBundles.remove(bundle.getSymbolicName());
+            relvantBundles.remove(bundle.getID());
             removeBundleFromAllServices(bundle);
         }
     }
 
-    private void removeBundleFromAllServices(Bundle bundle) {
+    private void removeBundleFromAllServices(ExtendedBundle bundle) {
         Set<ServiceReference<WebApplicationFactory<?>>> services = classResolvers.keySet();
         for (ServiceReference<WebApplicationFactory<?>> reference : services) {
             classResolvers.get(reference).removeBundle(bundle);
