@@ -21,7 +21,9 @@ import java.util.Arrays;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ProxyTarget;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
@@ -37,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author Christoph Läubrich
  * 
  */
-public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocator {
+public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OSGiServiceRegistryProxyTargetLocator.class);
 
@@ -156,7 +158,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
             return service;
         }
 
-        public synchronized Object releaseTarget() {
+        public synchronized ProxyTarget releaseTarget() {
             // When releasing, we unget the service so we don't keep stale references...
             service = null;
             if (delegatingProxy != null) {

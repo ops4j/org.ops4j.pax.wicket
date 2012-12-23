@@ -18,12 +18,13 @@ package org.ops4j.pax.wicket.internal.injection;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ProxyTarget;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-public abstract class AbstractProxyTargetLocator<Container> implements IProxyTargetLocator {
+public abstract class AbstractProxyTargetLocator<Container> implements ProxyTargetLocator {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +55,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         return references != null && references.length != 0;
     }
 
-    public Object locateProxyTarget() {
+    public ProxyTarget locateProxyTarget() {
         if (bundleContext == null) {
             throw new IllegalStateException("Bundle context is not allowed to be null");
         }
@@ -72,15 +73,20 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         }
         try {
             Thread.currentThread().setContextClassLoader(parent.getClassLoader());
-            BeanReactor<Container> strategy = createStrategy();
+            final BeanReactor<Container> strategy = createStrategy();
             for (ServiceReference<?> serviceReference : references) {
                 @SuppressWarnings("unchecked")
-                Container service = (Container) bundleContext.getService(serviceReference);
+                final Container service = (Container) bundleContext.getService(serviceReference);
                 try {
                     if (!strategy.containsBean(service)) {
                         continue;
                     }
-                    return strategy.createBean(service);
+                    return new ProxyTarget() {
+
+                        public Object getTarget() {
+                            return strategy.createBean(service);
+                        }
+                    };
                 } finally {
                     bundleContext.ungetService(serviceReference);
                 }

@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util.proxy;
-
-import org.apache.wicket.util.io.IClusterable;
-import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
+package org.ops4j.pax.wicket.spi;
 
 /**
- * Interface the lazy init proxies implement to make identification of the proxy and retrival of
- * {@link ProxyTargetLocator} possible.
- * 
- * @author Igor Vaynberg (ivaynberg)
+ * Interface for return values of {@link ProxyTargetLocator#locateProxyTarget()}.
  * 
  */
-public interface ILazyInitProxy extends IClusterable {
+public interface ReleasableProxyTarget extends ProxyTarget {
+
     /**
-     * @return object locator the proxy carries
+     * invoked when the target is released. <b>Implementation note:</b> This Method should never throw an
+     * RuntimeException!
+     * 
+     * @return the new target (might be a this pointer) or null if the target is no longer usable
      */
-    ProxyTargetLocator getObjectLocator();
+    public ProxyTarget releaseTarget();
 }

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util.proxy;
+package org.ops4j.pax.wicket.spi;
 
 import org.apache.wicket.util.io.IClusterable;
-import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
+import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 
 /**
  * Represents a service locator for lazy init proxies. When the first method invocation occurs on the lazy init proxy
@@ -40,41 +40,18 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
  * }
  * </pre>
  * 
- * @author Igor Vaynberg (ivaynberg)
- * @see LazyInitProxyFactory#createProxy(Class, IProxyTargetLocator)
+ * @see LazyInitProxyFactory#createProxy(Class, ProxyTargetLocator)
  */
-public interface IProxyTargetLocator extends IClusterable {
+public interface ProxyTargetLocator extends IClusterable {
     /**
      * Returns the object that will be used as target object for a lazy init proxy.
      * 
-     * @return retrieved object, or instance of {@link ReleasableProxyTarget}
+     * @return the {@link ProxyTarget} located or <code>null</code> if no proxy could be found
      */
-    Object locateProxyTarget();
+    ProxyTarget locateProxyTarget();
 
     /**
-     * Interface for return values of {@link IProxyTargetLocator#locateProxyTarget()}.
-     * 
-     * @author Christoph Läubrich
-     * 
-     */
-    public interface ReleasableProxyTarget {
-
-        /**
-         * @return the final target
-         */
-        public Object getTarget() throws NoBeanAvailableForInjectionException;
-
-        /**
-         * invoked when the target is released. <b>Implementation note:</b> This Method should never throw an
-         * RuntimeException!
-         * 
-         * @return the new target (might be a this pointer) or null if the target is no longer usable
-         */
-        public Object releaseTarget();
-    }
-
-    /*
-     * Returns the parent holding the responsibility for the serialisation.
+     * @return the parent holding the responsibility for the serialisation.
      */
     Class<?> getParent();
 }

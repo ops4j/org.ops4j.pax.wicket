@@ -15,18 +15,6 @@
  */
 package org.ops4j.pax.wicket.util.proxy;
 
-import net.sf.cglib.core.DefaultNamingPolicy;
-import net.sf.cglib.core.Predicate;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-import org.apache.wicket.Application;
-import org.apache.wicket.application.IClassResolver;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.settings.IApplicationSettings;
-import org.apache.wicket.util.io.IClusterable;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator.ReleasableProxyTarget;
-
 import java.io.InvalidClassException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -37,22 +25,37 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sf.cglib.core.DefaultNamingPolicy;
+import net.sf.cglib.core.Predicate;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.application.IClassResolver;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.util.io.IClusterable;
+import org.ops4j.pax.wicket.spi.ProxyTarget;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
+
 public class LazyInitProxyFactory {
 
-    private static final List<?> PRIMITIVES = Arrays.asList(new Class[]{String.class, byte.class,
-            Byte.class, short.class, Short.class, int.class, Integer.class, long.class, Long.class,
-            float.class, Float.class, double.class, Double.class, char.class, Character.class,
-            boolean.class, Boolean.class});
+    private static final List<?> BUILTINS = Arrays.asList(new Class[]{ String.class,
+            Byte.class, Short.class, Integer.class, Long.class,
+             Float.class, Double.class, Character.class,
+             Boolean.class });
 
-    public static Object createProxy(final Class<?> type, final IProxyTargetLocator locator) {
-        if (PRIMITIVES.contains(type) || Enum.class.isAssignableFrom(type)) {
+    public static Object createProxy(final Class<?> type, final ProxyTargetLocator locator) {
+        if (type.isPrimitive() || BUILTINS.contains(type) || Enum.class.isAssignableFrom(type)) {
             // We special-case primitives as sometimes people use these as
             // SpringBeans (WICKET-603, WICKET-906). Go figure.
             Object proxy = locator.locateProxyTarget();
             Object realTarget = getRealTarget(proxy);
-            if (proxy instanceof IProxyTargetLocator.ReleasableProxyTarget) {
+            if (proxy instanceof ReleasableProxyTarget) {
                 // This is not so nice... but with a primitive this should'nt matter at all...
-                ((IProxyTargetLocator.ReleasableProxyTarget) proxy).releaseTarget();
+                ((ReleasableProxyTarget) proxy).releaseTarget();
             }
             return realTarget;
         } else if (type.isInterface()) {
@@ -60,14 +63,13 @@ public class LazyInitProxyFactory {
 
             try {
                 return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                        new Class[]{type, Serializable.class, ILazyInitProxy.class,
-                                IWriteReplace.class}, handler);
+                        new Class[]{ type, Serializable.class, ILazyInitProxy.class,
+                                IWriteReplace.class }, handler);
             } catch (IllegalArgumentException e) {
                 // While in the original Wicket Environment this is a failure of the context-classloader in PAX-WICKET
                 // this is always an error of missing imports into the classloader. Right now we can do nothing here but
                 // inform the user about the problem and throw an IllegalStateException instead wrapping up and
                 // presenting the real problem.
-                // TODO: [PAXWICKET-126] It's the same import problem here
                 throw new IllegalStateException("The real problem is that the used wrapper classes are not imported " +
                         "by the bundle using injection", e);
             }
@@ -76,8 +78,8 @@ public class LazyInitProxyFactory {
             CGLibInterceptor handler = new CGLibInterceptor(type, locator);
 
             Enhancer e = new Enhancer();
-            e.setInterfaces(new Class[]{Serializable.class, ILazyInitProxy.class,
-                    IWriteReplace.class});
+            e.setInterfaces(new Class[]{ Serializable.class, ILazyInitProxy.class,
+                    IWriteReplace.class });
             e.setSuperclass(type);
             e.setCallback(handler);
             e.setNamingPolicy(new DefaultNamingPolicy() {
@@ -99,11 +101,11 @@ public class LazyInitProxyFactory {
     static class ProxyReplacement implements IClusterable {
         private static final long serialVersionUID = 1L;
 
-        private final IProxyTargetLocator locator;
+        private final ProxyTargetLocator locator;
 
         private final String type;
 
-        public ProxyReplacement(String type, IProxyTargetLocator locator) {
+        public ProxyReplacement(String type, ProxyTargetLocator locator) {
             this.type = type;
             this.locator = locator;
         }
@@ -143,13 +145,13 @@ public class LazyInitProxyFactory {
             IWriteReplace {
         private static final long serialVersionUID = 1L;
 
-        private final IProxyTargetLocator locator;
+        private final ProxyTargetLocator locator;
 
         private final String typeName;
 
         private transient Object target;
 
-        public CGLibInterceptor(Class<?> type, IProxyTargetLocator locator) {
+        public CGLibInterceptor(Class<?> type, ProxyTargetLocator locator) {
             super();
             typeName = type.getName();
             this.locator = locator;
@@ -178,14 +180,14 @@ public class LazyInitProxyFactory {
             try {
                 invoke = proxy.invoke(getRealTarget(target), args);
             } finally {
-                if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
-                    target = ((IProxyTargetLocator.ReleasableProxyTarget) target).releaseTarget();
+                if (target instanceof ReleasableProxyTarget) {
+                    target = ((ReleasableProxyTarget) target).releaseTarget();
                 }
             }
             return invoke;
         }
 
-        public IProxyTargetLocator getObjectLocator() {
+        public ProxyTargetLocator getObjectLocator() {
             return locator;
         }
 
@@ -197,7 +199,7 @@ public class LazyInitProxyFactory {
     /**
      * Invocation handler for proxies representing interface based object. For interface backed objects dynamic jdk
      * proxies are used.
-     *
+     * 
      * @author Igor Vaynberg (ivaynberg)
      */
     private static class JdkHandler
@@ -208,7 +210,7 @@ public class LazyInitProxyFactory {
             IWriteReplace {
         private static final long serialVersionUID = 1L;
 
-        private final IProxyTargetLocator locator;
+        private final ProxyTargetLocator locator;
 
         private final String typeName;
 
@@ -216,11 +218,11 @@ public class LazyInitProxyFactory {
 
         /**
          * Constructor
-         *
-         * @param type    class of object this handler will represent
+         * 
+         * @param type class of object this handler will represent
          * @param locator object locator used to locate the object this proxy represents
          */
-        public JdkHandler(Class<?> type, IProxyTargetLocator locator) {
+        public JdkHandler(Class<?> type, ProxyTargetLocator locator) {
             super();
             this.locator = locator;
             typeName = type.getName();
@@ -250,8 +252,8 @@ public class LazyInitProxyFactory {
                 try {
                     invoke = method.invoke(getRealTarget(target), args);
                 } finally {
-                    if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
-                        target = ((IProxyTargetLocator.ReleasableProxyTarget) target).releaseTarget();
+                    if (target instanceof ReleasableProxyTarget) {
+                        target = ((ReleasableProxyTarget) target).releaseTarget();
                     }
                 }
                 return invoke;
@@ -260,7 +262,7 @@ public class LazyInitProxyFactory {
             }
         }
 
-        public IProxyTargetLocator getObjectLocator() {
+        public ProxyTargetLocator getObjectLocator() {
             return locator;
         }
 
@@ -271,7 +273,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.equals()
-     *
+     * 
      * @param method method being tested
      * @return true if the method is derived from Object.equals(), false otherwise
      */
@@ -287,15 +289,15 @@ public class LazyInitProxyFactory {
      * @return the parameter target or the target of the {@link ReleasableProxyTarget} if present
      */
     public static Object getRealTarget(Object target) {
-        if (target instanceof IProxyTargetLocator.ReleasableProxyTarget) {
-            return ((IProxyTargetLocator.ReleasableProxyTarget) target).getTarget();
+        if (target instanceof ProxyTarget) {
+            return ((ProxyTarget) target).getTarget();
         }
         return target;
     }
 
     /**
      * Checks if the method is derived from Object.hashCode()
-     *
+     * 
      * @param method method being tested
      * @return true if the method is defined from Object.hashCode(), false otherwise
      */
@@ -306,7 +308,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.toString()
-     *
+     * 
      * @param method method being tested
      * @return true if the method is defined from Object.toString(), false otherwise
      */
@@ -317,7 +319,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.finalize()
-     *
+     * 
      * @param method method being tested
      * @return true if the method is defined from Object.finalize(), false otherwise
      */
@@ -328,7 +330,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is the writeReplace method
-     *
+     * 
      * @param method method being tested
      * @return true if the method is the writeReplace method, false otherwise
      */

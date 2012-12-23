@@ -28,7 +28,7 @@ import org.ops4j.pax.wicket.internal.OverwriteProxy;
 import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -108,7 +108,8 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                         setField(component, field, bundle.getBundleContext());
                     }
                 } else {
-                    Object proxy = createProxy(field, realClass, overwrites, injectionSource);
+                    Object proxy = LazyInitProxyFactory.createProxy(getBeanType(field),
+                        createProxyTargetLocator(field, realClass, overwrites, injectionSource));
                     setField(component, field, proxy);
                 }
             }
@@ -117,12 +118,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         }
     }
 
-    private Object createProxy(Field field, Class<?> page, Map<String, String> overwrites, String injectionSource) {
-        return LazyInitProxyFactory.createProxy(getBeanType(field),
-            createProxyTargetLocator(field, page, overwrites, injectionSource));
-    }
-
-    private IProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
+    private ProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
             String injectionSource) {
         if (PaxWicketBean.INJECTION_SOURCE_NULL.equals(injectionSource)
                 || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {

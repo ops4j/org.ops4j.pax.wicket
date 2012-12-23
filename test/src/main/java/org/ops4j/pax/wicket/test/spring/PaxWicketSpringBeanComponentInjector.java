@@ -25,16 +25,16 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.AbstractPaxWicketInjector;
-import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ProxyTarget;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Wicket component injector which should be used to test {@link PaxWicketBean} annotated fields. Those fields could be
- * injected using an {@link ApplicationContextMock}. The typical use case is almost similar to a regular wicket spring
- * test looking like:
- * 
- * <code>
+ * Wicket component injector which should be used to test {@link PaxWicketBean}
+ * annotated fields. Those fields could be injected using an
+ * {@link ApplicationContextMock}. The typical use case is almost similar to a
+ * regular wicket spring test looking like: <code>
  * 1. setup dependencies and mock objects
  * 2. setup mock injection environment
  *       ApplicationContextMock appctx=new ApplicationContextMock();
@@ -46,21 +46,20 @@ import org.springframework.context.ApplicationContext;
  *           new PaxWicketSpringComponentInjector(app.getApplication(), appctx ));
  *     
  * 4. run the test
- * </code>
- * 
- * For simplicity we do not provide an own mocking class for blueprint. Simply reuse the spring
- * {@link ApplicationContextMock}. Though, make sure that you set the {@link #simulateBlueprint} flag to true. That way
- * you make sure that the test case simulates the special behavior for blueprint injection.
+ * </code> For simplicity we do not provide an own mocking class for blueprint.
+ * Simply reuse the spring {@link ApplicationContextMock}. Though, make sure
+ * that you set the {@link #simulateBlueprint} flag to true. That way you make
+ * sure that the test case simulates the special behavior for blueprint
+ * injection.
  */
 public class PaxWicketSpringBeanComponentInjector implements IComponentInstantiationListener {
 
-    private static MetaDataKey<ApplicationContext> CONTEXT_KEY = new MetaDataKey<ApplicationContext>()
-    {
-        private static final long serialVersionUID = 1L;
-    };
+    private static MetaDataKey<ApplicationContext> CONTEXT_KEY = new MetaDataKey<ApplicationContext>() {
+                                                                   private static final long serialVersionUID = 1L;
+                                                               };
 
-    private PaxWicketTestBeanInjector beanInjector;
-    private boolean simulateBlueprint;
+    private final PaxWicketTestBeanInjector        beanInjector;
+    private boolean                                simulateBlueprint;
 
     public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext) {
         webApp.setMetaData(CONTEXT_KEY, appContext);
@@ -68,8 +67,7 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
         InjectorHolder.setInjector(webApp.getApplicationKey(), beanInjector);
     }
 
-    public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext,
-            boolean simulateBlueprint) {
+    public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext, boolean simulateBlueprint) {
         webApp.setMetaData(CONTEXT_KEY, appContext);
         beanInjector = new PaxWicketTestBeanInjector();
         InjectorHolder.setInjector(webApp.getApplicationKey(), beanInjector);
@@ -77,7 +75,8 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
     }
 
     /**
-     * This method is required in a case where you need to add the same injector to an additional application.
+     * This method is required in a case where you need to add the same injector
+     * to an additional application.
      */
     public void registerForAdditionalName(String applicationKey) {
         InjectorHolder.setInjector(applicationKey, beanInjector);
@@ -95,20 +94,18 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
                 if (simulateBlueprint && annotation.name().equals("")) {
                     throw new IllegalStateException("Blueprint mode does not allow annotations without name");
                 }
-                Object proxy =
-                    LazyInitProxyFactory.createProxy(field.getType(),
-                        new SpringTestProxyTargetLocator(annotation.name(), field.getType()));
+                Object proxy = LazyInitProxyFactory.createProxy(field.getType(), new SpringTestProxyTargetLocator(annotation.name(), field.getType()));
                 setField(toInject, field, proxy);
             }
         }
     }
 
-    private static class SpringTestProxyTargetLocator implements IProxyTargetLocator {
+    private static class SpringTestProxyTargetLocator implements ProxyTargetLocator {
 
         private static final long serialVersionUID = -4804663390878149597L;
 
-        private String beanName;
-        private Class<?> type;
+        private final String      beanName;
+        private final Class<?>    type;
 
         public SpringTestProxyTargetLocator(String beanName, Class<?> type) {
             super();
@@ -116,12 +113,23 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
             this.type = type;
         }
 
-        public Object locateProxyTarget() {
-            ApplicationContext appContext = Application.get().getMetaData(CONTEXT_KEY);
+        public ProxyTarget locateProxyTarget() {
+            final ApplicationContext appContext = Application.get().getMetaData(CONTEXT_KEY);
             if (beanName.equals("")) {
-                return appContext.getBean(type);
+                return new ProxyTarget() {
+
+                    public Object getTarget() {
+                        return appContext.getBean(type);
+                    }
+
+                };
             } else {
-                return appContext.getBean(beanName);
+                return new ProxyTarget() {
+                    public Object getTarget() {
+                        return appContext.getBean(beanName);
+                    }
+
+                };
             }
         }
 
