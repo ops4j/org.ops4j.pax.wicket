@@ -18,13 +18,15 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.it.PaxWicketIntegrationTest;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Christoph Läubrich
@@ -68,8 +70,8 @@ public class InjectSpecialBeanTest extends PaxWicketIntegrationTest {
         //Load the class through the bundles classloader
         Class<?> clazz = bundle.loadClass("org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener");
         //Construct an instance
-        Constructor<?> constructor = clazz.getConstructor(BundleContext.class, String.class);
-        Object listener = constructor.newInstance(bundleContext, PaxWicketBean.INJECTION_SOURCE_UNDEFINED);
+        Constructor<?> constructor = clazz.getConstructor(BundleContext.class, String.class, ServiceTracker.class);
+        Object listener = constructor.newInstance(bundleContext, PaxWicketBean.INJECTION_SOURCE_SCAN, new ServiceTracker(bundleContext, ProxyTargetLocatorFactory.class, null));
         //Fetch the inject method
         Method injectMethod = clazz.getMethod("inject", Object.class, Class.class);
         //Create a dummy class and let it inject

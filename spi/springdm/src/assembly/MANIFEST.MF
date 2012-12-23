@@ -1,0 +1,2 @@
+Eclipse-SourceBundle: org.ops4j.pax.wicket.service;version="${project.version}"
+Bundle-SymbolicName: org.ops4j.pax.wicket.service.source

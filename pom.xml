@@ -197,6 +197,7 @@
 
   <modules>
     <module>service</module>
+    <module>spi</module>
     <module>test</module>
     <module>samples</module>
     <module>features</module>

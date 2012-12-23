@@ -56,7 +56,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
      * @param serviceClass
      * 
      */
-    public OSGiServiceRegistryProxyTargetLocator(BundleContext paxBundleContext, PaxWicketBean annotation,
+    public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, PaxWicketBean annotation,
             Class<?> serviceClass, Class<?> pageClass) {
         this.parent = pageClass;
         if (pageClass.getClassLoader() instanceof BundleReference) {
@@ -65,7 +65,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
             bundleContext = reference.getBundle().getBundleContext();
             LOGGER.debug("Using the Bundlereference of class {} for locating services", pageClass);
         } else {
-            bundleContext = paxBundleContext;
+            bundleContext = callingContext;
             LOGGER.debug("Using the PAX Wicket BundlereContext for locating services");
         }
         componentName = annotation.name();
@@ -78,6 +78,38 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
      * @see org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator#locateProxyTarget()
      */
     public ReleasableProxyTarget locateProxyTarget() {
+        ServiceReference<?>[] references = fetchReferences();
+        if (references != null) {
+            // Sort the references...
+            Arrays.sort(references);
+            // Fetch the first (if any)...
+            for (final ServiceReference<?> reference : references) {
+                final Object service = bundleContext.getService(reference);
+                if (service == null) {
+                    // The service is gone while we where iterating over the service references...
+                    continue;
+                }
+                // And return a releasable proxy target...
+                return new ReleasableProxyTargetImplementation(service, reference);
+            }
+        }
+        throw new NoBeanAvailableForInjectionException("can't find any service matching objectClass = "
+                + serviceInterface + " and filter = " + getFilterString());
+    }
+
+    public ServiceReference<?>[] fetchReferences() {
+        try {
+            String filter = getFilterString();
+            LOGGER.debug("Try to locate a suitable service for objectClass = "
+                    + serviceInterface + " and filter = " + filter);
+            return bundleContext.getAllServiceReferences(serviceInterface, filter);
+        } catch (InvalidSyntaxException e) {
+            LOGGER.error("Creation of filter failed: {}", e.getMessage(), e);
+            throw new RuntimeException("Creation of filter failed", e);
+        }
+    }
+
+    private String getFilterString() {
         boolean hasComponentName = componentName != null && !componentName.trim().equals("");
         String filter;
         if (hasComponentName) {
@@ -85,30 +117,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
         } else {
             filter = null;
         }
-        try {
-            LOGGER.debug("Try to locate a suitable service for objectClass = "
-                    + serviceInterface + " and filter = " + filter);
-            ServiceReference<?>[] references = bundleContext.getAllServiceReferences(serviceInterface, filter);
-            if (references != null) {
-                // Sort the references...
-                Arrays.sort(references);
-                // Fetch the first (if any)...
-                for (final ServiceReference<?> reference : references) {
-                    final Object service = bundleContext.getService(reference);
-                    if (service == null) {
-                        // The service is gone while we where iterating over the service references...
-                        continue;
-                    }
-                    // And return a releasable proxy target...
-                    return new ReleasableProxyTargetImplementation(service, reference);
-                }
-            }
-        } catch (InvalidSyntaxException e) {
-            LOGGER.error("Creation of filter failed: {}", e.getMessage(), e);
-            throw new RuntimeException("Creation of filter failed", e);
-        }
-        throw new NoBeanAvailableForInjectionException("can't find any service matching objectClass = "
-                + serviceInterface + " and filter = " + filter);
+        return filter;
     }
 
     /**

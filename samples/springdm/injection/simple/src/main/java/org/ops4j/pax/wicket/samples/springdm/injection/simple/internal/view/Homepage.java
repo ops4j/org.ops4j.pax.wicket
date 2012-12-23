@@ -25,20 +25,19 @@ import org.ops4j.pax.wicket.samples.springdm.injection.simple.internal.service.M
  */
 public class Homepage extends WebPage {
 
-    private static final long serialVersionUID = 1L;
-    private static final String HOMEPAGE_TEXT =
-        "Welcome to the most simple pax-wicket injection application based on springdm.";
+    private static final long   serialVersionUID = 1L;
+    private static final String HOMEPAGE_TEXT    = "Welcome to the most simple pax-wicket injection application based on springdm.";
 
     /**
-     * Since you're using SpringDM it is also possible to reference the bean only by type. You can reference any bean
-     * here from the bundles "applicationContext". The "local/bundles" application context is created automatically from
-     * all spring .xml files in the META-INF/spring/ folder. You can beans by name or type. In addition osgi service or
-     * any other named entity such as other pax-wicket components are also supported.
+     * Since you're using SpringDM it is also possible to reference the bean
+     * only by type. You can reference any bean here from the bundles
+     * "applicationContext". The "local/bundles" application context is created
+     * automatically from all spring .xml files in the META-INF/spring/ folder.
+     * You can beans by name or type. In addition osgi service or any other
+     * named entity such as other pax-wicket components are also supported.
      */
-    @PaxWicketBean(
-    /** name = "defaultMyServiceBean" */
-    )
-    private MyService serviceBean;
+    @PaxWicketBean(injectionSource = PaxWicketBean.INJECTION_SOURCE_SPRING)
+    private MyService           serviceBean;
 
     public Homepage() {
         String serviceText = serviceBean.someEchoMethod(HOMEPAGE_TEXT);

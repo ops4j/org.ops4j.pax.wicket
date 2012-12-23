@@ -17,26 +17,33 @@ package org.ops4j.pax.wicket.internal.injection;
 
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.internal.OverwriteProxy;
-import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
-import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxyTargetLocator;
-import org.ops4j.pax.wicket.internal.injection.spring.SpringBeanProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.OverwriteProxy;
+import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWicketInjector {
+
+    /**
+     * 
+     */
+    private static final ProxyTargetLocatorFactory[] EMPTY_ARRAY = new ProxyTargetLocatorFactory[0];
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleAnalysingComponentInstantiationListener.class);
 
@@ -44,9 +51,14 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     private String bundleResources = "";
     private final String defaultInjectionSource;
 
-    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String defaultInjectionSource) {
+    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> tracker;
+
+    public BundleAnalysingComponentInstantiationListener(BundleContext bundleContext, String defaultInjectionSource,
+            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> tracker) {
         this.bundleContext = bundleContext;
         this.defaultInjectionSource = defaultInjectionSource;
+        this.tracker = tracker;
+        // TODO use ExtendedBundle instead
         Enumeration<URL> entries = bundleContext.getBundle().findEntries("/", "*.class", true);
         if (entries == null) {
             // bundle with no .class files (see PAXWICKET-305)
@@ -78,14 +90,15 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         try {
             Class<?> realClass = toHandle;
             Map<String, String> overwrites = null;
-            String injectionSource = null;
-            // TODO: [PAXWICKET-265] This have to look differently
+            String injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
             if (Factory.class.isInstance(component)) {
                 overwrites = ((OverwriteProxy) ((Factory) component).getCallback(0)).getOverwrites();
                 injectionSource = ((OverwriteProxy) ((Factory) component).getCallback(0)).getInjectionSource();
                 realClass = realClass.getSuperclass();
+            } else {
+                injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
             }
-            if (injectionSource == null || injectionSource.equals("")) {
+            if (injectionSource == null || injectionSource.length() > 0) {
                 injectionSource = defaultInjectionSource;
             }
             Thread.currentThread().setContextClassLoader(realClass.getClassLoader());
@@ -96,8 +109,9 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                     continue;
                 }
                 PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-                if (!annotation.injectionSource().equals(PaxWicketBean.INJECTION_SOURCE_UNDEFINED)) {
-                    injectionSource = annotation.injectionSource();
+                String fieldInjectionSource = annotation.injectionSource();
+                if (fieldInjectionSource != null && fieldInjectionSource.length() > 0) {
+                    injectionSource = fieldInjectionSource;
                 }
                 if (field.getType().equals(BundleContext.class)) {
                     // Is this the special BundleContext type?
@@ -118,48 +132,91 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         }
     }
 
-    private ProxyTargetLocator createProxyTargetLocator(Field field, Class<?> page, Map<String, String> overwrites,
+    private ProxyTargetLocator createProxyTargetLocator(Field field, final Class<?> page,
+            Map<String, String> overwrites,
             String injectionSource) {
-        if (PaxWicketBean.INJECTION_SOURCE_NULL.equals(injectionSource)
-                || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {
-            return null;
+        ProxyTargetLocatorFactory[] factories = tracker.getServices(EMPTY_ARRAY);
+        if (factories.length == 0) {
+            // If no factories are present we will wait for 2 seconds for at least one
+            try {
+                factories = new ProxyTargetLocatorFactory[]{ tracker.waitForService(TimeUnit.SECONDS.toMillis(2)) };
+            } catch (InterruptedException e) {
+                // We ignore this...
+            }
         }
-        PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-        AbstractProxyTargetLocator<?> springBeanTargetLocator =
-            new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
-        if (PaxWicketBean.INJECTION_SOURCE_SPRING.equals(injectionSource)) {
-            return springBeanTargetLocator;
+        List<ProxyTargetLocator> locators = new ArrayList<ProxyTargetLocator>(1);
+        for (ProxyTargetLocatorFactory factory : factories) {
+            if (factory == null) {
+                continue;
+            }
+            if (injectionSource == null || injectionSource.length() == 0 || injectionSource.equals(factory.getName())
+                    || PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
+                try {
+                    // We consider this factory...
+                    ProxyTargetLocator locator =
+                        factory.createProxyTargetLocator(bundleContext, field, page, overwrites);
+                    if (locator != null) {
+                        locators.add(locator);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.warn("ProxyTargetLocatorFactory factory {} because of RuntimeException", factory.getName(),
+                        e);
+                }
+            }
         }
-        AbstractProxyTargetLocator<?> blueprintBeanTargetLocator =
-            new BlueprintBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
-        if (PaxWicketBean.INJECTION_SOURCE_BLUEPRINT.equals(injectionSource)) {
-            return blueprintBeanTargetLocator;
-        }
-        if (PaxWicketBean.INJECTION_SOURCE_SERVICE_REGISTRY.equals(injectionSource)) {
-            return new OSGiServiceRegistryProxyTargetLocator(bundleContext, annotation, getBeanType(field), page);
-        }
-        if (PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
-            boolean springBeanTargetLocatorHasApplicationContext =
-                hasApplicationContextDelegation(springBeanTargetLocator);
-            boolean blueprintBeanTargetLocatorHasApplicationContext =
-                hasApplicationContextDelegation(blueprintBeanTargetLocator);
-            if (springBeanTargetLocatorHasApplicationContext && blueprintBeanTargetLocatorHasApplicationContext) {
+        if (locators.isEmpty()) {
+            if (field.getAnnotation(PaxWicketBean.class).allowNull()) {
+                return new ProxyTargetLocator() {
+
+                    private static final long serialVersionUID = 1L;
+
+                    public ProxyTarget locateProxyTarget() {
+                        return null;
+                    }
+
+                    public Class<?> getParent() {
+                        return page;
+                    }
+                };
+            } else {
                 throw new IllegalStateException(
-                    "INJECTION_SOURCE_SCAN cannot be used if spring & blueprint context exist.");
+                    String
+                        .format(
+                            "No injection source found for field [%s] in class [%s] and field is not marked as null allowed, the following injectors where queried: %s",
+                            field.getName(), page.getName(), toInjectNameString(factories)));
             }
-            if (!springBeanTargetLocatorHasApplicationContext && !blueprintBeanTargetLocatorHasApplicationContext) {
-                throw new IllegalStateException(
-                    "INJECTION_SOURCE_SCAN cannot be used with neither blueprint nor spring context");
+        } else {
+            if (locators.size() > 1) {
+                LOGGER
+                    .warn(
+                        "More than one injection source could be considered for field [{}] in class [{}] to archive consistent behaviour use an explicit injection source",
+                        field.getName(), page.getName());
             }
-            if (springBeanTargetLocatorHasApplicationContext) {
-                return springBeanTargetLocator;
-            }
-            if (blueprintBeanTargetLocatorHasApplicationContext) {
-                return blueprintBeanTargetLocator;
+            return locators.get(0);
+        }
+
+    }
+
+    /**
+     * @param factories
+     * @return
+     */
+    private Object toInjectNameString(ProxyTargetLocatorFactory[] factories) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        boolean first = true;
+        for (int i = 0; i < factories.length; i++) {
+            ProxyTargetLocatorFactory factory = factories[i];
+            if (factory != null) {
+                if (!first) {
+                    sb.append(", ");
+                }
+                first = false;
+                sb.append(factory);
             }
         }
-        throw new IllegalStateException(String.format("No injection source found for field [%s] in class [%s]",
-            field.getName(), page.getName()));
+        sb.append("]");
+        return sb;
     }
 
     /**

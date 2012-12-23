@@ -25,10 +25,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to tag a field as a placeholder for a spring bean.
+ * Annotation used to tag a field as a placeholder for an injected bean.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({/* ElementType.METHOD, */ElementType.FIELD })
+@Target({ ElementType.FIELD })
 @Documented
 public @interface PaxWicketBean {
 
@@ -45,17 +45,9 @@ public @interface PaxWicketBean {
      */
     public static final String INJECTION_SOURCE_SERVICE_REGISTRY = "service-registry";
     /**
-     * Will scan for blueprint and spring context; if none or both are found INJECTION_SOURCE_NULL is used.
+     * Will scan for any avaiable injection source.
      */
     public static final String INJECTION_SOURCE_SCAN = "scan";
-    /**
-     * Will simply inject null instead of a proxy
-     */
-    public static final String INJECTION_SOURCE_NULL = "null";
-    /**
-     * Uses other, general default values
-     */
-    public static final String INJECTION_SOURCE_UNDEFINED = "null";
 
     /**
      * Optional attribute for specifying the name of the bean. If not specified, the bean will be looked up by the type
@@ -66,6 +58,12 @@ public @interface PaxWicketBean {
     /**
      * Allows to override the source of the injection directly in the source code
      */
-    String injectionSource() default INJECTION_SOURCE_UNDEFINED;
+    String injectionSource() default "";
+
+    /**
+     * Optional attribute specifying if it is okay to inject a <code>null</code> value in cases where no
+     * injectionprovider can provide a suitable bean
+     */
+    boolean allowNull() default false;
 
 }

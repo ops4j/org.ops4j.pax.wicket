@@ -42,6 +42,7 @@ import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
  * 
  * @see LazyInitProxyFactory#createProxy(Class, ProxyTargetLocator)
  */
+// FIXME: is it necessary to extend IClusterable here??
 public interface ProxyTargetLocator extends IClusterable {
     /**
      * Returns the object that will be used as target object for a lazy init proxy.

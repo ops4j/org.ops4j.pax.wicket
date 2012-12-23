@@ -96,6 +96,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.ops4j.pax.wicket.spi</groupId>
+      <artifactId>org.ops4j.pax.wicket.spi.blueprint</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ops4j.pax.wicket.spi</groupId>
+      <artifactId>org.ops4j.pax.wicket.spi.springdm</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.ops4j.pax.wicket.samples</groupId>
       <artifactId>org.ops4j.pax.wicket.samples.navigation</artifactId>
       <version>${project.version}</version>

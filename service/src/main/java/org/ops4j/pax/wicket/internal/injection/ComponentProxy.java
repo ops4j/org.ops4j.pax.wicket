@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.ops4j.pax.wicket.internal.OverwriteProxy;
+import org.ops4j.pax.wicket.spi.OverwriteProxy;
 
 import net.sf.cglib.proxy.MethodProxy;
 

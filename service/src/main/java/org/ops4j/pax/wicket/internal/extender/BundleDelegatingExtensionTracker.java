@@ -26,8 +26,10 @@ import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.BundleDelegatingPageMounter;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +62,12 @@ public class BundleDelegatingExtensionTracker implements
     private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter> pageMounter =
         new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter>();
 
-    public BundleDelegatingExtensionTracker(BundleContext context) {
+    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
+
+    public BundleDelegatingExtensionTracker(BundleContext context,
+            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker) {
         paxWicketBundleContext = context;
+        this.factoryTracker = factoryTracker;
     }
 
     public void addingService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
@@ -90,7 +96,7 @@ public class BundleDelegatingExtensionTracker implements
         classResolvers.put(reference, new BundleDelegatingClassResolver(paxWicketBundleContext, applicationName));
         classResolvers.get(reference).start();
         componentInstanciationListener.put(reference, new BundleDelegatingComponentInstanciationListener(
-            paxWicketBundleContext, applicationName));
+            paxWicketBundleContext, applicationName, factoryTracker));
         componentInstanciationListener.get(reference).start();
         pageMounter.put(reference, new BundleDelegatingPageMounter(applicationName, paxWicketBundleContext));
         pageMounter.get(reference).start();

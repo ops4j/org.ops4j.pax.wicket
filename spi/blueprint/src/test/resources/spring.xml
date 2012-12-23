@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright OPS4J
+
+    Licensed under the Apache License, Version 2.0 (the "License"); you may
+    not use this file except in compliance with the License. You may obtain
+    a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:osgi="http://www.springframework.org/schema/osgi"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:osgix="http://www.springframework.org/schema/osgi-compendium" xmlns:wicket="http://www.ops4j.org/schema/wicket"
+  xsi:schemaLocation="http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
+        http://www.ops4j.org/schema/wicket http://www.ops4j.org/schema/wicket/wicket.xsd">
+
+  <wicket:componentContentSourceFactory id="testBean" applicationName="applicationName"
+    componentContentSourceFactory="someBeanReference" />
+
+  <wicket:contentSource id="timetableMainMenuPanel" contentSourceId="someId" applicationName="applicationName"
+    contentSourceClass="this.is.some.class.Yes">
+    <wicket:overwrites>
+      <wicket:overwrite originalBeanId="old1" newBeanId="new1" />
+      <wicket:overwrite originalBeanId="old2" newBeanId="new2" />
+    </wicket:overwrites>
+    <wicket:destinations>
+      <wicket:destination>infrastructure.mainmenu</wicket:destination>
+      <wicket:destination>infrastructure.mainmenu2</wicket:destination>
+    </wicket:destinations>
+  </wicket:contentSource>
+
+  <wicket:page id="newPage" pageId="pageId" applicationName="applicationName" pageName="pageName" pageClass="pageClass">
+    <wicket:overwrites>
+      <wicket:overwrite originalBeanId="old1" newBeanId="new1" />
+      <wicket:overwrite originalBeanId="old2" newBeanId="new2" />
+    </wicket:overwrites>
+  </wicket:page>
+
+  <wicket:application id="application" class="class" mountPoint="mountPoint" applicationName="applicationName" >
+    <wicket:context-param>
+      <wicket:param-name>name1</wicket:param-name>
+      <wicket:param-value>value1</wicket:param-value>
+    </wicket:context-param>
+    <wicket:context-param>
+      <wicket:param-name>name2</wicket:param-name>
+      <wicket:param-value>value2</wicket:param-value>
+    </wicket:context-param>
+  </wicket:application>
+
+  <wicket:contentAggregator id="contentAggregator" applicationName="applicationName"
+    aggregationPointName="aggregationPointName" />
+
+  <wicket:classResolver id="classResolver" applicationName="applicationName" />
+  
+  <wicket:autoPageMounter id="autoPageMounter" applicationName="applicationName" />
+
+  <wicket:injectionProvider id="injectionProvider" applicationName="applicationName" />
+
+  <wicket:filter id="filter" filterClass="filterClass" priority="priority" applicationName="applicationName">
+    <wicket:init-param>
+      <wicket:param-name>name1</wicket:param-name>
+      <wicket:param-value>value1</wicket:param-value>
+    </wicket:init-param>
+    <wicket:init-param>
+      <wicket:param-name>name2</wicket:param-name>
+      <wicket:param-value>value2</wicket:param-value>
+    </wicket:init-param>
+  </wicket:filter>
+
+</beans>

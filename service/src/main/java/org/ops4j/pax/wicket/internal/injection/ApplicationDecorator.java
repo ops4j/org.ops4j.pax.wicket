@@ -21,7 +21,6 @@ package org.ops4j.pax.wicket.internal.injection;
 import java.util.Map;
 
 import org.apache.wicket.protocol.http.WebApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.util.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -37,8 +36,6 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     private Class<? extends WebApplication> applicationClass;
     private Map<String, String> contextParams;
     private DefaultWebApplicationFactory<?> factory;
-    // FIXME: Why is this never used?
-    private String injectionSource = PaxWicketBean.INJECTION_SOURCE_UNDEFINED;
 
     public ApplicationDecorator() {
     }
@@ -64,7 +61,6 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     }
 
     public void setInjectionSource(String injectionSource) {
-        this.injectionSource = injectionSource;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

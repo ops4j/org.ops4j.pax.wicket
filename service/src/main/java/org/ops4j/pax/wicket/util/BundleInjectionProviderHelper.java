@@ -28,10 +28,12 @@ import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
@@ -52,13 +54,17 @@ public final class BundleInjectionProviderHelper {
     private final String injectionSource;
     private ServiceRegistration<?> serviceRegistration;
 
+    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
+
     /**
      * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
      * {@link PaxWicketBean}.
      */
-    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource)
+    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource,
+            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker)
         throws IllegalArgumentException {
         this.injectionSource = injectionSource;
+        this.factoryTracker = factoryTracker;
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
         serviceProperties = new Hashtable<String, Object>();
@@ -103,7 +109,7 @@ public final class BundleInjectionProviderHelper {
             } else {
                 serviceProperties.put(APPLICATION_NAME, applicationName);
                 bundleAnalysingComponentInstantiationListener =
-                    new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource);
+                    new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource, factoryTracker);
             }
 
             if (serviceRegistration != null) {

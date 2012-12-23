@@ -27,8 +27,10 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.InternalBundleDelegationProvider;
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,15 +41,18 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
 
     private final String applicationName;
     private final BundleContext paxWicketBundleContext;
-    private final String injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
 
     private final Map<String, BundleAnalysingComponentInstantiationListener> listeners =
         new HashMap<String, BundleAnalysingComponentInstantiationListener>();
     private ServiceRegistration<PaxWicketInjector> serviceRegistration;
 
-    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName) {
+    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
+
+    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName,
+            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker) {
         this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
+        this.factoryTracker = factoryTracker;
     }
 
     public String getApplicationName() {
@@ -73,7 +78,8 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
         listeners.put(bundle.getBundle().getSymbolicName(),
-            new BundleAnalysingComponentInstantiationListener(bundle.getBundle().getBundleContext(), injectionSource));
+            new BundleAnalysingComponentInstantiationListener(bundle.getBundle().getBundleContext(),
+                PaxWicketBean.INJECTION_SOURCE_SCAN, factoryTracker));
     }
 
     public void removeBundle(ExtendedBundle bundle) {

@@ -15,8 +15,10 @@
  */
 package org.ops4j.pax.wicket.internal.injection;
 
+import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.ops4j.pax.wicket.util.BundleInjectionProviderHelper;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class BundleInjectionProviderHelperDecorator implements InjectionAwareDecorator {
 
@@ -24,18 +26,23 @@ public class BundleInjectionProviderHelperDecorator implements InjectionAwareDec
     private BundleContext bundleContext;
     private BundleInjectionProviderHelper bundleInjectionProviderHelper;
     private String injectionSource;
+    private ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> tracker;
 
     public BundleInjectionProviderHelperDecorator() {
     }
 
     public void start() throws Exception {
+        tracker = new ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory>(bundleContext,
+            ProxyTargetLocatorFactory.class, null);
+        tracker.open();
         bundleInjectionProviderHelper =
-            new BundleInjectionProviderHelper(bundleContext, applicationName, injectionSource);
+            new BundleInjectionProviderHelper(bundleContext, applicationName, injectionSource, tracker);
         bundleInjectionProviderHelper.register();
     }
 
     public void stop() throws Exception {
         bundleInjectionProviderHelper.dispose();
+        tracker.close();
     }
 
     public void setBundleContext(BundleContext bundleContext) {
