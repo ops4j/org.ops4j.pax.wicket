@@ -29,7 +29,6 @@ public class SpringDMProxyTargetLocatorFactory implements ProxyTargetLocatorFact
         if (locator.hasApplicationContext()) {
             return locator;
         } else {
-            System.out.println("SpringDM no app context");
             return null;
         }
     }
