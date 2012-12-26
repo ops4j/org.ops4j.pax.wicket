@@ -71,7 +71,7 @@ public final class Activator implements BundleActivator {
         httpTracker.open();
 
         OSGiServiceRegistryProxyTargetLocatorFactory internalLocatorFactory =
-            new OSGiServiceRegistryProxyTargetLocatorFactory(context);
+            new OSGiServiceRegistryProxyTargetLocatorFactory();
         proxyFactoryService = context.registerService(ProxyTargetLocatorFactory.class, internalLocatorFactory, null);
 
         proxyFactoryTracker = new ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory>(bundleContext,
