@@ -15,7 +15,6 @@
  */
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
-import org.ops4j.pax.wicket.spi.springdm.injection.XmlFileTestUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
