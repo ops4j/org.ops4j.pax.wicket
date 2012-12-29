@@ -30,13 +30,13 @@ If you prefer to read code instead of manuals there are various samples availabl
 * mvn pax:provision
 * point the browser to [http://localhost:8080/navigation/](http://localhost:8080/navigation/). From here on you'll find links and (short) explanations to the available examples.
 * If you're not firm with the gogo command line the following commands might help:
-** stop 0 (kills the samples)
-** bundles (shows all bundles)
-** bundle BUNDLEID (shows more details to a bundle)
-** stop BUNDLEID (stops a bundle)
-** start BUNDLEID (starts a bundle again)
-** help (for a full list of possible commands)
-** help COMMANDNAME (full description of a command)
+    * stop 0 (kills the samples)
+    * bundles (shows all bundles)
+    * bundle BUNDLEID (shows more details to a bundle)
+    * stop BUNDLEID (stops a bundle)
+    * start BUNDLEID (starts a bundle again)
+    * help (for a full list of possible commands)
+    * help COMMANDNAME (full description of a command)
 
 ## Build PAX-WICKET
 
