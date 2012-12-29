@@ -40,7 +40,7 @@ If you prefer to read code instead of manuals there are various samples availabl
 
 ## Build PAX-WICKET
 
-PAX-WICKET uses [Apache Maven](http://maven.apache.org) as it's build system. Simply checkout the sources and run
+PAX-WICKET uses [Apache Maven](http://maven.apache.org) as its build system. Simply checkout the sources and run
 "mvn clean install". This will build PAX-WICKET, the samples and run all integration tests.
 
 ## Code on PAX-WICKET
