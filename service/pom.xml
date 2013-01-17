@@ -103,7 +103,8 @@
               org.ops4j.pax.wicket.util.*;version="${project.version}",
             </Export-Package>
             <DynamicImport-Package>
-              org.apache.wicket.*
+              org.apache.wicket.*,
+              org.atmosphere.*
             </DynamicImport-Package>
             <Bundle-ClassPath>
               .
