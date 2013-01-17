@@ -27,7 +27,6 @@ import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.spi.OverwriteProxy;
-import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
@@ -122,9 +121,20 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                         setField(component, field, bundle.getBundleContext());
                     }
                 } else {
-                    Object proxy = LazyInitProxyFactory.createProxy(getBeanType(field),
-                        createProxyTargetLocator(field, realClass, overwrites, injectionSource));
-                    setField(component, field, proxy);
+                    ProxyTargetLocator locator =
+                        createProxyTargetLocator(field, realClass, overwrites, injectionSource);
+                    if (locator != null) {
+                        Object proxy = LazyInitProxyFactory.createProxy(getBeanType(field),
+                            locator);
+                        setField(component, field, proxy);
+                    } else {
+                        if (field.getType().isPrimitive()) {
+                            throw new IllegalStateException("The primitive field " + field.getName()
+                                    + " is not allowed to be set to null");
+                        } else {
+                            setField(component, field, null);
+                        }
+                    }
                 }
             }
         } finally {
@@ -137,9 +147,10 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
             String injectionSource) {
         ProxyTargetLocatorFactory[] factories = tracker.getServices(EMPTY_ARRAY);
         if (factories.length == 0) {
-            // If no factories are present we will wait for 2 seconds for at least one
+            // If no factories are present we will wait for 5 seconds for at least one
+            // TODO: Shoudl thsi be configurable?
             try {
-                factories = new ProxyTargetLocatorFactory[]{ tracker.waitForService(TimeUnit.SECONDS.toMillis(2)) };
+                factories = new ProxyTargetLocatorFactory[]{ tracker.waitForService(TimeUnit.SECONDS.toMillis(5)) };
             } catch (InterruptedException e) {
                 // We ignore this...
             }
@@ -159,25 +170,15 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                         locators.add(locator);
                     }
                 } catch (RuntimeException e) {
-                    LOGGER.warn("ProxyTargetLocatorFactory factory {} because of RuntimeException", factory.getName(),
+                    LOGGER.warn("Ignored ProxyTargetLocatorFactory factory {} because of RuntimeException",
+                        factory.getName(),
                         e);
                 }
             }
         }
         if (locators.isEmpty()) {
             if (field.getAnnotation(PaxWicketBean.class).allowNull()) {
-                return new ProxyTargetLocator() {
-
-                    private static final long serialVersionUID = 1L;
-
-                    public ProxyTarget locateProxyTarget() {
-                        return null;
-                    }
-
-                    public Class<?> getParent() {
-                        return page;
-                    }
-                };
+                return null;
             } else {
                 throw new IllegalStateException(
                     String
@@ -217,32 +218,6 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         }
         sb.append("]");
         return sb;
-    }
-
-    /**
-     * @param locator
-     * @return <code>locator.hasApplicationContext()</code> if locator is not <code>null</code>, otherwhise
-     *         <code>false</code>. If the call throws any exception <code>false</code> is returned also
-     */
-    private boolean hasApplicationContextDelegation(AbstractProxyTargetLocator<?> locator) {
-        if (locator != null) {
-            try {
-                return locator.hasApplicationContext();
-            } catch (Exception e) {
-                LOGGER
-                    .debug(
-                        "Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false",
-                        locator.getClass().getName(), e);
-            } catch (NoClassDefFoundError e) {
-                // This is really nasty, but if wen don't catch this we can not catch java.lang.ClassNotFoundException
-                // wich are the root of the cause!
-                LOGGER
-                    .debug(
-                        "Can't determine hasApplicationContext for locator {}, an optional import might not resolve, return false",
-                        locator.getClass().getName(), e);
-            }
-        }
-        return false;
     }
 
 }
