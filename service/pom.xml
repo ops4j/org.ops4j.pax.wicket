@@ -59,6 +59,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
+            <Eclipse-SourceBundle>${project.artifactId};version="${project.version}"</Eclipse-SourceBundle>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Private-Package>
               com.sun.activation.registries,
