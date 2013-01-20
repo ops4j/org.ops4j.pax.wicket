@@ -36,7 +36,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer {
         String importedPackages = (String) bundle.getHeaders().get(Constants.IMPORT_PACKAGE);
         LOGGER.trace("Checking {} for import of org.apache.wicket.*", bundle.getSymbolicName());
         if (importedPackages == null) {
-            LOGGER.info("Bundle {} does not contain any imported packages --> ignore");
+            LOGGER.info("Bundle {} does not contain any imported packages --> ignore", bundle.getSymbolicName());
             return false;
         }
         if (importedPackages.contains("org.apache.wicket")) {
