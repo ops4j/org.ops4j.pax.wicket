@@ -49,7 +49,7 @@
   </scm>
 
   <properties>
-    <pax.exam.version>3.0.0.RC1</pax.exam.version>
+    <pax.exam.version>3.0.0</pax.exam.version>
     <pax.url.version>1.5.0</pax.url.version>
     <slf4j.version>1.7.2</slf4j.version>
     <pax.logging.version>1.7.0</pax.logging.version> 
