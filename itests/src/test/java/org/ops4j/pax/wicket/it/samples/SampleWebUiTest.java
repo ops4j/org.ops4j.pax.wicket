@@ -15,9 +15,7 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,14 +104,6 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         // testSamplePlainSimple_shouldRenderPage
         webclient = new WebClient();
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/simple/");
-        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
-        webclient.closeAllWindows();
-        // testSamplePlainPageFactoryShouldAllowLink
-        webclient = new WebClient();
-        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
-        assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
-        HtmlAnchor link = page.getAnchorByText("link");
-        Page backPage = link.click();
         assertTrue(page.asText().contains("Welcome to the most simple pax-wicket application"));
         webclient.closeAllWindows();
         // testSampleBlueprintSimpleDefault_shouldRenderPage
