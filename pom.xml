@@ -200,7 +200,8 @@
     <module>spi</module>
     <module>test</module>
     <module>samples</module>
-    <module>features</module>
+    <module>features/wicket</module>
+    <module>features/paxwicket</module>
     <module>itests</module>
   </modules>
 
