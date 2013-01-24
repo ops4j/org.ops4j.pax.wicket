@@ -83,6 +83,7 @@
               javax.servlet.*;version="[2.5,4)",
               javax.swing.*,
               javax.xml.*,
+              javax.inject;version="1";resolution:=optional,
               org.apache.wicket.*;version="${wicket.dependency.version}",
               org.codehaus.jackson.*;resolution:=optional,
               org.osgi.framework;version="1.4",
@@ -191,6 +192,10 @@
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-activation_1.1_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-atinject_1.0_spec</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>

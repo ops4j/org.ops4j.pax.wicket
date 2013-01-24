@@ -23,6 +23,8 @@ import static org.mockito.Mockito.mock;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,8 +64,41 @@ public class AbstractPaxWicketInjectorTest {
     }
 
     @SuppressWarnings("serial")
+    private static class TestJsr330Component extends Component {
+        @Inject
+        private TestService testServiceA;
+
+        public TestJsr330Component(String id) {
+            super(id);
+        }
+
+        @Override
+        protected void onRender() {
+        }
+    }
+
+    @SuppressWarnings("serial")
+    private static class TestJsr330ComponentExtender extends TestComponent {
+        @Inject
+        private TestService testServiceB;
+
+        private Object noBean;
+
+        public TestJsr330ComponentExtender() {
+            super("foo");
+        }
+    }
+
+    @SuppressWarnings("serial")
     private static class TestComponentBase extends TestComponent {
         public TestComponentBase() {
+            super("foo");
+        }
+    }
+
+    @SuppressWarnings("serial")
+    private static class TestJsr330ComponentBase extends TestJsr330Component {
+        public TestJsr330ComponentBase() {
             super("foo");
         }
     }
@@ -74,6 +109,30 @@ public class AbstractPaxWicketInjectorTest {
 
         public TestService getTestService() {
             return testService;
+        }
+    }
+
+    private static class TestJsr330Object {
+        @Inject
+        private TestService testService;
+
+        public TestService getTestService() {
+            return testService;
+        }
+    }
+
+    private static class TestMixedObject {
+        @Inject
+        private TestService testServiceA;
+        @PaxWicketBean
+        private TestService testServiceB;
+
+        public TestService getTestServiceA() {
+            return testServiceA;
+        }
+
+        public TestService getTestServiceB() {
+            return testServiceB;
         }
     }
 
@@ -97,9 +156,29 @@ public class AbstractPaxWicketInjectorTest {
     }
 
     @Test
+    public void testgetFields_shouldReturnBothJsr330ServiceFields() {
+        List<Field> fields = injector.getFields(TestJsr330ComponentExtender.class);
+
+        assertThat(fields.size(), is(2));
+        assertThat(fields.get(0).getName(), is("testServiceB"));
+        assertThat(fields.get(1).getName(), is("testServiceA"));
+    }
+
+    @Test
     public void testsetField_shouldSetFieldValue() {
         TestObject obj = new TestObject();
         List<Field> fields = injector.getFields(TestObject.class);
+        TestService service = mock(TestService.class);
+
+        injector.setField(obj, fields.get(0), service);
+
+        assertThat(obj.getTestService(), sameInstance(service));
+    }
+
+    @Test
+    public void testsetField_shouldSetJsr330FieldValue() {
+        TestJsr330Object obj = new TestJsr330Object();
+        List<Field> fields = injector.getFields(TestJsr330Object.class);
         TestService service = mock(TestService.class);
 
         injector.setField(obj, fields.get(0), service);
@@ -114,9 +193,29 @@ public class AbstractPaxWicketInjectorTest {
         assertThat(injector.getBeanType(fields.get(0)).getName(), is(TestService.class.getName()));
     }
 
+
+    @Test
+    public void testgetBeanType_shouldReturnJsr330Type() {
+        List<Field> fields = injector.getFields(TestJsr330Object.class);
+
+        assertThat(injector.getBeanType(fields.get(0)).getName(), is(TestService.class.getName()));
+    }
+
     @Test
     public void testdoesComponentContainPaxWicketBeanAnnotatedFields_shouldReturnTrue() {
         assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestComponentBase.class),
             is(1));
+    }
+
+    @Test
+    public void testdoesComponentContainJsr330AnnotatedFields_shouldReturnTrue() {
+        assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestJsr330ComponentBase.class),
+            is(1));
+    }
+
+    @Test
+    public void testdoesComponentContainMixedFields_shouldReturnTrue() {
+        assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestMixedObject.class),
+            is(2));
     }
 }

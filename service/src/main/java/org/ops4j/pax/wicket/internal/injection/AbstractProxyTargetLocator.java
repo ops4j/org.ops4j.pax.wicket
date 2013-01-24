@@ -18,6 +18,7 @@ package org.ops4j.pax.wicket.internal.injection;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanData;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -27,14 +28,14 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
 
     private static final long serialVersionUID = 1L;
 
-    protected PaxWicketBean annotation;
+    protected PaxWicketBeanData annotation;
     protected Class<?> beanType;
     protected Map<String, String> overwrites;
 
     private Class<?> parent;
     private BundleContext bundleContext;
 
-    public AbstractProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+    public AbstractProxyTargetLocator(BundleContext bundleContext, PaxWicketBeanData annotation, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         this.bundleContext = bundleContext;
         this.annotation = annotation;
@@ -90,7 +91,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements IProxyTar
         }
         throw new IllegalStateException(String.format(
             "Bundle %s can no longer attach bean %s with ID %s, class %s to page %s", bundleContext
-                .getBundle().getSymbolicName(), beanType.getName(), annotation.name(), beanType.getName(),
+                .getBundle().getSymbolicName(), beanType.getName(), annotation.getName(), beanType.getName(),
             parent.getName()));
     }
 
