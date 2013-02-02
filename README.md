@@ -1,9 +1,13 @@
 # Welcome to PAX-WICKET
 
+PAX-WICKET is a small framework which helps to integrate [Apache Wicket](http://wicket.apache.org)
+into the [OSGi](http://www.osgi.org) component framework.
+
+[![Build Status](https://travis-ci.org/ops4j/org.ops4j.pax.wicket.png?branch=master)](https://travis-ci.org/ops4j/org.ops4j.pax.wicket)
+
 ## Introduction
 
-PAX-WICKET is a small framework which helps to integrate [Apache Wicket](http://wicket.apache.org)
-into the [OSGi](http://www.osgi.org) component framework. PAX-WICKET provides the following features:
+PAX-WICKET provides the following features:
 
 * Full integration at HttpService Level
 * Bean and Service injection on bundle level from Spring and Blueprint
