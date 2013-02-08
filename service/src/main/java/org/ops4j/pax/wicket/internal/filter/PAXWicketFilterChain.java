@@ -50,8 +50,10 @@ public class PAXWicketFilterChain implements FilterChain {
         int size = filters.size();
         if (filterIndex < size) {
             Filter filter = filters.get(filterIndex);
-            LOGGER.debug("call filter {}/{} of type {} ",
-                new Object[]{ (filterIndex + 1), size, filter.getClass().getName() });
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("call filter {}/{} of type {} ", new Object[]{ (filterIndex + 1), size,
+                    filter.getClass().getName() });
+            }
             filterIndex++;
             filter.doFilter(request, response, this);
         } else {

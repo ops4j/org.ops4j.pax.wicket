@@ -20,11 +20,11 @@ import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 
-final class PaxWicketFilter extends WicketFilter {
+public final class PaxWicketFilter extends WicketFilter {
 
     private final IWebApplicationFactory applicationFactory;
 
-    PaxWicketFilter(IWebApplicationFactory factory) throws IllegalArgumentException {
+    public PaxWicketFilter(IWebApplicationFactory factory) throws IllegalArgumentException {
         validateNotNull(factory, "factory");
         applicationFactory = factory;
     }

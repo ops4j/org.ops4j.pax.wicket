@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.servlet.Servlet;
 
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
+import org.ops4j.pax.wicket.internal.servlet.PAXWicketServlet;
 import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -73,12 +74,11 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
     private void addApplication(ServiceReference<WebApplicationFactory<?>> reference,
             PaxWicketApplicationFactory internalFactory) {
         if (!internalFactory.isValidFactory()) {
-            LOGGER
-                .warn("Trying to register ApplicationFactory without application name or mount point is not possible");
-            return;
+            throw new IllegalArgumentException(
+                "Trying to register ApplicationFactory without application name or mount point is not possible");
         }
         LOGGER.debug("Service Added [{}], Factory hash [{}]", reference, identityHashCode(internalFactory));
-        Servlet servlet = ServletProxy.newServletProxy(internalFactory);
+        Servlet servlet = PAXWicketServlet.createServlet(internalFactory);
         addServlet(internalFactory.getMountPoint(), servlet, internalFactory.getContextParams(), reference);
         synchronized (factories) {
             factories.put(reference, internalFactory);

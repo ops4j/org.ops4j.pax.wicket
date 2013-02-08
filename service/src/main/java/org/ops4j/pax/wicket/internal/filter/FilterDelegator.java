@@ -27,8 +27,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.ops4j.pax.wicket.api.FilterFactory;
 import org.osgi.framework.BundleContext;
@@ -70,24 +70,27 @@ public final class FilterDelegator {
         filterTracker.close();
     }
 
-    public void doFilter(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
+    public void doFilter(Filter[] superFilter, ServletRequest servletRequest, ServletResponse servletResponse)
         throws ServletException, IOException {
-        FilterChain chain =
-            new PAXWicketFilterChain(getFiltersSortedWithHighestPriorityAsFirstFilter(servlet.getServletConfig()),
-                servlet);
+        List<Filter> filters = new ArrayList<Filter>();
+        if (superFilter != null && superFilter.length > 0) {
+            // First add all superfilter...
+            filters.addAll(Arrays.asList(superFilter));
+        }
+        List<Filter> filterList = getFiltersSortedWithHighestPriorityAsFirstFilter(filters, servlet.getServletConfig());
+        FilterChain chain = new PAXWicketFilterChain(filterList, servlet);
         chain.doFilter(servletRequest, servletResponse);
     }
 
-    public List<Filter> getFiltersSortedWithHighestPriorityAsFirstFilter(ServletConfig servletConfig) {
+    private List<Filter> getFiltersSortedWithHighestPriorityAsFirstFilter(List<Filter> filters,
+            ServletConfig servletConfig) {
         FilterFactoryReference[] factories = filterTracker.getServices(new FilterFactoryReference[0]);
-        List<Filter> filters = new ArrayList<Filter>();
         if (factories != null && factories.length > 0) {
             LOGGER.debug("Retrieved {} factories to create filters to apply", factories.length);
             Arrays.sort(factories);
             for (FilterFactoryReference filterFactory : factories) {
                 try {
-                    filters
-                        .add(filterFactory.getFilter(servletConfig));
+                    filters.add(filterFactory.getFilter(servletConfig));
                 } catch (ServletException e) {
                     LOGGER.error("Problem while creating filter: {}", e.getMessage(), e);
                 } catch (RuntimeException e) {

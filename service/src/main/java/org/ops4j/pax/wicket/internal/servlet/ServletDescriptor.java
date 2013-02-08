@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.internal.servlet;
 
 import java.util.Dictionary;
 import java.util.Map;
@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.ops4j.pax.wicket.internal.GenericContext;
 import org.ops4j.pax.wicket.internal.util.MapAsDictionary;
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;

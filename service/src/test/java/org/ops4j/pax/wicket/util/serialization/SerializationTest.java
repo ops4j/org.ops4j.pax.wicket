@@ -15,10 +15,8 @@
  */
 package org.ops4j.pax.wicket.util.serialization;
 
-import org.apache.wicket.application.IClassResolver;
-import org.junit.Test;
-import org.ops4j.pax.wicket.internal.EnumerationAdapter;
-import org.ops4j.pax.wicket.internal.NotImplementedException;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,8 +27,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import org.apache.wicket.application.IClassResolver;
+import org.junit.Test;
+import org.ops4j.pax.wicket.internal.EnumerationAdapter;
 
 /**
  * @author edward.yakop@gmail.com
@@ -63,13 +62,12 @@ public final class SerializationTest {
             }
 
             /**
-             * This method is uses only for some internal wicket stuff if the IClassResolver is NOT
-             * replaced and in some IOC stuff also not used by pax wicket. Therefore this method
-             * should never ever be called. If it is though we want to be informed about the
-             * problem as soon as possible.
+             * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some
+             * IOC stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though
+             * we want to be informed about the problem as soon as possible.
              */
             public ClassLoader getClassLoader() {
-                throw new NotImplementedException("This method should NOT BE CALLED!");
+                throw new UnsupportedOperationException("This method should NOT BE CALLED!");
             }
         };
 

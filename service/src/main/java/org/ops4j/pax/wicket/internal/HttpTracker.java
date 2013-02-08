@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import org.ops4j.pax.wicket.internal.servlet.ServletDescriptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

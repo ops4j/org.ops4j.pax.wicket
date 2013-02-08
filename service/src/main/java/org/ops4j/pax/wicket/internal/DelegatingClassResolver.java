@@ -80,7 +80,7 @@ public final class DelegatingClassResolver implements IClassResolver {
      * be informed about the problem as soon as possible.
      */
     public ClassLoader getClassLoader() {
-        throw new NotImplementedException("This method should NOT BE CALLED!");
+        throw new UnsupportedOperationException("This method should NOT BE CALLED!");
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {

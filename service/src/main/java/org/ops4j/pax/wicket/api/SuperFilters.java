@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.internal;
+package org.ops4j.pax.wicket.api;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * A method had been called which is not implemented right now
+ * Combines two or more {@link SuperFilter} they will be called in the specified order
  */
-public class NotImplementedException extends RuntimeException {
-
-    private static final long serialVersionUID = -121171427554149005L;
-
-    public NotImplementedException() {
-        super();
-    }
-
-    public NotImplementedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotImplementedException(String message) {
-        super(message);
-    }
-
-    public NotImplementedException(Throwable cause) {
-        super(cause);
-    }
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE })
+public @interface SuperFilters {
+    public SuperFilter[] filters();
 }

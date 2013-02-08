@@ -143,7 +143,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
      * be informed about the problem as soon as possible.
      */
     public ClassLoader getClassLoader() {
-        throw new NotImplementedException("This method should NOT BE CALLED!");
+        throw new UnsupportedOperationException("This method should NOT BE CALLED!");
     }
 
 }

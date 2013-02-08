@@ -31,7 +31,6 @@ import java.util.Iterator;
 
 import org.apache.wicket.application.IClassResolver;
 import org.ops4j.pax.wicket.internal.EnumerationAdapter;
-import org.ops4j.pax.wicket.internal.NotImplementedException;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -174,7 +173,7 @@ public final class BundleClassResolverHelper {
          * to be informed about the problem as soon as possible.
          */
         public ClassLoader getClassLoader() {
-            throw new NotImplementedException("This method should NOT BE CALLED!");
+            throw new UnsupportedOperationException("This method should NOT BE CALLED!");
         }
     }
 }

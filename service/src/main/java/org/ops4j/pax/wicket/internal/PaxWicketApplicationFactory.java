@@ -17,8 +17,11 @@ package org.ops4j.pax.wicket.internal;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -30,6 +33,8 @@ import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.ops4j.pax.wicket.api.Constants;
+import org.ops4j.pax.wicket.api.SuperFilter;
+import org.ops4j.pax.wicket.api.SuperFilters;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.filter.FilterDelegator;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
@@ -37,6 +42,8 @@ import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationL
 import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An internal wrapper for the {@link WebApplicationFactory} exported by clients who want to register an application.
@@ -45,6 +52,8 @@ import org.osgi.framework.ServiceReference;
  */
 public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PaxWicketApplicationFactory.class);
+
     private final BundleContext bundleContext;
     private final WebApplicationFactory<? extends WebApplication> webApplicationFactory;
     private final String applicationName;
@@ -52,6 +61,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     private final Map<String, String> contextParams;
     private final File tmpDir;
     private final FilterDelegator filterDelegator;
+    private final List<SuperFilter> superFilterList = new ArrayList<SuperFilter>(0);
 
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory
@@ -74,8 +84,10 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
         FilterDelegator filterDelegator =
                 new FilterDelegator(reference.getBundle().getBundleContext(), applicationName);
-        return new PaxWicketApplicationFactory(bundleContext, webApplicationFactory, applicationName, mountPoint,
+        PaxWicketApplicationFactory factory =
+            new PaxWicketApplicationFactory(bundleContext, webApplicationFactory, applicationName, mountPoint,
                 contextParams, tmpDir, filterDelegator);
+        return factory;
     }
 
     private static File retrieveTmpFile(BundleContext bundleContext) {
@@ -98,6 +110,28 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         this.contextParams = contextParams;
         this.tmpDir = tmpDir;
         this.filterDelegator = filterDelegator;
+        Class<?> factoryClass = webApplicationFactory.getClass();
+        SuperFilters superFilters = factoryClass.getAnnotation(SuperFilters.class);
+        LOG.info("Scan for superfilter at class {}...", factoryClass);
+        if (superFilters != null) {
+            LOG.info("Found @SuperFilters annotation at WebApplicationFactory: {}", factoryClass);
+            for (SuperFilter superFilter : superFilters.filters()) {
+                superFilterList.add(superFilter);
+            }
+        } else {
+            SuperFilter superFilter = factoryClass.getAnnotation(SuperFilter.class);
+            if (superFilter != null) {
+                LOG.info("Found @SuperFilter annotation at WebApplicationFactory: {}", factoryClass);
+                superFilterList.add(superFilter);
+            }
+        }
+    }
+
+    /**
+     * @return the current value of superFilterList
+     */
+    public List<SuperFilter> getSuperFilterList() {
+        return Collections.unmodifiableList(superFilterList);
     }
 
     public boolean isValidFactory() {
