@@ -15,19 +15,35 @@
  */
 package org.ops4j.pax.wicket.internal.servlet;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
+import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.protocol.http.WicketServlet;
 import org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory;
-import org.ops4j.pax.wicket.internal.PaxWicketFilter;
 
 /**
- * Extension of the {@link WicketServlet} to provide special Pax Wicket features, new instances are created with the
- * static {@link #createServlet(PaxWicketApplicationFactory)} method
+ * This Servlet sets required Wicket {@link ServletContext#setAttribute(String, Object)} values and delegates to the
+ * underlying {@link WicketFilter}, new instances are created with the static
+ * {@link #createServlet(PaxWicketApplicationFactory)} method
  */
-public final class PAXWicketServlet extends WicketServlet {
+public final class PAXWicketServlet implements Servlet {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,23 +51,68 @@ public final class PAXWicketServlet extends WicketServlet {
 
     private final PaxWicketApplicationFactory appFactory;
 
-    private PAXWicketServlet(PaxWicketApplicationFactory applicationFactory) throws IllegalArgumentException {
+    private ServletConfig config;
+
+    private final Filter wickFilter;
+
+    private PAXWicketServlet(PaxWicketApplicationFactory applicationFactory, Filter wickFilter)
+        throws IllegalArgumentException {
         appFactory = applicationFactory;
+        this.wickFilter = wickFilter;
         applicationFactory.getFilterDelegator().setServlet(this);
     }
 
-    @Override
-    protected WicketFilter newWicketFilter() {
-        ServletContext servletContext = getServletContext();
+    public void init(final ServletConfig config) throws ServletException {
+        this.config = config;
+        ServletContext servletContext = config.getServletContext();
         if (servletContext.getAttribute(WICKET_REQUIRED_ATTRIBUTE) == null) {
             servletContext.setAttribute(WICKET_REQUIRED_ATTRIBUTE, appFactory.getTmpDir());
         }
-        return new PaxWicketFilter(appFactory);
+        wickFilter.init(new FilterConfig() {
+
+            public ServletContext getServletContext() {
+                return config.getServletContext();
+            }
+
+            public Enumeration<?> getInitParameterNames() {
+                return config.getInitParameterNames();
+            }
+
+            public String getInitParameter(String name) {
+                return config.getInitParameter(name);
+            }
+
+            public String getFilterName() {
+                return "Wicket-" + appFactory.getApplicationName();
+            }
+        });
     }
 
-    @Override
-    public String getServletName() {
-        return appFactory.getApplicationName();
+    public ServletConfig getServletConfig() {
+        return config;
+    }
+
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        // First delegate to wicket, at last resort serve 404 error
+        wickFilter.doFilter(req, res, new FilterChain() {
+
+            public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+                if (!response.isCommitted()) {
+                    if (response instanceof HttpServletResponse) {
+                        response.reset();
+                        ((HttpServletResponse) response).sendError(404);
+                    }
+                }
+            }
+        });
+    }
+
+    public String getServletInfo() {
+        return toString() + " - " + appFactory.getApplicationName();
+    }
+
+    public void destroy() {
+        wickFilter.destroy();
     }
 
     @Override
@@ -64,6 +125,28 @@ public final class PAXWicketServlet extends WicketServlet {
      * @return a new instance for the given {@link PaxWicketApplicationFactory}
      */
     public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
-        return new ServletCallInterceptor(applicationFactory, new PAXWicketServlet(applicationFactory));
+        Enhancer e = new Enhancer();
+        e.setSuperclass(applicationFactory.getFilterClass());
+        e.setCallback(new WicketFilterCallback(applicationFactory));
+        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+        return new ServletCallInterceptor(applicationFactory, delegateServlet);
+    }
+
+    private static class WicketFilterCallback implements MethodInterceptor {
+
+        private final IWebApplicationFactory applicationFactory;
+
+        public WicketFilterCallback(IWebApplicationFactory applicationFactory) {
+            this.applicationFactory = applicationFactory;
+        }
+
+        public Object intercept(Object object, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+            method.setAccessible(true);
+            if (method.getName().equals("getApplicationFactory")) {
+                return applicationFactory;
+            }
+            return methodProxy.invokeSuper(object, args);
+        }
+
     }
 }

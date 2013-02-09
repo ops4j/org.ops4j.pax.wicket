@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.Filter;
+
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -63,6 +65,8 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     private final FilterDelegator filterDelegator;
     private final List<SuperFilter> superFilterList = new ArrayList<SuperFilter>(0);
 
+    private Class<? extends WicketFilter> wicketFilterClass = WicketFilter.class;
+
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory
         createPaxWicketApplicationFactory(
@@ -98,6 +102,14 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return tmpDir;
     }
 
+    /**
+     * 
+     * @return the concrete wicket filter class we will use as a base to intercept
+     */
+    public Class<? extends WicketFilter> getFilterClass() {
+        return wicketFilterClass;
+    }
+
     private PaxWicketApplicationFactory(BundleContext bundleContext,
             WebApplicationFactory<? extends WebApplication> webApplicationFactory,
                                         String applicationName, String mountPoint, Map<String, String> contextParams,
@@ -116,14 +128,25 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         if (superFilters != null) {
             LOG.info("Found @SuperFilters annotation at WebApplicationFactory: {}", factoryClass);
             for (SuperFilter superFilter : superFilters.filters()) {
-                superFilterList.add(superFilter);
+                addToSuperFilterList(superFilter);
             }
         } else {
             SuperFilter superFilter = factoryClass.getAnnotation(SuperFilter.class);
             if (superFilter != null) {
                 LOG.info("Found @SuperFilter annotation at WebApplicationFactory: {}", factoryClass);
-                superFilterList.add(superFilter);
+                addToSuperFilterList(superFilter);
             }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addToSuperFilterList(SuperFilter superFilter) {
+        Class<? extends Filter> filter = superFilter.filter();
+        if (WicketFilter.class.isAssignableFrom(filter)) {
+            LOG.info("Using special WicketFilter from {}", filter);
+            wicketFilterClass = (Class<? extends WicketFilter>) filter;
+        } else {
+            superFilterList.add(superFilter);
         }
     }
 
