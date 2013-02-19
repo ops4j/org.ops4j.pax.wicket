@@ -46,10 +46,10 @@ public class PaxWicketObjectOutputStream extends ObjectOutputStream {
     protected void writeObjectOverride(final Object object) throws IOException {
         try {
             outputStream.writeObject(object);
-        } catch (IOException e) {
+        } catch (NotSerializableException e) {
             if (CheckingObjectOutputStream.isAvailable()) {
                 // trigger serialization again, but this time gather some more info
-                new PaxWicketSerializableChecker((NotSerializableException) e) {
+                new PaxWicketSerializableChecker(e) {
                     @Override
                     protected boolean validateAdditionalSerializableConditions(Object obj) {
                         return !(obj instanceof BundleContext) && !(obj instanceof Bundle);
@@ -70,7 +70,6 @@ public class PaxWicketObjectOutputStream extends ObjectOutputStream {
                 // if we get here, we didn't fail, while we should;
                 throw e;
             }
-
             throw e;
         } catch (RuntimeException e) {
             LOGGER.error("error writing object " + object + ": " + e.getMessage(), e);
