@@ -46,7 +46,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
      * before our test runs.
      * The timeouts are rather high for the benefit of our CI server.
      */
-	private static final int TIMEOUT = 5 * 1000;
+	private static final int TIMEOUT = 120 * 1000;
     
     @Inject
     private BundleContext bundleContext;
