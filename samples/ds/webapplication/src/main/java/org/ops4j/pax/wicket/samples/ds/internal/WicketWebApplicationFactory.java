@@ -9,6 +9,10 @@ import org.ops4j.pax.wicket.api.WebApplicationFactory;
  * @author Christoph Läubrich
  */
 public class WicketWebApplicationFactory implements WebApplicationFactory<WicketApplication> {
+	
+	{
+		System.err.println("### INIT " + WicketWebApplicationFactory.class.getName());
+	}
 
     /* (non-Javadoc)
      * @see org.ops4j.pax.wicket.api.WebApplicationFactory#getWebApplicationClass()
@@ -22,6 +26,7 @@ public class WicketWebApplicationFactory implements WebApplicationFactory<Wicket
      */
     public void onInstantiation(WicketApplication application) {
         //Nothing to do here...
+		System.err.println("### INIT " + application );
     }
 
 }
