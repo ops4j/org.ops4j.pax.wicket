@@ -2,8 +2,8 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="example.ds.webapplicationfactory">
    <property name="pax.wicket.applicationname" type="String" value="sample.ds.factory"/>
    <property name="pax.wicket.mountpoint" type="String" value="example/ds"/>
-   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.WicketWebApplication
+   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.WicketWebApplicationFactory"/>
    <service>
       <provide interface="org.ops4j.pax.wicket.api.WebApplicationFactory"/>
-   </service>Factory"/>
+   </service>
 </scr:component>

@@ -39,21 +39,27 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 @RunWith(PaxExam.class)
 public class SampleWebUiTest extends PaxWicketIntegrationTest {
-    
-    @Inject
-    private BundleContext bundleContext;
-
+	
     /**
      * WebApplicationFactory of the some of the applications we started. We don't use these members,
      * except for synchronizing the test. Injecting them guarantees that the services are available 
      * before our test runs.
      * The timeouts are rather high for the benefit of our CI server.
      */
-    @Inject @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = 120000)
+	private static final int TIMEOUT = 120 * 1000;
+    
+    @Inject
+    private BundleContext bundleContext;
+
+    @Inject @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factoryEdgeInheritInjection;
 
-    @Inject @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = 120000)
+    @Inject @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
+
+    /** @see module: /samples/ds/webapplication */
+    @Inject @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
+    private WebApplicationFactory<WebApplication> factorySampleDS;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
@@ -124,8 +130,15 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
                 .artifactId("org.ops4j.pax.wicket.samples.mixed.component").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
                 .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.parent").versionAsInProject()),
-            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
-                .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit").versionAsInProject()),
+                provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.edge.inheritinjection")
+                        .artifactId("org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit").versionAsInProject()),
+                        
+            // declarative services
+            provision(mavenBundle().groupId("org.apache.felix")
+                                .artifactId("org.apache.felix.scr").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.wicket.samples.ds")
+                                .artifactId("org.ops4j.pax.wicket.samples.ds.webapplication").versionAsInProject()),
+                                
             provision(mavenBundle().groupId("org.openengsb.wrapped").artifactId("net.sourceforge.htmlunit-all")
                 .versionAsInProject()));
     }
@@ -212,6 +225,12 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection");
         assertTrue(page.asText().contains("Back to parent"));
         assertTrue(page.asText().contains("This is a link"));
+        webclient.closeAllWindows();
+
+        // declarative services
+        webclient = new WebClient();
+        page = webclient.getPage("http://localhost:" + WEBUI_PORT + "/example/ds");
+        assertTrue(page.asText().contains("Declarative Services"));
         webclient.closeAllWindows();
     }
     
