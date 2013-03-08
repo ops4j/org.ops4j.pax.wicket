@@ -21,11 +21,13 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
 
-public class OSGiServiceRegistryProxyTargetLocatorFactory implements ProxyTargetLocatorFactory {
+public class OSGiServiceRegistryProxyTargetLocatorFactory implements
+        ProxyTargetLocatorFactory.DelayableProxyTargetLocatorFactory {
 
     public OSGiServiceRegistryProxyTargetLocatorFactory() {
     }
@@ -44,6 +46,13 @@ public class OSGiServiceRegistryProxyTargetLocatorFactory implements ProxyTarget
         } else {
             return null;
         }
+    }
+
+    public FutureProxyTargetLocator createFutureProxyTargetLocator(BundleContext context, Field field,
+            Class<?> realFieldType, Class<?> page,
+            Map<String, String> overwrites) {
+        return new OSGiServiceRegistryProxyTargetLocator(context, field.getAnnotation(PaxWicketBean.class),
+            realFieldType, page);
     }
 
 }

@@ -16,11 +16,14 @@
 package org.ops4j.pax.wicket.internal.injection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import net.sf.cglib.proxy.Factory;
@@ -112,43 +115,87 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 if (fieldInjectionSource != null && fieldInjectionSource.length() > 0) {
                     injectionSource = fieldInjectionSource;
                 }
+                Object value;
                 if (field.getType().equals(BundleContext.class)) {
                     // Is this the special BundleContext type?
-                    ClassLoader classLoader = realClass.getClassLoader();
-                    if (classLoader instanceof BundleReference) {
-                        BundleReference bundleReference = (BundleReference) classLoader;
-                        Bundle bundle = bundleReference.getBundle();
-                        setField(component, field, bundle.getBundleContext());
-                    }
+                    value = injectBundleContext(realClass, field);
+                } else if (field.getType().equals(Future.class)) {
+                    value = injectFuture(field, realClass, overwrites, injectionSource);
                 } else {
                     ProxyTargetLocator locator =
-                        createProxyTargetLocator(field, realClass, overwrites, injectionSource);
+                        createProxyTargetLocator(field, getBeanType(field), realClass, overwrites, injectionSource,
+                            false);
                     if (locator != null) {
                         Object proxy = LazyInitProxyFactory.createProxy(getBeanType(field),
                             locator);
-                        setField(component, field, proxy);
+                        value = proxy;
                     } else {
-                        if (field.getType().isPrimitive()) {
-                            throw new IllegalStateException("The primitive field " + field.getName()
-                                    + " is not allowed to be set to null");
-                        } else {
-                            setField(component, field, null);
-                        }
+                        value = null;
                     }
                 }
+                if (value == null) {
+                    if (field.getType().isPrimitive()) {
+                        throw new IllegalStateException("The primitive field " + field.getName()
+                                + " is not allowed to be set to null");
+                    }
+                    if (!field.getAnnotation(PaxWicketBean.class).allowNull()) {
+                        throw new IllegalStateException("The field " + field.getName()
+                                + " is not allowed to be set to null, but value for injection was finally a null value");
+                    }
+                }
+                setField(component, field, value);
             }
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
     }
 
-    private ProxyTargetLocator createProxyTargetLocator(Field field, final Class<?> page,
+    private Future<?> injectFuture(Field field, final Class<?> page,
             Map<String, String> overwrites,
             String injectionSource) {
+        Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if (actualTypeArguments.length == 1) {
+                Type type = actualTypeArguments[0];
+                if (type instanceof Class<?>) {
+                    Class<?> realClass = (Class<?>) type;
+                    ProxyTargetLocator locator =
+                        createProxyTargetLocator(field, realClass, page, overwrites, injectionSource, true);
+                    return InjectionFuture.create(realClass, locator);
+                } else {
+                    throw new IllegalArgumentException(
+                        "only direct class types are allowed for generic parameter on the Future<T>, but " + type
+                                + " was given!");
+                }
+            } else {
+                throw new IllegalArgumentException("one type parameter required but " + actualTypeArguments.length
+                        + " where found!");
+            }
+        } else {
+            throw new IllegalArgumentException("Not a ParameterizedType!");
+        }
+    }
+
+    private BundleContext injectBundleContext(Class<?> requestingClass, Field field) {
+        ClassLoader classLoader = requestingClass.getClassLoader();
+        if (classLoader instanceof BundleReference) {
+            BundleReference bundleReference = (BundleReference) classLoader;
+            Bundle bundle = bundleReference.getBundle();
+            return bundle.getBundleContext();
+        } else {
+            throw new IllegalStateException("the classloader does not provide a BundleReference");
+        }
+    }
+
+    private ProxyTargetLocator createProxyTargetLocator(Field field, Class<?> realFieldType, final Class<?> page,
+            Map<String, String> overwrites,
+            String injectionSource, boolean returnFutureLocators) {
         ProxyTargetLocatorFactory[] factories = tracker.getServices(EMPTY_ARRAY);
         if (factories.length == 0) {
             // If no factories are present we will wait for 5 seconds for at least one
-            // TODO: Shoudl thsi be configurable?
+            // TODO: Should this be configurable?
             try {
                 factories = new ProxyTargetLocatorFactory[]{ tracker.waitForService(TimeUnit.SECONDS.toMillis(5)) };
             } catch (InterruptedException e) {
@@ -164,11 +211,19 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                     || PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
                 try {
                     // We consider this factory...
-                    ProxyTargetLocator locator =
-                        factory.createProxyTargetLocator(bundleContext, field, page, overwrites);
+                    ProxyTargetLocator locator;
+                    if (returnFutureLocators
+                            && factory instanceof ProxyTargetLocatorFactory.DelayableProxyTargetLocatorFactory) {
+                        locator = ((ProxyTargetLocatorFactory.DelayableProxyTargetLocatorFactory) factory)
+                                .createFutureProxyTargetLocator(bundleContext, field, realFieldType, page, overwrites);
+                    } else {
+                        locator =
+                            factory.createProxyTargetLocator(bundleContext, field, page, overwrites);
+                    }
                     if (locator != null) {
                         locators.add(locator);
                     }
+
                 } catch (RuntimeException e) {
                     LOGGER.warn("Ignored ProxyTargetLocatorFactory factory {} because of RuntimeException",
                         factory.getName(),

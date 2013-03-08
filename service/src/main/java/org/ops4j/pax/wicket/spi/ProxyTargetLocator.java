@@ -55,4 +55,5 @@ public interface ProxyTargetLocator extends IClusterable {
      * @return the parent holding the responsibility for the serialisation.
      */
     Class<?> getParent();
+
 }

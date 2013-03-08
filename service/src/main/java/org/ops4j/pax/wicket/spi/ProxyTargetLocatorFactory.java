@@ -45,4 +45,18 @@ public interface ProxyTargetLocatorFactory {
      */
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,
             Map<String, String> overwrites);
+
+    /**
+     * 
+     * Services registered unter the {@link ProxyTargetLocatorFactory} interface, that register this interface also ar
+     * promoting their capability to create locators that might resolve in the future
+     * 
+     */
+    public interface DelayableProxyTargetLocatorFactory extends ProxyTargetLocatorFactory {
+
+        public FutureProxyTargetLocator createFutureProxyTargetLocator(BundleContext context, Field field,
+                Class<?> realFieldType,
+                Class<?> page,
+                Map<String, String> overwrites);
+    }
 }

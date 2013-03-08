@@ -18,16 +18,20 @@
 package org.ops4j.pax.wicket.internal.injection.registry;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
-import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author Christoph Läubrich
  * 
  */
-public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator {
+public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetLocator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OSGiServiceRegistryProxyTargetLocator.class);
 
@@ -72,11 +76,6 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
         serviceInterface = serviceClass.getName();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator#locateProxyTarget()
-     */
     public ReleasableProxyTarget locateProxyTarget() {
         ServiceReference<?>[] references = fetchReferences();
         if (references != null) {
@@ -186,12 +185,40 @@ public class OSGiServiceRegistryProxyTargetLocator implements ProxyTargetLocator
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator#getParent()
-     */
     public Class<?> getParent() {
         return parent;
+    }
+
+    public ProxyTarget locateProxyTarget(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
+        String filter = getFilterString();
+        if (filter == null) {
+            filter = String.format("(%s=%s)", Constants.OBJECTCLASS, serviceInterface);
+        } else {
+            filter = String.format("(&(%s=%s)%s)", Constants.OBJECTCLASS, serviceInterface, filter);
+        }
+        try {
+            final ServiceTracker<Object, Object> tracker =
+                new ServiceTracker<Object, Object>(bundleContext, bundleContext.createFilter(filter), null);
+            tracker.open();
+            final Object service = tracker.waitForService(unit.toMillis(timeout));
+            if (service == null) {
+                throw new TimeoutException("no service for filter = " + filter + " was avaiable in time");
+            }
+            return new ReleasableProxyTarget() {
+
+                public Object getTarget() {
+                    return service;
+                }
+
+                public ProxyTarget releaseTarget() {
+                    tracker.close();
+                    return null;
+                }
+
+            };
+        } catch (InvalidSyntaxException e) {
+            throw new RuntimeException("filter creation failed", e);
+        }
+
     }
 }
