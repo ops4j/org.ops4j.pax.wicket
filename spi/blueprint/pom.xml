@@ -99,7 +99,7 @@
               org.ops4j.pax.wicket.spi;version="${project.version}",
               org.ops4j.pax.wicket.spi.support;version="${project.version}",
               org.ops4j.pax.wicket.api;version="${project.version}",
-              org.ops4j.pax.wicket.util.*;version="${project.version}",
+              org.ops4j.pax.wicket.util.proxy;version="${project.version}",
               !sun.*
             </Import-Package>
             <Export-Package></Export-Package>

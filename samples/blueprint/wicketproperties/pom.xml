@@ -47,7 +47,6 @@
               org.apache.wicket.protocol.http,
               org.apache.wicket.request.http,
               org.ops4j.pax.wicket.api,
-              org.ops4j.pax.wicket.util,
               org.osgi.framework,
               net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}",

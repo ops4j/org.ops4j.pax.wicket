@@ -102,7 +102,8 @@
               org.ops4j.pax.wicket.spi.support;version="${project.version}",
               org.ops4j.pax.wicket.api;version="${project.version}",
               org.ops4j.pax.wicket.api.support;version="${project.version}",
-              org.ops4j.pax.wicket.util.*;version="${project.version}",
+              org.ops4j.pax.wicket.util.proxy;version="${project.version}",
+              org.ops4j.pax.wicket.util.serialization;version="${project.version}"
             </Export-Package>
             <DynamicImport-Package>
               org.apache.wicket.*,
