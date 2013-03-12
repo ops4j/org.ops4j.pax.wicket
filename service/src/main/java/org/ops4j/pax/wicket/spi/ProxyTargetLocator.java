@@ -48,8 +48,9 @@ public interface ProxyTargetLocator extends IClusterable {
      * Returns the object that will be used as target object for a lazy init proxy.
      * 
      * @return the {@link ProxyTarget} located or <code>null</code> if no proxy could be found
+     * @throws IllegalStateException
      */
-    ProxyTarget locateProxyTarget();
+    ProxyTarget locateProxyTarget() throws IllegalStateException;
 
     /**
      * @return the parent holding the responsibility for the serialisation.

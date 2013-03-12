@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
@@ -93,7 +92,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
                 return new ReleasableProxyTargetImplementation(service, reference);
             }
         }
-        throw new NoBeanAvailableForInjectionException("can't find any service matching objectClass = "
+        throw new IllegalStateException("can't find any service matching objectClass = "
                 + serviceInterface + " and filter = " + getFilterString());
     }
 
@@ -142,7 +141,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
             this.reference = reference;
         }
 
-        public synchronized Object getTarget() throws NoBeanAvailableForInjectionException {
+        public synchronized Object getTarget() throws IllegalStateException {
             if (service == null) {
                 // The service was released before, try to reaquire it...
                 LOGGER.debug("Try to reaquire service...");

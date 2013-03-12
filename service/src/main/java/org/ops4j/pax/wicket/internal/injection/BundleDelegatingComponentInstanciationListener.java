@@ -22,7 +22,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.ops4j.pax.wicket.api.Constants;
-import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.InternalBundleDelegationProvider;
@@ -99,7 +98,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
                 }
             }
         }
-        throw new NoBeanAvailableForInjectionException();
+        throw new IllegalStateException("no source for injection found");
     }
 
 }

@@ -24,7 +24,6 @@ import static org.osgi.framework.Constants.SERVICE_PID;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
@@ -151,7 +150,7 @@ public final class BundleInjectionProviderHelper {
                 bundleAnalysingComponentInstantiationListener.inject(toInject, toHandle);
                 return;
             }
-            throw new NoBeanAvailableForInjectionException();
+            throw new IllegalStateException("no injections source found");
         }
 
         @SuppressWarnings("rawtypes")

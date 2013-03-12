@@ -23,6 +23,7 @@ public interface ProxyTarget {
 
     /**
      * @return the final target
+     * @throws IllegalStateException if anything prevents the proxy from locating its target
      */
-    public Object getTarget();
+    public Object getTarget() throws IllegalStateException;
 }

@@ -28,7 +28,9 @@ public interface PaxWicketInjector {
     /**
      * The object to inject can contain a dept of abstractions from various bundles. Each of the levels may be required
      * to be injected from a different bundle. Therefore it have to be possible to look at each level independent.
+     * 
+     * @throws IllegalStateException if any internal state prevents the injector from finishing its work successfull
      */
-    public void inject(Object toInject, Class<?> toHandle) throws NoBeanAvailableForInjectionException;
+    public void inject(Object toInject, Class<?> toHandle) throws IllegalStateException;
 
 }

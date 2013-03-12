@@ -26,7 +26,6 @@ import java.util.List;
 import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.InjectorHolder;
-import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -109,7 +108,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
                         }
                         // once we've found it we could take the next level
                         break;
-                    } catch (NoBeanAvailableForInjectionException e) {
+                    } catch (IllegalStateException e) {
                         // well, not found... retry with the next listener
                     }
                 }
@@ -121,7 +120,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
             }
         }
         if (handledAnnotations != foundAnnotation) {
-            throw new NoBeanAvailableForInjectionException(String.format(
+            throw new IllegalStateException(String.format(
                 "For Component %s %s could be injected but only %s had been injected.", toInject.getClass().getName(),
                 foundAnnotation, handledAnnotations));
         }
