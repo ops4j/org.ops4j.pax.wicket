@@ -21,7 +21,10 @@ import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.OBJECTCLASS;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.cglib.proxy.Factory;
 
@@ -79,14 +82,13 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
     }
 
     public void inject(Object toInject, Class<?> toHandle) {
-        // TODO: [PAXWICKET-265] With a new approach we can remove the
-        int foundAnnotation = countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(toHandle);
-        if (foundAnnotation == 0) {
+        Set<String> foundAnnotation = countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(toHandle);
+        if (foundAnnotation.isEmpty()) {
             LOGGER.trace("Component {} doesn't contain any PaxWicketBean fields. Therefore ignore", toInject
                 .getClass().getName());
             return;
         }
-        int handledAnnotations = 0;
+        Set<String> handledAnnotations = new HashSet<String>();
         synchronized (resolvers) {
             Class<?> currentAnalysingClass = toHandle;
             boolean handledFactory = false;
@@ -99,12 +101,12 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
                         listener.inject(toInject, currentAnalysingClass);
                         // if we reach here the bean had been injected correctly
                         if (handledFactory) {
-                            handledAnnotations +=
+                            handledAnnotations.addAll(
                                 countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass
-                                    .getSuperclass());
+                                    .getSuperclass()));
                         } else {
-                            handledAnnotations +=
-                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass);
+                            handledAnnotations.addAll(
+                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass));
                         }
                         // once we've found it we could take the next level
                         break;
@@ -119,10 +121,15 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
                 }
             }
         }
-        if (handledAnnotations != foundAnnotation) {
+        if (handledAnnotations.size() != foundAnnotation.size()) {
             throw new IllegalStateException(String.format(
-                "For Component %s %s could be injected but only %s had been injected.", toInject.getClass().getName(),
-                foundAnnotation, handledAnnotations));
+                "For Component %s %d %s fields should be injected but only %d %s had been injected.", toInject
+                    .getClass()
+                    .getName(),
+                    foundAnnotation.size(),
+                Arrays.toString(foundAnnotation.toArray(new String[0])),
+                handledAnnotations.size(),
+                Arrays.toString(handledAnnotations.toArray(new String[0]))));
         }
     }
 

@@ -22,6 +22,7 @@ import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -52,7 +53,7 @@ public class AbstractPaxWicketInjectorTest {
         }
 
         @Override
-        protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
+        protected Set<String> countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
             return super.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(component);
         }
     }
@@ -141,7 +142,8 @@ public class AbstractPaxWicketInjectorTest {
 
     @Test
     public void testdoesComponentContainPaxWicketBeanAnnotatedFields_shouldReturnTrue() {
-        assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestComponentBase.class),
+        assertThat(injector.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(TestComponentBase.class)
+            .size(),
             is(1));
     }
 }

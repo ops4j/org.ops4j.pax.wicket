@@ -40,7 +40,7 @@ import org.ops4j.pax.wicket.api.SuperFilters;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.filter.FilterDelegator;
 import org.ops4j.pax.wicket.internal.injection.ComponentInstantiationListenerFacade;
-import org.ops4j.pax.wicket.internal.injection.DelegatingComponentInstanciationListener;
+import org.ops4j.pax.wicket.spi.support.DelegatingComponentInstanciationListener;
 import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;

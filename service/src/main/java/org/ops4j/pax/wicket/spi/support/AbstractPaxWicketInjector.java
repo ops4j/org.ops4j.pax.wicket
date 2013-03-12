@@ -17,7 +17,9 @@ package org.ops4j.pax.wicket.spi.support;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -89,28 +91,28 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return beanType;
     }
 
-    protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
+    protected Set<String> countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
+        Set<String> foundAnnotation = new HashSet<String>();
         Class<?> clazz = component;
-        int numberOfInjectionFields = 0;
         while (clazz != null && !isBoundaryClass(clazz)) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Inject.class)) {
-                    numberOfInjectionFields++;
+                    foundAnnotation.add(field.toGenericString());
                 }
             }
             clazz = clazz.getSuperclass();
         }
-        return numberOfInjectionFields;
+        return foundAnnotation;
     }
 
-    protected int countComponentContainPaxWicketBeanAnnotatedOneLevel(Class<?> component) {
+    protected Set<String> countComponentContainPaxWicketBeanAnnotatedOneLevel(Class<?> component) {
+        Set<String> foundAnnotation = new HashSet<String>();
         Class<?> clazz = component;
-        int numberOfInjectionFields = 0;
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(Inject.class)) {
-                numberOfInjectionFields++;
+                foundAnnotation.add(field.toGenericString());
             }
         }
-        return numberOfInjectionFields;
+        return foundAnnotation;
     }
 }
