@@ -28,11 +28,32 @@ import javax.inject.Inject;
 import org.apache.wicket.Component;
 import org.junit.Before;
 import org.junit.Test;
+import org.ops4j.pax.wicket.spi.support.AbstractPaxWicketInjector;
 
 public class AbstractPaxWicketInjectorTest {
 
     private static class PaxWicketTestInjector extends AbstractPaxWicketInjector {
         public void inject(Object toInject, Class<?> toHandle) {
+        }
+
+        @Override
+        protected List<Field> getFields(Class<?> clazz) {
+            return super.getFields(clazz);
+        }
+
+        @Override
+        protected void setField(Object component, Field field, Object proxy) {
+            super.setField(component, field, proxy);
+        }
+
+        @Override
+        protected Class<?> getBeanType(Field field) {
+            return super.getBeanType(field);
+        }
+
+        @Override
+        protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
+            return super.countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(component);
         }
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.spi.blueprint.injection;
+package org.ops4j.pax.wicket.spi.support;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ import javax.servlet.Filter;
 
 import org.ops4j.pax.wicket.api.ConfigurableFilterConfig;
 import org.ops4j.pax.wicket.api.FilterFactory;
-import org.ops4j.pax.wicket.util.AbstractFilterFactory;
+import org.ops4j.pax.wicket.api.support.AbstractFilterFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

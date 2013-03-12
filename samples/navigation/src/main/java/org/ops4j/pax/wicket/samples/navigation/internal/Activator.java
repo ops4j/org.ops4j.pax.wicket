@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.samples.navigation.internal;
 
-import org.ops4j.pax.wicket.util.DefaultWebApplicationFactory;
+import org.ops4j.pax.wicket.api.support.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 

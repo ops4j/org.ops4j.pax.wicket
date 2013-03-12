@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import org.apache.wicket.Component;
 import org.junit.Test;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
-import org.ops4j.pax.wicket.spi.springdm.injection.ComponentInstantiationListenerFacade;
+import org.ops4j.pax.wicket.spi.support.ComponentInstantiationListenerFacade;
 
 public class ComponentInstantiationListenerFacadeTest {
 

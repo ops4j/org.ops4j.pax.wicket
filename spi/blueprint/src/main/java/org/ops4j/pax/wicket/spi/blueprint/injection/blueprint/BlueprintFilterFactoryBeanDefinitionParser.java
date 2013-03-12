@@ -17,8 +17,8 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
-import org.ops4j.pax.wicket.spi.blueprint.injection.FilterFactoryDecorator;
-import org.ops4j.pax.wicket.spi.blueprint.injection.InjectionParserUtil;
+import org.ops4j.pax.wicket.spi.support.FilterFactoryDecorator;
+import org.ops4j.pax.wicket.spi.support.InjectionParserUtil;
 import org.w3c.dom.Element;
 
 public class BlueprintFilterFactoryBeanDefinitionParser extends AbstractBlueprintBeanDefinitionParser {

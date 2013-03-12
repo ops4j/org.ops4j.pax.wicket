@@ -21,8 +21,8 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
 import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
-import org.ops4j.pax.wicket.spi.blueprint.injection.InjectionParserUtil;
-import org.ops4j.pax.wicket.spi.blueprint.injection.PageFactoryDecorator;
+import org.ops4j.pax.wicket.spi.support.InjectionParserUtil;
+import org.ops4j.pax.wicket.spi.support.PageFactoryDecorator;
 import org.w3c.dom.Element;
 
 public class BlueprintPageFactoryBeanDefinitionParser extends AbstractBlueprintBeanDefinitionParser {

@@ -15,59 +15,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util;
+package org.ops4j.pax.wicket.spi.support;
 
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 import static org.ops4j.pax.wicket.api.Constants.APPLICATION_NAME;
 import static org.osgi.framework.Constants.SERVICE_PID;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
-import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
-import org.ops4j.pax.wicket.api.PaxWicketInjector;
-import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
-import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
+import org.apache.wicket.application.IClassResolver;
+import org.ops4j.pax.wicket.internal.EnumerationAdapter;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
  */
-public final class BundleInjectionProviderHelper {
+public final class BundleClassResolverHelper {
 
     private static final String[] SERVICE_NAMES =
     {
-        PaxWicketInjector.class.getName(),
+        IClassResolver.class.getName(),
         ManagedService.class.getName()
     };
 
     private final BundleContext bundleContext;
     private final Hashtable<String, Object> serviceProperties;
-    private BundleAnalysingComponentInstantiationListener bundleAnalysingComponentInstantiationListener;
 
     private final Object lock = new Object();
-    private final String injectionSource;
     private ServiceRegistration<?> serviceRegistration;
 
-    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
-
     /**
-     * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
-     * {@link PaxWicketBeanInjectionSource}.
+     * Construct an instance of {@code BundleClassResolver}.
      */
-    public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource,
-            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker)
-        throws IllegalArgumentException {
-        this.injectionSource = injectionSource;
-        this.factoryTracker = factoryTracker;
+    public BundleClassResolverHelper(BundleContext bundleContext) throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundle");
         this.bundleContext = bundleContext;
         serviceProperties = new Hashtable<String, Object>();
-        setApplicationName(applicationName);
     }
 
     /**
@@ -100,15 +93,12 @@ public final class BundleInjectionProviderHelper {
     /**
      * Sets the application nane.
      */
-    public final void setApplicationName(String applicationName) {
+    public final void setApplicationName(String... applicationNames) {
         synchronized (lock) {
-            if (applicationName == null) {
+            if (applicationNames == null) {
                 serviceProperties.remove(APPLICATION_NAME);
-                bundleAnalysingComponentInstantiationListener = null;
             } else {
-                serviceProperties.put(APPLICATION_NAME, applicationName);
-                bundleAnalysingComponentInstantiationListener =
-                    new BundleAnalysingComponentInstantiationListener(bundleContext, injectionSource, factoryTracker);
+                serviceProperties.put(APPLICATION_NAME, applicationNames);
             }
 
             if (serviceRegistration != null) {
@@ -123,7 +113,7 @@ public final class BundleInjectionProviderHelper {
     public final void register() {
         synchronized (lock) {
             if (serviceRegistration == null) {
-                BundleInjectionResolver resolver = new BundleInjectionResolver();
+                BundleClassResolver resolver = new BundleClassResolver();
                 serviceRegistration = bundleContext.registerService(SERVICE_NAMES, resolver, serviceProperties);
             }
         }
@@ -141,16 +131,24 @@ public final class BundleInjectionProviderHelper {
         }
     }
 
-    private final class BundleInjectionResolver implements PaxWicketInjector, ManagedService {
+    private final class BundleClassResolver implements IClassResolver, ManagedService {
 
-        public void inject(Object toInject, Class<?> toHandle) {
-            validateNotNull(bundleAnalysingComponentInstantiationListener,
-                "bundleAnalysingComponentInstantiationListener");
-            if (bundleAnalysingComponentInstantiationListener.injectionPossible(toHandle)) {
-                bundleAnalysingComponentInstantiationListener.inject(toInject, toHandle);
-                return;
+        public final Class<?> resolveClass(String classname) throws ClassNotFoundException {
+            Bundle bundle = bundleContext.getBundle();
+            return bundle.loadClass(classname);
+        }
+
+        public Iterator<URL> getResources(String name) {
+            try {
+                final Bundle bundle = bundleContext.getBundle();
+                final Enumeration<URL> enumeration = bundle.getResources(name);
+                if (null == enumeration) {
+                    return null;
+                }
+                return new EnumerationAdapter<URL>(enumeration);
+            } catch (IOException e) {
+                return Collections.<URL> emptyList().iterator();
             }
-            throw new IllegalStateException("no injections source found");
         }
 
         @SuppressWarnings("rawtypes")
@@ -169,5 +167,13 @@ public final class BundleInjectionProviderHelper {
             }
         }
 
+        /**
+         * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
+         * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want
+         * to be informed about the problem as soon as possible.
+         */
+        public ClassLoader getClassLoader() {
+            throw new UnsupportedOperationException("This method should NOT BE CALLED!");
+        }
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.spi.blueprint.injection;
+package org.ops4j.pax.wicket.spi.support;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ import net.sf.cglib.proxy.Enhancer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.ops4j.pax.wicket.api.PageFactory;
-import org.ops4j.pax.wicket.util.AbstractPageFactory;
+import org.ops4j.pax.wicket.api.support.AbstractPageFactory;
 import org.osgi.framework.BundleContext;
 
 public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwareDecorator {

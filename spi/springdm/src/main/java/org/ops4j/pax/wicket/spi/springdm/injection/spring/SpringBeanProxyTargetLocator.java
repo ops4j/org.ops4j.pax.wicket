@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
 import java.util.Map;
 
-import org.ops4j.pax.wicket.spi.springdm.injection.AbstractProxyTargetLocator;
+import org.ops4j.pax.wicket.spi.support.AbstractProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

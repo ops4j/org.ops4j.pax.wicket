@@ -19,8 +19,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.spi.blueprint.injection.BundleScanningMountPointProviderDecorator;
 import org.ops4j.pax.wicket.spi.blueprint.injection.blueprint.BlueprintAutoPageMounterDefinitionParser;
+import org.ops4j.pax.wicket.spi.support.BundleScanningMountPointProviderDecorator;
 
 public class BlueprintAutoPageMounterDefinitionParserTest {
 

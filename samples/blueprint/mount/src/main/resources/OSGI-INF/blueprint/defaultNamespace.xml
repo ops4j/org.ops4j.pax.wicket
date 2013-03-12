@@ -24,7 +24,7 @@
       <entry key="pax.wicket.applicationname" value="blueprint.mount" />
       <entry key="pax.wicket.mountpoint" value="blueprint/mount" />
     </service-properties>
-    <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory">
+    <bean class="org.ops4j.pax.wicket.api.support.SimpleWebApplicationFactory">
       <property name="wicketApplication" value="org.ops4j.pax.wicket.samples.blueprint.mount.internal.WicketApplication" />
     </bean>
   </service>

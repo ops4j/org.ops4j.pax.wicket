@@ -15,7 +15,7 @@
  */
 package org.ops4j.pax.wicket.it.classResolver.simpleLibraries.internal;
 
-import org.ops4j.pax.wicket.util.BundleClassResolverHelper;
+import org.ops4j.pax.wicket.spi.support.BundleClassResolverHelper;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 

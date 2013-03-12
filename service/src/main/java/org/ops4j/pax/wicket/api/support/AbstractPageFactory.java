@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.ops4j.pax.wicket.util;
+package org.ops4j.pax.wicket.api.support;
 
 import static org.ops4j.lang.NullArgumentException.validateNotEmpty;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;

@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
-import org.ops4j.pax.wicket.spi.blueprint.injection.BundleScanningMountPointProviderDecorator;
+import org.ops4j.pax.wicket.spi.support.BundleScanningMountPointProviderDecorator;
 import org.w3c.dom.Element;
 
 public class BlueprintAutoPageMounterDefinitionParser extends AbstractBlueprintBeanDefinitionParser {

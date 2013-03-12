@@ -16,7 +16,7 @@
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
 import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
-import org.ops4j.pax.wicket.spi.springdm.injection.BundleInjectionProviderHelperDecorator;
+import org.ops4j.pax.wicket.spi.support.BundleInjectionProviderHelperDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 

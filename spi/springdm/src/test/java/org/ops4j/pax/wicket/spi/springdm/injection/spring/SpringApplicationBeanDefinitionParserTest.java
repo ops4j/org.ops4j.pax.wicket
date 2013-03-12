@@ -19,8 +19,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.spi.springdm.injection.ApplicationDecorator;
 import org.ops4j.pax.wicket.spi.springdm.injection.spring.SpringApplicationBeanDefinitionParser;
+import org.ops4j.pax.wicket.spi.support.ApplicationDecorator;
 
 public class SpringApplicationBeanDefinitionParserTest {
 

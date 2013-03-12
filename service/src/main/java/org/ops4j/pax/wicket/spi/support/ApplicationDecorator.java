@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
-package org.ops4j.pax.wicket.spi.blueprint.injection;
+package org.ops4j.pax.wicket.spi.support;
 
 import java.util.Map;
 
 import org.apache.wicket.protocol.http.WebApplication;
-import org.ops4j.pax.wicket.util.DefaultWebApplicationFactory;
+import org.ops4j.pax.wicket.api.support.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +61,18 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
         this.contextParams = contextParams;
     }
 
+    public void setInjectionSource(String injectionSource) {
+        this.injectionSource = injectionSource;
+    }
+
+    /**
+     * @return the current value of injectionSource
+     */
+    public String getInjectionSource() {
+        // TODO: This must be used!
+        return injectionSource;
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void start() throws Exception {
         factory =
@@ -73,15 +85,6 @@ public class ApplicationDecorator implements InjectionAwareDecorator {
     public void stop() throws Exception {
         factory.dispose();
         LOGGER.info("Successfully unregistered application factory");
-    }
-
-    public void setInjectionSource(String injectionSource) {
-        this.injectionSource = injectionSource;
-    }
-
-    public String getInjectionSource() {
-        // FIXME: This is not used ATM!
-        return injectionSource;
     }
 
 }

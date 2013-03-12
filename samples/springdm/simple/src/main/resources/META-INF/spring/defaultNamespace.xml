@@ -29,7 +29,7 @@
       <entry key="pax.wicket.applicationname" value="springdm.simple.default" />
       <entry key="pax.wicket.mountpoint" value="springdm/simple/default" />
     </osgi:service-properties>
-    <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory">
+    <bean class="org.ops4j.pax.wicket.api.support.SimpleWebApplicationFactory">
       <property name="wicketApplication" value="org.ops4j.pax.wicket.samples.springdm.simple.internal.WicketApplication" />
     </bean>
   </osgi:service>

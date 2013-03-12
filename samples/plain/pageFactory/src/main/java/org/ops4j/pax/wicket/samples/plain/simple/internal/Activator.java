@@ -16,8 +16,8 @@
 package org.ops4j.pax.wicket.samples.plain.simple.internal;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.ops4j.pax.wicket.util.AbstractPageFactory;
-import org.ops4j.pax.wicket.util.DefaultWebApplicationFactory;
+import org.ops4j.pax.wicket.api.support.AbstractPageFactory;
+import org.ops4j.pax.wicket.api.support.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 

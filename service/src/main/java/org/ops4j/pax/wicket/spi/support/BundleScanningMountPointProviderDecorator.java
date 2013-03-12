@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.spi.springdm.injection;
+package org.ops4j.pax.wicket.spi.support;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
-import org.ops4j.pax.wicket.util.DefaultPageMounter;
+import org.ops4j.pax.wicket.api.support.DefaultPageMounter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;

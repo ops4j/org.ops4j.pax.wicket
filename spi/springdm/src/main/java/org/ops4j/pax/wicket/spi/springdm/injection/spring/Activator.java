@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.spi.springdm.injection;
+package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
-import org.ops4j.pax.wicket.spi.springdm.injection.spring.SpringDMProxyTargetLocatorFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;

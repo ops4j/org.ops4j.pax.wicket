@@ -15,8 +15,8 @@
  */
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
-import org.ops4j.pax.wicket.spi.springdm.injection.FilterFactoryDecorator;
-import org.ops4j.pax.wicket.spi.springdm.injection.InjectionParserUtil;
+import org.ops4j.pax.wicket.spi.support.FilterFactoryDecorator;
+import org.ops4j.pax.wicket.spi.support.InjectionParserUtil;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 

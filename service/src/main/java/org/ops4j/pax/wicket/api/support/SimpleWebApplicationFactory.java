@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.util;
+package org.ops4j.pax.wicket.api.support;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;

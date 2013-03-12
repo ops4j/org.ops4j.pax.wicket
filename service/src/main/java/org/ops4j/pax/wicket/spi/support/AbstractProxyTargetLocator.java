@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.ops4j.pax.wicket.spi.blueprint.injection;
+package org.ops4j.pax.wicket.spi.support;
 
 import java.util.Map;
 
@@ -53,6 +53,13 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
             throw new IllegalStateException("not possible", e);
         }
         return references != null && references.length != 0;
+    }
+
+    /**
+     * @return the current value of beanName
+     */
+    public String getBeanName() {
+        return beanName;
     }
 
     public ProxyTarget locateProxyTarget() {
@@ -98,10 +105,6 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
             "Bundle %s can no longer attach bean %s with ID %s, class %s to page %s", bundleContext
                 .getBundle().getSymbolicName(), beanType.getName(), beanName, beanType.getName(),
             parent.getName()));
-    }
-
-    public String getBeanName() {
-        return beanName;
     }
 
     public Class<?> getParent() {

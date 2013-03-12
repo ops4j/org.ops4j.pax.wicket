@@ -19,8 +19,8 @@ import static org.hamcrest.Matchers.typeCompatibleWith;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.ops4j.pax.wicket.spi.springdm.injection.PageFactoryDecorator;
 import org.ops4j.pax.wicket.spi.springdm.injection.spring.SpringPageFactoryBeanDefinitionParser;
+import org.ops4j.pax.wicket.spi.support.PageFactoryDecorator;
 
 public class SpringPageFactoryBeanDefinitionParserTest {
     @Test

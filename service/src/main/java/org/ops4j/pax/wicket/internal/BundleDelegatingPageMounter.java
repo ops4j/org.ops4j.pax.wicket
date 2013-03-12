@@ -23,9 +23,9 @@ import java.util.Map;
 
 import org.apache.wicket.Page;
 import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
+import org.ops4j.pax.wicket.api.support.DefaultPageMounter;
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
-import org.ops4j.pax.wicket.util.DefaultPageMounter;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

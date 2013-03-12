@@ -23,7 +23,7 @@
       <entry key="pax.wicket.applicationname" value="blueprint.filter.default" />
       <entry key="pax.wicket.mountpoint" value="blueprint/filter/default" />
     </service-properties>
-    <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory" >
+    <bean class="org.ops4j.pax.wicket.api.support.SimpleWebApplicationFactory" >
       <property name="wicketApplication" value="org.ops4j.pax.wicket.samples.blueprint.filter.internal.WicketApplication" />
     </bean>
   </service>
