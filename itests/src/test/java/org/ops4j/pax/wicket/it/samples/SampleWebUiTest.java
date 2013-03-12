@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.it.samples;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
@@ -57,7 +58,7 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     @Inject @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
 
-    /** @see module: /samples/ds/webapplication */
+    /** see module: /samples/ds/webapplication */
     @Inject @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySampleDS;
 
@@ -145,6 +146,9 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
 
     @Test
     public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
+        assertNotNull(factoryEdgeInheritInjection);
+        assertNotNull(factorySpringDmSimpleDefault);
+        assertNotNull(factorySampleDS);
         //Register a service here for later injection
         bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
 

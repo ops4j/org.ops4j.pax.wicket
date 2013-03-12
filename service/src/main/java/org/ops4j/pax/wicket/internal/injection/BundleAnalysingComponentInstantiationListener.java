@@ -26,9 +26,12 @@ import java.util.Map;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import net.sf.cglib.proxy.Factory;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanAllowNull;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.OverwriteProxy;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
@@ -92,13 +95,13 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
         try {
             Class<?> realClass = toHandle;
             Map<String, String> overwrites = null;
-            String injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
+            String injectionSource = PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN;
             if (Factory.class.isInstance(component)) {
                 overwrites = ((OverwriteProxy) ((Factory) component).getCallback(0)).getOverwrites();
                 injectionSource = ((OverwriteProxy) ((Factory) component).getCallback(0)).getInjectionSource();
                 realClass = realClass.getSuperclass();
             } else {
-                injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
+                injectionSource = PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN;
             }
             if (injectionSource == null || injectionSource.length() > 0) {
                 injectionSource = defaultInjectionSource;
@@ -107,13 +110,12 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
 
             List<Field> fields = getSingleLevelOfFields(realClass);
             for (Field field : fields) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                if (!field.isAnnotationPresent(Inject.class)) {
                     continue;
                 }
-                PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-                String fieldInjectionSource = annotation.injectionSource();
-                if (fieldInjectionSource != null && fieldInjectionSource.length() > 0) {
-                    injectionSource = fieldInjectionSource;
+                PaxWicketBeanInjectionSource annotation = field.getAnnotation(PaxWicketBeanInjectionSource.class);
+                if (annotation != null && annotation.value() != null && !annotation.value().isEmpty()) {
+                    injectionSource = annotation.value();
                 }
                 Object value;
                 if (field.getType().equals(BundleContext.class)) {
@@ -138,7 +140,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                         throw new IllegalStateException("The primitive field " + field.getName()
                                 + " is not allowed to be set to null");
                     }
-                    if (!field.getAnnotation(PaxWicketBean.class).allowNull()) {
+                    if (field.getAnnotation(PaxWicketBeanAllowNull.class) == null) {
                         throw new IllegalStateException("The field " + field.getName()
                                 + " is not allowed to be set to null, but value for injection was finally a null value");
                     }
@@ -208,7 +210,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 continue;
             }
             if (injectionSource == null || injectionSource.length() == 0 || injectionSource.equals(factory.getName())
-                    || PaxWicketBean.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
+                    || PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN.equals(injectionSource)) {
                 try {
                     // We consider this factory...
                     ProxyTargetLocator locator;
@@ -232,7 +234,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
             }
         }
         if (locators.isEmpty()) {
-            if (field.getAnnotation(PaxWicketBean.class).allowNull()) {
+            if (field.getAnnotation(PaxWicketBeanAllowNull.class) != null) {
                 return null;
             } else {
                 throw new IllegalStateException(

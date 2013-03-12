@@ -23,11 +23,11 @@ import static org.mockito.Mockito.mock;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.junit.Before;
 import org.junit.Test;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.ops4j.pax.wicket.spi.springdm.injection.AbstractPaxWicketInjector;
 
 public class AbstractPaxWicketInjectorTest {
 
@@ -38,7 +38,8 @@ public class AbstractPaxWicketInjectorTest {
 
     @SuppressWarnings("serial")
     private static class TestComponent extends Component {
-        @PaxWicketBean
+        @SuppressWarnings("unused")
+        @Inject
         private TestService testServiceA;
 
         public TestComponent(String id) {
@@ -52,9 +53,11 @@ public class AbstractPaxWicketInjectorTest {
 
     @SuppressWarnings("serial")
     private static class TestComponentExtender extends TestComponent {
-        @PaxWicketBean
+        @SuppressWarnings("unused")
+        @Inject
         private TestService testServiceB;
 
+        @SuppressWarnings("unused")
         private Object noBean;
 
         public TestComponentExtender() {
@@ -70,7 +73,7 @@ public class AbstractPaxWicketInjectorTest {
     }
 
     private static class TestObject {
-        @PaxWicketBean
+        @Inject
         private TestService testService;
 
         public TestService getTestService() {

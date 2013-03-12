@@ -37,21 +37,20 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.core.io.Resource;
 
 /**
- * Mock application context object. This mock context allows easy creation of unit tests by allowing the user to put
- * bean instances into the context.
- * 
- * Only {@link #getBean(String)}, {@link #getBean(String, Class)}, and {@link #getBeansOfType(Class)
- * } are implemented so
- * far. Any other method throws {@link UnsupportedOperationException}.
+ * Mock application context object. This mock context allows easy creation of
+ * unit tests by allowing the user to put bean instances into the context. Only
+ * {@link #getBean(String)}, {@link #getBean(String, Class)}, and
+ * {@link #getBeansOfType(Class)
+ * } are implemented so far. Any other method
+ * throws {@link UnsupportedOperationException}.
  * 
  * @author Igor Vaynberg (ivaynberg)
- * 
  */
 @SuppressWarnings("unchecked")
 public class ApplicationContextMock implements ApplicationContext, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long         serialVersionUID = 1L;
 
-    private final Map<String, Object> beans = new HashMap<String, Object>();
+    private final Map<String, Object> beans            = new HashMap<String, Object>();
 
     public void putBean(String name, Object bean) {
         beans.put(name, bean);
@@ -131,13 +130,11 @@ public class ApplicationContextMock implements ApplicationContext, Serializable 
         return (String[]) names.toArray(new String[names.size()]);
     }
 
-    public String[] getBeanNamesForType(Class type, boolean includePrototypes,
-            boolean includeFactoryBeans) {
+    public String[] getBeanNamesForType(Class type, boolean includePrototypes, boolean includeFactoryBeans) {
         throw new UnsupportedOperationException();
     }
 
-    public Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans)
-            throws BeansException {
+    public Map getBeansOfType(Class type, boolean includePrototypes, boolean includeFactoryBeans) throws BeansException {
         throw new UnsupportedOperationException();
     }
 
@@ -165,13 +162,11 @@ public class ApplicationContextMock implements ApplicationContext, Serializable 
         throw new UnsupportedOperationException();
     }
 
-    public String getMessage(String code, Object[] args, Locale locale)
-            throws NoSuchMessageException {
+    public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
         throw new UnsupportedOperationException();
     }
 
-    public String getMessage(MessageSourceResolvable resolvable, Locale locale)
-            throws NoSuchMessageException {
+    public String getMessage(MessageSourceResolvable resolvable, Locale locale) throws NoSuchMessageException {
         throw new UnsupportedOperationException();
     }
 
@@ -200,7 +195,7 @@ public class ApplicationContextMock implements ApplicationContext, Serializable 
 
     }
 
-    public Object getBean(String name, Object[] args) throws BeansException {
+    public Object getBean(String name, Object... args) throws BeansException {
         throw new UnsupportedOperationException();
 
     }

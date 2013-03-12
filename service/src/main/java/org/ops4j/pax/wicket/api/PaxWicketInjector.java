@@ -15,11 +15,13 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 
 /**
- * General PaxWicket injection abstraction. This interface takes any object and tries to inject all
- * {@link PaxWicketBean} annotations. In that way there is no difference if its a Wicket {@link Component} or not.
+ * General PaxWicket injection abstraction. This interface takes any object and tries to inject all {@link Inject}
+ * annotations. In that way there is no difference if its a Wicket {@link Component} or not.
  */
 public interface PaxWicketInjector {
 

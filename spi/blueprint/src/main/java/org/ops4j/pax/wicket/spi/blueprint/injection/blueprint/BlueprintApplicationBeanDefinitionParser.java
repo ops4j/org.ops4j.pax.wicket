@@ -17,7 +17,7 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
 import org.apache.aries.blueprint.ParserContext;
 import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.blueprint.injection.ApplicationDecorator;
 import org.ops4j.pax.wicket.spi.blueprint.injection.InjectionParserUtil;
 import org.w3c.dom.Element;
@@ -40,7 +40,7 @@ public class BlueprintApplicationBeanDefinitionParser extends AbstractBlueprintB
         String injectionSource = element.getAttribute("injectionSource");
         if (injectionSource == null || injectionSource.isEmpty()) {
             beanMetadata.addProperty("injectionSource",
-                createStringValue(context, PaxWicketBean.INJECTION_SOURCE_BLUEPRINT));
+                createStringValue(context, PaxWicketBeanInjectionSource.INJECTION_SOURCE_BLUEPRINT));
         } else {
             beanMetadata.addProperty("injectionSource", createStringValue(context, injectionSource));
         }

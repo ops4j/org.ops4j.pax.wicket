@@ -19,6 +19,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -27,7 +29,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebSession;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 
 public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
@@ -35,7 +36,7 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
     protected List<Field> getSingleLevelOfFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<Field>();
         for (Field field : clazz.getDeclaredFields()) {
-            if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+            if (!field.isAnnotationPresent(Inject.class)) {
                 continue;
             }
             fields.add(field);
@@ -48,7 +49,7 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
 
         while (clazz != null && !isBoundaryClass(clazz)) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                if (!field.isAnnotationPresent(Inject.class)) {
                     continue;
                 }
                 fields.add(field);
@@ -93,7 +94,7 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         int numberOfInjectionFields = 0;
         while (clazz != null && !isBoundaryClass(clazz)) {
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(PaxWicketBean.class)) {
+                if (field.isAnnotationPresent(Inject.class)) {
                     numberOfInjectionFields++;
                 }
             }
@@ -106,7 +107,7 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         Class<?> clazz = component;
         int numberOfInjectionFields = 0;
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(PaxWicketBean.class)) {
+            if (field.isAnnotationPresent(Inject.class)) {
                 numberOfInjectionFields++;
             }
         }

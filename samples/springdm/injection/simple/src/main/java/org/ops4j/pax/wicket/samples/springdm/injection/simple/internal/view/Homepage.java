@@ -15,9 +15,11 @@
  */
 package org.ops4j.pax.wicket.samples.springdm.injection.simple.internal.view;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.samples.springdm.injection.simple.internal.service.MyService;
 
 /**
@@ -36,7 +38,8 @@ public class Homepage extends WebPage {
      * You can beans by name or type. In addition osgi service or any other
      * named entity such as other pax-wicket components are also supported.
      */
-    @PaxWicketBean(injectionSource = PaxWicketBean.INJECTION_SOURCE_SPRING)
+    @PaxWicketBeanInjectionSource(PaxWicketBeanInjectionSource.INJECTION_SOURCE_SPRING)
+    @Inject
     private MyService           serviceBean;
 
     public Homepage() {

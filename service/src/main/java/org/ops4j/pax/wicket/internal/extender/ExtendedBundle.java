@@ -263,6 +263,9 @@ public class ExtendedBundle {
         } catch (ClassNotFoundException e) {
             LOGGER.debug("ClassNotFoundException while try to load {}", className, e);
             return null;
+        } catch (ClassFormatError e) {
+            LOGGER.debug("ClassFormatError while try to load {}", className, e);
+            return null;
         }
     }
 

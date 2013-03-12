@@ -15,8 +15,10 @@
  */
 package org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.markup.html.basic.Label;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.samples.edge.inheritinjection.parent.Parent;
 
 /**
@@ -26,8 +28,9 @@ public class InheritedPage extends Parent {
 
     private static final long serialVersionUID = 1L;
 
-    @PaxWicketBean(name = "injectedBean")
-    private InternalBean injectedBean;
+    @Named("injectedBean")
+    @Inject
+    private InternalBean      injectedBean;
 
     public InheritedPage() {
         add(new Label("text", injectedBean.getSomeText()));

@@ -65,6 +65,7 @@
               net.sf.cglib.core;version="${cglib.range}",
               net.sf.cglib.reflect;version="${cglib.range}",
               javax.servlet,
+              javax.inject,
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,

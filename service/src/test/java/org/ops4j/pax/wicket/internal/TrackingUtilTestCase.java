@@ -68,15 +68,15 @@ public final class TrackingUtilTestCase {
             "(&(pax.wicket.applicationname=appName)(objectClass=org.ops4j.pax.wicket.api.PageFactory))"
             );
         Filter expFilter = mockery.mock(Filter.class);
-        exp1.will(exp1.returnValue(expFilter));
+        exp1.will(Expectations.returnValue(expFilter));
 
         mockery.checking(exp1);
         Filter filter = createAllPageFactoryFilter(context, "appName");
         assertEquals(expFilter, filter);
 
         Expectations exp2 = new Expectations();
-        exp2.one(context).createFilter(exp2.with(exp2.any(String.class)));
-        exp2.will(exp2.throwException(new InvalidSyntaxException("msg", "filter")));
+        exp2.one(context).createFilter(exp2.with(Expectations.any(String.class)));
+        exp2.will(Expectations.throwException(new InvalidSyntaxException("msg", "filter")));
 
         mockery.checking(exp2);
 

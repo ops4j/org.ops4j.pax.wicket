@@ -25,7 +25,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.injection.BundleAnalysingComponentInstantiationListener;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
@@ -58,7 +58,7 @@ public final class BundleInjectionProviderHelper {
 
     /**
      * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
-     * {@link PaxWicketBean}.
+     * {@link PaxWicketBeanInjectionSource}.
      */
     public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource,
             ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker)

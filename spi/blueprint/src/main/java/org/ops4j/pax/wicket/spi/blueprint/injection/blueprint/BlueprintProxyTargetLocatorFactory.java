@@ -18,7 +18,9 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import javax.inject.Named;
+
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
@@ -29,17 +31,17 @@ import org.osgi.framework.BundleContext;
 public class BlueprintProxyTargetLocatorFactory implements ProxyTargetLocatorFactory {
 
     public String getName() {
-        return PaxWicketBean.INJECTION_SOURCE_BLUEPRINT;
+        return PaxWicketBeanInjectionSource.INJECTION_SOURCE_BLUEPRINT;
     }
 
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,
             Map<String, String> overwrites) {
-        PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-        if (annotation.name().equals("")) {
+        Named annotation = field.getAnnotation(Named.class);
+        if (annotation.value().isEmpty()) {
             // We require a name!
             return null;
         }
-        BlueprintBeanProxyTargetLocator locator = new BlueprintBeanProxyTargetLocator(context, annotation,
+        BlueprintBeanProxyTargetLocator locator = new BlueprintBeanProxyTargetLocator(context, annotation.value(),
             field.getType(), page, overwrites);
         if (locator.hasApplicationContext()) {
             return locator;

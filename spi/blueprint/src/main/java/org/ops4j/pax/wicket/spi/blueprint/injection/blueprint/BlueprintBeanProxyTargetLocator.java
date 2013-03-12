@@ -17,7 +17,6 @@ package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.spi.blueprint.injection.AbstractProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -28,20 +27,20 @@ public class BlueprintBeanProxyTargetLocator extends AbstractProxyTargetLocator<
 
     private static final long serialVersionUID = 7855320656221559137L;
 
-    public BlueprintBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+    public BlueprintBeanProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
-        super(bundleContext, annotation, beanType, parent, overwrites);
+        super(bundleContext, beanName, beanType, parent, overwrites);
     }
 
     @Override
     protected BeanReactor<BlueprintContainer> createStrategy() {
-        if (annotation.name().equals("")) {
+        if (getBeanName().isEmpty()) {
             throw new IllegalStateException("Blueprint requires annotation name");
         }
-        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
-            return new BlueprintBeanReactor(annotation.name());
+        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(getBeanName())) {
+            return new BlueprintBeanReactor(getBeanName());
         }
-        return new BlueprintBeanReactor(overwrites.get(annotation.name()));
+        return new BlueprintBeanReactor(overwrites.get(getBeanName()));
     }
 
     @Override

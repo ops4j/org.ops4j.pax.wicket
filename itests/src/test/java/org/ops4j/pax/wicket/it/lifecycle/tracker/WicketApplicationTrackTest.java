@@ -15,6 +15,16 @@
  */
 package org.ops4j.pax.wicket.it.lifecycle.tracker;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.provision;
+import static org.ops4j.pax.exam.OptionUtils.combine;
+
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
+
 import org.apache.wicket.protocol.http.WebApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,16 +41,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.hooks.weaving.WeavingHook;
-
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.provision;
-import static org.ops4j.pax.exam.OptionUtils.combine;
 
 @RunWith(PaxExam.class)
 public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
@@ -81,6 +81,9 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
 
     @Test
     public final void testAppicationTracker() throws InterruptedException, BundleException {
+        assertNotNull(factory);
+        assertNotNull(injector);
+        assertNotNull(servletContext);
         Bundle paxWicketBundle = getPaxWicketServiceBundle(bundleContext);
         Bundle simpleAppBundle = getBundleBySymbolicName(bundleContext, "org.ops4j.pax.wicket.samples.navigation");
         assertNotNull("Simple Bundle was null",simpleAppBundle);

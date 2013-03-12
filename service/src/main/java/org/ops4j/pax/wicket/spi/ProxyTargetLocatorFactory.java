@@ -18,7 +18,7 @@ package org.ops4j.pax.wicket.spi;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -29,7 +29,7 @@ public interface ProxyTargetLocatorFactory {
 
     /**
      * @return the name for this factory. The name could be used to specify a special injection source see
-     *         {@link PaxWicketBean#injectionSource()}
+     *         {@link PaxWicketBeanInjectionSource#value()}
      */
     public String getName();
 

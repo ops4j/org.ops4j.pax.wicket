@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
 import org.ops4j.pax.wicket.internal.InternalBundleDelegationProvider;
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
@@ -79,7 +79,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         }
         listeners.put(bundle.getBundle().getSymbolicName(),
             new BundleAnalysingComponentInstantiationListener(bundle.getBundle().getBundleContext(),
-                PaxWicketBean.INJECTION_SOURCE_SCAN, factoryTracker));
+                PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN, factoryTracker));
     }
 
     public void removeBundle(ExtendedBundle bundle) {

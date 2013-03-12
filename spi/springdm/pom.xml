@@ -81,7 +81,7 @@
               javax.crypto.*,
               javax.imageio.*,
               javax.servlet.*;version="[2.5,4)",
-              javax.swing.*,
+              javax.inject.*,
               javax.xml.*,
               org.apache.wicket.*;version="${wicket.dependency.version}",
               org.codehaus.jackson.*;resolution:=optional,
@@ -240,6 +240,10 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
+    </dependency>
+    <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -65,6 +65,7 @@
               net.sf.cglib.core;version="${cglib.range}",
               net.sf.cglib.reflect;version="${cglib.range}",
               javax.servlet,
+              javax.inject,
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,
@@ -92,6 +93,10 @@
       <groupId>org.ops4j.pax.wicket</groupId>
       <artifactId>org.ops4j.pax.wicket.service</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+         <groupId>javax</groupId>
+         <artifactId>javaee-api</artifactId>
     </dependency>
   </dependencies>
 </project>

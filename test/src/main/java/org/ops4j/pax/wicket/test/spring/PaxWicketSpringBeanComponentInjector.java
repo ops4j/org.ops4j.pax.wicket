@@ -17,13 +17,15 @@ package org.ops4j.pax.wicket.test.spring;
 
 import java.lang.reflect.Field;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.application.IComponentInstantiationListener;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.ops4j.pax.wicket.api.InjectorHolder;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.internal.injection.AbstractPaxWicketInjector;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
@@ -31,7 +33,7 @@ import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Wicket component injector which should be used to test {@link PaxWicketBean}
+ * Wicket component injector which should be used to test {@link Inject}
  * annotated fields. Those fields could be injected using an
  * {@link ApplicationContextMock}. The typical use case is almost similar to a
  * regular wicket spring test looking like: <code>
@@ -90,11 +92,17 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
 
         public void inject(Object toInject, Class<?> toHandle) {
             for (Field field : getFields(toInject.getClass())) {
-                PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-                if (simulateBlueprint && annotation.name().equals("")) {
+                Named named = field.getAnnotation(Named.class);
+                if (simulateBlueprint && (named == null || named.value().isEmpty())) {
                     throw new IllegalStateException("Blueprint mode does not allow annotations without name");
                 }
-                Object proxy = LazyInitProxyFactory.createProxy(field.getType(), new SpringTestProxyTargetLocator(annotation.name(), field.getType()));
+                String bn = "";
+                if (named != null) {
+                    if (named.value() != null) {
+                        bn = named.value();
+                    }
+                }
+                Object proxy = LazyInitProxyFactory.createProxy(field.getType(), new SpringTestProxyTargetLocator(bn, field.getType()));
                 setField(toInject, field, proxy);
             }
         }

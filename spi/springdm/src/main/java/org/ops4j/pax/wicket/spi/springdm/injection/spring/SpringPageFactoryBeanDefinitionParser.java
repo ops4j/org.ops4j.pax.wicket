@@ -18,7 +18,7 @@
 
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.springdm.injection.InjectionParserUtil;
 import org.ops4j.pax.wicket.spi.springdm.injection.PageFactoryDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -38,7 +38,7 @@ public class SpringPageFactoryBeanDefinitionParser extends AbstractSpringBeanDef
         addPropertyValueFromElement("pageName", element, bean);
         addPropertyValueFromElement("pageClass", element, bean);
         bean.addPropertyValue("overwrites", InjectionParserUtil.retrieveOverwriteElements(element));
-        bean.addPropertyValue("injectionSource", PaxWicketBean.INJECTION_SOURCE_SPRING);
+        bean.addPropertyValue("injectionSource", PaxWicketBeanInjectionSource.INJECTION_SOURCE_SPRING);
     }
 
 }

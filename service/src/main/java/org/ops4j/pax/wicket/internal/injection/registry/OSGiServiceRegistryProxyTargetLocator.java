@@ -22,13 +22,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -49,19 +49,21 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
 
     private static final long serialVersionUID = -5726156325232163363L;
     private final BundleContext bundleContext;
-    private final String componentName;
 
     private final String serviceInterface;
 
     private final Class<?> parent;
+
+    private final Filter baseFilter;
 
     /**
      * @param pageClass
      * @param serviceClass
      * 
      */
-    public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, PaxWicketBean annotation,
+    public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, Filter baseFilter,
             Class<?> serviceClass, Class<?> pageClass) {
+        this.baseFilter = baseFilter;
         this.parent = pageClass;
         if (pageClass.getClassLoader() instanceof BundleReference) {
             // Fetch the Bundlecontext of the page class to locate the service
@@ -72,7 +74,6 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
             bundleContext = callingContext;
             LOGGER.debug("Using the PAX Wicket BundlereContext for locating services");
         }
-        componentName = annotation.name();
         serviceInterface = serviceClass.getName();
     }
 
@@ -109,14 +110,11 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
     }
 
     private String getFilterString() {
-        boolean hasComponentName = componentName != null && !componentName.trim().equals("");
-        String filter;
-        if (hasComponentName) {
-            filter = String.format("(%s=%s)", "component.name", componentName);
+        if (baseFilter != null) {
+            return baseFilter.toString();
         } else {
-            filter = null;
+            return null;
         }
-        return filter;
     }
 
     /**

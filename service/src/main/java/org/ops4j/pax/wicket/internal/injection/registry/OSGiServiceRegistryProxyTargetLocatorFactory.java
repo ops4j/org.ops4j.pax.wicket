@@ -20,11 +20,14 @@ package org.ops4j.pax.wicket.internal.injection.registry;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanFilter;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 
 public class OSGiServiceRegistryProxyTargetLocatorFactory implements
         ProxyTargetLocatorFactory.DelayableProxyTargetLocatorFactory {
@@ -33,13 +36,13 @@ public class OSGiServiceRegistryProxyTargetLocatorFactory implements
     }
 
     public String getName() {
-        return PaxWicketBean.INJECTION_SOURCE_SERVICE_REGISTRY;
+        return PaxWicketBeanInjectionSource.INJECTION_SOURCE_SERVICE_REGISTRY;
     }
 
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,
             Map<String, String> overwrites) {
         OSGiServiceRegistryProxyTargetLocator locator =
-            new OSGiServiceRegistryProxyTargetLocator(context, field.getAnnotation(PaxWicketBean.class),
+            new OSGiServiceRegistryProxyTargetLocator(context, getFilter(context, field),
                 field.getType(), page);
         if (locator.fetchReferences() != null) {
             return locator;
@@ -51,8 +54,23 @@ public class OSGiServiceRegistryProxyTargetLocatorFactory implements
     public FutureProxyTargetLocator createFutureProxyTargetLocator(BundleContext context, Field field,
             Class<?> realFieldType, Class<?> page,
             Map<String, String> overwrites) {
-        return new OSGiServiceRegistryProxyTargetLocator(context, field.getAnnotation(PaxWicketBean.class),
+        return new OSGiServiceRegistryProxyTargetLocator(context, getFilter(context, field),
             realFieldType, page);
+    }
+
+    private static Filter getFilter(BundleContext context, Field field) {
+        PaxWicketBeanFilter annotation = field.getAnnotation(PaxWicketBeanFilter.class);
+        if (annotation != null) {
+            String value = annotation.value();
+            if (value != null && !value.isEmpty()) {
+                try {
+                    return context.createFilter(value);
+                } catch (InvalidSyntaxException e) {
+                    throw new IllegalArgumentException("Filterstring is invalid", e);
+                }
+            }
+        }
+        return null;
     }
 
 }

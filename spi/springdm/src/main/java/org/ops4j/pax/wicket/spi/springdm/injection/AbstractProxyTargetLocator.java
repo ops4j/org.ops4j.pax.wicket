@@ -17,7 +17,6 @@ package org.ops4j.pax.wicket.spi.springdm.injection;
 
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.osgi.framework.BundleContext;
@@ -28,17 +27,18 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
 
     private static final long serialVersionUID = 1L;
 
-    protected PaxWicketBean annotation;
     protected Class<?> beanType;
     protected Map<String, String> overwrites;
 
     private final Class<?> parent;
     private final BundleContext bundleContext;
 
-    public AbstractProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+    private final String beanName;
+
+    public AbstractProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         this.bundleContext = bundleContext;
-        this.annotation = annotation;
+        this.beanName = beanName;
         this.beanType = beanType;
         this.parent = parent;
         this.overwrites = overwrites;
@@ -53,6 +53,13 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
             throw new IllegalStateException("not possible", e);
         }
         return references != null && references.length != 0;
+    }
+
+    /**
+     * @return the current value of beanName
+     */
+    public String getBeanName() {
+        return beanName;
     }
 
     public ProxyTarget locateProxyTarget() {
@@ -96,7 +103,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
         }
         throw new IllegalStateException(String.format(
             "Bundle %s can no longer attach bean %s with ID %s, class %s to page %s", bundleContext
-                .getBundle().getSymbolicName(), beanType.getName(), annotation.name(), beanType.getName(),
+                .getBundle().getSymbolicName(), beanType.getName(), beanName, beanType.getName(),
             parent.getName()));
     }
 

@@ -15,9 +15,11 @@
  */
 package org.ops4j.pax.wicket.samples.plain.simple.internal;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
 
 /**
@@ -25,7 +27,8 @@ import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
  */
 public class Homepage extends WebPage {
 
-    @PaxWicketBean(injectionSource = PaxWicketBean.INJECTION_SOURCE_SERVICE_REGISTRY)
+    @Inject
+    @PaxWicketBeanInjectionSource(PaxWicketBeanInjectionSource.INJECTION_SOURCE_SERVICE_REGISTRY)
     private EchoService       echoService;
 
     private static final long serialVersionUID = 1L;

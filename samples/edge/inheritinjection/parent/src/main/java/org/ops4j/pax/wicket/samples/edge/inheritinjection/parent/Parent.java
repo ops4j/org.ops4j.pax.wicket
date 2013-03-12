@@ -17,15 +17,18 @@ package org.ops4j.pax.wicket.samples.edge.inheritinjection.parent;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class Parent extends WebPage {
 
-    @PaxWicketBean(name = "links")
+    @Named("links")
+    @Inject
     private List<LinkProvider> links;
 
     public Parent() {

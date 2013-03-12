@@ -17,7 +17,6 @@ package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
 import java.util.Map;
 
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.spi.springdm.injection.AbstractProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -28,14 +27,14 @@ public class SpringBeanProxyTargetLocator extends AbstractProxyTargetLocator<App
 
     private static final long serialVersionUID = 3688782411985692696L;
 
-    public SpringBeanProxyTargetLocator(BundleContext bundleContext, PaxWicketBean annotation, Class<?> beanType,
+    public SpringBeanProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
-        super(bundleContext, annotation, beanType, parent, overwrites);
+        super(bundleContext, beanName, beanType, parent, overwrites);
     }
 
     @Override
     protected BeanReactor<ApplicationContext> createStrategy() {
-        if (annotation.name().equals("")) {
+        if (getBeanName().isEmpty()) {
             return new AbstractProxyTargetLocator.BeanReactor<ApplicationContext>() {
                 public boolean containsBean(ApplicationContext applicationContext) {
                     try {
@@ -51,24 +50,24 @@ public class SpringBeanProxyTargetLocator extends AbstractProxyTargetLocator<App
                 }
             };
         }
-        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(annotation.name())) {
+        if (overwrites == null || overwrites.size() == 0 || !overwrites.containsKey(getBeanName())) {
             return new AbstractProxyTargetLocator.BeanReactor<ApplicationContext>() {
                 public boolean containsBean(ApplicationContext applicationContext) {
-                    return applicationContext.containsBean(annotation.name());
+                    return applicationContext.containsBean(getBeanName());
                 }
 
                 public Object createBean(ApplicationContext applicationContext) {
-                    return applicationContext.getBean(annotation.name(), beanType);
+                    return applicationContext.getBean(getBeanName(), beanType);
                 }
             };
         }
         return new AbstractProxyTargetLocator.BeanReactor<ApplicationContext>() {
             public boolean containsBean(ApplicationContext applicationContext) {
-                return applicationContext.containsBean(overwrites.get(annotation.name()));
+                return applicationContext.containsBean(overwrites.get(getBeanName()));
             }
 
             public Object createBean(ApplicationContext applicationContext) {
-                return applicationContext.getBean(overwrites.get(annotation.name()), beanType);
+                return applicationContext.getBean(overwrites.get(getBeanName()), beanType);
             }
         };
     }

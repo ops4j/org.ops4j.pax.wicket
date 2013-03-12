@@ -17,12 +17,14 @@ package org.ops4j.pax.wicket.samples.mixed.main.internal;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.ops4j.pax.wicket.samples.mixed.api.ComponentProvider;
 import org.ops4j.pax.wicket.samples.mixed.api.PageProvider;
 
@@ -31,16 +33,17 @@ import org.ops4j.pax.wicket.samples.mixed.api.PageProvider;
  */
 public class Homepage extends WebPage {
 
-    private static final long serialVersionUID = 1L;
+    private static final long       serialVersionUID = 1L;
 
-    @PaxWicketBean(name = "componentProvider")
+    @Named("componentProvider")
+    @Inject
     private List<ComponentProvider> componentProvider;
-    @PaxWicketBean(name = "pageProvider")
-    private List<PageProvider> pageProvider;
+    @Named("pageProvider")
+    @Inject
+    private List<PageProvider>      pageProvider;
 
     public Homepage() {
-        add(new Label("oneComponent",
-            "Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
+        add(new Label("oneComponent", "Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
 
         ListView<PageProvider> links = new ListView<PageProvider>("links", pageProvider) {
             @Override
