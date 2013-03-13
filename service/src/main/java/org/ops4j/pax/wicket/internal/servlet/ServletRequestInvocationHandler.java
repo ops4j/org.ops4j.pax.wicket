@@ -18,6 +18,7 @@ package org.ops4j.pax.wicket.internal.servlet;
 import static org.ops4j.lang.NullArgumentException.validateNotNull;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,22 +51,25 @@ public final class ServletRequestInvocationHandler
         this.mountPoint = mountPoint;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] arguments)
-                throws Throwable {
-        String methodName = method.getName();
-        Object returnValue;
-        if (mountPoint.length() == 0) {
-            if ("getContextPath".equals(methodName) ||
+    public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
+        try {
+            String methodName = method.getName();
+            Object returnValue;
+            if (mountPoint.length() == 0) {
+                if ("getContextPath".equals(methodName) ||
                             "getServletPath".equals(methodName)) {
-                returnValue = "";
-            } else if ("getPathInfo".equals(methodName)) {
-                returnValue = request.getServletPath();
+                    returnValue = "";
+                } else if ("getPathInfo".equals(methodName)) {
+                    returnValue = request.getServletPath();
+                } else {
+                    returnValue = method.invoke(request, arguments);
+                }
             } else {
                 returnValue = method.invoke(request, arguments);
             }
-        } else {
-            returnValue = method.invoke(request, arguments);
+            return returnValue;
+        } catch (InvocationTargetException e) {
+            throw e.getTargetException();
         }
-        return returnValue;
     }
 }
