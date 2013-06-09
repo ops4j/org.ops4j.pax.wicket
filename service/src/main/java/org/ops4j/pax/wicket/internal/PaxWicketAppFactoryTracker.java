@@ -67,7 +67,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
         factory.setPaxWicketBundle(context.getBundle());
 
-        File tmpDir = context.getDataFile("tmp-dir");
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
         String mountPoint = factory.getMountPoint();
         String applicationName = (String) reference.getProperty(APPLICATION_NAME);
         FilterDelegator filterDelegator =
@@ -107,7 +107,7 @@ final class PaxWicketAppFactoryTracker extends ServiceTracker {
 
         String newApplicationName = (String) reference.getProperty(APPLICATION_NAME);
         if (!oldApplicationName.equals(newApplicationName)) {
-            File tmpDir = context.getDataFile("tmp-dir");
+            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             FilterDelegator filterDelegator =
                 new FilterDelegator(reference.getBundle().getBundleContext(), newApplicationName);
             Servlet servlet =
