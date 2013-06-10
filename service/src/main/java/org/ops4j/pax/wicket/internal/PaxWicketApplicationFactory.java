@@ -51,7 +51,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory createPaxWicketApplicationFactory(BundleContext bundleContext,
             IWebApplicationFactory webApplicationFactory, ServiceReference reference) {
-        File tmpDir = retrieveTmpFile(bundleContext);
+        File tmpDir = retrieveTmpFile();
         tmpDir.mkdirs();
         String mountPoint = (String) reference.getProperty(Constants.MOUNTPOINT);
         String applicationName = (String) reference.getProperty(Constants.APPLICATION_NAME);
@@ -62,8 +62,8 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
             contextParams, tmpDir, filterDelegator);
     }
 
-    private static File retrieveTmpFile(BundleContext bundleContext) {
-        File tmpDir = bundleContext.getDataFile("tmp-dir");
+    private static File retrieveTmpFile() {
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
         if (tmpDir == null) {
             throw new IllegalStateException("Platform needs file system access to work correctly.");
         }
