@@ -73,7 +73,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     private static File retrieveTmpFile(BundleContext bundleContext) {
-        File tmpDir = bundleContext.getDataFile("tmp-dir");
+        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
         if (tmpDir == null) {
             throw new IllegalStateException("Platform needs file system access to work correctly.");
         }
