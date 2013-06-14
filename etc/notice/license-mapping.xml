@@ -83,5 +83,15 @@
         <artifactId>wiquery-jquery-ui</artifactId>
         <license>MIT License</license>
     </artifact>
+    <artifact>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <license>Apache License, Version 2.0</license>
+    </artifact>
+    <artifact>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>org.eclipse.osgi</artifactId>
+        <license>Eclipse Public License, Version 1.0</license>
+    </artifact>
 </license-lookup>
 
