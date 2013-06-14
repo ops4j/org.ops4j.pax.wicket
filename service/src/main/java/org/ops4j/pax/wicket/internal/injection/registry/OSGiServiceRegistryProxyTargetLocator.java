@@ -25,7 +25,6 @@ import org.ops4j.pax.wicket.spi.FutureProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleReference;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -62,17 +61,9 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
      */
     public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, Filter baseFilter,
             Class<?> serviceClass, Class<?> pageClass) {
+        bundleContext = callingContext;
         this.baseFilter = baseFilter;
         this.parent = pageClass;
-        if (pageClass.getClassLoader() instanceof BundleReference) {
-            // Fetch the Bundlecontext of the page class to locate the service
-            BundleReference reference = (BundleReference) pageClass.getClassLoader();
-            bundleContext = reference.getBundle().getBundleContext();
-            LOGGER.debug("Using the Bundlereference of class {} for locating services", pageClass);
-        } else {
-            bundleContext = callingContext;
-            LOGGER.debug("Using the PAX Wicket BundlereContext for locating services");
-        }
         serviceInterface = serviceClass.getName();
     }
 

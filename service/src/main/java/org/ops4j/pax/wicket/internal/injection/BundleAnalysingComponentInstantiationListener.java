@@ -155,6 +155,21 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
     private Future<?> injectFuture(Field field, final Class<?> page,
             Map<String, String> overwrites,
             String injectionSource) {
+        Class<?> realClass = getGenericTypeArgument(field);
+        ProxyTargetLocator locator =
+                        createProxyTargetLocator(field, realClass, page, overwrites, injectionSource, true);
+        return InjectionFuture.create(realClass, locator);
+
+    }
+
+    /**
+     * Takes a field and returns the type argument for this
+     * 
+     * @param field
+     * @return the type of the generic parameter of that field
+     */
+    public static Class<?> getGenericTypeArgument(Field field) {
+        // TODO Might this better be located under SPI in an "InjectionUtil" class or something?
         Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) genericType;
@@ -163,20 +178,23 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 Type type = actualTypeArguments[0];
                 if (type instanceof Class<?>) {
                     Class<?> realClass = (Class<?>) type;
-                    ProxyTargetLocator locator =
-                        createProxyTargetLocator(field, realClass, page, overwrites, injectionSource, true);
-                    return InjectionFuture.create(realClass, locator);
+                    return realClass;
                 } else {
                     throw new IllegalArgumentException(
-                        "only direct class types are allowed for generic parameter on the Future<T>, but " + type
+                        "only direct class types are allowed for generic parameter on field " + field.getName()
+                                + " of type "
+                                + genericType.getClass().getName() + "<T>, but " + type
                                 + " was given!");
                 }
             } else {
-                throw new IllegalArgumentException("one type parameter required but " + actualTypeArguments.length
+                throw new IllegalArgumentException("only one type parameter expected for field " + field.getName()
+                        + " but " + actualTypeArguments.length
                         + " where found!");
             }
         } else {
-            throw new IllegalArgumentException("Not a ParameterizedType!");
+            throw new IllegalArgumentException(
+                "The field '" + field.getName()
+                        + "' is not a ParameterizedType but this is required for type inferrence!");
         }
     }
 
