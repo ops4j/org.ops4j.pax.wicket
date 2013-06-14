@@ -11,158 +11,59 @@ distributed  under the  License is distributed on an "AS IS" BASIS,
 WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
 implied.
 
+Every project contains a NOTICE_DETAILS file listening all projects 
+referenced by the specific bundle. Those could be required for build
+or test only or could be packaged with the software. To find out which
+projects finally get used where its best to check the poms. This NOTICE
+file just gives an overview of software repacked with Pax Wicket.
+
 See the License for the specific language governing permissions and
 limitations under the License.
 
-This project includes:
-  Activation 1.1 under The Apache Software License, Version 2.0
-  AOP alliance under Public Domain
-  Apache Aries Blueprint Bundle under The Apache Software License, Version 2.0
-  Apache Aries Proxy Bundle under The Apache Software License, Version 2.0
-  Apache Aries Util under The Apache Software License, Version 2.0
-  Apache Felix Configuration Admin Service under The Apache Software License, Version 2.0
-  Apache Felix EventAdmin under The Apache Software License, Version 2.0
-  Apache Geronimo JSR-330 Spec API under The Apache Software License, Version 2.0
-  Apache JAMES Mime4j under Apache License, Version 2.0
-  Apache Log4j under The Apache Software License, Version 2.0
-  Apache ServiceMix :: Bundles :: aopalliance under The Apache Software License, Version 2.0
-  Apache ServiceMix :: Bundles :: asm under The Apache Software License, Version 2.0
-  Apache ServiceMix :: Bundles :: cglib under The Apache Software License, Version 2.0
-  Apache ServiceMix :: Bundles :: mail under The Apache Software License, Version 2.0
-  Apache ServiceMix :: Bundles :: xmlbeans under The Apache Software License, Version 2.0
-  aQute Bundle Tool Library under All files contained in this JAR are licensed under the Apache
-         2.0 license, unless noted differently in their source (see
-         swing2swt).
-  ASM Core under BSD License
-  Commons Codec under The Apache Software License, Version 2.0
-  Commons Collections under The Apache Software License, Version 2.0
-  Commons IO under The Apache Software License, Version 2.0
-  Commons Lang under The Apache Software License, Version 2.0
-  Commons Logging under The Apache Software License, Version 2.0
-  CSS Parser under GNU Lesser General Public License
-  Data Mapper for Jackson under The Apache Software License, Version 2.0
-  Geronimo OSGi-enable spec bundle locator under The Apache Software License, Version 2.0
-  Guava (Google Common Libraries) under The Apache Software License, Version 2.0
-  Hamcrest Core under BSD style
-  Hamcrest Library under BSD style
-  HtmlUnit under Apache License, Version 2.0
-  HtmlUnit Core JS under Mozilla Public License version 1.1
-  HttpClient under Apache License
-  HttpCore under Apache License
-  HttpMime under Apache License
-  Jackson under The Apache Software License, Version 2.0
-  Jetty :: Continuation under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Http Utility under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: IO Utility under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: JNDI Naming under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Plus under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Security under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Server Core under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Servlet Handling under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Utilities under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: Webapp Application Support under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty :: XML utilities under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty Orbit :: Activation under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty Orbit :: Glassfish Mail under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty Orbit :: Servlet API under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  Jetty Orbit :: Transaction API under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
-  jMock 2 Core under BSD style
-  jMock JUnit 4 Extension under BSD style
-  JTA 1.1 under The Apache Software License, Version 2.0
-  JUnit under Common Public License Version 1.0
-  Logging under The Apache Software License, Version 2.0
-  Mockito under The MIT License
-  Neko HTML under The Apache Software License, Version 2.0
-  OpenEngSB :: OSGi Wrapped Bundles :: HTML Unit Testing Framework under Apache 2
-  OPS4J Base - All under ALv2
-  OPS4J Base - Execution under ALv2
-  OPS4J Base - IO under ALv2
-  OPS4J Base - Lang under ALv2
-  OPS4J Base - Monitors under ALv2
-  OPS4J Base - Net under ALv2
-  OPS4J Base - Service Provider Access under ALv2
-  OPS4J Base - Store under ALv2
-  OPS4J Base - Util - Property under ALv2
-  OPS4J Pax Exam - API under Apache License, Version 2.0
-  OPS4J Pax Exam - Driver JUnit4 under Apache License, Version 2.0
-  OPS4J Pax Exam - Injection under Apache License, Version 2.0
-  OPS4J Pax Exam - Links for Assembly under Apache License, Version 2.0
-  OPS4J Pax Exam - Remote Bundle Context under Apache License, Version 2.0
-  OPS4J Pax Exam - Remote Bundle Context Client under Apache License, Version 2.0
-  OPS4J Pax Exam - TestContainer PaxRunner under Apache License, Version 2.0
-  OPS4J Pax Exam - TestContainer Remote under Apache License, Version 2.0
-  OPS4J Pax Exam - UI Low Level SPI under Apache License, Version 2.0
-  OPS4J Pax Logging - API under ALv2
-  OPS4J Pax Logging - Service under ALv2
-  OPS4J Pax Runner - Core - No JCL under ALv2
-  OPS4J Pax Swissbox :: Framework Helpers under ALv2
-  OPS4J Pax Swissbox :: Lifecycle under ALv2
-  OPS4J Pax Swissbox :: OSGi Core under ALv2
-  OPS4J Pax Tinybundles under ALv2
-  OPS4J Pax Web - API under ALv2
-  OPS4J Pax Web - Jetty under ALv2
-  OPS4J Pax Web - Runtime under ALv2
-  OPS4J Pax Web - Service SPI under ALv2
-  OPS4J Pax Wicket :: Integration Tests under ALv2
-  OPS4J Pax Wicket :: Karaf Feature File under ALv2
-  OPS4J Pax Wicket :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Application Factory under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Filter under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Injection :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Injection :: Simple under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Mount under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Simple under ALv2
-  OPS4J Pax Wicket :: Samples :: Blueprint :: Wicket Properties Examples under ALv2
-  OPS4J Pax Wicket :: Samples :: Edge Cases :: Inherit Injection :: Extended Parent Class under ALv2
-  OPS4J Pax Wicket :: Samples :: Edge Cases :: Inherit Injection :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Edge Cases :: Inherit Injection :: Parent Class Provider under ALv2
-  OPS4J Pax Wicket :: Samples :: Edge Cases :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Karaf Feature File under ALv2
-  OPS4J Pax Wicket :: Samples :: Mixed :: API under ALv2
-  OPS4J Pax Wicket :: Samples :: Mixed :: Component Provider under ALv2
-  OPS4J Pax Wicket :: Samples :: Mixed :: Main Aggretator under ALv2
-  OPS4J Pax Wicket :: Samples :: Mixed :: Page Provider under ALv2
-  OPS4J Pax Wicket :: Samples :: Mixed :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Navigation under ALv2
-  OPS4J Pax Wicket :: Samples :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Pax Construct Provision Pom under ALv2
-  OPS4J Pax Wicket :: Samples :: Plain :: Page Factory under ALv2
-  OPS4J Pax Wicket :: Samples :: Plain :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: Plain :: Simple under ALv2
-  OPS4J Pax Wicket :: Samples :: SpringDM :: Injection :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: SpringDM :: Injection :: Simple under ALv2
-  OPS4J Pax Wicket :: Samples :: SpringDM :: Parent under ALv2
-  OPS4J Pax Wicket :: Samples :: SpringDM :: Simple under ALv2
-  OPS4J Pax Wicket :: Service under ALv2
-  OPS4J Pax Wicket :: Test Helper under ALv2
-  org.osgi.compendium under Apache License, Version 2.0
-  org.osgi.core under Apache License, Version 2.0
-  OSGI factory registry under The Apache Software License, Version 2.0
-  Rhino under Mozilla Public License
-  Servlet 2.5 under The Apache Software License, Version 2.0
-  Simple API for CSS under The W3C Software License
-  SLF4J API Module under MIT License
-  Spring OSGi Annotations under Apache License, Version 2.0
-  Spring OSGi Core under Apache License, Version 2.0
-  Spring OSGi Extender under Apache License, Version 2.0
-  Spring OSGi IO under Apache License, Version 2.0
-  spring-aop under Apache License, Version 2.0
-  spring-asm under Apache License, Version 2.0
-  spring-beans under Apache License, Version 2.0
-  spring-context under Apache License, Version 2.0
-  spring-core under Apache License, Version 2.0
-  spring-expression under Apache License, Version 2.0
-  Wicket Auth Roles under The Apache Software License, Version 2.0
-  Wicket Core under The Apache Software License, Version 2.0
-  Wicket Development Utilities under The Apache Software License, Version 2.0
-  Wicket Extensions under The Apache Software License, Version 2.0
-  Wicket Request under The Apache Software License, Version 2.0
-  Wicket Util under The Apache Software License, Version 2.0
-  WiQuery Core Project under MIT License
-  WiQuery jQuery UI Project under MIT License
-  Xalan Java under The Apache Software License, Version 2.0
-  Xalan Java Serializer under The Apache Software License, Version 2.0
-  Xerces2 Java Parser under The Apache Software License, Version 2.0
-  XML Commons External Components XML APIs under The Apache Software License, Version 2.0
+I. Included Software
 
+This product includes software developed at
+OPS4J (http://www.ops4j.org/).
+Licensed under the Apache License 2.0.
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+Licensed under the Apache License 2.0.
+
+This product uses software developed at
+The OSGi Alliance (http://www.osgi.org/).
+Copyright (c) OSGi Alliance (2000, 2010).
+Licensed under the Apache License 2.0.
+
+This product includes software developed at
+OW2 (http://www.ow2.org/).
+Licensed under the BSD License.
+
+This product includes software developed at
+Eclipse Foundation (http://www.eclipse.org/).
+Licensed under the EPL.
+
+II. Used Software
+
+This product uses software developed at
+AOP Alliance (http://aopalliance.sourceforge.net/).
+Licensed under the Public Domain.
+
+This product uses software developed at
+SLF4J (http://www.slf4j.org/).
+Licensed under the MIT License.
+
+This product uses software developed at
+SpringSource (http://www.springsource.org/).
+Licensed under the Apache License 2.0.
+
+This product uses software from http://www.json.org.
+Copyright (c) 2002 JSON.org
+
+
+III. License Summary
+- Apache License 2.0
+- BSD License
+- EPL License
+- MIT License
+- Public Domain

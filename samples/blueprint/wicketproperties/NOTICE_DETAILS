@@ -1,0 +1,50 @@
+Copyright OPS4J
+
+Licensed  under the  Apache License,  Version 2.0  (the "License");
+you may not use  this file  except in  compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed  under the  License is distributed on an "AS IS" BASIS,
+WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+implied.
+
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This project includes:
+  Activation 1.1 under The Apache Software License, Version 2.0
+  AOP alliance under Public Domain
+  Apache Aries Blueprint Bundle under The Apache Software License, Version 2.0
+  Apache ServiceMix :: Bundles :: cglib under The Apache Software License, Version 2.0
+  Commons Logging under The Apache Software License, Version 2.0
+  Data Mapper for Jackson under The Apache Software License, Version 2.0
+  Geronimo OSGi-enable spec bundle locator under The Apache Software License, Version 2.0
+  Jackson under The Apache Software License, Version 2.0
+  OPS4J Base - All under ALv2
+  OPS4J Pax Wicket :: Samples :: Blueprint :: Wicket Properties Examples under ALv2
+  OPS4J Pax Wicket :: Service under ALv2
+  org.osgi.core under Apache License, Version 2.0
+  OSGI factory registry under The Apache Software License, Version 2.0
+  Rhino under Mozilla Public License
+  Spring OSGi Annotations under Apache License, Version 2.0
+  Spring OSGi Core under Apache License, Version 2.0
+  Spring OSGi Extender under Apache License, Version 2.0
+  Spring OSGi IO under Apache License, Version 2.0
+  spring-aop under Apache License, Version 2.0
+  spring-asm under Apache License, Version 2.0
+  spring-beans under Apache License, Version 2.0
+  spring-context under Apache License, Version 2.0
+  spring-core under Apache License, Version 2.0
+  spring-expression under Apache License, Version 2.0
+  Wicket Auth Roles under The Apache Software License, Version 2.0
+  Wicket Core under The Apache Software License, Version 2.0
+  Wicket Development Utilities under The Apache Software License, Version 2.0
+  Wicket Extensions under The Apache Software License, Version 2.0
+  Wicket Request under The Apache Software License, Version 2.0
+  Wicket Util under The Apache Software License, Version 2.0
+  WiQuery Core Project under MIT License
+  WiQuery jQuery UI Project under MIT License
+
