@@ -16,7 +16,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -49,14 +50,14 @@
   </scm>
 
   <properties>
-    <pax.exam.version>3.0.0</pax.exam.version>
+    <pax.exam.version>3.0.3</pax.exam.version>
     <pax.url.version>1.5.0</pax.url.version>
     <slf4j.version>1.7.2</slf4j.version>
-    <pax.logging.version>1.7.0</pax.logging.version> 
+    <pax.logging.version>1.7.0</pax.logging.version>
     <karaf.version>2.3.0</karaf.version>
     <felix.eventadmin.version>1.3.2</felix.eventadmin.version>
     <felix.configadmin.version>1.6.0</felix.configadmin.version>
-    <wicket.dependency.version>6.2.0</wicket.dependency.version>
+    <wicket.dependency.version>6.7.0</wicket.dependency.version>
     <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>7.6.7.v20120910</jetty.version>
@@ -65,28 +66,32 @@
     <spring.version>3.0.7.RELEASE</spring.version>
     <cglib.version>2.2_2</cglib.version>
     <cglib.range>[2,3)</cglib.range>
-    <aries.blueprint.version>1.0.0</aries.blueprint.version>
-    <aries.proxy.version>1.0.0</aries.proxy.version>
-    <aries.util.version>1.0.0</aries.util.version>
-    <wiquery.version>1.5.7</wiquery.version>
-    <jackson.version>1.8.6</jackson.version>
+    <aries.blueprint.version>1.1.0</aries.blueprint.version>
+    <aries.proxy.version>1.0.1</aries.proxy.version>
+    <aries.util.version>1.1.0</aries.util.version>
+    <wiquery.version>6.6.0</wiquery.version>
+    <jackson.version>1.9.11</jackson.version>
     <aries.blueprint.range>[0.3,2.0)</aries.blueprint.range>
     <ops4j.base.version>1.4.0</ops4j.base.version>
     <osgi.framework.version>4.3.1</osgi.framework.version>
   </properties>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.4</version>
+        <version>2.3.7</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
+        <version>2.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -100,7 +105,7 @@
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
-        <version>1.9.0</version>
+        <version>1.10.b1</version>
         <configuration>
           <header>https://raw.github.com/ops4j/org.ops4j.pax.wicket/master/etc/header/asf.txt</header>
           <failIfMissing>true</failIfMissing>
@@ -131,7 +136,7 @@
       <plugin>
         <groupId>org.jasig.maven</groupId>
         <artifactId>maven-notice-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <configuration>
           <fileName>NOTICE_DETAILS</fileName>
           <noticeTemplate>etc/notice/NOTICE.template</noticeTemplate>
@@ -146,17 +151,17 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
-          <version>1.6</version>
+          <version>1.7</version>
         </plugin>
         <plugin>
           <groupId>org.ops4j</groupId>
           <artifactId>maven-pax-plugin</artifactId>
-          <version>1.4</version>
+          <version>1.5</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-eclipse-plugin</artifactId>
-          <version>2.6</version>
+          <version>2.9</version>
         </plugin>
         <plugin>
           <groupId>org.apache.servicemix.tooling</groupId>
@@ -166,7 +171,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.9</version>
+          <version>2.14</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -176,7 +181,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.9</version>
         <configuration>
           <aggregate>true</aggregate>
           <stylesheetfile>${basedir}/src/site/resources/css/javadoc.css</stylesheetfile>
@@ -231,7 +236,7 @@
       <dependency>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>org.eclipse.osgi</artifactId>
-        <version>3.7.0.v20110613</version>
+        <version>3.9.0.v20130305-2200</version>
       </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
@@ -246,12 +251,12 @@
       <dependency>
         <groupId>org.apache.geronimo.specs</groupId>
         <artifactId>geronimo-osgi-locator</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.geronimo.specs</groupId>
         <artifactId>geronimo-osgi-registry</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.geronimo.specs</groupId>
@@ -355,12 +360,12 @@
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.asm</artifactId>
-        <version>3.3_2</version>
+        <version>3.3.1_1</version>
       </dependency>
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.javax.mail</artifactId>
-        <version>1.4.1_4</version>
+        <version>1.4.1_5</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
@@ -446,7 +451,7 @@
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.aopalliance</artifactId>
-        <version>1.0_5</version>
+        <version>1.0_6</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
@@ -601,13 +606,13 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.2</version>
+        <version>4.11</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
-        <version>1.9.0</version>
+        <version>1.9.5</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -619,7 +624,7 @@
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.xmlbeans</artifactId>
-        <version>2.5.0_2</version>
+        <version>2.6.0_2</version>
       </dependency>
       <dependency>
         <groupId>org.odlabs.wiquery</groupId>
@@ -642,10 +647,10 @@
         <version>${jackson.version}</version>
       </dependency>
       <dependency>
-         <groupId>javax</groupId>
-         <artifactId>javaee-api</artifactId>
-         <version>6.0</version>
-       </dependency>
+        <groupId>javax</groupId>
+        <artifactId>javaee-api</artifactId>
+        <version>6.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
