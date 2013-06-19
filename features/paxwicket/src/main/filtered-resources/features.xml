@@ -23,12 +23,22 @@
     <feature>wicket</feature>
     <feature>eventadmin</feature>
     <bundle>mvn:org.ops4j.base/ops4j-base/${ops4j.base.version}</bundle>
+    <bundle>mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/${geronimo.inject.version}</bundle>
+    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
     <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${project.version}</bundle>
   </feature>
+
 
   <feature name="pax-wicket-spring" version="${project.version}">
     <feature>pax-wicket</feature>
     <feature>spring-dm</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.springdm/${project.version}</bundle>
+  </feature>
+
+  <feature name="pax-wicket-blueprint" version="${project.version}">
+    <feature>pax-wicket</feature>
+    <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.blueprint/${project.version}</bundle>
   </feature>
 
 </features>

@@ -19,12 +19,12 @@
 <features name="wicket-features-${project.version}">
 
   <feature name="wicket" version="${wicket.dependency.version}">
-      <feature>http</feature>
-      <bundle>mvn:org.apache.wicket/wicket-util/${wicket.dependency.version}</bundle>
-      <bundle>mvn:org.apache.wicket/wicket-request/${wicket.dependency.version}</bundle>
-      <bundle>mvn:org.apache.wicket/wicket-core/${wicket.dependency.version}</bundle>
-      <bundle>mvn:org.apache.wicket/wicket-auth-roles/${wicket.dependency.version}</bundle>
-      <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket.dependency.version}</bundle>
+    <feature>http</feature>
+    <bundle>mvn:org.apache.wicket/wicket-util/${wicket.dependency.version}</bundle>
+    <bundle>mvn:org.apache.wicket/wicket-request/${wicket.dependency.version}</bundle>
+    <bundle>mvn:org.apache.wicket/wicket-core/${wicket.dependency.version}</bundle>
+    <bundle>mvn:org.apache.wicket/wicket-auth-roles/${wicket.dependency.version}</bundle>
+    <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket.dependency.version}</bundle>
   </feature>
 
 </features>

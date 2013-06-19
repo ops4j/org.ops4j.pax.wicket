@@ -15,24 +15,23 @@
  */
 package org.ops4j.pax.wicket.api;
 
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WicketFilter;
+
+import javax.servlet.Filter;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.servlet.Filter;
-
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WicketFilter;
-
 /**
  * A {@link WebApplicationFactory} can be annotated with this to provide a hint that the supplied "SuperFilter" must be
  * used with this application. A {@link SuperFilter} is required to allow specifying a global {@link Filter} that is
- * always called befor any other custom filters and will be initilized before the {@link WebApplication} is started,
- * thus it is tied to the liefecycle of the underlying Servlet like in a classical WebApplication environment. This
+ * always called before any other custom filters and will be initialized before the {@link WebApplication} is started,
+ * thus it is tied to the lifecycle of the underlying Servlet like in a classical WebApplication environment. This
  * allows to enable special features of Wicket like Atmosphere integration, Native Websockets or Shiro <br>
- * <b>Ther is one special case</b> when the filter (an no more than one is allowed per application!) extends
- * {@link WicketFilter} it is used as the baseclass of PAX Wickets Wicket integration (this is needed for
+ * <b>There is one special case</b> when the filter (an no more than one is allowed per application!) extends
+ * {@link WicketFilter} it is used as the base class of PAX Wickets Wicket integration (this is needed for
  * NativeWebsockets and maybe future Wicket extensions)
  */
 @Retention(RetentionPolicy.RUNTIME)
