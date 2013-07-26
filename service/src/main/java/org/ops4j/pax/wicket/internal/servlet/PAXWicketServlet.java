@@ -83,7 +83,7 @@ public final class PAXWicketServlet implements Servlet {
             }
 
             public String getFilterName() {
-                return "Wicket-" + appFactory.getApplicationName();
+                return appFactory.getApplicationName();
             }
         });
     }
