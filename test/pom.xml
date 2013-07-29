@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>pax-wicket</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.test</artifactId>
-  <version>3.0.1</version>
+  <version>3.0.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>OPS4J Pax Wicket :: Test Helper</name>
 
