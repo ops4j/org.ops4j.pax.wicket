@@ -55,12 +55,9 @@ public class BundleDelegatingExtensionTracker implements
 
     private final BundleContext paxWicketBundleContext;
     private final Map<String, ExtendedBundle> relvantBundles = new HashMap<String, ExtendedBundle>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver> classResolvers =
-        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener> componentInstanciationListener =
-        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter> pageMounter =
-        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver> classResolvers = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener> componentInstanciationListener = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter> pageMounter = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter>();
 
     private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
 
@@ -93,6 +90,10 @@ public class BundleDelegatingExtensionTracker implements
 
     private void addServicesForServiceReference(ServiceReference<WebApplicationFactory<?>> reference) {
         String applicationName = (String) reference.getProperty(Constants.APPLICATION_NAME);
+        if (applicationName == null) {
+            throw new IllegalArgumentException("The service must provide a '" + Constants.APPLICATION_NAME
+                    + "' property");
+        }
         classResolvers.put(reference, new BundleDelegatingClassResolver(paxWicketBundleContext, applicationName));
         classResolvers.get(reference).start();
         componentInstanciationListener.put(reference, new BundleDelegatingComponentInstanciationListener(
