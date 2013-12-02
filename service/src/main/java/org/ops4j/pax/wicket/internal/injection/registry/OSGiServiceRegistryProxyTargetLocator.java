@@ -50,7 +50,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
 
     private final Class<?> parent;
 
-    private final Filter baseFilter;
+    private final String filterString;
 
     /**
      * @param pageClass
@@ -60,7 +60,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
     public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, Filter baseFilter,
             Class<?> serviceClass, Class<?> pageClass) {
         bundleContext = callingContext;
-        this.baseFilter = baseFilter;
+        this.filterString = getFilterString(baseFilter);
         this.parent = pageClass;
         serviceInterface = serviceClass.getName();
     }
@@ -82,22 +82,21 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
             }
         }
         throw new IllegalStateException("can't find any service matching objectClass = "
-                + serviceInterface + " and filter = " + getFilterString());
+                + serviceInterface + " and filter = " + filterString);
     }
 
     public ServiceReference<?>[] fetchReferences() {
         try {
-            String filter = getFilterString();
             LOGGER.debug("Try to locate a suitable service for objectClass = "
-                    + serviceInterface + " and filter = " + filter);
-            return bundleContext.getAllServiceReferences(serviceInterface, filter);
+                    + serviceInterface + " and filter = " + filterString);
+            return bundleContext.getAllServiceReferences(serviceInterface, filterString);
         } catch (InvalidSyntaxException e) {
             LOGGER.error("Creation of filter failed: {}", e.getMessage(), e);
             throw new RuntimeException("Creation of filter failed", e);
         }
     }
 
-    private String getFilterString() {
+    private String getFilterString(Filter baseFilter) {
         if (baseFilter != null) {
             return baseFilter.toString();
         } else {
@@ -176,7 +175,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
     }
 
     public ProxyTarget locateProxyTarget(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
-        String filter = getFilterString();
+        String filter = filterString;
         if (filter == null) {
             filter = String.format("(%s=%s)", Constants.OBJECTCLASS, serviceInterface);
         } else {
