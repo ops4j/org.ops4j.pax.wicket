@@ -15,7 +15,6 @@
  */
 package org.ops4j.pax.wicket.internal.extender;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -67,7 +66,7 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
     public void addingService(ServiceReference reference, WebApplicationFactory service) {
         synchronized (this) {
             addServicesForServiceReference(reference);
-            reevaluateAllBundles(reference);
+            reevaluateAllBundles(reference, false);
         }
     }
 
@@ -75,7 +74,7 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
         synchronized (this) {
             removeServicesForServiceReference(reference);
             addServicesForServiceReference(reference);
-            reevaluateAllBundles(reference);
+            reevaluateAllBundles(reference, false);
         }
     }
 
@@ -109,10 +108,24 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
         pageMounter.remove(reference);
     }
 
-    private void reevaluateAllBundles(ServiceReference reference) {
-        Collection<Bundle> bundles = relvantBundles.values();
+    private void reevaluateAllBundles(ServiceReference reference, boolean recall) {
+        Bundle[] bundles = relvantBundles.values().toArray(new Bundle[0]);
         for (Bundle bundle : bundles) {
             addBundleToServicesReference(bundle, reference);
+        }
+        int size = relvantBundles.values().size();
+        if (size != bundles.length) {
+            if (recall) {
+                LOGGER.warn("cyclic dependency breaks Pax Wicket bundle handling, state might be inconsistent!");
+                return;
+            } else {
+                LOGGER
+                    .info(
+                        "rerun reevaluateAllBundles for added service reference {}({}) (old bundle count = {}, new bundle count = {})",
+                        new Object[]{ reference.getProperty(org.osgi.framework.Constants.OBJECTCLASS),
+                            reference.getProperty(org.osgi.framework.Constants.SERVICE_ID), bundles.length, size });
+                reevaluateAllBundles(reference, true);
+            }
         }
     }
 
