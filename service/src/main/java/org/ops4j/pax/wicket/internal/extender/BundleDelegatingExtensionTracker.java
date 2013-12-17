@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.extender;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +51,9 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingExtensionTracker.class);
 
+    private static final boolean ignoreServiceUpdates = Boolean.getBoolean("pax.wicket.ignoreupdate");
+    private static final boolean useModsaveMap = Boolean.getBoolean("pax.wicket.modsave");
+
     private final BundleContext paxWicketBundleContext;
     private final Map<String, Bundle> relvantBundles = new HashMap<String, Bundle>();
     private final Map<ServiceReference, BundleDelegatingClassResolver> classResolvers =
@@ -71,6 +75,9 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
     }
 
     public void modifiedService(ServiceReference reference, WebApplicationFactory service) {
+        if (ignoreServiceUpdates) {
+            return;
+        }
         synchronized (this) {
             removeServicesForServiceReference(reference);
             addServicesForServiceReference(reference);
@@ -109,22 +116,29 @@ public class BundleDelegatingExtensionTracker implements ServiceTrackerAggregato
     }
 
     private void reevaluateAllBundles(ServiceReference reference, boolean recall) {
-        Bundle[] bundles = relvantBundles.values().toArray(new Bundle[0]);
-        for (Bundle bundle : bundles) {
-            addBundleToServicesReference(bundle, reference);
-        }
-        int size = relvantBundles.values().size();
-        if (size != bundles.length) {
-            if (recall) {
-                LOGGER.warn("cyclic dependency breaks Pax Wicket bundle handling, state might be inconsistent!");
-                return;
-            } else {
-                LOGGER
-                    .info(
-                        "rerun reevaluateAllBundles for added service reference {}({}) (old bundle count = {}, new bundle count = {})",
-                        new Object[]{ reference.getProperty(org.osgi.framework.Constants.OBJECTCLASS),
-                            reference.getProperty(org.osgi.framework.Constants.SERVICE_ID), bundles.length, size });
-                reevaluateAllBundles(reference, true);
+        if (useModsaveMap) {
+            Bundle[] bundles = relvantBundles.values().toArray(new Bundle[0]);
+            for (Bundle bundle : bundles) {
+                addBundleToServicesReference(bundle, reference);
+            }
+            int size = relvantBundles.values().size();
+            if (size != bundles.length) {
+                if (recall) {
+                    LOGGER.warn("cyclic dependency breaks Pax Wicket bundle handling, state might be inconsistent!");
+                    return;
+                } else {
+                    LOGGER
+                        .info(
+                            "rerun reevaluateAllBundles for added service reference {}({}) (old bundle count = {}, new bundle count = {})",
+                            new Object[]{ reference.getProperty(org.osgi.framework.Constants.OBJECTCLASS),
+                                reference.getProperty(org.osgi.framework.Constants.SERVICE_ID), bundles.length, size });
+                    reevaluateAllBundles(reference, true);
+                }
+            }
+        } else {
+            Collection<Bundle> bundles = relvantBundles.values();
+            for (Bundle bundle : bundles) {
+                addBundleToServicesReference(bundle, reference);
             }
         }
     }
