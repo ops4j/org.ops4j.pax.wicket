@@ -36,7 +36,8 @@ import org.slf4j.LoggerFactory;
 public class BundleDelegatingComponentInstanciationListener implements PaxWicketInjector,
         InternalBundleDelegationProvider {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingComponentInstanciationListener.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(BundleDelegatingComponentInstanciationListener.class);
 
     private final String applicationName;
     private final BundleContext paxWicketBundleContext;
@@ -47,7 +48,8 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
 
     private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
 
-    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName,
+    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext,
+            String applicationName,
             ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker) {
         this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
@@ -76,16 +78,20 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.put(bundle.getBundle().getSymbolicName(),
-            new BundleAnalysingComponentInstantiationListener(bundle.getBundle().getBundleContext(),
-                PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN, factoryTracker));
+        synchronized (listeners) {
+            listeners.put(bundle.getBundle().getSymbolicName(), new BundleAnalysingComponentInstantiationListener(
+                    bundle.getBundle().getBundleContext(), PaxWicketBeanInjectionSource.INJECTION_SOURCE_SCAN,
+                    factoryTracker));
+        }
     }
 
     public void removeBundle(ExtendedBundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.remove(bundle.getBundle().getSymbolicName());
+        synchronized (listeners) {
+            listeners.remove(bundle.getBundle().getSymbolicName());
+        }
     }
 
     public void inject(Object toInject, Class<?> toHandle) {
