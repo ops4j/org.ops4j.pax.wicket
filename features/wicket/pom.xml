@@ -12,7 +12,7 @@
 
   <packaging>pom</packaging>
 
-  <name>OPS4J Pax Wicket :: Karaf Feature File</name>
+  <name>OPS4J Pax Wicket :: Wicket Karaf Feature File</name>
 
   <build>
     <resources>
