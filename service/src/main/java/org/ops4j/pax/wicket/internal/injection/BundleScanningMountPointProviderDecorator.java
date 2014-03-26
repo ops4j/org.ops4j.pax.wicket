@@ -58,13 +58,11 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
                 .toString(), bundleToScan.getSymbolicName());
             return;
         }
-        Enumeration<?> baseEntries = bundleContext.getBundle().findEntries("/", "*", false);
-        String baseUrl = ((URL) baseEntries.nextElement()).getFile().replaceFirst("[^/]+/$", "");
+        String baseUrl = bundleContext.getBundle().getLocation();
         while (findEntries.hasMoreElements()) {
             URL object = (URL) findEntries.nextElement();
-            String className = object.getFile()
-                    .replaceFirst(baseUrl, "")
-                    .replaceAll("jar:.*jar!/", "")
+            String className = object.toString()
+                    .replaceFirst("^" + baseUrl, "")
                     .replaceAll("/", ".")
                     .replaceAll(".class$", "");
             Class<?> candidateClass = bundleToScan.loadClass(className);
