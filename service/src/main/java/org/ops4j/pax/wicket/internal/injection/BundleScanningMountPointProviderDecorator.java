@@ -64,6 +64,7 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
             URL object = (URL) findEntries.nextElement();
             String className = object.getFile()
                     .replaceFirst(baseUrl, "")
+                    .replaceAll("jar:.*jar!/", "")
                     .replaceAll("/", ".")
                     .replaceAll(".class$", "");
             Class<?> candidateClass = bundleToScan.loadClass(className);
