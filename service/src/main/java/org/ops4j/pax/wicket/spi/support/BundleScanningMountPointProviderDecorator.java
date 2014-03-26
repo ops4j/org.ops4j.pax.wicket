@@ -15,6 +15,7 @@
  */
 package org.ops4j.pax.wicket.spi.support;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -58,13 +59,8 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
                 .toString(), bundleToScan.getSymbolicName());
             return;
         }
-        String baseUrl = bundleContext.getBundle().getLocation();
         while (findEntries.hasMoreElements()) {
-            URL object = (URL) findEntries.nextElement();
-            String className = object.toString()
-                    .replaceFirst("^" + baseUrl, "")
-                    .replaceAll("/", ".")
-                    .replaceAll(".class$", "");
+            String className = calculateClassName((URL) findEntries.nextElement());
             Class<?> candidateClass = bundleToScan.loadClass(className);
             if (!Page.class.isAssignableFrom(candidateClass)) {
                 continue;
@@ -79,6 +75,19 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
                 mountPointRegistrations.add(mountPointRegistration);
             }
         }
+    }
+
+    private String calculateClassName(URL url) throws MalformedURLException {
+        String className = url.getFile();
+        URL baseUrl = new URL(bundleContext.getBundle().getLocation());
+        if (className.startsWith(baseUrl.getFile())) {
+            className = className.replaceFirst(baseUrl.getFile(), "");
+        } else {
+            className = className.replaceFirst("^/", "");
+        }
+        className = className.replaceAll("/", ".");
+        className = className.replaceAll(".class$", "");
+        return className;
     }
 
     public void stop() throws Exception {
