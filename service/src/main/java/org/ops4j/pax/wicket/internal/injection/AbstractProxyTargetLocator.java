@@ -31,7 +31,7 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
     protected Map<String, String> overwrites;
 
     private final Class<?> parent;
-    private final BundleContext bundleContext;
+    private final transient BundleContext bundleContext;
 
     public AbstractProxyTargetLocator(BundleContext bundleContext, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
