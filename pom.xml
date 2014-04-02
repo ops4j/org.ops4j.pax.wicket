@@ -49,8 +49,7 @@
   </scm>
 
   <properties>
-    <pax.exam.version>2.4.0.RC1</pax.exam.version>
-    <pax.runner.version>1.7.6</pax.runner.version>
+    <pax.exam.version>2.6.0</pax.exam.version>
     <slf4j.version>1.7.2</slf4j.version>
     <pax.logging.version>1.7.0</pax.logging.version> 
     <karaf.version>2.3.0</karaf.version>
@@ -267,7 +266,7 @@
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>pax-exam-container-paxrunner</artifactId>
+        <artifactId>pax-exam-container-forked</artifactId>
         <version>${pax.exam.version}</version>
       </dependency>
       <dependency>
@@ -286,9 +285,10 @@
         <version>1.0</version>
       </dependency>
       <dependency>
-        <groupId>org.ops4j.pax.runner</groupId>
-        <artifactId>pax-runner-no-jcl</artifactId>
-        <version>${pax.runner.version}</version>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.framework</artifactId>
+        <version>4.4.0</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.ops4j.pax.tinybundles</groupId>
