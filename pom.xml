@@ -56,7 +56,7 @@
     <karaf.version>2.2.2</karaf.version>
     <felix.eventadmin.version>1.2.12</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
-    <wicket.dependency.version>1.4.22</wicket.dependency.version>
+    <wicket.dependency.version>1.4.23</wicket.dependency.version>
     <jetty.version>7.3.1.v20110307</jetty.version>
     <pax.web.version>1.0.4</pax.web.version>
     <spring.osgi.version>1.2.1</spring.osgi.version>
