@@ -42,12 +42,14 @@
 
   <scm>
     <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket.git</connection>
-    <developerConnection>${release-paxwicket-altGitURL}</developerConnection>
+    <developerConnection>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</developerConnection>
     <url>http://github.com/ops4j/org.ops4j.pax.wicket</url>
     <tag>v0.7.12-SNAPSHOT</tag>
   </scm>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
     <pax.exam.version>1.2.4</pax.exam.version>
     <slf4j.version>1.6.1</slf4j.version>
     <pax.logging.version>1.6.2</pax.logging.version> 
@@ -55,8 +57,6 @@
     <felix.eventadmin.version>1.2.12</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
     <wicket.dependency.version>1.4.22</wicket.dependency.version>
-    <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>7.3.1.v20110307</jetty.version>
     <pax.web.version>1.0.4</pax.web.version>
     <spring.osgi.version>1.2.1</spring.osgi.version>
