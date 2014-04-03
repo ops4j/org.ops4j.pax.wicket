@@ -200,7 +200,12 @@
     <module>test</module>
     <module>samples</module>
     <module>features</module>
-    <module>itests</module>
+    <!-- 
+         It's a PITA, and someone really needs to reactivate that if there is any interest of
+         further maintaining this branch. But since it is out of life for quite some time now
+         we can life with this problem (for now).
+    -->
+    <!--<module>itests</module>-->
   </modules>
 
   <dependencyManagement>
