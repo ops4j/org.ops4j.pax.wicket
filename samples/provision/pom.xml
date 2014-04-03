@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>pax-wicket-samples-parent</artifactId>
-    <version>0.7.14</version>
+    <version>0.7.15-SNAPSHOT</version>
   </parent>
 
   <groupId>org.ops4j.pax.wicket.samples</groupId>
   <artifactId>provision</artifactId>
-  <version>0.7.14</version>
+  <version>0.7.15-SNAPSHOT</version>
 
   <name>OPS4J Pax Wicket :: Samples :: Pax Construct Provision Pom</name>
 
