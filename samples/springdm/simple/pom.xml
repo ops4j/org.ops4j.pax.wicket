@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.springdm</groupId>
     <artifactId>springdm</artifactId>
-    <version>0.8.9-SNAPSHOT</version>
+    <version>0.8.9</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.springdm.simple</artifactId>
-  <version>0.8.9-SNAPSHOT</version>
+  <version>0.8.9</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: SpringDM :: Simple</name>
 
