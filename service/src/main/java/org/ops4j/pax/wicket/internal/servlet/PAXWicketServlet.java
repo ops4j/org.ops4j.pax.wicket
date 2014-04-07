@@ -16,6 +16,7 @@
 package org.ops4j.pax.wicket.internal.servlet;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 
@@ -145,7 +146,11 @@ public final class PAXWicketServlet implements Servlet {
             if (method.getName().equals("getApplicationFactory")) {
                 return applicationFactory;
             }
-            return methodProxy.invokeSuper(object, args);
+            try {
+                return methodProxy.invokeSuper(object, args);
+            } catch (InvocationTargetException e) {
+                throw e.getTargetException();
+            }
         }
 
     }
