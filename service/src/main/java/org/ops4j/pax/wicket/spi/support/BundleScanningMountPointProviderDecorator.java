@@ -15,7 +15,10 @@
  */
 package org.ops4j.pax.wicket.spi.support;
 
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -77,11 +80,12 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
         }
     }
 
-    private String calculateClassName(URL url) throws MalformedURLException {
-        String className = url.getFile();
-        URL baseUrl = new URL(bundleContext.getBundle().getLocation());
-        if (className.startsWith(baseUrl.getFile())) {
-            className = className.replaceFirst(baseUrl.getFile(), "");
+    private String calculateClassName(URL url) throws URISyntaxException {
+        String className = url.getProtocol().equals("jar") ? url.toURI().getSchemeSpecificPart() : url.toURI().getPath();
+        URI baseUrl = new URI(bundleContext.getBundle().getLocation());
+        String pattern = baseUrl.getSchemeSpecificPart();
+        if (className.startsWith(pattern)) {
+            className = className.replaceFirst(pattern, "");
         } else {
             className = className.replaceFirst("^/", "");
         }
