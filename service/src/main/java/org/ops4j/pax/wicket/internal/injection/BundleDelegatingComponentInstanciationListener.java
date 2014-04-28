@@ -32,8 +32,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BundleDelegatingComponentInstanciationListener implements PaxWicketInjector,
-        InternalBundleDelegationProvider {
+public class BundleDelegatingComponentInstanciationListener implements PaxWicketInjector, InternalBundleDelegationProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingComponentInstanciationListener.class);
 
@@ -41,8 +40,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
     private final BundleContext paxWicketBundleContext;
     private final String injectionSource = PaxWicketBean.INJECTION_SOURCE_SCAN;
 
-    private Map<String, BundleAnalysingComponentInstantiationListener> listeners =
-        new HashMap<String, BundleAnalysingComponentInstantiationListener>();
+    private Map<String, BundleAnalysingComponentInstantiationListener> listeners = new HashMap<String, BundleAnalysingComponentInstantiationListener>();
     private ServiceRegistration serviceRegistration;
 
     public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName) {
@@ -72,15 +70,19 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.put(bundle.getSymbolicName(),
-            new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), injectionSource));
+        synchronized (listeners) {
+            listeners.put(bundle.getSymbolicName(),
+                    new BundleAnalysingComponentInstantiationListener(bundle.getBundleContext(), injectionSource));
+        }
     }
 
     public void removeBundle(Bundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
         }
-        listeners.remove(bundle.getSymbolicName());
+        synchronized (listeners) {
+            listeners.remove(bundle.getSymbolicName());
+        }
     }
 
     public void inject(Object toInject, Class<?> toHandle) {
