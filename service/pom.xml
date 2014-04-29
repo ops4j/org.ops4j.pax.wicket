@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>pax-wicket</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.2</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.service</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Service</name>
 

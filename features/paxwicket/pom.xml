@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>pax-wicket</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.0.2</version>
     <relativePath>../..</relativePath>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>features</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
 
   <packaging>pom</packaging>
 
