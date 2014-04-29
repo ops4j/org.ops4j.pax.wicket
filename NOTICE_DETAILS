@@ -128,8 +128,8 @@ This project includes:
   OPS4J Pax Web - Runtime under ALv2
   OPS4J Pax Web - Service SPI under ALv2
   OPS4J Pax Wicket :: Integration Tests under ALv2
-  OPS4J Pax Wicket :: Karaf Feature File under ALv2
   OPS4J Pax Wicket :: Parent under ALv2
+  OPS4J Pax Wicket :: PAX-WICKET Karaf Feature File under ALv2
   OPS4J Pax Wicket :: Samples :: Blueprint :: Application Factory under ALv2
   OPS4J Pax Wicket :: Samples :: Blueprint :: Filter under ALv2
   OPS4J Pax Wicket :: Samples :: Blueprint :: Injection :: Parent under ALv2
@@ -167,6 +167,7 @@ This project includes:
   OPS4J Pax Wicket :: SPI :: Parent under ALv2
   OPS4J Pax Wicket :: SPI :: Spring DM under ALv2
   OPS4J Pax Wicket :: Test Helper under ALv2
+  OPS4J Pax Wicket :: Wicket Karaf Feature File under ALv2
   org.eclipse.osgi under Eclipse Public License, Version 1.0
   osgi.cmpn under Apache License, Version 2.0
   osgi.core under Apache License, Version 2.0
