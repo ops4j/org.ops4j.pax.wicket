@@ -43,9 +43,9 @@
 
   <scm>
     <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket.git</connection>
-    <developerConnection>${release-paxwicket-altGitURL}</developerConnection>
+    <developerConnection>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</developerConnection>
     <url>http://github.com/ops4j/org.ops4j.pax.wicket</url>
-    <tag>HEAD</tag>
+    <tag>v1.x.y</tag>
   </scm>
 
   <properties>
