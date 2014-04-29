@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.ops4j</groupId>
     <artifactId>master</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.1</version>
   </parent>
 
   <groupId>org.ops4j.pax.wicket</groupId>
@@ -49,6 +49,8 @@
   </scm>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     <pax.exam.version>2.6.0</pax.exam.version>
     <slf4j.version>1.6.4</slf4j.version>
     <pax.logging.version>1.6.5</pax.logging.version> 
@@ -56,8 +58,6 @@
     <felix.eventadmin.version>1.2.14</felix.eventadmin.version>
     <felix.configadmin.version>1.2.8</felix.configadmin.version>
     <wicket.dependency.version>1.5.11</wicket.dependency.version>
-    <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>7.5.4.v20111024</jetty.version>
     <pax.web.version>1.0.8</pax.web.version>
     <spring.osgi.version>1.2.1</spring.osgi.version>
