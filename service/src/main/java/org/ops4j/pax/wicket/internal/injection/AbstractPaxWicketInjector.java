@@ -16,6 +16,9 @@
 package org.ops4j.pax.wicket.internal.injection;
 
 import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,29 +36,43 @@ import org.ops4j.pax.wicket.api.PaxWicketInjector;
 
 public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
 
-    protected List<Field> getSingleLevelOfFields(Class<?> clazz) {
-        List<Field> fields = new ArrayList<Field>();
-        for (Field field : clazz.getDeclaredFields()) {
-            if (!field.isAnnotationPresent(Inject.class)) {
-                continue;
-            }
-            fields.add(field);
-        }
+    protected List<Field> getSingleLevelOfFields(final Class<?> clazz) {
+        final List<Field> fields = new ArrayList<Field>();
+        AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			@Override
+			public Void run() {
+				for (Field field : clazz.getDeclaredFields()) {
+		            if (!field.isAnnotationPresent(Inject.class)) {
+		                continue;
+		            }
+		            fields.add(field);
+		        }
+				return null;
+			}
+		});
+        
         return fields;
     }
 
-    protected List<Field> getFields(Class<?> clazz) {
-        List<Field> fields = new ArrayList<Field>();
+    protected List<Field> getFields(final Class<?> component) {
+        final List<Field> fields = new ArrayList<Field>();
 
-        while (clazz != null && !isBoundaryClass(clazz)) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (!field.isAnnotationPresent(Inject.class)) {
-                    continue;
-                }
-                fields.add(field);
-            }
-            clazz = clazz.getSuperclass();
-        }
+        AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			@Override
+			public Void run() {
+				Class<?> clazz = component;
+		        while (clazz != null && !isBoundaryClass(clazz)) {
+		            for (Field field : clazz.getDeclaredFields()) {
+		                if (!field.isAnnotationPresent(Inject.class)) {
+		                    continue;
+		                }
+		                fields.add(field);
+		            }
+		            clazz = clazz.getSuperclass();
+		        }
+		        return null;
+			}
+        });
         return fields;
     }
 
@@ -69,10 +86,16 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return false;
     }
 
-    protected void setField(Object component, Field field, Object proxy) {
+    protected void setField(final Object component, final Field field, final Object proxy) {
         try {
             checkAccessabilityOfField(field);
-            field.set(component, proxy);
+            AccessController.doPrivileged(new PrivilegedExceptionAction<Void>() {
+    			@Override
+    			public Void run() throws IllegalArgumentException, IllegalAccessException {
+					field.set(component, proxy);
+    				return null;
+    			}
+            });
         } catch (Exception e) {
             throw new RuntimeException("Bumm", e);
         }
@@ -89,28 +112,40 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return beanType;
     }
 
-    protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
-        Class<?> clazz = component;
-        int numberOfInjectionFields = 0;
-        while (clazz != null && !isBoundaryClass(clazz)) {
-            for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(Inject.class)) {
-                    numberOfInjectionFields++;
-                }
-            }
-            clazz = clazz.getSuperclass();
-        }
-        return numberOfInjectionFields;
+    protected int countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(final Class<?> component) {
+        
+        return AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+			@Override
+			public Integer run() {
+				Class<?> clazz = component;
+				int numberOfInjectionFields = 0;
+				while (clazz != null && !isBoundaryClass(clazz)) {
+		            for (Field field : clazz.getDeclaredFields()) {
+		                if (field.isAnnotationPresent(Inject.class)) {
+		                    numberOfInjectionFields++;
+		                }
+		            }
+		            clazz = clazz.getSuperclass();
+		        }
+				
+				return numberOfInjectionFields;
+			}
+        });
     }
 
-    protected int countComponentContainPaxWicketBeanAnnotatedOneLevel(Class<?> component) {
-        Class<?> clazz = component;
-        int numberOfInjectionFields = 0;
-        for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Inject.class)) {
-                numberOfInjectionFields++;
-            }
-        }
-        return numberOfInjectionFields;
+    protected int countComponentContainPaxWicketBeanAnnotatedOneLevel(final Class<?> clazz) {
+        return AccessController.doPrivileged(new PrivilegedAction<Integer>() {
+			@Override
+			public Integer run() {
+				int numberOfInjectionFields = 0;
+		        for (Field field : clazz.getDeclaredFields()) {
+		            if (field.isAnnotationPresent(Inject.class)) {
+		                numberOfInjectionFields++;
+		            }
+		        }
+		        
+		        return numberOfInjectionFields;
+			}
+        });
     }
 }
