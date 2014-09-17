@@ -17,7 +17,6 @@ package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
-import org.ops4j.pax.wicket.internal.extender.BundleImportExtender;
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
 import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxyTargetLocatorFactory;
@@ -27,7 +26,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
@@ -50,9 +48,9 @@ public final class Activator implements BundleActivator {
 
     private BundleTracker<ExtendedBundle> bundleExtensionTracker;
 
-    private BundleImportExtender bundleImportExtender;
+    // private BundleImportExtender bundleImportExtender;
 
-    private ServiceRegistration<WeavingHook> weavingHockRegistration;
+    // private ServiceRegistration<WeavingHook> weavingHockRegistration;
 
     private ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> proxyFactoryTracker;
 
@@ -63,9 +61,9 @@ public final class Activator implements BundleActivator {
         LOGGER.debug("Initializing [{}] bundle.", context.getBundle().getSymbolicName());
         bundleContext = context;
 
-        bundleImportExtender = new BundleImportExtender(context);
-        context.addBundleListener(bundleImportExtender);
-        weavingHockRegistration = context.registerService(WeavingHook.class, bundleImportExtender, null);
+        // bundleImportExtender = new BundleImportExtender(context);
+        // context.addBundleListener(bundleImportExtender);
+        // weavingHockRegistration = context.registerService(WeavingHook.class, bundleImportExtender, null);
 
         httpTracker = new HttpTracker(context);
         httpTracker.open();
@@ -106,9 +104,9 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
-        weavingHockRegistration.unregister();
+        // weavingHockRegistration.unregister();
         proxyFactoryService.unregister();
-        context.removeBundleListener(bundleImportExtender);
+        // context.removeBundleListener(bundleImportExtender);
         bundleExtensionTracker.close();
         bundleTrackerAggregator.close();
         httpTracker.close();

@@ -15,9 +15,7 @@
  */
 package org.ops4j.pax.wicket.internal.extender;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext;
@@ -28,33 +26,45 @@ import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClass;
 import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * This Extender adds dynmic imports to client bundles
- * 
  */
+@Component(service = { WeavingHook.class })
 public class BundleImportExtender implements WeavingHook, SynchronousBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleImportExtender.class);
 
     private final Set<Long> extendedBundles = new HashSet<Long>();
 
-    private final List<String> additionalImports = new ArrayList<String>();
+    private static final Set<String> ADDITIONAL_IMPORTS = new HashSet<String>();
 
-    private final ExtendedBundleContext extendedBundleContext;
+    static {
+        ADDITIONAL_IMPORTS.add("org.apache.wicket.core.request.mapper;version=\"[1.6,2)\"");
+        ADDITIONAL_IMPORTS.add("org.ops4j.pax.wicket.util.proxy;version=\"[1.3,2)\"");
+        ADDITIONAL_IMPORTS.add("net.sf.cglib.proxy;version=\"[2,3)\"");
+        ADDITIONAL_IMPORTS.add("net.sf.cglib.core;version=\"[2,3)\"");
+        ADDITIONAL_IMPORTS.add("net.sf.cglib.reflect;version=\"[2,3)\"");
+        ADDITIONAL_IMPORTS.add("javax.servlet;version=\"[2.5.0,3]\"");
+        ADDITIONAL_IMPORTS.add("javax.servlet.http;version=\"[2.5.0,3]\"");
+    }
 
-    public BundleImportExtender(BundleContext paxBundleContext) {
-        extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(paxBundleContext);
-        // TODO: Any chance we not must hardcode this?
-        additionalImports.add("org.apache.wicket.core.request.mapper");
-        additionalImports.add("org.ops4j.pax.wicket.util.proxy");
-        additionalImports.add("net.sf.cglib.proxy;version=\"[2,3)\"");
-        additionalImports.add("net.sf.cglib.core;version=\"[2,3)\"");
-        additionalImports.add("net.sf.cglib.reflect;version=\"[2,3)\"");
-        additionalImports.add("javax.servlet;version=\"2.5.0\"");
-        additionalImports.add("javax.servlet.http;version=\"2.5.0\"");
+    private ExtendedBundleContext extendedBundleContext;
+
+    @Activate
+    public void startUp(BundleContext bundleContext) {
+        extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(bundleContext);
+        bundleContext.addBundleListener(this);
+    }
+
+    @Deactivate
+    public void shutDown(BundleContext bundleContext) {
+        bundleContext.removeBundleListener(this);
     }
 
     public void weave(WovenClass wovenClass) {
@@ -71,7 +81,7 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
             ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, bundle);
             if (extendedBundle.isRelevantForImportEnhancements()) {
                 LOGGER.debug("Enhance DynamicImports of bundle {}...", bundle.getSymbolicName());
-                wovenClass.getDynamicImports().addAll(additionalImports);
+                wovenClass.getDynamicImports().addAll(ADDITIONAL_IMPORTS);
             }
         } catch (RuntimeException e) {
             LOGGER.warn("RuntimeException while trying to extend bundle imports");
@@ -80,8 +90,14 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
     }
 
     public void bundleChanged(BundleEvent event) {
-        // Remove bundle from cache in some circumstances
+        Bundle eventBundle = event.getBundle();
+        ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, eventBundle);
+        if (extendedBundle.isRelevantForImportEnhancements()) {
+            // TODO: We need to refresh the bundles here if we detect that they were started before we could enhance
+            // them!
+        }
         switch (event.getType()) {
+            // Remove bundle from cache in some circumstances
             case BundleEvent.UPDATED:
             case BundleEvent.UNINSTALLED:
             case BundleEvent.UNRESOLVED:
