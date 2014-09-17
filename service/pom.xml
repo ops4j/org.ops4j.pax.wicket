@@ -83,7 +83,7 @@
               javax.servlet.*;version="[2.5,4)",
               javax.inject.*,
               javax.xml.*,
-              org.apache.wicket.*;version="${wicket.dependency.version}",
+              org.apache.wicket.*;version="${wicket.dependency.version.range}",
               org.codehaus.jackson.*;resolution:=optional,
               org.osgi.framework;version="[1.6,2)",
               org.osgi.framework.wiring;version="[1,2)",
