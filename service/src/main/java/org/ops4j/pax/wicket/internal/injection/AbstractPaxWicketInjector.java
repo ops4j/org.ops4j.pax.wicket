@@ -88,10 +88,10 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
 
     protected void setField(final Object component, final Field field, final Object proxy) {
         try {
-            checkAccessabilityOfField(field);
             AccessController.doPrivileged(new PrivilegedExceptionAction<Void>() {
     			@Override
     			public Void run() throws IllegalArgumentException, IllegalAccessException {
+    				checkAccessabilityOfField(field);
 					field.set(component, proxy);
     				return null;
     			}
