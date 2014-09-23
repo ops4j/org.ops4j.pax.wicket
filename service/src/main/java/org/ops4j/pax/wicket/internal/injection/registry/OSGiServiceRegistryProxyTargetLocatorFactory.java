@@ -31,9 +31,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Component(service = { ProxyTargetLocatorFactory.class })
 public class OSGiServiceRegistryProxyTargetLocatorFactory implements
         ProxyTargetLocatorFactory.DelayableProxyTargetLocatorFactory {
 
