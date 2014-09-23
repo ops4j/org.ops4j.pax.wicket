@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.wicket.application.IClassResolver;
 import org.osgi.framework.BundleContext;
@@ -40,7 +41,7 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     private final BundleContext context;
     private final String applicationName;
-    private final List<IClassResolver> resolvers;
+    private final List<IClassResolver> resolvers = new CopyOnWriteArrayList<IClassResolver>();
 
     private ClassResolverTracker tracker;
 
@@ -49,7 +50,6 @@ public final class DelegatingClassResolver implements IClassResolver {
         validateNotEmpty(applicationName, "applicationName");
         this.context = context;
         this.applicationName = applicationName;
-        resolvers = new ArrayList<IClassResolver>();
     }
 
     public final void intialize() throws IllegalStateException {
@@ -84,43 +84,39 @@ public final class DelegatingClassResolver implements IClassResolver {
     }
 
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {
-        synchronized (resolvers) {
-            LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
-            for (IClassResolver resolver : resolvers) {
-                try {
-                    Class<?> candidate = resolver.resolveClass(classname);
-                    if (candidate != null) {
-                        return candidate;
-                    }
-                } catch (ClassNotFoundException e) {
-                    LOGGER.trace("ClassResolver {} could not find class: {}", resolver, classname);
-                } catch (RuntimeException e) {
-                    LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
+        LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
+        for (IClassResolver resolver : resolvers) {
+            try {
+                Class<?> candidate = resolver.resolveClass(classname);
+                if (candidate != null) {
+                    return candidate;
                 }
+            } catch (ClassNotFoundException e) {
+                LOGGER.trace("ClassResolver {} could not find class: {}", resolver, classname);
+            } catch (RuntimeException e) {
+                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
             }
         }
         throw new ClassNotFoundException(String.format("Class [%s] can't be resolved.", classname));
     }
 
     public Iterator<URL> getResources(String name) {
-        synchronized (resolvers) {
-            ArrayList<URL> collectedResources = new ArrayList<URL>();
-            for (IClassResolver resolver : resolvers) {
-                try {
-                    Iterator<URL> iterator = resolver.getResources(name);
-                    if (iterator == null) {
-                        continue;
-                    }
-                    while (iterator.hasNext()) {
-                        collectedResources.add(iterator.next());
-                    }
-                } catch (RuntimeException e) {
-                    LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
-                    return collectedResources.iterator();
+        ArrayList<URL> collectedResources = new ArrayList<URL>();
+        for (IClassResolver resolver : resolvers) {
+            try {
+                Iterator<URL> iterator = resolver.getResources(name);
+                if (iterator == null) {
+                    continue;
                 }
+                while (iterator.hasNext()) {
+                    collectedResources.add(iterator.next());
+                }
+            } catch (RuntimeException e) {
+                LOGGER.warn("ClassResolver {} threw an unexpected exception.", resolver, e);
+                return collectedResources.iterator();
             }
-            return collectedResources.iterator();
         }
+        return collectedResources.iterator();
     }
 
     private final class ClassResolverTracker extends ServiceTracker<IClassResolver, IClassResolver> {
@@ -135,9 +131,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         @Override
         public final IClassResolver addingService(ServiceReference<IClassResolver> reference) {
             IClassResolver resolver = super.addingService(reference);
-            synchronized (resolvers) {
-                resolvers.add(resolver);
-            }
+            resolvers.add(resolver);
             return resolver;
         }
 
@@ -168,9 +162,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         @Override
         public final void removedService(ServiceReference<IClassResolver> reference, IClassResolver service) {
             IClassResolver resolver = service;
-            synchronized (resolvers) {
-                resolvers.remove(resolver);
-            }
+            resolvers.remove(resolver);
             super.removedService(reference, service);
         }
     }
