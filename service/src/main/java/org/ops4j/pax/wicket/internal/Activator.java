@@ -58,6 +58,8 @@ public final class Activator implements BundleActivator {
 
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
+        LOGGER
+            .info("Pax Wicket makes uses of Decarative Services starting with this release. Make sure a suitable implementation (e.g. Felix SCR or Equinox DS) is present and started in your framework!");
         LOGGER.debug("Initializing [{}] bundle.", context.getBundle().getSymbolicName());
         bundleContext = context;
 
