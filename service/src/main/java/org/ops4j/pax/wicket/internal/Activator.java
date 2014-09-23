@@ -16,16 +16,10 @@
 package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
-import org.ops4j.pax.wicket.internal.extender.BundleDelegatingExtensionTracker;
-import org.ops4j.pax.wicket.internal.extender.ExtendedBundle;
-import org.ops4j.pax.wicket.internal.extender.PaxWicketBundleListener;
 import org.ops4j.pax.wicket.internal.util.BundleTrackerAggregator;
-import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.BundleTracker;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,17 +34,7 @@ public final class Activator implements BundleActivator {
 
     private static BundleContext bundleContext;
 
-    private BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
-
     private BundleTrackerAggregator<WebApplicationFactory<?>> bundleTrackerAggregator;
-
-    private BundleTracker<ExtendedBundle> bundleExtensionTracker;
-
-    // private BundleImportExtender bundleImportExtender;
-
-    // private ServiceRegistration<WeavingHook> weavingHockRegistration;
-
-    private ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> proxyFactoryTracker;
 
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
@@ -62,21 +46,11 @@ public final class Activator implements BundleActivator {
         httpTracker = new HttpTracker(context);
         httpTracker.open();
 
-        proxyFactoryTracker = new ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory>(bundleContext,
-                ProxyTargetLocatorFactory.class, null);
-        proxyFactoryTracker.open();
-        bundleDelegatingExtensionTracker = new BundleDelegatingExtensionTracker(context, proxyFactoryTracker);
         applicationFactoryTracker = new PaxWicketAppFactoryTracker(context, httpTracker);
-
-        PaxWicketBundleListener paxWicketBundleListener =
-            new PaxWicketBundleListener(context, bundleDelegatingExtensionTracker);
-
-        bundleExtensionTracker = new BundleTracker<ExtendedBundle>(context, Bundle.ACTIVE, paxWicketBundleListener);
-        bundleExtensionTracker.open();
 
         bundleTrackerAggregator =
             new BundleTrackerAggregator<WebApplicationFactory<?>>(context, WebApplicationFactory.class.getName(), null,
-                bundleDelegatingExtensionTracker, applicationFactoryTracker);
+                applicationFactoryTracker);
         bundleTrackerAggregator.open(true);
     }
 
@@ -94,7 +68,6 @@ public final class Activator implements BundleActivator {
     }
 
     public final void stop(BundleContext context) throws Exception {
-        bundleExtensionTracker.close();
         bundleTrackerAggregator.close();
         httpTracker.close();
         bundleContext = null;

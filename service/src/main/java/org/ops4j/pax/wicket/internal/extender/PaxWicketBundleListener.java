@@ -23,25 +23,17 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PaxWicketBundleListener implements BundleTrackerCustomizer<ExtendedBundle> {
+public abstract class PaxWicketBundleListener implements BundleTrackerCustomizer<ExtendedBundle> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
-    private final BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker;
-
-    private final ExtendedBundleContext extendedBundleContext;
-
-    public PaxWicketBundleListener(BundleContext paxBundleContext,
-            BundleDelegatingExtensionTracker bundleDelegatingExtensionTracker) {
-        this.bundleDelegatingExtensionTracker = bundleDelegatingExtensionTracker;
-        extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(paxBundleContext);
-    }
+    private ExtendedBundleContext extendedBundleContext;
 
     public ExtendedBundle addingBundle(Bundle bundle, BundleEvent event) {
         ExtendedBundle extendedBundle =
             new ExtendedBundle(extendedBundleContext, bundle);
         if (extendedBundle.isImportingPAXWicketAPI() || extendedBundle.isImportingWicket()) {
-            bundleDelegatingExtensionTracker.addRelevantBundle(extendedBundle);
+            addRelevantBundle(extendedBundle);
             LOGGER.info("{} is added as a relevant bundle for pax wicket", bundle.getSymbolicName());
             return extendedBundle;
         } else {
@@ -55,8 +47,16 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer<Extended
     }
 
     public void removedBundle(Bundle bundle, BundleEvent event, ExtendedBundle object) {
-        bundleDelegatingExtensionTracker.removeRelevantBundle(object);
+        removeRelevantBundle(object);
         LOGGER.debug("{} is removed as a relevant bundle for pax wicket", bundle.getSymbolicName());
+    }
+
+    protected abstract void addRelevantBundle(ExtendedBundle bundle);
+
+    protected abstract void removeRelevantBundle(ExtendedBundle bundle);
+
+    protected void activate(BundleContext bundleContext) {
+        extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(bundleContext);
     }
 
 }
