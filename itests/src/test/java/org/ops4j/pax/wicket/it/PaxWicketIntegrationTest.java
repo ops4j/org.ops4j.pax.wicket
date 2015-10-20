@@ -45,7 +45,7 @@ public abstract class PaxWicketIntegrationTest {
                         .versionAsInProject().startLevel(1).start(true)),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-activation_1.1_spec")
                 .versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-servlet_2.5_spec")
+            provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-servlet_3.0_spec")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-jta_1.1_spec")
                 .versionAsInProject()),
