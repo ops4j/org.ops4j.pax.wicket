@@ -80,19 +80,19 @@
               org.slf4j.*;version="[1,2)",
               javax.crypto.*,
               javax.imageio.*,
-              javax.servlet.*;version="[2.5,4)",
+              javax.servlet.*;version="[3,4)",
               javax.inject.*,
               javax.xml.*,
-              org.apache.wicket.*;version="${wicket.dependency.version.range}",
+              org.apache.wicket.*,
               org.codehaus.jackson.*;resolution:=optional,
               org.osgi.framework;version="[1.6,2)",
               org.osgi.framework.wiring;version="[1,2)",
-              org.osgi.framework.hooks.weaving;version="[1,1.1)",
+              org.osgi.framework.hooks.weaving,
               org.osgi.service.*;version="[1,2)",
               org.osgi.util.*;version="[1,2)",
-              net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,
-              net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
-              net.sf.cglib.reflect;version="${cglib.range}";resolution:=optional,
+              net.sf.cglib.proxy;resolution:=optional,
+              net.sf.cglib.core;resolution:=optional,
+              net.sf.cglib.reflect;resolution:=optional,
               org.xml.sax,
               org.w3c.dom,
               !sun.*
@@ -168,7 +168,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+      <artifactId>geronimo-servlet_3.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
