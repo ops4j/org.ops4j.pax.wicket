@@ -75,12 +75,13 @@ public final class PAXWicketServlet implements Servlet {
                 return config.getServletContext();
             }
 
-            public Enumeration<?> getInitParameterNames() {
-                return config.getInitParameterNames();
-            }
-
             public String getInitParameter(String name) {
                 return config.getInitParameter(name);
+            }
+
+            @Override
+            public Enumeration<String> getInitParameterNames() {
+                return config.getInitParameterNames();
             }
 
             public String getFilterName() {
@@ -97,7 +98,8 @@ public final class PAXWicketServlet implements Servlet {
         // First delegate to wicket, at last resort serve 404 error
         wickFilter.doFilter(req, res, new FilterChain() {
 
-            public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+            public void doFilter(ServletRequest request, ServletResponse response)
+                throws IOException, ServletException {
                 if (!response.isCommitted()) {
                     if (response instanceof HttpServletResponse) {
                         response.reset();
