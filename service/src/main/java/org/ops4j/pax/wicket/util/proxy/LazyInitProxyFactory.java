@@ -34,7 +34,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.wicket.Application;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.settings.IApplicationSettings;
+import org.apache.wicket.settings.ApplicationSettings;
 import org.apache.wicket.util.io.IClusterable;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
@@ -114,7 +114,7 @@ public class LazyInitProxyFactory {
             Class<?> clazz;
             try {
                 Application application = WebApplication.get();
-                IApplicationSettings appSettings = application.getApplicationSettings();
+                ApplicationSettings appSettings = application.getApplicationSettings();
                 IClassResolver classResolver = appSettings.getClassResolver();
                 clazz = classResolver.resolveClass(type);
             } catch (ClassNotFoundException e) {
