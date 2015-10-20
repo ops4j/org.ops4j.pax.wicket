@@ -57,9 +57,9 @@
               org.apache.wicket.protocol.http,
               org.apache.wicket.request.http,
               org.ops4j.pax.wicket.api,
-              net.sf.cglib.proxy;version="${cglib.range}",
-              net.sf.cglib.core;version="${cglib.range}",
-              net.sf.cglib.reflect;version="${cglib.range}",
+              net.sf.cglib.proxy,
+              net.sf.cglib.core,
+              net.sf.cglib.reflect,
               javax.servlet,
               org.apache.wicket.settings,
               org.apache.wicket.session,
@@ -88,7 +88,7 @@
         <!-- Required for the filter interface. -->
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+      <artifactId>geronimo-servlet_3.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

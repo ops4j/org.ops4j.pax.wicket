@@ -60,15 +60,15 @@
               org.ops4j.pax.wicket.api,
               org.ops4j.pax.wicket.api.support,
               org.osgi.framework,
-              net.sf.cglib.proxy;version="${cglib.range}",
-              net.sf.cglib.core;version="${cglib.range}",
-              net.sf.cglib.reflect;version="${cglib.range}",
-              javax.servlet,
+              net.sf.cglib.proxy,
+              net.sf.cglib.core,
+              net.sf.cglib.reflect,
+              javax.servlet;version="[3,4)",
+              javax.servlet.http;version="[3,4)",	      
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,
               org.apache.wicket.request,
-              javax.servlet.http,
               org.apache.wicket.ajax,
               org.osgi.service.blueprint,
               org.apache.wicket.core.request.mapper
@@ -95,7 +95,7 @@
     <!-- Required for the filter interface. -->
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+      <artifactId>geronimo-servlet_3.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
