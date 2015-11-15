@@ -15,9 +15,13 @@
  */
 package org.ops4j.pax.wicket.internal;
 
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -30,11 +34,9 @@ import org.ops4j.pax.wicket.util.serialization.PaxWicketSerializer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
 
 /**
  * An internal wrapper for the {@link WebApplicationFactory} exported by clients who want to register an application.
@@ -129,7 +131,11 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
                 handleOnDestroy();
             }
             method.setAccessible(true);
-            return methodProxy.invokeSuper(object, args);
+            try {
+                return methodProxy.invokeSuper(object, args);
+            } catch (InvocationTargetException e) {
+                throw e.getTargetException();
+            }
         }
 
         /**
