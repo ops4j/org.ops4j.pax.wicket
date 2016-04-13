@@ -17,62 +17,90 @@
 
 -->
 <features name="pax-wicket-samples-features-${project.version}">
-  <!-- This features are dependend on the pax-wicket features -->
-  <repository>mvn:org.ops4j.pax.wicket/features/${project.version}/xml/features</repository>
+    <!-- This features are dependend on the pax-wicket features -->
+    <repository>mvn:org.ops4j.pax.wicket/features/${project.version}/xml/features</repository>
 
-  <!-- This is the base entry-point for all sample applications showing the pages and providing base documentation about them. -->
-  <feature name="wicket-samples-base" version="${project.version}">
-    <feature version="${project.version}">wicket-spring</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.navigation/${project.version}</bundle>
-  </feature>
+    <!-- This is the base entry-point for all sample applications showing the pages and providing base documentation about them. -->
+    <feature name="wicket-samples-base" version="${project.version}">
+        <feature version="${project.version}">pax-wicket-spring</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.navigation/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-plain-simple" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.simple/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-plain-simple" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.simple/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.pageFactory/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.inject/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-plain-pagefactory" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.pagefactory/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-plain-pagefactory" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.pagefactory/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-blueprint-simple" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.simple/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-blueprint-simple" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.simple/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-blueprint-wicketproperties" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.codehaus.jackson/jackson-core-asl/${jackson.version}</bundle>
-    <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/${jackson.version}</bundle>
-    <bundle>mvn:org.odlabs.wiquery/wiquery/${wiquery.version}</bundle>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.wicketproperties/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-blueprint-wicketproperties" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.codehaus.jackson/jackson-core-asl/${jackson.version}</bundle>
+        <bundle>mvn:org.codehaus.jackson/jackson-mapper-asl/${jackson.version}</bundle>
+        <bundle>mvn:org.odlabs.wiquery/wiquery-core/${wiquery.version}</bundle>
+        <bundle>mvn:org.odlabs.wiquery/wiquery-jquery-ui/${wiquery.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.wicketproperties/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-blueprint-mount" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.mount/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-blueprint-mount" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.mount/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-blueprint-filter" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.filter/${project.version}</bundle>
-  </feature>
+<!--    <feature name="wicket-samples-blueprint-filter" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.filter/${project.version}</bundle>
+    </feature>-->
 
-  <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.injection/org.ops4j.pax.wicket.samples.blueprint.injection.simple/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint.injection/org.ops4j.pax.wicket.samples.blueprint.injection.simple/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-spring-simple" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.springdm/org.ops4j.pax.wicket.samples.springdm.simple/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-spring-simple" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.springdm/org.ops4j.pax.wicket.samples.springdm.simple/${project.version}</bundle>
+    </feature>
 
-  <feature name="wicket-samples-spring-injection-simple" version="${project.version}">
-    <feature version="${project.version}">wicket-samples-base</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.samples.springdm.injection/org.ops4j.pax.wicket.samples.springdm.injection.simple/${project.version}</bundle>
-  </feature>
+    <feature name="wicket-samples-spring-injection-simple" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.springdm.injection/org.ops4j.pax.wicket.samples.springdm.injection.simple/${project.version}</bundle>
+    </feature>
+  
+
+
+    <feature name="wicket-samples-ds" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.ds/org.ops4j.pax.wicket.samples.ds.filterfactory/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.ds/org.ops4j.pax.wicket.samples.ds.webapplication/${project.version}</bundle>        
+    </feature>
+
+  
+    <feature name="wicket-samples-edge-mixed" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.mixed/org.ops4j.pax.wicket.samples.mixed.api/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.mixed/org.ops4j.pax.wicket.samples.mixed.component/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.mixed/org.ops4j.pax.wicket.samples.mixed.main/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.mixed/org.ops4j.pax.wicket.samples.mixed.page/${project.version}</bundle>
+    
+    </feature>
+  
+    <feature name="wicket-samples-edge-inheritinjection" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <feature version="${project.version}">wicket-samples-edge-mixed</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.edge.inheritinjection/org.ops4j.pax.wicket.samples.edge.inheritinjection.parent/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.edge.inheritinjection/org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit/${project.version}</bundle>
+    </feature>
 
 </features>
 
