@@ -76,6 +76,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>org.ops4j.pax.wicket.service</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.ops4j.pax.wicket.samples</groupId>
             <artifactId>org.ops4j.pax.wicket.samples.navigation</artifactId>
             <version>${project.version}</version>
@@ -226,7 +232,6 @@
         <dependency>
             <groupId>org.openengsb.wrapped</groupId>
             <artifactId>net.sourceforge.htmlunit-all</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>

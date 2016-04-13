@@ -17,31 +17,38 @@
 
 -->
 <features name="pax-wicket-features-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.1 http://karaf.apache.org/xmlns/features/v1.2.1">
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.1 http://karaf.apache.org/xmlns/features/v1.2.1">
 
-  <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
-  <feature name="pax-wicket" version="${project.version}">
-    <feature>wicket</feature>
-    <feature>eventadmin</feature>
-    <bundle>mvn:org.ops4j.base/ops4j-base/${ops4j.base.version}</bundle>
-    <bundle>mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/${geronimo.inject.version}</bundle>
-    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
-    <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
-    <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${project.version}</bundle>
-  </feature>
+    <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
+    <feature name="pax-wicket" version="${project.version}">
+        <feature>wicket</feature>
+        <feature>eventadmin</feature>
+        <bundle>mvn:org.ops4j.base/ops4j-base/${ops4j.base.version}</bundle>
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/${geronimo.inject.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${project.version}</bundle>
+    </feature>
 
 
-  <feature name="pax-wicket-spring" version="${project.version}">
-    <feature>pax-wicket</feature>
-    <feature>spring-dm</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.springdm/${project.version}</bundle>
-  </feature>
+    <feature name="pax-wicket-spring" version="${project.version}">
+        <feature>pax-wicket</feature>
+        <feature>spring-dm</feature>
+        <feature>spring</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.springdm/${project.version}</bundle>
+    </feature>
 
-  <feature name="pax-wicket-blueprint" version="${project.version}">
-    <feature>pax-wicket</feature>
-    <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.blueprint/${project.version}</bundle>
-  </feature>
+    <feature name="pax-wicket-blueprint" version="${project.version}">
+        <feature>pax-wicket</feature>
+        <feature>aries-proxy</feature>
+        <feature>aries-blueprint</feature>
+        <feature>aries-annotation</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.spi/org.ops4j.pax.wicket.spi.blueprint/${project.version}</bundle>
+
+
+
+    </feature>
 
 </features>
 
