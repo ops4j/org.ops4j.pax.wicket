@@ -57,10 +57,18 @@
         <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.mount/${project.version}</bundle>
     </feature>
 
-<!--    <feature name="wicket-samples-blueprint-filter" version="${project.version}">
+    <feature name="wicket-samples-blueprint-filter" version="${project.version}">
         <feature version="${project.version}">wicket-samples-base</feature>
         <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.filter/${project.version}</bundle>
-    </feature>-->
+    </feature>
+
+    
+    <feature name="wicket-samples-blueprint-applicationfactory" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples.blueprint/org.ops4j.pax.wicket.samples.blueprint.applicationfactory/${project.version}</bundle>
+    </feature>
+                
+    
 
     <feature name="wicket-samples-blueprint-injection-simple" version="${project.version}">
         <feature version="${project.version}">wicket-samples-base</feature>
