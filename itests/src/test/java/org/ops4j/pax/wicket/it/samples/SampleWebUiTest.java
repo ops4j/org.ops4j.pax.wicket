@@ -237,6 +237,13 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
         assertTrue(page.asText().contains("Declarative Services"));
         webclient.closeAllWindows();
     }
+
+
+
+
+
+
+
     
     /**
      * Simple Echo Implementation for itest...

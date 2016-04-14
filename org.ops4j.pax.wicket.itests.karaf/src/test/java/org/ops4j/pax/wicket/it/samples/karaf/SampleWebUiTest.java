@@ -23,6 +23,7 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -30,15 +31,18 @@ import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
+import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.MavenUrlReference;
+import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
+import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
@@ -46,6 +50,7 @@ import org.osgi.framework.BundleContext;
 import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
 
 @RunWith(PaxExam.class)
+@ExamReactorStrategy(PerClass.class)
 public class SampleWebUiTest {
 
     /**
@@ -70,10 +75,6 @@ public class SampleWebUiTest {
     @Inject
     @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
-
-    /**
-     * see module: /samples/ds/webapplication
-     */
     @Inject
     @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySampleDS;
@@ -104,8 +105,7 @@ public class SampleWebUiTest {
             .unpackDirectory(new File("target", "exam"))
             .useDeployFolder(false),
             keepRuntimeFolder(),
-            configureConsole().ignoreLocalConsole(), //logLevel(LogLevel.TRACE),
-
+            configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
             features(karafStandardRepo, "scr"),
             features(karafStandardRepo, "webconsole"),
             features(wicketFeatureRepo, "wicket"),
@@ -120,52 +120,83 @@ public class SampleWebUiTest {
             features(karafSampleFeatureRepo, "wicket-samples-blueprint-mount"),
             features(karafSampleFeatureRepo, "wicket-samples-blueprint-filter"),
             features(karafSampleFeatureRepo, "wicket-samples-blueprint-applicationfactory"),
-            
             features(karafSampleFeatureRepo, "wicket-samples-blueprint-injection-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-spring-injection-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-spring-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-edge-mixed"),
             features(karafSampleFeatureRepo, "wicket-samples-ds"),
-            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),
-        };
+            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),};
+
+    }
+
+    @Test()
+    public void waitForever() throws IOException {
+
+       // System.in.read();
+    }
+
+    @Test()
+    public void allFactoriesPresent() throws Exception {
+
+        assertNotNull(factorySpringDmSimpleDefault);
+        assertNotNull(factoryEdgeInheritInjection);
+        assertNotNull(factorySampleDS);
+    }
+
+    @Test
+    public void testNavigationApplicationShouldRender() throws Exception {
+
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/navigation/");
+        assertTrue(page.contains("Homepage linking all OPS4J samples"));
+    }
+
+    @Test
+    public void testSamplePlainSimpleShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/simple/");
+        assertTrue(page.contains("Welcome to the most simple pax-wicket application"));
+    }
+
+    @Test
+    public void testSamplePlainPageFactoryShouldAllowLink() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
+        assertTrue(page.contains("Welcome to the most simple pax-wicket application"));
 
     }
 
     @Test
-    public void testIfAllExamplesWhereLoaded_shouldBeAbleToAccessThemAll() throws Exception {
-        assertNotNull(factoryEdgeInheritInjection);
-        assertNotNull(factorySpringDmSimpleDefault);
-        assertNotNull(factorySampleDS);
-//        //Register a service here for later injection
+    public void checkInjectedPage() throws Exception {
+        //Register a service here for later injection
         bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
-        
-//        // testNavigationApplication_shouldRender
-//  
-        String page = sendGet("http://localhost:" + WEBUI_PORT + "/navigation/");
-        assertTrue(page.contains("Homepage linking all OPS4J samples"));
-//        // testSamplePlainSimple_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/simple/");
-        assertTrue(page.contains("Welcome to the most simple pax-wicket application"));
 
-        // testSamplePlainPageFactoryShouldAllowLink
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/pagefactory/");
-        assertTrue(page.contains("Welcome to the most simple pax-wicket application"));
-
-//        //Check injected page
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/inject/");
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/inject/");
         assertTrue("/plain/inject/ failed to start properly", page.contains("Echo: Welcome to the most simple pax-wicket application"));
 
-        // testSampleBlueprintSimpleDefault_shouldRenderPage
+    }
 
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
+    @Test
+    public void testSampleBlueprintSimpleInjectionBluePrintShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/injection/simple/");
+        assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
+    }
+    public void testSampleBlueprintSimpleDefaultShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
+        assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
+    }
+
+    
+    
+
+    @Test
+    public void testSampleBlueprintSimplePaxwicketShouldRenderPage() throws Exception {
+
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
         assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
 
-        // testSampleBlueprintSimplePaxwicket_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/simple/paxwicket");
-        assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
+    }
 
-        // testSampleBlueprintMountPoint_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/mount/manuallymounted");
+    @Test
+    public void testSampleBlueprintMountPointShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/mount/manuallymounted");
         assertTrue(page.contains("This page is mounted manually."));
         page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/mount/automounted");
         assertTrue(page.contains("This page is automatically mounted."));
@@ -173,40 +204,64 @@ public class SampleWebUiTest {
         assertTrue(page.contains("This page is mounted initially."));
         page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/mount");
         assertTrue(page.contains("Mountpoint blueprint based sample."));
-        // testSampleBlueprintMountPoint_shouldRenderPage
+    }
 
-//        page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/first");
-//        assertTrue(page.contains("This is the 'The first' application home page."));
+    @Test
+    public void testSampleBlueprintMountPointsToSameApplication() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/first");
+        assertTrue("contained :" + page, page.contains("This is the &#039;The first&#039; application home page."));
         page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/applicationfactory/second");
-        assertTrue(page.contains("This is the 'The second' application home page."));
+        assertTrue("contained :" + page, page.contains("This is the &#039;The second&#039; application home page."));
 
-        // testSampleSpringdmSimpleDefault_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/springdm/simple/default");
-        assertTrue(page.contains("Welcome to the most simple pax-wicket application based on springdm"));
+    }
 
-        // testSampleSpringdmInjectionSimple_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/springdm/injection/simple");
+    @Test
+    public void testSampleSpringdmInjectionSimpleShouldRenderPage() throws Exception {
+
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/springdm/injection/simple");
         assertTrue(page.contains(
                 "Welcome to the most simple pax-wicket injection application based on springdm."));
 
-        // testSampleSpringdmSimplePaxwicket_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
+    }
+
+    @Test
+    public void testSampleSpringdmSimplePaxwicketShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/springdm/simple/paxwicket");
         assertTrue(page.contains("Welcome to the most simple pax-wicket application based on springdm"));
 
-        // testSampleMixed_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/mixed");
+    }
+
+    @Test
+    public void testSampleMixedShouldRenderPage() throws Exception {
+
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/mixed");
         assertTrue(page.contains(
                 "Welcome to the mixed component and technology example. Enjoy the full power of pax wicket!."));
         assertTrue(page.contains("This is a link"));
         assertTrue(page.contains("This is a panel from a separate component"));
 
-        // testSampleEdgeInheritInjection_shouldRenderPage
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection");
+    }
+
+    @Test
+    public void testSampleEdgeInheritInjectionShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection");
         assertTrue(page.contains("Back to parent"));
         assertTrue(page.contains("This is a link"));
 
-        // declarative services
-        page = sendGet("http://localhost:" + WEBUI_PORT + "/example/ds");
+    }
+    @Test
+    public void testSampleEdgeInheritInheritedPageShouldRenderPage() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection/wicket/bookmarkable/org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal.InheritedPage");
+        assertTrue(page.contains("Back to parent"));
+        assertTrue(page.contains("This is a link"));
+    }
+    
+
+    
+
+    @Test
+    public void testSampleDeclarativeServices() throws Exception {
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/example/ds");
         assertTrue(page.contains("Declarative Services"));
 
     }
@@ -221,7 +276,6 @@ public class SampleWebUiTest {
 
         //add request header
         con.setRequestProperty("User-Agent", USER_AGENT);
-
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
