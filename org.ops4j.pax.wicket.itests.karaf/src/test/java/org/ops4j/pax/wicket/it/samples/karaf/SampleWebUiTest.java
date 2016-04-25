@@ -84,14 +84,14 @@ public class SampleWebUiTest {
 
         MavenUrlReference wicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("paxwicket")
-                .version("3.0.3-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
 
         MavenUrlReference paxwicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("features")
-                .version("3.0.3-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
         MavenUrlReference karafSampleFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket.samples").artifactId("features")
-                .version("3.0.3-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
         MavenUrlReference karafStandardRepo = maven()
                 .groupId("org.apache.karaf.features").artifactId("standard").versionAsInProject().classifier("features").type("xml");
 
@@ -132,7 +132,7 @@ public class SampleWebUiTest {
     @Test()
     public void waitForever() throws IOException {
 
-       // System.in.read();
+        System.in.read();
     }
 
     @Test()
