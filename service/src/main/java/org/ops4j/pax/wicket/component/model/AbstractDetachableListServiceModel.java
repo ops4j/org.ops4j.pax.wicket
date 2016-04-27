@@ -55,7 +55,7 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
 	this.serviceType = serviceType;
 
 	if(!BundleReference.class.isAssignableFrom(owningBundleClass)){
-	    throw new IllegalArgumentException("This model can only be used from within OSGi containers. The supplied class doe snot appear to originate in "
+	    throw new IllegalArgumentException("This model can only be used from within OSGi containers. The supplied class does not appear to originate in "
 		    + "a bundle "+owningBundleClass.getCanonicalName());
 	}
 	context = BundleReference.class.cast(owningBundleClass.getClassLoader()).getBundle().getBundleContext();
