@@ -17,7 +17,6 @@
 package org.ops4j.pax.wicket.component.model;
 
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.ops4j.pax.wicket.spi.support.DelegatingComponentInstanciationListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.ServiceReference;
