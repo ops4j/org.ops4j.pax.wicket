@@ -61,6 +61,7 @@
     <felix.scr.version>1.8.2</felix.scr.version>
     <wicket.dependency.version>6.7.0</wicket.dependency.version>
     <wicket.dependency.version.range>[6.7.0,7)</wicket.dependency.version.range>
+    <wicket.core.dependency.version>6.7.0.osgifriendly</wicket.core.dependency.version>
     <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>7.6.7.v20120910</jetty.version>
@@ -546,7 +547,7 @@
       <dependency>
         <groupId>org.apache.wicket</groupId>
         <artifactId>wicket-core</artifactId>
-        <version>${wicket.dependency.version}</version>
+        <version>${wicket.core.dependency.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.slf4j</groupId>

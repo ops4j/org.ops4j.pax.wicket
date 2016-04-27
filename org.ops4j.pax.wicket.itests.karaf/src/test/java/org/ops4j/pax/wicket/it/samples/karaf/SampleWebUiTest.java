@@ -68,15 +68,15 @@ public class SampleWebUiTest {
     @Inject
     private BundleContext bundleContext;
 
-    @Inject
-    @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = TIMEOUT)
+//    @Inject
+//    @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factoryEdgeInheritInjection;
 
-    @Inject
-    @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
+//    @Inject
+//    @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
-    @Inject
-    @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
+//    @Inject
+//    @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySampleDS;
 
     @Configuration
@@ -125,7 +125,8 @@ public class SampleWebUiTest {
             features(karafSampleFeatureRepo, "wicket-samples-spring-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-edge-mixed"),
             features(karafSampleFeatureRepo, "wicket-samples-ds"),
-            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),};
+            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),
+        };
 
     }
 
@@ -166,8 +167,9 @@ public class SampleWebUiTest {
     @Test
     public void checkInjectedPage() throws Exception {
         //Register a service here for later injection
-        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
 
+        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
+        System.in.read();
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/inject/");
         assertTrue("/plain/inject/ failed to start properly", page.contains("Echo: Welcome to the most simple pax-wicket application"));
 
@@ -178,13 +180,11 @@ public class SampleWebUiTest {
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/injection/simple/");
         assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
     }
+
     public void testSampleBlueprintSimpleDefaultShouldRenderPage() throws Exception {
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/simple/default");
         assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
     }
-
-    
-    
 
     @Test
     public void testSampleBlueprintSimplePaxwicketShouldRenderPage() throws Exception {
@@ -249,15 +249,13 @@ public class SampleWebUiTest {
         assertTrue(page.contains("This is a link"));
 
     }
+
     @Test
     public void testSampleEdgeInheritInheritedPageShouldRenderPage() throws Exception {
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/edge/inheritinjection/wicket/bookmarkable/org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit.internal.InheritedPage");
         assertTrue(page.contains("Back to parent"));
         assertTrue(page.contains("This is a link"));
     }
-    
-
-    
 
     @Test
     public void testSampleDeclarativeServices() throws Exception {
