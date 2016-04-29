@@ -18,7 +18,6 @@ package org.ops4j.pax.wicket.component.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
