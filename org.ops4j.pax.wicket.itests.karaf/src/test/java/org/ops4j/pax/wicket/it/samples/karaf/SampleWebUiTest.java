@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
@@ -68,15 +67,15 @@ public class SampleWebUiTest {
     @Inject
     private BundleContext bundleContext;
 
-//    @Inject
-//    @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = TIMEOUT)
+    @Inject
+    @Filter(value = "(pax.wicket.applicationname=edge.inheritinjection)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factoryEdgeInheritInjection;
 
-//    @Inject
-//    @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
+    @Inject
+    @Filter(value = "(pax.wicket.applicationname=springdm.simple.default)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySpringDmSimpleDefault;
-//    @Inject
-//    @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
+    @Inject
+    @Filter(value = "(pax.wicket.applicationname=sample.ds.factory)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factorySampleDS;
 
     @Configuration
@@ -84,20 +83,20 @@ public class SampleWebUiTest {
 
         MavenUrlReference wicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("paxwicket")
-                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
 
         MavenUrlReference paxwicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("features")
-                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
         MavenUrlReference karafSampleFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket.samples").artifactId("features")
-                .version("3.0.4-SNAPSHOT").classifier("features").type("xml");
+                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
         MavenUrlReference karafStandardRepo = maven()
                 .groupId("org.apache.karaf.features").artifactId("standard").versionAsInProject().classifier("features").type("xml");
 
         MavenArtifactUrlReference karafUrl = maven()
                 .groupId("org.apache.karaf").artifactId("apache-karaf")
-                .version("4.0.4").type("zip");
+                .version("4.0.5").type("zip");
 
         return new Option[]{
             karafDistributionConfiguration()
@@ -125,12 +124,10 @@ public class SampleWebUiTest {
             features(karafSampleFeatureRepo, "wicket-samples-spring-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-edge-mixed"),
             features(karafSampleFeatureRepo, "wicket-samples-ds"),
-            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),
-        };
+            features(karafSampleFeatureRepo, "wicket-samples-edge-inheritinjection"),};
 
     }
 
-    @Test()
     public void waitForever() throws IOException {
 
         System.in.read();
