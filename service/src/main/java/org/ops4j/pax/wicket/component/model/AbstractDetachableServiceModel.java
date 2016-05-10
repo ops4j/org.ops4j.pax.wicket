@@ -34,7 +34,7 @@ public abstract class AbstractDetachableServiceModel<T extends Object, E extends
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDetachableServiceModel.class);
     
     private final Class<T> serviceType;
-    private final BundleContext context;
+    private transient BundleContext context;
 	
     /**
      * Takes the type of the service to retrieve data from. When the {@code load} method is called, the first valid service of 
@@ -62,7 +62,6 @@ public abstract class AbstractDetachableServiceModel<T extends Object, E extends
 //	    throw new IllegalArgumentException("This model can only be used from within OSGi containers. The supplied class does not appear to originate in "
 //		    + "a bundle "+owningBundleClass.getCanonicalName());
 //	}
-	context = BundleReference.class.cast(owningBundleClass.getClassLoader()).getBundle().getBundleContext();
 	
 	if(!serviceType.isInterface()){
 	    throw new IllegalArgumentException("The serviceType must be an interface, was: "+serviceType.getCanonicalName()+". Error occured in "+context.getBundle().getSymbolicName());
@@ -81,6 +80,7 @@ public abstract class AbstractDetachableServiceModel<T extends Object, E extends
 
     @Override
     protected E load() {
+	context = BundleReference.class.cast(serviceType.getClassLoader()).getBundle().getBundleContext();
 	ServiceReference<T> ref = context.getServiceReference(serviceType);
 	try{
 	if(ref == null){

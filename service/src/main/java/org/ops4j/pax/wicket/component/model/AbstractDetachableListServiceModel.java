@@ -40,7 +40,7 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDetachableListServiceModel.class);
     
     private final Class<T> serviceType;
-    private final BundleContext context;
+    private transient BundleContext context;
     private final String filter;
     
     /**
@@ -60,7 +60,6 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
 		    + "a bundle "+owningBundleClass.getCanonicalName());
 	}
         */
-	context = BundleReference.class.cast(owningBundleClass.getClassLoader()).getBundle().getBundleContext();
 	
 	if(!serviceType.isInterface()){
 	    throw new IllegalArgumentException("The serviceType must be an interface, was: "+serviceType.getCanonicalName()+". Error occured in "+context.getBundle().getSymbolicName());
@@ -113,6 +112,7 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
     
     @Override
     protected List<E> load() {
+	context = BundleReference.class.cast(serviceType.getClassLoader()).getBundle().getBundleContext();
 	List<E> returnValues = new ArrayList<E>();
 	Collection<ServiceReference<T>> refs = Collections.EMPTY_LIST;
 	try{
