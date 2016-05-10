@@ -25,10 +25,17 @@ import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver;
 import org.ops4j.pax.wicket.internal.BundleDelegatingPageMounter;
 import org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener;
-import org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,33 +55,54 @@ import org.slf4j.LoggerFactory;
  * 
  * Everytime a bundle is removed it is simply removed from all applications from all services.
  */
-public class BundleDelegatingExtensionTracker implements
-        ServiceTrackerAggregatorReadyChildren<WebApplicationFactory<?>> {
+@Component
+public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleDelegatingExtensionTracker.class);
 
-    private final BundleContext paxWicketBundleContext;
+    private BundleContext paxWicketBundleContext;
     private final Map<String, ExtendedBundle> relvantBundles = new HashMap<String, ExtendedBundle>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver> classResolvers = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener> componentInstanciationListener = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener>();
-    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter> pageMounter = new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver> classResolvers =
+        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingClassResolver>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener> componentInstanciationListener =
+        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingComponentInstanciationListener>();
+    private final Map<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter> pageMounter =
+        new HashMap<ServiceReference<WebApplicationFactory<?>>, BundleDelegatingPageMounter>();
 
-    private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
+    private ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
 
-    public BundleDelegatingExtensionTracker(BundleContext context,
-            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker) {
-        paxWicketBundleContext = context;
-        this.factoryTracker = factoryTracker;
+    private BundleTracker<ExtendedBundle> bundleExtensionTracker;
+
+    @Override
+    @Activate
+    public void activate(BundleContext bundleContext) {
+        super.activate(bundleContext);
+        paxWicketBundleContext = bundleContext;
+        // TODO replace this by a DS injection, we just keep this for now to allow easier transition
+        factoryTracker = new ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory>(bundleContext,
+                ProxyTargetLocatorFactory.class, null);
+        factoryTracker.open();
+        bundleExtensionTracker = new BundleTracker<ExtendedBundle>(bundleContext, Bundle.ACTIVE, this);
+        bundleExtensionTracker.open();
     }
 
-    public void addingService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
+    @Deactivate
+    public void deactivate() {
+        factoryTracker.close();
+        bundleExtensionTracker.close();
+    }
+
+    @Reference(service = WebApplicationFactory.class, unbind = "removedService", updated = "modifiedService",
+        cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    public void addingService(ServiceReference<WebApplicationFactory<?>> reference) {
         synchronized (this) {
             addServicesForServiceReference(reference);
             reevaluateAllBundles(reference);
         }
     }
 
-    public void modifiedService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
+    public void modifiedService(ServiceReference<WebApplicationFactory<?>> reference) {
+        // TODO check if this is really needed or if we are fine with the normal remove/add provided by DS...
         synchronized (this) {
             removeServicesForServiceReference(reference);
             addServicesForServiceReference(reference);
@@ -82,7 +110,7 @@ public class BundleDelegatingExtensionTracker implements
         }
     }
 
-    public void removedService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
+    public void removedService(ServiceReference<WebApplicationFactory<?>> reference) {
         synchronized (this) {
             removeServicesForServiceReference(reference);
         }
@@ -119,6 +147,7 @@ public class BundleDelegatingExtensionTracker implements
         }
     }
 
+    @Override
     public void addRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
             LOGGER.debug("this bundle is relevant {}",bundle.getID());
@@ -151,6 +180,7 @@ public class BundleDelegatingExtensionTracker implements
         }
     }
 
+    @Override
     public void removeRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
             relvantBundles.remove(bundle.getID());

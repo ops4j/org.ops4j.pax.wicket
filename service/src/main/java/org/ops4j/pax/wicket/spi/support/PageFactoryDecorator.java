@@ -105,6 +105,7 @@ public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwar
             if (params != null && !params.isEmpty()) {
                 try {
                     Enhancer e = new Enhancer();
+                    e.setClassLoader(PageFactoryDecorator.class.getClassLoader());
                     e.setSuperclass(pageClass);
                     e.setCallback(new ComponentProxy(injectionSource, overwrites));
                     return (WebPage) e.create(new Class[]{ PageParameters.class }, new Object[]{ params });
@@ -115,6 +116,7 @@ public class PageFactoryDecorator implements PageFactory<WebPage>, InjectionAwar
             try {
                 Enhancer e = new Enhancer();
                 e.setSuperclass(pageClass);
+                e.setClassLoader(PageFactoryDecorator.class.getClassLoader());
                 e.setCallback(new ComponentProxy(injectionSource, overwrites));
                 return (WebPage) e.create();
             } catch (Exception e) {

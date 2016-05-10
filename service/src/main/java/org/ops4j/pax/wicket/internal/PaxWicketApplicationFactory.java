@@ -168,6 +168,7 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     private <T extends WebApplication> T createFromFactory(WebApplicationFactory<T> factory) {
         Class<T> applicationClass = factory.getWebApplicationClass();
         Enhancer e = new Enhancer();
+        e.setClassLoader(PaxWicketApplicationFactory.class.getClassLoader());
         e.setSuperclass(applicationClass);
         e.setCallback(new WebApplicationWrapper());
         @SuppressWarnings("unchecked")

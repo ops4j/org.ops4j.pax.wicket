@@ -82,6 +82,7 @@ public class LazyInitProxyFactory {
                     IWriteReplace.class });
             e.setSuperclass(type);
             e.setCallback(handler);
+            e.setClassLoader(LazyInitProxyFactory.class.getClassLoader());
             e.setNamingPolicy(new DefaultNamingPolicy() {
                 @Override
                 public String getClassName(final String prefix, final String source,

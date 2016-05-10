@@ -16,10 +16,8 @@
 package org.ops4j.pax.wicket.internal.servlet;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.Enumeration;
 
 import javax.servlet.Filter;
@@ -33,6 +31,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -43,10 +42,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Servlet sets required Wicket
+ * This Servlet sets required Wicket {@link ServletContext#setAttribute(String, Object)} values and delegates to the
  * {@link ServletContext#setAttribute(String, Object)} values and delegates to
- * the underlying {@link WicketFilter}, new instances are created with the
- * static {@link #createServlet(PaxWicketApplicationFactory)} method
+ * underlying {@link WicketFilter}, new instances are created with the static
+ * {@link #createServlet(PaxWicketApplicationFactory)} method
  */
 public final class PAXWicketServlet implements Servlet {
 
@@ -62,7 +61,7 @@ public final class PAXWicketServlet implements Servlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(PAXWicketServlet.class);
 
     private PAXWicketServlet(PaxWicketApplicationFactory applicationFactory, Filter wickFilter)
-            throws IllegalArgumentException {
+        throws IllegalArgumentException {
         appFactory = applicationFactory;
         this.wickFilter = wickFilter;
         applicationFactory.getFilterDelegator().setServlet(this);
@@ -131,80 +130,12 @@ public final class PAXWicketServlet implements Servlet {
      * @return a new instance for the given {@link PaxWicketApplicationFactory}
      */
     public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
-        try {
-
-//            Enhancer e = new Enhancer();
-//            e.setSuperclass(applicationFactory.getFilterClass());
-//            e.setCallback(new WicketFilterCallback(applicationFactory));
-            Filter proxyFilter = (Filter) Proxy.newProxyInstance(
-                    PAXWicketServlet.class.getClassLoader(),
-                    new Class[]{Filter.class}, new WicketProxyFilterCallback(applicationFactory));
-
-//            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
-            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, new WicketCustomFilter(applicationFactory));
-            return new ServletCallInterceptor(applicationFactory, delegateServlet);
-        } catch (NullPointerException ex) {
-            LOGGER.error("Got an nullpointer while enhancing {} ", applicationFactory.getApplicationName(), ex);
-        }
-        return null;
-
-    }
-
-    private static class WicketCustomFilter extends WicketFilter {
-
-        protected IWebApplicationFactory applicationFactory;
-
-        public WicketCustomFilter(IWebApplicationFactory applicationFactory) {
-            this.applicationFactory = applicationFactory;
-        }
-
-        @Override
-        protected IWebApplicationFactory getApplicationFactory() {
-            return applicationFactory;
-        }
-
-    }
-
-    private static class WicketProxyFilterCallback implements InvocationHandler {
-
-        private static class WicketCustomFilter extends WicketFilter {
-
-            protected IWebApplicationFactory applicationFactory;
-
-            public WicketCustomFilter(IWebApplicationFactory applicationFactory) {
-                this.applicationFactory = applicationFactory;
-            }
-
-            @Override
-            protected IWebApplicationFactory getApplicationFactory() {
-                return applicationFactory;
-            }
-
-        }
-
-        private final IWebApplicationFactory applicationFactory;
-        private final WicketCustomFilter wicketFilter;
-
-        public WicketProxyFilterCallback(IWebApplicationFactory applicationFactory) {
-            this.applicationFactory = applicationFactory;
-            this.wicketFilter = new WicketCustomFilter(applicationFactory);
-
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            method.setAccessible(true);
-            if (method.getName().equals("getApplicationFactory")) {
-                return applicationFactory;
-            }
-            try {
-                return method.invoke(wicketFilter, args);
-            } catch (InvocationTargetException e) {
-                throw e.getTargetException();
-            }
-
-        }
-
+        Enhancer e = new Enhancer();
+        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
+        e.setSuperclass(applicationFactory.getFilterClass());
+        e.setCallback(new WicketFilterCallback(applicationFactory));
+        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+        return new ServletCallInterceptor(applicationFactory, delegateServlet);
     }
 
     private static class WicketFilterCallback implements MethodInterceptor {

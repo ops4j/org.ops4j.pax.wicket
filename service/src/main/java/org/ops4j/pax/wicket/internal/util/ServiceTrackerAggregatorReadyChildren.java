@@ -22,6 +22,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * Since a service tracker is not directly aggregatorable. Therefore this interface slightly modifies the functionality
  * to make it usable.
  */
+@Deprecated
 public interface ServiceTrackerAggregatorReadyChildren<ServiceType> {
 
     /**
