@@ -127,6 +127,7 @@ public final class PAXWicketServlet implements Servlet {
      */
     public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
         Enhancer e = new Enhancer();
+        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
         e.setSuperclass(applicationFactory.getFilterClass());
         e.setCallback(new WicketFilterCallback(applicationFactory));
         PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
