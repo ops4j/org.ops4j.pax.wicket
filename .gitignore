@@ -10,3 +10,4 @@ wicket.iws
 *runner
 *bin
 *.idea
+*.xml
