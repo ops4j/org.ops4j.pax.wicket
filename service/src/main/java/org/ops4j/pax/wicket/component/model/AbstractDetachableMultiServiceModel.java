@@ -35,10 +35,10 @@ import org.slf4j.LoggerFactory;
  * @param <T> The models return type.
  */
 public abstract class AbstractDetachableMultiServiceModel<T extends Object> extends LoadableDetachableModel<T>{
-
     public static final Logger LOGGER = LoggerFactory.getLogger(AbstractDetachableMultiServiceModel.class);
-    private Map<Class, ServiceReference> references;
-    private final BundleContext context;
+    private Class owningBundleClass;
+    private transient Map<Class, ServiceReference> references;
+    private transient BundleContext context;
 
     /**
      * This constructor must be passed a class from the bundle, in which this class is used. Simply passing {@code this.getClass()} is usually sufficient.
@@ -47,7 +47,7 @@ public abstract class AbstractDetachableMultiServiceModel<T extends Object> exte
      * @param owningBundleClass Any class from within the bundle containing whatever page the model is used in.
      */
     public AbstractDetachableMultiServiceModel(Class owningBundleClass) {
-	context = BundleReference.class.cast(owningBundleClass.getClassLoader()).getBundle().getBundleContext();
+	this.owningBundleClass = owningBundleClass;
     }
 
     /**
@@ -66,6 +66,7 @@ public abstract class AbstractDetachableMultiServiceModel<T extends Object> exte
     
     @Override
     protected T load() {
+	context = BundleReference.class.cast(owningBundleClass.getClassLoader()).getBundle().getBundleContext();
 	references = new HashMap<Class, ServiceReference>();
 	try{
 	    return doLoad();
