@@ -29,7 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
-import static org.junit.Assert.assertNotNull;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
@@ -40,11 +39,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
 import org.osgi.framework.BundleContext;
 import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
-import static org.junit.Assert.assertTrue;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import static org.junit.Assert.assertNotNull;
@@ -140,6 +134,7 @@ public class SampleWebUiTestFull {
      * @throws IOException 
      */
     public void waitForever() throws IOException {
+        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         System.in.read();
     }
 
@@ -176,7 +171,7 @@ public class SampleWebUiTestFull {
         //Register a service here for later injection
 
         bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
-        System.in.read();
+
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/inject/");
         assertTrue("/plain/inject/ failed to start properly", page.contains("Echo: Welcome to the most simple pax-wicket application"));
 
