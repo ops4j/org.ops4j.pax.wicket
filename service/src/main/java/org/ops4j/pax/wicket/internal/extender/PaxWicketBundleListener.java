@@ -37,6 +37,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer<Extended
         extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(paxBundleContext);
     }
 
+    @Override
     public ExtendedBundle addingBundle(Bundle bundle, BundleEvent event) {
         ExtendedBundle extendedBundle =
             new ExtendedBundle(extendedBundleContext, bundle);
@@ -54,6 +55,7 @@ public class PaxWicketBundleListener implements BundleTrackerCustomizer<Extended
         // we don't care about state changes (for now)
     }
 
+    @Override
     public void removedBundle(Bundle bundle, BundleEvent event, ExtendedBundle object) {
         bundleDelegatingExtensionTracker.removeRelevantBundle(object);
         LOGGER.debug("{} is removed as a relevant bundle for pax wicket", bundle.getSymbolicName());

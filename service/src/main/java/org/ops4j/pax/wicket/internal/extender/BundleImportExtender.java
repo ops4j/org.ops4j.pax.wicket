@@ -79,6 +79,7 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
                 }
                 extendedBundles.add(bundle.getBundleId());
             }
+            LOGGER.info("about to dynamicly add imports via weaving for bundle {} ",bundle.getSymbolicName());
             ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, bundle);
             if (extendedBundle.isRelevantForImportEnhancements()) {
                 LOGGER.debug("Enhance DynamicImports of bundle {}...", bundle.getSymbolicName());

@@ -74,7 +74,8 @@
               org.apache.wicket.markup.html.link,
               org.apache.wicket.markup.html.list,
               org.ops4j.pax.wicket.util.proxy,
-              org.apache.wicket.core.request.mapper
+              org.apache.wicket.core.request.mapper,
+               org.ops4j.pax.wicket.spi;version="${project.version}"
             </Import-Package>
           </instructions>
         </configuration>

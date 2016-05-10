@@ -121,6 +121,7 @@ public class BundleDelegatingExtensionTracker implements
 
     public void addRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
+            LOGGER.debug("this bundle is relevant {}",bundle.getID());
             relvantBundles.put(bundle.getID(), bundle);
             Set<ServiceReference<WebApplicationFactory<?>>> services = classResolvers.keySet();
             for (ServiceReference<WebApplicationFactory<?>> serviceReference : services) {

@@ -76,7 +76,8 @@
               org.apache.wicket.core.request.mapper,
               org.apache.wicket.markup.html.link,
               org.apache.wicket.request.component,
-              org.apache.wicket.request.mapper.parameter
+              org.apache.wicket.request.mapper.parameter,
+              org.ops4j.pax.wicket.util.proxy
             </Import-Package>
           </instructions>
         </configuration>

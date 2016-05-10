@@ -91,7 +91,7 @@
               org.osgi.framework.hooks.weaving;version="[1,1.2)",
               org.osgi.service.*;version="[1,2)",
               org.osgi.util.*;version="[1,2)",
-              net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,
+              net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
               net.sf.cglib.reflect;version="${cglib.range}";resolution:=optional,
               org.xml.sax,

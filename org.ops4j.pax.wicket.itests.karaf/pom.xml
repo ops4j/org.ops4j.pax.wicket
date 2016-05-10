@@ -195,30 +195,30 @@
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-container-karaf</artifactId>
-            <version>4.8.0</version>
+            <version>4.9.1</version>
             <scope>test</scope>
         </dependency>
     
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam</artifactId>
-            <version>4.8.0</version>
+            <version>4.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-junit4</artifactId>
-            <version>4.8.0</version>
+            <version>4.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-inject</artifactId>
-            <version>4.8.0</version>
+            <version>4.9.1</version>
         </dependency>
         		
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
-            <version>4.0.4</version>
+            <version>4.0.5</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>test</scope>

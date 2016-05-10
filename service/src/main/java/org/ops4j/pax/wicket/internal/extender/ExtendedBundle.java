@@ -103,6 +103,8 @@ public class ExtendedBundle {
         if (isWicket() || isPAXWicket()) {
             return false;
         }
+        LOGGER.debug("isCandidateForImport NOT WICKET or PAX WICKET  {}",getID());
+        
         return isImportingPAXWicketAPI() || isImportingWicket();
     }
 
