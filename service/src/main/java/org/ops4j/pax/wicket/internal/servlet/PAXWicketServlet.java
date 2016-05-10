@@ -31,7 +31,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -129,15 +128,50 @@ public final class PAXWicketServlet implements Servlet {
      * @param applicationFactory
      * @return a new instance for the given {@link PaxWicketApplicationFactory}
      */
-    public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
-        Enhancer e = new Enhancer();
-        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
-        e.setSuperclass(applicationFactory.getFilterClass());
-        e.setCallback(new WicketFilterCallback(applicationFactory));
-        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
-        return new ServletCallInterceptor(applicationFactory, delegateServlet);
-    }
+//    public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
+//        Enhancer e = new Enhancer();
+//        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
+//        e.setSuperclass(applicationFactory.getFilterClass());
+//        e.setCallback(new WicketFilterCallback(applicationFactory));
+//        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+//        return new ServletCallInterceptor(applicationFactory, delegateServlet);
+//    }
 
+     public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
+        try {
+
+//            Enhancer e = new Enhancer();
+//            e.setSuperclass(applicationFactory.getFilterClass());
+//            e.setCallback(new WicketFilterCallback(applicationFactory));
+//            Filter proxyFilter = (Filter) Proxy.newProxyInstance(
+//                    PAXWicketServlet.class.getClassLoader(),
+//                    new Class[]{Filter.class}, new WicketProxyFilterCallback(applicationFactory));
+
+//            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, new WicketCustomFilter(applicationFactory));
+            return new ServletCallInterceptor(applicationFactory, delegateServlet);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Got an nullpointer while enhancing {} ", applicationFactory.getApplicationName(), ex);
+        }
+        return null;
+
+    }
+    
+        private static class WicketCustomFilter extends WicketFilter {
+
+        protected IWebApplicationFactory applicationFactory;
+
+        public WicketCustomFilter(IWebApplicationFactory applicationFactory) {
+            this.applicationFactory = applicationFactory;
+        }
+
+        @Override
+        protected IWebApplicationFactory getApplicationFactory() {
+            return applicationFactory;
+        }
+
+    }
+    
     private static class WicketFilterCallback implements MethodInterceptor {
 
         private final IWebApplicationFactory applicationFactory;

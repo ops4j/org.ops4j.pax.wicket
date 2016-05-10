@@ -135,6 +135,10 @@ public class SampleWebUiTestFull {
 
     }
 
+    /**
+     * used for manually testing put in @Test() and it will bring up a karaf with all samples loaded
+     * @throws IOException 
+     */
     public void waitForever() throws IOException {
         System.in.read();
     }
@@ -172,6 +176,7 @@ public class SampleWebUiTestFull {
         //Register a service here for later injection
 
         bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
+        System.in.read();
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/plain/inject/");
         assertTrue("/plain/inject/ failed to start properly", page.contains("Echo: Welcome to the most simple pax-wicket application"));
 
