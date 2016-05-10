@@ -22,6 +22,7 @@
     <module>mixed</module>
     <module>edge</module>
     <module>navigation</module>
+    <module>issues</module>
     <module>features</module>
   </modules>
 

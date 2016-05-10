@@ -1,0 +1,33 @@
+Copyright OPS4J
+
+Licensed  under the  Apache License,  Version 2.0  (the "License");
+you may not use  this file  except in  compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed  under the  License is distributed on an "AS IS" BASIS,
+WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+implied.
+
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This project includes:
+  Activation 1.1 under The Apache Software License, Version 2.0
+  Apache Geronimo OSGI factory registry under The Apache Software License, Version 2.0
+  Apache Geronimo OSGi-enable spec bundle locator under The Apache Software License, Version 2.0
+  Apache ServiceMix :: Bundles :: cglib under The Apache Software License, Version 2.0
+  Java(TM) EE 6 Specification APIs under CDDL + GPLv2 with classpath exception
+  OPS4J Base - All under ALv2
+  OPS4J Pax Wicket :: Samples :: Plain :: Inject under ALv2
+  OPS4J Pax Wicket :: Service under ALv2
+  osgi.core under Apache License, Version 2.0
+  Wicket Auth Roles under The Apache Software License, Version 2.0
+  Wicket Core under The Apache Software License, Version 2.0
+  Wicket Development Utilities under The Apache Software License, Version 2.0
+  Wicket Extensions under The Apache Software License, Version 2.0
+  Wicket Request under The Apache Software License, Version 2.0
+  Wicket Util under The Apache Software License, Version 2.0
+

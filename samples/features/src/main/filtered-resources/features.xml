@@ -25,6 +25,12 @@
         <bundle>mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.navigation/${project.version}</bundle>
     </feature>
 
+    <feature name="wicket-samples-issues" version="${project.version}">
+        <feature version="${project.version}">wicket-samples-base</feature>
+        <bundle>mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/${project.version}</bundle>
+    </feature>
+
+
     <feature name="wicket-samples-plain-simple" version="${project.version}">
         <feature version="${project.version}">wicket-samples-base</feature>
         <bundle>mvn:org.ops4j.pax.wicket.samples.plain/org.ops4j.pax.wicket.samples.plain.simple/${project.version}</bundle>

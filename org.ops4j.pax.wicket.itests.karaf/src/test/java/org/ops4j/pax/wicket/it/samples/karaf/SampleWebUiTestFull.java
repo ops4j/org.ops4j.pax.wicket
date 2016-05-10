@@ -110,6 +110,7 @@ public class SampleWebUiTestFull {
             features(paxwicketFeatureRepo, "pax-wicket"),
             features(paxwicketFeatureRepo, "pax-wicket-blueprint"),
             features(karafSampleFeatureRepo, "wicket-samples-base"),
+            features(karafSampleFeatureRepo, "wicket-samples-issues"),
             features(karafSampleFeatureRepo, "wicket-samples-plain-simple"),
             features(karafSampleFeatureRepo, "wicket-samples-plain-pagefactory"),
             features(karafSampleFeatureRepo, "wicket-samples-blueprint-simple"),
@@ -133,9 +134,9 @@ public class SampleWebUiTestFull {
      * used for manually testing put in @Test() and it will bring up a karaf with all samples loaded
      * @throws IOException 
      */
-    //@Test
+    @Test
     public void waitForever() throws IOException {
-        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
+        //bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         System.in.read();
     }
 
