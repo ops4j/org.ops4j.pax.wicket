@@ -133,6 +133,7 @@ public class SampleWebUiTestFull {
      * used for manually testing put in @Test() and it will bring up a karaf with all samples loaded
      * @throws IOException 
      */
+    //@Test
     public void waitForever() throws IOException {
         bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         System.in.read();

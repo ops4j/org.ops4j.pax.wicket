@@ -95,11 +95,11 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     private static File retrieveTmpFile(BundleContext bundleContext) {
-        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-        if (tmpDir == null) {
+        String property = System.getProperty("java.io.tmpdir");
+        if (property == null) {
             throw new IllegalStateException("Platform needs file system access to work correctly.");
         }
-        return tmpDir;
+        return new File(property);
     }
 
     /**
@@ -165,10 +165,33 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
         return createFromFactory(webApplicationFactory);
     }
 
-    private <T extends WebApplication> T createFromFactory(WebApplicationFactory<T> factory) {
-        Class<T> applicationClass = factory.getWebApplicationClass();
+    private <T extends WebApplication> T createFromFactory(final WebApplicationFactory<T> factory) {
+        final Class<T> applicationClass = factory.getWebApplicationClass();
+        final ClassLoader factoryClassLoader = factory.getClass().getClassLoader();
+        final ClassLoader applicationClassClassLoader = applicationClass.getClassLoader();
         Enhancer e = new Enhancer();
-       // e.setClassLoader(PaxWicketApplicationFactory.class.getClassLoader());
+        e.setClassLoader(new ClassLoader(PaxWicketApplicationFactory.class.getClassLoader()) {
+            @Override
+            protected Class<?> findClass(String name) throws ClassNotFoundException {
+                try {
+                    return factoryClassLoader.loadClass(name);
+                } catch (ClassNotFoundException cnf1) {
+                    LOG.debug("{} not found in WebApplicationFactory classloader ({}), try WebApplicationClass...",
+                        name, factory.getClass()
+                            .getName(), cnf1);
+                    try {
+                        return applicationClassClassLoader.loadClass(name);
+                    } catch (ClassNotFoundException cnf2) {
+                        LOG.debug("{} not found in WebApplicationClass classloader ({})", name, applicationClass
+                            .getClass().getName(), cnf2);
+                        throw new ClassNotFoundException(
+                            name
+                                    + " was neither found in WebApplicationFactory nor WebApplicationClass classloader, enable DEBUG loglevel on "
+                                    + PaxWicketApplicationFactory.class + " to get more details");
+                    }
+                }
+            }
+        });
         e.setSuperclass(applicationClass);
         e.setCallback(new WebApplicationWrapper());
         @SuppressWarnings("unchecked")
