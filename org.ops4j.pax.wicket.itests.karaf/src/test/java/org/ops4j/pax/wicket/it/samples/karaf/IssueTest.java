@@ -44,6 +44,7 @@ import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
+import org.osgi.framework.Bundle;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -111,6 +112,9 @@ public class IssueTest {
 
     @Test
     public void testIssues() throws Exception {
+        while(bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState()!=Bundle.ACTIVE){
+            Thread.sleep(200);
+        }
 
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/issues/");
         assertTrue(page.contains("HomePage"));
