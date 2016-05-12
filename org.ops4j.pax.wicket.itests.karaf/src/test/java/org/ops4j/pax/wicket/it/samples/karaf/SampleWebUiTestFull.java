@@ -103,7 +103,7 @@ public class SampleWebUiTestFull {
             .unpackDirectory(new File("target", "exam"))
             .useDeployFolder(false),
             keepRuntimeFolder(),
-            configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
+            configureConsole().ignoreLocalConsole(), logLevel(LogLevel.INFO),
             features(karafStandardRepo, "scr"),
             features(karafStandardRepo, "webconsole"),
             features(wicketFeatureRepo, "wicket"),
@@ -134,6 +134,7 @@ public class SampleWebUiTestFull {
      * used for manually testing put in @Test() and it will bring up a karaf with all samples loaded
      * @throws IOException 
      */
+    @Test
     public void waitForever() throws IOException {
         //bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         System.in.read();

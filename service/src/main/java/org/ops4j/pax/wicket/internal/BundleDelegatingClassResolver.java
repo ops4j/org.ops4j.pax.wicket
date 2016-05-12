@@ -36,7 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class represents an extended class loader automatically trying to load from all bundles added to it.
+ * This class represents an extended class loader automatically trying to load
+ * from all bundles added to it.
  */
 public class BundleDelegatingClassResolver implements IClassResolver, InternalBundleDelegationProvider {
 
@@ -62,8 +63,17 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         }
         Dictionary<String, String> properties = new Hashtable<String, String>();
         properties.put(Constants.APPLICATION_NAME, applicationName);
-        classResolverRegistration =
-            paxWicketBundleContext.registerService(IClassResolver.class, this, properties);
+        try {
+            classResolverRegistration
+                    = paxWicketBundleContext.registerService(IClassResolver.class, this, properties);
+
+        } catch (NullPointerException e) {
+            LOGGER.error("nullpointer while trying to register >{}< using {} with >{}< bundlecontext are >{}<", IClassResolver.class, this, properties, paxWicketBundleContext, e);
+            throw e;
+        }
+        {
+        }
+
     }
 
     public void stop() {
@@ -104,11 +114,11 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
                     return loadedClass;
                 } catch (ClassNotFoundException e) {
                     LOGGER.trace("Could not load class {} from bundle {} because bundle does not contain the class",
-                        classname, bundle.getSymbolicName());
+                            classname, bundle.getSymbolicName());
                 } catch (IllegalStateException e) {
                     LOGGER.trace("Could not load class {} from bundle {} because bundle had been uninstalled",
-                        classname,
-                        bundle.getSymbolicName());
+                            classname,
+                            bundle.getSymbolicName());
                 }
             }
         }
@@ -138,9 +148,10 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
     }
 
     /**
-     * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
-     * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want to
-     * be informed about the problem as soon as possible.
+     * This method is uses only for some internal wicket stuff if the
+     * IClassResolver is NOT replaced and in some IOC stuff also not used by pax
+     * wicket. Therefore this method should never ever be called. If it is
+     * though we want to be informed about the problem as soon as possible.
      */
     public ClassLoader getClassLoader() {
         throw new UnsupportedOperationException("This method should NOT BE CALLED!");

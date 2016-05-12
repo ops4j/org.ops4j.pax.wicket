@@ -58,13 +58,13 @@
               org.apache.wicket.protocol.http,
               org.apache.wicket.request.http,
               org.ops4j.pax.wicket.api,
+              org.ops4j.pax.wicket.api.support,
               org.osgi.framework,
-              org.ops4j.pax.wicket.util.proxy,
               net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}",
               net.sf.cglib.reflect;version="${cglib.range}",
               javax.servlet,
-              javax.inject,
+              javax.inject,  
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,
@@ -72,9 +72,10 @@
               javax.servlet.http,
               org.apache.wicket.ajax,
               org.osgi.service.blueprint,
+              org.apache.wicket.core.request.mapper,
+
               org.apache.wicket.behavior,
               org.apache.wicket.util.time,
-              org.apache.wicket.core.request.mapper
             </Import-Package>
           </instructions>
         </configuration>

@@ -38,8 +38,8 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
 import org.osgi.framework.BundleContext;
 import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
@@ -106,15 +106,21 @@ public class IssueTest {
      *
      * @throws IOException
      */
+    @Test
     public void waitForever() throws IOException {
         System.in.read();
     }
 
-    @Test
-    public void testIssues() throws Exception {
+    @Before
+    public void before() throws InterruptedException{
         while(bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState()!=Bundle.ACTIVE){
             Thread.sleep(200);
         }
+    
+    }
+    
+    @Test
+    public void testIssues() throws Exception {
 
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/issues/");
         assertTrue(page.contains("HomePage"));

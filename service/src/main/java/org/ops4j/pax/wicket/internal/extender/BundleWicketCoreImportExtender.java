@@ -30,7 +30,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This Extender adds dynmic imports to client bundles
  */
-@Component(service = {WeavingHook.class})
+//Temporary disable weaving
+//@Component(service = {WeavingHook.class})
 public class BundleWicketCoreImportExtender implements WeavingHook {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleWicketCoreImportExtender.class);

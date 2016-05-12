@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This Extender adds dynmic imports to client bundles
  */
-@Component(service = { WeavingHook.class })
+//Temporary disable weaving
+//@Component(service = { WeavingHook.class })
 public class BundleImportExtender implements WeavingHook, SynchronousBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleImportExtender.class);
@@ -79,7 +80,7 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
                 }
                 extendedBundles.add(bundle.getBundleId());
             }
-            LOGGER.info("about to dynamicly add imports via weaving for bundle {} ",bundle.getSymbolicName());
+            LOGGER.debug("considering to add imports via weaving for bundle {} ",bundle.getSymbolicName());
             ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, bundle);
             if (extendedBundle.isRelevantForImportEnhancements()) {
                 LOGGER.debug("Enhance DynamicImports of bundle {}...", bundle.getSymbolicName());

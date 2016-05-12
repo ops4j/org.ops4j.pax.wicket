@@ -73,9 +73,6 @@
                             org.osgi.service.blueprint,
                             org.apache.wicket.core.request.mapper
                         </Import-Package>
-                        <DynamicImport-Package>
-                            org.ops4j.pax.wicket.spi
-                        </DynamicImport-Package>
 
                     </instructions>
                 </configuration>

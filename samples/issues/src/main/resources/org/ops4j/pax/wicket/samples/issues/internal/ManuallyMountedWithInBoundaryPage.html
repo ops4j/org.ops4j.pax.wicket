@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright OPS4J
@@ -16,11 +15,12 @@
     limitations under the License.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="example.ds.webapplicationfactory">
-   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.PAXWicketFilterFactory"/>
-   <implementation class="org.ops4j.pax.wicket.samples.ds.internal.WicketWebApplicationFactory"/>
-   <property name="pax.wicket.applicationname" type="String" value="sample.ds.factory"/>
-   <service>
-      <provide interface="org.ops4j.pax.wicket.api.WebApplicationFactory"/>
-   </service>
-</scr:component>
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+    <head>  
+        <title>OPS4J PAX Wicket Issues Sample Mounted Page Within boundary</title>
+    </head>
+    <body>
+        
+        Im mounted and happy!
+    </body>
+</html>
