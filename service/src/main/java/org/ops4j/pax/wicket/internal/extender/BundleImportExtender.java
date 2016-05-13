@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
 /**
  * This Extender adds dynmic imports to client bundles
  */
-@Component(service = { WeavingHook.class })
+//Temporary disable weaving
+//@Component(service = { WeavingHook.class })
 public class BundleImportExtender implements WeavingHook, SynchronousBundleListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleImportExtender.class);
@@ -44,9 +45,10 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
 
     private static final Set<String> ADDITIONAL_IMPORTS = new HashSet<String>();
 
+    //TODO THIS SHOULD PULL from POM file
     static {
-        ADDITIONAL_IMPORTS.add("org.apache.wicket.core.request.mapper;version=\"[1.6,2)\"");
-        ADDITIONAL_IMPORTS.add("org.ops4j.pax.wicket.util.proxy;version=\"[1.3,2)\"");
+        ADDITIONAL_IMPORTS.add("org.apache.wicket.core.request.mapper;version=\"[6,7)\"");
+        ADDITIONAL_IMPORTS.add("org.ops4j.pax.wicket.util.proxy;version=\"[3,4)\"");
         ADDITIONAL_IMPORTS.add("net.sf.cglib.proxy;version=\"[2,3)\"");
         ADDITIONAL_IMPORTS.add("net.sf.cglib.core;version=\"[2,3)\"");
         ADDITIONAL_IMPORTS.add("net.sf.cglib.reflect;version=\"[2,3)\"");
@@ -78,6 +80,7 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
                 }
                 extendedBundles.add(bundle.getBundleId());
             }
+            LOGGER.debug("considering to add imports via weaving for bundle {} ",bundle.getSymbolicName());
             ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, bundle);
             if (extendedBundle.isRelevantForImportEnhancements()) {
                 LOGGER.debug("Enhance DynamicImports of bundle {}...", bundle.getSymbolicName());

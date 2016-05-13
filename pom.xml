@@ -28,7 +28,7 @@
 
   <groupId>org.ops4j.pax.wicket</groupId>
   <artifactId>pax-wicket</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -59,8 +59,9 @@
     <felix.eventadmin.version>1.3.2</felix.eventadmin.version>
     <felix.configadmin.version>1.6.0</felix.configadmin.version>
     <felix.scr.version>1.8.2</felix.scr.version>
-    <wicket.dependency.version>6.7.0</wicket.dependency.version>
-    <wicket.dependency.version.range>[6.7.0,7)</wicket.dependency.version.range>
+    <wicket.dependency.version>6.22.0</wicket.dependency.version>
+    <wicket.dependency.version.range>[6.22.0,7)</wicket.dependency.version.range>
+    <wicket.core.dependency.version>6.22.0</wicket.core.dependency.version>
     <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jetty.version>7.6.7.v20120910</jetty.version>
@@ -90,7 +91,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
@@ -214,6 +214,7 @@
     <module>features/wicket</module>
     <module>features/paxwicket</module>
     <module>itests</module>
+    <module>org.ops4j.pax.wicket.itests.karaf</module>
   </modules>
 
   <dependencyManagement>
@@ -545,7 +546,7 @@
       <dependency>
         <groupId>org.apache.wicket</groupId>
         <artifactId>wicket-core</artifactId>
-        <version>${wicket.dependency.version}</version>
+        <version>${wicket.core.dependency.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.slf4j</groupId>

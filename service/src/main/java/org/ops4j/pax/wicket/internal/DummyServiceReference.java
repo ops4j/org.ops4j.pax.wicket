@@ -26,18 +26,22 @@ import org.osgi.framework.ServiceReference;
  */
 public class DummyServiceReference<T> implements ServiceReference<T> {
 
+    @Override
     public Object getProperty(String key) {
         return null;
     }
 
+    @Override
     public String[] getPropertyKeys() {
         return null;
     }
 
+    @Override
     public Bundle getBundle() {
         return null;
     }
 
+    @Override
     public Bundle[] getUsingBundles() {
         return null;
     }
@@ -46,6 +50,7 @@ public class DummyServiceReference<T> implements ServiceReference<T> {
         return false;
     }
 
+    @Override
     public int compareTo(Object reference) {
         return 0;
     }

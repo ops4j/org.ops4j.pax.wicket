@@ -18,80 +18,81 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
-    <artifactId>blueprint</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>org.ops4j.pax.wicket.samples.blueprint</groupId>
+        <artifactId>blueprint</artifactId>
+        <version>3.0.5-SNAPSHOT</version>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>org.ops4j.pax.wicket.samples.blueprint.simple</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-  <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Simple</name>
+    <artifactId>org.ops4j.pax.wicket.samples.blueprint.simple</artifactId>
+    <version>3.0.5-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    <name>OPS4J Pax Wicket :: Samples :: Blueprint :: Simple</name>
 
-  <description>
-    This project provides the most simple introduction into pax-wicket using blueprint to register the applications.
-  </description>
+    <description>
+        This project provides the most simple introduction into pax-wicket using blueprint to register the applications.
+    </description>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-            <!-- The bundle activator is only required if we do the things by hand. -->
-            <Import-Package>
-              org.apache.wicket,
-              org.apache.wicket.util,
-              org.apache.wicket.event,
-              org.apache.wicket.page,
-              org.apache.wicket.request.resource,
-              org.apache.wicket.request.mapper,
-              org.apache.wicket.request.cycle,
-              org.apache.wicket.markup.html,
-              org.apache.wicket.markup.html.basic,
-              org.apache.wicket.protocol.http,
-              org.apache.wicket.request.http,
-              org.ops4j.pax.wicket.api,
-              org.ops4j.pax.wicket.api.support,
-              org.osgi.framework,
-              net.sf.cglib.proxy;version="${cglib.range}",
-              net.sf.cglib.core;version="${cglib.range}",
-              net.sf.cglib.reflect;version="${cglib.range}",
-              javax.servlet,
-              org.apache.wicket.settings,
-              org.apache.wicket.session,
-              org.apache.wicket.util.file,
-              org.apache.wicket.request,
-              javax.servlet.http,
-              org.apache.wicket.ajax,
-              org.osgi.service.blueprint,
-              org.apache.wicket.core.request.mapper
-            </Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <!-- The bundle activator is only required if we do the things by hand. -->
+                        <Import-Package>
+                            org.apache.wicket,
+                            org.apache.wicket.util,
+                            org.apache.wicket.event,
+                            org.apache.wicket.page,
+                            org.apache.wicket.request.resource,
+                            org.apache.wicket.request.mapper,
+                            org.apache.wicket.request.cycle,
+                            org.apache.wicket.markup.html,
+                            org.apache.wicket.markup.html.basic,
+                            org.apache.wicket.protocol.http,
+                            org.apache.wicket.request.http,
+                            org.ops4j.pax.wicket.api,
+                            org.ops4j.pax.wicket.api.support,
+                            org.osgi.framework,
+                            net.sf.cglib.proxy;version="${cglib.range}",
+                            net.sf.cglib.core;version="${cglib.range}",
+                            net.sf.cglib.reflect;version="${cglib.range}",
+                            javax.servlet,
+                            org.apache.wicket.settings,
+                            org.apache.wicket.session,
+                            org.apache.wicket.util.file,
+                            org.apache.wicket.request,
+                            javax.servlet.http,
+                            org.apache.wicket.ajax,
+                            org.osgi.service.blueprint,
+                            org.apache.wicket.core.request.mapper
+                        </Import-Package>
 
-  <dependencies>
-    <!-- Since we're using OSGi direclty we need a reference to those classes -->
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <!-- We need wicket and pax-wicket references for this sample; simply add the core wicket bundle. -->
-    <dependency>
-      <groupId>org.ops4j.pax.wicket</groupId>
-      <artifactId>org.ops4j.pax.wicket.service</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!-- Since we're using OSGi direclty we need a reference to those classes -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- We need wicket and pax-wicket references for this sample; simply add the core wicket bundle. -->
+        <dependency>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>org.ops4j.pax.wicket.service</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
 

@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.edge.inheritinjection</groupId>
     <artifactId>inheritinjection</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.edge.inheritinjection.inherit</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Edge Cases :: Inherit Injection :: Extended Parent Class</name>
 
@@ -73,7 +73,9 @@
               org.apache.wicket.ajax,
               org.ops4j.pax.wicket.samples.edge.inheritinjection.parent,
               org.osgi.service.blueprint,
-              org.apache.wicket.core.request.mapper
+              org.apache.wicket.core.request.mapper,
+              org.ops4j.pax.wicket.spi;version="${project.version}"
+                
             </Import-Package>
           </instructions>
         </configuration>

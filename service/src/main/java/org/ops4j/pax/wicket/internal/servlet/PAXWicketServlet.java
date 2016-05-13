@@ -30,18 +30,22 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-
 import net.sf.cglib.proxy.Enhancer;
+
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.wicket.protocol.http.IWebApplicationFactory;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This Servlet sets required Wicket {@link ServletContext#setAttribute(String, Object)} values and delegates to the
- * underlying {@link WicketFilter}, new instances are created with the static
+ * This Servlet sets required Wicket
+ * {@link ServletContext#setAttribute(String, Object)} values and delegates to
+ * the {@link ServletContext#setAttribute(String, Object)} values and delegates
+ * to underlying {@link WicketFilter}, new instances are created with the static
  * {@link #createServlet(PaxWicketApplicationFactory)} method
  */
 public final class PAXWicketServlet implements Servlet {
@@ -50,14 +54,42 @@ public final class PAXWicketServlet implements Servlet {
 
     private static final String WICKET_REQUIRED_ATTRIBUTE = "javax.servlet.context.tempdir";
 
+    private static void setCombinedClassLoader(Enhancer e, final PaxWicketApplicationFactory applicationFactory) {
+        e.setClassLoader(new ClassLoader(PaxWicketApplicationFactory.class.getClassLoader()) {
+            @Override
+            protected Class<?> findClass(String name) throws ClassNotFoundException {
+                try {
+
+                    return applicationFactory.getFilterClass().getClassLoader().loadClass(name);
+                } catch (ClassNotFoundException cnf1) {
+                    LOGGER.debug("{} not found in filterclass classloader ({}), try WebApplicationClass...",
+                            name, applicationFactory.getClass()
+                            .getName(), cnf1);
+                    try {
+                        return applicationFactory.getWebApplicationFactory().getWebApplicationClass().getClassLoader().loadClass(name);
+                    } catch (ClassNotFoundException cnf2) {
+                        LOGGER.debug("{} not found in WebApplicationClass classloader ({})", name, applicationFactory.getWebApplicationFactory().getWebApplicationClass()
+                                .getClass().getName(), cnf2);
+                        throw new ClassNotFoundException(
+                                name
+                                + " was neither found in WebApplicationFactory nor filterclass classloader, enable DEBUG loglevel on "
+                                + PAXWicketServlet.class + " to get more details");
+                    }
+                }
+            }
+        });
+
+    }
+
     private final PaxWicketApplicationFactory appFactory;
 
     private ServletConfig config;
 
     private final Filter wickFilter;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PAXWicketServlet.class);
 
     private PAXWicketServlet(PaxWicketApplicationFactory applicationFactory, Filter wickFilter)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         appFactory = applicationFactory;
         this.wickFilter = wickFilter;
         applicationFactory.getFilterDelegator().setServlet(this);
@@ -125,13 +157,45 @@ public final class PAXWicketServlet implements Servlet {
      * @param applicationFactory
      * @return a new instance for the given {@link PaxWicketApplicationFactory}
      */
-    public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
-        Enhancer e = new Enhancer();
-        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
-        e.setSuperclass(applicationFactory.getFilterClass());
-        e.setCallback(new WicketFilterCallback(applicationFactory));
-        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
-        return new ServletCallInterceptor(applicationFactory, delegateServlet);
+//    public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
+//        Enhancer e = new Enhancer();
+//        e.setClassLoader(PAXWicketServlet.class.getClassLoader());
+//        e.setSuperclass(applicationFactory.getFilterClass());
+//        e.setCallback(new WicketFilterCallback(applicationFactory));
+//        PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+//        return new ServletCallInterceptor(applicationFactory, delegateServlet);
+//    }
+    public static Servlet createServlet(final PaxWicketApplicationFactory applicationFactory) {
+        try {
+            Enhancer e = new Enhancer();
+            e.setSuperclass(applicationFactory.getFilterClass());
+            e.setCallback(new WicketFilterCallback(applicationFactory));
+            setCombinedClassLoader(e, applicationFactory);
+
+            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, (Filter) e.create());
+//            PAXWicketServlet delegateServlet = new PAXWicketServlet(applicationFactory, new WicketCustomFilter(applicationFactory));
+            return new ServletCallInterceptor(applicationFactory, delegateServlet);
+
+        } catch (NullPointerException ex) {
+            LOGGER.error("Got an nullpointer while enhancing {} ", applicationFactory.getApplicationName(), ex);
+        }
+        return null;
+
+    }
+
+    private static class WicketCustomFilter extends WicketFilter {
+
+        protected IWebApplicationFactory applicationFactory;
+
+        public WicketCustomFilter(IWebApplicationFactory applicationFactory) {
+            this.applicationFactory = applicationFactory;
+        }
+
+        @Override
+        protected IWebApplicationFactory getApplicationFactory() {
+            return applicationFactory;
+        }
+
     }
 
     private static class WicketFilterCallback implements MethodInterceptor {

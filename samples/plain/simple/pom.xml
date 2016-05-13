@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.plain</groupId>
     <artifactId>plain</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.plain.simple</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Plain :: Simple</name>
 
@@ -73,7 +73,8 @@
               org.apache.wicket.request,
               javax.servlet.http,
               org.apache.wicket.ajax,
-              org.apache.wicket.core.request.mapper
+              org.apache.wicket.core.request.mapper,
+              org.ops4j.pax.wicket.util.proxy
             </Import-Package>
           </instructions>
         </configuration>

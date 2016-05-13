@@ -148,6 +148,7 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
     @Override
     public void addRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
+            LOGGER.debug("this bundle is relevant {}",bundle.getID());
             relvantBundles.put(bundle.getID(), bundle);
             for (WebApplicationFactory<?> serviceReference : classResolvers.keySet()) {
                 addBundleToServicesReference(bundle, serviceReference);

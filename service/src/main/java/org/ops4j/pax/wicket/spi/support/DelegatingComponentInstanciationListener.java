@@ -49,7 +49,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
     private ComponentInstanciationListenerTracker tracker;
 
     public DelegatingComponentInstanciationListener(BundleContext context, String applicationName)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotEmpty(applicationName, "applicationName");
         this.context = context;
@@ -63,7 +63,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         synchronized (this) {
             if (tracker != null) {
                 throw new IllegalStateException(
-                    "DelegatingComponentInstanciationListener [" + this + "] had been initialized.");
+                        "DelegatingComponentInstanciationListener [" + this + "] had been initialized.");
             }
             tracker = new ComponentInstanciationListenerTracker(context, applicationName);
             tracker.open();
@@ -74,7 +74,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         synchronized (this) {
             if (tracker == null) {
                 throw new IllegalStateException(
-                    "DelegatingComponentInstanciationListener [" + this + "] had not been initialized.");
+                        "DelegatingComponentInstanciationListener [" + this + "] had not been initialized.");
             }
             tracker.close();
             tracker = null;
@@ -85,7 +85,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         Set<String> foundAnnotation = countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(toHandle);
         if (foundAnnotation.isEmpty()) {
             LOGGER.trace("Component {} doesn't contain any PaxWicketBean fields. Therefore ignore", toInject
-                .getClass().getName());
+                    .getClass().getName());
             return;
         }
         Set<String> handledAnnotations = new HashSet<String>();
@@ -95,6 +95,8 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
             if (Factory.class.isInstance(toInject)) {
                 handledFactory = true;
             }
+            LOGGER.debug("Component {} trying to find injector", toInject
+                    .getClass().getName());
             while (!isBoundaryClass(currentAnalysingClass)) {
                 for (PaxWicketInjector listener : resolvers) {
                     try {
@@ -102,15 +104,18 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
                         // if we reach here the bean had been injected correctly
                         if (handledFactory) {
                             handledAnnotations.addAll(
-                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass
-                                    .getSuperclass()));
+                                    countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass
+                                            .getSuperclass()));
                         } else {
                             handledAnnotations.addAll(
-                                countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass));
+                                    countComponentContainPaxWicketBeanAnnotatedOneLevel(currentAnalysingClass));
                         }
                         // once we've found it we could take the next level
                         break;
                     } catch (IllegalStateException e) {
+                        LOGGER.debug("Nothing found for component {}, using injector {} got this exception: {}", toInject
+                                .getClass().getName(),listener.getClass().getCanonicalName(),e.getMessage());
+
                         // well, not found... retry with the next listener
                     }
                 }
@@ -123,13 +128,13 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
         if (handledAnnotations.size() != foundAnnotation.size()) {
             throw new IllegalStateException(String.format(
-                "For Component %s %d %s fields should be injected but only %d %s had been injected.", toInject
+                    "For Component %s %d %s fields should be injected but only %d %s had been injected.", toInject
                     .getClass()
                     .getName(),
                     foundAnnotation.size(),
-                Arrays.toString(foundAnnotation.toArray(new String[0])),
-                handledAnnotations.size(),
-                Arrays.toString(handledAnnotations.toArray(new String[0]))));
+                    Arrays.toString(foundAnnotation.toArray(new String[0])),
+                    handledAnnotations.size(),
+                    Arrays.toString(handledAnnotations.toArray(new String[0]))));
         }
     }
 
@@ -187,9 +192,9 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
     }
 
     private static Filter createFilter(BundleContext context, String applicationName) {
-        String filterStr =
-            "(&(" + OBJECTCLASS + "=" + PaxWicketInjector.class.getName() + ")(" + APPLICATION_NAME + "="
-                    + applicationName + "))";
+        String filterStr
+                = "(&(" + OBJECTCLASS + "=" + PaxWicketInjector.class.getName() + ")(" + APPLICATION_NAME + "="
+                + applicationName + "))";
         try {
             return context.createFilter(filterStr);
         } catch (InvalidSyntaxException e) {

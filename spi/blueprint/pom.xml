@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.spi</groupId>
     <artifactId>spi</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.spi.blueprint</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: SPI :: Blueprint</name>
 
@@ -87,7 +87,7 @@
               org.osgi.framework;version="[1.6,2)",
               org.osgi.service.*;version="[1,2)",
               org.osgi.util.*;version="[1,2)",
-              net.sf.cglib.proxy;version="${cglib.range}";resolution:=optional,
+              net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}";resolution:=optional,
               net.sf.cglib.reflect;version="${cglib.range}";resolution:=optional,
               org.xml.sax,

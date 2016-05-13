@@ -24,7 +24,7 @@
     <feature>http</feature>
     <bundle>mvn:org.apache.wicket/wicket-util/${wicket.dependency.version}</bundle>
     <bundle>mvn:org.apache.wicket/wicket-request/${wicket.dependency.version}</bundle>
-    <bundle>mvn:org.apache.wicket/wicket-core/${wicket.dependency.version}</bundle>
+    <bundle>mvn:org.apache.wicket/wicket-core/${wicket.core.dependency.version}</bundle>
     <bundle>mvn:org.apache.wicket/wicket-auth-roles/${wicket.dependency.version}</bundle>
     <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket.dependency.version}</bundle>
   </feature>

@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples</groupId>
     <artifactId>samples</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.navigation</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: Navigation</name>
 
@@ -72,6 +72,7 @@
               javax.servlet.http,
               org.apache.wicket.core.request.mapper,
               org.apache.wicket.ajax,
+              org.ops4j.pax.wicket.util.proxy
             </Import-Package>
           </instructions>
         </configuration>

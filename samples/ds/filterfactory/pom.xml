@@ -21,13 +21,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.ds</groupId>
     <artifactId>ds</artifactId>
-    <version>3.0.3-SNAPSHOT</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>org.ops4j.pax.wicket.samples.ds.filterfactory</artifactId>
-  <version>3.0.3-SNAPSHOT</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>OPS4J Pax Wicket :: Samples :: DS :: Filterfactory</name>
 
@@ -60,12 +60,12 @@
               net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}",
               net.sf.cglib.reflect;version="${cglib.range}",
-              javax.servlet,
+              javax.servlet;version="[2.5,4)",
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,
               org.apache.wicket.request,
-              javax.servlet.http,
+              javax.servlet.http;version="[2.5,4)",
               org.apache.wicket.ajax,
               org.apache.wicket.core.request.mapper
             </Import-Package>
