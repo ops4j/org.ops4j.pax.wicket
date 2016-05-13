@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+import org.apache.wicket.protocol.http.WebApplication;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
@@ -44,7 +45,10 @@ import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
+import org.ops4j.pax.exam.util.Filter;
+import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.Bundle;
+import org.osgi.service.http.HttpService;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -64,6 +68,9 @@ public class IssueTest {
 
     @Inject
     private BundleContext bundleContext;
+
+    @Inject
+    private HttpService httpService;
 
     @Configuration
     public final Option[] configureAdditionalProvision() {
@@ -106,19 +113,23 @@ public class IssueTest {
      *
      * @throws IOException
      */
-    @Test
+    
     public void waitForever() throws IOException {
         System.in.read();
     }
 
+    @Inject
+    @Filter(value = "(pax.wicket.applicationname=issues)", timeout = TIMEOUT)
+    private WebApplicationFactory<WebApplication> factoryIssue;
+
     @Before
-    public void before() throws InterruptedException{
-        while(bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState()!=Bundle.ACTIVE){
+    public void before() throws InterruptedException {
+        while (bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState() != Bundle.ACTIVE) {
             Thread.sleep(200);
         }
-    
+
     }
-    
+
     @Test
     public void testIssues() throws Exception {
 
