@@ -11,3 +11,4 @@ wicket.iws
 *bin
 *.idea
 *.xml
+/builddoc.txt

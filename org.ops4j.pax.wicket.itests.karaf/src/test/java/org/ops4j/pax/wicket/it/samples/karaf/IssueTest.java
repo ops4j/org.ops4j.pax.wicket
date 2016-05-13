@@ -113,7 +113,7 @@ public class IssueTest {
      *
      * @throws IOException
      */
-    
+
     public void waitForever() throws IOException {
         System.in.read();
     }

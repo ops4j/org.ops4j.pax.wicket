@@ -28,7 +28,7 @@
         <bundle>mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/${geronimo.inject.version}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
-        <bundle start-level="95">mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${project.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${project.version}</bundle>
     </feature>
 
 
