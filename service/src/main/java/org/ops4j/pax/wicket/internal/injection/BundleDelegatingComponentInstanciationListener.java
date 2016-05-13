@@ -48,12 +48,13 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
 
     private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
 
-    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext,
-            String applicationName,
-            ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker) {
+    public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName) {
         this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
-        this.factoryTracker = factoryTracker;
+        // TODO replace this by a DS injection, we just keep this for now to allow easier transition
+        this.factoryTracker =
+            new ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory>(paxWicketBundleContext,
+                ProxyTargetLocatorFactory.class, null);
     }
 
     public String getApplicationName() {
@@ -61,12 +62,14 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
     }
 
     public void start() {
+        this.factoryTracker.open();
         Dictionary<String, String> props = new Hashtable<String, String>();
         props.put(Constants.APPLICATION_NAME, applicationName);
         serviceRegistration = paxWicketBundleContext.registerService(PaxWicketInjector.class, this, props);
     }
 
     public void stop() {
+        this.factoryTracker.close();
         if (serviceRegistration == null) {
             LOGGER.warn("Trying to unregister listener although not registered.");
             return;
