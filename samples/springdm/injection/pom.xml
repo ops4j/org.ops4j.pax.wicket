@@ -3,13 +3,13 @@
   <parent>
     <groupId>org.ops4j.pax.wicket.samples.springdm</groupId>
     <artifactId>springdm</artifactId>
-    <version>3.0.4</version>
+    <version>3.0.5-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ops4j.pax.wicket.samples.springdm.injection</groupId>
   <artifactId>injection</artifactId>
-  <version>3.0.4</version>
+  <version>3.0.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>OPS4J Pax Wicket :: Samples :: SpringDM :: Injection :: Parent</name>
 
