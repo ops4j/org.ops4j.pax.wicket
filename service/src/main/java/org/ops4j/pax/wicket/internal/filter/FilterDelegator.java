@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal.filter;
 
@@ -35,7 +39,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public final class FilterDelegator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterDelegator.class);
 
@@ -44,6 +47,12 @@ public final class FilterDelegator {
 
     private Servlet servlet;
 
+    /**
+     * <p>Constructor for FilterDelegator.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public FilterDelegator(BundleContext context, String applicationName) {
         this.applicationName = applicationName;
         FilterTrackerCustomizer customizer = new FilterTrackerCustomizer(context, applicationName);
@@ -52,6 +61,11 @@ public final class FilterDelegator {
                 customizer);
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
@@ -70,6 +84,15 @@ public final class FilterDelegator {
         filterTracker.close();
     }
 
+    /**
+     * <p>doFilter.</p>
+     *
+     * @param superFilter an array of {@link javax.servlet.Filter} objects.
+     * @param servletRequest a {@link javax.servlet.ServletRequest} object.
+     * @param servletResponse a {@link javax.servlet.ServletResponse} object.
+     * @throws javax.servlet.ServletException if any.
+     * @throws java.io.IOException if any.
+     */
     public void doFilter(Filter[] superFilter, ServletRequest servletRequest, ServletResponse servletResponse)
         throws ServletException, IOException {
         List<Filter> filters = new ArrayList<Filter>();
@@ -101,6 +124,11 @@ public final class FilterDelegator {
         return filters;
     }
 
+    /**
+     * <p>Setter for the field <code>servlet</code>.</p>
+     *
+     * @param servlet a {@link javax.servlet.Servlet} object.
+     */
     public void setServlet(Servlet servlet) {
         validateNotNull(servlet, "servlet");
         this.servlet = servlet;

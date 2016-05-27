@@ -32,6 +32,9 @@ final class AuthenticatedToken implements Serializable {
         Id = String.valueOf(idSequence);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final boolean equals(Object o) {
         if (this == o) {
@@ -46,6 +49,9 @@ final class AuthenticatedToken implements Serializable {
         return Id.equals(that.Id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int hashCode() {
         return Id.hashCode();

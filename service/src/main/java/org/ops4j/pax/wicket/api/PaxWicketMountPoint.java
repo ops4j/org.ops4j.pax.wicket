@@ -23,6 +23,9 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to tag a page to be automatically mounted within a specific place
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
@@ -30,6 +33,7 @@ import java.lang.annotation.Target;
 public @interface PaxWicketMountPoint {
     /**
      * Defines the place where a page should be mounted
+     * @return 
      */
     String mountPoint();
 }

@@ -21,15 +21,24 @@ import org.ops4j.pax.wicket.api.PaxWicketInjector;
 
 /**
  * Simple wrapper transforming calls from a
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ComponentInstantiationListenerFacade implements IComponentInstantiationListener {
 
     private PaxWicketInjector toWrap;
 
+    /**
+     * <p>Constructor for ComponentInstantiationListenerFacade.</p>
+     *
+     * @param toWrap a {@link org.ops4j.pax.wicket.api.PaxWicketInjector} object.
+     */
     public ComponentInstantiationListenerFacade(PaxWicketInjector toWrap) {
         this.toWrap = toWrap;
     }
 
+    /** {@inheritDoc} */
     public void onInstantiation(Component component) {
         toWrap.inject(component, component.getClass());
     }

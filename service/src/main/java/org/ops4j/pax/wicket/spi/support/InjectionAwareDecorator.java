@@ -20,13 +20,31 @@ import org.osgi.framework.BundleContext;
 /**
  * This interface describes a set of methods each injection parser and every decorator should provide to unify the
  * readability and handling of those classes.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface InjectionAwareDecorator {
 
+    /**
+     * <p>setBundleContext.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     */
     void setBundleContext(BundleContext bundleContext);
 
+    /**
+     * <p>start.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     void start() throws Exception;
 
+    /**
+     * <p>stop.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     void stop() throws Exception;
 
 }

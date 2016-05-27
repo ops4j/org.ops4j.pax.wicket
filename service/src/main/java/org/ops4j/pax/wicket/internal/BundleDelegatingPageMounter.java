@@ -31,10 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The behavior of this Delegating Resolver is different from the {@link BundleDelegatingClassResolver} or
- * {@link BundleDelegatingComponentInstanciationListener}. In this case the bundles are not only scanned during the real
+ * The behavior of this Delegating Resolver is different from the {@link org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver} or
+ * {@link org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener}. In this case the bundles are not only scanned during the real
  * operation but rather services are exported directly at the pax-wicket bundle for the application to register the
  * right mount points.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class BundleDelegatingPageMounter implements InternalBundleDelegationProvider {
 
@@ -46,19 +49,36 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
     private final Map<String, List<DefaultPageMounter>> mountPointRegistrations =
         new HashMap<String, List<DefaultPageMounter>>();
 
+    /**
+     * <p>Constructor for BundleDelegatingPageMounter.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     * @param paxWicketContext a {@link org.osgi.framework.BundleContext} object.
+     */
     public BundleDelegatingPageMounter(String applicationName, BundleContext paxWicketContext) {
         this.applicationName = applicationName;
         this.paxWicketContext = paxWicketContext;
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * <p>start.</p>
+     */
     public void start() {
         // not required for this class
     }
 
+    /**
+     * <p>stop.</p>
+     */
     public void stop() {
         Collection<List<DefaultPageMounter>> values;
         synchronized (mountPointRegistrations) {
@@ -72,6 +92,7 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
         }
     }
 
+    /** {@inheritDoc} */
     public void addBundle(ExtendedBundle bundle) {
         String symbolicName = bundle.getBundle().getSymbolicName();
         if (bundle.isRelevantForMountPointAnnotations()) {
@@ -111,6 +132,7 @@ public class BundleDelegatingPageMounter implements InternalBundleDelegationProv
 
     }
 
+    /** {@inheritDoc} */
     public void removeBundle(ExtendedBundle bundle) {
         List<DefaultPageMounter> registrations;
         synchronized (mountPointRegistrations) {

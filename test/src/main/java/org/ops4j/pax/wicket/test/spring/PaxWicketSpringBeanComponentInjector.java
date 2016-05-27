@@ -33,26 +33,29 @@ import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Wicket component injector which should be used to test {@link Inject}
+ * Wicket component injector which should be used to test {@link javax.inject.Inject}
  * annotated fields. Those fields could be injected using an
- * {@link ApplicationContextMock}. The typical use case is almost similar to a
+ * {@link org.ops4j.pax.wicket.test.spring.ApplicationContextMock}. The typical use case is almost similar to a
  * regular wicket spring test looking like: <code>
  * 1. setup dependencies and mock objects
  * 2. setup mock injection environment
  *       ApplicationContextMock appctx=new ApplicationContextMock();
  *       appctx.putBean("contactDao", dao);
- * 
+ *
  * 3. setup WicketTester and injector for @SpringBean
  *       WicketTester app=new WicketTester();
  *       app.getApplication().addComponentInstantiationListener(
  *           new PaxWicketSpringComponentInjector(app.getApplication(), appctx ));
- *     
+ *
  * 4. run the test
  * </code> For simplicity we do not provide an own mocking class for blueprint.
- * Simply reuse the spring {@link ApplicationContextMock}. Though, make sure
+ * Simply reuse the spring {@link org.ops4j.pax.wicket.test.spring.ApplicationContextMock}. Though, make sure
  * that you set the {@link #simulateBlueprint} flag to true. That way you make
  * sure that the test case simulates the special behavior for blueprint
  * injection.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class PaxWicketSpringBeanComponentInjector implements IComponentInstantiationListener {
 
@@ -63,12 +66,25 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
     private final PaxWicketTestBeanInjector        beanInjector;
     private boolean                                simulateBlueprint;
 
+    /**
+     * <p>Constructor for PaxWicketSpringBeanComponentInjector.</p>
+     *
+     * @param webApp a {@link org.apache.wicket.protocol.http.WebApplication} object.
+     * @param appContext a {@link org.springframework.context.ApplicationContext} object.
+     */
     public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext) {
         webApp.setMetaData(CONTEXT_KEY, appContext);
         beanInjector = new PaxWicketTestBeanInjector();
         InjectorHolder.setInjector(webApp.getApplicationKey(), beanInjector);
     }
 
+    /**
+     * <p>Constructor for PaxWicketSpringBeanComponentInjector.</p>
+     *
+     * @param webApp a {@link org.apache.wicket.protocol.http.WebApplication} object.
+     * @param appContext a {@link org.springframework.context.ApplicationContext} object.
+     * @param simulateBlueprint a boolean.
+     */
     public PaxWicketSpringBeanComponentInjector(WebApplication webApp, ApplicationContext appContext, boolean simulateBlueprint) {
         webApp.setMetaData(CONTEXT_KEY, appContext);
         beanInjector = new PaxWicketTestBeanInjector();
@@ -79,11 +95,14 @@ public class PaxWicketSpringBeanComponentInjector implements IComponentInstantia
     /**
      * This method is required in a case where you need to add the same injector
      * to an additional application.
+     *
+     * @param applicationKey a {@link java.lang.String} object.
      */
     public void registerForAdditionalName(String applicationKey) {
         InjectorHolder.setInjector(applicationKey, beanInjector);
     }
 
+    /** {@inheritDoc} */
     public void onInstantiation(Component component) {
         beanInjector.inject(component, component.getClass());
     }

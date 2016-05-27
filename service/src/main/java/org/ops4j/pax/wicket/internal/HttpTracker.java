@@ -49,6 +49,7 @@ final class HttpTracker extends ServiceTracker<HttpService, HttpService> {
         super(context, HttpService.class.getName(), null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public final HttpService addingService(ServiceReference<HttpService> serviceReference) {
         // TODO This does not work well with multiple http services!
@@ -61,6 +62,7 @@ final class HttpTracker extends ServiceTracker<HttpService, HttpService> {
         return httpService;
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void removedService(ServiceReference<HttpService> serviceReference, HttpService httpService) {
         // TODO This does not work well with multiple http services!
@@ -108,6 +110,14 @@ final class HttpTracker extends ServiceTracker<HttpService, HttpService> {
         }
     }
 
+    /**
+     * <p>addServlet.</p>
+     *
+     * @param mountPoint a {@link java.lang.String} object.
+     * @param servlet a {@link javax.servlet.Servlet} object.
+     * @param contextParams a {@link java.util.Map} object.
+     * @param paxWicketBundle a {@link org.osgi.framework.Bundle} object.
+     */
     public final void addServlet(String mountPoint, Servlet servlet, Map<?, ?> contextParams, Bundle paxWicketBundle) {
         mountPoint = GenericContext.normalizeMountPoint(mountPoint);
         ServletDescriptor descriptor =
@@ -124,6 +134,11 @@ final class HttpTracker extends ServiceTracker<HttpService, HttpService> {
         }
     }
 
+    /**
+     * <p>removeServlet.</p>
+     *
+     * @param mountPoint a {@link java.lang.String} object.
+     */
     public final void removeServlet(String mountPoint) {
         mountPoint = GenericContext.normalizeMountPoint(mountPoint);
         synchronized (servlets) {

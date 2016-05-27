@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -32,9 +36,14 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebSession;
 import org.ops4j.pax.wicket.api.PaxWicketInjector;
-
 public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
 
+    /**
+     * <p>getSingleLevelOfFields.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @return a {@link java.util.List} object.
+     */
     protected List<Field> getSingleLevelOfFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<Field>();
         for (Field field : clazz.getDeclaredFields()) {
@@ -46,6 +55,12 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return fields;
     }
 
+    /**
+     * <p>getFields.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @return a {@link java.util.List} object.
+     */
     protected List<Field> getFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<Field>();
 
@@ -61,6 +76,12 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return fields;
     }
 
+    /**
+     * <p>isBoundaryClass.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @return a boolean.
+     */
     protected boolean isBoundaryClass(Class<?> clazz) {
         if (clazz.equals(WebPage.class) || clazz.equals(Page.class) || clazz.equals(Panel.class)
                 || clazz.equals(MarkupContainer.class) || clazz.equals(Component.class)
@@ -71,6 +92,13 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return false;
     }
 
+    /**
+     * <p>setField.</p>
+     *
+     * @param component a {@link java.lang.Object} object.
+     * @param field a {@link java.lang.reflect.Field} object.
+     * @param proxy a {@link java.lang.Object} object.
+     */
     protected void setField(Object component, Field field, Object proxy) {
         try {
             checkAccessabilityOfField(field);
@@ -86,11 +114,23 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         }
     }
 
+    /**
+     * <p>getBeanType.</p>
+     *
+     * @param field a {@link java.lang.reflect.Field} object.
+     * @return a {@link java.lang.Class} object.
+     */
     protected Class<?> getBeanType(Field field) {
         Class<?> beanType = field.getType();
         return beanType;
     }
 
+    /**
+     * <p>countComponentContainPaxWicketBeanAnnotatedFieldsHierachical.</p>
+     *
+     * @param component a {@link java.lang.Class} object.
+     * @return a {@link java.util.Set} object.
+     */
     protected Set<String> countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(Class<?> component) {
         Set<String> foundAnnotation = new HashSet<String>();
         Class<?> clazz = component;
@@ -105,6 +145,12 @@ public abstract class AbstractPaxWicketInjector implements PaxWicketInjector {
         return foundAnnotation;
     }
 
+    /**
+     * <p>countComponentContainPaxWicketBeanAnnotatedOneLevel.</p>
+     *
+     * @param component a {@link java.lang.Class} object.
+     * @return a {@link java.util.Set} object.
+     */
     protected Set<String> countComponentContainPaxWicketBeanAnnotatedOneLevel(Class<?> component) {
         Set<String> foundAnnotation = new HashSet<String>();
         Class<?> clazz = component;

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,15 +13,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-
 public abstract class AbstractSpringBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 
+    /** {@inheritDoc} */
     @Override
     public void doParse(Element element, BeanDefinitionBuilder builder) {
         builder.addPropertyReference("bundleContext", "bundleContext");
@@ -31,19 +35,47 @@ public abstract class AbstractSpringBeanDefinitionParser extends AbstractSingleB
         super.doParse(element, builder);
     }
 
+    /**
+     * <p>prepareInjection.</p>
+     *
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @param bean a {@link org.springframework.beans.factory.support.BeanDefinitionBuilder} object.
+     */
     protected abstract void prepareInjection(Element element, BeanDefinitionBuilder bean);
 
+    /**
+     * <p>addPropertyValueFromElement.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @param bean a {@link org.springframework.beans.factory.support.BeanDefinitionBuilder} object.
+     */
     protected void addPropertyValueFromElement(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addPropertyValue(id, beanElement);
     }
 
+    /**
+     * <p>addPropertyValueFromElement.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @param injectionId a {@link java.lang.String} object.
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @param bean a {@link org.springframework.beans.factory.support.BeanDefinitionBuilder} object.
+     */
     protected void addPropertyValueFromElement(String id, String injectionId, Element element,
             BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addPropertyValue(injectionId, beanElement);
     }
 
+    /**
+     * <p>addPropertyReferenceFromElement.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @param bean a {@link org.springframework.beans.factory.support.BeanDefinitionBuilder} object.
+     */
     protected void addPropertyReferenceFromElement(String id, Element element, BeanDefinitionBuilder bean) {
         String beanElement = element.getAttribute(id);
         bean.addPropertyReference(id, beanElement);

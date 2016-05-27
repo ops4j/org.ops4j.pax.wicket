@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal.extender;
 
@@ -22,13 +26,13 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public abstract class PaxWicketBundleListener implements BundleTrackerCustomizer<ExtendedBundle> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
 
     private ExtendedBundleContext extendedBundleContext;
 
+    /** {@inheritDoc} */
     @Override
     public ExtendedBundle addingBundle(Bundle bundle, BundleEvent event) {
         ExtendedBundle extendedBundle =
@@ -43,20 +47,44 @@ public abstract class PaxWicketBundleListener implements BundleTrackerCustomizer
         }
     }
 
+    /**
+     * <p>modifiedBundle.</p>
+     *
+     * @param bundle a {@link org.osgi.framework.Bundle} object.
+     * @param event a {@link org.osgi.framework.BundleEvent} object.
+     * @param object a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle} object.
+     */
     public void modifiedBundle(Bundle bundle, BundleEvent event, ExtendedBundle object) {
         // we don't care about state changes (for now)
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removedBundle(Bundle bundle, BundleEvent event, ExtendedBundle object) {
         removeRelevantBundle(object);
         LOGGER.debug("{} is removed as a relevant bundle for pax wicket", bundle.getSymbolicName());
     }
 
+    /**
+     * <p>addRelevantBundle.</p>
+     *
+     * @param bundle a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle} object.
+     */
     protected abstract void addRelevantBundle(ExtendedBundle bundle);
 
+    /**
+     * <p>removeRelevantBundle.</p>
+     *
+     * @param bundle a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle} object.
+     */
     protected abstract void removeRelevantBundle(ExtendedBundle bundle);
 
+    /**
+     * <p>activate.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @since 3.0.5
+     */
     protected void activate(BundleContext bundleContext) {
         extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(bundleContext);
     }

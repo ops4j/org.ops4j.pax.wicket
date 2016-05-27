@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
@@ -34,7 +38,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public final class DelegatingClassResolver implements IClassResolver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingClassResolver.class);
@@ -45,6 +48,13 @@ public final class DelegatingClassResolver implements IClassResolver {
 
     private ClassResolverTracker tracker;
 
+    /**
+     * <p>Constructor for DelegatingClassResolver.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public DelegatingClassResolver(BundleContext context, String applicationName) throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotEmpty(applicationName, "applicationName");
@@ -52,6 +62,11 @@ public final class DelegatingClassResolver implements IClassResolver {
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>intialize.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public final void intialize() throws IllegalStateException {
         synchronized (this) {
             if (tracker != null) {
@@ -63,6 +78,11 @@ public final class DelegatingClassResolver implements IClassResolver {
         }
     }
 
+    /**
+     * <p>dispose.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public void dispose() throws IllegalStateException {
         synchronized (this) {
             if (tracker == null) {
@@ -78,11 +98,14 @@ public final class DelegatingClassResolver implements IClassResolver {
      * This method is uses only for some internal wicket stuff if the IClassResolver is NOT replaced and in some IOC
      * stuff also not used by pax wicket. Therefore this method should never ever be called. If it is though we want to
      * be informed about the problem as soon as possible.
+     *
+     * @return a {@link java.lang.ClassLoader} object.
      */
     public ClassLoader getClassLoader() {
         throw new UnsupportedOperationException("This method should NOT BE CALLED!");
     }
 
+    /** {@inheritDoc} */
     public Class<?> resolveClass(final String classname) throws ClassNotFoundException {
         LOGGER.trace("Try to resolve {} from {} resolvers", classname, resolvers.size());
         for (IClassResolver resolver : resolvers) {
@@ -100,6 +123,7 @@ public final class DelegatingClassResolver implements IClassResolver {
         throw new ClassNotFoundException(String.format("Class [%s] can't be resolved.", classname));
     }
 
+    /** {@inheritDoc} */
     public Iterator<URL> getResources(String name) {
         ArrayList<URL> collectedResources = new ArrayList<URL>();
         for (IClassResolver resolver : resolvers) {

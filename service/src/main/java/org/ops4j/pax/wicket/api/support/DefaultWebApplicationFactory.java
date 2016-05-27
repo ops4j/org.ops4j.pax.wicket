@@ -30,10 +30,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This page is a little bit more complex (compared to the {@link SimpleWebApplicationFactory}). But it is not required
+ * This page is a little bit more complex (compared to the {@link org.ops4j.pax.wicket.api.support.SimpleWebApplicationFactory}). But it is not required
  * to register the OSGi service yourself.
- * 
+ *
  * In the easiest version
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class DefaultWebApplicationFactory<T extends WebApplication> extends SimpleWebApplicationFactory<T> {
 
@@ -46,20 +49,47 @@ public class DefaultWebApplicationFactory<T extends WebApplication> extends Simp
     private ServiceRegistration<WebApplicationFactory> registration;
     private Map<String, String> contextParam = new HashMap<String, String>();
 
+    /**
+     * <p>Constructor for DefaultWebApplicationFactory.</p>
+     */
     public DefaultWebApplicationFactory() {
         super();
     }
 
+    /**
+     * <p>Constructor for DefaultWebApplicationFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param wicketApplication a {@link java.lang.Class} object.
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName) {
         this(bundleContext, wicketApplication, applicationName, applicationName, null);
     }
 
+    /**
+     * <p>Constructor for DefaultWebApplicationFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param wicketApplication a {@link java.lang.Class} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param mountPoint a {@link java.lang.String} object.
+     */
     public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName, String mountPoint) {
         this(bundleContext, wicketApplication, applicationName, mountPoint, null);
     }
 
+    /**
+     * <p>Constructor for DefaultWebApplicationFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param wicketApplication a {@link java.lang.Class} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param mountPoint a {@link java.lang.String} object.
+     * @param contextParam a {@link java.util.Map} object.
+     */
     public DefaultWebApplicationFactory(BundleContext bundleContext, Class<T> wicketApplication,
             String applicationName, String mountPoint, Map<String, String> contextParam) {
         super(wicketApplication);
@@ -69,6 +99,9 @@ public class DefaultWebApplicationFactory<T extends WebApplication> extends Simp
         this.contextParam = contextParam == null ? new HashMap<String, String>() : contextParam;
     }
 
+    /**
+     * <p>register.</p>
+     */
     public void register() {
         if (registration != null) {
             throw new IllegalStateException("Webapplication is already registered.");
@@ -82,6 +115,9 @@ public class DefaultWebApplicationFactory<T extends WebApplication> extends Simp
         registration = bundleContext.registerService(WebApplicationFactory.class, this, props);
     }
 
+    /**
+     * <p>dispose.</p>
+     */
     public void dispose() {
         if (registration == null) {
             LOGGER.warn("Trying to unregister application {} which is not registered", applicationName);
@@ -91,10 +127,20 @@ public class DefaultWebApplicationFactory<T extends WebApplication> extends Simp
         registration = null;
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * <p>Setter for the field <code>applicationName</code>.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public void setApplicationName(String applicationName) {
         if (registration != null) {
             throw new IllegalStateException(
@@ -103,10 +149,20 @@ public class DefaultWebApplicationFactory<T extends WebApplication> extends Simp
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>Getter for the field <code>mountPoint</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getMountPoint() {
         return mountPoint;
     }
 
+    /**
+     * <p>Setter for the field <code>mountPoint</code>.</p>
+     *
+     * @param mountPoint a {@link java.lang.String} object.
+     */
     public void setMountPoint(String mountPoint) {
         if (registration != null) {
             throw new IllegalStateException(

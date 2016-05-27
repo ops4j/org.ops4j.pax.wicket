@@ -20,8 +20,19 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * A locater that tries to locate a proxy target for the given ammount of time
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface FutureProxyTargetLocator extends ProxyTargetLocator {
+    /**
+     * <p>locateProxyTarget.</p>
+     *
+     * @param timeout a long.
+     * @param unit a {@link java.util.concurrent.TimeUnit} object.
+     * @return a {@link org.ops4j.pax.wicket.spi.ProxyTarget} object.
+     * @throws java.lang.InterruptedException if any.
+     * @throws java.util.concurrent.TimeoutException if any.
+     */
     ProxyTarget locateProxyTarget(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException;
 }

@@ -23,8 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A simple singleton class storing and retrieving {@link PaxWicketInjector}s. The {@link #getInjector()} method only
+ * A simple singleton class storing and retrieving {@link org.ops4j.pax.wicket.api.PaxWicketInjector}s. The {@link #getInjector()} method only
  * works in an PaxWicket-Enabled integration context.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class InjectorHolder {
     private static final Logger LOGGER = LoggerFactory.getLogger(InjectorHolder.class);
@@ -36,8 +39,10 @@ public final class InjectorHolder {
     }
 
     /**
-     * Retrieves the InjectionHolder responsible for the active {@link Application}. Therefore this will only work in an
+     * Retrieves the InjectionHolder responsible for the active {@link org.apache.wicket.Application}. Therefore this will only work in an
      * active Wicket context!
+     *
+     * @return Injector
      */
     public static PaxWicketInjector getInjector() {
         String applicationName = Application.get().getApplicationKey();
@@ -52,6 +57,12 @@ public final class InjectorHolder {
         return injector;
     }
 
+    /**
+     * <p>setInjector.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     * @param newInjector a {@link org.ops4j.pax.wicket.api.PaxWicketInjector} object.
+     */
     public static void setInjector(String applicationName, PaxWicketInjector newInjector) {
         synchronized (instance.injectorMap) {
             instance.injectorMap.put(applicationName, newInjector);

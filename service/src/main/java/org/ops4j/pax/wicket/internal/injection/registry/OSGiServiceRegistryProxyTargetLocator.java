@@ -35,9 +35,9 @@ import org.slf4j.LoggerFactory;
  * This class locates the ProxyTarget through the OSGi service registry. It will locate an arbitary service by the
  * service class if the bean name is not specified. If a bean name is specified, it tries to locate a Declarative
  * Component with the given name and service interface
- * 
+ *
  * @author Christoph Läubrich
- * 
+ * @version $Id: $Id
  */
 public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetLocator {
 
@@ -53,9 +53,12 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
     private final String filterString;
 
     /**
-     * @param pageClass
-     * @param serviceClass
-     * 
+     * <p>Constructor for OSGiServiceRegistryProxyTargetLocator.</p>
+     *
+     * @param pageClass a {@link java.lang.Class} object.
+     * @param serviceClass a {@link java.lang.Class} object.
+     * @param callingContext a {@link org.osgi.framework.BundleContext} object.
+     * @param baseFilter a {@link org.osgi.framework.Filter} object.
      */
     public OSGiServiceRegistryProxyTargetLocator(BundleContext callingContext, Filter baseFilter,
             Class<?> serviceClass, Class<?> pageClass) {
@@ -65,6 +68,11 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
         serviceInterface = serviceClass.getName();
     }
 
+    /**
+     * <p>locateProxyTarget.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.spi.ReleasableProxyTarget} object.
+     */
     public ReleasableProxyTarget locateProxyTarget() {
         ServiceReference<?>[] references = fetchReferences();
         if (references != null) {
@@ -85,6 +93,11 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
                 + serviceInterface + " and filter = " + filterString);
     }
 
+    /**
+     * <p>fetchReferences.</p>
+     *
+     * @return an array of {@link org.osgi.framework.ServiceReference} objects.
+     */
     public ServiceReference<?>[] fetchReferences() {
         try {
             LOGGER.debug("Try to locate a suitable service for objectClass = "
@@ -170,10 +183,16 @@ public class OSGiServiceRegistryProxyTargetLocator implements FutureProxyTargetL
         }
     }
 
+    /**
+     * <p>Getter for the field <code>parent</code>.</p>
+     *
+     * @return a {@link java.lang.Class} object.
+     */
     public Class<?> getParent() {
         return parent;
     }
 
+    /** {@inheritDoc} */
     public ProxyTarget locateProxyTarget(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
         String filter = filterString;
         if (filter == null) {

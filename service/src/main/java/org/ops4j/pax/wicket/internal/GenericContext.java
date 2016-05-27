@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
@@ -28,7 +32,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class GenericContext implements HttpContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericContext.class);
@@ -37,6 +40,12 @@ public class GenericContext implements HttpContext {
     private final MimetypesFileTypeMap typeMap;
     private final Bundle bundle;
 
+    /**
+     * <p>Constructor for GenericContext.</p>
+     *
+     * @param bundle a {@link org.osgi.framework.Bundle} object.
+     * @param mountPoint a {@link java.lang.String} object.
+     */
     public GenericContext(Bundle bundle, String mountPoint) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("GenericContext(" + mountPoint + " )");
@@ -47,6 +56,7 @@ public class GenericContext implements HttpContext {
         typeMap.addMimeTypes("text/css css");
     }
 
+    /** {@inheritDoc} */
     public boolean handleSecurity(HttpServletRequest request, HttpServletResponse response)
         throws IOException {
         if (LOGGER.isDebugEnabled()) {
@@ -55,6 +65,7 @@ public class GenericContext implements HttpContext {
         return true;
     }
 
+    /** {@inheritDoc} */
     public URL getResource(String resourceName) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("getResource( " + resourceName + " )");
@@ -66,6 +77,7 @@ public class GenericContext implements HttpContext {
         return bundle.getResource(resourceName);
     }
 
+    /** {@inheritDoc} */
     public String getMimeType(String resourceName) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("getMimeType( " + resourceName + " )");
@@ -86,6 +98,12 @@ public class GenericContext implements HttpContext {
         return contentType;
     }
 
+    /**
+     * <p>normalizeMountPoint.</p>
+     *
+     * @param mountPoint a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String normalizeMountPoint(String mountPoint) {
         if (!mountPoint.startsWith("/")) {
             mountPoint = "/" + mountPoint;

@@ -29,19 +29,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * <p>PaxWicketObjectOutputStream class.</p>
+ *
  * @author edward.yakop@gmail.com
  * @since 0.5.4
+ * @version $Id: $Id
  */
 public class PaxWicketObjectOutputStream extends ObjectOutputStream {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketObjectOutputStream.class);
     protected final ObjectOutputStream outputStream;
 
+    /**
+     * <p>Constructor for PaxWicketObjectOutputStream.</p>
+     *
+     * @param outputStream a {@link java.io.OutputStream} object.
+     * @throws java.io.IOException if any.
+     */
     public PaxWicketObjectOutputStream(OutputStream outputStream) throws IOException {
         validateNotNull(outputStream, "outputStream");
         this.outputStream = new OSGiAwareOutputStream(outputStream);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void writeObjectOverride(final Object object) throws IOException {
         try {
@@ -77,11 +87,13 @@ public class PaxWicketObjectOutputStream extends ObjectOutputStream {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void flush() throws IOException {
         outputStream.flush();
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void close() throws IOException {
         outputStream.close();

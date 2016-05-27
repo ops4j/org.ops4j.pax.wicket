@@ -40,17 +40,20 @@ import org.slf4j.LoggerFactory;
 /**
  * Right now it listens on all pax-wicket applications. In addition it is "feeded" by a bundleListeners with all bundles
  * implementing org.apache.wicket.
- * 
+ *
  * If a service is added a new BundleDelegatingVersion of the classloaders, injection handlers and mount point listeners
  * is added to the service reference. Initally all currently registered bundles are checked then if they should be added
  * into the specific lifecycle for a specific application.
- * 
+ *
  * If an application get updated the check if bundles are still valid for this package are repeated.
- * 
+ *
  * Every time a bundle is added it is evaluated to which BundleDelegatingServices this bundle should be added (and is
  * added to the matching services).
- * 
+ *
  * Everytime a bundle is removed it is simply removed from all applications from all services.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Component
 public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
@@ -67,6 +70,7 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
 
     private BundleTracker<ExtendedBundle> bundleExtensionTracker;
 
+    /** {@inheritDoc} */
     @Override
     @Activate
     public void activate(BundleContext bundleContext) {
@@ -75,11 +79,23 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
         bundleExtensionTracker.open();
     }
 
+    /**
+     * <p>deactivate.</p>
+     *
+     * @since 3.0.5
+     */
     @Deactivate
     public void deactivate() {
         bundleExtensionTracker.close();
     }
 
+    /**
+     * <p>addWebApplicationFactory.</p>
+     *
+     * @param webApplicationFactory a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     * @param properties a {@link java.util.Map} object.
+     * @since 3.0.5
+     */
     @Reference(service = WebApplicationFactory.class, unbind = "removeWebApplicationFactory",
         updated = "modifiedWebApplicationFactory",
         cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -90,6 +106,13 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
         }
     }
 
+    /**
+     * <p>modifiedWebApplicationFactory.</p>
+     *
+     * @param webApplicationFactory a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     * @param properties a {@link java.util.Map} object.
+     * @since 3.0.5
+     */
     public void
         modifiedWebApplicationFactory(WebApplicationFactory<?> webApplicationFactory, Map<String, ?> properties) {
         // TODO check if this is really needed or if we are fine with the normal remove/add provided by DS...
@@ -100,6 +123,12 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
         }
     }
 
+    /**
+     * <p>removeWebApplicationFactory.</p>
+     *
+     * @param webApplicationFactory a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     * @since 3.0.5
+     */
     public void removeWebApplicationFactory(WebApplicationFactory<?> webApplicationFactory) {
         synchronized (this) {
             removeServicesForServiceReference(webApplicationFactory);
@@ -145,6 +174,7 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void addRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {
@@ -177,6 +207,7 @@ public class BundleDelegatingExtensionTracker extends PaxWicketBundleListener {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removeRelevantBundle(ExtendedBundle bundle) {
         synchronized (this) {

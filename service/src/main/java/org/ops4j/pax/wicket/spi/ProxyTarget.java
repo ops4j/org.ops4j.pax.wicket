@@ -17,13 +17,17 @@ package org.ops4j.pax.wicket.spi;
 
 /**
  * Object that identifies a located proxy target
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface ProxyTarget {
 
     /**
+     * <p>getTarget.</p>
+     *
      * @return the final target
-     * @throws IllegalStateException if anything prevents the proxy from locating its target
+     * @throws java.lang.IllegalStateException if anything prevents the proxy from locating its target
      */
     public Object getTarget() throws IllegalStateException;
 }

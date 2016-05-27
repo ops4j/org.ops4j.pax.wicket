@@ -28,8 +28,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Wrapper around the original wicket {@link DefaultPageFactory} adding lookup possiblities for own page loaders. In
+ * Wrapper around the original wicket {@link org.apache.wicket.session.DefaultPageFactory} adding lookup possiblities for own page loaders. In
  * case non are provided the original wicket algorithm for loading of pages is used.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class PaxWicketPageFactory implements IPageFactory {
 
@@ -39,6 +42,13 @@ public final class PaxWicketPageFactory implements IPageFactory {
 
     private ServiceTracker<PageFactory<? extends IRequestablePage>, PageFactory<? extends IRequestablePage>> m_pageTracker;
 
+    /**
+     * <p>Constructor for PaxWicketPageFactory.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public PaxWicketPageFactory(BundleContext context, String applicationName) throws IllegalArgumentException {
         validateNotNull(context, "context");
         validateNotNull(applicationName, "applicationName");
@@ -47,11 +57,17 @@ public final class PaxWicketPageFactory implements IPageFactory {
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>initialize.</p>
+     */
     public final void initialize() {
         m_pageTracker = new PaxWicketPageTracker(bundleContext, applicationName, this);
         m_pageTracker.open();
     }
 
+    /**
+     * <p>dispose.</p>
+     */
     public final void dispose() {
         synchronized (this) {
             contents.clear();
@@ -60,13 +76,9 @@ public final class PaxWicketPageFactory implements IPageFactory {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Creates a new page using a page class.
-     * 
-     * @param pageClass The page class to instantiate
-     * 
-     * @return The page
-     * 
-     * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
         PageFactory<C> content = getFactory(pageClass);
@@ -77,16 +89,11 @@ public final class PaxWicketPageFactory implements IPageFactory {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Creates a new Page, passing PageParameters to the Page constructor if such a constructor exists. If no such
      * constructor exists and the parameters argument is null or empty, then any available default constructor will be
      * used.
-     * 
-     * @param pageClass The class of Page to create
-     * @param parameters Any parameters to pass to the Page's constructor
-     * 
-     * @return The new page
-     * 
-     * @throws org.apache.wicket.WicketRuntimeException Thrown if the page cannot be constructed
      */
     public final <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
         PageFactory<C> content = getFactory(pageClass);
@@ -105,10 +112,17 @@ public final class PaxWicketPageFactory implements IPageFactory {
         return content;
     }
 
+    /** {@inheritDoc} */
     public <C extends IRequestablePage> boolean isBookmarkable(Class<C> pageClass) {
         return new DefaultPageFactory().isBookmarkable(pageClass);
     }
 
+    /**
+     * <p>add.</p>
+     *
+     * @param pageSource a {@link org.ops4j.pax.wicket.api.PageFactory} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public void add(PageFactory<? extends IRequestablePage> pageSource)
         throws IllegalArgumentException {
         validateNotNull(pageSource, "pageSource");
@@ -119,6 +133,12 @@ public final class PaxWicketPageFactory implements IPageFactory {
         }
     }
 
+    /**
+     * <p>remove.</p>
+     *
+     * @param pageSource a {@link org.ops4j.pax.wicket.api.PageFactory} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public final void remove(PageFactory<? extends IRequestablePage> pageSource) throws IllegalArgumentException {
         validateNotNull(pageSource, "pageSource");
 

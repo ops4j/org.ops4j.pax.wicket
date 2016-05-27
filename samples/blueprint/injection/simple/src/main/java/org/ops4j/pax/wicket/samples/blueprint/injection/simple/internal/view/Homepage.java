@@ -28,6 +28,9 @@ import org.ops4j.pax.wicket.samples.blueprint.injection.simple.internal.service.
 
 /**
  * Very simple page providing entry points into various other examples.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class Homepage extends WebPage {
 
@@ -49,6 +52,9 @@ public class Homepage extends WebPage {
     @Inject
     private MyService         serviceBean;
 
+    /**
+     * <p>Constructor for Homepage.</p>
+     */
     public Homepage() {
         add(new Label("oneComponent", "blub"));
         add(new AbstractAjaxTimerBehavior(seconds(1)) {

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,16 +13,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api;
 
 import java.util.List;
 
 import org.apache.wicket.Page;
-
 public interface PageMounter {
 
+    /**
+     * <p>addMountPoint.</p>
+     *
+     * @param path a {@link java.lang.String} object.
+     * @param pageClass a {@link java.lang.Class} object.
+     */
     void addMountPoint(String path, Class<? extends Page> pageClass);
 
+    /**
+     * <p>getMountPoints.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     List<MountPointInfo> getMountPoints();
 }

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi;
 
@@ -23,8 +27,18 @@ import net.sf.cglib.proxy.MethodInterceptor;
 //FIXME: Is it really neccesary to extend MethodInterceptor here?
 public interface OverwriteProxy extends MethodInterceptor {
 
+    /**
+     * <p>getOverwrites.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     Map<String, String> getOverwrites();
 
+    /**
+     * <p>getInjectionSource.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getInjectionSource();
 
 }

@@ -22,14 +22,25 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * Simple aggregator for {@link ServiceTrackerAggregatorReadyChildren}s of the same type which needs to be called in a
- * specific order. Therefore add the child {@link ServiceTrackerAggregatorReadyChildren}s in the order you would like to
+ * Simple aggregator for {@link org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren}s of the same type which needs to be called in a
+ * specific order. Therefore add the child {@link org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren}s in the order you would like to
  * have them called! As another remark
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<ServiceType, ServiceType> {
 
     private final ServiceTrackerAggregatorReadyChildren<ServiceType>[] children;
 
+    /**
+     * <p>Constructor for BundleTrackerAggregator.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param filter a {@link org.osgi.framework.Filter} object.
+     * @param customizer a {@link org.osgi.util.tracker.ServiceTrackerCustomizer} object.
+     * @param children a {@link org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren} object.
+     */
     public BundleTrackerAggregator(BundleContext context, Filter filter,
             ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
             ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
@@ -37,6 +48,14 @@ public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<Service
         this.children = children;
     }
 
+    /**
+     * <p>Constructor for BundleTrackerAggregator.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param customizer a {@link org.osgi.util.tracker.ServiceTrackerCustomizer} object.
+     * @param children a {@link org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren} object.
+     */
     public BundleTrackerAggregator(BundleContext context, ServiceReference<ServiceType> reference,
             ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
             ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
@@ -44,6 +63,14 @@ public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<Service
         this.children = children;
     }
 
+    /**
+     * <p>Constructor for BundleTrackerAggregator.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param clazz a {@link java.lang.String} object.
+     * @param customizer a {@link org.osgi.util.tracker.ServiceTrackerCustomizer} object.
+     * @param children a {@link org.ops4j.pax.wicket.internal.util.ServiceTrackerAggregatorReadyChildren} object.
+     */
     public BundleTrackerAggregator(BundleContext context, String clazz,
             ServiceTrackerCustomizer<ServiceType, ServiceType> customizer,
             ServiceTrackerAggregatorReadyChildren<ServiceType>... children) {
@@ -51,6 +78,7 @@ public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<Service
         this.children = children;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServiceType addingService(ServiceReference<ServiceType> reference) {
         ServiceType service = super.addingService(reference);
@@ -60,6 +88,7 @@ public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<Service
         return service;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void modifiedService(ServiceReference<ServiceType> reference, ServiceType service) {
         for (ServiceTrackerAggregatorReadyChildren<ServiceType> child : children) {
@@ -68,6 +97,7 @@ public class BundleTrackerAggregator<ServiceType> extends ServiceTracker<Service
         super.modifiedService(reference, service);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removedService(ServiceReference<ServiceType> reference, ServiceType service) {
         for (int i = children.length - 1; i >= 0; i--) {

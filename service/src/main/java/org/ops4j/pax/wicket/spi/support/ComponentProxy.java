@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -22,7 +26,6 @@ import java.util.Map;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.ops4j.pax.wicket.spi.OverwriteProxy;
-
 public class ComponentProxy implements OverwriteProxy, Serializable {
 
     private static final long serialVersionUID = 1848500647893384991L;
@@ -30,11 +33,18 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
     private final Map<String, String> overwrites;
     private final String injectionSource;
 
+    /**
+     * <p>Constructor for ComponentProxy.</p>
+     *
+     * @param injectionSource a {@link java.lang.String} object.
+     * @param overwrites a {@link java.util.Map} object.
+     */
     public ComponentProxy(String injectionSource, Map<String, String> overwrites) {
         this.injectionSource = injectionSource;
         this.overwrites = overwrites;
     }
 
+    /** {@inheritDoc} */
     public Object intercept(Object object, Method method, Object[] args, MethodProxy proxy) throws Throwable {
         if (isFinalizeMethod(method)) {
             // swallow finalize call
@@ -54,19 +64,41 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
         return proxy.invokeSuper(object, args);
     }
 
+    /**
+     * <p>Getter for the field <code>overwrites</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, String> getOverwrites() {
         return overwrites;
     }
 
+    /**
+     * <p>Getter for the field <code>injectionSource</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getInjectionSource() {
         return injectionSource;
     }
 
+    /**
+     * <p>isGetOverwritesMethod.</p>
+     *
+     * @param method a {@link java.lang.reflect.Method} object.
+     * @return a boolean.
+     */
     protected static boolean isGetOverwritesMethod(Method method) {
         return method.getReturnType() == Map.class && method.getParameterTypes().length == 0 &&
                 method.getName().equals("getOverwrites");
     }
 
+    /**
+     * <p>isGetInjectionSourceMethod.</p>
+     *
+     * @param method a {@link java.lang.reflect.Method} object.
+     * @return a boolean.
+     */
     protected static boolean isGetInjectionSourceMethod(Method method) {
         return method.getReturnType() == Map.class && method.getParameterTypes().length == 0 &&
                 method.getName().equals("getInjectionSource");
@@ -74,7 +106,7 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
 
     /**
      * Checks if the method is derived from Object.equals()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is derived from Object.equals(), false otherwise
      */
@@ -85,7 +117,7 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
 
     /**
      * Checks if the method is derived from Object.hashCode()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.hashCode(), false otherwise
      */
@@ -96,7 +128,7 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
 
     /**
      * Checks if the method is derived from Object.toString()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.toString(), false otherwise
      */
@@ -107,7 +139,7 @@ public class ComponentProxy implements OverwriteProxy, Serializable {
 
     /**
      * Checks if the method is derived from Object.finalize()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.finalize(), false otherwise
      */

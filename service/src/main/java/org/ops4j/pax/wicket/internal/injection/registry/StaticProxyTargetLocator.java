@@ -19,8 +19,10 @@ import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 
 /**
- * A {@link ProxyTargetLocator} that always returns the same {@link ProxyTarget} that always returns a given Object
- * 
+ * A {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator} that always returns the same {@link org.ops4j.pax.wicket.spi.ProxyTarget} that always returns a given Object
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class StaticProxyTargetLocator implements ProxyTargetLocator {
 
@@ -29,6 +31,8 @@ public class StaticProxyTargetLocator implements ProxyTargetLocator {
     private final StaticProxyTarget staticProxyTarget;
 
     /**
+     * <p>Constructor for StaticProxyTargetLocator.</p>
+     *
      * @param target the target to always return
      * @param parent the parent for classloading
      */
@@ -37,10 +41,20 @@ public class StaticProxyTargetLocator implements ProxyTargetLocator {
         staticProxyTarget = new StaticProxyTarget(target);
     }
 
+    /**
+     * <p>locateProxyTarget.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.spi.ProxyTarget} object.
+     */
     public ProxyTarget locateProxyTarget() {
         return staticProxyTarget;
     }
 
+    /**
+     * <p>Getter for the field <code>parent</code>.</p>
+     *
+     * @return a {@link java.lang.Class} object.
+     */
     public Class<?> getParent() {
         return parent;
     }

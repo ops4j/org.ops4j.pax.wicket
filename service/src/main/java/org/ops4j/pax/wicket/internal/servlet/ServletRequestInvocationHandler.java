@@ -24,9 +24,11 @@ import java.lang.reflect.Method;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 
+ *
  * TODO what is the goal of this class
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class ServletRequestInvocationHandler
                 implements InvocationHandler {
@@ -34,6 +36,13 @@ public final class ServletRequestInvocationHandler
     private final HttpServletRequest request;
     private final String mountPoint;
 
+    /**
+     * <p>Constructor for ServletRequestInvocationHandler.</p>
+     *
+     * @param request a {@link javax.servlet.http.HttpServletRequest} object.
+     * @param mountPoint a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public ServletRequestInvocationHandler(HttpServletRequest request, String mountPoint)
                 throws IllegalArgumentException {
         validateNotNull(request, "request");
@@ -51,6 +60,15 @@ public final class ServletRequestInvocationHandler
         this.mountPoint = mountPoint;
     }
 
+    /**
+     * <p>invoke.</p>
+     *
+     * @param proxy a {@link java.lang.Object} object.
+     * @param method a {@link java.lang.reflect.Method} object.
+     * @param arguments an array of {@link java.lang.Object} objects.
+     * @return a {@link java.lang.Object} object.
+     * @throws java.lang.Throwable if any.
+     */
     public Object invoke(Object proxy, Method method, Object[] arguments) throws Throwable {
         try {
             String methodName = method.getName();

@@ -26,7 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.ops4j.pax.wicket.api.Constants;
-import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
 import org.ops4j.pax.wicket.internal.Activator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,7 +40,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class handles all the enhancement stuff for PAX Wicket when working with an underlying bundle
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ExtendedBundle {
 
@@ -63,7 +64,15 @@ public class ExtendedBundle {
     private final ExtendedBundleContext bundleContext;
 
     /**
-     * @param bundle
+     * <p>Constructor for ExtendedBundle.</p>
+     *
+     * @param bundle a {@link org.osgi.framework.Bundle} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
+     * @param bundleContext a {@link org.ops4j.pax.wicket.internal.extender.ExtendedBundle.ExtendedBundleContext} object.
      */
     public ExtendedBundle(ExtendedBundleContext bundleContext, Bundle bundle) {
         this.bundleContext = bundleContext;
@@ -71,6 +80,8 @@ public class ExtendedBundle {
     }
 
     /**
+     * <p>getExtendedBundleContext.</p>
+     *
      * @return the current value of bundleContext
      */
     public ExtendedBundleContext getExtendedBundleContext() {
@@ -78,18 +89,27 @@ public class ExtendedBundle {
     }
 
     /**
+     * <p>Getter for the field <code>bundle</code>.</p>
+     *
      * @return the current value of bundle
      */
     public Bundle getBundle() {
         return bundle;
     }
 
+    /**
+     * <p>getID.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getID() {
         return getBundle().getSymbolicName();
     }
 
     /**
-     * @return <code>true</code> if this bundle is relevant for {@link PaxWicketMountPoint} annotations
+     * <p>isRelevantForMountPointAnnotations.</p>
+     *
+     * @return <code>true</code> if this bundle is relevant for {@link org.ops4j.pax.wicket.api.PaxWicketMountPoint} annotations
      *         <code>false</code> otherwhise
      */
     public boolean isRelevantForMountPointAnnotations() {
@@ -99,6 +119,11 @@ public class ExtendedBundle {
         return isImportingPAXWicketAPI();
     }
 
+    /**
+     * <p>isRelevantForImportEnhancements.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isRelevantForImportEnhancements() {
         if (isWicket() || isPAXWicket()) {
             return false;
@@ -109,6 +134,8 @@ public class ExtendedBundle {
     }
 
     /**
+     * <p>isWicket.</p>
+     *
      * @return <code>true</code> if the underlying bundle is one of the wicket bundles <code>false</code> otherwhise
      */
     public boolean isWicket() {
@@ -120,6 +147,8 @@ public class ExtendedBundle {
     }
 
     /**
+     * <p>isPAXWicket.</p>
+     *
      * @return <code>true</code> if the underlying bundle is the PAXWicket bundle
      */
     public boolean isPAXWicket() {
@@ -131,7 +160,8 @@ public class ExtendedBundle {
     }
 
     /**
-     * 
+     * <p>isImportingWicket.</p>
+     *
      * @return <code>true</code> if this bundle imports anything from the org.apache.wicket Namespace
      */
     public boolean isImportingWicket() {
@@ -167,7 +197,8 @@ public class ExtendedBundle {
     }
 
     /**
-     * 
+     * <p>isImportingPAXWicketAPI.</p>
+     *
      * @return <code>true</code> if this bundle imports anything from the org.ops4j.pax.wicket.api Namespace
      */
     public boolean isImportingPAXWicketAPI() {
@@ -197,14 +228,14 @@ public class ExtendedBundle {
      * Try to load a Collection of all classes conained in the underlying bundle, please be aware that calling this has
      * the following implications:
      * <ul>
-     * <li>it might be costly to call this method and invloves loading all class from the underlying bundle what might
+     * <li>it might be costly to call this method and involves loading all class from the underlying bundle what might
      * trigger other bundles with lazy activation to activate</li>
-     * <li>it can't be garantueed that all classes are found</li>
+     * <li>it can't be guaranteed that all classes are found</li>
      * <li>even if a class is detected it might not be included if it's optional dependencies are not already bound to
      * the bundle</li>
      * </ul>
-     * 
-     * @return a Collection of classes conained in this bundle
+     *
+     * @return a Collection of classes contained in this bundle
      */
     public Collection<Class<?>> getAllClasses() {
         Set<Class<?>> classList = new HashSet<Class<?>>();

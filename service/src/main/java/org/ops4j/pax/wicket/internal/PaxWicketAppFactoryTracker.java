@@ -33,9 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The factory tracker waits for every new {@link WebApplicationFactory} class registered as OSGi service. If the
+ * The factory tracker waits for every new {@link org.ops4j.pax.wicket.api.WebApplicationFactory} class registered as OSGi service. If the
  * services does also contain properties for an application name and a mount point is is registered for a Servlet.
  * Otherwise the problem is logged as a warning and the service is simply ignored.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReadyChildren<WebApplicationFactory<?>> {
 
@@ -52,12 +55,24 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         this.httpTracker = httpTracker;
     }
 
+    /**
+     * <p>addingService.</p>
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param service a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     */
     public void addingService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
         PaxWicketApplicationFactory internalFactory =
             PaxWicketApplicationFactory.createPaxWicketApplicationFactory(context, service, reference);
         addApplication(reference, internalFactory);
     }
 
+    /**
+     * <p>modifiedService.</p>
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param service a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     */
     public void modifiedService(ServiceReference<WebApplicationFactory<?>> reference,
             WebApplicationFactory<?> service) {
         removeApplication(reference);
@@ -67,6 +82,12 @@ public class PaxWicketAppFactoryTracker implements ServiceTrackerAggregatorReady
         addApplication(reference, internalFactory);
     }
 
+    /**
+     * <p>removedService.</p>
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param service a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     */
     public void removedService(ServiceReference<WebApplicationFactory<?>> reference, WebApplicationFactory<?> service) {
         removeApplication(reference);
     }

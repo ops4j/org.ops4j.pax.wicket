@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal.injection;
 
@@ -32,7 +36,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class BundleDelegatingComponentInstanciationListener implements PaxWicketInjector,
         InternalBundleDelegationProvider {
 
@@ -48,6 +51,12 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
 
     private final ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker;
 
+    /**
+     * <p>Constructor for BundleDelegatingComponentInstanciationListener.</p>
+     *
+     * @param paxWicketBundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public BundleDelegatingComponentInstanciationListener(BundleContext paxWicketBundleContext, String applicationName) {
         this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
@@ -57,10 +66,18 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
                 ProxyTargetLocatorFactory.class, null);
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * <p>start.</p>
+     */
     public void start() {
         this.factoryTracker.open();
         Dictionary<String, String> props = new Hashtable<String, String>();
@@ -68,6 +85,9 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         serviceRegistration = paxWicketBundleContext.registerService(PaxWicketInjector.class, this, props);
     }
 
+    /**
+     * <p>stop.</p>
+     */
     public void stop() {
         this.factoryTracker.close();
         if (serviceRegistration == null) {
@@ -77,6 +97,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         serviceRegistration.unregister();
     }
 
+    /** {@inheritDoc} */
     public void addBundle(ExtendedBundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
@@ -88,6 +109,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         }
     }
 
+    /** {@inheritDoc} */
     public void removeBundle(ExtendedBundle bundle) {
         if (serviceRegistration == null) {
             throw new IllegalStateException("Cannot add any bundle to listener while not started.");
@@ -97,6 +119,7 @@ public class BundleDelegatingComponentInstanciationListener implements PaxWicket
         }
     }
 
+    /** {@inheritDoc} */
     public void inject(Object toInject, Class<?> toHandle) {
         synchronized (listeners) {
             Collection<BundleAnalysingComponentInstantiationListener> values = listeners.values();

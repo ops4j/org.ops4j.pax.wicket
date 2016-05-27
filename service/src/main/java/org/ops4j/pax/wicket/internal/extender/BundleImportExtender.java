@@ -34,6 +34,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This Extender adds dynmic imports to client bundles
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 //Temporary disable weaving
 //@Component(service = { WeavingHook.class })
@@ -58,17 +61,30 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
 
     private ExtendedBundleContext extendedBundleContext;
 
+    /**
+     * <p>startUp.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @since 3.0.5
+     */
     @Activate
     public void startUp(BundleContext bundleContext) {
         extendedBundleContext = new ExtendedBundle.ExtendedBundleContext(bundleContext);
         bundleContext.addBundleListener(this);
     }
 
+    /**
+     * <p>shutDown.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @since 3.0.5
+     */
     @Deactivate
     public void shutDown(BundleContext bundleContext) {
         bundleContext.removeBundleListener(this);
     }
 
+    /** {@inheritDoc} */
     public void weave(WovenClass wovenClass) {
         try {
             BundleWiring bundleWiring = wovenClass.getBundleWiring();
@@ -92,6 +108,7 @@ public class BundleImportExtender implements WeavingHook, SynchronousBundleListe
 
     }
 
+    /** {@inheritDoc} */
     public void bundleChanged(BundleEvent event) {
         Bundle eventBundle = event.getBundle();
         ExtendedBundle extendedBundle = new ExtendedBundle(extendedBundleContext, eventBundle);

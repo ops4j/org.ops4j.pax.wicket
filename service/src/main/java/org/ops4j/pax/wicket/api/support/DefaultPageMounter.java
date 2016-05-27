@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api.support;
 
@@ -34,7 +38,6 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class DefaultPageMounter implements PageMounter, ManagedService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPageMounter.class);
@@ -48,6 +51,12 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
     private static final String[] SERVICE_CLASSES = new String[]{ PageMounter.class.getName(),
         ManagedService.class.getName() };
 
+    /**
+     * <p>Constructor for DefaultPageMounter.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     */
     public DefaultPageMounter(String applicationName, BundleContext bundleContext) {
         validateNotNull(bundleContext, "bundleContext");
         LOGGER.trace("Initializing MountTracker for {}", applicationName);
@@ -58,7 +67,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
     }
 
     /**
-     * Automatically regsiteres the {@link PageMounter} as OSGi service
+     * Automatically regsiteres the {@link org.ops4j.pax.wicket.api.PageMounter} as OSGi service
      */
     public void register() {
         LOGGER.debug("Register mount tracker as OSGi service");
@@ -73,7 +82,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
     }
 
     /**
-     * Automatically unregister the {@link PageMounter} from the OSGi registry
+     * Automatically unregister the {@link org.ops4j.pax.wicket.api.PageMounter} from the OSGi registry
      */
     public void dispose() {
         synchronized (this) {
@@ -86,6 +95,7 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
         }
     }
 
+    /** {@inheritDoc} */
     public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
         if (properties != null) {
             setApplicationName((String) properties.get(APPLICATION_NAME));
@@ -95,6 +105,11 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
         }
     }
 
+    /**
+     * <p>setApplicationName.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public void setApplicationName(String applicationName) {
         validateNotEmpty(applicationName, "applicationName");
         synchronized (this) {
@@ -102,6 +117,11 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
         }
     }
 
+    /**
+     * <p>getApplicationName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         synchronized (this) {
             return properties.get(APPLICATION_NAME);
@@ -109,16 +129,18 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
     }
 
     /**
+     * {@inheritDoc}
+     *
      * A convenience method that uses a default coding strategy.
-     * 
-     * @param path the path on which the page is to be mounted
-     * @param pageClass the class to mount on this mount point using the default strategy
      */
+    @Override
     public void addMountPoint(String path, Class<? extends Page> pageClass) {
         LOGGER.debug("Adding mount point for path {} = {}", path, pageClass.getName());
         mountPoints.add(new DefaultMountPointInfo(path, pageClass));
     }
 
+    /** {@inheritDoc} */
+    @Override
     public final List<MountPointInfo> getMountPoints() {
         return Collections.unmodifiableList(mountPoints);
     }
@@ -134,10 +156,12 @@ public class DefaultPageMounter implements PageMounter, ManagedService {
             this.pageClass = pageClass;
         }
 
+        @Override
         public final String getPath() {
             return path;
         }
 
+        @Override
         public final Class<? extends Page> getPage() {
             return pageClass;
         }

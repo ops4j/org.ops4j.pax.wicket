@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api.support;
 
@@ -33,7 +37,6 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-
 public abstract class AbstractPageFactory<T extends Page> implements PageFactory<T>, ManagedService {
 
     private BundleContext bundleContext;
@@ -47,7 +50,13 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * While this constructor does not require a pageClass it will NOT analyse the loaded classes automatically for the
-     * {@link PaxWicketMountPoint} annotation.
+     * {@link org.ops4j.pax.wicket.api.PaxWicketMountPoint} annotation.
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param pageId a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param pageName a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
      */
     protected AbstractPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName)
         throws IllegalArgumentException {
@@ -56,8 +65,15 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * This constructor expects an {@link #pageClass}. This class is expected to be the exported page and is
-     * automatically scanned for the {@link PaxWicketMountPoint} annotation. The found page is automatically exported as
+     * automatically scanned for the {@link org.ops4j.pax.wicket.api.PaxWicketMountPoint} annotation. The found page is automatically exported as
      * service mounting the page on the defined place.
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param pageId a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param pageName a {@link java.lang.String} object.
+     * @param pageClass a {@link java.lang.Class} object.
+     * @throws java.lang.IllegalArgumentException if any.
      */
     protected AbstractPageFactory(BundleContext bundleContext, String pageId, String applicationName, String pageName,
             Class<? extends WebPage> pageClass) throws IllegalArgumentException {
@@ -73,6 +89,11 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         setPageName(pageName);
     }
 
+    /**
+     * <p>register.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public final void register() throws IllegalStateException {
         validateNotNull(bundleContext, "bundleContext");
 
@@ -93,6 +114,11 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
+    /**
+     * <p>dispose.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public final void dispose() throws IllegalStateException {
         synchronized (this) {
             if (pageServiceRegistration == null) {
@@ -110,9 +136,8 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * Returns the application name.
-     * 
+     *
      * @return The application name.
-     * 
      * @since 1.0.0
      */
     public final String getApplicationName() {
@@ -123,9 +148,8 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * Returns the page name.
-     * 
+     *
      * @return The page name.
-     * 
      * @since 1.0.0
      */
     public final String getPageName() {
@@ -134,6 +158,8 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void updated(Dictionary<String, ?> config)
         throws ConfigurationException {
         if (config == null) {
@@ -155,10 +181,9 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * Sets the application name.
-     * 
+     *
      * @param applicationName The application name. This argument must not be {@code null} or empty.
-     * 
-     * @throws IllegalArgumentException Thrown if the specified {@code applicationName} is {@code null}.
+     * @throws java.lang.IllegalArgumentException Thrown if the specified {@code applicationName} is {@code null}.
      * @since 1.0.0
      */
     protected final void setApplicationName(String applicationName) throws IllegalArgumentException {
@@ -168,6 +193,12 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
+    /**
+     * <p>setPageId.</p>
+     *
+     * @param pageId a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     protected final void setPageId(String pageId) throws IllegalArgumentException {
         validateNotEmpty(pageId, "pageId");
         synchronized (this) {
@@ -177,10 +208,9 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
 
     /**
      * Set the page name.
-     * 
+     *
      * @param pageName The page name. This argument must not be {@code null} or empty.
-     * 
-     * @throws IllegalArgumentException Thrown if the specified {@code pageName} arguments are {@code null}.
+     * @throws java.lang.IllegalArgumentException Thrown if the specified {@code pageName} arguments are {@code null}.
      * @since 1.0.0
      */
     protected final void setPageName(String pageName) throws IllegalArgumentException {
@@ -190,6 +220,12 @@ public abstract class AbstractPageFactory<T extends Page> implements PageFactory
         }
     }
 
+    /**
+     * <p>setInternalBundleContext.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     protected final void setInternalBundleContext(BundleContext bundleContext) throws IllegalArgumentException {
         this.bundleContext = bundleContext;
     }

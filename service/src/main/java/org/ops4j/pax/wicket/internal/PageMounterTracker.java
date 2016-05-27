@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
@@ -39,13 +43,25 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMounter> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageMounterTracker.class);
 
     private final WebApplication application;
 
+    /**
+     * <p>Constructor for PageMounterTracker.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param application a {@link org.apache.wicket.protocol.http.WebApplication} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public PageMounterTracker(BundleContext context, WebApplication application, String applicationName)
         throws IllegalArgumentException {
         super(context, createFilter(context, applicationName), null);
@@ -68,6 +84,7 @@ public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMo
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public final PageMounter addingService(ServiceReference<PageMounter> reference) {
         PageMounter mounter = super.addingService(reference);
@@ -90,6 +107,7 @@ public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMo
         return mounter;
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void removedService(ServiceReference<PageMounter> reference, PageMounter mounter) {
         PageMounter pageMounter = mounter;

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -22,12 +26,17 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 public final class InjectionParserUtil {
 
     private InjectionParserUtil() {
     }
 
+    /**
+     * <p>retrieveInitParam.</p>
+     *
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, String> retrieveInitParam(Element element) {
         Map<String, String> contextParams = new HashMap<String, String>();
         NodeList elementsByTagName = element.getElementsByTagNameNS("*", "init-param");
@@ -39,6 +48,12 @@ public final class InjectionParserUtil {
         return contextParams;
     }
 
+    /**
+     * <p>retrieveContextParam.</p>
+     *
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, String> retrieveContextParam(Element element) {
         Map<String, String> contextParams = new HashMap<String, String>();
         NodeList elementsByTagName = element.getElementsByTagNameNS("*", "context-param");
@@ -55,6 +70,12 @@ public final class InjectionParserUtil {
         return elementsByTagName.item(0).getChildNodes().item(0).getNodeValue();
     }
 
+    /**
+     * <p>retrieveOverwriteElements.</p>
+     *
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, String> retrieveOverwriteElements(Element element) {
         Map<String, String> overwrites = new HashMap<String, String>();
         NodeList elementsByTagName = element.getElementsByTagNameNS("*", "overwrite");
@@ -67,6 +88,12 @@ public final class InjectionParserUtil {
         return overwrites;
     }
 
+    /**
+     * <p>retrieveDestinationElements.</p>
+     *
+     * @param element a {@link org.w3c.dom.Element} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> retrieveDestinationElements(Element element) {
         List<String> destinations = new ArrayList<String>();
         NodeList elementsByTagName = element.getElementsByTagNameNS("*", "destination");

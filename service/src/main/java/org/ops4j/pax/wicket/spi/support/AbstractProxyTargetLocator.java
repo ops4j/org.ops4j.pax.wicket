@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -22,7 +26,6 @@ import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
 public abstract class AbstractProxyTargetLocator<Container> implements ProxyTargetLocator {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +38,15 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
 
     private final String beanName;
 
+    /**
+     * <p>Constructor for AbstractProxyTargetLocator.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param beanName a {@link java.lang.String} object.
+     * @param beanType a {@link java.lang.Class} object.
+     * @param parent a {@link java.lang.Class} object.
+     * @param overwrites a {@link java.util.Map} object.
+     */
     public AbstractProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         this.bundleContext = bundleContext;
@@ -44,6 +56,11 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
         this.overwrites = overwrites;
     }
 
+    /**
+     * <p>hasApplicationContext.</p>
+     *
+     * @return a boolean.
+     */
     public boolean hasApplicationContext() {
         String filter = getApplicationContextFilter(bundleContext.getBundle().getSymbolicName());
         ServiceReference<?>[] references = null;
@@ -56,12 +73,19 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
     }
 
     /**
+     * <p>Getter for the field <code>beanName</code>.</p>
+     *
      * @return the current value of beanName
      */
     public String getBeanName() {
         return beanName;
     }
 
+    /**
+     * <p>locateProxyTarget.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.spi.ProxyTarget} object.
+     */
     public ProxyTarget locateProxyTarget() {
         if (bundleContext == null) {
             throw new IllegalStateException("Bundle context is not allowed to be null");
@@ -107,14 +131,35 @@ public abstract class AbstractProxyTargetLocator<Container> implements ProxyTarg
             parent.getName()));
     }
 
+    /**
+     * <p>Getter for the field <code>parent</code>.</p>
+     *
+     * @return a {@link java.lang.Class} object.
+     */
     public Class<?> getParent() {
         return parent;
     }
 
+    /**
+     * <p>createStrategy.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.spi.support.AbstractProxyTargetLocator.BeanReactor} object.
+     */
     protected abstract BeanReactor<Container> createStrategy();
 
+    /**
+     * <p>getApplicationContextFilter.</p>
+     *
+     * @param symbolicBundleName a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     protected abstract String getApplicationContextFilter(String symbolicBundleName);
 
+    /**
+     * <p>getContainerClass.</p>
+     *
+     * @return a {@link java.lang.Class} object.
+     */
     protected abstract Class<? extends Container> getContainerClass();
 
     protected static interface BeanReactor<Container> {

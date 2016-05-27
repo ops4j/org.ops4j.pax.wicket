@@ -25,9 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Tracks {@link SessionDestroyedListener}s and registers them to an Application.
- * 
+ * Tracks {@link org.ops4j.pax.wicket.api.SessionDestroyedListener}s and registers them to an Application.
+ *
  * @author David Leangen
+ * @version $Id: $Id
  */
 public final class SessionDestroyedListenerTracker extends
         ServiceTracker<SessionDestroyedListener, SessionDestroyedListener> {
@@ -39,11 +40,10 @@ public final class SessionDestroyedListenerTracker extends
 
     /**
      * Construct an instance of {@code SessionDestroyedListenerTracker} with the specified arguments.
-     * 
+     *
      * @param context The bundle context. This argument must not be {@code null}.
      * @param handler The handler that will handle the listeners.
-     * 
-     * @throws IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
+     * @throws java.lang.IllegalArgumentException Thrown if one or some or all arguments are {@code null}.
      */
     public SessionDestroyedListenerTracker(BundleContext context, SessionDestroyedHander handler)
         throws IllegalArgumentException {
@@ -54,8 +54,9 @@ public final class SessionDestroyedListenerTracker extends
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Adding service.
-     * 
      * @see ServiceTracker#addingService(ServiceReference)
      */
     @Override
@@ -71,8 +72,9 @@ public final class SessionDestroyedListenerTracker extends
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Handle removed service.
-     * 
      * @see ServiceTracker#removedService(ServiceReference,Object)
      */
     @Override

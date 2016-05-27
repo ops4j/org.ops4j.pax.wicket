@@ -26,17 +26,27 @@ import java.io.*;
 /**
  * A simple wrapper for the original wicket serializer making it possible to serialize class which inject osgi
  * bundle based classes.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class PaxWicketSerializer extends JavaSerializer {
+    /**
+     * <p>Constructor for PaxWicketSerializer.</p>
+     *
+     * @param applicationKey a {@link java.lang.String} object.
+     */
     public PaxWicketSerializer(String applicationKey) {
         super(applicationKey);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected ObjectInputStream newObjectInputStream(InputStream in) throws IOException {
         return new PaxWicketObjectInputStream(in, getClassResolver());
     }
 
+    /** {@inheritDoc} */
     @Override
     protected ObjectOutputStream newObjectOutputStream(OutputStream out) throws IOException {
         return new PaxWicketObjectOutputStream(out);

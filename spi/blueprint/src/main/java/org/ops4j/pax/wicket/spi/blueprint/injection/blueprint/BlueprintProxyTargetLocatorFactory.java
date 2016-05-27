@@ -27,13 +27,22 @@ import org.osgi.framework.BundleContext;
 
 /**
  * creates the actual instance
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class BlueprintProxyTargetLocatorFactory implements ProxyTargetLocatorFactory {
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return PaxWicketBeanInjectionSource.INJECTION_SOURCE_BLUEPRINT;
     }
 
+    /** {@inheritDoc} */
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,
             Map<String, String> overwrites) {
         Named annotation = field.getAnnotation(Named.class);

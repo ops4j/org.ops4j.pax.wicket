@@ -20,11 +20,24 @@ import java.util.Map;
 /**
  * One method to create overwrites is to register an OverwriteBean in the Spring application context. This one will be
  * looked up for every call
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface OverwriteBean {
 
+    /**
+     * <p>getApplicationName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getApplicationName();
 
+    /**
+     * <p>getBeanNameMapping.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     Map<String, String> getBeanNameMapping();
 
 }

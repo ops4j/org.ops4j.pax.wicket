@@ -26,14 +26,23 @@ import org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory;
 import org.osgi.framework.BundleContext;
 
 /**
- * {@link ProxyTargetLocatorFactory} for spring injections
+ * {@link org.ops4j.pax.wicket.spi.ProxyTargetLocatorFactory} for spring injections
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class SpringDMProxyTargetLocatorFactory implements ProxyTargetLocatorFactory {
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return PaxWicketBeanInjectionSource.INJECTION_SOURCE_SPRING;
     }
 
+    /** {@inheritDoc} */
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,
             Map<String, String> overwrites) {
         Named annotation = field.getAnnotation(Named.class

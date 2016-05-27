@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,28 +13,48 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
 import java.util.Enumeration;
 import java.util.Iterator;
-
 public class EnumerationAdapter<E> implements Iterator<E> {
 
     private final Enumeration<E> enumeration;
 
+    /**
+     * <p>Constructor for EnumerationAdapter.</p>
+     *
+     * @param enumeration a {@link java.util.Enumeration} object.
+     */
     public EnumerationAdapter(Enumeration<E> enumeration) {
         this.enumeration = enumeration;
     }
 
+    /**
+     * <p>hasNext.</p>
+     *
+     * @return a boolean.
+     */
     public boolean hasNext() {
         return enumeration.hasMoreElements();
     }
 
+    /**
+     * <p>next.</p>
+     *
+     * @return a E object.
+     */
     public E next() {
         return enumeration.nextElement();
     }
 
+    /**
+     * <p>remove.</p>
+     */
     public void remove() {
         throw new UnsupportedOperationException();
     }

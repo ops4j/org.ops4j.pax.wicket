@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,15 +13,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
 import org.ops4j.pax.wicket.api.SessionDestroyedListener;
-
 public interface SessionDestroyedHander
 {
+    /**
+     * <p>getApplicationName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getApplicationName();
+    /**
+     * <p>sessionDestroyed.</p>
+     *
+     * @param sessionId a {@link java.lang.String} object.
+     */
     void sessionDestroyed( String sessionId );
+    /**
+     * <p>addListener.</p>
+     *
+     * @param listener a {@link org.ops4j.pax.wicket.api.SessionDestroyedListener} object.
+     */
     void addListener( SessionDestroyedListener listener );
+    /**
+     * <p>removeListener.</p>
+     *
+     * @param listener a {@link org.ops4j.pax.wicket.api.SessionDestroyedListener} object.
+     */
     void removeListener( SessionDestroyedListener listener );
 }

@@ -25,13 +25,22 @@ import org.ops4j.pax.wicket.api.PageMounter;
 /**
  * This class is exported as a service via blueprint and automatically recognized by pax-wicket mounting a page manually
  * in the system.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ManuallyPageMounter implements PageMounter {
 
+    /** {@inheritDoc} */
     public void addMountPoint(String path, Class<? extends Page> pageClass) {
         // this method is typically though only for internal use
     }
 
+    /**
+     * <p>getMountPoints.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<MountPointInfo> getMountPoints() {
         List<MountPointInfo> mountPoints = new ArrayList<MountPointInfo>();
         mountPoints.add(new MountPointInfo() {

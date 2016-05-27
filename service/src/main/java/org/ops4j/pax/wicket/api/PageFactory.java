@@ -20,6 +20,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * PageFactory instances are capable of providing bookmarkable web pages, as defined by Wicket.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface PageFactory<C extends IRequestablePage> {
 

@@ -40,31 +40,41 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * A wrapper around a {@link Map} access it as a {@link Dictionary}.
- * 
- * This class is a Dictionary-implementation that delegates operations to a backing {@link Map}. The resulting
+ * A wrapper around a {@link java.util.Map} access it as a {@link java.util.Dictionary}.
+ *
+ * This class is a Dictionary-implementation that delegates operations to a backing {@link java.util.Map}. The resulting
  * Dictionary can be accessed an manipulated like any other Dictionary.
- * 
+ *
  * Adapted code from apache felix utils.collections
- * 
+ *
  * As opposed to the original felix-implementation this Map is not immutable and can be manipulated, with the
  * restriction(s) described above.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class MapAsDictionary<K, V> extends Dictionary<K, V> {
 
     private Map<K, V> map;
 
     /**
-     * creates a new instance backed by the given map. Please use {@link MapAsDictionary#wrap} to prevent nesting of
-     * {@link MapAsDictionary} and {@link DictionaryAsMap}
+     * creates a new instance backed by the given map. Please use {@link org.ops4j.pax.wicket.internal.util.MapAsDictionary#wrap} to prevent nesting of
+     * {@link org.ops4j.pax.wicket.internal.util.MapAsDictionary} and {@link org.ops4j.pax.wicket.internal.util.DictionaryAsMap}
+     *
+     * @param map a {@link java.util.Map} object.
      */
     public MapAsDictionary(Map<K, V> map) {
         this.map = map;
     }
 
     /**
-     * creates a Dictionary-representation of the map. If the map is an instance of {@link DictionaryAsMap} the original
+     * creates a Dictionary-representation of the map. If the map is an instance of {@link org.ops4j.pax.wicket.internal.util.DictionaryAsMap} the original
      * dictionary is returned to prevent deeper nesting.
+     *
+     * @param map a {@link java.util.Map} object.
+     * @return a {@link java.util.Dictionary} object.
+     * @param <K> a K object.
+     * @param <V> a V object.
      */
     public static <K, V> Dictionary<K, V> wrap(Map<K, V> map) {
         if (map instanceof DictionaryAsMap) {
@@ -73,41 +83,53 @@ public class MapAsDictionary<K, V> extends Dictionary<K, V> {
         return new MapAsDictionary<K, V>(map);
     }
 
+    /**
+     * <p>setSourceMap.</p>
+     *
+     * @param map a {@link java.util.Map} object.
+     */
     public void setSourceMap(Map<K, V> map) {
         this.map = map;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Enumeration<V> elements() {
         return new IteratorToEnumeration<V>(map.values().iterator());
     }
 
+    /** {@inheritDoc} */
     @Override
     public V get(Object key) {
         return map.get(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Enumeration<K> keys() {
         return new IteratorToEnumeration<K>(map.keySet().iterator());
     }
 
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
     public V put(Object key, Object value) {
         return map.put((K) key, (V) value);
     }
 
+    /** {@inheritDoc} */
     @Override
     public V remove(Object key) {
         return map.remove(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int size() {
         if (map == null) {
@@ -116,6 +138,11 @@ public class MapAsDictionary<K, V> extends Dictionary<K, V> {
         return map.size();
     }
 
+    /**
+     * <p>Getter for the field <code>map</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<K, V> getMap() {
         return this.map;
     }
@@ -147,6 +174,7 @@ public class MapAsDictionary<K, V> extends Dictionary<K, V> {
      * 
      * @see java.lang.Object#toString()
      */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return map.toString();

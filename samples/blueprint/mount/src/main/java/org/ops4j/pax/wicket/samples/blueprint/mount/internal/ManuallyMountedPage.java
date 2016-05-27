@@ -18,8 +18,11 @@ package org.ops4j.pax.wicket.samples.blueprint.mount.internal;
 import org.apache.wicket.markup.html.WebPage;
 
 /**
- * This page is mounted by blueprint but has a similar affect like the {@link AutomountedPage} with the difference that
+ * This page is mounted by blueprint but has a similar affect like the {@link org.ops4j.pax.wicket.samples.blueprint.mount.internal.AutomountedPage} with the difference that
  * it is possible to choose any mount point liked.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ManuallyMountedPage extends WebPage {
 

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
@@ -22,16 +26,25 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
-
 public class SpringBeanProxyTargetLocator extends AbstractProxyTargetLocator<ApplicationContext> {
 
     private static final long serialVersionUID = 3688782411985692696L;
 
+    /**
+     * <p>Constructor for SpringBeanProxyTargetLocator.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param beanName a {@link java.lang.String} object.
+     * @param beanType a {@link java.lang.Class} object.
+     * @param parent a {@link java.lang.Class} object.
+     * @param overwrites a {@link java.util.Map} object.
+     */
     public SpringBeanProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         super(bundleContext, beanName, beanType, parent, overwrites);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected BeanReactor<ApplicationContext> createStrategy() {
         if (getBeanName().isEmpty()) {
@@ -72,12 +85,14 @@ public class SpringBeanProxyTargetLocator extends AbstractProxyTargetLocator<App
         };
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getApplicationContextFilter(String symbolicBundleName) {
         return String.format("(&(%s=%s)(%s=%s))", Constants.BUNDLE_SYMBOLICNAME, symbolicBundleName,
             Constants.OBJECTCLASS, ApplicationContext.class.getName());
     }
 
+    /** {@inheritDoc} */
     @Override
     protected Class<? extends ApplicationContext> getContainerClass() {
         return ApplicationContext.class;

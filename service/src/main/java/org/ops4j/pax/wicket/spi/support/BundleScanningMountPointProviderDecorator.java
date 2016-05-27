@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -31,7 +35,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class BundleScanningMountPointProviderDecorator implements InjectionAwareDecorator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BundleScanningMountPointProviderDecorator.class);
@@ -40,14 +43,25 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
     private String applicationName;
     private final List<DefaultPageMounter> mountPointRegistrations = new ArrayList<DefaultPageMounter>();
 
+    /** {@inheritDoc} */
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 
+    /**
+     * <p>Setter for the field <code>applicationName</code>.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>start.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     public void start() throws Exception {
         Bundle bundleToScan = bundleContext.getBundle();
         Enumeration<?> findEntries = bundleToScan.findEntries("", "*.class", true);
@@ -94,6 +108,11 @@ public class BundleScanningMountPointProviderDecorator implements InjectionAware
         return className;
     }
 
+    /**
+     * <p>stop.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     public void stop() throws Exception {
         for (DefaultPageMounter pageMounter : mountPointRegistrations) {
             pageMounter.dispose();

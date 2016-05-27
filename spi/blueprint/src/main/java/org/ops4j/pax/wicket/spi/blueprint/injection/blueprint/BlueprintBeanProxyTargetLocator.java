@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
@@ -22,16 +26,25 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 import org.osgi.service.blueprint.container.NoSuchComponentException;
-
 public class BlueprintBeanProxyTargetLocator extends AbstractProxyTargetLocator<BlueprintContainer> {
 
     private static final long serialVersionUID = 7855320656221559137L;
 
+    /**
+     * <p>Constructor for BlueprintBeanProxyTargetLocator.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param beanName a {@link java.lang.String} object.
+     * @param beanType a {@link java.lang.Class} object.
+     * @param parent a {@link java.lang.Class} object.
+     * @param overwrites a {@link java.util.Map} object.
+     */
     public BlueprintBeanProxyTargetLocator(BundleContext bundleContext, String beanName, Class<?> beanType,
             Class<?> parent, Map<String, String> overwrites) {
         super(bundleContext, beanName, beanType, parent, overwrites);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected BeanReactor<BlueprintContainer> createStrategy() {
         if (getBeanName().isEmpty()) {
@@ -43,6 +56,7 @@ public class BlueprintBeanProxyTargetLocator extends AbstractProxyTargetLocator<
         return new BlueprintBeanReactor(overwrites.get(getBeanName()));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected String getApplicationContextFilter(String symbolicBundleName) {
         return String.format("(&(%s=%s)(%s=%s))", "osgi.blueprint.container.symbolicname", symbolicBundleName,
@@ -76,6 +90,7 @@ public class BlueprintBeanProxyTargetLocator extends AbstractProxyTargetLocator<
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected Class<? extends BlueprintContainer> getContainerClass() {
         return BlueprintContainer.class;

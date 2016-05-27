@@ -22,34 +22,43 @@ import org.osgi.framework.ServiceReference;
 /**
  * This class is nothing more than a dummy class which is useful in case you need an empty, additional instance of a
  * service reference not coming from OSGi but still uniquely identifiable. The typical use case for this class is
- * available in the {@link BundleDelegatingClassResolver} or {@link BundleDelegatingComponentInstanciationListener}.
+ * available in the {@link org.ops4j.pax.wicket.internal.BundleDelegatingClassResolver} or {@link org.ops4j.pax.wicket.internal.injection.BundleDelegatingComponentInstanciationListener}.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class DummyServiceReference<T> implements ServiceReference<T> {
 
+    /** {@inheritDoc} */
     @Override
     public Object getProperty(String key) {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String[] getPropertyKeys() {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Bundle getBundle() {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Bundle[] getUsingBundles() {
         return null;
     }
 
+    /** {@inheritDoc} */
     public boolean isAssignableTo(Bundle bundle, String className) {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int compareTo(Object reference) {
         return 0;

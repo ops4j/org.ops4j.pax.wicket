@@ -43,10 +43,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This Servlet sets required Wicket
- * {@link ServletContext#setAttribute(String, Object)} values and delegates to
- * the {@link ServletContext#setAttribute(String, Object)} values and delegates
- * to underlying {@link WicketFilter}, new instances are created with the static
+ * {@link javax.servlet.ServletContext#setAttribute(String, Object)} values and delegates to
+ * the {@link javax.servlet.ServletContext#setAttribute(String, Object)} values and delegates
+ * to underlying {@link org.apache.wicket.protocol.http.WicketFilter}, new instances are created with the static
  * {@link #createServlet(PaxWicketApplicationFactory)} method
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class PAXWicketServlet implements Servlet {
 
@@ -95,6 +98,7 @@ public final class PAXWicketServlet implements Servlet {
         applicationFactory.getFilterDelegator().setServlet(this);
     }
 
+    /** {@inheritDoc} */
     public void init(final ServletConfig config) throws ServletException {
         this.config = config;
         ServletContext servletContext = config.getServletContext();
@@ -121,10 +125,16 @@ public final class PAXWicketServlet implements Servlet {
         });
     }
 
+    /**
+     * <p>getServletConfig.</p>
+     *
+     * @return a {@link javax.servlet.ServletConfig} object.
+     */
     public ServletConfig getServletConfig() {
         return config;
     }
 
+    /** {@inheritDoc} */
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         // First delegate to wicket, at last resort serve 404 error
         wickFilter.doFilter(req, res, new FilterChain() {
@@ -140,22 +150,33 @@ public final class PAXWicketServlet implements Servlet {
         });
     }
 
+    /**
+     * <p>getServletInfo.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getServletInfo() {
         return toString() + " - " + appFactory.getApplicationName();
     }
 
+    /**
+     * <p>destroy.</p>
+     */
     public void destroy() {
         wickFilter.destroy();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Pax Wicket Servlet";
     }
 
     /**
-     * @param applicationFactory
-     * @return a new instance for the given {@link PaxWicketApplicationFactory}
+     * <p>createServlet.</p>
+     *
+     * @param applicationFactory a {@link org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory} object.
+     * @return a new instance for the given {@link org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory}
      */
 //    public static Servlet createServlet(PaxWicketApplicationFactory applicationFactory) {
 //        Enhancer e = new Enhancer();

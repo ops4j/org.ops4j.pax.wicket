@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
@@ -25,26 +29,42 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import org.ops4j.pax.wicket.api.ConfigurableFilterConfig;
-
 public class DefaultConfigurableFilterConfig implements ConfigurableFilterConfig {
 
     private String filterName;
     private final ServletConfig servletConfig;
     private Map<String, String> additionalConfigurations = new HashMap<String, String>();
 
+    /**
+     * <p>Constructor for DefaultConfigurableFilterConfig.</p>
+     *
+     * @param servletConfig a {@link javax.servlet.ServletConfig} object.
+     */
     public DefaultConfigurableFilterConfig(ServletConfig servletConfig) {
         this(null, servletConfig);
     }
 
+    /**
+     * <p>Constructor for DefaultConfigurableFilterConfig.</p>
+     *
+     * @param filterName a {@link java.lang.String} object.
+     * @param servlet a {@link javax.servlet.ServletConfig} object.
+     */
     public DefaultConfigurableFilterConfig(String filterName, ServletConfig servlet) {
         this.filterName = filterName;
         servletConfig = servlet;
     }
 
+    /**
+     * <p>Getter for the field <code>filterName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getFilterName() {
         return filterName;
     }
 
+    /** {@inheritDoc} */
     public String getInitParameter(String paramName) {
         if (additionalConfigurations.containsKey(paramName)) {
             return additionalConfigurations.get(paramName);
@@ -52,6 +72,11 @@ public class DefaultConfigurableFilterConfig implements ConfigurableFilterConfig
         return servletConfig.getInitParameter(paramName);
     }
 
+    /**
+     * <p>getInitParameterNames.</p>
+     *
+     * @return a {@link java.util.Enumeration} object.
+     */
     @SuppressWarnings("unchecked")
     public Enumeration<String> getInitParameterNames() {
         List<String> initParameterNames = Collections.list(servletConfig.getInitParameterNames());
@@ -59,18 +84,26 @@ public class DefaultConfigurableFilterConfig implements ConfigurableFilterConfig
         return Collections.enumeration(initParameterNames);
     }
 
+    /**
+     * <p>getServletContext.</p>
+     *
+     * @return a {@link javax.servlet.ServletContext} object.
+     */
     public ServletContext getServletContext() {
         return servletConfig.getServletContext();
     }
 
+    /** {@inheritDoc} */
     public void setFilterName(String filterName) {
         this.filterName = filterName;
     }
 
+    /** {@inheritDoc} */
     public void putInitParameter(String name, String parameter) {
         additionalConfigurations.put(name, parameter);
     }
 
+    /** {@inheritDoc} */
     public void putAllInitParameter(Map<String, String> parameterMap) {
         additionalConfigurations.putAll(parameterMap);
     }

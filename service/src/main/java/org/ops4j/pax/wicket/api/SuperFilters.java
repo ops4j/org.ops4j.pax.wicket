@@ -21,10 +21,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Combines two or more {@link SuperFilter} they will be called in the specified order
+ * Combines two or more {@link org.ops4j.pax.wicket.api.SuperFilter} they will be called in the specified order
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 public @interface SuperFilters {
+    /**
+     * <p>filters.</p>
+     *
+     * @return an array of {@link org.ops4j.pax.wicket.api.SuperFilter} objects.
+     */
     public SuperFilter[] filters();
 }

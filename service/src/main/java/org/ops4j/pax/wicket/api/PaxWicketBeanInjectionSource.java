@@ -23,11 +23,15 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to tag a field as needing a special injection source
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 @Documented
 public @interface PaxWicketBeanInjectionSource {
+
     /**
      * Will always (and only) search for a spring application context
      */
@@ -46,7 +50,10 @@ public @interface PaxWicketBeanInjectionSource {
     public static final String INJECTION_SOURCE_SCAN = "scan";
 
     /**
-     * Allows to override the source of the injection directly in the source code
-     */
+     * Allows to override the source of the injection directly in the source
+     * code
+     *
+     * @return value
+    */
     String value();
 }

@@ -37,6 +37,9 @@ import org.osgi.service.cm.ManagedService;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class BundleClassResolverHelper {
 
@@ -54,6 +57,9 @@ public final class BundleClassResolverHelper {
 
     /**
      * Construct an instance of {@code BundleClassResolver}.
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @throws java.lang.IllegalArgumentException if any.
      */
     public BundleClassResolverHelper(BundleContext bundleContext) throws IllegalArgumentException {
         validateNotNull(bundleContext, "bundle");
@@ -64,6 +70,8 @@ public final class BundleClassResolverHelper {
     /**
      * Sets the service pid of this {@code BundleClassResolverHelper} instance. This is useful if this class resolver
      * needs to be wired to multiple pax-wicket applications.
+     *
+     * @param servicePid a {@link java.lang.String} object.
      */
     public final void setServicePid(String servicePid) {
         synchronized (lock) {
@@ -80,6 +88,8 @@ public final class BundleClassResolverHelper {
     }
 
     /**
+     * <p>getServicePid.</p>
+     *
      * @return The service pid of this {@code BundleClassResolverHelper}. Returns {@code null} if not set.
      */
     public final String getServicePid() {
@@ -90,6 +100,8 @@ public final class BundleClassResolverHelper {
 
     /**
      * Sets the application nane.
+     *
+     * @param applicationNames a {@link java.lang.String} object.
      */
     public final void setApplicationName(String... applicationNames) {
         synchronized (lock) {

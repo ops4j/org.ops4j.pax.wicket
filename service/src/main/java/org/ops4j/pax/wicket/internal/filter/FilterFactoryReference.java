@@ -31,9 +31,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A {@link FilterFactoryReference} is a reference to a {@link FilterFactory} and maintains creation/caching nad
+ * A {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference} is a reference to a {@link org.ops4j.pax.wicket.api.FilterFactory} and maintains creation/caching nad
  * detroing of new Filterinstances
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class FilterFactoryReference implements Comparable<FilterFactoryReference> {
 
@@ -52,16 +54,18 @@ public class FilterFactoryReference implements Comparable<FilterFactoryReference
     private long serviceID;
 
     /**
-     * @param factory
+     * <p>Constructor for FilterFactoryReference.</p>
+     *
+     * @param factory a {@link org.ops4j.pax.wicket.api.FilterFactory} object.
      */
     public FilterFactoryReference(FilterFactory factory) {
         this.factory = factory;
     }
 
     /**
-     * set the properties for this reference from the given {@link ServiceReference}
-     * 
-     * @param reference
+     * set the properties for this reference from the given {@link org.osgi.framework.ServiceReference}
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
      */
     public void setProperties(ServiceReference<FilterFactory> reference) {
         { // set the lifecycle property
@@ -98,7 +102,7 @@ public class FilterFactoryReference implements Comparable<FilterFactoryReference
     }
 
     /**
-     * dispose this {@link FilterFactoryReference} and free all resources
+     * dispose this {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference} and free all resources
      */
     public void dispose() {
         LOGGER.debug("dispose all Filters for FilterFactory {}...", factory.getClass().getName());
@@ -118,6 +122,13 @@ public class FilterFactoryReference implements Comparable<FilterFactoryReference
         }
     }
 
+    /**
+     * <p>getFilter.</p>
+     *
+     * @param servletConfig a {@link javax.servlet.ServletConfig} object.
+     * @return a {@link javax.servlet.Filter} object.
+     * @throws javax.servlet.ServletException if any.
+     */
     public Filter getFilter(ServletConfig servletConfig) throws ServletException {
         synchronized (filterCache) {
             Filter f = filterCache.get(servletConfig);
@@ -135,6 +146,8 @@ public class FilterFactoryReference implements Comparable<FilterFactoryReference
     }
 
     /**
+     * <p>Getter for the field <code>factory</code>.</p>
+     *
      * @return the current value of factory
      */
     public FilterFactory getFactory() {
@@ -145,6 +158,12 @@ public class FilterFactoryReference implements Comparable<FilterFactoryReference
      * (non-Javadoc)
      * 
      * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    /**
+     * <p>compareTo.</p>
+     *
+     * @param o a {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference} object.
+     * @return a int.
      */
     public int compareTo(FilterFactoryReference o) {
         long cmp = serviceRanking - o.serviceRanking;

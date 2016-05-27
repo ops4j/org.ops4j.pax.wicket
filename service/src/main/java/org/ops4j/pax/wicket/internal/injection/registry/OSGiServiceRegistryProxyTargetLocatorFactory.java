@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal.injection.registry;
 
@@ -41,13 +45,22 @@ public class OSGiServiceRegistryProxyTargetLocatorFactory implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OSGiServiceRegistryProxyTargetLocatorFactory.class);
 
+    /**
+     * <p>Constructor for OSGiServiceRegistryProxyTargetLocatorFactory.</p>
+     */
     public OSGiServiceRegistryProxyTargetLocatorFactory() {
     }
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return PaxWicketBeanInjectionSource.INJECTION_SOURCE_SERVICE_REGISTRY;
     }
 
+    /** {@inheritDoc} */
     public ProxyTargetLocator createProxyTargetLocator(BundleContext callingContext, Field field, Class<?> page,
             Map<String, String> overwrites) {
         BundleContext context;
@@ -84,6 +97,7 @@ public class OSGiServiceRegistryProxyTargetLocatorFactory implements
         }
     }
 
+    /** {@inheritDoc} */
     public FutureProxyTargetLocator createFutureProxyTargetLocator(BundleContext context, Field field,
             Class<?> realFieldType, Class<?> page,
             Map<String, String> overwrites) {

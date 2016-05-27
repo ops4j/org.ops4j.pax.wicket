@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,34 +13,55 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
 import org.osgi.framework.BundleContext;
-
 public class BundleClassResolverHelperDecorator implements InjectionAwareDecorator {
 
     private String applicationName;
     private BundleContext bundleContext;
     private BundleClassResolverHelper bundleClassResolverHelper;
 
+    /**
+     * <p>Constructor for BundleClassResolverHelperDecorator.</p>
+     */
     public BundleClassResolverHelperDecorator() {
     }
 
+    /** {@inheritDoc} */
     public void setBundleContext(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
     }
 
+    /**
+     * <p>Setter for the field <code>applicationName</code>.</p>
+     *
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>start.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     public void start() throws Exception {
         bundleClassResolverHelper = new BundleClassResolverHelper(bundleContext);
         bundleClassResolverHelper.setApplicationName(applicationName);
         bundleClassResolverHelper.register();
     }
 
+    /**
+     * <p>stop.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     public void stop() throws Exception {
         bundleClassResolverHelper.dispose();
     }

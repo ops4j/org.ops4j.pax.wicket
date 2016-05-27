@@ -23,7 +23,9 @@ import java.lang.annotation.Target;
 
 /**
  * Mark an field as injection null values if no bean avaiable
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })

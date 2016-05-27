@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,15 +13,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api;
 
 import org.apache.wicket.Page;
-
 public interface MountPointInfo {
 
+    /**
+     * <p>getPath.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     String getPath();
 
+    /**
+     * <p>getPage.</p>
+     *
+     * @return a {@link java.lang.Class} object.
+     */
     Class<? extends Page> getPage();
 
 }

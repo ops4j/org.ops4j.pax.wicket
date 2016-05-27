@@ -38,6 +38,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This class represents an extended class loader automatically trying to load
  * from all bundles added to it.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class BundleDelegatingClassResolver implements IClassResolver, InternalBundleDelegationProvider {
 
@@ -48,15 +51,29 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
     private final Map<String, Bundle> bundles = new HashMap<String, Bundle>();
     private ServiceRegistration<IClassResolver> classResolverRegistration;
 
+    /**
+     * <p>Constructor for BundleDelegatingClassResolver.</p>
+     *
+     * @param paxWicketBundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public BundleDelegatingClassResolver(BundleContext paxWicketBundleContext, String applicationName) {
         this.paxWicketBundleContext = paxWicketBundleContext;
         this.applicationName = applicationName;
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * <p>start.</p>
+     */
     public void start() {
         if (classResolverRegistration != null) {
             throw new IllegalStateException("Service is already registered");
@@ -76,6 +93,9 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
 
     }
 
+    /**
+     * <p>stop.</p>
+     */
     public void stop() {
         if (classResolverRegistration == null) {
             LOGGER.warn("Trying to unregister service although not registered");
@@ -84,6 +104,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         classResolverRegistration.unregister();
     }
 
+    /** {@inheritDoc} */
     public void addBundle(ExtendedBundle bundle) {
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be added");
@@ -93,6 +114,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         }
     }
 
+    /** {@inheritDoc} */
     public void removeBundle(ExtendedBundle bundle) {
         if (classResolverRegistration == null) {
             throw new IllegalStateException("The service is stoped and no more bundles could be removed");
@@ -102,6 +124,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         }
     }
 
+    /** {@inheritDoc} */
     public Class<?> resolveClass(String classname) throws ClassNotFoundException {
         LOGGER.trace("Trying to resolve class {} from BundleDelegatingClassResolver", classname);
         synchronized (bundles) {
@@ -125,6 +148,7 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
         throw new ClassNotFoundException("Class [" + classname + "] can't be resolved.");
     }
 
+    /** {@inheritDoc} */
     public Iterator<URL> getResources(String name) {
         ArrayList<URL> collectedResources = new ArrayList<URL>();
         try {
@@ -152,6 +176,8 @@ public class BundleDelegatingClassResolver implements IClassResolver, InternalBu
      * IClassResolver is NOT replaced and in some IOC stuff also not used by pax
      * wicket. Therefore this method should never ever be called. If it is
      * though we want to be informed about the problem as soon as possible.
+     *
+     * @return a {@link java.lang.ClassLoader} object.
      */
     public ClassLoader getClassLoader() {
         throw new UnsupportedOperationException("This method should NOT BE CALLED!");

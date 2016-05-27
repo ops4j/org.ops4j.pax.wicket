@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.util.proxy;
 
@@ -39,7 +43,6 @@ import org.apache.wicket.util.io.IClusterable;
 import org.ops4j.pax.wicket.spi.ProxyTarget;
 import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 import org.ops4j.pax.wicket.spi.ReleasableProxyTarget;
-
 public class LazyInitProxyFactory {
 
     private static final List<?> BUILTINS = Arrays.asList(new Class[]{ String.class,
@@ -47,6 +50,13 @@ public class LazyInitProxyFactory {
              Float.class, Double.class, Character.class,
              Boolean.class });
 
+    /**
+     * <p>createProxy.</p>
+     *
+     * @param type a {@link java.lang.Class} object.
+     * @param locator a {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator} object.
+     * @return a {@link java.lang.Object} object.
+     */
     public static Object createProxy(final Class<?> type, final ProxyTargetLocator locator) {
         if (type.isPrimitive() || BUILTINS.contains(type) || Enum.class.isAssignableFrom(type)) {
             // We special-case primitives as sometimes people use these as
@@ -274,7 +284,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.equals()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is derived from Object.equals(), false otherwise
      */
@@ -284,10 +294,10 @@ public class LazyInitProxyFactory {
     }
 
     /**
-     * Check if the object is of the special type {@link ReleasableProxyTarget} and return the target of this interface
-     * 
-     * @param target
-     * @return the parameter target or the target of the {@link ReleasableProxyTarget} if present
+     * Check if the object is of the special type {@link org.ops4j.pax.wicket.spi.ReleasableProxyTarget} and return the target of this interface
+     *
+     * @param target a {@link java.lang.Object} object.
+     * @return the parameter target or the target of the {@link org.ops4j.pax.wicket.spi.ReleasableProxyTarget} if present
      */
     public static Object getRealTarget(Object target) {
         if (target instanceof ProxyTarget) {
@@ -298,7 +308,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.hashCode()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.hashCode(), false otherwise
      */
@@ -309,7 +319,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.toString()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.toString(), false otherwise
      */
@@ -320,7 +330,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is derived from Object.finalize()
-     * 
+     *
      * @param method method being tested
      * @return true if the method is defined from Object.finalize(), false otherwise
      */
@@ -331,7 +341,7 @@ public class LazyInitProxyFactory {
 
     /**
      * Checks if the method is the writeReplace method
-     * 
+     *
      * @param method method being tested
      * @return true if the method is the writeReplace method, false otherwise
      */

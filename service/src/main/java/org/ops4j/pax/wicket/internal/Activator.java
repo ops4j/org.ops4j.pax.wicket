@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.internal;
 
@@ -22,9 +26,9 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public final class Activator implements BundleActivator {
 
+    /** Constant <code>SYMBOLIC_NAME="org.ops4j.pax.wicket.service"</code> */
     public static final String SYMBOLIC_NAME = "org.ops4j.pax.wicket.service";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
@@ -36,6 +40,7 @@ public final class Activator implements BundleActivator {
 
     private BundleTrackerAggregator<WebApplicationFactory<?>> bundleTrackerAggregator;
 
+    /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     public final void start(BundleContext context) throws Exception {
         LOGGER
@@ -54,10 +59,21 @@ public final class Activator implements BundleActivator {
         bundleTrackerAggregator.open(true);
     }
 
+    /**
+     * <p>Getter for the field <code>bundleContext</code>.</p>
+     *
+     * @return a {@link org.osgi.framework.BundleContext} object.
+     */
     public static BundleContext getBundleContext() {
         return bundleContext;
     }
 
+    /**
+     * <p>getBundleContextByBundleId.</p>
+     *
+     * @param bundleId a long.
+     * @return a {@link org.osgi.framework.BundleContext} object.
+     */
     public static BundleContext getBundleContextByBundleId(long bundleId) {
         Bundle bundle = bundleContext.getBundle(bundleId);
         if (bundle != null) {
@@ -67,6 +83,7 @@ public final class Activator implements BundleActivator {
         }
     }
 
+    /** {@inheritDoc} */
     public final void stop(BundleContext context) throws Exception {
         bundleTrackerAggregator.close();
         httpTracker.close();

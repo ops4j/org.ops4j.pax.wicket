@@ -19,16 +19,24 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 /**
  * Plain wicket web-application
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class WicketApplication extends WebApplication {
+    /**
+     * <p>Constructor for WicketApplication.</p>
+     */
     public WicketApplication() {
     }
 
+    /** {@inheritDoc} */
     @Override
     public Class<Homepage> getHomePage() {
         return Homepage.class;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void init() {
         super.init();

@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,23 +13,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.samples.plain.simple.internal;
 
 import org.ops4j.pax.wicket.api.support.DefaultWebApplicationFactory;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-
 public class Activator implements BundleActivator {
 
     private DefaultWebApplicationFactory applicationFactory;
 
+    /** {@inheritDoc} */
     public void start(BundleContext context) throws Exception {
         applicationFactory =
             new DefaultWebApplicationFactory(context, WicketApplication.class, "plain.simple", "plain/simple");
         applicationFactory.register();
     }
 
+    /** {@inheritDoc} */
     public void stop(BundleContext context) throws Exception {
         applicationFactory.dispose();
     }

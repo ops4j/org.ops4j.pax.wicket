@@ -34,6 +34,9 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * {@code BundleClassResolverHelper} is a helper to register {@code IClassResolver}.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class BundleInjectionProviderHelper {
 
@@ -55,7 +58,13 @@ public final class BundleInjectionProviderHelper {
 
     /**
      * Construct an instance of {@code BundleClassResolver}. The injectionSource is defined as constant in
-     * {@link PaxWicketBeanInjectionSource}.
+     * {@link org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource}.
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param injectionSource a {@link java.lang.String} object.
+     * @param factoryTracker a {@link org.osgi.util.tracker.ServiceTracker} object.
+     * @throws java.lang.IllegalArgumentException if any.
      */
     public BundleInjectionProviderHelper(BundleContext bundleContext, String applicationName, String injectionSource,
             ServiceTracker<ProxyTargetLocatorFactory, ProxyTargetLocatorFactory> factoryTracker)
@@ -71,6 +80,8 @@ public final class BundleInjectionProviderHelper {
     /**
      * Sets the service pid of this {@code BundleClassResolverHelper} instance. This is useful if this class resolver
      * needs to be wired to multiple pax-wicket applications.
+     *
+     * @param servicePid a {@link java.lang.String} object.
      */
     public final void setServicePid(String servicePid) {
         synchronized (lock) {
@@ -87,6 +98,8 @@ public final class BundleInjectionProviderHelper {
     }
 
     /**
+     * <p>getServicePid.</p>
+     *
      * @return The service pid of this {@code BundleClassResolverHelper}. Returns {@code null} if not set.
      */
     public final String getServicePid() {
@@ -97,6 +110,8 @@ public final class BundleInjectionProviderHelper {
 
     /**
      * Sets the application nane.
+     *
+     * @param applicationName a {@link java.lang.String} object.
      */
     public final void setApplicationName(String applicationName) {
         synchronized (lock) {

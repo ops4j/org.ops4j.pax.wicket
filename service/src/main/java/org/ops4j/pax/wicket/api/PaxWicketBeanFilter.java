@@ -23,9 +23,11 @@ import java.lang.annotation.Target;
 
 /**
  * Allow to further restrict a field to be injected, keep in mind, that this is completely provider specific, you might
- * togehter whis this annotation, also restrict the injection provider with an {@link PaxWicketBeanInjectionSource}
+ * togehter whis this annotation, also restrict the injection provider with an {@link org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource}
  * annotation
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD })

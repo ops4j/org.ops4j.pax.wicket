@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api.support;
 
@@ -20,11 +24,20 @@ import java.lang.reflect.UndeclaredThrowableException;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.osgi.framework.BundleContext;
-
 public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T> {
 
     private Class<T> pageClass;
 
+    /**
+     * <p>Constructor for DefaultPageFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param pageId a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param pageName a {@link java.lang.String} object.
+     * @param pageClass a {@link java.lang.Class} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public DefaultPageFactory(
             BundleContext bundleContext,
             String pageId,
@@ -35,6 +48,17 @@ public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T> {
         this(bundleContext, pageId, applicationName, pageName, pageClass, null);
     }
 
+    /**
+     * <p>Constructor for DefaultPageFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param pageId a {@link java.lang.String} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param pageName a {@link java.lang.String} object.
+     * @param pageClass a {@link java.lang.Class} object.
+     * @param niceUrlPath a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public DefaultPageFactory(
             BundleContext bundleContext,
             String pageId,
@@ -47,10 +71,14 @@ public class DefaultPageFactory<T extends Page> extends AbstractPageFactory<T> {
         this.pageClass = pageClass;
     }
 
+    /** {@inheritDoc} */
+    @Override
     public Class<T> getPageClass() {
         return pageClass;
     }
 
+    /** {@inheritDoc} */
+    @Override
     public T createPage(PageParameters params) {
         try {
             return pageClass.newInstance();

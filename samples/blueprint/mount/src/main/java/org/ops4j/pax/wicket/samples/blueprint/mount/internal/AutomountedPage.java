@@ -21,6 +21,9 @@ import org.ops4j.pax.wicket.api.PaxWicketMountPoint;
 /**
  * This page is automatically picked up by pax-wicket mounting the page at the location defined by the "mountPoint"
  * attribute.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 @PaxWicketMountPoint(mountPoint = "automounted")
 public class AutomountedPage extends WebPage {

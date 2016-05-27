@@ -20,11 +20,17 @@ import java.io.Serializable;
 /**
  * This class presents a VERY simple interface which can be located in any package or bundle wished. For simplicity it
  * should be kept in one bundle for now.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface EchoService extends Serializable {
 
     /**
      * Very simple method returning the toEcho value.
+     *
+     * @param toEcho a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
      */
     String someEchoMethod(String toEcho);
 

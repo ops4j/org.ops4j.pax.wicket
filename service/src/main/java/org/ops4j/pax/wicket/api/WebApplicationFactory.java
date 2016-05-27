@@ -21,6 +21,8 @@ import org.apache.wicket.protocol.http.WebApplication;
  * WebApplicationFactory returns Wicket WebApplication instances
  *
  * @since 2.0.0
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface WebApplicationFactory<C extends WebApplication> {
 
@@ -36,7 +38,6 @@ public interface WebApplicationFactory<C extends WebApplication> {
      * just after the construction using the default constructor.
      *
      * @param application the web application that is being instantiated
-     *
      */
     void onInstantiation(C application);
 

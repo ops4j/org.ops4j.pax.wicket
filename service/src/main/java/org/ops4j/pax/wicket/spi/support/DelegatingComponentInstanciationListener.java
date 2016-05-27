@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.support;
 
@@ -37,7 +41,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public final class DelegatingComponentInstanciationListener extends AbstractPaxWicketInjector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingComponentInstanciationListener.class);
@@ -48,6 +51,13 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
 
     private ComponentInstanciationListenerTracker tracker;
 
+    /**
+     * <p>Constructor for DelegatingComponentInstanciationListener.</p>
+     *
+     * @param context a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public DelegatingComponentInstanciationListener(BundleContext context, String applicationName)
             throws IllegalArgumentException {
         validateNotNull(context, "context");
@@ -59,6 +69,11 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         InjectorHolder.setInjector(applicationName, this);
     }
 
+    /**
+     * <p>intialize.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public final void intialize() throws IllegalStateException {
         synchronized (this) {
             if (tracker != null) {
@@ -70,6 +85,11 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
     }
 
+    /**
+     * <p>dispose.</p>
+     *
+     * @throws java.lang.IllegalStateException if any.
+     */
     public void dispose() throws IllegalStateException {
         synchronized (this) {
             if (tracker == null) {
@@ -81,6 +101,7 @@ public final class DelegatingComponentInstanciationListener extends AbstractPaxW
         }
     }
 
+    /** {@inheritDoc} */
     public void inject(Object toInject, Class<?> toHandle) {
         Set<String> foundAnnotation = countComponentContainPaxWicketBeanAnnotatedFieldsHierachical(toHandle);
         if (foundAnnotation.isEmpty()) {

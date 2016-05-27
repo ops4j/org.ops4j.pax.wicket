@@ -43,19 +43,20 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility class that analyzes objects for non-serializable nodes. Construct, then call {@link #check(Object)} with the
- * object you want to check. When a non-serializable object is found, a {@link WicketNotSerializableException} is thrown
+ * object you want to check. When a non-serializable object is found, a {@link org.ops4j.pax.wicket.util.serialization.PaxWicketSerializableChecker.WicketNotSerializableException} is thrown
  * with a message that shows the trace up to the not-serializable object. The exception is thrown for the first
  * non-serializable instance it encounters, so multiple problems will not be shown.
  * <p>
  * As this class depends heavily on JDK's serialization internals using introspection, analyzing may not be possible,
  * for instance when the runtime environment does not have sufficient rights to set fields accessible that would
- * otherwise be hidden. You should call {@link PaxWicketSerializableChecker#isAvailable()} to see whether this class can
+ * otherwise be hidden. You should call {@link org.ops4j.pax.wicket.util.serialization.PaxWicketSerializableChecker#isAvailable()} to see whether this class can
  * operate properly. If it doesn't, you should fall back to e.g. re-throwing/ printing the
- * {@link NotSerializableException} you probably got before using this class.
+ * {@link java.io.NotSerializableException} you probably got before using this class.
  * </p>
- * 
+ *
  * @author eelcohillenius
  * @author Al Maw
+ * @version $Id: $Id
  */
 public class PaxWicketSerializableChecker extends ObjectOutputStream
 {
@@ -107,67 +108,69 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
 
     private static abstract class ObjectOutputAdaptor implements ObjectOutput
     {
-
+        @Override
         public void close() throws IOException
         {
         }
-
+        @Override
         public void flush() throws IOException
         {
         }
-
+        @Override
         public void write(byte[] b) throws IOException
         {
         }
-
+        @Override
         public void write(byte[] b, int off, int len) throws IOException
         {
         }
-
+        @Override
         public void write(int b) throws IOException
         {
         }
-
+        @Override
         public void writeBoolean(boolean v) throws IOException
         {
         }
 
+        @Override
         public void writeByte(int v) throws IOException
         {
         }
 
+        @Override
         public void writeBytes(String s) throws IOException
         {
         }
-
+        @Override
         public void writeChar(int v) throws IOException
         {
         }
-
+        @Override
         public void writeChars(String s) throws IOException
         {
         }
-
+        @Override
         public void writeDouble(double v) throws IOException
         {
         }
-
+        @Override
         public void writeFloat(float v) throws IOException
         {
         }
-
+        @Override
         public void writeInt(int v) throws IOException
         {
         }
-
+        @Override
         public void writeLong(long v) throws IOException
         {
         }
-
+        @Override
         public void writeShort(int v) throws IOException
         {
         }
-
+        @Override
         public void writeUTF(String str) throws IOException
         {
         }
@@ -263,9 +266,9 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
 
     /**
      * Gets whether we can execute the tests. If false, calling {@link #check(Object)} will just return and you are
-     * advised to rely on the {@link NotSerializableException}. Clients are advised to call this method prior to calling
+     * advised to rely on the {@link java.io.NotSerializableException}. Clients are advised to call this method prior to calling
      * the check method.
-     * 
+     *
      * @return whether security settings and underlying API etc allow for accessing the serialization API using
      *         introspection
      */
@@ -302,19 +305,16 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
 
     /**
      * Construct.
-     * 
+     *
      * @param exception exception that should be set as the cause when throwing a new exception
-     * 
-     * @throws IOException
+     * @throws java.io.IOException cause
      */
     public PaxWicketSerializableChecker(NotSerializableException exception) throws IOException
     {
         this.exception = exception;
     }
 
-    /**
-     * @see java.io.ObjectOutputStream#reset()
-     */
+    /** {@inheritDoc} */
     @Override
     public void reset() throws IOException
     {
@@ -431,6 +431,7 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
                 {
                     private int count = 0;
 
+                    @Override
                     public void writeObject(Object streamObj) throws IOException
                     {
                         // Check for circular reference.
@@ -684,9 +685,7 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
         return result.toString();
     }
 
-    /**
-     * @see java.io.ObjectOutputStream#writeObjectOverride(java.lang.Object)
-     */
+    /** {@inheritDoc} */
     @Override
     protected final void writeObjectOverride(Object obj) throws IOException
     {
@@ -705,6 +704,9 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
 
     /**
      * Validates additional "isSerializable" conditions.
+     *
+     * @param obj a {@link java.lang.Object} object.
+     * @return is okay for serializable
      */
     protected boolean validateAdditionalSerializableConditions(Object obj) {
         return true;
@@ -712,6 +714,9 @@ public class PaxWicketSerializableChecker extends ObjectOutputStream
 
     /**
      * Execute object replacement if required for a transformation.
+     *
+     * @param streamObj a {@link java.lang.Object} object.
+     * @return additional replacements
      */
     protected Object additionalObjectReplacements(Object streamObj) {
         return streamObj;

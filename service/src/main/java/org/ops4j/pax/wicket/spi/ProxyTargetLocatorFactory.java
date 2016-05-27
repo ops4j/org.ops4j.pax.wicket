@@ -22,25 +22,29 @@ import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.osgi.framework.BundleContext;
 
 /**
- * Services registered under this interface can participate in providing {@link ProxyTargetLocator}s
- * 
+ * Services registered under this interface can participate in providing {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator}s
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface ProxyTargetLocatorFactory {
 
     /**
+     * <p>getName.</p>
+     *
      * @return the name for this factory. The name could be used to specify a special injection source see
-     *         {@link PaxWicketBeanInjectionSource#value()}
+     *         {@link org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource#value()}
      */
     public String getName();
 
     /**
-     * This creates the {@link ProxyTargetLocator} for the given field, page and overrides
-     * 
+     * This creates the {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator} for the given field, page and overrides
+     *
      * @param context the bundle context of the requesting bundle
      * @param field the field that sould be injected
      * @param page the page the field will be injected into
      * @param overwrites TODO what is this?
-     * @return the {@link ProxyTargetLocator} used to inject content to field or <code>null</code> if this factory can't
+     * @return the {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator} used to inject content to field or <code>null</code> if this factory can't
      *         inject the field
      */
     public ProxyTargetLocator createProxyTargetLocator(BundleContext context, Field field, Class<?> page,

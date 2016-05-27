@@ -42,24 +42,26 @@ final class PaxWicketPageTracker extends
     }
 
     /**
-     * Default implementation of the {@code ServiceTrackerCustomizer.addingService} method.
-     * 
+     * {@inheritDoc}
+     *
+     * Default implementation of the
+     * {@code ServiceTrackerCustomizer.addingService} method.
+     *
      * <p>
-     * This method is only called when this <code>ServiceTracker</code> object has been constructed with a
-     * <code>null ServiceTrackerCustomizer</code> argument.
-     * 
-     * The default implementation returns the result of calling <code>getService</code>, on the
-     * <code>BundleContext</code> object with which this <code>ServiceTracker</code> object was created, passing the
+     * This method is only called when this <code>ServiceTracker</code> object
+     * has been constructed with a <code>null ServiceTrackerCustomizer</code>
+     * argument.
+     *
+     * The default implementation returns the result of calling
+     * <code>getService</code>, on the <code>BundleContext</code> object with
+     * which this <code>ServiceTracker</code> object was created, passing the
      * specified <code>ServiceReference</code> object.
      * <p>
-     * This method can be overridden in a subclass to customize the service object to be tracked for the service being
-     * added. In that case, take care not to rely on the default implementation of removedService that will unget the
-     * service.
-     * 
-     * @param reference Reference to service being added to this <code>ServiceTracker</code> object.
-     * 
-     * @return The service object to be tracked for the service added to this <code>ServiceTracker</code> object.
-     * 
+     * This method can be overridden in a subclass to customize the service
+     * object to be tracked for the service being added. In that case, take care
+     * not to rely on the default implementation of removedService that will
+     * unget the service.
+     *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
     @Override
@@ -71,17 +73,18 @@ final class PaxWicketPageTracker extends
     }
 
     /**
-     * Default implementation of the <code>ServiceTrackerCustomizer.modifiedService</code> method.
-     * 
+     * {@inheritDoc}
+     *
+     * Default implementation of the
+     * <code>ServiceTrackerCustomizer.modifiedService</code> method.
+     *
      * <p>
-     * This method is only called when this <code>ServiceTracker</code> object has been constructed with a
-     * <code>null ServiceTrackerCustomizer</code> argument.
-     * 
+     * This method is only called when this <code>ServiceTracker</code> object
+     * has been constructed with a <code>null ServiceTrackerCustomizer</code>
+     * argument.
+     *
      * The default implementation does nothing.
-     * 
-     * @param reference Reference to modified service.
-     * @param service The service object for the modified service.
-     * 
+     *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
     @Override
@@ -94,21 +97,25 @@ final class PaxWicketPageTracker extends
     }
 
     /**
-     * Default implementation of the <code>ServiceTrackerCustomizer.removedService</code> method.
-     * 
+     * {@inheritDoc}
+     *
+     * Default implementation of the
+     * <code>ServiceTrackerCustomizer.removedService</code> method.
+     *
      * <p>
-     * This method is only called when this <code>ServiceTracker</code> object has been constructed with a
-     * <code>null ServiceTrackerCustomizer</code> argument.
-     * 
-     * The default implementation calls <code>ungetService</code>, on the <code>BundleContext</code> object with which
-     * this <code>ServiceTracker</code> object was created, passing the specified <code>ServiceReference</code> object.
+     * This method is only called when this <code>ServiceTracker</code> object
+     * has been constructed with a <code>null ServiceTrackerCustomizer</code>
+     * argument.
+     *
+     * The default implementation calls <code>ungetService</code>, on the
+     * <code>BundleContext</code> object with which this
+     * <code>ServiceTracker</code> object was created, passing the specified
+     * <code>ServiceReference</code> object.
      * <p>
-     * This method can be overridden in a subclass. If the default implementation of <code>addingService</code> method
-     * was used, this method must unget the service.
-     * 
-     * @param reference Reference to removed service.
-     * @param service The service object for the removed service.
-     * 
+     * This method can be overridden in a subclass. If the default
+     * implementation of <code>addingService</code> method was used, this method
+     * must unget the service.
+     *
      * @see org.osgi.util.tracker.ServiceTrackerCustomizer
      */
     @Override

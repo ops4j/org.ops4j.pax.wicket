@@ -24,13 +24,23 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.application.IClassResolver;
 
 /**
+ * <p>PaxWicketObjectInputStream class.</p>
+ *
  * @author edward.yakop@gmail.com
  * @since 0.5.4
+ * @version $Id: $Id
  */
 public final class PaxWicketObjectInputStream extends ObjectInputStream {
 
     private final IClassResolver classResolver;
 
+    /**
+     * <p>Constructor for PaxWicketObjectInputStream.</p>
+     *
+     * @param inputStream a {@link java.io.InputStream} object.
+     * @param resolver a {@link org.apache.wicket.application.IClassResolver} object.
+     * @throws java.io.IOException if any.
+     */
     public PaxWicketObjectInputStream(InputStream inputStream, IClassResolver resolver) throws IOException {
         super(inputStream);
 
@@ -38,6 +48,7 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream {
         enableResolveObject(true);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected final Object resolveObject(Object object) throws IOException {
         if (object instanceof ReplaceBundleContext) {
@@ -51,6 +62,7 @@ public final class PaxWicketObjectInputStream extends ObjectInputStream {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected final Class<?> resolveClass(ObjectStreamClass objectStreamClass) throws IOException,
         ClassNotFoundException {

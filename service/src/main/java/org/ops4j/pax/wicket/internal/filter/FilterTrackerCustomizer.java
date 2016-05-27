@@ -29,8 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link FilterTrackerCustomizer} do all the work of transforming a {@link FilterFactory} service into
- * {@link FilterFactoryReference}s for usage in PAX Wicket and keep track of the internal state and buffering
+ * The {@link org.ops4j.pax.wicket.internal.filter.FilterTrackerCustomizer} do all the work of transforming a {@link org.ops4j.pax.wicket.api.FilterFactory} service into
+ * {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference}s for usage in PAX Wicket and keep track of the internal state and buffering
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<FilterFactory, FilterFactoryReference> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FilterTrackerCustomizer.class);
@@ -39,6 +42,12 @@ public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<F
 
     private final BundleContext bundleContext;
 
+    /**
+     * <p>Constructor for FilterTrackerCustomizer.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     */
     public FilterTrackerCustomizer(BundleContext bundleContext, String applicationName) {
         validateNotNull(bundleContext, "bundleContext");
         validateNotEmpty(applicationName, "applicationName");
@@ -46,6 +55,7 @@ public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<F
         this.applicationName = applicationName;
     }
 
+    /** {@inheritDoc} */
     public final FilterFactoryReference addingService(ServiceReference<FilterFactory> reference) {
         FilterFactory filterFactory = bundleContext.getService(reference);
         if (filterFactory != null) {
@@ -57,6 +67,12 @@ public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<F
         return null;
     }
 
+    /**
+     * <p>modifiedService.</p>
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param service a {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference} object.
+     */
     public void modifiedService(ServiceReference<FilterFactory> reference, FilterFactoryReference service) {
         if (service != null) {
             service.setProperties(reference);
@@ -65,6 +81,12 @@ public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<F
         }
     }
 
+    /**
+     * <p>removedService.</p>
+     *
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @param service a {@link org.ops4j.pax.wicket.internal.filter.FilterFactoryReference} object.
+     */
     public void removedService(ServiceReference<FilterFactory> reference, FilterFactoryReference service) {
         bundleContext.ungetService(reference);
         if (service != null) {
@@ -73,6 +95,12 @@ public final class FilterTrackerCustomizer implements ServiceTrackerCustomizer<F
         }
     }
 
+    /**
+     * <p>createOsgiFilter.</p>
+     *
+     * @return a {@link org.osgi.framework.Filter} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public org.osgi.framework.Filter createOsgiFilter()
         throws IllegalArgumentException {
         org.osgi.framework.Filter filter;

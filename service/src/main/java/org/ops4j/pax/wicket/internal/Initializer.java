@@ -19,7 +19,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.IInitializer;
 
 /**
- * {@code Initializer} is invoked by {@link Application} to initialize wicket application.
+ * {@code Initializer} is invoked by {@link org.apache.wicket.Application} to initialize wicket application.
  * <p>
  * The problem here is that there are various activators currently hidden inside pax-wicket (.e.g extension and the base
  * initializer). Even if those initializer are externalized there's still the problem that wicket is only looking for
@@ -28,22 +28,25 @@ import org.apache.wicket.IInitializer;
  *
  * @author Edward Yakop
  * @since 0.5.0
+ * @version $Id: $Id
  */
 public final class Initializer implements IInitializer {
 
     private final IInitializer wicketInitializer;
     private final IInitializer wicketExtensionInitializer;
 
+    /**
+     * <p>Constructor for Initializer.</p>
+     */
     public Initializer() {
         wicketInitializer = new org.apache.wicket.Initializer();
         wicketExtensionInitializer = new org.apache.wicket.extensions.Initializer();
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Initialize the application.
-     *
-     * @param application The application loading the component
-     *
      * @since 0.5.0
      */
     public final void init(Application application) {
@@ -51,6 +54,7 @@ public final class Initializer implements IInitializer {
         wicketExtensionInitializer.init(application);
     }
 
+    /** {@inheritDoc} */
     public void destroy(Application application) {
         wicketExtensionInitializer.destroy(application);
         wicketInitializer.destroy(application);

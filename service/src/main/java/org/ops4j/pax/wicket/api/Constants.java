@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,9 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api;
-
 public interface Constants {
 
     /**

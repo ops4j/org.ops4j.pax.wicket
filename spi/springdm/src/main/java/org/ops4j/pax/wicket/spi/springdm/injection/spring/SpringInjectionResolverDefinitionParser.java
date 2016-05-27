@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.springdm.injection.spring;
 
@@ -19,14 +23,15 @@ import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.support.BundleInjectionProviderHelperDecorator;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
-
 public class SpringInjectionResolverDefinitionParser extends AbstractSpringBeanDefinitionParser {
 
+    /** {@inheritDoc} */
     @Override
     public Class<?> getBeanClass(Element element) {
         return BundleInjectionProviderHelperDecorator.class;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void prepareInjection(Element element, BeanDefinitionBuilder builder) {
         addPropertyValueFromElement("applicationName", element, builder);

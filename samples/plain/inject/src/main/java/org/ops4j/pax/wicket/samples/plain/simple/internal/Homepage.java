@@ -24,6 +24,9 @@ import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
 
 /**
  * Very simple page providing entry points into various other examples.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class Homepage extends WebPage {
 
@@ -33,6 +36,9 @@ public class Homepage extends WebPage {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * <p>Constructor for Homepage.</p>
+     */
     public Homepage() {
         add(new Label("oneComponent", echoService.someEchoMethod("Welcome to the most simple pax-wicket application")));
     }

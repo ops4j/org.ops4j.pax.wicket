@@ -31,10 +31,11 @@ final class ReplaceBundleContext implements Serializable {
 
     /**
      * Construct a new instance of {@code ReplaceBundleContext}.
-     * 
+     *
      * @param bundleContext The bundle context. Must not be {@code null}.
-     * 
-     * @throws IllegalArgumentException Thrown if the specified {@code aBundleContext} is {@code null}.
+     *
+     * @throws IllegalArgumentException Thrown if the specified
+     * {@code aBundleContext} is {@code null}.
      * @since 0.5.4
      */
     ReplaceBundleContext(BundleContext bundleContext) throws IllegalArgumentException {
@@ -46,9 +47,9 @@ final class ReplaceBundleContext implements Serializable {
 
     /**
      * Returns the bundle context.
-     * 
+     *
      * @return The bundle context.
-     * 
+     *
      * @since 0.5.4
      */
     final BundleContext getBundleContext() {

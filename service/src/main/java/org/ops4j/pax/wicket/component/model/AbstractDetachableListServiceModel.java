@@ -29,12 +29,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This model makes it easier to work with OSGi services in Wicket. It is a LoadableDetachableModel that loads data via Services retrieved 
+ * This model makes it easier to work with OSGi services in Wicket. It is a LoadableDetachableModel that loads data via Services retrieved
  * from the Service Registry. The model takes a Service Type and, when load is called, calls {@code doLoad} on each service. The list returned
  * from load will contain the output of every service that did not return exceptions.
+ *
  * @author Martin Nybo Nielsen
  * @param <T> The type of service to poll for populating the model.
  * @param <E> The return type expected from the model.
+ * @version $Id: $Id
+ * @since 3.0.5
  */
 public abstract class AbstractDetachableListServiceModel<T extends Object, E extends Object> extends LoadableDetachableModel<List<E>>{
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDetachableListServiceModel.class);
@@ -44,11 +47,12 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
     private final String filter;
     
     /**
-     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of 
+     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of
      * {@code serviceType} will be polled for data. {@code owningBundleObject} is used to properly define the BundleContext which the
      * model should use for calling the service registry. Any object residing in the same bundle as the page where the model is used is recommended.
+     *
      * @param serviceType The type of the service to retrieve model data from
-     * @param owningBundleClass
+     * @param owningBundleClass a {@link java.lang.Class} object.
      * @param filter An LDAP filter to use to narrow the search for registered services.
      */
     public AbstractDetachableListServiceModel(Class<T> serviceType, Class owningBundleClass, String filter) {
@@ -69,20 +73,22 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
     }
 
     /**
-     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of 
+     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of
      * {@code serviceType} will be polled for data. {@code owningBundleObject} is used to properly define the BundleContext which the
      * model should use for calling the service registry. Any object residing in the same bundle as the page where the model is used is recommended.
+     *
      * @param serviceType The type of the service to retrieve model data from
-     * @param owningBundleClass
+     * @param owningBundleClass a {@link java.lang.Class} object.
      */
     public AbstractDetachableListServiceModel(Class<T> serviceType, Class owningBundleClass) {
 	this(serviceType, owningBundleClass, null);
     }
     
     /**
-     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of 
+     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of
      * {@code serviceType} will be polled for data. {@code owningBundleObject} is used to properly define the BundleContext which the
      * model should use for calling the service registry. Any object residing in the same bundle as the page where the model is used is recommended.
+     *
      * @param serviceType The type of the service to retrieve model data from
      * @param owningBundleObject Any object which resides in the bundle which uses this model.
      * @param filter An LDAP filter to use to narrow the search for registered services.
@@ -92,24 +98,27 @@ public abstract class AbstractDetachableListServiceModel<T extends Object, E ext
     }
 
     /**
-     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of 
+     * Takes the type of the service to retrieve data from. When the {@code load} method is called, all valid services of
      * {@code serviceType} will be polled for data. {@code owningBundleObject} is used to properly define the BundleContext which the
      * model should use for calling the service registry. Any object residing in the same bundle as the page where the model is used is recommended.
+     *
      * @param serviceType The type of the service to retrieve model data from
      * @param owningBundleObject Any object which resides in the bundle which uses this model.
-    */
+     */
     public AbstractDetachableListServiceModel(Class<T> serviceType, Object owningBundleObject) {
 	this(serviceType, owningBundleObject.getClass(), null);
     }
     
     /**
+     * <p>doLoad.</p>
      *
-     * @param source
-     * @return
-     * @throws Exception
+     * @param source a T object.
+     * @throws java.lang.Exception errors can happen here that could cause exceptions
+     * @return a E object.
      */
     protected abstract E doLoad(T source) throws Exception;
     
+    /** {@inheritDoc} */
     @Override
     protected List<E> load() {
 	context = BundleReference.class.cast(serviceType.getClassLoader()).getBundle().getBundleContext();

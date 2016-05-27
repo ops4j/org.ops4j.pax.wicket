@@ -46,8 +46,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Intercepts calls to a servlet before they are given to an underlying servlet, the initilization of
- * {@link SuperFilter}s is done here
- * 
+ * {@link org.ops4j.pax.wicket.api.SuperFilter}s is done here
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ServletCallInterceptor implements Servlet {
 
@@ -63,14 +65,17 @@ public class ServletCallInterceptor implements Servlet {
     private Filter[] superFilter;
 
     /**
-     * @param applicationFactory
-     * @param delegateServlet
+     * <p>Constructor for ServletCallInterceptor.</p>
+     *
+     * @param applicationFactory a {@link org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory} object.
+     * @param delegateServlet a {@link javax.servlet.Servlet} object.
      */
     public ServletCallInterceptor(PaxWicketApplicationFactory applicationFactory, Servlet delegateServlet) {
         this.applicationFactory = applicationFactory;
         this.delegateServlet = delegateServlet;
     }
 
+    /** {@inheritDoc} */
     public void init(ServletConfig config) throws ServletException {
         LOG.info("Init servlet...");
         // We must init the superfilters first...
@@ -150,10 +155,16 @@ public class ServletCallInterceptor implements Servlet {
         return properties;
     }
 
+    /**
+     * <p>getServletConfig.</p>
+     *
+     * @return a {@link javax.servlet.ServletConfig} object.
+     */
     public ServletConfig getServletConfig() {
         return delegateServlet.getServletConfig();
     }
 
+    /** {@inheritDoc} */
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         // Check if we should replace this request
         if (req instanceof HttpServletRequest) {
@@ -188,10 +199,18 @@ public class ServletCallInterceptor implements Servlet {
         return false;
     }
 
+    /**
+     * <p>getServletInfo.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getServletInfo() {
         return delegateServlet.getServletInfo();
     }
 
+    /**
+     * <p>destroy.</p>
+     */
     public void destroy() {
         // destroy all filter first...
         for (Filter filter : superFilter) {

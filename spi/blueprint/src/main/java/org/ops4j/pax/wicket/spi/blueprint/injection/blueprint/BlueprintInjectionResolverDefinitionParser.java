@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
@@ -20,14 +24,15 @@ import org.apache.aries.blueprint.mutable.MutableBeanMetadata;
 import org.ops4j.pax.wicket.api.PaxWicketBeanInjectionSource;
 import org.ops4j.pax.wicket.spi.support.BundleInjectionProviderHelperDecorator;
 import org.w3c.dom.Element;
-
 public class BlueprintInjectionResolverDefinitionParser extends AbstractBlueprintBeanDefinitionParser {
 
+    /** {@inheritDoc} */
     @Override
     public Class<?> getRuntimeClass() {
         return BundleInjectionProviderHelperDecorator.class;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void extractRemainingMetaData(Element element, ParserContext context, MutableBeanMetadata beanMetadata)
         throws Exception {

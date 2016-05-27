@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.api.support;
 
@@ -28,7 +32,6 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public abstract class AbstractFilterFactory implements FilterFactory, ManagedService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractFilterFactory.class);
@@ -43,6 +46,13 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
 
     private ServiceRegistration<?> filterFactoryServiceRegistration;
 
+    /**
+     * <p>Constructor for AbstractFilterFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param applicationName a {@link java.lang.String} object.
+     * @param priority a {@link java.lang.Integer} object.
+     */
     public AbstractFilterFactory(BundleContext bundleContext, String applicationName, Integer priority) {
         validateNotNull(bundleContext, "bundleContext");
         validateNotEmpty(applicationName, "applicationName");
@@ -59,6 +69,11 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         }
     }
 
+    /**
+     * <p>getPriority.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getPriority() {
         synchronized (this) {
             return (Integer) properties.get(FILTER_PRIORITY);
@@ -72,12 +87,20 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         }
     }
 
+    /**
+     * <p>getApplicationName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         synchronized (this) {
             return (String) properties.get(APPLICATION_NAME);
         }
     }
 
+    /**
+     * <p>register.</p>
+     */
     public final void register() {
         synchronized (this) {
             if (filterFactoryServiceRegistration != null) {
@@ -90,6 +113,9 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         }
     }
 
+    /**
+     * <p>dispose.</p>
+     */
     public final void dispose() {
         if (filterFactoryServiceRegistration == null) {
             throw new IllegalStateException(String.format("%s [%s] has not been registered.", getClass()
@@ -101,6 +127,7 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
             getPriority());
     }
 
+    /** {@inheritDoc} */
     public void updated(Dictionary<String, ?> config) throws ConfigurationException {
         if (config != null) {
             Integer filterPriority = (Integer) config.get(FILTER_PRIORITY);
@@ -113,6 +140,11 @@ public abstract class AbstractFilterFactory implements FilterFactory, ManagedSer
         }
     }
 
+    /**
+     * <p>Getter for the field <code>bundleContext</code>.</p>
+     *
+     * @return a {@link org.osgi.framework.BundleContext} object.
+     */
     protected BundleContext getBundleContext() {
         return bundleContext;
     }

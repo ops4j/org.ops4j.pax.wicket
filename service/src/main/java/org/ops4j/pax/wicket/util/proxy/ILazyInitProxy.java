@@ -20,13 +20,15 @@ import org.ops4j.pax.wicket.spi.ProxyTargetLocator;
 
 /**
  * Interface the lazy init proxies implement to make identification of the proxy and retrival of
- * {@link ProxyTargetLocator} possible.
- * 
+ * {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator} possible.
+ *
  * @author Igor Vaynberg (ivaynberg)
- * 
+ * @version $Id: $Id
  */
 public interface ILazyInitProxy extends IClusterable {
     /**
+     * <p>getObjectLocator.</p>
+     *
      * @return object locator the proxy carries
      */
     ProxyTargetLocator getObjectLocator();

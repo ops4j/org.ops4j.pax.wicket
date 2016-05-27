@@ -16,15 +16,17 @@
 package org.ops4j.pax.wicket.spi;
 
 /**
- * Interface for return values of {@link ProxyTargetLocator#locateProxyTarget()}.
- * 
+ * Interface for return values of {@link org.ops4j.pax.wicket.spi.ProxyTargetLocator#locateProxyTarget()}.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public interface ReleasableProxyTarget extends ProxyTarget {
 
     /**
      * invoked when the target is released. <b>Implementation note:</b> This Method should never throw an
      * RuntimeException!
-     * 
+     *
      * @return the new target (might be a this pointer) or null if the target is no longer usable
      */
     public ProxyTarget releaseTarget();

@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Encapsulate the registration information for a servlet
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public final class ServletDescriptor {
 
@@ -43,6 +46,14 @@ public final class ServletDescriptor {
     private final String alias;
     private HttpService service;
 
+    /**
+     * <p>Constructor for ServletDescriptor.</p>
+     *
+     * @param servlet a {@link javax.servlet.Servlet} object.
+     * @param alias a {@link java.lang.String} object.
+     * @param bundle a {@link org.osgi.framework.Bundle} object.
+     * @param contextParams a {@link java.util.Map} object.
+     */
     public ServletDescriptor(Servlet servlet, String alias, Bundle bundle,
                 Map<?, ?> contextParams) {
         this.servlet = servlet;
@@ -53,14 +64,269 @@ public final class ServletDescriptor {
     }
 
     /**
-     * register the service with the given {@link HttpService} if not already registered and the given service is not
+     * register the service with the given {@link org.osgi.service.http.HttpService} if not already registered and the given service is not
      * <code>null</code>
-     * 
-     * @param service
-     * @throws NamespaceException if the registration fails because the alias is already in use.
-     * @throws ServletException if the servlet's init method throws an exception, or the given servlet object has
+     *
+     * @param service a {@link org.osgi.service.http.HttpService} object.
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws javax.servlet.ServletException if the servlet's init method throws an exception, or the given servlet object has
      *         already been registered at a different alias.
-     * @throws NamespaceException when the servlet is currently registered under a different {@link HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws org.osgi.service.http.NamespaceException if the registration fails because the alias is already in use.
+     * @throws org.osgi.service.http.NamespaceException when the servlet is currently registered under a different {@link org.osgi.service.http.HttpService}
+     * @throws java.lang.IllegalStateException if any.
      */
     public synchronized void register(HttpService service) throws ServletException, NamespaceException,
             IllegalStateException {
@@ -88,6 +354,11 @@ public final class ServletDescriptor {
         }
     }
 
+    /**
+     * <p>Getter for the field <code>alias</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getAlias() {
         return alias;
     }

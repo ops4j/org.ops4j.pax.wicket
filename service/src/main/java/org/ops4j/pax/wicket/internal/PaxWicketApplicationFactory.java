@@ -48,9 +48,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An internal wrapper for the {@link WebApplicationFactory} exported by clients who want to register an application.
+ * An internal wrapper for the {@link org.ops4j.pax.wicket.api.WebApplicationFactory} exported by clients who want to register an application.
  * This class adds all the logic to extract the required properties from the osgi service and wrapping the created
  * application factory with the classloading, injection and other tricks required to run the application.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
@@ -67,6 +70,14 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     private Class<? extends WicketFilter> wicketFilterClass = WicketFilter.class;
 
+    /**
+     * <p>createPaxWicketApplicationFactory.</p>
+     *
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     * @param webApplicationFactory a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     * @param reference a {@link org.osgi.framework.ServiceReference} object.
+     * @return a {@link org.ops4j.pax.wicket.internal.PaxWicketApplicationFactory} object.
+     */
     @SuppressWarnings("unchecked")
     public static PaxWicketApplicationFactory
         createPaxWicketApplicationFactory(
@@ -103,7 +114,8 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     /**
-     * 
+     * <p>getFilterClass.</p>
+     *
      * @return the concrete wicket filter class we will use as a base to intercept
      */
     public Class<? extends WicketFilter> getFilterClass() {
@@ -151,16 +163,24 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
     }
 
     /**
+     * <p>Getter for the field <code>superFilterList</code>.</p>
+     *
      * @return the current value of superFilterList
      */
     public List<SuperFilter> getSuperFilterList() {
         return Collections.unmodifiableList(superFilterList);
     }
 
+    /**
+     * <p>isValidFactory.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isValidFactory() {
         return applicationName != null && mountPoint != null;
     }
 
+    /** {@inheritDoc} */
     public WebApplication createApplication(WicketFilter filter) {
         return createFromFactory(webApplicationFactory);
     }
@@ -298,34 +318,70 @@ public class PaxWicketApplicationFactory implements IWebApplicationFactory {
 
     }
 
+    /**
+     * <p>Getter for the field <code>bundleContext</code>.</p>
+     *
+     * @return a {@link org.osgi.framework.BundleContext} object.
+     */
     public BundleContext getBundleContext() {
         return bundleContext;
     }
 
+    /**
+     * <p>Getter for the field <code>webApplicationFactory</code>.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.api.WebApplicationFactory} object.
+     */
     public WebApplicationFactory<? extends WebApplication> getWebApplicationFactory() {
         return webApplicationFactory;
     }
 
+    /**
+     * <p>Getter for the field <code>applicationName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getApplicationName() {
         return applicationName;
     }
 
+    /**
+     * <p>Getter for the field <code>mountPoint</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getMountPoint() {
         return mountPoint;
     }
 
+    /**
+     * <p>Getter for the field <code>contextParams</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, String> getContextParams() {
         return contextParams;
     }
 
+    /**
+     * <p>Getter for the field <code>tmpDir</code>.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
     public File getTmpDir() {
         return tmpDir;
     }
 
+    /**
+     * <p>Getter for the field <code>filterDelegator</code>.</p>
+     *
+     * @return a {@link org.ops4j.pax.wicket.internal.filter.FilterDelegator} object.
+     */
     public FilterDelegator getFilterDelegator() {
         return filterDelegator;
     }
 
+    /** {@inheritDoc} */
     public void destroy(WicketFilter filter) {
     }
 

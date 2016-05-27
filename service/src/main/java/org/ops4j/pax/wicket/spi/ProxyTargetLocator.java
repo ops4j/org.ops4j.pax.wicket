@@ -19,18 +19,21 @@ import org.apache.wicket.util.io.IClusterable;
 import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
 
 /**
+ * <p>
  * Represents a service locator for lazy init proxies. When the first method invocation occurs on the lazy init proxy
  * this locator will be used to retrieve the proxy target object that will receive the method invocation.
- * <p/>
+ * </p>
+ * <p>
  * Generally implementations should be small when serialized because the main purpose of lazy init proxies is to be
  * stored in session when the wicket pages are serialized, and when deserialized to be able to lookup the dependency
  * again. The smaller the implementation of IProxyTargetLocator the less the drain on session size.
- * <p/>
+ * </p>
+ * <p> 
  * A small implementation may use a static lookup to retrieve the target object.
- * <p/>
+ * </p>
  * Example:
- * <p/>
  * 
+ *
  * <pre>
  * class UserServiceLocator implements IProxyTargetLocator {
  *     Object locateProxyObject() {
@@ -39,20 +42,24 @@ import org.ops4j.pax.wicket.util.proxy.LazyInitProxyFactory;
  *     }
  * }
  * </pre>
- * 
+ *
  * @see LazyInitProxyFactory#createProxy(Class, ProxyTargetLocator)
+ * @author nmw
+ * @version $Id: $Id
  */
 // FIXME: is it necessary to extend IClusterable here??
 public interface ProxyTargetLocator extends IClusterable {
     /**
      * Returns the object that will be used as target object for a lazy init proxy.
-     * 
-     * @return the {@link ProxyTarget} located or <code>null</code> if no proxy could be found
-     * @throws IllegalStateException
+     *
+     * @return the {@link org.ops4j.pax.wicket.spi.ProxyTarget} located or <code>null</code> if no proxy could be found
+     * @throws java.lang.IllegalStateException if any.
      */
     ProxyTarget locateProxyTarget() throws IllegalStateException;
 
     /**
+     * <p>getParent.</p>
+     *
      * @return the parent holding the responsibility for the serialisation.
      */
     Class<?> getParent();

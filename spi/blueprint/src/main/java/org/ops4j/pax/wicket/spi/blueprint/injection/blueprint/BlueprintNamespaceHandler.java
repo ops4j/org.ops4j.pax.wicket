@@ -1,3 +1,4 @@
+
 /**
  * Copyright OPS4J
  *
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 package org.ops4j.pax.wicket.spi.blueprint.injection.blueprint;
 
@@ -29,11 +33,13 @@ import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.Metadata;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
 public class BlueprintNamespaceHandler implements NamespaceHandler {
 
     Map<String, AbstractBlueprintBeanDefinitionParser> namespaceRegistrations;
 
+    /**
+     * <p>Constructor for BlueprintNamespaceHandler.</p>
+     */
     public BlueprintNamespaceHandler() {
         namespaceRegistrations = new HashMap<String, AbstractBlueprintBeanDefinitionParser>();
         namespaceRegistrations.put("application", new BlueprintApplicationBeanDefinitionParser());
@@ -44,10 +50,16 @@ public class BlueprintNamespaceHandler implements NamespaceHandler {
         namespaceRegistrations.put("autoPageMounter", new BlueprintAutoPageMounterDefinitionParser());
     }
 
+    /** {@inheritDoc} */
     public ComponentMetadata decorate(Node node, ComponentMetadata component, ParserContext context) {
         throw new ComponentDefinitionException("Bad xml syntax: node decoration is not supported");
     }
 
+    /**
+     * <p>getManagedClasses.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     @SuppressWarnings("rawtypes")
     public Set<Class> getManagedClasses() {
         Set<Class> managedClasses = new HashSet<Class>();
@@ -59,10 +71,12 @@ public class BlueprintNamespaceHandler implements NamespaceHandler {
         return managedClasses;
     }
 
+    /** {@inheritDoc} */
     public URL getSchemaLocation(String schemaLocation) {
         return getClass().getResource("wicket.xsd");
     }
 
+    /** {@inheritDoc} */
     public Metadata parse(Element element, ParserContext context) {
         AbstractBlueprintBeanDefinitionParser definitionParser = retrieveDefinitionParser(element);
         try {

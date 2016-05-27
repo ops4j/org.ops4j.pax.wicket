@@ -29,8 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link PAXWicketFilterChain} is responsible for dispatching registered filters if applicable and finally to the
- * {@link Servlet} if all filters are respected
+ * The {@link org.ops4j.pax.wicket.internal.filter.PAXWicketFilterChain} is responsible for dispatching registered filters if applicable and finally to the
+ * {@link javax.servlet.Servlet} if all filters are respected
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class PAXWicketFilterChain implements FilterChain {
 
@@ -41,11 +44,18 @@ public class PAXWicketFilterChain implements FilterChain {
 
     private final Servlet delegateServlet;
 
+    /**
+     * <p>Constructor for PAXWicketFilterChain.</p>
+     *
+     * @param filter a {@link java.util.List} object.
+     * @param delegateServlet a {@link javax.servlet.Servlet} object.
+     */
     public PAXWicketFilterChain(List<Filter> filter, Servlet delegateServlet) {
         filters = filter;
         this.delegateServlet = delegateServlet;
     }
 
+    /** {@inheritDoc} */
     public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
         int size = filters.size();
         if (filterIndex < size) {

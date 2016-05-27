@@ -24,23 +24,25 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 /**
- * Backing {@link Iterable} for supporting the Collection types for injection. Since the OSGi registry is very dynmic
+ * Backing {@link java.lang.Iterable} for supporting the Collection types for injection. Since the OSGi registry is very dynmic
  * this has the following implications:
  * <ul>
- * <li>As soon as {@link #iterator()} is called a <b>Snapshot</b> of the current {@link ServiceReference}s that match
+ * <li>As soon as {@link #iterator()} is called a <b>Snapshot</b> of the current {@link org.osgi.framework.ServiceReference}s that match
  * the type and filter are taken
  * <li>This will not update unless another call to {@link #iterator()} is performed</li>
- * <li>calls to the {@link Iterator#next()} method try to fetch the service at call time, this miht result in return an
+ * <li>calls to the {@link java.util.Iterator#next()} method try to fetch the service at call time, this miht result in return an
  * Object that is <code>null</code> (the service might has vanished between call and snapshot time)!
  * <li>As soon as the service is successfully fetched, its is freed, that means the use count is decremented, so users
  * should take care to not keep reference longer than needed to prevent stale references</li>
  * <li>Services that perform cleanup when the usecount reaches zero might behave unespected</li>
  * <li>In case of DeclarativeServices it should be keept in mind that components gets activated/deactivated if the have
  * not set immediate=true and no one other is using the service (this is a concrete case for the above point)</li>
- * <li>calls to {@link Iterator#remove()} will always throw {@link UnsupportedOperationException}</li>
+ * <li>calls to {@link java.util.Iterator#remove()} will always throw {@link java.lang.UnsupportedOperationException}</li>
  * <li><strong>All in one</strong>: Handle this with care and keep the implications in mind!</li>
  * </ul>
- * 
+ *
+ * @author nmw
+ * @version $Id: $Id
  */
 public class ServiceReferenceIterable<T> implements Iterable<T>, Serializable {
 
@@ -49,12 +51,24 @@ public class ServiceReferenceIterable<T> implements Iterable<T>, Serializable {
     private final String filter;
     private final Class<T> type;
 
+    /**
+     * <p>Constructor for ServiceReferenceIterable.</p>
+     *
+     * @param type a {@link java.lang.Class} object.
+     * @param filter a {@link java.lang.String} object.
+     * @param bundleContext a {@link org.osgi.framework.BundleContext} object.
+     */
     public ServiceReferenceIterable(Class<T> type, String filter, BundleContext bundleContext) {
         this.type = type;
         this.filter = filter;
         this.bundleContext = bundleContext;
     }
 
+    /**
+     * <p>iterator.</p>
+     *
+     * @return a {@link java.util.Iterator} object.
+     */
     public Iterator<T> iterator() {
         Collection<ServiceReference<T>> fetchReferences = fetchReferences();
         return new ServiceReferenceIterator<T>(fetchReferences.iterator(), bundleContext);
@@ -68,6 +82,11 @@ public class ServiceReferenceIterable<T> implements Iterable<T>, Serializable {
         }
     }
 
+    /**
+     * <p>getCurrentSize.</p>
+     *
+     * @return a int.
+     */
     public int getCurrentSize() {
         return fetchReferences().size();
     }
