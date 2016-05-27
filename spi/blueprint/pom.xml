@@ -93,15 +93,17 @@
               org.xml.sax,
               org.w3c.dom,
               org.apache.aries.blueprint.*;version="${aries.blueprint.range}";resolution:=optional,
-              org.osgi.service.blueprint;version="[1.0,2.0)",
-              org.osgi.service.blueprint.container;version="[1.0,2.0)",
-              org.osgi.service.blueprint.reflect;version="[1.0,2.0)",
               org.ops4j.pax.wicket.spi;version="${project.version}",
               org.ops4j.pax.wicket.spi.support;version="${project.version}",
               org.ops4j.pax.wicket.api;version="${project.version}",
               org.ops4j.pax.wicket.util.proxy;version="${project.version}",
               !sun.*
             </Import-Package>
+            
+<!--              org.osgi.service.blueprint;version="[1.0,2.0)",
+              org.osgi.service.blueprint.container;version="[1.0,2.0)",
+              org.osgi.service.blueprint.reflect;version="[1.0,2.0)",-->
+
             <Export-Package />
             <DynamicImport-Package />
             <Bundle-ClassPath>
