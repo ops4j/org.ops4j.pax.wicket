@@ -59,8 +59,8 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
     @Inject @Filter(value = "(osgi.web.symbolicname=org.ops4j.pax.wicket.service)", timeout = 30000)
     private ServletContext servletContext;
     
-    private static final int EXPECTED_SERVICE_COUNT_WITH_APPLICATION = 5;
-    private static final int EXPECTED_SERVICE_COUNT_WITHOUT_APPLICATION = 2;
+    private static final int EXPECTED_SERVICE_COUNT_WITH_APPLICATION = 4;
+    private static final int EXPECTED_SERVICE_COUNT_WITHOUT_APPLICATION = 1;
 
     @Inject
     private BundleContext bundleContext;
@@ -99,7 +99,7 @@ public final class WicketApplicationTrackTest extends PaxWicketIntegrationTest {
         assertNotNull("No services at all anymore", afterStopServices);
         assertEquals("Not all services are unregistered, registered ones are: "+buildServiceGraph(afterStopServices), EXPECTED_SERVICE_COUNT_WITHOUT_APPLICATION, afterStopServices.length);
         //Check if the remaining service is the WeavingHook
-        assertTrue("remaining service does not contain the WeavingHook", containsService(afterStopServices, WeavingHook.class));
+        //assertTrue("remaining service does not contain the WeavingHook", containsService(afterStopServices, WeavingHook.class));
         assertTrue("remaining service does not contain the default ProxyTargetLocatorFactory", containsService(afterStopServices, ProxyTargetLocatorFactory.class));
     }
 
