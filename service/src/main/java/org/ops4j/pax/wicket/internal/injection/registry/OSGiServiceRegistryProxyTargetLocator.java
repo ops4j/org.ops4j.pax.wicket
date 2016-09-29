@@ -18,7 +18,7 @@ package org.ops4j.pax.wicket.internal.injection.registry;
 import java.util.Arrays;
 
 import org.ops4j.pax.wicket.api.NoBeanAvailableForInjectionException;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanData;
 import org.ops4j.pax.wicket.util.proxy.IProxyTargetLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
@@ -52,7 +52,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
      * @param serviceClass
      * 
      */
-    public OSGiServiceRegistryProxyTargetLocator(BundleContext paxBundleContext, PaxWicketBean annotation,
+    public OSGiServiceRegistryProxyTargetLocator(BundleContext paxBundleContext, PaxWicketBeanData annotation,
             Class<?> serviceClass, Class<?> pageClass) {
         this.parent = pageClass;
         if (pageClass.getClassLoader() instanceof BundleReference) {
@@ -64,7 +64,7 @@ public class OSGiServiceRegistryProxyTargetLocator implements IProxyTargetLocato
             bundleContext = paxBundleContext;
             LOGGER.debug("Using the PAX Wicket BundlereContext for locating services");
         }
-        componentName = annotation.name();
+        componentName = annotation.getName();
         serviceInterface = serviceClass.getName();
     }
 

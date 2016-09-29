@@ -24,6 +24,7 @@ import java.util.Map;
 import net.sf.cglib.proxy.Factory;
 
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.ops4j.pax.wicket.api.PaxWicketBeanData;
 import org.ops4j.pax.wicket.internal.OverwriteProxy;
 import org.ops4j.pax.wicket.internal.injection.blueprint.BlueprintBeanProxyTargetLocator;
 import org.ops4j.pax.wicket.internal.injection.registry.OSGiServiceRegistryProxyTargetLocator;
@@ -93,12 +94,15 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
 
             List<Field> fields = getSingleLevelOfFields(realClass);
             for (Field field : fields) {
-                if (!field.isAnnotationPresent(PaxWicketBean.class)) {
+                if (!PaxWicketBeanData.isPaxWicketField(field)) {
                     continue;
                 }
-                PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
-                if (!annotation.injectionSource().equals(PaxWicketBean.INJECTION_SOURCE_UNDEFINED)) {
-                    injectionSource = annotation.injectionSource();
+                PaxWicketBeanData annotation = new PaxWicketBeanData(field);
+
+                if (annotation != null) {
+                    if (!annotation.getInjectionSource().equals(PaxWicketBean.INJECTION_SOURCE_UNDEFINED)) {
+                        injectionSource = annotation.getInjectionSource();
+                    }
                 }
                 if (field.getType().equals(BundleContext.class)) {
                     // Is this the special BundleContext type?
@@ -129,7 +133,7 @@ public class BundleAnalysingComponentInstantiationListener extends AbstractPaxWi
                 || PaxWicketBean.INJECTION_SOURCE_UNDEFINED.equals(injectionSource)) {
             return null;
         }
-        PaxWicketBean annotation = field.getAnnotation(PaxWicketBean.class);
+        PaxWicketBeanData annotation = new PaxWicketBeanData(field);
         AbstractProxyTargetLocator<?> springBeanTargetLocator =
             new SpringBeanProxyTargetLocator(bundleContext, annotation, getBeanType(field), page, overwrites);
         if (PaxWicketBean.INJECTION_SOURCE_SPRING.equals(injectionSource)) {
