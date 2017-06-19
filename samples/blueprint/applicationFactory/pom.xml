@@ -93,8 +93,8 @@
     </dependency>
     <!-- Required for the filter interface. -->
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+        <groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

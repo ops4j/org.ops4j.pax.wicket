@@ -60,12 +60,12 @@
               net.sf.cglib.proxy;version="${cglib.range}",
               net.sf.cglib.core;version="${cglib.range}",
               net.sf.cglib.reflect;version="${cglib.range}",
-              javax.servlet;version="[2.5,4)",
+              javax.servlet;version="[3,4)",
               org.apache.wicket.settings,
               org.apache.wicket.session,
               org.apache.wicket.util.file,
               org.apache.wicket.request,
-              javax.servlet.http;version="[2.5,4)",
+              javax.servlet.http;version="[3,4)",
               org.apache.wicket.ajax,
               org.apache.wicket.core.request.mapper
             </Import-Package>
@@ -87,8 +87,8 @@
     </dependency>
         <!-- Required for the filter interface. -->
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+      	<groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>

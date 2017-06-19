@@ -111,7 +111,7 @@ public final class PAXWicketServlet implements Servlet {
                 return config.getServletContext();
             }
 
-            public Enumeration<?> getInitParameterNames() {
+            public Enumeration<String> getInitParameterNames() {
                 return config.getInitParameterNames();
             }
 

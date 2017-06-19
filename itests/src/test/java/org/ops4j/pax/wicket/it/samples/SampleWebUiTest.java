@@ -251,7 +251,8 @@ public class SampleWebUiTest extends PaxWicketIntegrationTest {
     private final class EchoServiceImplementation implements EchoService {
         private static final long serialVersionUID = 6447679249771482700L;
 
-        public String someEchoMethod(String toEcho) {
+        @Override
+		public String someEchoMethod(String toEcho) {
             return "Echo: "+toEcho;
         }
     }

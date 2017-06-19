@@ -23,6 +23,7 @@ import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 
+import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -37,6 +38,7 @@ public abstract class PaxWicketIntegrationTest {
 
     public final Option[] configureProvisions() {
         return options(
+        		CoreOptions.systemProperty("osgi.console.enable.builtin").value("true"),
             provision(mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.eventadmin")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.configadmin")
@@ -45,7 +47,7 @@ public abstract class PaxWicketIntegrationTest {
                         .versionAsInProject().startLevel(1).start(true)),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-activation_1.1_spec")
                 .versionAsInProject()),
-            provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-servlet_2.5_spec")
+            provision(mavenBundle().groupId("javax.servlet").artifactId("javax.servlet-api")
                 .versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.geronimo.specs").artifactId("geronimo-jta_1.1_spec")
                 .versionAsInProject()),
@@ -54,6 +56,8 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.asm")
                 .versionAsInProject()),
+            provision(mavenBundle().groupId("commons-io").artifactId("commons-io").versionAsInProject()),
+            provision(mavenBundle().groupId("commons-fileupload").artifactId("commons-fileupload").versionAsInProject()),
             provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-util").versionAsInProject()),
             provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-io").versionAsInProject()),
             provision(mavenBundle().groupId("org.eclipse.jetty").artifactId("jetty-http").versionAsInProject()),
@@ -69,6 +73,11 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-spi").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-runtime").versionAsInProject()),
             provision(mavenBundle().groupId("org.ops4j.pax.web").artifactId("pax-web-jetty").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-finder").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-bundleutils").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ow2.asm").artifactId("asm-all").versionAsInProject()),
+//            provision(wrappedBundle(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-asm-util").versionAsInProject())),
+            
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
                 .artifactId("org.apache.servicemix.bundles.cglib")
                 .versionAsInProject()),

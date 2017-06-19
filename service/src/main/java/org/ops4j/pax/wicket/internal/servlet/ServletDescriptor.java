@@ -349,6 +349,8 @@ public final class ServletDescriptor {
      */
     public synchronized void unregister() {
         if (this.service != null) {
+            LOG.info("unregister servlet on mountpoint {} with contextParams {}", getAlias(),
+                contextParams);
             this.service.unregister(getAlias());
             this.service = null;
         }

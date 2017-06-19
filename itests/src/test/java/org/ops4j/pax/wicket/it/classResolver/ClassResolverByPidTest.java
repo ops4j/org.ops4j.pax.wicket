@@ -150,8 +150,9 @@ public final class ClassResolverByPidTest extends PaxWicketIntegrationTest {
     }
 
     private ServiceReference getLibraryClassResolverReference() throws InvalidSyntaxException {
-        ServiceReference[] references = bundleContext.getServiceReferences(IClassResolver.class.getName(), "(" + SERVICE_PID + "=libraryPid)");
-        assertNotNull(references);
+        String filter = "(" + SERVICE_PID + "=libraryPid)";
+		ServiceReference[] references = bundleContext.getServiceReferences(IClassResolver.class.getName(), filter);
+        assertNotNull("no services found by filter "+filter, references);
         assertEquals(references.length, 1);
         return references[0];
 

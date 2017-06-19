@@ -194,8 +194,8 @@
       <artifactId>geronimo-activation_1.1_spec</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-servlet_2.5_spec</artifactId>
+      <groupId>javax.servlet</groupId>
+		<artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>

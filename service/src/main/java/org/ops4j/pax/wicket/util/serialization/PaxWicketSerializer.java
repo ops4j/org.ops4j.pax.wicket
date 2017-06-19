@@ -15,13 +15,17 @@
  */
 package org.ops4j.pax.wicket.util.serialization;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.application.IClassResolver;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.serialize.java.JavaSerializer;
-import org.apache.wicket.settings.IApplicationSettings;
-
-import java.io.*;
+import org.apache.wicket.settings.ApplicationSettings;
 
 /**
  * A simple wrapper for the original wicket serializer making it possible to serialize class which inject osgi
@@ -54,7 +58,7 @@ public class PaxWicketSerializer extends JavaSerializer {
 
     private IClassResolver getClassResolver() {
         Application application = WebApplication.get();
-        IApplicationSettings appSettings = application.getApplicationSettings();
+        ApplicationSettings appSettings = application.getApplicationSettings();
         return appSettings.getClassResolver();
     }
 }

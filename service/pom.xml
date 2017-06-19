@@ -68,10 +68,11 @@
                         </Bundle-Activator>
                         <Import-Package>
                             org.ops4j.lang,
+                            org.apache.commons.io;version="[2.5,3)",
                             org.slf4j.*;version="[1,2)",
                             org.apache.wicket.*;version="${wicket.dependency.version.range}",
                             org.osgi.service.http,
-                            javax.servlet.*;version="[2.5,4)",
+                            javax.servlet.*;version="[3,4)",
                             javax.inject.*,
                             javax.activation.*;
                             org.osgi.service.useradmin;resolution:=optional,
@@ -158,8 +159,8 @@
             <artifactId>geronimo-activation_1.1_spec</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
