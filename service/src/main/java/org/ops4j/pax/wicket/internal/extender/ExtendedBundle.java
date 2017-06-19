@@ -57,7 +57,7 @@ public class ExtendedBundle {
     private static final Pattern PACKAGE_PATTERN_WICKET = Pattern.compile("\\(" + OSGI_WIRING_PACKAGE_NAMESPACE
             + "=" + Pattern.quote(APACHE_WICKET_NAMESPACE) + "\\..*\\)");
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaxWicketBundleListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedBundle.class);
 
     private final Bundle bundle;
 
@@ -247,6 +247,9 @@ public class ExtendedBundle {
                     resource = resource.substring(1);
                 }
                 String className = resource.substring(0, resource.length() - 6).replaceAll("/", ".");
+                if (isIgnoreClass(className)) {
+                    continue;
+                }
                 Class<?> candidateClass = null;
                 try {
                     candidateClass = loadCandidate(className);
@@ -283,6 +286,16 @@ public class ExtendedBundle {
             }
         }
         return classList;
+    }
+
+    private boolean isIgnoreClass(String className) {
+        if (className == null || className.isEmpty()) {
+            return true;
+        }
+        if (className.startsWith("java.") || className.startsWith("javax.")) {
+            return true;
+        }
+        return false;
     }
 
     /**
