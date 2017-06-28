@@ -135,7 +135,7 @@ public class SampleWebUiTestFull {
      * @throws IOException 
      */
     public void waitForever() throws IOException {
-        //bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
+        bundleContext.registerService(EchoService.class, new EchoServiceImplementation(), null);
         System.in.read();
     }
 
