@@ -28,7 +28,7 @@
 
     <groupId>org.ops4j.pax.wicket</groupId>
     <artifactId>pax-wicket</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -45,7 +45,7 @@
         <connection>scm:git:git://github.com/ops4j/org.ops4j.pax.wicket.git</connection>
         <developerConnection>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</developerConnection>
         <url>http://github.com/ops4j/org.ops4j.pax.wicket</url>
-        <tag>pax-wicket-4.0.0</tag>
+        <tag>pax-wicket-3.0.5</tag>
     </scm>
 
     <properties>
