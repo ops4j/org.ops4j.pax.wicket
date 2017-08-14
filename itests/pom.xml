@@ -86,8 +86,39 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.5.11</version>
+      <version>${slf4j.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+        <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-collections4</artifactId>
+	    <version>4.1</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.github.openjson</groupId>
+	    <artifactId>openjson</artifactId>
+	    <version>1.0.8</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.ops4j.pax.url</groupId>
+	    <artifactId>pax-url-wrap</artifactId>
+	    <version>2.5.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.danekja</groupId>
+	    <artifactId>jdk-serializable-functional</artifactId>
+	    <version>1.8.3</version>
+	</dependency>
+	
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>

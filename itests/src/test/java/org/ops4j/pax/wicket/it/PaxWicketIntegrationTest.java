@@ -22,6 +22,7 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
+import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
 
 import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
@@ -76,6 +77,13 @@ public abstract class PaxWicketIntegrationTest {
             provision(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-finder").versionAsInProject()),
             provision(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-bundleutils").versionAsInProject()),
             provision(mavenBundle().groupId("org.ow2.asm").artifactId("asm-all").versionAsInProject()),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-api").versionAsInProject()),
+            provision(mavenBundle().groupId("org.apache.commons").artifactId("commons-collections4").versionAsInProject()),
+            provision(mavenBundle().groupId("org.ops4j.pax.url").artifactId("pax-url-wrap").versionAsInProject()),
+            provision(wrappedBundle(mavenBundle().groupId("org.danekja").artifactId("jdk-serializable-functional").versionAsInProject())),
+            
+            provision(wrappedBundle(mavenBundle().groupId("com.github.openjson").artifactId("openjson").versionAsInProject())),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
 //            provision(wrappedBundle(mavenBundle().groupId("org.apache.xbean").artifactId("xbean-asm-util").versionAsInProject())),
             
             provision(mavenBundle().groupId("org.apache.servicemix.bundles")
