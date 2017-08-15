@@ -80,6 +80,9 @@
         <osgi.framework.version>4.3.1</osgi.framework.version>
         <geronimo.inject.version>1.0</geronimo.inject.version>
         <aopalliance.version>1.0_6</aopalliance.version>
+        <commons-collections4.version>4.1</commons-collections4.version>
+        <jdk-serializable-functional.version>1.8.3</jdk-serializable-functional.version>
+        <openjson.version>1.0.8</openjson.version>
     </properties>
 
     <prerequisites>

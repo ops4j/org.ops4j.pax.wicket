@@ -28,6 +28,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+
+import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
@@ -94,6 +96,7 @@ public class SampleWebUiTestWithSomethingThatPullsCGLib3x {
             configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
             features(karafStandardRepo, "scr"),
             features(karafStandardRepo, "webconsole"),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
             features(wicketFeatureRepo, "wicket"),
             features(paxwicketFeatureRepo, "pax-wicket"),
             features(karafSampleFeatureRepo, "wicket-samples-base"),

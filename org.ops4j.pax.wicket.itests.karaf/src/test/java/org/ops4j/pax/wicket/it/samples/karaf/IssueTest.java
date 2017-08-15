@@ -29,6 +29,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
 import org.apache.wicket.protocol.http.WebApplication;
+
+import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
@@ -77,14 +80,14 @@ public class IssueTest {
 
         MavenUrlReference wicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("paxwicket")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
 
         MavenUrlReference paxwicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
         MavenUrlReference karafSampleFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket.samples").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
         MavenUrlReference karafStandardRepo = maven()
                 .groupId("org.apache.karaf.features").artifactId("standard").versionAsInProject().classifier("features").type("xml");
 
@@ -99,6 +102,7 @@ public class IssueTest {
             .useDeployFolder(false),
             keepRuntimeFolder(),
             configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
             features(karafStandardRepo, "scr"),
             features(karafStandardRepo, "webconsole"),
             features(wicketFeatureRepo, "wicket"),
@@ -121,14 +125,6 @@ public class IssueTest {
     @Inject
     @Filter(value = "(pax.wicket.applicationname=issues)", timeout = TIMEOUT)
     private WebApplicationFactory<WebApplication> factoryIssue;
-
-    @Before
-    public void before() throws InterruptedException {
-        while (bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState() != Bundle.ACTIVE) {
-            Thread.sleep(200);
-        }
-
-    }
 
     @Test
     public void testIssues() throws Exception {

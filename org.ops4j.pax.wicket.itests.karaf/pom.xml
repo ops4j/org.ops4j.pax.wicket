@@ -223,6 +223,13 @@
             <type>xml</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>apache-karaf</artifactId>
+            <version>4.0.5</version>
+            <type>zip</type>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.osgi</groupId>
@@ -288,6 +295,31 @@
             <artifactId>commons-net</artifactId>
             <version>3.3</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>paxwicket</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>features</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.wicket.samples</groupId>
+            <artifactId>features</artifactId>
+            <version>5.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <classifier>features</classifier>
+            <type>xml</type>
         </dependency>
 
         

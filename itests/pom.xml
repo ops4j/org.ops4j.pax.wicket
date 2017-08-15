@@ -101,12 +101,12 @@
 	<dependency>
 	    <groupId>org.apache.commons</groupId>
 	    <artifactId>commons-collections4</artifactId>
-	    <version>4.1</version>
+	    <version>${commons-collections4.version}</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.github.openjson</groupId>
 	    <artifactId>openjson</artifactId>
-	    <version>1.0.8</version>
+	    <version>${openjson.version}</version>
 	</dependency>
 	<dependency>
 	    <groupId>org.ops4j.pax.url</groupId>
@@ -116,7 +116,7 @@
 	<dependency>
 	    <groupId>org.danekja</groupId>
 	    <artifactId>jdk-serializable-functional</artifactId>
-	    <version>1.8.3</version>
+	    <version>${jdk-serializable-functional.version}</version>
 	</dependency>
 	
     <dependency>
