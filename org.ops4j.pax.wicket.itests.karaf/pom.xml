@@ -4,13 +4,13 @@
     <parent>
         <groupId>org.ops4j.pax.wicket</groupId>
         <artifactId>pax-wicket</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.0.0-RC1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>org.ops4j.pax.wicket.itests.karaf</artifactId>
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0-RC1</version>
     <name>OPS4J Pax Wicket :: Karaf Integration Tests</name>
 
     <build>
@@ -300,7 +300,7 @@
         <dependency>
             <groupId>org.ops4j.pax.wicket</groupId>
             <artifactId>paxwicket</artifactId>
-            <version>5.0.0-SNAPSHOT</version>
+            <version>5.0.0-RC1</version>
             <scope>test</scope>
             <classifier>features</classifier>
             <type>xml</type>
@@ -308,7 +308,7 @@
         <dependency>
             <groupId>org.ops4j.pax.wicket</groupId>
             <artifactId>features</artifactId>
-            <version>5.0.0-SNAPSHOT</version>
+            <version>5.0.0-RC1</version>
             <scope>test</scope>
             <classifier>features</classifier>
             <type>xml</type>
@@ -316,7 +316,7 @@
         <dependency>
             <groupId>org.ops4j.pax.wicket.samples</groupId>
             <artifactId>features</artifactId>
-            <version>5.0.0-SNAPSHOT</version>
+            <version>5.0.0-RC1</version>
             <scope>test</scope>
             <classifier>features</classifier>
             <type>xml</type>
