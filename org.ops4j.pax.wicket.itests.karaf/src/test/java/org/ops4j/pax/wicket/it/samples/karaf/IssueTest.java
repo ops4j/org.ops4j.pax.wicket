@@ -77,14 +77,14 @@ public class IssueTest {
 
         MavenUrlReference wicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("paxwicket")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .version("4.0.0").classifier("features").type("xml");
 
         MavenUrlReference paxwicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .version("4.0.0").classifier("features").type("xml");
         MavenUrlReference karafSampleFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket.samples").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .version("4.0.0").classifier("features").type("xml");
         MavenUrlReference karafStandardRepo = maven()
                 .groupId("org.apache.karaf.features").artifactId("standard").versionAsInProject().classifier("features").type("xml");
 
@@ -124,7 +124,7 @@ public class IssueTest {
 
     @Before
     public void before() throws InterruptedException {
-        while (bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/3.0.5-SNAPSHOT").getState() != Bundle.ACTIVE) {
+        while (bundleContext.getBundle("mvn:org.ops4j.pax.wicket.samples/org.ops4j.pax.wicket.samples.issues/4.0.0").getState() != Bundle.ACTIVE) {
             Thread.sleep(200);
         }
 
