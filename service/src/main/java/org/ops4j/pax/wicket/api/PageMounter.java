@@ -37,5 +37,5 @@ public interface PageMounter {
      *
      * @return a {@link java.util.List} object.
      */
-    List<MountPointInfo> getMountPoints();
+    List<? extends MountPointInfo> getMountPoints();
 }

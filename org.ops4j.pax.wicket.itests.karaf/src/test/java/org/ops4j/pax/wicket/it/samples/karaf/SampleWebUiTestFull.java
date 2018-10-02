@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+import org.apache.karaf.features.BootFinished;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
@@ -47,6 +48,7 @@ import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.maven;
+import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
@@ -67,6 +69,8 @@ public class SampleWebUiTestFull {
 
     private static final int TIMEOUT = 120 * 1000;
 
+    @Inject
+    private BootFinished bootFinished;
     @Inject
     private BundleContext bundleContext;
 
@@ -101,6 +105,7 @@ public class SampleWebUiTestFull {
                 .type("zip").versionAsInProject();
 
         return new Option[]{
+            KarafDistributionOption.debugConfiguration("5005", false),
             karafDistributionConfiguration()
             .frameworkUrl(karafUrl)
             .unpackDirectory(new File("target", "exam"))
@@ -186,7 +191,7 @@ public class SampleWebUiTestFull {
     @Test
     public void testSampleBlueprintSimpleInjectionBluePrintShouldRenderPage() throws Exception {
         String page = sendGet("http://localhost:" + WEBUI_PORT + "/blueprint/injection/simple/");
-        assertTrue(page.contains("Welcome to the most simple pax-wicket application based on blueprint"));
+        assertTrue(page.contains("blub"));
     }
 
     public void testSampleBlueprintSimpleDefaultShouldRenderPage() throws Exception {

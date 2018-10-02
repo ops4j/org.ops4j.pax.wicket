@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+import org.apache.karaf.features.BootFinished;
 
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
@@ -46,6 +47,7 @@ import org.osgi.framework.BundleContext;
 import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.maven;
+import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
@@ -66,6 +68,8 @@ public class SampleWebUiTestNoSpring {
 
     private static final int TIMEOUT = 120 * 1000;
 
+    @Inject
+    private BootFinished bootFinished;
     @Inject
     private BundleContext bundleContext;
 
@@ -100,6 +104,7 @@ public class SampleWebUiTestNoSpring {
                 .type("zip").versionAsInProject();
 
         return new Option[]{
+                KarafDistributionOption.debugConfiguration("5005", false),
                 karafDistributionConfiguration()
                         .frameworkUrl(karafUrl)
                         .unpackDirectory(new File("target", "exam"))

@@ -60,7 +60,7 @@
         <felix.configadmin.version>1.6.0</felix.configadmin.version>
         <felix.scr.version>1.8.2</felix.scr.version>
         <wicket.dependency.version>8.1.0</wicket.dependency.version>
-        <wicket.dependency.version.range>[8.0.0,8.2.0)</wicket.dependency.version.range>
+        <wicket.dependency.version.range>[8.1.0,9.0.0)</wicket.dependency.version.range>
         <wicket.core.dependency.version>8.1.0</wicket.core.dependency.version>
         <release-paxwicket-altGitURL>scm:git:git@github.com:ops4j/org.ops4j.pax.wicket.git</release-paxwicket-altGitURL>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

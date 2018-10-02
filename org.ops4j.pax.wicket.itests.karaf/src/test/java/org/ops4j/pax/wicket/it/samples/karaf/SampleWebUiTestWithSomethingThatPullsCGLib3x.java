@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+import org.apache.karaf.features.BootFinished;
 
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
@@ -43,6 +44,7 @@ import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertTrue;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
+import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
@@ -64,6 +66,9 @@ public class SampleWebUiTestWithSomethingThatPullsCGLib3x {
     private static final int TIMEOUT = 120 * 1000;
 
     @Inject
+    private BootFinished bootFinished;
+    
+    @Inject
     private BundleContext bundleContext;
 
     @Configuration
@@ -71,14 +76,14 @@ public class SampleWebUiTestWithSomethingThatPullsCGLib3x {
 
         MavenUrlReference wicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("paxwicket")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
 
         MavenUrlReference paxwicketFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
         MavenUrlReference karafSampleFeatureRepo = maven()
                 .groupId("org.ops4j.pax.wicket.samples").artifactId("features")
-                .version("3.0.5-SNAPSHOT").classifier("features").type("xml");
+                .versionAsInProject().classifier("features").type("xml");
         MavenUrlReference karafStandardRepo = maven()
                 .groupId("org.apache.karaf.features").artifactId("standard").versionAsInProject().classifier("features").type("xml");
 
@@ -87,6 +92,7 @@ public class SampleWebUiTestWithSomethingThatPullsCGLib3x {
                 .version("4.0.5").type("zip");
 
         return new Option[]{
+            KarafDistributionOption.debugConfiguration("5005", false),
             karafDistributionConfiguration()
             .frameworkUrl(karafUrl)
             .unpackDirectory(new File("target", "exam"))
@@ -96,7 +102,8 @@ public class SampleWebUiTestWithSomethingThatPullsCGLib3x {
             configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
             features(karafStandardRepo, "scr"),
             features(karafStandardRepo, "webconsole"),
-            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject()),
+            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-api").versionAsInProject()),
             features(wicketFeatureRepo, "wicket"),
             features(paxwicketFeatureRepo, "pax-wicket"),
             features(karafSampleFeatureRepo, "wicket-samples-base"),

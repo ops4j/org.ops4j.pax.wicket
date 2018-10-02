@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+import org.apache.karaf.features.BootFinished;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
@@ -69,6 +70,9 @@ public class IssueTest {
 
     private static final int TIMEOUT = 120 * 1000;
 
+    @Inject
+    private BootFinished bootFinished;
+    
     @Inject
     private BundleContext bundleContext;
 

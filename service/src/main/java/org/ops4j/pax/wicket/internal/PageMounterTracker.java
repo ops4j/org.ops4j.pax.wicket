@@ -88,7 +88,7 @@ public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMo
     @Override
     public final PageMounter addingService(ServiceReference<PageMounter> reference) {
         PageMounter mounter = super.addingService(reference);
-        List<MountPointInfo> infos = mounter.getMountPoints();
+        List<? extends MountPointInfo> infos = mounter.getMountPoints();
         for (MountPointInfo info : infos) {
             LOGGER.trace("Make sure that path {} is clear before trying to remount", info.getPath());
             Application oldApp = ThreadContext.getApplication();
@@ -111,7 +111,7 @@ public final class PageMounterTracker extends ServiceTracker<PageMounter, PageMo
     @Override
     public final void removedService(ServiceReference<PageMounter> reference, PageMounter mounter) {
         PageMounter pageMounter = mounter;
-        List<MountPointInfo> infos = pageMounter.getMountPoints();
+        List<? extends MountPointInfo> infos = pageMounter.getMountPoints();
         for (MountPointInfo info : infos) {
             LOGGER.trace("Trying to mount {} with {}", info.getPath(), info.getPage().getName());
             Application oldApp = ThreadContext.getApplication();
