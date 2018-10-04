@@ -1,12 +1,12 @@
 /**
  * Copyright OPS4J
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
  * a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
 package org.ops4j.pax.wicket.it.samples.karaf;
 
 import java.io.BufferedReader;
+
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
@@ -28,6 +30,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.inject.Inject;
+
 import org.apache.karaf.features.BootFinished;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -35,6 +38,7 @@ import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.provision;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.configureConsole;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
+
 import org.ops4j.pax.exam.karaf.options.LogLevelOption.LogLevel;
 import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
 import org.ops4j.pax.exam.options.MavenUrlReference;
@@ -42,17 +46,22 @@ import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.wicket.samples.plain.simple.service.EchoService;
 import org.osgi.framework.BundleContext;
+
 import static shaded.org.apache.http.HttpHeaders.USER_AGENT;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
+
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.logLevel;
+
 import org.ops4j.pax.exam.util.Filter;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.service.http.HttpService;
+import shaded.org.apache.http.client.HttpResponseException;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -72,7 +81,7 @@ public class IssueTest {
 
     @Inject
     private BootFinished bootFinished;
-    
+
     @Inject
     private BundleContext bundleContext;
 
@@ -100,18 +109,18 @@ public class IssueTest {
                 .version("4.0.5").type("zip");
 
         return new Option[]{
-            karafDistributionConfiguration()
-            .frameworkUrl(karafUrl)
-            .unpackDirectory(new File("target", "exam"))
-            .useDeployFolder(false),
-            keepRuntimeFolder(),
-            configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
-            provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
-            features(karafStandardRepo, "scr"),
-            features(karafStandardRepo, "webconsole"),
-            features(wicketFeatureRepo, "wicket"),
-            features(paxwicketFeatureRepo, "pax-wicket"),
-            features(karafSampleFeatureRepo, "wicket-samples-issues")};
+                karafDistributionConfiguration()
+                        .frameworkUrl(karafUrl)
+                        .unpackDirectory(new File("target", "exam"))
+                        .useDeployFolder(false),
+                keepRuntimeFolder(),
+                configureConsole().ignoreLocalConsole(), logLevel(LogLevel.ERROR),
+                provision(mavenBundle().groupId("org.slf4j").artifactId("slf4j-simple").versionAsInProject().start(false)),
+                features(karafStandardRepo, "scr"),
+                features(karafStandardRepo, "webconsole"),
+                features(wicketFeatureRepo, "wicket"),
+                features(paxwicketFeatureRepo, "pax-wicket"),
+                features(karafSampleFeatureRepo, "wicket-samples-issues")};
 
     }
 
@@ -121,8 +130,8 @@ public class IssueTest {
      *
      * @throws IOException
      */
-
     public void waitForever() throws IOException {
+
         System.in.read();
     }
 
@@ -132,12 +141,13 @@ public class IssueTest {
 
     @Test
     public void testIssues() throws Exception {
-
-        String page = sendGet("http://localhost:" + WEBUI_PORT + "/issues/");
+        //Have too sleep for a while otherwise test will run too quickly and fail before http context are published
+        //TODO  Someday implement or use https://github.com/ops4j/org.ops4j.pax.web/blob/master/pax-web-itest/pax-web-itest-base/src/main/java/org/ops4j/pax/web/itest/base/AbstractControlledTestBase.java
+        String page = sendGet("http://localhost:" + WEBUI_PORT + "/issues/", 0);
         assertTrue(page.contains("HomePage"));
     }
 
-    private String sendGet(String url) throws Exception {
+    private String sendGet(String url, Integer i) throws Exception {
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -147,20 +157,32 @@ public class IssueTest {
 
         //add request header
         con.setRequestProperty("User-Agent", USER_AGENT);
+        try {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
 
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+            //print result
+            return response.toString();
+        } catch (IOException exeception) {
+            if (con.getResponseCode() == 401) {
+                if (i < 5) {
+                    con.disconnect();
+                    Thread.sleep(1000);
+
+                    return sendGet(url, ++i);
+                } else {
+                    Assert.fail("Http context never became ready before timeout");
+                }
+            }
         }
-        in.close();
-
-        //print result
-        return response.toString();
-
+        throw new RuntimeException();
     }
 
     /**
