@@ -14,3 +14,7 @@ after_success:
   - python etc/travis/addServer.py
   - mvn clean deploy --settings ~/.m2/mySettings.xml
 
+
+cache:
+  directories:
+  - $HOME/.m2
